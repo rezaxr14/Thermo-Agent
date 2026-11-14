@@ -44,9 +44,9 @@ If `trainer_state.json` shows a large share of skipped steps, lower the learning
 |---|---|---|
 | base weights, fp16 | 8.0 GB | 8.0 GB |
 | LoRA params + fp32 optimizer state | ~0.4 GB | ~0.2 GB |
-| activations (checkpointing on) | ~2 GB at batch 2 × 3072 tokens | ~1 GB at 16 sequences × 320 tokens |
-| KV cache | — | ~0.6 GB |
-| **total** | **~10–11 GB of 15 GB** | **~10 GB of 15 GB** |
+| activations (checkpointing on) | ~2 GB at batch 2 × 3072 tokens | ~1.5 GB at 64 sequences × 320 tokens |
+| KV cache | — | ~3 GB |
+| **total** | **~10–11 GB of 15 GB** | **~12.5 GB of 15 GB** |
 
 Both fit with headroom. A 4-bit base is unnecessary and is not used (`--qlora` is refused under DDP).
 
@@ -57,10 +57,16 @@ Both fit with headroom. A 4-bit base is unnecessary and is not used (`--qlora` i
 | Stage | per device | accum | ranks | effective |
 |---|---|---|---|---|
 | SFT | 2 | 8 | 2 | 32 sequences |
-| GRPO | 2 | 8 | 2 | 32 prompts, 8 completions each |
+| GRPO | 8 | 2 | 2 | 32 prompts, 8 completions each |
 
-GRPO needs the effective prompt batch to be a multiple of `num_generations` (8), or whole groups cannot be
-formed. `--per-device-batch 2 --grad-accum 8` satisfies it; the trainer checks this before loading the model.
+GRPO groups completions per prompt, so two divisibility readings matter across TRL versions: the per-device
+prompt batch and the effective batch must both be multiples of `num_generations` (8). `--per-device-batch 8
+--grad-accum 2` satisfies both; the trainer checks the effective batch before loading the model. If a 15 GB
+card runs out of memory during rollouts, halve the per-device batch only on a TRL version that documents
+`generation_batch_size`; otherwise shorten `max_completion_length` instead.
+
+Memory for GRPO is dominated by the rollout: 8 prompts × 8 completions = 64 sequences of up to 320 tokens per
+rank, which is why the KV cache is ~3 GB there. That is the line item to watch on a T4.
 
 ## Commands
 

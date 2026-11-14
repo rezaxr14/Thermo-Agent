@@ -34,8 +34,8 @@ class GrpoSettings:
     num_generations: int = 8           # group size G
     max_completion_length: int = 320
     temperature: float = 1.0
-    per_device_batch: int = 2          # prompts per device; 2x8x2 = 32, divisible by G=8
-    grad_accum: int = 8
+    per_device_batch: int = 8          # prompts per device; 8 divides G=8, and 8x2x2 = 32 divides by G too
+    grad_accum: int = 2
     max_steps: int = 300
     loss_type: str = "dapo"            # TRL default; 'grpo' reproduces the original length normalisation
     beta: float = 0.0                  # no KL term -> no reference model in memory

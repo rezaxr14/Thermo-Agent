@@ -79,8 +79,8 @@ def assert_grpo_batches(per_device: int, grad_accum: int, world_size: int, num_g
     if not grpo_batches_divisible(per_device, grad_accum, world_size, num_generations):
         raise ValueError(
             f"effective batch {per_device}x{grad_accum}x{world_size}={eff} is not divisible by "
-            f"num_generations={num_generations}; adjustment example for 2 GPUs and G=8: "
-            "--per-device-batch 2 --grad-accum 8"
+            f"num_generations={num_generations}; the dual-T4 setting is "
+            "--per-device-batch 8 --grad-accum 2"
         )
 
 

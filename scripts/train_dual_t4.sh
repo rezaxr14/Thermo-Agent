@@ -53,7 +53,7 @@ run_grpo() {
   preflight
   torchrun --standalone --nproc_per_node="$NGPU" --module thermo_agent.train.grpo \
     "$DATA" "$OUT/grpo_$task" --task "$task" --init "$INIT" --dtype float16 \
-    --per-device-batch 2 --grad-accum 8 --grad-norm 1.0 --num-workers 2
+    --per-device-batch 8 --grad-accum 2 --grad-norm 1.0 --num-workers 2
 }
 
 run_merge() {
