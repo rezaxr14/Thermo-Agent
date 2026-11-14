@@ -1,0 +1,53 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+ENV/
+env/
+*.egg-info/
+build/
+dist/
+.eggs/
+# --- Tooling caches ---
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+.ipynb_checkpoints/
+# --- Run artefacts / generated data ---
+runs/
+outputs/
+wandb/
+data/processed/
+data/raw/*
+!data/raw/.gitkeep
+*.sqlite
+*.db
+# --- Model artefacts ---
+*.safetensors
+*.bin
+*.pt
+*.ckpt
+checkpoints/
+# --- Secrets ---
+.env
+.env.*
+*.pem
+*.key
+secrets.yaml
+# --- OS / editors ---
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+# --- Archives (keep the repo lean) ---
+*.zip
+!.gitattributes

@@ -1,0 +1,10 @@
+# Versions the test suite was run with (CPU only). Training packages (torch, transformers, peft, trl, bitsandbytes, accelerate, datasets)
+# are not pinned here: they were not installed in the authoring environment; record yours with `pip freeze` (see docs/RUNBOOK.md).
+CoolProp==8.0.0
+numpy==2.4.4
+scipy==1.17.1
+pydantic==2.14.2
+pandas==3.0.2
+openpyxl==3.1.5
+matplotlib==3.10.8
+pytest==9.2.0
