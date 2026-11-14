@@ -1,4 +1,5 @@
 # Non-model baselines (runbook 3) and GRPO reward diagnostics (3b). No GPU needed.
+# Called directly, with output tee'd to reports/, so each run leaves a record.
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 Set-Location $root
@@ -7,29 +8,39 @@ New-Item -ItemType Directory -Force -Path 'reports' | Out-Null
 
 function Step([string]$msg) { Write-Output ("[{0}] {1}" -f (Get-Date -Format o), $msg) }
 
-function Capture([string]$label, [string]$outFile, [string[]]$Args) {
-    Step $label
-    & $py @Args 2>&1 | Tee-Object -FilePath $outFile
-    if ($LASTEXITCODE -ne 0) { throw "$label failed with exit code $LASTEXITCODE" }
-}
+Step 'repair baselines: test_id'
+& $py -m thermo_agent.eval.run_eval data/processed --split test_id --limit 40 --by-fault 2>&1 |
+    Tee-Object -FilePath 'reports/baseline_repair_test_id.txt'
+if ($LASTEXITCODE -ne 0) { throw "repair test_id failed ($LASTEXITCODE)" }
 
-Capture 'repair baselines: test_id' 'reports/baseline_repair_test_id.txt' `
-    @('-m', 'thermo_agent.eval.run_eval', 'data/processed', '--split', 'test_id', '--limit', '40', '--by-fault')
-Capture 'repair baselines: test_ood_fault' 'reports/baseline_repair_test_ood_fault.txt' `
-    @('-m', 'thermo_agent.eval.run_eval', 'data/processed', '--split', 'test_ood_fault', '--limit', '40', '--by-fault')
-Capture 'repair baselines: test_ood_topology' 'reports/baseline_repair_test_ood_topology.txt' `
-    @('-m', 'thermo_agent.eval.run_eval', 'data/processed', '--split', 'test_ood_topology', '--limit', '40', '--by-fault')
+Step 'repair baselines: test_ood_fault'
+& $py -m thermo_agent.eval.run_eval data/processed --split test_ood_fault --limit 40 --by-fault 2>&1 |
+    Tee-Object -FilePath 'reports/baseline_repair_test_ood_fault.txt'
+if ($LASTEXITCODE -ne 0) { throw "repair test_ood_fault failed ($LASTEXITCODE)" }
 
-Capture 'design baselines: test_ood_climate' 'reports/baseline_design_test_ood_climate.txt' `
-    @('-m', 'thermo_agent.design.run_eval', 'data/processed', '--split', 'test_ood_climate', '--limit', '10')
+Step 'repair baselines: test_ood_topology'
+& $py -m thermo_agent.eval.run_eval data/processed --split test_ood_topology --limit 40 --by-fault 2>&1 |
+    Tee-Object -FilePath 'reports/baseline_repair_test_ood_topology.txt'
+if ($LASTEXITCODE -ne 0) { throw "repair test_ood_topology failed ($LASTEXITCODE)" }
 
-Capture 'audit baselines: test_ood_topology' 'reports/baseline_audit_test_ood_topology.txt' `
-    @('-m', 'thermo_agent.audit.run_eval', 'data/processed', '--split', 'test_ood_topology', '--limit', '40')
+Step 'design baselines: test_ood_climate'
+& $py -m thermo_agent.design.run_eval data/processed --split test_ood_climate --limit 10 2>&1 |
+    Tee-Object -FilePath 'reports/baseline_design_test_ood_climate.txt'
+if ($LASTEXITCODE -ne 0) { throw "design baseline failed ($LASTEXITCODE)" }
 
-Capture 'ledger baselines: test_ood_fault' 'reports/baseline_ledger_test_ood_fault.txt' `
-    @('-m', 'thermo_agent.ledger.run_eval', 'data/processed', '--split', 'test_ood_fault', '--limit', '200')
+Step 'audit baselines: test_ood_topology'
+& $py -m thermo_agent.audit.run_eval data/processed --split test_ood_topology --limit 40 2>&1 |
+    Tee-Object -FilePath 'reports/baseline_audit_test_ood_topology.txt'
+if ($LASTEXITCODE -ne 0) { throw "audit baseline failed ($LASTEXITCODE)" }
 
-Capture 'reward diagnostics' 'reports/reward_diagnostics.txt' `
-    @('-m', 'thermo_agent.train.reward_diagnostics', 'data/processed', '--groups', '12', '--out', 'reports/reward_diagnostics.json')
+Step 'ledger baselines: test_ood_fault'
+& $py -m thermo_agent.ledger.run_eval data/processed --split test_ood_fault --limit 200 2>&1 |
+    Tee-Object -FilePath 'reports/baseline_ledger_test_ood_fault.txt'
+if ($LASTEXITCODE -ne 0) { throw "ledger baseline failed ($LASTEXITCODE)" }
+
+Step 'reward diagnostics'
+& $py -m thermo_agent.train.reward_diagnostics data/processed --groups 12 --out reports/reward_diagnostics.json 2>&1 |
+    Tee-Object -FilePath 'reports/reward_diagnostics.txt'
+if ($LASTEXITCODE -ne 0) { throw "reward diagnostics failed ($LASTEXITCODE)" }
 
 Step 'done'

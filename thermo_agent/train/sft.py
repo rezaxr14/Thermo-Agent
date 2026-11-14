@@ -1,11 +1,20 @@
-"""Stage 1: SFT on verified expert completions (LoRA / QLoRA), one adapter for one or several tasks.
+"""Stage 1: SFT on verified expert completions (full fp16 LoRA, optional DDP).
     python -m thermo_agent.train.sft DATA_DIR OUT_DIR [--tasks repair design audit ledger] [--model Qwen/Qwen3.5-4B]
         [--dtype bfloat16|float16] [--qlora] [--max-steps N] [--limit-rows N] [--print-sample]
+        [--per-device-batch 2] [--grad-accum 8] [--grad-norm 1.0] [--num-workers 2]
+Dual T4 (see docs/DUAL_T4.md):
+    torchrun --standalone --nproc_per_node=2 --module thermo_agent.train.sft DATA_DIR runs/sft \
+        --dtype float16 --per-device-batch 2 --grad-accum 8
+DDP replicates the frozen base model; only LoRA gradients cross PCIe. fp16 runs under the Trainer's AMP
+GradScaler, so loss overflows are rescaled automatically, and gradients are clipped at --grad-norm before
+each optimizer step.
 Prompts are rendered with the tokenizer exactly as GRPO and inference will render them (see train/render.py).
-Not run in the authoring environment (no GPU). If the checkpoint loads only through an image-text class, load that class and
-pass the model object to SFTTrainer instead of the string."""
+If the checkpoint loads only through an image-text class, load that class and pass the model object to
+SFTTrainer instead of the string."""
 from __future__ import annotations
 import argparse, json, pathlib, random
+
+from . import ddp
 from .config import BASE_MODEL, SftSettings
 from .render import render_pair, prefix_report
 
@@ -19,12 +28,46 @@ def read_rows(data_dir, tasks, split, seed=0, limit=None):
     return rows[:limit] if limit else rows
 
 
+def _report_topology(dtype: str) -> None:
+    """Print what this rank sees and refuse a dtype the hardware cannot run."""
+    import torch
+    if not torch.cuda.is_available():
+        raise SystemExit("no CUDA device visible; SFT needs a GPU")
+    capability = torch.cuda.get_device_capability(0)
+    ddp.check_dtype_supported(dtype, capability)
+    world = ddp.world_size_from_env()
+    if torch.cuda.device_count() < world:
+        raise SystemExit(f"torchrun started {world} processes but only {torch.cuda.device_count()} GPUs are visible")
+    if dtype == "float16":
+        # accumulate matmuls in fp32: slower by a few percent, much less overflow-prone on Turing
+        torch.backends.cuda.matmul.allow_fp16_reduced_precision_reduction = False
+    print(f"[rank {ddp.local_rank_from_env()}/{world}] {ddp.topology_line()}", flush=True)
+
+
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("data"); ap.add_argument("out")
     ap.add_argument("--tasks", nargs="+", default=["repair"], choices=["repair", "design", "audit", "ledger"])
-    ap.add_argument("--model", default=BASE_MODEL); ap.add_argument("--dtype", default="bfloat16"); ap.add_argument("--qlora", action="store_true")
+    ap.add_argument("--model", default=BASE_MODEL); ap.add_argument("--dtype", default="bfloat16", choices=list(ddp.DTYPES))
+    ap.add_argument("--qlora", action="store_true", help="4-bit base weights; only for cards under 10 GB, not the T4 path")
     ap.add_argument("--max-steps", type=int, default=-1); ap.add_argument("--limit-rows", type=int); ap.add_argument("--print-sample", action="store_true")
+    ap.add_argument("--per-device-batch", type=int); ap.add_argument("--grad-accum", type=int); ap.add_argument("--grad-norm", type=float)
+    ap.add_argument("--num-workers", type=int, default=2)
     a = ap.parse_args(); s = SftSettings()
+    if a.per_device_batch: s.per_device_batch = a.per_device_batch
+    if a.grad_accum: s.grad_accum = a.grad_accum
+    if a.grad_norm is not None: s.max_grad_norm = a.grad_norm
+    world = ddp.world_size_from_env()
+    if a.qlora and world > 1:
+        raise SystemExit("QLoRA + DDP is not supported here: use full fp16 LoRA (drop --qlora), as in docs/DUAL_T4.md")
+    if a.print_sample:
+        from transformers import AutoTokenizer
+        tr = read_rows(a.data, a.tasks, "train", limit=1)
+        if not tr: raise SystemExit(f"no training rows for {a.tasks} in {a.data}")
+        ex = tr[0]; tok = AutoTokenizer.from_pretrained(a.model); pair = render_pair(tok, ex)
+        print("PROMPT TAIL:", repr(pair["prompt"][-200:])); print("COMPLETION HEAD:", repr(pair["completion"][:200]))
+        print("PREFIX CHECK:", json.dumps(prefix_report(tok, ex), indent=1)); return
+    _report_topology(a.dtype)
+
     from datasets import Dataset
     from peft import LoraConfig
     from transformers import AutoTokenizer
@@ -32,10 +75,6 @@ def main():
     tok = AutoTokenizer.from_pretrained(a.model)
     tr, va = read_rows(a.data, a.tasks, "train", limit=a.limit_rows), read_rows(a.data, a.tasks, "val", limit=a.limit_rows)
     if not tr: raise SystemExit(f"no training rows for {a.tasks} in {a.data}")
-    if a.print_sample:
-        ex = tr[0]; pair = render_pair(tok, ex)
-        print("PROMPT TAIL:", repr(pair["prompt"][-200:])); print("COMPLETION HEAD:", repr(pair["completion"][:200]))
-        print("PREFIX CHECK:", json.dumps(prefix_report(tok, ex), indent=1)); return
     train = Dataset.from_list([render_pair(tok, r) for r in tr]); val = Dataset.from_list([render_pair(tok, r) for r in va]) if va else None
     init = {"dtype": a.dtype}
     if a.qlora:
@@ -43,9 +82,13 @@ def main():
         from transformers import BitsAndBytesConfig
         init["quantization_config"] = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4", bnb_4bit_compute_dtype=getattr(torch, a.dtype))
     cfg = SFTConfig(output_dir=a.out, learning_rate=s.lr, num_train_epochs=s.epochs, max_steps=a.max_steps, max_length=s.max_length,
-                    per_device_train_batch_size=s.per_device_batch, gradient_accumulation_steps=s.grad_accum, gradient_checkpointing=True,
-                    logging_steps=5, eval_strategy="epoch" if val else "no", save_strategy="epoch", completion_only_loss=True,
-                    model_init_kwargs=init, report_to="none", fp16=(a.dtype == "float16"), bf16=(a.dtype == "bfloat16"))
+                    per_device_train_batch_size=s.per_device_batch, gradient_accumulation_steps=s.grad_accum, max_grad_norm=s.max_grad_norm,
+                    gradient_checkpointing=True, dataloader_num_workers=a.num_workers,
+                    logging_steps=5, eval_strategy="epoch" if val else "no", save_strategy="epoch", save_total_limit=2,
+                    completion_only_loss=True, model_init_kwargs=init, report_to="none", seed=0,
+                    fp16=(a.dtype == "float16"), bf16=(a.dtype == "bfloat16"),
+                    gradient_as_bucket_view=True, ddp_find_unused_parameters=False, ddp_bucket_cap_mb=64,
+                    optim="adamw_torch")
     lora = LoraConfig(r=s.lora.r, lora_alpha=s.lora.alpha, lora_dropout=s.lora.dropout, target_modules=s.lora.target_modules, task_type="CAUSAL_LM")
     SFTTrainer(model=a.model, args=cfg, train_dataset=train, eval_dataset=val, peft_config=lora).train()
 

@@ -10,6 +10,9 @@ Everything under "Generate data" and every test runs on CPU. Everything that loa
 | Kaggle T4 (16 GB), one GPU | `--dtype float16 --qlora`. T4 has no bf16. |
 | Kaggle TPU v5e-8 | not supported by these scripts (PyTorch/TRL on GPU only). |
 | RTX 4050 (6 GB) | data generation, tests and non-model baselines only; 4B training with prompts of about 2k tokens is unlikely to fit. |
+Two T4s (Kaggle `2x T4`) are not a single bigger GPU: they share PCIe. Train through
+`scripts/train_dual_t4.sh`, which launches two DDP ranks with full fp16 LoRA and no 4-bit weights; the
+reasoning and the batch arithmetic are in `docs/DUAL_T4.md`.
 
 ## 1. Install
 ```
