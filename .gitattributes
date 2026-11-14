@@ -1,0 +1,14 @@
+# Normalize to LF everywhere so Windows and CI agree
+* text=auto eol=lf
+# Binary assets
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+*.zip binary
+*.xlsx binary
+*.safetensors binary
+*.bin binary
+*.pt binary
+*.ckpt binary
