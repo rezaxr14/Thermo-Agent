@@ -45,3 +45,18 @@ def augment(messages: list[dict], mode: str, task: str, plant: Plant | None = No
     out = [dict(m) for m in messages]
     out[0]["content"] = out[0]["content"] + "\n\n" + "\n\n".join(parts)
     return out
+
+def augment_with_memory(messages: list[dict], mode: str, task: str, plant: Plant | None = None,
+                        notes=None, k: int = 3, exclude_record: str = "") -> list[dict]:
+    """`augment` plus hindsight failure notes retrieved for this plant.
+
+    Kept separate from `augment` so the harness ablation (`MODES`) is unchanged; memory is an extra layer that
+    can be switched on independently in training and evaluation.
+    """
+    from ..teacher import memory
+    from .dsl import plant_to_text
+    out = augment(messages, mode, task, plant)
+    if not notes:
+        return out
+    query = plant_to_text(plant) if plant is not None else ""
+    return memory.augment_with_memory(out, task, query, notes, k=k, exclude_record=exclude_record)

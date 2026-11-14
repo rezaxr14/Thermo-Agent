@@ -1,0 +1,232 @@
+{
+ "repair": {
+  "rows": {
+   "test_id": 161,
+   "test_ood_fault": 1068,
+   "test_ood_topology": 1310,
+   "train": 1248,
+   "val": 149
+  },
+  "approx_prompt_tokens": {
+   "mean": 609,
+   "max": 752
+  },
+  "fault_by_topology": {
+   "dc_electric/wrong_fluid": 267,
+   "dc_absorption/wrong_fluid": 249,
+   "dc_electric/efficiency_gt_1": 267,
+   "dc_absorption/efficiency_gt_1": 267,
+   "dc_absorption/unit_slip": 255,
+   "dc_electric/unit_slip": 253,
+   "dc_absorption/sign_flip": 267,
+   "dc_absorption/swapped_ports": 267,
+   "dc_electric/sign_flip": 267,
+   "dc_electric/swapped_ports": 267,
+   "cgam_orc/unit_slip": 88,
+   "cgam_orc/sign_flip": 89,
+   "cgam_orc/efficiency_gt_1": 89,
+   "cgam_orc/wrong_fluid": 178,
+   "dc_engine_absorption/unit_slip": 85,
+   "dc_engine_absorption/sign_flip": 89,
+   "dc_engine_absorption/efficiency_gt_1": 89,
+   "dc_engine_absorption/swapped_ports": 89,
+   "dc_engine_electric/unit_slip": 81,
+   "dc_engine_electric/sign_flip": 88,
+   "dc_engine_electric/efficiency_gt_1": 88,
+   "dc_engine_electric/swapped_ports": 88,
+   "dc_engine_electric/wrong_fluid": 88,
+   "dc_engine_absorption/wrong_fluid": 81
+  },
+  "train_fault_types": [
+   "efficiency_gt_1",
+   "unit_slip",
+   "wrong_fluid"
+  ],
+  "expert_reward_means": {
+   "r_format": 1.0,
+   "r_valid": 1.0,
+   "r_site": 1.0,
+   "r_exact": 1.0,
+   "r_minimal": 1.0,
+   "r_grounded": 1.0
+  }
+ },
+ "design": {
+  "rows": {
+   "test_id": 78,
+   "test_ood_climate": 229,
+   "test_ood_load": 148,
+   "test_ood_scale": 164,
+   "train": 652,
+   "val": 96
+  },
+  "approx_prompt_tokens": {
+   "mean": 419,
+   "max": 424
+  },
+  "winning_configs": {
+   "engine/absorption/dry/orc_toluene": 204,
+   "engine/absorption/wet/orc_toluene": 154,
+   "turbine/absorption/dry/orc_cyclopentane": 143,
+   "engine/absorption/dry/orc_cyclopentane": 139,
+   "engine/absorption/wet/orc_cyclopentane": 104,
+   "engine/electric/dry/none": 89,
+   "engine/absorption/dry/orc_r245fa": 87,
+   "turbine/absorption/dry/orc_toluene": 85
+  },
+  "mean_valid_configs_per_site": 10.3,
+  "expert_reward_means": {
+   "d_format": 1.0,
+   "d_valid": 1.0,
+   "d_quality": 1.0,
+   "d_grounded": 1.0
+  }
+ },
+ "audit": {
+  "rows": {
+   "test_id": 65,
+   "test_ood_topology": 239,
+   "train": 413,
+   "val": 56
+  },
+  "approx_prompt_tokens": {
+   "mean": 847,
+   "max": 1269
+  },
+  "best_change_param": {
+   "AC.PR": 347,
+   "CC.T_out": 231,
+   "CH.dT_rej": 90,
+   "REJ.fan_frac": 40,
+   "ENG.f_loss": 22,
+   "CC.dp": 14,
+   "PMP.P_out": 13,
+   "EVA.flow_frac": 11
+  },
+  "expert_reward_means": {
+   "a_format": 1.0,
+   "a_rank": 1.0,
+   "a_valid": 1.0,
+   "a_gain": 1.0,
+   "a_pred": 1.0,
+   "a_grounded": 1.0
+  }
+ },
+ "ledger": {
+  "rows": {
+   "test_id": 145,
+   "test_ood_fault": 535,
+   "test_ood_topology": 998,
+   "train": 1166,
+   "val": 155
+  },
+  "approx_prompt_tokens": {
+   "mean": 957,
+   "max": 1544
+  },
+  "fault_type_counts": {
+   "wrong_factor": 363,
+   "sign_flip": 368,
+   "unit_slip": 586,
+   "t0_offset": 228,
+   "t0_celsius": 235,
+   "sign_T0": 294,
+   "missing_ech": 113,
+   "dropped_term": 325,
+   "missing_m": 235,
+   "t0_literal": 300,
+   "wrong_stream": 370,
+   "wrong_ref": 216,
+   "dropped_work": 256
+  },
+  "train_fault_types": [
+   "dropped_term",
+   "missing_ech",
+   "missing_m",
+   "sign_T0",
+   "sign_flip",
+   "t0_celsius",
+   "t0_literal",
+   "t0_offset",
+   "unit_slip",
+   "wrong_factor"
+  ],
+  "expert_reward_means": {
+   "l_format": 1.0,
+   "l_closure": 1.0,
+   "l_nonneg": 1.0,
+   "l_exact": 1.0,
+   "l_minimal": 1.0,
+   "l_grounded": 1.0
+  }
+ },
+ "meta": {
+  "audit": {
+   "params": {
+    "n": 800,
+    "seed": 0,
+    "workers": 8,
+    "counts": {
+     "test_id": 65,
+     "train": 413,
+     "test_ood_topology": 239,
+     "val": 56
+    }
+   },
+   "coolprop": "8.0.0",
+   "created_utc": "2026-11-14T17:08:22+00:00"
+  },
+  "design": {
+   "params": {
+    "n": 1500,
+    "seed": 0,
+    "workers": 14,
+    "max_evals": 60,
+    "counts": {
+     "train": 652,
+     "test_ood_load": 148,
+     "test_ood_scale": 164,
+     "test_ood_climate": 229,
+     "test_id": 78,
+     "val": 96
+    }
+   },
+   "coolprop": "8.0.0",
+   "created_utc": "2026-11-14T18:44:44+00:00"
+  },
+  "ledger": {
+   "params": {
+    "n": 3000,
+    "seed": 0,
+    "workers": 8,
+    "counts": {
+     "train": 1166,
+     "test_ood_fault": 535,
+     "test_id": 145,
+     "test_ood_topology": 998,
+     "val": 155
+    }
+   },
+   "coolprop": "8.0.0",
+   "created_utc": "2026-11-14T17:57:35+00:00"
+  },
+  "repair": {
+   "params": {
+    "n": 4000,
+    "seed": 0,
+    "workers": 8,
+    "chunk": 90,
+    "counts": {
+     "train": 1248,
+     "test_ood_fault": 1068,
+     "val": 149,
+     "test_id": 161,
+     "test_ood_topology": 1310
+    }
+   },
+   "coolprop": "8.0.0",
+   "created_utc": "2026-11-14T17:06:39+00:00"
+  }
+ },
+ "problems": []
+}

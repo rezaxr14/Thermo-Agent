@@ -62,7 +62,7 @@ def test_grpo_groups_divide_the_effective_batch():
 
 
 def test_dual_t4_defaults_are_consistent():
-    """Two ranks, the shipped batch sizes: SFT 2x8x2, GRPO 8x2x2 divisible by G=8."""
+    """Two ranks, the shipped batch sizes: SFT 2x8x2, GRPO 4x2x2 divisible by G=4."""
     s, g = SftSettings(), GrpoSettings()
     assert ddp.effective_batch(s.per_device_batch, s.grad_accum, 2) == 32
     assert g.per_device_batch % g.num_generations == 0          # TRL also checks the per-device batch

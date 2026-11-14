@@ -21,7 +21,7 @@ class LoraSettings:
 class SftSettings:
     lr: float = 2e-4
     epochs: int = 2
-    max_length: int = 3072             # prompt (<= ~6.5k chars) + completion
+    max_length: int = 4096             # prompt (harness + memory, capped at 14k chars) + completion
     per_device_batch: int = 2
     grad_accum: int = 8
     max_grad_norm: float = 1.0         # fp16 needs clipping before the optimizer step
@@ -31,10 +31,10 @@ class SftSettings:
 @dataclass
 class GrpoSettings:
     lr: float = 5e-5                   # LoRA RL learning rate; TRL's LoRA example uses 5e-5
-    num_generations: int = 8           # group size G
+    num_generations: int = 4           # group size G; 8 x 320-token rollouts on a T4 exceed 15 GB
     max_completion_length: int = 320
     temperature: float = 1.0
-    per_device_batch: int = 8          # prompts per device; 8 divides G=8, and 8x2x2 = 32 divides by G too
+    per_device_batch: int = 4          # prompts per device; 4 divides G=4 and 4x2x2 = 16 does too
     grad_accum: int = 2
     max_steps: int = 300
     loss_type: str = "dapo"            # TRL default; 'grpo' reproduces the original length normalisation

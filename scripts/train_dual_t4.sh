@@ -12,14 +12,23 @@ cd "$(dirname "$0")/.."
 DATA=${DATA:-data/processed}
 OUT=${OUT:-runs}
 MODEL=${MODEL:-Qwen/Qwen3.5-4B}
-NGPU=${NGPU:-2}
 TASKS=${TASKS:-"repair design audit ledger"}
 INIT=${INIT:-runs/sft_merged}
 PY=${PY:-python}
 [ -x .venv/bin/python ] && PY=.venv/bin/python
 
+# Detect the GPUs and dataloader workers instead of assuming the Kaggle 2xT4 shape.
+if [ -z "${NGPU:-}" ]; then
+  NGPU=$(nvidia-smi -L 2>/dev/null | wc -l | tr -d ' ')
+  [ "${NGPU:-0}" -ge 1 ] 2>/dev/null || NGPU=1
+fi
+if [ -z "${WORKERS:-}" ]; then
+  CPUS=$(nproc 2>/dev/null || echo 4)
+  WORKERS=$(( CPUS / 2 )); [ "$WORKERS" -lt 1 ] && WORKERS=1
+fi
+
 export TOKENIZERS_PARALLELISM=false
-export OMP_NUM_THREADS=${OMP_NUM_THREADS:-4}
+export OMP_NUM_THREADS=${OMP_NUM_THREADS:-$(( WORKERS > 4 ? 4 : WORKERS ))}
 export NCCL_DEBUG=${NCCL_DEBUG:-WARN}
 export NCCL_IB_DISABLE=1           # no InfiniBand on Kaggle; avoids a probe that can stall
 # export NCCL_P2P_DISABLE=1        # only if NCCL hangs or reports an unsupported P2P setup
@@ -45,7 +54,7 @@ run_sft() {
   preflight
   torchrun --standalone --nproc_per_node="$NGPU" --module thermo_agent.train.sft \
     "$DATA" "$OUT/sft" --model "$MODEL" --dtype float16 --tasks $TASKS \
-    --per-device-batch 2 --grad-accum 8 --grad-norm 1.0 --num-workers 2
+    --per-device-batch 2 --grad-accum 8 --grad-norm 1.0 --num-workers "$WORKERS"
 }
 
 run_grpo() {
@@ -53,7 +62,7 @@ run_grpo() {
   preflight
   torchrun --standalone --nproc_per_node="$NGPU" --module thermo_agent.train.grpo \
     "$DATA" "$OUT/grpo_$task" --task "$task" --init "$INIT" --dtype float16 \
-    --per-device-batch 8 --grad-accum 2 --grad-norm 1.0 --num-workers 2
+    --per-device-batch 4 --grad-accum 2 --grad-norm 1.0 --num-workers "$WORKERS"
 }
 
 run_merge() {

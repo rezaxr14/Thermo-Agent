@@ -1,0 +1,20 @@
+{
+ "task": "repair_arch",
+ "params": {
+  "n": 400,
+  "seed": 0,
+  "workers": 12,
+  "architectures": 65,
+  "counts": {
+   "train": 61,
+   "test_ood_fault": 60,
+   "val": 11,
+   "test_id": 9,
+   "test_ood_topology": 135
+  }
+ },
+ "schema_version": "0.1.0",
+ "python": "3.12.3",
+ "coolprop": "8.0.0",
+ "created_utc": "2026-11-14T19:14:54+00:00"
+}

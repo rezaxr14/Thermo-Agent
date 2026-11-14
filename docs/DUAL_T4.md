@@ -44,9 +44,9 @@ If `trainer_state.json` shows a large share of skipped steps, lower the learning
 |---|---|---|
 | base weights, fp16 | 8.0 GB | 8.0 GB |
 | LoRA params + fp32 optimizer state | ~0.4 GB | ~0.2 GB |
-| activations (checkpointing on) | ~2 GB at batch 2 × 3072 tokens | ~1.5 GB at 64 sequences × 320 tokens |
-| KV cache | — | ~3 GB |
-| **total** | **~10–11 GB of 15 GB** | **~12.5 GB of 15 GB** |
+| activations (checkpointing on) | ~2.6 GB at batch 2 × 4096 tokens | ~1 GB at 16 sequences × 320 tokens |
+| KV cache | — | ~2 GB at 4 prompts × 4 completions × ~900 tokens |
+| **total** | **~11.5 GB of 15 GB** | **~11 GB of 15 GB** |
 
 Both fit with headroom. A 4-bit base is unnecessary and is not used (`--qlora` is refused under DDP).
 
@@ -57,13 +57,17 @@ Both fit with headroom. A 4-bit base is unnecessary and is not used (`--qlora` i
 | Stage | per device | accum | ranks | effective |
 |---|---|---|---|---|
 | SFT | 2 | 8 | 2 | 32 sequences |
-| GRPO | 8 | 2 | 2 | 32 prompts, 8 completions each |
+| GRPO | 4 | 2 | 2 | 16 prompts, 4 completions each |
 
 GRPO groups completions per prompt, so two divisibility readings matter across TRL versions: the per-device
-prompt batch and the effective batch must both be multiples of `num_generations` (8). `--per-device-batch 8
---grad-accum 2` satisfies both; the trainer checks the effective batch before loading the model. If a 15 GB
-card runs out of memory during rollouts, halve the per-device batch only on a TRL version that documents
-`generation_batch_size`; otherwise shorten `max_completion_length` instead.
+prompt batch and the effective batch must both be multiples of `num_generations` (4). `--per-device-batch 4
+--grad-accum 2` satisfies both; the trainer checks the effective batch before loading the model.
+
+The group size is 4 rather than 8 because of the KV cache, not the weights. A 4B model with grouped-query
+attention needs roughly 0.15 MB of KV per token; 8 prompts x 8 completions x (600-token prompt + 320 generated)
+is about 9 GB of cache on top of the 8 GB of fp16 weights, which does not fit a 15 GB T4. At G=4 the same
+arithmetic gives about 2 GB, leaving room for activations. If a future runtime has more memory, raise G and
+keep the two divisibility conditions.
 
 Memory for GRPO is dominated by the rollout: 8 prompts × 8 completions = 64 sequences of up to 320 tokens per
 rank, which is why the KV cache is ~3 GB there. That is the line item to watch on a T4.
