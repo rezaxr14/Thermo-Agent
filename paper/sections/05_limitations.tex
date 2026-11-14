@@ -1,0 +1,36 @@
+\section{Limitations}\label{sec:limits}
+
+\paragraph{Assumed technology constants.}
+The engine electrical efficiency (0.43) and loss fraction (0.15 by default; 0.10 to 0.20 in the generators), the turbine efficiencies, the chiller reversible-limit fractions and the 0.8 COP cap, the heat-pump approach, the rejector approaches and fan fraction, the ORC fluid
+vapor limits, the 333~K stack floor and the fraction of IT heat on the chilled loop are assumed (\cref{tab:constants}). They are not fitted to data, and the Design and Audit outcomes depend on them. In particular, the feasibility limits of \cref{sec:feasibility} follow from these constants.
+
+\paragraph{Heat that is not recovered or modeled.}
+Engine jacket and radiation heat is rejected, not recovered. The absorption chiller is a system-level model with a fraction of the reversible COP and a cap, not a LiBr property model.
+Water use is an upper bound. At an 18\,$^\circ$C chilled-water supply the chiller sits at its COP cap, so the absorption results are insensitive to $\varepsilon$ there. Free cooling is not modeled, which makes the cold cells of \cref{fig:fig_design_feasibility} infeasible in the model.
+
+\paragraph{Operation.}
+There are no real part-load curves, no thermal storage, no dispatch, and no start-up or ramp limits. Trace results are bounds (\cref{sec:trace}), and the modular-fleet penalty depends on the trace shape.
+
+\paragraph{No measured on-site-generation data center.}
+Published measurements of a supercomputer set operating points, and nothing in this paper was measured on a data center with on-site generation. The Frontier trace evaluation is pending, and the only trace result is on a synthetic trace. There is no validation against a real plant: the cross-check in \cref{sec:env} is one operating point of one configuration against an independent implementation of the same equations.
+
+\paragraph{Audit.}
+The prime mover was the largest destroyer in every plant generated, so the ranking excludes it, and the task is a ranking among the remaining components. The best allowed change is mostly the pressure ratio or the turbine inlet temperature on turbine plants, where a fixed rule recovers \val{audb.rule_gain_id_pct}\% of the best gain when it is valid. The held-out plants (engine and steam-ORC) offer much smaller savings, so the gain channel is small in absolute terms there.
+
+\paragraph{Ledger repair.}
+The task is solvable by a rule: a program that rebuilds every line from the topology solves every row by construction. It measures whether a model applies that rule from text and localizes the fault, and it does not measure thermodynamic insight. Of the generated rows, \val{led.none_pct}\% show no second-law symptom, so the checks alone cannot detect them; the model has to find them from the text.
+
+\paragraph{Repair.}
+Most Repair faults are caught by parameter-range checks, and the baseline search solves almost all rows. The task is useful for the cost it measures (solver calls), not for difficulty of detection.
+
+\paragraph{Reference and baselines.}
+The Design reference is the best design found by enumeration plus a local polish, not a proven optimum, and the enumerate-then-polish curve runs the procedure that defines the reference. The baseline samples are small (\val{des.n_sites} Design sites, \val{aud.n_id} and \val{aud.n_ood} Audit plants, \val{rep.total_n} Repair rows, one example plant for each of the cross-check and the exergy-flow figure), and the intervals are wide where we give them.
+
+\paragraph{Synthetic data.}
+All training and evaluation data are sampled by the generators and labeled by the simulator and the verifiers. They are not measurements, and the distribution of plants is the one the generators produce.
+
+\paragraph{No trained model.}
+No model has been trained or evaluated, because no GPU was available. The GPU code is untested: loading Qwen3.5-4B through the causal-LM class, the TRL argument names, 4-bit loading and merging, and generation-length cutoffs are the known risks. The runbook of the project records them. Every model statement in this paper is pending.
+
+\paragraph{Verifier gaming and software status.}
+Verifier gaming is possible. Edits are restricted to existing fields, the site check is in the Repair reward, and the reward functions are tested with junk and mutated answers for robustness (they must not raise and must stay bounded), but this does not exclude gaming by a trained policy. The project has \val{env.n_tests} tests that pass on the CPU; the continuous-integration workflow in the project has never been executed.

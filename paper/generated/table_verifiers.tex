@@ -1,0 +1,17 @@
+\begingroup\small\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}lp{3.3cm}p{7.6cm}p{1.9cm}@{}}
+\toprule
+ID & Check & Definition and tolerance & Kind \\
+\midrule
+V1 & mass balance & per component, residual $\le 10^{-6}$ of the largest flow & hard \\
+V2 & energy balance & per component, residual $\le 10^{-6}\,(|\dot W_{\text{net}}|+\dot Q_{\text{fuel}}+1~\mathrm{MW})$ & hard \\
+V3a & non-negative destruction & $\ED \ge -10^{-5}\,\dot E_{\text{fuel}}$ in every component & hard \\
+V3b & exergy closure & $|\sum \ED - (\text{in} - \text{out} - \dot W_{\text{net}})| \le 10^{-6}\,\dot E_{\text{fuel}}$ & hard \\
+V4a & temperature cross & minimum approach $\ge 0$ K in every heat exchanger & hard \\
+V4b & practical pinch & minimum approach $\ge 1$ K & soft \\
+V5 & second-law bounds & $0\le\eta_{\mathrm{II}}\le 1$; power efficiency $<1-\Tzero/T_{\max}$; ORC efficiency $<1-T_{\mathrm{cond}}/T_{\mathrm{hot}}$; every COP at or below its reversible limit & hard \\
+V6 & parameter and state ranges & efficiencies in $(0,1]$, pressure ratio $>1$, drops in $[0,0.3]$, $T$ in 150--2500 K, $P$ in 1 kPa--100 MPa, pressure-change direction & hard \\
+V7 & number grounding & numbers with units in reasoning text match solver or plant values within 0.5\% (3\% for predicted Design quantities) & reward channel \\
+V8 & site requirements & IT load within 1\%, electricity balance (no grid import unless allowed), cooling and heat $\ge 99\%$, water limit & hard (site) \\
+\bottomrule
+\end{tabular}\endgroup

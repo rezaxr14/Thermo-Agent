@@ -1,0 +1,282 @@
+\section{Method}\label{sec:method}
+
+The method has four parts: a plant simulator with exergy accounting (\cref{sec:env,sec:exergy}), verifiers
+that decide whether a plant is acceptable (\cref{sec:verifiers}), four task families built on them
+(\cref{sec:tasks,sec:rewards}), and a two-stage training recipe with an optional agent harness
+(\cref{sec:training,sec:harness}). Constants marked as assumed are model settings, not measurements;
+\cref{tab:constants} lists them and \cref{sec:limits} discusses what they do to the results.
+
+\subsection{The environment: plant graph, fluids and solver}\label{sec:env}
+
+A plant is a typed graph. Components are nodes; streams are edges whose endpoints are either
+\texttt{Comp.port} or \texttt{ext:name} for a boundary. Each port accepts one fluid class, gas or liquid, and a
+mismatch is an error. Stream fluids are ideal-gas mixtures (\texttt{CGAM\_AIR}, \texttt{FLUE},
+\texttt{CH4}), with NASA-7 polynomials from GRI-Mech~3.0 \citep{smith1999grimech} whose enthalpy includes
+the formation enthalpy and whose entropy uses partial pressures, or CoolProp fluids \citep{bell2014coolprop}
+(Water, R245fa, Cyclopentane, Toluene). A stream that has a component as its source and carries fixed
+values is a tear stream: it closes a loop, and the producing component must reproduce it or the solver
+reports non-convergence. The solver is sequential-modular with tear streams, on a molar basis in SI units. Errors are
+typed (for example \texttt{E\_PROP\_RANGE}, \texttt{E\_TEMP\_CROSS}, \texttt{E\_NOT\_CONVERGED},
+\texttt{E\_FLUID\_MISMATCH}, \texttt{E\_DISCONNECTED}, \texttt{E\_OVER\_SPECIFIED},
+\texttt{E\_UNDER\_SPECIFIED}), so that a failed solve returns text a model can read. One solve of the plant in
+\cref{fig:fig_exergy_flow} took \val{exf.solve_ms}\,ms on average over ten runs on the authoring machine (a single
+CPU); the project's design notes give 10 to 30 ms.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\linewidth]{figures/pdf/fig_plant_graph.pdf}
+\caption{Plant graph of the data-center model with the real stream identifiers. Gas streams are orange and liquid
+streams blue; dashed streams are tear streams with fixed values that close a loop; dashed boxes are optional or
+alternative blocks (gas engine, district-heat exchanger, ORC loop, second heat rejector, heat pump). The graph is
+produced from three builder calls of the \texttt{dc\_chp} topology (\texttt{assets/plant\_graph.json}); it is a
+structural diagram, not a result.}
+\label{fig:fig_plant_graph}
+\end{figure}
+
+\paragraph{Component library.}
+There are \val{env.n_components} component types with \val{env.n_params} registered parameters in total
+(\cref{tab:components}; the full registry is in \cref{app:registry}). The main models are these. The combustor
+solves a fuel-to-air mole ratio from an energy balance with a heat-loss fraction. The gas engine is sized by its
+rated electrical output: fuel is $P_{\mathrm{el}}/(\eta_{\mathrm{el}}\,\mathrm{LHV})$, jacket and radiation heat
+$f_{\mathrm{loss}}\,\dot n_F\,\mathrm{LHV}$ is rejected to ambient rather than recovered, and the exhaust
+temperature follows from the balance. The absorption chiller has
+$\mathrm{COP}=\min(\varepsilon\,\mathrm{COP}_{\mathrm{rev}},\mathrm{COP}_{\max})$ with $\varepsilon=0.27$ and a
+cap of $0.8$, where $\mathrm{COP}_{\mathrm{rev}}$ is the reversible COP of the generator, rejection and
+evaporator temperatures. Electric chillers and heat pumps use a fraction $\varepsilon=0.5$ of the reversible (Lorenz)
+COP on refrigerant-side temperatures obtained by moving the stream log-mean temperatures outward by a 5~K approach.
+The heat rejector's outlet is the dry-bulb temperature (dry cooler, 8~K approach) or the wet-bulb temperature (tower,
+5~K approach) plus the approach; fans use 1.5\% of the heat rejected, and tower make-up water is an upper bound.
+The ORC evaporator puts its pinch at the bubble point and lets the working-fluid flow lie in a window: the upper limit keeps the
+exhaust above a stack floor of 333~K and the lower limit keeps the vapor at or below a fluid-specific temperature
+(420, 480 and 560~K for R245fa, cyclopentane and toluene); if the lower limit exceeds the upper, the exhaust is too hot
+for that fluid. The IT load consumes $P_{\mathrm{it}}$ of electricity and passes a fraction $f$ of it to a chilled-water
+loop; the rest is rejected directly.
+
+\begin{table}[tbp]
+\centering
+\input{generated/table_components.tex}
+\caption{Component library, generated from \texttt{core.components} (\texttt{REQUIRED\_PORTS},
+\texttt{PORT\_CLASS}, \texttt{PARAMS}). Ports are marked g (gas) or l (liquid).}
+\label{tab:components}
+\end{table}
+
+\paragraph{Sizing and topologies.}
+The prime mover (the air flow of a turbine or the rated power of an engine) is scaled by secant iteration on full
+plant solves until net electricity (generation minus parasitics plus ORC output) equals $1.03\,P_{\mathrm{it}}$. Two
+topology families are used. The first is a gas turbine with an air preheater, an HRSG and an R245fa ORC, which is held
+out as the steam-ORC topology. The second is the data-center plant \texttt{dc\_chp}: a prime mover (turbine or engine), cooling
+(absorption or electric), heat rejection (an ideal boundary, a dry cooler or a wet tower), optional ORC bottoming with
+one of three fluids, and optional district heat from the exhaust (a heat exchanger) or from a heat pump on the chiller
+rejection water.
+
+\paragraph{Cross-check.}
+The generic engine was checked against an independent reference implementation of a gas turbine with an HRSG and an
+R245fa ORC (one operating point, $n=1$). Net power agrees to \val{xchk.wnet_rel_pct}\%, energy efficiency to
+\val{xchk.etaI_rel_pct}\%, and the HRSG pinch to \val{xchk.pinch_diff_K}~K; exergy closure holds to
+\val{xchk.closure_w}~W, and component destruction agrees to \val{xchk.ed_max_rel_pct}\% or better. Exergy efficiency is
+\val{xchk.etaII_diff_pct}\% (engine relative to reference), because chemical exergy is computed from the Gibbs energy of
+the fuel reaction. This is a consistency check of the implementation, not a validation against a real plant.
+
+\begin{table}[tbp]
+\centering
+\input{generated/table_constants.tex}
+\caption{Assumed technology constants with their code defaults (\texttt{synth/topologies.py}, \texttt{core.components}). They are model settings, not measurements.}
+\label{tab:constants}
+\end{table}
+
+\subsection{Exergy accounting}\label{sec:exergy}
+
+The dead state is $(T_0,P_0)$ with the ambient air composition. For a stream at $(T,P)$ the physical exergy per mole is
+\begin{equation}
+e_{\mathrm{ph}}=(h-h_0)-T_0\,(s-s_0),
+\end{equation}
+with $h_0,s_0$ evaluated at $(T_0,P_0)$ for the same composition. The chemical exergy of a gas mixture is
+\begin{equation}
+e_{\mathrm{ch}}=\sum_i y_i\,\varepsilon_i+R\,T_0\sum_i y_i\ln y_i,
+\end{equation}
+where $\varepsilon_i=-R\,T_0\ln y_{\mathrm{env},i}$ for the species present in the environment, so that ambient air has exactly
+zero exergy, and $\varepsilon_{\mathrm{CH_4}}=-\Delta G+\varepsilon_{\mathrm{CO_2}}+2\varepsilon_{\mathrm{H_2O}}-2\varepsilon_{\mathrm{O_2}}$
+with $\Delta G$ the Gibbs energy change of $\mathrm{CH_4}+2\,\mathrm{O_2}\rightarrow\mathrm{CO_2}+2\,\mathrm{H_2O(g)}$ at $(T_0,1~\mathrm{atm})$.
+Liquids carry no chemical exergy. The exergy destruction of a component is
+\begin{equation}
+\ED=\sum_{\mathrm{in}}\dot n\,e-\sum_{\mathrm{out}}\dot n\,e-\dot W_{\mathrm{out}},
+\end{equation}
+and heat dissipated to the ambient carries no exergy. Over the plant,
+$\sum\ED=\sum_{\text{ext. in}}\dot n\,e-\sum_{\text{ext. out}}\dot n\,e-\sum\dot W$ (closure), which holds to machine precision in the tests. The
+exergy efficiency is
+\begin{equation}
+\eta_{\mathrm{II}}=\frac{\dot W_{\mathrm{net}}+\Delta\dot E_{\text{steam, heat, chilled water}}}{\dot E_{\mathrm{fuel}}}.
+\end{equation}
+\Cref{fig:fig_exergy_flow} shows one solved plant: a gas turbine with absorption cooling, a dry cooler and
+district heat from the exhaust at a 20~MW IT load. Of \val{exf.fuel_mw}~MW of fuel exergy, \val{exf.cc_mw}~MW
+(\val{exf.cc_share_pct}\%) is destroyed in the combustor, \val{exf.stack_mw}~MW leaves with the stack, and the delivered
+cooling and heat carry only \val{exf.cool_ex_mw} and \val{exf.heat_ex_mw}~MW of exergy although they are
+\val{exf.cool_mw} and \val{exf.heat_mw}~MW of energy. The heat rejector dissipates \val{exf.rej_energy_mw}~MW of energy
+but destroys only \val{exf.rej_ed_mw}~MW of exergy, which is the contrast that \cref{sec:findings} measures over many plants.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\linewidth]{figures/pdf/fig_exergy_flow.pdf}
+\caption{Exergy flow of one solved plant ($n=1$, simulation): gas turbine, absorption cooling, dry cooler, district heat
+from the exhaust, 20~MW IT load. Ribbon widths are proportional to MW of exergy. Most fuel exergy is destroyed in the
+combustor; cooling and heat are small in exergy terms; the destruction in the IT load itself
+(\val{exf.dc_mw}~MW) is not attributable to the plant. Data: \texttt{assets/exergy\_flow.json}.}
+\label{fig:fig_exergy_flow}
+\end{figure}
+
+\subsection{Verifiers}\label{sec:verifiers}
+
+Eight verifiers decide whether a plant is acceptable (\cref{tab:verifiers}); the same checks are the reward
+(\cref{sec:rewards}) and the feedback at inference. Hard checks gate validity; soft checks only lower a score.
+V1 and V2 are balance checks. V3a requires non-negative destruction in every component, and V3b requires the closure
+of \cref{sec:exergy}; together they are the second-law checks on the model itself. V4a rejects a temperature cross in any heat
+exchanger, and V4b asks for a practical pinch of 1~K. V5 bounds the efficiencies and every COP by the reversible limit of its stream temperatures.
+V6 holds parameter and state ranges and is what catches most parameter-level faults. V7 grounds the numbers in a model's reasoning text, and V8
+checks that the plant serves the site.
+
+\begin{table}[tbp]
+\centering
+\input{generated/table_verifiers.tex}
+\caption{Verifiers V1 to V8 with tolerances. Hard checks gate validity.}
+\label{tab:verifiers}
+\end{table}
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\linewidth]{figures/pdf/fig_verifiers.pdf}
+\caption{Verifiers V1 to V8 with tolerances and what each catches (left). Right: in the ledger task an error in any
+stream value or in $T_0$ enters the closure sum with opposite signs and cancels; only errors in the destruction lines break
+closure. The counts are from \val{led.n} generated ledger rows (seed 0, simulation): closure is broken in
+\val{led.comp_closure} of \val{led.comp_rows} rows with a component-line fault and in \val{led.stream_closure} of
+\val{led.stream_rows} rows with only stream-line or constant faults. Data: \texttt{assets/ledger\_symptoms.json}.}
+\label{fig:fig_verifiers}
+\end{figure}
+
+\subsection{Tasks}\label{sec:tasks}
+
+All four tasks are text in and text out. Plants are shown in a compact text language with one line per component
+(\texttt{C id type \{params\}}) and per stream (\texttt{S id from -> to fluid \{extras\}}). \Cref{tab:tasks} summarizes the
+tasks and \cref{fig:fig_tasks} shows verbatim excerpts of generated rows. The fault catalogs are in
+\cref{app:faults}. Splits are structural: whole fault types, topologies or operating regimes are held out, and the rest
+is split by a hash of the example identifier.
+
+\begin{table}[tbp]
+\centering
+\input{generated/table_tasks.tex}
+\caption{The four tasks: input, output, reward channels with weights (\cref{sec:rewards}) and held-out splits. Split
+sizes are in \cref{app:datasets}.}
+\label{tab:tasks}
+\end{table}
+
+\paragraph{Repair.}
+A valid plant is broken by one of \val{env.n_repair_faults} fault types (unit slip, sign flip, efficiency above 1,
+swapped ports, wrong fluid). The model reads the plant, the site and the solver or verifier output, and answers with
+a diagnosis and at most six edits (\texttt{SET comp.param = x}, \texttt{SET @stream.field = x},
+\texttt{REWIRE @stream.to = comp.port}, \texttt{FLUID @stream = fluid}) on existing numbers, endpoints and fluids. Every
+injected fault that is kept is detected by the solver or the verifiers once the site specification is attached; most are
+caught by range checks, which is why the Ledger task exists. The held-out splits are sign flip and swapped ports
+(\texttt{test\_ood\_fault}) and the steam-ORC and gas-engine plants (\texttt{test\_ood\_topology}).
+
+\paragraph{Design.}
+The input is a site: IT load, chilled load, ambient temperature and humidity, coolant temperatures, and optionally a heat
+demand and a water limit. The output is a \texttt{<rationale>} and a \texttt{<design>} block. The catalog combines prime mover
+(turbine, engine), cooling (absorption, electric), rejection (dry, wet) and bottoming (none or an ORC on R245fa, cyclopentane
+or toluene), which gives \val{env.n_catalog} configurations, doubled to \val{env.n_catalog_heat} by the heat source (exhaust or heat pump)
+when there is a heat demand; seven continuous parameters (\texttt{dT\_rej}, \texttt{PR}, \texttt{T4}, \texttt{T\_hw}, \texttt{dT\_hw},
+\texttt{P\_orc\_bar}, \texttt{orc\_frac}) complete a design. The objective is the least fuel among valid plants, with the services fixed by
+the site. The reference is enumeration of the defaults followed by a Nelder--Mead polish of the best two; it is the best design found by this search, not a proven
+optimum. Held-out regimes are an IT load of 45~MW or more, an ambient temperature of 305~K or more, and a chilled fraction of 0.85 or more.
+
+\paragraph{Audit.}
+The input is a solved plant with an energy-level summary; exergy destruction is hidden. The output is a ranking of exergy
+destroyers, one allowed change (a set-point or loss parameter within $[0.8,1.25]$ of its value; component efficiencies and tear-closing temperatures
+are excluded on purpose) and a prediction of the fuel change in MW after the prime mover is re-sized to the same net electricity.
+The combustor or engine was the largest destroyer in every plant generated, so the ranking is scored with it removed.
+
+\paragraph{Ledger repair.}
+The exergy ledger of a solved plant is a list of arithmetic lines: \texttt{T0 = ...}; for every stream
+\texttt{E[x] = m[x]*(h[x] - T0*s[x] - g0[x] + ech[x])/1e6}; for every component
+\texttt{ED[c] = sum E[in] - sum E[out] - W[c]}. \val{env.n_ledger_faults} equation-level fault types in three layers
+(stream lines, component lines, the constant) are injected into one or two lines; the model sees the ledger, the topology, the ambient
+temperature, the stream values and the evaluated result, and answers with up to four corrected lines. Lines are evaluated by a
+restricted arithmetic evaluator and nothing is executed. The held-out fault types are \texttt{wrong\_stream}, \texttt{dropped\_work} and
+\texttt{wrong\_ref}. A program that rebuilds every line from the topology solves every row by construction, so the task measures whether a
+model applies that rule from text and localizes the fault; this is a property of the benchmark, not an achievement of a model.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\linewidth]{figures/pdf/fig_tasks.pdf}
+\caption{The four tasks. For each: an excerpt of a generated input row, the expert answer the model must write, the reward
+channels with their weights, and the held-out splits with row counts. Excerpts are verbatim from one generated training row
+per task (seed 0; the row at the 12.5th length percentile); `\ldots' marks omitted lines. Data:
+\texttt{assets/excerpts.json}, \texttt{assets/splits.json} (simulation, synthetic rows).}
+\label{fig:fig_tasks}
+\end{figure}
+
+\subsection{Rewards}\label{sec:rewards}
+
+Each task has its own channels; all are computed by the simulator and the verifiers, with no learned judge. Weights are in
+\cref{tab:tasks}. \emph{Format} (0.5) rewards a parseable answer. \emph{Validity} (2 in Repair and Design, 1 in Audit) gives 1 if the plant
+solves and passes every hard check and a partial credit otherwise (Repair: 0.5 times the fraction of checks passed; Design: 0.2 for a built but invalid plant).
+\emph{Site} (1, Repair) requires the repaired plant to serve the site, so that deleting load is not a repair. \emph{Exact restoration} (1, Repair) applies only when the
+original value is deducible from the broken plant. \emph{Minimality} rewards $1/(1+\text{extra edits})$. \emph{Quality} (2, Design) is
+$1-(F-F_{\mathrm{ref}})/(0.1\,F_{\mathrm{ref}})$ clipped to $[0,1.05]$, so it is 1 at the reference fuel and 0 at 10\% more. In Audit, \emph{rank} (1.5) is nDCG@3 with the prime mover
+removed, \emph{gain} (2) is the saved fuel divided by the best allowed saving, and \emph{prediction} (1) is
+$1-|\hat y-y|/\max(|y|,0.002\,F)$. In Ledger repair, \emph{closure} (1) is 1 when the residual is within $10^{-6}$ of fuel exergy and falls to 0 at 1\%, \emph{non-negativity} (0.5) is the
+share of components with $\ED\ge0$, and \emph{exactness} (2.5) counts faulty lines that now evaluate to the true value minus correct lines that are now broken. \emph{Grounding} (0.5) uses V7: every
+number with a unit in the reasoning must match a solver or plant value.
+
+Reward hacking is limited in three ways. Edits are restricted to existing fields, endpoints and fluids, so a model cannot add a component. The site check is part of the
+Repair reward. The project's tests fuzz each reward function with junk and mutated answers and require that it never raises and stays bounded; this does not prove that
+gaming is impossible, and we do not claim it.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\linewidth]{figures/pdf/fig_training.pdf}
+\caption{Training pipeline and splits: data generation, verification, reward diagnostics (CPU, before GPU time), supervised
+fine-tuning, merge, GRPO and evaluation; SFT, GRPO and evaluation share one rendered prompt text. The lower panel shows rows per structural split for each task
+(\val{split.total} rows in total, synthetic, seed 0). The GRPO rollout rewards drawn in the figure are illustrative, not
+measured; no model has been trained. Data: \texttt{assets/splits.json}.}
+\label{fig:fig_training}
+\end{figure}
+
+\subsection{Training}\label{sec:training}
+
+\paragraph{Stage 1: supervised fine-tuning.}
+Qwen3.5-4B is fine-tuned with LoRA on expert answers written programmatically from the ground truth, with one adapter for all four tasks. Prompts are rendered with the tokenizer's
+generation prompt (thinking disabled) as plain prompt and completion text, exactly as GRPO and evaluation render them, so that no template mismatch arises between training and
+inference. Supervised fine-tuning comes first because verifiable rewards are sparse for a policy that never succeeds \citep{lambert2024tulu3}.
+
+\paragraph{Stage 2: GRPO.}
+The adapter is merged, and GRPO is run per task from the merged model with a new LoRA adapter, a group of 8 completions, temperature 1, at most 320 completion tokens, a DAPO-style loss
+\citep{yu2025dapo} without a KL term, group-normalized rewards, and truncated completions masked. The reward is the weighted channel sum of
+\cref{tab:tasks}. The code is written against TRL \citep{vonwerra2020trl} and is untested on a GPU; loading the model, the library's argument names, 4-bit loading and
+merging, and generation-length cutoffs are the known risks. \Cref{tab:training} lists the settings.
+
+\begin{table}[tbp]
+\centering
+\input{generated/table_training.tex}
+\caption{Training settings, read from \texttt{train/config.py}. None of this has been run on a GPU.}
+\label{tab:training}
+\end{table}
+
+\paragraph{Reward diagnostics.}
+Before any GPU time, each reward is probed with simulated policies that return the expert answer with probability $1-e$ and a damaged answer otherwise. For groups of
+\val{rd.G} completions the diagnostic reports the share of groups whose rewards are all equal. Such groups carry no gradient under group-normalized advantages, so they indicate the error rate below
+which GRPO stops being informative for a task (\cref{sec:rewarddiag}).
+
+\subsection{Agent harness}\label{sec:harness}
+
+The harness is text added to the system message. An \texttt{AGENTS.md} file holds conventions, verifier meanings, how to read solver errors and the answer formats; \val{env.n_skills} skills cover the gas
+engine, heat rejector, absorption chiller, ORC bottoming, heat pump and district heat, the exergy audit, the design catalog and the exergy ledger. The port and parameter sections of the
+skills are generated from the component registry, and a test fails if they drift from it. There are four modes: none, \texttt{AGENTS.md}, skills, and both. In the skill modes the bodies of the selected skills
+are appended to the system message (they are not loaded on demand); a component skill is selected when its component appears in the plant, and all component skills are given when there is no plant yet, as in Design.
+The planned ablation holds the gas engine out of the training topologies, so that its skill is its only description (\cref{sec:experiments}).
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\linewidth]{figures/pdf/fig_harness.pdf}
+\caption{Harness text: the component registry generates the AUTO sections of \texttt{AGENTS.md} and of the skills; four modes add none, \texttt{AGENTS.md}, skills or both to the prompt; the gas engine is the
+component held out of the training topologies. Data: \texttt{assets/harness.json} (files of the project, $n=\val{env.n_skills}$ skills).}
+\label{fig:fig_harness}
+\end{figure}

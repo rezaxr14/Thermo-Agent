@@ -1,0 +1,212 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1118" width="1000" height="1118" font-family="Helvetica, Arial, 'Liberation Sans', sans-serif">
+<rect width="1000" height="1118" fill="#FFFFFF"/>
+<rect x="16" y="16" width="476" height="524" rx="12" fill="#F7F7F8" stroke="#4C72B0" stroke-width="2.0"/>
+<rect x="32" y="30" width="67.57" height="28" rx="6" fill="#34548A"/>
+<text x="65.79" y="48.9" font-size="14" font-weight="bold" text-anchor="middle" fill="#FFFFFF">Repair</text>
+<text x="32" y="78" font-size="12.5" fill="#666666">a plant model fails to solve or violates a check: edit it back</text>
+<text x="32" y="102" font-size="12" font-weight="bold" fill="#666666">input (excerpt of a generated row)</text>
+<rect x="28" y="108" width="452" height="99" rx="6" fill="#FFFFFF" stroke="#D9D9DC" stroke-width="1.3"/>
+<text x="36" y="125" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">PLANT dc_electric_sampled T0=289.5749196372255 P0=101325.0 ...</text>
+<text x="36" y="139.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#8C8C8C">...</text>
+<text x="36" y="154" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">SITE</text>
+<text x="36" y="168.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">it_load_w=10002695.173719998 cooling_load_w=7717530.8518218...</text>
+<text x="36" y="183" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">RESULT</text>
+<text x="36" y="197.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">SOLVER ERROR E_FLUID_MISMATCH: CH.rej_in expects a liquid s...</text>
+<g class="arrow"><path d="M254,215 L254,222" fill="none" stroke="#4C72B0" stroke-width="2.0" stroke-linejoin="round"/><polygon points="254,229 250.8,222 257.2,222" fill="#4C72B0"/></g>
+<text x="32" y="243" font-size="12" font-weight="bold" fill="#666666">answer the model must write (expert answer)</text>
+<rect x="28" y="249" width="452" height="99" rx="6" fill="#EEF3FA" stroke="#4C72B0" stroke-width="1.4"/>
+<text x="36" y="266" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">&lt;diagnosis&gt;Stream cw_in is labelled CGAM_AIR, but it feeds</text>
+<text x="36" y="280.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">CH.rej_in, which expects a stream of the other fluid class;</text>
+<text x="36" y="295" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">its neighbours in the same loop carry Water.&lt;/diagnosis&gt;</text>
+<text x="36" y="309.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">&lt;edits&gt;</text>
+<text x="36" y="324" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">FLUID @cw_in = Water</text>
+<text x="36" y="338.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">&lt;/edits&gt;</text>
+<text x="32" y="372" font-size="12" font-weight="bold" fill="#666666">reward channels, weight shown by the bar</text>
+<text x="32" y="393" font-size="12" fill="#333333">format</text>
+<rect x="106" y="383" width="84" height="11" rx="3" fill="#E6E6E8"/>
+<rect x="106" y="383" width="16.8" height="11" rx="3" fill="#4C72B0"/>
+<text x="196" y="393" font-size="11.5" fill="#666666">x 0.5</text>
+<text x="264" y="393" font-size="12" fill="#333333">valid</text>
+<rect x="338" y="383" width="84" height="11" rx="3" fill="#E6E6E8"/>
+<rect x="338" y="383" width="67.2" height="11" rx="3" fill="#4C72B0"/>
+<text x="428" y="393" font-size="11.5" fill="#666666">x 2</text>
+<text x="32" y="414" font-size="12" fill="#333333">site</text>
+<rect x="106" y="404" width="84" height="11" rx="3" fill="#E6E6E8"/>
+<rect x="106" y="404" width="33.6" height="11" rx="3" fill="#4C72B0"/>
+<text x="196" y="414" font-size="11.5" fill="#666666">x 1</text>
+<text x="264" y="414" font-size="12" fill="#333333">exact</text>
+<rect x="338" y="404" width="84" height="11" rx="3" fill="#E6E6E8"/>
+<rect x="338" y="404" width="33.6" height="11" rx="3" fill="#4C72B0"/>
+<text x="428" y="414" font-size="11.5" fill="#666666">x 1</text>
+<text x="32" y="435" font-size="12" fill="#333333">minimal</text>
+<rect x="106" y="425" width="84" height="11" rx="3" fill="#E6E6E8"/>
+<rect x="106" y="425" width="16.8" height="11" rx="3" fill="#4C72B0"/>
+<text x="196" y="435" font-size="11.5" fill="#666666">x 0.5</text>
+<text x="264" y="435" font-size="12" fill="#333333">grounded</text>
+<rect x="338" y="425" width="84" height="11" rx="3" fill="#E6E6E8"/>
+<rect x="338" y="425" width="16.8" height="11" rx="3" fill="#4C72B0"/>
+<text x="428" y="435" font-size="11.5" fill="#666666">x 0.5</text>
+<text x="32" y="463" font-size="12" font-weight="bold" fill="#666666">held out</text>
+<rect x="94" y="451" width="94.12" height="18" id="p1" rx="9" fill="#8172B3"/>
+<text x="141.06" y="464.02" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">topology  128</text>
+<rect x="196.12" y="451" width="69.85" height="18" id="p2" rx="9" fill="#DD8452"/>
+<text x="231.05" y="464.02" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">fault  108</text>
+<text x="32" y="487" font-size="11.5" fill="#666666">topology: steam-ORC plant and gas-engine plants; fault: sign flip, swapped ports</text>
+<rect x="508" y="16" width="476" height="524" rx="12" fill="#F7F7F8" stroke="#55A868" stroke-width="2.0"/>
+<rect x="524" y="30" width="70.68" height="28" rx="6" fill="#2F7D45"/>
+<text x="559.34" y="48.9" font-size="14" font-weight="bold" text-anchor="middle" fill="#FFFFFF">Design</text>
+<text x="524" y="78" font-size="12.5" fill="#666666">a site is given: choose the plant and its parameters</text>
+<text x="524" y="102" font-size="12" font-weight="bold" fill="#666666">input (excerpt of a generated row)</text>
+<rect x="520" y="108" width="452" height="128" rx="6" fill="#FFFFFF" stroke="#D9D9DC" stroke-width="1.3"/>
+<text x="528" y="125" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#8C8C8C">...</text>
+<text x="528" y="139.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">Catalog: prime_mover in {turbine, engine}; cooling in {abso...</text>
+<text x="528" y="154" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#8C8C8C">...</text>
+<text x="528" y="168.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">SITE</text>
+<text x="528" y="183" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">it_load_w=6981896.020919639 cooling_load_w=5560755.5387988435</text>
+<text x="528" y="197.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">ambient_T_K=289.8868636949644 ambient_RH=0.5468045609643586</text>
+<text x="528" y="212" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">coolant_supply_K=294.77946989549787</text>
+<text x="528" y="226.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">coolant_return_K=304.0269252194416 grid_import_allowed=false</text>
+<g class="arrow"><path d="M746,244 L746,251" fill="none" stroke="#55A868" stroke-width="2.0" stroke-linejoin="round"/><polygon points="746,258 742.8,251 749.2,251" fill="#55A868"/></g>
+<text x="524" y="272" font-size="12" font-weight="bold" fill="#666666">answer the model must write (expert answer)</text>
+<rect x="520" y="278" width="452" height="113.5" rx="6" fill="#EDF7F0" stroke="#55A868" stroke-width="1.4"/>
+<text x="528" y="295" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">&lt;rationale&gt;turbine with absorption cooling and a dry heat-</text>
+<text x="528" y="309.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">rejection loop, an ORC on toluene bottoming. engine prime</text>
+<text x="528" y="324" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">mover is rejected because its exhaust cannot supply the</text>
+<text x="528" y="338.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">required heat duty; electric cooling is rejected because its</text>
+<text x="528" y="353" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">exhaust is too hot for that ORC fluid at this site; wet</text>
+<text x="528" y="367.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">rejection is rejected because its exhaust cannot supply the</text>
+<text x="528" y="382" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#8C8C8C">...</text>
+<text x="524" y="415.5" font-size="12" font-weight="bold" fill="#666666">reward channels, weight shown by the bar</text>
+<text x="524" y="436.5" font-size="12" fill="#333333">format</text>
+<rect x="598" y="426.5" width="84" height="11" rx="3" fill="#E6E6E8"/>
+<rect x="598" y="426.5" width="16.8" height="11" rx="3" fill="#55A868"/>
+<text x="688" y="436.5" font-size="11.5" fill="#666666">x 0.5</text>
+<text x="756" y="436.5" font-size="12" fill="#333333">valid</text>
+<rect x="830" y="426.5" width="84" height="11" rx="3" fill="#E6E6E8"/>
+<rect x="830" y="426.5" width="67.2" height="11" rx="3" fill="#55A868"/>
+<text x="920" y="436.5" font-size="11.5" fill="#666666">x 2</text>
+<text x="524" y="457.5" font-size="12" fill="#333333">quality</text>
+<rect x="598" y="447.5" width="84" height="11" rx="3" fill="#E6E6E8"/>
+<rect x="598" y="447.5" width="67.2" height="11" rx="3" fill="#55A868"/>
+<text x="688" y="457.5" font-size="11.5" fill="#666666">x 2</text>
+<text x="756" y="457.5" font-size="12" fill="#333333">grounded</text>
+<rect x="830" y="447.5" width="84" height="11" rx="3" fill="#E6E6E8"/>
+<rect x="830" y="447.5" width="16.8" height="11" rx="3" fill="#55A868"/>
+<text x="920" y="457.5" font-size="11.5" fill="#666666">x 0.5</text>
+<text x="524" y="485.5" font-size="12" font-weight="bold" fill="#666666">held out</text>
+<rect x="586" y="473.5" width="61.56" height="18" id="p3" rx="9" fill="#C9A227"/>
+<text x="616.78" y="486.52" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">scale  4</text>
+<rect x="655.56" y="473.5" width="78.81" height="18" id="p4" rx="9" fill="#B5383C"/>
+<text x="694.97" y="486.52" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">climate  19</text>
+<rect x="742.38" y="473.5" width="62.82" height="18" id="p5" rx="9" fill="#64B5CD"/>
+<text x="773.79" y="486.52" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">load  10</text>
+<text x="524" y="509.5" font-size="11.5" fill="#666666">scale: IT load of 45 MW or more; climate: ambient 305 K or more; load: chilled fraction</text>
+<text x="524" y="524" font-size="11.5" fill="#666666">0.85 or more</text>
+<rect x="16" y="556" width="476" height="516" rx="12" fill="#F7F7F8" stroke="#DD8452" stroke-width="2.0"/>
+<rect x="32" y="570" width="59.77" height="28" rx="6" fill="#B8561F"/>
+<text x="61.88" y="588.9" font-size="14" font-weight="bold" text-anchor="middle" fill="#FFFFFF">Audit</text>
+<text x="32" y="618" font-size="12.5" fill="#666666">rank where exergy is lost, propose one change, predict its effect</text>
+<text x="32" y="642" font-size="12" font-weight="bold" fill="#666666">input (excerpt of a generated row)</text>
+<rect x="28" y="648" width="452" height="99" rx="6" fill="#FFFFFF" stroke="#D9D9DC" stroke-width="1.3"/>
+<text x="36" y="665" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">PLANT dc_electric_sampled T0=298.2874350341205 P0=101325.0 ...</text>
+<text x="36" y="679.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#8C8C8C">...</text>
+<text x="36" y="694" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">SUMMARY</text>
+<text x="36" y="708.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">KPI fuel_MW=122.46 net_electricity_MW=39.74 cooling_MW=21.2...</text>
+<text x="36" y="723" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">AC compressor W_MW=-45.26 Q_MW=0.00 loss_MW=0.00 T_min_K=29...</text>
+<text x="36" y="737.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#8C8C8C">...</text>
+<g class="arrow"><path d="M254,755 L254,762" fill="none" stroke="#DD8452" stroke-width="2.0" stroke-linejoin="round"/><polygon points="254,769 250.8,762 257.2,762" fill="#DD8452"/></g>
+<text x="32" y="783" font-size="12" font-weight="bold" fill="#666666">answer the model must write (expert answer)</text>
+<rect x="28" y="789" width="452" height="113.5" rx="6" fill="#FFF3E6" stroke="#DD8452" stroke-width="1.4"/>
+<text x="36" y="806" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">&lt;analysis&gt;Exergy is destroyed mostly in CC (40.6 MW), GT (5.14</text>
+<text x="36" y="820.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">MW), AC (2.22 MW), with a fuel input of 122 MW. The change SET</text>
+<text x="36" y="835" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">CC.T_out = 1604.81 should lower fuel input for the same</text>
+<text x="36" y="849.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">services.&lt;/analysis&gt;</text>
+<text x="36" y="864" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">&lt;ranking&gt;CC &gt; GT &gt; AC &gt; CH&lt;/ranking&gt;</text>
+<text x="36" y="878.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">&lt;change&gt;SET CC.T_out = 1604.81&lt;/change&gt;</text>
+<text x="36" y="893" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">&lt;prediction&gt;fuel_change_mw = -2.578&lt;/prediction&gt;</text>
+<text x="32" y="926.5" font-size="12" font-weight="bold" fill="#666666">reward channels, weight shown by the bar</text>
+<text x="32" y="947.5" font-size="12" fill="#333333">format</text>
+<rect x="106" y="937.5" width="84" height="11" rx="3" fill="#E6E6E8"/>
+<rect x="106" y="937.5" width="16.8" height="11" rx="3" fill="#DD8452"/>
+<text x="196" y="947.5" font-size="11.5" fill="#666666">x 0.5</text>
+<text x="264" y="947.5" font-size="12" fill="#333333">rank</text>
+<rect x="338" y="937.5" width="84" height="11" rx="3" fill="#E6E6E8"/>
+<rect x="338" y="937.5" width="50.4" height="11" rx="3" fill="#DD8452"/>
+<text x="428" y="947.5" font-size="11.5" fill="#666666">x 1.5</text>
+<text x="32" y="968.5" font-size="12" fill="#333333">valid</text>
+<rect x="106" y="958.5" width="84" height="11" rx="3" fill="#E6E6E8"/>
+<rect x="106" y="958.5" width="33.6" height="11" rx="3" fill="#DD8452"/>
+<text x="196" y="968.5" font-size="11.5" fill="#666666">x 1</text>
+<text x="264" y="968.5" font-size="12" fill="#333333">gain</text>
+<rect x="338" y="958.5" width="84" height="11" rx="3" fill="#E6E6E8"/>
+<rect x="338" y="958.5" width="67.2" height="11" rx="3" fill="#DD8452"/>
+<text x="428" y="968.5" font-size="11.5" fill="#666666">x 2</text>
+<text x="32" y="989.5" font-size="12" fill="#333333">pred</text>
+<rect x="106" y="979.5" width="84" height="11" rx="3" fill="#E6E6E8"/>
+<rect x="106" y="979.5" width="33.6" height="11" rx="3" fill="#DD8452"/>
+<text x="196" y="989.5" font-size="11.5" fill="#666666">x 1</text>
+<text x="264" y="989.5" font-size="12" fill="#333333">grounded</text>
+<rect x="338" y="979.5" width="84" height="11" rx="3" fill="#E6E6E8"/>
+<rect x="338" y="979.5" width="16.8" height="11" rx="3" fill="#DD8452"/>
+<text x="428" y="989.5" font-size="11.5" fill="#666666">x 0.5</text>
+<text x="32" y="1017.5" font-size="12" font-weight="bold" fill="#666666">held out</text>
+<rect x="94" y="1005.5" width="87.73" height="18" id="p6" rx="9" fill="#8172B3"/>
+<text x="137.86" y="1018.52" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">topology  58</text>
+<text x="32" y="1041.5" font-size="11.5" fill="#666666">topology: steam-ORC plant and gas-engine plants</text>
+<rect x="508" y="556" width="476" height="516" rx="12" fill="#F7F7F8" stroke="#8172B3" stroke-width="2.0"/>
+<rect x="524" y="570" width="70.68" height="28" rx="6" fill="#5A4B8A"/>
+<text x="559.34" y="588.9" font-size="14" font-weight="bold" text-anchor="middle" fill="#FFFFFF">Ledger</text>
+<text x="524" y="618" font-size="12.5" fill="#666666">an exergy ledger does not close: find and fix the wrong lines</text>
+<text x="524" y="642" font-size="12" font-weight="bold" fill="#666666">input (excerpt of a generated row)</text>
+<rect x="520" y="648" width="452" height="99" rx="6" fill="#FFFFFF" stroke="#D9D9DC" stroke-width="1.3"/>
+<text x="528" y="665" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">ED[AC] = E[air] - E[s2] - W[AC]</text>
+<text x="528" y="679.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">ED[CC] = E[s2] + E[fuel] - E[s4]</text>
+<text x="528" y="694" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#8C8C8C">...</text>
+<text x="528" y="708.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">RESULT</text>
+<text x="528" y="723" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">ED (MW): AC=2.575 CC=37.69 GT=4.349 DC=21.74 CH=2.662</text>
+<text x="528" y="737.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">E (MW): air=-8.516e-16 s2=44.76 fuel=130 s4=137 s5=37.31 ch...</text>
+<g class="arrow"><path d="M746,755 L746,762" fill="none" stroke="#8172B3" stroke-width="2.0" stroke-linejoin="round"/><polygon points="746,769 742.8,762 749.2,762" fill="#8172B3"/></g>
+<text x="524" y="783" font-size="12" font-weight="bold" fill="#666666">answer the model must write (expert answer)</text>
+<rect x="520" y="789" width="452" height="113.5" rx="6" fill="#F3F0F9" stroke="#8172B3" stroke-width="1.4"/>
+<text x="528" y="806" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">&lt;diagnosis&gt;the term for DC in ED[DC] is multiplied by 0.5,</text>
+<text x="528" y="820.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">which no balance has; ED[DC] evaluates to 21.74 MW, but</text>
+<text x="528" y="835" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">destruction is inlet exergy minus outlet exergy minus</text>
+<text x="528" y="849.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">work.&lt;/diagnosis&gt;</text>
+<text x="528" y="864" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">&lt;fix&gt;</text>
+<text x="528" y="878.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">FIX ED[DC] = E[chw_sup] - E[chw_ret] - W[DC]</text>
+<text x="528" y="893" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">&lt;/fix&gt;</text>
+<text x="524" y="926.5" font-size="12" font-weight="bold" fill="#666666">reward channels, weight shown by the bar</text>
+<text x="524" y="947.5" font-size="12" fill="#333333">format</text>
+<rect x="598" y="937.5" width="84" height="11" rx="3" fill="#E6E6E8"/>
+<rect x="598" y="937.5" width="16.8" height="11" rx="3" fill="#8172B3"/>
+<text x="688" y="947.5" font-size="11.5" fill="#666666">x 0.5</text>
+<text x="756" y="947.5" font-size="12" fill="#333333">closure</text>
+<rect x="830" y="937.5" width="84" height="11" rx="3" fill="#E6E6E8"/>
+<rect x="830" y="937.5" width="33.6" height="11" rx="3" fill="#8172B3"/>
+<text x="920" y="947.5" font-size="11.5" fill="#666666">x 1</text>
+<text x="524" y="968.5" font-size="12" fill="#333333">nonneg</text>
+<rect x="598" y="958.5" width="84" height="11" rx="3" fill="#E6E6E8"/>
+<rect x="598" y="958.5" width="16.8" height="11" rx="3" fill="#8172B3"/>
+<text x="688" y="968.5" font-size="11.5" fill="#666666">x 0.5</text>
+<text x="756" y="968.5" font-size="12" fill="#333333">exact</text>
+<rect x="830" y="958.5" width="84" height="11" rx="3" fill="#E6E6E8"/>
+<rect x="830" y="958.5" width="84" height="11" rx="3" fill="#8172B3"/>
+<text x="920" y="968.5" font-size="11.5" fill="#666666">x 2.5</text>
+<text x="524" y="989.5" font-size="12" fill="#333333">minimal</text>
+<rect x="598" y="979.5" width="84" height="11" rx="3" fill="#E6E6E8"/>
+<rect x="598" y="979.5" width="16.8" height="11" rx="3" fill="#8172B3"/>
+<text x="688" y="989.5" font-size="11.5" fill="#666666">x 0.5</text>
+<text x="756" y="989.5" font-size="12" fill="#333333">grounded</text>
+<rect x="830" y="979.5" width="84" height="11" rx="3" fill="#E6E6E8"/>
+<rect x="830" y="979.5" width="16.8" height="11" rx="3" fill="#8172B3"/>
+<text x="920" y="989.5" font-size="11.5" fill="#666666">x 0.5</text>
+<text x="524" y="1017.5" font-size="12" font-weight="bold" fill="#666666">held out</text>
+<rect x="586" y="1005.5" width="94.12" height="18" id="p7" rx="9" fill="#8172B3"/>
+<text x="633.06" y="1018.52" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">topology  198</text>
+<rect x="688.12" y="1005.5" width="69.85" height="18" id="p8" rx="9" fill="#DD8452"/>
+<text x="723.05" y="1018.52" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">fault  109</text>
+<text x="524" y="1041.5" font-size="11.5" fill="#666666">topology: steam-ORC plant and gas-engine plants; fault: wrong_stream,</text>
+<text x="524" y="1056" font-size="11.5" fill="#666666">dropped_work, wrong_ref</text>
+<text x="16" y="1094" font-size="11.5" fill="#666666">Synthetic rows from the project's data builders, seed 0 (n = 1265 rows over four tasks). Bar length is the REWARD_WEIGHTS entry of the channel; excerpts are verbatim, '...' marks omitted</text>
+<text x="16" y="1108.95" font-size="11.5" fill="#666666">lines.</text>
+</svg>

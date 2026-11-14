@@ -1,0 +1,130 @@
+{
+ "command": "agent.harness (MODES, skill_names, TASK_SKILLS), agent.build_harness.frontmatter, core.components.REQUIRED_PORTS; topologies of test_ood_topology rows",
+ "seed": 0,
+ "n": 8,
+ "kind": "files",
+ "modes": [
+  "none",
+  "agents",
+  "skills",
+  "agents+skills"
+ ],
+ "task_skills": {
+  "design": [
+   "design-catalog"
+  ],
+  "audit": [
+   "exergy-audit"
+  ],
+  "repair": [],
+  "ledger": [
+   "exergy-ledger"
+  ]
+ },
+ "skills": [
+  {
+   "name": "absorption-chiller",
+   "components": [
+    "absorption_chiller"
+   ],
+   "description": "Use when a plant contains an absorption_chiller (single-effect, hot-water driven) or when hot-water loops and chilled-water loops appear."
+  },
+  {
+   "name": "design-catalog",
+   "components": [],
+   "description": "Use for Design tasks: choosing prime mover, cooling, heat rejection, bottoming cycle and district-heat source for a site."
+  },
+  {
+   "name": "exergy-audit",
+   "components": [],
+   "description": "Use for Audit tasks: ranking exergy destruction, choosing a fuel-saving change, and predicting its effect."
+  },
+  {
+   "name": "exergy-ledger",
+   "components": [],
+   "description": "Use for ledger-repair tasks: the stream exergy lines E[x], component destruction lines ED[c], the constant T0, and how to find and fix a wrong line."
+  },
+  {
+   "name": "gas-engine",
+   "components": [
+    "gas_engine"
+   ],
+   "description": "Use when a plant contains a gas_engine component: a reciprocating gas engine sized by rated electrical output, with air, fuel and exhaust ports."
+  },
+  {
+   "name": "heat-pump-district-heat",
+   "components": [
+    "heat_pump",
+    "recuperator"
+   ],
+   "description": "Use when a plant delivers district heat, with a heat_pump on the chiller heat-rejection loop or a heat exchanger flagged useful_heat on the exhaust."
+  },
+  {
+   "name": "heat-rejector",
+   "components": [
+    "heat_rejector"
+   ],
+   "description": "Use when a plant contains a heat_rejector (dry cooler or evaporative cooling tower) closing a cooling-water loop."
+  },
+  {
+   "name": "orc-bottoming",
+   "components": [
+    "orc_evaporator",
+    "orc_turbine",
+    "pump",
+    "condenser"
+   ],
+   "description": "Use when a plant contains an organic Rankine cycle (orc_evaporator, orc_turbine, pump, condenser) on exhaust heat."
+  }
+ ],
+ "agents_md_sections": {
+  "Conventions": [
+   "- SI units: K, Pa, W, kg/s. Efficiencies, second-law fractions (`eps`) and pressure-drop fractions (`dp*`) are fractions, never percent. Temperatures are kelvin, never degrees Celsius.",
+   "- A plant is a graph. `C <id> <type> {params}` is a component; `S <id> <from> -> <to> <fluid> {extras}` is a stream. Endpoints are `<component>.<port>` or `ext:<name>` (a boundary)."
+  ],
+  "What the verifiers check": [
+   "V1 mass balance, V2 energy balance, V3 exergy: closure and no negative exergy destruction in any component, V4 no temperature cross (min approach below 0 K fails), V5 second-law and Carnot bounds, V6 unit and range checks, V7 numbers in your text must match the solver, V8 site requirements (IT load served, no grid import unless allowed, cooling, heat, water limit)."
+  ],
+  "Reading a solver error": [
+   "- E_PROP_RANGE: a value is non-positive, a unit slip, or outside the property data (a pressure of 20 Pa, a temperature of 1226 K entered as 1226 degC).",
+   "- E_TEMP_CROSS: heat cannot flow as specified: hot and cold inlets swapped, a duty larger than the hot stream can supply, or an inlet colder than the achievable outlet."
+  ],
+  "Answer formats": [
+   "- Repair: `<diagnosis>` citing only numbers shown, then `<edits>` with lines `SET <component>.<param> = <number>`, `SET @<stream>.<field> = <number>`, `REWIRE @<stream>.<to|from> = <component>.<port>`, `FLUID @<stream> = <fluid>`. Change as little as possible; you cannot add or remove components.",
+   "- Design: `<rationale>` then `<design>` with `key = value` lines, exactly the keys your choices require."
+  ],
+  "Habits": [
+   "1. Find which stream or parameter the error or failing check points at before editing anything.",
+   "2. Prefer the explanation that fixes the reported failure with the fewest edits."
+  ],
+  "Components": [
+   "- `compressor`: ports in, out; params PR, eta_s",
+   "- `turbine`: ports in, out; params P_out, eta_s"
+  ]
+ },
+ "gas_engine_skill_lines": [
+  "SKILL gas-engine: Use when a plant contains a gas_engine component: a reciprocating gas engine sized by rated electrical output, with air, fuel and exhaust ports.",
+  "# Gas engine",
+  "<!-- AUTO:components -->"
+ ],
+ "agents_md_lines": 51,
+ "agents_md_chars": 4655,
+ "n_component_types": 15,
+ "gas_engine_ports": [
+  "air_in",
+  "fuel_in",
+  "exh_out"
+ ],
+ "test_ood_topology_topologies": {
+  "repair": {
+   "cgam_orc": 45,
+   "dc_engine_absorption": 43,
+   "dc_engine_electric": 40
+  },
+  "audit": {
+   "cgam_orc": 22,
+   "dc_engine_absorption": 15,
+   "dc_engine_electric": 21
+  }
+ }
+}

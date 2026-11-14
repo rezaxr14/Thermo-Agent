@@ -1,0 +1,212 @@
+{
+ "command": "numpy.random.default_rng(0): 2000 samples, IT load normal(24, 5) MW clipped to 8..30 MW; design.trace_eval.bin_trace(df, 10); design.modular.scan_units(units=1,2,3,4,6,8,12), spec default_spec(prime_mover, 'absorption', 'wet'), chilled fraction 0.5, step 1/6 h",
+ "seed": 0,
+ "n": 2000,
+ "bins": 10,
+ "kind": "SYNTHETIC trace (not Frontier data)",
+ "histogram_counts": [
+  5,
+  6,
+  1,
+  8,
+  12,
+  13,
+  30,
+  30,
+  58,
+  78,
+  103,
+  92,
+  135,
+  132,
+  165,
+  166,
+  134,
+  172,
+  125,
+  128,
+  97,
+  310
+ ],
+ "histogram_edges_mw": [
+  8.0,
+  9.0,
+  10.0,
+  11.0,
+  12.0,
+  13.0,
+  14.0,
+  15.0,
+  16.0,
+  17.0,
+  18.0,
+  19.0,
+  20.0,
+  21.0,
+  22.0,
+  23.0,
+  24.0,
+  25.0,
+  26.0,
+  27.0,
+  28.0,
+  29.0,
+  30.0
+ ],
+ "bin_it_mw": [
+  15.79,
+  18.63,
+  20.5,
+  21.94,
+  23.23,
+  24.59,
+  25.79,
+  27.3,
+  28.93,
+  30.0
+ ],
+ "bin_share": [
+  0.1,
+  0.1,
+  0.1,
+  0.1,
+  0.1,
+  0.1,
+  0.1,
+  0.1,
+  0.086,
+  0.114
+ ],
+ "scan": {
+  "turbine": [
+   {
+    "n_units": 1,
+    "modularity_penalty": 0.2667,
+    "fuel_mwh": 28736.11,
+    "ideal_fuel_mwh": 22685.79,
+    "mean_units_online": 1.0,
+    "surplus_electricity_mwh": 2441.0,
+    "infeasible_time_share": 0.0
+   },
+   {
+    "n_units": 2,
+    "modularity_penalty": 0.2667,
+    "fuel_mwh": 28736.11,
+    "ideal_fuel_mwh": 22685.79,
+    "mean_units_online": 2.0,
+    "surplus_electricity_mwh": 2441.0,
+    "infeasible_time_share": 0.0
+   },
+   {
+    "n_units": 3,
+    "modularity_penalty": 0.1823,
+    "fuel_mwh": 26820.37,
+    "ideal_fuel_mwh": 22685.79,
+    "mean_units_online": 2.8,
+    "surplus_electricity_mwh": 1743.09,
+    "infeasible_time_share": 0.0
+   },
+   {
+    "n_units": 4,
+    "modularity_penalty": 0.14,
+    "fuel_mwh": 25862.5,
+    "ideal_fuel_mwh": 22685.79,
+    "mean_units_online": 3.6,
+    "surplus_electricity_mwh": 1394.13,
+    "infeasible_time_share": 0.0
+   },
+   {
+    "n_units": 6,
+    "modularity_penalty": 0.0978,
+    "fuel_mwh": 24904.62,
+    "ideal_fuel_mwh": 22685.79,
+    "mean_units_online": 5.2,
+    "surplus_electricity_mwh": 1045.17,
+    "infeasible_time_share": 0.0
+   },
+   {
+    "n_units": 8,
+    "modularity_penalty": 0.0609,
+    "fuel_mwh": 24066.49,
+    "ideal_fuel_mwh": 22685.79,
+    "mean_units_online": 6.7,
+    "surplus_electricity_mwh": 739.83,
+    "infeasible_time_share": 0.0
+   },
+   {
+    "n_units": 12,
+    "modularity_penalty": 0.045,
+    "fuel_mwh": 23707.29,
+    "ideal_fuel_mwh": 22685.79,
+    "mean_units_online": 9.9,
+    "surplus_electricity_mwh": 608.97,
+    "infeasible_time_share": 0.0
+   }
+  ],
+  "engine": [
+   {
+    "n_units": 1,
+    "modularity_penalty": 0.2667,
+    "fuel_mwh": 24345.93,
+    "ideal_fuel_mwh": 19219.96,
+    "mean_units_online": 1.0,
+    "surplus_electricity_mwh": 2441.0,
+    "infeasible_time_share": 0.0
+   },
+   {
+    "n_units": 2,
+    "modularity_penalty": 0.2667,
+    "fuel_mwh": 24345.93,
+    "ideal_fuel_mwh": 19219.96,
+    "mean_units_online": 2.0,
+    "surplus_electricity_mwh": 2441.0,
+    "infeasible_time_share": 0.0
+   },
+   {
+    "n_units": 3,
+    "modularity_penalty": 0.1823,
+    "fuel_mwh": 22722.87,
+    "ideal_fuel_mwh": 19219.96,
+    "mean_units_online": 2.8,
+    "surplus_electricity_mwh": 1743.09,
+    "infeasible_time_share": 0.0
+   },
+   {
+    "n_units": 4,
+    "modularity_penalty": 0.14,
+    "fuel_mwh": 21911.34,
+    "ideal_fuel_mwh": 19219.96,
+    "mean_units_online": 3.6,
+    "surplus_electricity_mwh": 1394.13,
+    "infeasible_time_share": 0.0
+   },
+   {
+    "n_units": 6,
+    "modularity_penalty": 0.0978,
+    "fuel_mwh": 21099.81,
+    "ideal_fuel_mwh": 19219.96,
+    "mean_units_online": 5.2,
+    "surplus_electricity_mwh": 1045.17,
+    "infeasible_time_share": 0.0
+   },
+   {
+    "n_units": 8,
+    "modularity_penalty": 0.0609,
+    "fuel_mwh": 20389.72,
+    "ideal_fuel_mwh": 19219.96,
+    "mean_units_online": 6.7,
+    "surplus_electricity_mwh": 739.83,
+    "infeasible_time_share": 0.0
+   },
+   {
+    "n_units": 12,
+    "modularity_penalty": 0.045,
+    "fuel_mwh": 20085.39,
+    "ideal_fuel_mwh": 19219.96,
+    "mean_units_online": 9.9,
+    "surplus_electricity_mwh": 608.97,
+    "infeasible_time_share": 0.0
+   }
+  ]
+ }
+}

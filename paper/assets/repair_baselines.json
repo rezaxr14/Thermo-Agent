@@ -1,0 +1,137 @@
+{
+ "study": "repair",
+ "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+ "seed": 0,
+ "n": 248,
+ "split_rows": {
+  "train": 125,
+  "val": 15,
+  "test_id": 12,
+  "test_ood_fault": 108,
+  "test_ood_topology": 128
+ },
+ "splits": {
+  "test_id": {
+   "all": {
+    "n": 12,
+    "noop": 0,
+    "search_success": 11,
+    "search_exact": 7,
+    "expert_success": 12,
+    "search_mean_solves_when_solved": 174
+   },
+   "by_fault": {
+    "efficiency_gt_1": {
+     "n": 4,
+     "noop": 0,
+     "search_success": 3,
+     "search_exact": 0,
+     "expert_success": 4,
+     "search_mean_solves_when_solved": 28
+    },
+    "unit_slip": {
+     "n": 1,
+     "noop": 0,
+     "search_success": 1,
+     "search_exact": 1,
+     "expert_success": 1,
+     "search_mean_solves_when_solved": 28
+    },
+    "wrong_fluid": {
+     "n": 7,
+     "noop": 0,
+     "search_success": 7,
+     "search_exact": 6,
+     "expert_success": 7,
+     "search_mean_solves_when_solved": 257.4
+    }
+   },
+   "limit": 12,
+   "seconds": 1.9
+  },
+  "test_ood_fault": {
+   "all": {
+    "n": 108,
+    "noop": 0,
+    "search_success": 108,
+    "search_exact": 108,
+    "expert_success": 108,
+    "search_mean_solves_when_solved": 127.6
+   },
+   "by_fault": {
+    "sign_flip": {
+     "n": 54,
+     "noop": 0,
+     "search_success": 54,
+     "search_exact": 54,
+     "expert_success": 54,
+     "search_mean_solves_when_solved": 8
+    },
+    "swapped_ports": {
+     "n": 54,
+     "noop": 0,
+     "search_success": 54,
+     "search_exact": 54,
+     "expert_success": 54,
+     "search_mean_solves_when_solved": 247.3
+    }
+   },
+   "limit": 108,
+   "seconds": 51.0
+  },
+  "test_ood_topology": {
+   "all": {
+    "n": 128,
+    "noop": 0,
+    "search_success": 127,
+    "search_exact": 98,
+    "expert_success": 128,
+    "search_mean_solves_when_solved": 122.2
+   },
+   "by_fault": {
+    "efficiency_gt_1": {
+     "n": 26,
+     "noop": 0,
+     "search_success": 25,
+     "search_exact": 0,
+     "expert_success": 26,
+     "search_mean_solves_when_solved": 24.8
+    },
+    "sign_flip": {
+     "n": 26,
+     "noop": 0,
+     "search_success": 26,
+     "search_exact": 26,
+     "expert_success": 26,
+     "search_mean_solves_when_solved": 8
+    },
+    "swapped_ports": {
+     "n": 17,
+     "noop": 0,
+     "search_success": 17,
+     "search_exact": 17,
+     "expert_success": 17,
+     "search_mean_solves_when_solved": 217.7
+    },
+    "unit_slip": {
+     "n": 26,
+     "noop": 0,
+     "search_success": 26,
+     "search_exact": 25,
+     "expert_success": 26,
+     "search_mean_solves_when_solved": 68.9
+    },
+    "wrong_fluid": {
+     "n": 33,
+     "noop": 0,
+     "search_success": 33,
+     "search_exact": 30,
+     "expert_success": 33,
+     "search_mean_solves_when_solved": 278.8
+    }
+   },
+   "limit": 128,
+   "seconds": 27.2
+  }
+ }
+}

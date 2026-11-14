@@ -1,0 +1,528 @@
+{
+ "command": "synth.topologies.dc_chp(...) with all optional blocks",
+ "seed": null,
+ "n": 3,
+ "kind": "topology",
+ "turbine_absorption_dry_orc_exhaust_heat": {
+  "components": [
+   {
+    "id": "AC",
+    "type": "compressor"
+   },
+   {
+    "id": "CC",
+    "type": "combustor"
+   },
+   {
+    "id": "GT",
+    "type": "turbine"
+   },
+   {
+    "id": "DC",
+    "type": "dc_load"
+   },
+   {
+    "id": "REJ",
+    "type": "heat_rejector"
+   },
+   {
+    "id": "HXD",
+    "type": "recuperator"
+   },
+   {
+    "id": "HX",
+    "type": "recuperator"
+   },
+   {
+    "id": "CH",
+    "type": "absorption_chiller"
+   },
+   {
+    "id": "EVA",
+    "type": "orc_evaporator"
+   },
+   {
+    "id": "OT",
+    "type": "orc_turbine"
+   },
+   {
+    "id": "COND",
+    "type": "condenser"
+   },
+   {
+    "id": "PMP",
+    "type": "pump"
+   },
+   {
+    "id": "REJ2",
+    "type": "heat_rejector"
+   }
+  ],
+  "streams": [
+   {
+    "id": "air",
+    "from": "ext:air",
+    "to": "AC.in",
+    "fluid": "CGAM_AIR",
+    "fixed": true,
+    "tear": false
+   },
+   {
+    "id": "s2",
+    "from": "AC.out",
+    "to": "CC.air_in",
+    "fluid": "CGAM_AIR",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "fuel",
+    "from": "ext:fuel",
+    "to": "CC.fuel_in",
+    "fluid": "CH4",
+    "fixed": true,
+    "tear": false
+   },
+   {
+    "id": "s4",
+    "from": "CC.out",
+    "to": "GT.in",
+    "fluid": "FLUE",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "s5",
+    "from": "GT.out",
+    "to": "HX.hot_in",
+    "fluid": "FLUE",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "s6",
+    "from": "HX.hot_out",
+    "to": "HXD.hot_in",
+    "fluid": "FLUE",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "s7",
+    "from": "HXD.hot_out",
+    "to": "EVA.hot_in",
+    "fluid": "FLUE",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "s8",
+    "from": "EVA.hot_out",
+    "to": "ext:stack",
+    "fluid": "FLUE",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "chw_ret",
+    "from": "DC.out",
+    "to": "CH.evap_in",
+    "fluid": "Water",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "chw_sup",
+    "from": "CH.evap_out",
+    "to": "DC.in",
+    "fluid": "Water",
+    "fixed": true,
+    "tear": true
+   },
+   {
+    "id": "rej_hot",
+    "from": "CH.rej_out",
+    "to": "REJ.in",
+    "fluid": "Water",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "rej_cold",
+    "from": "REJ.out",
+    "to": "CH.rej_in",
+    "fluid": "Water",
+    "fixed": true,
+    "tear": true
+   },
+   {
+    "id": "dh_in",
+    "from": "ext:dh",
+    "to": "HXD.cold_in",
+    "fluid": "Water",
+    "fixed": true,
+    "tear": false
+   },
+   {
+    "id": "dh_out",
+    "from": "HXD.cold_out",
+    "to": "ext:dh_out",
+    "fluid": "Water",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "hw_hot",
+    "from": "HX.cold_out",
+    "to": "CH.gen_in",
+    "fluid": "Water",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "hw_ret",
+    "from": "CH.gen_out",
+    "to": "HX.cold_in",
+    "fluid": "Water",
+    "fixed": true,
+    "tear": true
+   },
+   {
+    "id": "o1",
+    "from": "COND.hot_out",
+    "to": "PMP.in",
+    "fluid": "R245fa",
+    "fixed": true,
+    "tear": true
+   },
+   {
+    "id": "o2",
+    "from": "PMP.out",
+    "to": "EVA.cold_in",
+    "fluid": "R245fa",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "o3",
+    "from": "EVA.cold_out",
+    "to": "OT.in",
+    "fluid": "R245fa",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "o4",
+    "from": "OT.out",
+    "to": "COND.hot_in",
+    "fluid": "R245fa",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "ocw_hot",
+    "from": "COND.cold_out",
+    "to": "REJ2.in",
+    "fluid": "Water",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "ocw_cold",
+    "from": "REJ2.out",
+    "to": "COND.cold_in",
+    "fluid": "Water",
+    "fixed": true,
+    "tear": true
+   }
+  ]
+ },
+ "engine_absorption_dry_orc_heat_pump": {
+  "components": [
+   {
+    "id": "ENG",
+    "type": "gas_engine"
+   },
+   {
+    "id": "DC",
+    "type": "dc_load"
+   },
+   {
+    "id": "REJ",
+    "type": "heat_rejector"
+   },
+   {
+    "id": "HP",
+    "type": "heat_pump"
+   },
+   {
+    "id": "HX",
+    "type": "recuperator"
+   },
+   {
+    "id": "CH",
+    "type": "absorption_chiller"
+   },
+   {
+    "id": "EVA",
+    "type": "orc_evaporator"
+   },
+   {
+    "id": "OT",
+    "type": "orc_turbine"
+   },
+   {
+    "id": "COND",
+    "type": "condenser"
+   },
+   {
+    "id": "PMP",
+    "type": "pump"
+   },
+   {
+    "id": "REJ2",
+    "type": "heat_rejector"
+   }
+  ],
+  "streams": [
+   {
+    "id": "air",
+    "from": "ext:air",
+    "to": "ENG.air_in",
+    "fluid": "CGAM_AIR",
+    "fixed": true,
+    "tear": false
+   },
+   {
+    "id": "fuel",
+    "from": "ext:fuel",
+    "to": "ENG.fuel_in",
+    "fluid": "CH4",
+    "fixed": true,
+    "tear": false
+   },
+   {
+    "id": "s5",
+    "from": "ENG.exh_out",
+    "to": "HX.hot_in",
+    "fluid": "FLUE",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "s6",
+    "from": "HX.hot_out",
+    "to": "EVA.hot_in",
+    "fluid": "FLUE",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "s7",
+    "from": "EVA.hot_out",
+    "to": "ext:stack",
+    "fluid": "FLUE",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "chw_ret",
+    "from": "DC.out",
+    "to": "CH.evap_in",
+    "fluid": "Water",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "chw_sup",
+    "from": "CH.evap_out",
+    "to": "DC.in",
+    "fluid": "Water",
+    "fixed": true,
+    "tear": true
+   },
+   {
+    "id": "rej_hot",
+    "from": "CH.rej_out",
+    "to": "HP.src_in",
+    "fluid": "Water",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "rej_hot2",
+    "from": "HP.src_out",
+    "to": "REJ.in",
+    "fluid": "Water",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "dh_in",
+    "from": "ext:dh",
+    "to": "HP.sink_in",
+    "fluid": "Water",
+    "fixed": true,
+    "tear": false
+   },
+   {
+    "id": "dh_out",
+    "from": "HP.sink_out",
+    "to": "ext:dh_out",
+    "fluid": "Water",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "rej_cold",
+    "from": "REJ.out",
+    "to": "CH.rej_in",
+    "fluid": "Water",
+    "fixed": true,
+    "tear": true
+   },
+   {
+    "id": "hw_hot",
+    "from": "HX.cold_out",
+    "to": "CH.gen_in",
+    "fluid": "Water",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "hw_ret",
+    "from": "CH.gen_out",
+    "to": "HX.cold_in",
+    "fluid": "Water",
+    "fixed": true,
+    "tear": true
+   },
+   {
+    "id": "o1",
+    "from": "COND.hot_out",
+    "to": "PMP.in",
+    "fluid": "R245fa",
+    "fixed": true,
+    "tear": true
+   },
+   {
+    "id": "o2",
+    "from": "PMP.out",
+    "to": "EVA.cold_in",
+    "fluid": "R245fa",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "o3",
+    "from": "EVA.cold_out",
+    "to": "OT.in",
+    "fluid": "R245fa",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "o4",
+    "from": "OT.out",
+    "to": "COND.hot_in",
+    "fluid": "R245fa",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "ocw_hot",
+    "from": "COND.cold_out",
+    "to": "REJ2.in",
+    "fluid": "Water",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "ocw_cold",
+    "from": "REJ2.out",
+    "to": "COND.cold_in",
+    "fluid": "Water",
+    "fixed": true,
+    "tear": true
+   }
+  ]
+ },
+ "engine_electric_wet": {
+  "components": [
+   {
+    "id": "ENG",
+    "type": "gas_engine"
+   },
+   {
+    "id": "DC",
+    "type": "dc_load"
+   },
+   {
+    "id": "REJ",
+    "type": "heat_rejector"
+   },
+   {
+    "id": "CH",
+    "type": "electric_chiller"
+   }
+  ],
+  "streams": [
+   {
+    "id": "air",
+    "from": "ext:air",
+    "to": "ENG.air_in",
+    "fluid": "CGAM_AIR",
+    "fixed": true,
+    "tear": false
+   },
+   {
+    "id": "fuel",
+    "from": "ext:fuel",
+    "to": "ENG.fuel_in",
+    "fluid": "CH4",
+    "fixed": true,
+    "tear": false
+   },
+   {
+    "id": "s5",
+    "from": "ENG.exh_out",
+    "to": "ext:stack",
+    "fluid": "FLUE",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "chw_ret",
+    "from": "DC.out",
+    "to": "CH.evap_in",
+    "fluid": "Water",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "chw_sup",
+    "from": "CH.evap_out",
+    "to": "DC.in",
+    "fluid": "Water",
+    "fixed": true,
+    "tear": true
+   },
+   {
+    "id": "rej_hot",
+    "from": "CH.rej_out",
+    "to": "REJ.in",
+    "fluid": "Water",
+    "fixed": false,
+    "tear": false
+   },
+   {
+    "id": "rej_cold",
+    "from": "REJ.out",
+    "to": "CH.rej_in",
+    "fluid": "Water",
+    "fixed": true,
+    "tear": true
+   }
+  ]
+ }
+}

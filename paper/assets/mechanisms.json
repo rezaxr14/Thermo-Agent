@@ -1,0 +1,357 @@
+{
+ "study": "mechanisms",
+ "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+ "seed": null,
+ "n": 30,
+ "sweep_f": [
+  {
+   "prime_mover": "engine",
+   "chilled_fraction": 0.3,
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 48.37790697674419,
+   "stack_K": 666.7281896309446
+  },
+  {
+   "prime_mover": "turbine",
+   "chilled_fraction": 0.3,
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 57.10164407393188,
+   "stack_K": 748.0501084986694
+  },
+  {
+   "prime_mover": "engine",
+   "chilled_fraction": 0.35,
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 48.45639534883721,
+   "stack_K": 632.4610166551478
+  },
+  {
+   "prime_mover": "turbine",
+   "chilled_fraction": 0.35,
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 57.19428584715604,
+   "stack_K": 729.2562179098142
+  },
+  {
+   "prime_mover": "engine",
+   "chilled_fraction": 0.4,
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 48.53488372093023,
+   "stack_K": 598.0209691775257
+  },
+  {
+   "prime_mover": "turbine",
+   "chilled_fraction": 0.4,
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 57.28692762038018,
+   "stack_K": 710.4365064796451
+  },
+  {
+   "prime_mover": "engine",
+   "chilled_fraction": 0.45,
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 48.613372093023266,
+   "stack_K": 563.413757419616
+  },
+  {
+   "prime_mover": "turbine",
+   "chilled_fraction": 0.45,
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 57.37956939360432,
+   "stack_K": 691.5912553324546
+  },
+  {
+   "prime_mover": "engine",
+   "chilled_fraction": 0.5,
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 48.69186046511628,
+   "stack_K": 528.6463949669901
+  },
+  {
+   "prime_mover": "turbine",
+   "chilled_fraction": 0.5,
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 57.47221116682846,
+   "stack_K": 672.7209571088894
+  },
+  {
+   "prime_mover": "engine",
+   "chilled_fraction": 0.55,
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 48.770348837209305,
+   "stack_K": 493.72685334967997
+  },
+  {
+   "prime_mover": "turbine",
+   "chilled_fraction": 0.55,
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 57.564852940052624,
+   "stack_K": 653.826304401484
+  },
+  {
+   "prime_mover": "engine",
+   "chilled_fraction": 0.6,
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 48.84883720930233,
+   "stack_K": 458.6636645338745
+  },
+  {
+   "prime_mover": "turbine",
+   "chilled_fraction": 0.6,
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 57.65749471327673,
+   "stack_K": 634.9081772145123
+  },
+  {
+   "prime_mover": "engine",
+   "chilled_fraction": 0.65,
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 48.92732558139535,
+   "stack_K": 423.4654731747145
+  },
+  {
+   "prime_mover": "turbine",
+   "chilled_fraction": 0.65,
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 57.750136486500864,
+   "stack_K": 615.9676293882958
+  },
+  {
+   "prime_mover": "engine",
+   "chilled_fraction": 0.7,
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 49.00581395348837,
+   "stack_K": 388.14054189830756
+  },
+  {
+   "prime_mover": "turbine",
+   "chilled_fraction": 0.7,
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 57.842778259725044,
+   "stack_K": 597.0058739475026
+  },
+  {
+   "prime_mover": "engine",
+   "chilled_fraction": 0.75,
+   "valid": false,
+   "reason": "failed: V#a_no_temperature_cross",
+   "fuel_mw": null,
+   "stack_K": 352.6962136342322
+  },
+  {
+   "prime_mover": "turbine",
+   "chilled_fraction": 0.75,
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 57.93542003294918,
+   "stack_K": 578.0242673528289
+  },
+  {
+   "prime_mover": "engine",
+   "chilled_fraction": 0.8,
+   "valid": false,
+   "reason": "failed: V#a_no_temperature_cross",
+   "fuel_mw": null,
+   "stack_K": 317.13833485059433
+  },
+  {
+   "prime_mover": "turbine",
+   "chilled_fraction": 0.8,
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 58.028061806173326,
+   "stack_K": 559.024292655475
+  },
+  {
+   "prime_mover": "engine",
+   "chilled_fraction": 0.85,
+   "valid": false,
+   "reason": "failed: V#a_no_temperature_cross",
+   "fuel_mw": null,
+   "stack_K": 281.4706422090241
+  },
+  {
+   "prime_mover": "turbine",
+   "chilled_fraction": 0.85,
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 58.12070357939744,
+   "stack_K": 540.0075415735747
+  },
+  {
+   "prime_mover": "engine",
+   "chilled_fraction": 0.9,
+   "valid": false,
+   "reason": "failed: V#a_no_temperature_cross",
+   "fuel_mw": null,
+   "stack_K": 245.69411242848304
+  },
+  {
+   "prime_mover": "turbine",
+   "chilled_fraction": 0.9,
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 58.213345352621594,
+   "stack_K": 520.97569552882
+  },
+  {
+   "prime_mover": "engine",
+   "chilled_fraction": 0.95,
+   "valid": false,
+   "reason": "failed: V#a_no_temperature_cross",
+   "fuel_mw": null,
+   "stack_K": 209.80627079083123
+  },
+  {
+   "prime_mover": "turbine",
+   "chilled_fraction": 0.95,
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 58.305987125845746,
+   "stack_K": 501.93050569940146
+  },
+  {
+   "prime_mover": "engine",
+   "chilled_fraction": 1.0,
+   "valid": false,
+   "reason": "sizing: sizing run failed: HX: the hot stream cannot supply the required duty of # MW",
+   "fuel_mw": null,
+   "stack_K": null
+  },
+  {
+   "prime_mover": "turbine",
+   "chilled_fraction": 1.0,
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 58.398628899069884,
+   "stack_K": 482.8737721615858
+  }
+ ],
+ "orc_turbine": {
+  "orc_r245fa": {
+   "valid": false,
+   "reason": "sizing: sizing run failed: EVA: exhaust at # K is too hot for R#fa (vapour limit # K) while leaving the stack above # K",
+   "fuel_mw": null,
+   "stack_K": null
+  },
+  "orc_cyclopentane": {
+   "valid": false,
+   "reason": "sizing: sizing run failed: EVA: exhaust at # K is too hot for Cyclopentane (vapour limit # K) while leaving the stack above # K",
+   "fuel_mw": null,
+   "stack_K": null
+  },
+  "orc_toluene": {
+   "valid": false,
+   "reason": "sizing: sizing run failed: EVA: exhaust at # K is too hot for Toluene (vapour limit # K) while leaving the stack above # K",
+   "fuel_mw": null,
+   "stack_K": null
+  }
+ },
+ "engine_orc": {
+  "orc_r245fa": {
+   "valid": false,
+   "reason": "sizing: sizing run failed: EVA: exhaust at # K is too hot for R#fa (vapour limit # K) while leaving the stack above # K",
+   "fuel_mw": null,
+   "stack_K": null
+  },
+  "orc_cyclopentane": {
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 46.64893235478719,
+   "stack_K": 354.2678644566146
+  },
+  "orc_toluene": {
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 47.09070103834069,
+   "stack_K": 412.9424124087087
+  },
+  "none": {
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 48.69186046511628,
+   "stack_K": 528.6463949669901
+  }
+ },
+ "ambient_305": {
+  "dry": {
+   "valid": false,
+   "reason": "failed: V#a_no_temperature_cross",
+   "fuel_mw": null,
+   "stack_K": 299.8282883930832
+  },
+  "wet": {
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 48.69186046511628,
+   "stack_K": 535.2229135547757
+  }
+ },
+ "water_limit": {
+  "dry": {
+   "valid": true,
+   "reason": "",
+   "fuel_mw": 57.47221116682846,
+   "stack_K": 672.7209571088894
+  },
+  "wet": {
+   "valid": false,
+   "reason": "failed: V#e_water_limit",
+   "fuel_mw": null,
+   "stack_K": 672.7209571088894
+  },
+  "unlimited_wet_kpis": {
+   "water_use_kg_s": 9.196092173846246
+  }
+ },
+ "exhaust_K": {
+  "turbine": 860.2846567548892,
+  "engine": 868.6092461485335
+ },
+ "engine_orc_net_orc_mw": {
+  "W_orc_net_w": 0.9435247820347238,
+  "Q_evap_orc_w": 5.268361719136571
+ },
+ "engine_orc_kpis_w": {
+  "W_net_w": 20600193.14053669,
+  "Q_fuel_w": 46648932.35478719,
+  "Q_useful_w": 10000000.0,
+  "Q_heat_w": 0.0,
+  "Q_cooling_w": 10000000.0,
+  "P_it_w": 20000000.0,
+  "E_fuel_w": 48843691.99799823,
+  "ED_total_w": 47009411.70915347,
+  "ED_plant_w": 26940886.696733482,
+  "closure_residual_w": 7.450580596923828e-09,
+  "T_max_K": 868.6092461485334,
+  "T0_K": 298.15,
+  "water_use_kg_s": 10.963718800977068,
+  "COP_CH": 0.8,
+  "COPrev_CH": 13.21721401014739,
+  "eta_I": 0.6559677059232084,
+  "eta_I_power": 0.4416005276147046,
+  "eta_II": 0.42316043909628587,
+  "W_orc_net_w": 943524.7820347238,
+  "Q_evap_orc_w": 5268361.7191365715,
+  "T_orc_hot_K": 424.6510356285521,
+  "T_cond_K": 312.03348681030894
+ }
+}

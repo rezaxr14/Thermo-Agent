@@ -1,0 +1,26 @@
+\begingroup\small\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{@{}p{7.2cm}p{4.6cm}p{3.6cm}@{}}
+\toprule
+Constant (assumed, not fitted) & Code name & Default \\
+\midrule
+Compressor isentropic efficiency & \texttt{eta\_c} & 0.86 \\
+Turbine isentropic efficiency & \texttt{eta\_t} & 0.88 \\
+Pressure ratio & \texttt{PR} & 18 \\
+Turbine inlet temperature (K) & \texttt{T4} & 1500 \\
+Combustor pressure drop; heat loss fraction & \texttt{dp\_cc}, \texttt{q\_loss} & 0.04; 0.01 \\
+Gas engine electrical efficiency & \texttt{eta\_el} & 0.43 \\
+Gas engine loss fraction (jacket and radiation) & \texttt{f\_loss} & 0.15 \\
+Air excess & \texttt{air\_excess} & 1.8 \\
+Absorption chiller: fraction of reversible COP; COP cap & \texttt{eps\_abs}, \texttt{COP\_max} & 0.27; 0.8 \\
+Electric chiller and heat pump: fraction of reversible COP & \texttt{eps\_ec}, \texttt{eps\_hp} & 0.5; 0.5 \\
+Chilled-water supply and return (K) & \texttt{T\_supply}, \texttt{T\_return} & 291.15; 301.15 \\
+Hot-water loop supply and return (K) & \texttt{T\_hw}, \texttt{T\_gen\_out} & 368.15; 358.15 \\
+Rejector approach to ambient (dry or wet; K) & \texttt{dT\_rej} & 8 (dry), 5 (wet) \\
+Rejector fan power (share of heat rejected) & \texttt{fan\_frac} & 0.015 \\
+ORC working-fluid vapour limits (K) & \texttt{ORC\_T\_MAX} & R245fa 420; Cyclopentane 480; Toluene 560 \\
+ORC condenser approach (K); pump and turbine efficiency & \texttt{orc\_cond\_approach}, \texttt{eta\_pump}, \texttt{eta\_orct} & 8; 0.75; 0.85 \\
+Stack temperature floor for exhaust recovery (K) & \texttt{T\_stack\_min} & 333.15 \\
+Fraction of the IT heat on the chilled-water loop & \texttt{chilled\_fraction} & 0.5 (Design: site input) \\
+Sizing margin on net electricity & \texttt{margin} & 1.03 \\
+\bottomrule
+\end{tabular}\endgroup

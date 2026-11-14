@@ -1,0 +1,22 @@
+{
+ "study": "crosscheck",
+ "command": "synth.topologies.cgam_orc(n_air=R['n_a']*1e3, T_cond=T11, T_cw_in=T11, dT_cw=10) solved by core.solve.solve; reference core.cgam_plant.solve()",
+ "seed": null,
+ "n": 1,
+ "solved": true,
+ "w_net_rel_err": 3.532940069865731e-06,
+ "eta_I_rel_err": -0.0002568243560691434,
+ "eta_II_rel_diff": -0.010469614291629304,
+ "hrsg_pinch_diff_K": 0.004265538313461548,
+ "closure_residual_w": 7.450580596923828e-09,
+ "ed_rel_diff": {
+  "AC": 0.0005033557047355764,
+  "AP": 0.0005037763888000865,
+  "GT": 0.0005034889785703994,
+  "HRSG": 0.0005072240542272602,
+  "EVA": 0.0006178522655901175,
+  "CC": -0.009702479198199384
+ },
+ "max_mass_residual": 1.4210854715202004e-14,
+ "max_energy_residual_w": 1.210719347000122e-08
+}

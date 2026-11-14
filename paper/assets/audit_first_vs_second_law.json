@@ -1,0 +1,72 @@
+{
+ "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+ "seed": 0,
+ "n": 75,
+ "n_plants_in_example": 1,
+ "example_row_id": "aud-0-00000",
+ "example_topology": "dc_absorption",
+ "prime_mover": "CC",
+ "components": [
+  {
+   "id": "CC",
+   "type": "combustor",
+   "exergy_destroyed_mw": 41.73602623216471,
+   "energy_dissipated_mw": 1.2730313587697712
+  },
+  {
+   "id": "HX",
+   "type": "recuperator",
+   "exergy_destroyed_mw": 16.96077140472275,
+   "energy_dissipated_mw": 0.0
+  },
+  {
+   "id": "CH",
+   "type": "absorption_chiller",
+   "exergy_destroyed_mw": 6.7293396329706345,
+   "energy_dissipated_mw": 0.0
+  },
+  {
+   "id": "GT",
+   "type": "turbine",
+   "exergy_destroyed_mw": 4.989656870157718,
+   "energy_dissipated_mw": 0.0
+  },
+  {
+   "id": "AC",
+   "type": "compressor",
+   "exergy_destroyed_mw": 2.7036940958407074,
+   "energy_dissipated_mw": 0.0
+  },
+  {
+   "id": "REJ",
+   "type": "heat_rejector",
+   "exergy_destroyed_mw": 2.536119261368542,
+   "energy_dissipated_mw": 72.7064974389232
+  }
+ ],
+ "fuel_mw": 127.30313587697711,
+ "hit_rates": {
+  "test_id": {
+   "n": 17,
+   "first_law_top1": 0,
+   "random_top1": 0.253,
+   "first_law_hits": 0,
+   "ndcg3": {
+    "random": 0.699,
+    "first_law": 0.587
+   }
+  },
+  "test_ood_topology": {
+   "n": 58,
+   "first_law_top1": 0.121,
+   "random_top1": 0.322,
+   "first_law_hits": 7,
+   "ndcg3": {
+    "random": 0.665,
+    "first_law": 0.69
+   }
+  }
+ },
+ "kind": "simulation",
+ "random_baseline": "mean over 20 random orders per plant"
+}

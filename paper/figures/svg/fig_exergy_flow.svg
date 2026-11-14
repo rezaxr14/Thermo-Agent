@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" width="1000" height="700" font-family="Helvetica, Arial, 'Liberation Sans', sans-serif">
+<rect width="1000" height="700" fill="#FFFFFF"/>
+<text x="40" y="56" font-size="14" font-weight="bold" fill="#333333">Fuel exergy 60.51 MW</text>
+<text x="372" y="56" font-size="14" font-weight="bold" fill="#333333">Where the fuel exergy goes</text>
+<text x="700" y="56" font-size="14" font-weight="bold" fill="#333333">What the delivered exergy does</text>
+<rect x="40" y="98" width="22" height="129.78" fill="#55A868"/>
+<rect x="40" y="227.78" width="22" height="1.2" fill="#4C72B0"/>
+<rect x="40" y="228.21" width="22" height="2.64" fill="#DD8452"/>
+<rect x="40" y="230.85" width="22" height="115.33" fill="#B5383C"/>
+<rect x="40" y="346.19" width="22" height="34.97" fill="#B5383C"/>
+<rect x="40" y="381.15" width="22" height="14.54" fill="#B5383C"/>
+<rect x="40" y="395.69" width="22" height="11.22" fill="#B5383C"/>
+<rect x="40" y="406.91" width="22" height="9.59" fill="#B5383C"/>
+<rect x="40" y="416.5" width="22" height="8.18" fill="#B5383C"/>
+<rect x="40" y="424.68" width="22" height="7.6" fill="#B5383C"/>
+<rect x="40" y="432.29" width="22" height="46.91" fill="#8C8C8C"/>
+<path d="M62,98 C217,98 217,84 372,84 L372,213.78 C217,213.78 217,227.78 62,227.78 Z" fill="#55A868" fill-opacity="0.42"/>
+<path d="M62,227.78 C217,227.78 217,220.78 372,220.78 L372,221.98 C217,221.98 217,228.98 62,228.98 Z" fill="#4C72B0" fill-opacity="0.42"/>
+<path d="M62,228.21 C217,228.21 217,239.78 372,239.78 L372,242.42 C217,242.42 217,230.85 62,230.85 Z" fill="#DD8452" fill-opacity="0.42"/>
+<path d="M62,230.85 C217,230.85 217,277.78 372,277.78 L372,393.11 C217,393.11 217,346.19 62,346.19 Z" fill="#B5383C" fill-opacity="0.42"/>
+<path d="M62,346.19 C217,346.19 217,400.11 372,400.11 L372,435.08 C217,435.08 217,381.15 62,381.15 Z" fill="#B5383C" fill-opacity="0.42"/>
+<path d="M62,381.15 C217,381.15 217,442.08 372,442.08 L372,456.62 C217,456.62 217,395.69 62,395.69 Z" fill="#B5383C" fill-opacity="0.42"/>
+<path d="M62,395.69 C217,395.69 217,463.62 372,463.62 L372,474.84 C217,474.84 217,406.91 62,406.91 Z" fill="#B5383C" fill-opacity="0.42"/>
+<path d="M62,406.91 C217,406.91 217,482.62 372,482.62 L372,492.21 C217,492.21 217,416.5 62,416.5 Z" fill="#B5383C" fill-opacity="0.42"/>
+<path d="M62,416.5 C217,416.5 217,501.62 372,501.62 L372,509.8 C217,509.8 217,424.68 62,424.68 Z" fill="#B5383C" fill-opacity="0.42"/>
+<path d="M62,424.68 C217,424.68 217,539.62 372,539.62 L372,547.22 C217,547.22 217,432.29 62,432.29 Z" fill="#B5383C" fill-opacity="0.42"/>
+<path d="M62,432.29 C217,432.29 217,558.62 372,558.62 L372,605.53 C217,605.53 217,479.2 62,479.2 Z" fill="#8C8C8C" fill-opacity="0.5"/>
+<rect x="372" y="84" width="22" height="129.78" rx="1" fill="#55A868"/>
+<rect x="399.5" y="66.75" width="149.5" height="13.5" fill="#FFFFFF"/>
+<text x="402" y="77" font-size="12.5" font-weight="bold" fill="#333333">net electricity  20.60 MW</text>
+<rect x="372" y="220.78" width="22" height="1.5" rx="1" fill="#4C72B0"/>
+<rect x="400" y="215.78" width="207.54" height="13.5" fill="#FFFFFF"/>
+<text x="402" y="226.03" font-size="12.5" font-weight="bold" fill="#333333">delivered cooling exergy  0.07 MW</text>
+<rect x="372" y="239.78" width="22" height="2.64" rx="1" fill="#DD8452"/>
+<rect x="400" y="235.35" width="188.8" height="13.5" fill="#FFFFFF"/>
+<text x="402" y="245.6" font-size="12.5" font-weight="bold" fill="#333333">delivered heat exergy  0.42 MW</text>
+<rect x="372" y="277.78" width="22" height="115.33" rx="1" fill="#B5383C"/>
+<text x="402" y="339.95" font-size="12.5" fill="#333333">combustor CC  18.31 MW</text>
+<rect x="372" y="400.11" width="22" height="34.97" rx="1" fill="#B5383C"/>
+<text x="402" y="422.1" font-size="12.5" fill="#333333">hot-water exchanger HX  5.55 MW</text>
+<rect x="372" y="442.08" width="22" height="14.54" rx="1" fill="#B5383C"/>
+<text x="402" y="453.85" font-size="12.5" fill="#333333">gas turbine GT  2.31 MW</text>
+<rect x="372" y="463.62" width="22" height="11.22" rx="1" fill="#B5383C"/>
+<text x="402" y="473.73" font-size="12.5" fill="#333333">district-heat exchanger HXD  1.78 MW</text>
+<rect x="372" y="482.62" width="22" height="9.59" rx="1" fill="#B5383C"/>
+<text x="402" y="491.91" font-size="12.5" fill="#333333">compressor AC  1.52 MW</text>
+<rect x="372" y="501.62" width="22" height="8.18" rx="1" fill="#B5383C"/>
+<text x="402" y="510.21" font-size="12.5" fill="#333333">absorption chiller CH  1.30 MW</text>
+<rect x="372" y="539.62" width="22" height="7.6" rx="1" fill="#B5383C"/>
+<text x="402" y="547.92" font-size="12.5" fill="#333333">dry cooler REJ  1.21 MW</text>
+<rect x="372" y="558.62" width="22" height="46.91" rx="1" fill="#8C8C8C"/>
+<text x="402" y="586.58" font-size="12.5" fill="#333333">stack gas  7.45 MW</text>
+<path d="M394,84 C547,84 547,84 700,84 L700,210 C547,210 547,210 394,210 Z" fill="#55A868" fill-opacity="0.42"/>
+<path d="M394,210 C547,210 547,226.43 700,226.43 L700,230.21 C547,230.21 547,213.78 394,213.78 Z" fill="#55A868" fill-opacity="0.42"/>
+<path d="M394,220.78 C547,220.78 547,210 700,210 L700,211.2 C547,211.2 547,221.98 394,221.98 Z" fill="#4C72B0" fill-opacity="0.7"/>
+<path d="M394,239.78 C547,239.78 547,260.43 700,260.43 L700,263.07 C547,263.07 547,242.42 394,242.42 Z" fill="#DD8452" fill-opacity="0.5"/>
+<rect x="700" y="84" width="22" height="126.43" rx="3" fill="#FBECEC" stroke="#B5383C" stroke-width="1.6" stroke-dasharray="5 3"/>
+<rect x="700" y="226.43" width="22" height="3.78" rx="1" fill="#55A868"/>
+<rect x="700" y="260.43" width="22" height="2.64" rx="1" fill="#DD8452"/>
+<text x="730" y="102" font-size="12.5" font-weight="bold" fill="#333333">IT load destruction  20.07 MW</text>
+<text x="730" y="120" font-size="12.5" fill="#666666">not attributable to the plant: the IT load turns</text>
+<text x="730" y="136.25" font-size="12.5" fill="#666666">its electricity into low-grade heat</text>
+<text x="730" y="231.43" font-size="12.5" fill="#333333">surplus electricity  0.60 MW</text>
+<text x="730" y="265.43" font-size="12.5" fill="#333333">delivered heat  0.42 MW</text>
+<rect x="700" y="372" width="284" height="184" rx="8" fill="#FFFFFF" stroke="#BDBDBD" stroke-width="1.2"/>
+<text x="714" y="397" font-size="13.5" font-weight="bold" fill="#333333">Second-law efficiency 34.9 %</text>
+<text x="714" y="418" font-size="12.5" fill="#666666">First-law efficiency is 59.9 %. The</text>
+<text x="714" y="434.25" font-size="12.5" fill="#666666">chilled-water loop removes 10.0 MW of heat</text>
+<text x="714" y="450.5" font-size="12.5" fill="#666666">but delivers only 0.07 MW of exergy. The dry</text>
+<text x="714" y="466.75" font-size="12.5" fill="#666666">cooler dissipates 22.8 MW to ambient, and</text>
+<text x="714" y="483" font-size="12.5" fill="#666666">heat at ambient temperature carries no</text>
+<text x="714" y="499.25" font-size="12.5" fill="#666666">exergy. Of 60.5 MW of fuel exergy, 32.0 MW</text>
+<text x="714" y="515.5" font-size="12.5" fill="#666666">is destroyed inside the plant, mostly in the</text>
+<text x="714" y="531.75" font-size="12.5" fill="#666666">combustor.</text>
+<text x="40" y="664" font-size="11.5" fill="#666666">Simulation, one solved plant (n = 1): gas turbine (pressure ratio 18, inlet 1500 K), absorption cooling, dry cooler, 4 MW district heat from the exhaust, 20 MW IT load, ambient 298.15 K.</text>
+<text x="40" y="678.95" font-size="11.5" fill="#666666">Exergy in MW; closure residual below 1e-9 MW.</text>
+</svg>

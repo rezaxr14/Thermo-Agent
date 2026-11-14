@@ -1,0 +1,22 @@
+\begingroup\scriptsize\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}p{3.2cm}p{4.9cm}p{7.0cm}@{}}
+\toprule
+Type & Ports (fluid class) & Parameters \\
+\midrule
+\texttt{compressor} & \texttt{in} (g), \texttt{out} (g) & \texttt{PR}, \texttt{eta\_s} \\
+\texttt{turbine} & \texttt{in} (g), \texttt{out} (g) & \texttt{P\_out}, \texttt{eta\_s} \\
+\texttt{orc\_turbine} & \texttt{in} (l), \texttt{out} (l) & \texttt{P\_out}, \texttt{eta\_s} \\
+\texttt{pump} & \texttt{in} (l), \texttt{out} (l) & \texttt{P\_out}, \texttt{eta\_s} \\
+\texttt{combustor} & \texttt{air\_in} (g), \texttt{fuel\_in} (g), \texttt{out} (g) & \texttt{T\_out}, \texttt{dp}, \texttt{q\_loss} \\
+\texttt{recuperator} & \texttt{cold\_in} (?), \texttt{cold\_out} (?), \texttt{hot\_in} (?), \texttt{hot\_out} (?) & \texttt{T\_cold\_out}, \texttt{dp\_cold}, \texttt{dp\_hot}, \texttt{useful\_heat} \\
+\texttt{hrsg} & \texttt{hot\_in} (g), \texttt{hot\_out} (g), \texttt{water\_in} (l), \texttt{steam\_out} (l) & \texttt{P\_steam}, \texttt{dp\_gas}, \texttt{econ\_approach\_K} \\
+\texttt{orc\_evaporator} & \texttt{hot\_in} (g), \texttt{hot\_out} (g), \texttt{cold\_in} (l), \texttt{cold\_out} (l) & \texttt{pinch\_K}, \texttt{dp\_hot}, \texttt{flow\_frac}, \texttt{T\_stack\_min}, \texttt{T\_max\_K} \\
+\texttt{condenser} & \texttt{hot\_in} (l), \texttt{hot\_out} (l), \texttt{cold\_in} (l), \texttt{cold\_out} (l) & \texttt{dT\_cw} \\
+\texttt{dc\_load} & \texttt{in} (l), \texttt{out} (l) & \texttt{P\_it}, \texttt{chilled\_fraction}, \texttt{T\_return} \\
+\texttt{absorption\_chiller} & \texttt{gen\_in} (l), \texttt{gen\_out} (l), \texttt{evap\_in} (l), \texttt{evap\_out} (l), \texttt{rej\_in} (l), \texttt{rej\_out} (l) & \texttt{T\_chw\_out}, \texttt{T\_gen\_out}, \texttt{dT\_rej}, \texttt{eps}, \texttt{COP\_max} \\
+\texttt{heat\_pump} & \texttt{src\_in} (l), \texttt{src\_out} (l), \texttt{sink\_in} (l), \texttt{sink\_out} (l) & \texttt{T\_sink\_out}, \texttt{eps}, \texttt{approach\_K}, \texttt{Q\_sink}, \texttt{dT\_src} \\
+\texttt{electric\_chiller} & \texttt{evap\_in} (l), \texttt{evap\_out} (l), \texttt{rej\_in} (l), \texttt{rej\_out} (l) & \texttt{T\_chw\_out}, \texttt{dT\_rej}, \texttt{eps}, \texttt{approach\_K} \\
+\texttt{heat\_rejector} & \texttt{in} (l), \texttt{out} (l) & \texttt{kind}, \texttt{approach\_K}, \texttt{fan\_frac} \\
+\texttt{gas\_engine} & \texttt{air\_in} (g), \texttt{fuel\_in} (g), \texttt{exh\_out} (g) & \texttt{P\_el}, \texttt{eta\_el}, \texttt{f\_loss}, \texttt{air\_excess}, \texttt{P\_exh} \\
+\bottomrule
+\end{tabular}\endgroup

@@ -1,0 +1,26 @@
+\begingroup\small\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{@{}p{3.3cm}p{3.0cm}p{7.2cm}l@{}}
+\toprule
+Task, layer & Fault & Effect & Held out \\
+\midrule
+Repair & \texttt{efficiency\_gt\_1} & efficiency above 1 & no \\
+Repair & \texttt{sign\_flip} & sign of a parameter or flow reversed & yes \\
+Repair & \texttt{swapped\_ports} & destinations of two same-fluid streams exchanged & yes \\
+Repair & \texttt{unit\_slip} & value off by a factor of $10^{\pm k}$ or a unit offset & no \\
+Repair & \texttt{wrong\_fluid} & stream labelled with the wrong fluid & no \\
+\midrule
+Ledger, stream lines & \texttt{missing\_m} & flow factor missing in a stream line & no \\
+Ledger, stream lines & \texttt{missing\_ech} & chemical term missing in a stream line & no \\
+Ledger, stream lines & \texttt{sign\_T0} & wrong sign on the $T_0$ term in a stream line & no \\
+Ledger, stream lines & \texttt{t0\_literal} & the number 25 in place of $T_0$ & no \\
+Ledger, stream lines & \texttt{wrong\_ref} & another stream's reference state in a stream line & yes \\
+Ledger, component lines & \texttt{dropped\_term} & a stream dropped from a destruction line & no \\
+Ledger, component lines & \texttt{dropped\_work} & work term dropped from a destruction line & yes \\
+Ledger, component lines & \texttt{sign\_flip} & flipped sign of a stream term in a destruction line & no \\
+Ledger, component lines & \texttt{wrong\_factor} & destruction line scaled by 0.1, 10, 2 or 0.5 & no \\
+Ledger, component lines & \texttt{wrong\_stream} & a different stream in a destruction line & yes \\
+Ledger, stream or component line & \texttt{unit\_slip} & $/10^3$ for $/10^6$ in a stream line, or a factor $10^{\pm3}$ in a destruction line & no \\
+Ledger, constants & \texttt{t0\_celsius} & $T_0$ in Celsius & no \\
+Ledger, constants & \texttt{t0\_offset} & $T_0 = 273.15$ & no \\
+\bottomrule
+\end{tabular}\endgroup

@@ -1,0 +1,18 @@
+\begingroup\small\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{@{}p{4.2cm}p{5.4cm}p{5.6cm}@{}}
+\toprule
+ & Stage 1: SFT & Stage 2: GRPO \\
+\midrule
+Base model & \texttt{Qwen/Qwen3.5-4B} & \texttt{Qwen/Qwen3.5-4B} \\
+Method & LoRA SFT, all tasks in one adapter & GRPO per task on the merged SFT model \\
+LoRA rank / alpha / dropout & 16 / 32 / 0.05 & 8 / 16 / 0.05 \\
+Target modules & all-linear & all-linear \\
+Learning rate & 0.0002 & 5e-05 \\
+Epochs or steps & 2 epochs & 300 steps (maximum) \\
+Maximum length (tokens) & 3072 & completion 320 \\
+Batch per device / accumulation & 2 / 8 & 8 / 2 \\
+Group size / temperature & -- & 8 / 1 \\
+Loss & causal LM, completion tokens only & dapo-style, KL coefficient 0, truncated completions masked \\
+Prompt rendering & tokenizer generation prompt, thinking disabled & same text as SFT and evaluation \\
+\bottomrule
+\end{tabular}\endgroup

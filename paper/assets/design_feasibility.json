@@ -1,0 +1,877 @@
+{
+ "command": "design.search.enumerate_designs on Site(it_load_w=20e6, cooling_load_w=cf*20e6, T0=T, RH=0.5, supply 291.15 K, return 301.15 K); design.build.evaluate_design",
+ "seed": null,
+ "n": 63,
+ "kind": "simulation",
+ "it_load_mw": 20,
+ "chilled_fractions": [
+  0.2,
+  0.3,
+  0.4,
+  0.5,
+  0.6,
+  0.7,
+  0.8,
+  0.9,
+  1.0
+ ],
+ "T_amb_K": [
+  283.0,
+  288.0,
+  293.0,
+  298.0,
+  303.0,
+  308.0,
+  313.0
+ ],
+ "cells": [
+  {
+   "T_amb_K": 283.0,
+   "chilled_fraction": 0.2,
+   "n_valid": 0,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": null,
+   "best": null
+  },
+  {
+   "T_amb_K": 283.0,
+   "chilled_fraction": 0.3,
+   "n_valid": 0,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": null,
+   "best": null
+  },
+  {
+   "T_amb_K": 283.0,
+   "chilled_fraction": 0.4,
+   "n_valid": 0,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": null,
+   "best": null
+  },
+  {
+   "T_amb_K": 283.0,
+   "chilled_fraction": 0.5,
+   "n_valid": 0,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": null,
+   "best": null
+  },
+  {
+   "T_amb_K": 283.0,
+   "chilled_fraction": 0.6,
+   "n_valid": 0,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": null,
+   "best": null
+  },
+  {
+   "T_amb_K": 283.0,
+   "chilled_fraction": 0.7,
+   "n_valid": 0,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": null,
+   "best": null
+  },
+  {
+   "T_amb_K": 283.0,
+   "chilled_fraction": 0.8,
+   "n_valid": 0,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": null,
+   "best": null
+  },
+  {
+   "T_amb_K": 283.0,
+   "chilled_fraction": 0.9,
+   "n_valid": 0,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": null,
+   "best": null
+  },
+  {
+   "T_amb_K": 283.0,
+   "chilled_fraction": 1.0,
+   "n_valid": 0,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": null,
+   "best": null
+  },
+  {
+   "T_amb_K": 288.0,
+   "chilled_fraction": 0.2,
+   "n_valid": 4,
+   "n_specs": 32,
+   "engine_absorption_valid": 1,
+   "best_fuel_mw": 48.22093023255814,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "dry",
+    "bottoming": "none"
+   }
+  },
+  {
+   "T_amb_K": 288.0,
+   "chilled_fraction": 0.3,
+   "n_valid": 5,
+   "n_specs": 32,
+   "engine_absorption_valid": 2,
+   "best_fuel_mw": 43.70517634906885,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "dry",
+    "bottoming": "orc_toluene"
+   }
+  },
+  {
+   "T_amb_K": 288.0,
+   "chilled_fraction": 0.4,
+   "n_valid": 5,
+   "n_specs": 32,
+   "engine_absorption_valid": 2,
+   "best_fuel_mw": 45.39791423843696,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "dry",
+    "bottoming": "orc_toluene"
+   }
+  },
+  {
+   "T_amb_K": 288.0,
+   "chilled_fraction": 0.5,
+   "n_valid": 6,
+   "n_specs": 32,
+   "engine_absorption_valid": 3,
+   "best_fuel_mw": 46.79205949694713,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "dry",
+    "bottoming": "orc_cyclopentane"
+   }
+  },
+  {
+   "T_amb_K": 288.0,
+   "chilled_fraction": 0.6,
+   "n_valid": 7,
+   "n_specs": 32,
+   "engine_absorption_valid": 3,
+   "best_fuel_mw": 48.07241533188673,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "dry",
+    "bottoming": "orc_r245fa"
+   }
+  },
+  {
+   "T_amb_K": 288.0,
+   "chilled_fraction": 0.7,
+   "n_valid": 5,
+   "n_specs": 32,
+   "engine_absorption_valid": 1,
+   "best_fuel_mw": 49.00581395348837,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "dry",
+    "bottoming": "none"
+   }
+  },
+  {
+   "T_amb_K": 288.0,
+   "chilled_fraction": 0.8,
+   "n_valid": 4,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": 52.06134524946083,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "electric",
+    "rejection": "dry",
+    "bottoming": "none"
+   }
+  },
+  {
+   "T_amb_K": 288.0,
+   "chilled_fraction": 0.9,
+   "n_valid": 4,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": 52.58064131262018,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "electric",
+    "rejection": "dry",
+    "bottoming": "none"
+   }
+  },
+  {
+   "T_amb_K": 288.0,
+   "chilled_fraction": 1.0,
+   "n_valid": 4,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": 53.09993737577953,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "electric",
+    "rejection": "dry",
+    "bottoming": "none"
+   }
+  },
+  {
+   "T_amb_K": 293.0,
+   "chilled_fraction": 0.2,
+   "n_valid": 4,
+   "n_specs": 32,
+   "engine_absorption_valid": 1,
+   "best_fuel_mw": 48.22093023255814,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "dry",
+    "bottoming": "none"
+   }
+  },
+  {
+   "T_amb_K": 293.0,
+   "chilled_fraction": 0.3,
+   "n_valid": 5,
+   "n_specs": 32,
+   "engine_absorption_valid": 2,
+   "best_fuel_mw": 43.754847840259494,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "dry",
+    "bottoming": "orc_toluene"
+   }
+  },
+  {
+   "T_amb_K": 293.0,
+   "chilled_fraction": 0.4,
+   "n_valid": 5,
+   "n_specs": 32,
+   "engine_absorption_valid": 2,
+   "best_fuel_mw": 45.38386793330431,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "dry",
+    "bottoming": "orc_toluene"
+   }
+  },
+  {
+   "T_amb_K": 293.0,
+   "chilled_fraction": 0.5,
+   "n_valid": 6,
+   "n_specs": 32,
+   "engine_absorption_valid": 3,
+   "best_fuel_mw": 46.81045194908071,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "dry",
+    "bottoming": "orc_cyclopentane"
+   }
+  },
+  {
+   "T_amb_K": 293.0,
+   "chilled_fraction": 0.6,
+   "n_valid": 7,
+   "n_specs": 32,
+   "engine_absorption_valid": 3,
+   "best_fuel_mw": 48.086599747461655,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "dry",
+    "bottoming": "orc_cyclopentane"
+   }
+  },
+  {
+   "T_amb_K": 293.0,
+   "chilled_fraction": 0.7,
+   "n_valid": 5,
+   "n_specs": 32,
+   "engine_absorption_valid": 1,
+   "best_fuel_mw": 49.00581395348837,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "dry",
+    "bottoming": "none"
+   }
+  },
+  {
+   "T_amb_K": 293.0,
+   "chilled_fraction": 0.8,
+   "n_valid": 4,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": 53.35872785355071,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "electric",
+    "rejection": "dry",
+    "bottoming": "none"
+   }
+  },
+  {
+   "T_amb_K": 293.0,
+   "chilled_fraction": 0.9,
+   "n_valid": 4,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": 54.04019674222129,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "electric",
+    "rejection": "dry",
+    "bottoming": "none"
+   }
+  },
+  {
+   "T_amb_K": 293.0,
+   "chilled_fraction": 1.0,
+   "n_valid": 4,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": 54.72166563089188,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "electric",
+    "rejection": "dry",
+    "bottoming": "none"
+   }
+  },
+  {
+   "T_amb_K": 298.0,
+   "chilled_fraction": 0.2,
+   "n_valid": 8,
+   "n_specs": 32,
+   "engine_absorption_valid": 2,
+   "best_fuel_mw": 48.22093023255814,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "dry",
+    "bottoming": "none"
+   }
+  },
+  {
+   "T_amb_K": 298.0,
+   "chilled_fraction": 0.3,
+   "n_valid": 10,
+   "n_specs": 32,
+   "engine_absorption_valid": 4,
+   "best_fuel_mw": 43.52278917638155,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "wet",
+    "bottoming": "orc_toluene"
+   }
+  },
+  {
+   "T_amb_K": 298.0,
+   "chilled_fraction": 0.4,
+   "n_valid": 10,
+   "n_specs": 32,
+   "engine_absorption_valid": 4,
+   "best_fuel_mw": 45.19291955525718,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "wet",
+    "bottoming": "orc_toluene"
+   }
+  },
+  {
+   "T_amb_K": 298.0,
+   "chilled_fraction": 0.5,
+   "n_valid": 12,
+   "n_specs": 32,
+   "engine_absorption_valid": 6,
+   "best_fuel_mw": 46.648739719250635,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "wet",
+    "bottoming": "orc_cyclopentane"
+   }
+  },
+  {
+   "T_amb_K": 298.0,
+   "chilled_fraction": 0.6,
+   "n_valid": 14,
+   "n_specs": 32,
+   "engine_absorption_valid": 6,
+   "best_fuel_mw": 47.96876966016575,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "wet",
+    "bottoming": "orc_cyclopentane"
+   }
+  },
+  {
+   "T_amb_K": 298.0,
+   "chilled_fraction": 0.7,
+   "n_valid": 12,
+   "n_specs": 32,
+   "engine_absorption_valid": 4,
+   "best_fuel_mw": 48.78844800598967,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "wet",
+    "bottoming": "orc_r245fa"
+   }
+  },
+  {
+   "T_amb_K": 298.0,
+   "chilled_fraction": 0.8,
+   "n_valid": 9,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": 52.03804197432554,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "electric",
+    "rejection": "wet",
+    "bottoming": "none"
+   }
+  },
+  {
+   "T_amb_K": 298.0,
+   "chilled_fraction": 0.9,
+   "n_valid": 10,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": 52.554425128092966,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "electric",
+    "rejection": "wet",
+    "bottoming": "none"
+   }
+  },
+  {
+   "T_amb_K": 298.0,
+   "chilled_fraction": 1.0,
+   "n_valid": 8,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": 53.070808281860394,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "electric",
+    "rejection": "wet",
+    "bottoming": "none"
+   }
+  },
+  {
+   "T_amb_K": 303.0,
+   "chilled_fraction": 0.2,
+   "n_valid": 8,
+   "n_specs": 32,
+   "engine_absorption_valid": 2,
+   "best_fuel_mw": 48.22093023255814,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "wet",
+    "bottoming": "none"
+   }
+  },
+  {
+   "T_amb_K": 303.0,
+   "chilled_fraction": 0.3,
+   "n_valid": 10,
+   "n_specs": 32,
+   "engine_absorption_valid": 4,
+   "best_fuel_mw": 45.74662363921391,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "dry",
+    "bottoming": "orc_toluene"
+   }
+  },
+  {
+   "T_amb_K": 303.0,
+   "chilled_fraction": 0.4,
+   "n_valid": 12,
+   "n_specs": 32,
+   "engine_absorption_valid": 5,
+   "best_fuel_mw": 45.171409060285825,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "wet",
+    "bottoming": "orc_toluene"
+   }
+  },
+  {
+   "T_amb_K": 303.0,
+   "chilled_fraction": 0.5,
+   "n_valid": 11,
+   "n_specs": 32,
+   "engine_absorption_valid": 4,
+   "best_fuel_mw": 46.65831312172168,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "wet",
+    "bottoming": "orc_cyclopentane"
+   }
+  },
+  {
+   "T_amb_K": 303.0,
+   "chilled_fraction": 0.6,
+   "n_valid": 12,
+   "n_specs": 32,
+   "engine_absorption_valid": 3,
+   "best_fuel_mw": 47.927598064438456,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "wet",
+    "bottoming": "orc_cyclopentane"
+   }
+  },
+  {
+   "T_amb_K": 303.0,
+   "chilled_fraction": 0.7,
+   "n_valid": 10,
+   "n_specs": 32,
+   "engine_absorption_valid": 2,
+   "best_fuel_mw": 48.76396769808935,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "wet",
+    "bottoming": "orc_r245fa"
+   }
+  },
+  {
+   "T_amb_K": 303.0,
+   "chilled_fraction": 0.8,
+   "n_valid": 9,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": 53.10628074237401,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "electric",
+    "rejection": "wet",
+    "bottoming": "none"
+   }
+  },
+  {
+   "T_amb_K": 303.0,
+   "chilled_fraction": 0.9,
+   "n_valid": 9,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": 53.7561937421475,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "electric",
+    "rejection": "wet",
+    "bottoming": "none"
+   }
+  },
+  {
+   "T_amb_K": 303.0,
+   "chilled_fraction": 1.0,
+   "n_valid": 6,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": 54.40610674192101,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "electric",
+    "rejection": "wet",
+    "bottoming": "none"
+   }
+  },
+  {
+   "T_amb_K": 308.0,
+   "chilled_fraction": 0.2,
+   "n_valid": 10,
+   "n_specs": 32,
+   "engine_absorption_valid": 4,
+   "best_fuel_mw": 45.29691381375504,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "dry",
+    "bottoming": "orc_toluene"
+   }
+  },
+  {
+   "T_amb_K": 308.0,
+   "chilled_fraction": 0.3,
+   "n_valid": 11,
+   "n_specs": 32,
+   "engine_absorption_valid": 4,
+   "best_fuel_mw": 47.85992363999702,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "dry",
+    "bottoming": "orc_cyclopentane"
+   }
+  },
+  {
+   "T_amb_K": 308.0,
+   "chilled_fraction": 0.4,
+   "n_valid": 10,
+   "n_specs": 32,
+   "engine_absorption_valid": 2,
+   "best_fuel_mw": 45.15630189386818,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "wet",
+    "bottoming": "orc_toluene"
+   }
+  },
+  {
+   "T_amb_K": 308.0,
+   "chilled_fraction": 0.5,
+   "n_valid": 10,
+   "n_specs": 32,
+   "engine_absorption_valid": 3,
+   "best_fuel_mw": 46.674219499537124,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "wet",
+    "bottoming": "orc_cyclopentane"
+   }
+  },
+  {
+   "T_amb_K": 308.0,
+   "chilled_fraction": 0.6,
+   "n_valid": 11,
+   "n_specs": 32,
+   "engine_absorption_valid": 3,
+   "best_fuel_mw": 47.892784174886266,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "wet",
+    "bottoming": "orc_cyclopentane"
+   }
+  },
+  {
+   "T_amb_K": 308.0,
+   "chilled_fraction": 0.7,
+   "n_valid": 8,
+   "n_specs": 32,
+   "engine_absorption_valid": 2,
+   "best_fuel_mw": 48.74696242445632,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "wet",
+    "bottoming": "orc_r245fa"
+   }
+  },
+  {
+   "T_amb_K": 308.0,
+   "chilled_fraction": 0.8,
+   "n_valid": 6,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": 53.9337131616068,
+   "best": {
+    "prime_mover": "turbine",
+    "cooling": "absorption",
+    "rejection": "wet",
+    "bottoming": "orc_toluene"
+   }
+  },
+  {
+   "T_amb_K": 308.0,
+   "chilled_fraction": 0.9,
+   "n_valid": 7,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": 54.964094388553185,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "electric",
+    "rejection": "wet",
+    "bottoming": "none"
+   }
+  },
+  {
+   "T_amb_K": 308.0,
+   "chilled_fraction": 1.0,
+   "n_valid": 6,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": 55.748218571260644,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "electric",
+    "rejection": "wet",
+    "bottoming": "none"
+   }
+  },
+  {
+   "T_amb_K": 313.0,
+   "chilled_fraction": 0.2,
+   "n_valid": 10,
+   "n_specs": 32,
+   "engine_absorption_valid": 3,
+   "best_fuel_mw": 47.257173326928324,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "dry",
+    "bottoming": "orc_cyclopentane"
+   }
+  },
+  {
+   "T_amb_K": 313.0,
+   "chilled_fraction": 0.3,
+   "n_valid": 10,
+   "n_specs": 32,
+   "engine_absorption_valid": 2,
+   "best_fuel_mw": 44.31396704401329,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "wet",
+    "bottoming": "orc_toluene"
+   }
+  },
+  {
+   "T_amb_K": 313.0,
+   "chilled_fraction": 0.4,
+   "n_valid": 11,
+   "n_specs": 32,
+   "engine_absorption_valid": 3,
+   "best_fuel_mw": 46.16790853273442,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "wet",
+    "bottoming": "orc_toluene"
+   }
+  },
+  {
+   "T_amb_K": 313.0,
+   "chilled_fraction": 0.5,
+   "n_valid": 10,
+   "n_specs": 32,
+   "engine_absorption_valid": 3,
+   "best_fuel_mw": 47.565348712211424,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "wet",
+    "bottoming": "orc_cyclopentane"
+   }
+  },
+  {
+   "T_amb_K": 313.0,
+   "chilled_fraction": 0.6,
+   "n_valid": 8,
+   "n_specs": 32,
+   "engine_absorption_valid": 2,
+   "best_fuel_mw": 48.64083027944949,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "absorption",
+    "rejection": "wet",
+    "bottoming": "orc_r245fa"
+   }
+  },
+  {
+   "T_amb_K": 313.0,
+   "chilled_fraction": 0.7,
+   "n_valid": 7,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": 54.233056861633365,
+   "best": {
+    "prime_mover": "turbine",
+    "cooling": "absorption",
+    "rejection": "wet",
+    "bottoming": "orc_toluene"
+   }
+  },
+  {
+   "T_amb_K": 313.0,
+   "chilled_fraction": 0.8,
+   "n_valid": 7,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": 55.260848998740975,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "electric",
+    "rejection": "wet",
+    "bottoming": "none"
+   }
+  },
+  {
+   "T_amb_K": 313.0,
+   "chilled_fraction": 0.9,
+   "n_valid": 6,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": 56.18008303056035,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "electric",
+    "rejection": "wet",
+    "bottoming": "none"
+   }
+  },
+  {
+   "T_amb_K": 313.0,
+   "chilled_fraction": 1.0,
+   "n_valid": 7,
+   "n_specs": 32,
+   "engine_absorption_valid": 0,
+   "best_fuel_mw": 57.0993170623797,
+   "best": {
+    "prime_mover": "engine",
+    "cooling": "electric",
+    "rejection": "wet",
+    "bottoming": "none"
+   }
+  }
+ ],
+ "reasons_in_cells_without_valid_design": {
+  "sizing: sizing run failed: CH: heat rejection # K is not above evaporator # K": 288
+ },
+ "reasons_engine_absorption_when_none_valid": {
+  "sizing: sizing run failed: CH: heat rejection # K is not above evaporator # K": 96,
+  "sizing: sizing run failed: EVA: hot-side inlet # K cannot supply pinch # K above bubble point # K": 77,
+  "sizing: sizing run failed: HX: the hot stream cannot supply the required duty of # MW": 18,
+  "sizing: sizing run failed: EVA: exhaust at # K is too hot for R#fa (vapour limit # K) while leaving the stack above # K": 16,
+  "failed: V#a_no_temperature_cross": 14,
+  "sizing: sizing run failed: EVA: exhaust at # K is too hot for Cyclopentane (vapour limit # K) while leaving the stack above # K": 3
+ }
+}

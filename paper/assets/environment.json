@@ -1,0 +1,667 @@
+{
+ "study": "environment",
+ "command": "thermo_agent.core.components (REQUIRED_PORTS, PORT_CLASS, PARAMS); inspect.signature(synth.topologies.dc_chp); train.config; design.spec",
+ "seed": null,
+ "n": 15,
+ "components": [
+  {
+   "type": "compressor",
+   "ports": [
+    {
+     "name": "in",
+     "class": "gas"
+    },
+    {
+     "name": "out",
+     "class": "gas"
+    }
+   ],
+   "params": {
+    "PR": {
+     "doc": "pressure ratio (-)",
+     "default": "required"
+    },
+    "eta_s": {
+     "doc": "isentropic efficiency (-)",
+     "default": "required"
+    }
+   }
+  },
+  {
+   "type": "turbine",
+   "ports": [
+    {
+     "name": "in",
+     "class": "gas"
+    },
+    {
+     "name": "out",
+     "class": "gas"
+    }
+   ],
+   "params": {
+    "P_out": {
+     "doc": "outlet pressure (Pa)",
+     "default": "required"
+    },
+    "eta_s": {
+     "doc": "isentropic efficiency (-)",
+     "default": "required"
+    }
+   }
+  },
+  {
+   "type": "orc_turbine",
+   "ports": [
+    {
+     "name": "in",
+     "class": "liquid"
+    },
+    {
+     "name": "out",
+     "class": "liquid"
+    }
+   ],
+   "params": {
+    "P_out": {
+     "doc": "outlet pressure (Pa)",
+     "default": "required"
+    },
+    "eta_s": {
+     "doc": "isentropic efficiency (-)",
+     "default": "required"
+    }
+   }
+  },
+  {
+   "type": "pump",
+   "ports": [
+    {
+     "name": "in",
+     "class": "liquid"
+    },
+    {
+     "name": "out",
+     "class": "liquid"
+    }
+   ],
+   "params": {
+    "P_out": {
+     "doc": "outlet pressure (Pa)",
+     "default": "required"
+    },
+    "eta_s": {
+     "doc": "isentropic efficiency (-)",
+     "default": "required"
+    }
+   }
+  },
+  {
+   "type": "combustor",
+   "ports": [
+    {
+     "name": "air_in",
+     "class": "gas"
+    },
+    {
+     "name": "fuel_in",
+     "class": "gas"
+    },
+    {
+     "name": "out",
+     "class": "gas"
+    }
+   ],
+   "params": {
+    "T_out": {
+     "doc": "outlet temperature (K)",
+     "default": "required"
+    },
+    "dp": {
+     "doc": "pressure-drop fraction (-)",
+     "default": 0.0
+    },
+    "q_loss": {
+     "doc": "heat-loss fraction of fuel LHV (-)",
+     "default": 0.0
+    }
+   }
+  },
+  {
+   "type": "recuperator",
+   "ports": [
+    {
+     "name": "cold_in",
+     "class": "?"
+    },
+    {
+     "name": "cold_out",
+     "class": "?"
+    },
+    {
+     "name": "hot_in",
+     "class": "?"
+    },
+    {
+     "name": "hot_out",
+     "class": "?"
+    }
+   ],
+   "params": {
+    "T_cold_out": {
+     "doc": "cold-side outlet temperature (K)",
+     "default": "required"
+    },
+    "dp_cold": {
+     "doc": "cold-side pressure-drop fraction (-)",
+     "default": 0.0
+    },
+    "dp_hot": {
+     "doc": "hot-side pressure-drop fraction (-)",
+     "default": 0.0
+    },
+    "useful_heat": {
+     "doc": "flag: duty counts as delivered heat",
+     "default": false
+    }
+   }
+  },
+  {
+   "type": "hrsg",
+   "ports": [
+    {
+     "name": "hot_in",
+     "class": "gas"
+    },
+    {
+     "name": "hot_out",
+     "class": "gas"
+    },
+    {
+     "name": "water_in",
+     "class": "liquid"
+    },
+    {
+     "name": "steam_out",
+     "class": "liquid"
+    }
+   ],
+   "params": {
+    "P_steam": {
+     "doc": "steam pressure (Pa)",
+     "default": "required"
+    },
+    "dp_gas": {
+     "doc": "gas-side pressure-drop fraction (-)",
+     "default": 0.0
+    },
+    "econ_approach_K": {
+     "doc": "economiser approach (K)",
+     "default": 15.0
+    }
+   }
+  },
+  {
+   "type": "orc_evaporator",
+   "ports": [
+    {
+     "name": "hot_in",
+     "class": "gas"
+    },
+    {
+     "name": "hot_out",
+     "class": "gas"
+    },
+    {
+     "name": "cold_in",
+     "class": "liquid"
+    },
+    {
+     "name": "cold_out",
+     "class": "liquid"
+    }
+   ],
+   "params": {
+    "pinch_K": {
+     "doc": "pinch at the bubble point (K)",
+     "default": 3.0
+    },
+    "dp_hot": {
+     "doc": "hot-side pressure-drop fraction (-)",
+     "default": 0.0
+    },
+    "flow_frac": {
+     "doc": "working-fluid flow between its minimum (0) and maximum (1); used when the flow is not given",
+     "default": "required if flow not given"
+    },
+    "T_stack_min": {
+     "doc": "minimum exhaust outlet temperature (K)",
+     "default": 333.15
+    },
+    "T_max_K": {
+     "doc": "maximum working-fluid vapour temperature (K)",
+     "default": 420.0
+    }
+   }
+  },
+  {
+   "type": "condenser",
+   "ports": [
+    {
+     "name": "hot_in",
+     "class": "liquid"
+    },
+    {
+     "name": "hot_out",
+     "class": "liquid"
+    },
+    {
+     "name": "cold_in",
+     "class": "liquid"
+    },
+    {
+     "name": "cold_out",
+     "class": "liquid"
+    }
+   ],
+   "params": {
+    "dT_cw": {
+     "doc": "cooling-water temperature rise (K)",
+     "default": "required"
+    }
+   }
+  },
+  {
+   "type": "dc_load",
+   "ports": [
+    {
+     "name": "in",
+     "class": "liquid"
+    },
+    {
+     "name": "out",
+     "class": "liquid"
+    }
+   ],
+   "params": {
+    "P_it": {
+     "doc": "IT electrical power (W)",
+     "default": "required"
+    },
+    "chilled_fraction": {
+     "doc": "share of the heat sent to the chilled loop (-)",
+     "default": 1.0
+    },
+    "T_return": {
+     "doc": "coolant return temperature (K)",
+     "default": "required"
+    }
+   }
+  },
+  {
+   "type": "absorption_chiller",
+   "ports": [
+    {
+     "name": "gen_in",
+     "class": "liquid"
+    },
+    {
+     "name": "gen_out",
+     "class": "liquid"
+    },
+    {
+     "name": "evap_in",
+     "class": "liquid"
+    },
+    {
+     "name": "evap_out",
+     "class": "liquid"
+    },
+    {
+     "name": "rej_in",
+     "class": "liquid"
+    },
+    {
+     "name": "rej_out",
+     "class": "liquid"
+    }
+   ],
+   "params": {
+    "T_chw_out": {
+     "doc": "chilled-water outlet temperature (K)",
+     "default": "required"
+    },
+    "T_gen_out": {
+     "doc": "generator outlet temperature (K)",
+     "default": "required"
+    },
+    "dT_rej": {
+     "doc": "heat-rejection water temperature rise (K)",
+     "default": "required"
+    },
+    "eps": {
+     "doc": "fraction of the reversible COP (-)",
+     "default": 0.27
+    },
+    "COP_max": {
+     "doc": "first-law COP ceiling (-)",
+     "default": 0.8
+    }
+   }
+  },
+  {
+   "type": "heat_pump",
+   "ports": [
+    {
+     "name": "src_in",
+     "class": "liquid"
+    },
+    {
+     "name": "src_out",
+     "class": "liquid"
+    },
+    {
+     "name": "sink_in",
+     "class": "liquid"
+    },
+    {
+     "name": "sink_out",
+     "class": "liquid"
+    }
+   ],
+   "params": {
+    "T_sink_out": {
+     "doc": "sink outlet temperature (K)",
+     "default": "required"
+    },
+    "eps": {
+     "doc": "fraction of the Lorenz COP (-)",
+     "default": 0.5
+    },
+    "approach_K": {
+     "doc": "evaporator and condenser approach (K)",
+     "default": 5.0
+    },
+    "Q_sink": {
+     "doc": "heat duty to deliver (W); sizes the source cooling",
+     "default": "one of Q_sink or dT_src"
+    },
+    "dT_src": {
+     "doc": "source-side temperature drop (K)",
+     "default": "one of Q_sink or dT_src"
+    }
+   }
+  },
+  {
+   "type": "electric_chiller",
+   "ports": [
+    {
+     "name": "evap_in",
+     "class": "liquid"
+    },
+    {
+     "name": "evap_out",
+     "class": "liquid"
+    },
+    {
+     "name": "rej_in",
+     "class": "liquid"
+    },
+    {
+     "name": "rej_out",
+     "class": "liquid"
+    }
+   ],
+   "params": {
+    "T_chw_out": {
+     "doc": "chilled-water outlet temperature (K)",
+     "default": "required"
+    },
+    "dT_rej": {
+     "doc": "heat-rejection water temperature rise (K)",
+     "default": "required"
+    },
+    "eps": {
+     "doc": "fraction of the reversible COP (-)",
+     "default": 0.5
+    },
+    "approach_K": {
+     "doc": "evaporator and condenser approach (K)",
+     "default": 5.0
+    }
+   }
+  },
+  {
+   "type": "heat_rejector",
+   "ports": [
+    {
+     "name": "in",
+     "class": "liquid"
+    },
+    {
+     "name": "out",
+     "class": "liquid"
+    }
+   ],
+   "params": {
+    "kind": {
+     "doc": "'dry' (dry cooler) or 'wet' (evaporative tower)",
+     "default": "dry"
+    },
+    "approach_K": {
+     "doc": "approach to dry-bulb or wet-bulb (K)",
+     "default": "required"
+    },
+    "fan_frac": {
+     "doc": "fan electricity as a fraction of heat rejected (-)",
+     "default": 0.015
+    }
+   }
+  },
+  {
+   "type": "gas_engine",
+   "ports": [
+    {
+     "name": "air_in",
+     "class": "gas"
+    },
+    {
+     "name": "fuel_in",
+     "class": "gas"
+    },
+    {
+     "name": "exh_out",
+     "class": "gas"
+    }
+   ],
+   "params": {
+    "P_el": {
+     "doc": "rated electrical output (W)",
+     "default": "required"
+    },
+    "eta_el": {
+     "doc": "electrical efficiency on LHV (-)",
+     "default": "required"
+    },
+    "f_loss": {
+     "doc": "jacket and radiation heat, fraction of fuel energy, rejected to ambient (-)",
+     "default": "required"
+    },
+    "air_excess": {
+     "doc": "air flow over stoichiometric (-)",
+     "default": 1.8
+    },
+    "P_exh": {
+     "doc": "exhaust pressure (Pa)",
+     "default": 110000.0
+    }
+   }
+  }
+ ],
+ "dc_chp_defaults": {
+  "P_it": 20000000.0,
+  "chilled_fraction": 0.5,
+  "cooling": "absorption",
+  "prime_mover": "turbine",
+  "rejection": "ext",
+  "n_air": 1000.0,
+  "P_el": null,
+  "T_amb": 298.15,
+  "RH": 0.6,
+  "PR": 18.0,
+  "eta_c": 0.86,
+  "eta_t": 0.88,
+  "T4": 1500.0,
+  "dp_cc": 0.04,
+  "dp_hx": 0.03,
+  "q_loss": 0.01,
+  "eta_el": 0.43,
+  "f_loss": 0.15,
+  "air_excess": 1.8,
+  "T_supply": 291.15,
+  "T_return": 301.15,
+  "P_loop": 300000.0,
+  "T_hw": 368.15,
+  "T_gen_out": 358.15,
+  "P_hw": 500000.0,
+  "dT_rej": 8.0,
+  "rej_approach": null,
+  "fan_frac": 0.015,
+  "eps_abs": 0.27,
+  "COP_max": 0.8,
+  "eps_ec": 0.5,
+  "orc": false,
+  "orc_fluid": "R245fa",
+  "orc_frac": 0.7,
+  "P_orc_high": 1200000.0,
+  "orc_cond_approach": 8.0,
+  "eta_pump": 0.75,
+  "eta_orct": 0.85,
+  "T_stack_min": 333.15,
+  "heat_demand_w": 0.0,
+  "heat_source": "exhaust",
+  "T_dh_in": 323.15,
+  "T_dh_out": 343.15,
+  "P_dh": 500000.0,
+  "eps_hp": 0.5,
+  "P_fuel": 2000000.0,
+  "name": "dc_chp"
+ },
+ "orc_t_max_K": {
+  "R245fa": 420.0,
+  "Cyclopentane": 480.0,
+  "Toluene": 560.0
+ },
+ "training_config": {
+  "sft": {
+   "lr": 0.0002,
+   "epochs": 2,
+   "max_length": 3072,
+   "per_device_batch": 2,
+   "grad_accum": 8
+  },
+  "sft_lora": {
+   "r": 16,
+   "alpha": 32,
+   "dropout": 0.05,
+   "target_modules": "all-linear"
+  },
+  "grpo": {
+   "lr": 5e-05,
+   "num_generations": 8,
+   "max_completion_length": 320,
+   "temperature": 1.0,
+   "per_device_batch": 8,
+   "grad_accum": 2,
+   "max_steps": 300,
+   "loss_type": "dapo",
+   "beta": 0.0,
+   "mask_truncated": true
+  },
+  "grpo_lora": {
+   "r": 8,
+   "alpha": 16,
+   "dropout": 0.05,
+   "target_modules": "all-linear"
+  },
+  "base_model": "Qwen/Qwen3.5-4B"
+ },
+ "fault_injectors": [
+  "efficiency_gt_1",
+  "sign_flip",
+  "swapped_ports",
+  "unit_slip",
+  "wrong_fluid"
+ ],
+ "discrete_catalog": {
+  "prime_mover": [
+   "turbine",
+   "engine"
+  ],
+  "cooling": [
+   "absorption",
+   "electric"
+  ],
+  "rejection": [
+   "dry",
+   "wet"
+  ],
+  "bottoming": [
+   "none",
+   "orc_r245fa",
+   "orc_cyclopentane",
+   "orc_toluene"
+  ]
+ },
+ "continuous_parameters": {
+  "dT_rej": [
+   5.0,
+   12.0,
+   8.0
+  ],
+  "PR": [
+   10.0,
+   30.0,
+   18.0
+  ],
+  "T4": [
+   1300.0,
+   1600.0,
+   1500.0
+  ],
+  "T_hw": [
+   353.15,
+   383.15,
+   368.15
+  ],
+  "dT_hw": [
+   5.0,
+   20.0,
+   10.0
+  ],
+  "P_orc_bar": [
+   10.0,
+   25.0,
+   12.0
+  ],
+  "orc_frac": [
+   0.1,
+   1.0,
+   0.5
+  ]
+ },
+ "n_catalog_specs": 32,
+ "versions": {
+  "CoolProp": "8.0.0",
+  "numpy": "2.4.4",
+  "scipy": "1.17.1",
+  "pydantic": "2.14.2",
+  "pandas": "3.0.2",
+  "python": "3.12.3"
+ },
+ "tests": {
+  "passed": 234,
+  "seconds": 157.17,
+  "command": "python -m pytest -q"
+ }
+}

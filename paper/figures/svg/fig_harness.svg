@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 706" width="1000" height="706" font-family="Helvetica, Arial, 'Liberation Sans', sans-serif">
+<rect width="1000" height="706" fill="#FFFFFF"/>
+<rect x="16" y="16" width="304" height="330" id="ca" rx="12" fill="#EEF3FA" stroke="#4C72B0" stroke-width="2.0"/>
+<circle cx="43.5" cy="41" r="11.5" fill="#4C72B0"/>
+<text x="43.5" y="45.5" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">a</text>
+<path d="M62,31 L71.13,31 L76.04,35.5 L76.04,49 L62,49 Z" fill="none" stroke="#34548A" stroke-width="1.5" stroke-linejoin="round"/>
+<path d="M64.5,40 L73.54,40" fill="none" stroke="#34548A" stroke-width="1.2"/>
+<path d="M64.5,43.6 L73.54,43.6" fill="none" stroke="#34548A" stroke-width="1.2"/>
+<text x="88" y="46" font-size="15" font-weight="bold" fill="#34548A">AGENTS.md</text>
+<text x="32" y="66" font-size="12" fill="#666666">51 lines, versioned with the code; the component</text>
+<text x="32" y="81.6" font-size="12" fill="#666666">list is generated</text>
+<text x="32" y="104" font-size="12.5" font-weight="bold" fill="#34548A">Conventions</text>
+<text x="32" y="121" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">- SI units: K, Pa, W, kg/s. Effici...</text>
+<path d="M32,132 L304,132" fill="none" stroke="#D9D9DC" stroke-width="1.0"/>
+<text x="32" y="150" font-size="12.5" font-weight="bold" fill="#34548A">What the verifiers check</text>
+<text x="32" y="167" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">V1 mass balance, V2 energy balance...</text>
+<path d="M32,178 L304,178" fill="none" stroke="#D9D9DC" stroke-width="1.0"/>
+<text x="32" y="196" font-size="12.5" font-weight="bold" fill="#34548A">Answer formats</text>
+<text x="32" y="213" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">- Repair: &lt;diagnosis&gt; citing only ...</text>
+<path d="M32,224 L304,224" fill="none" stroke="#D9D9DC" stroke-width="1.0"/>
+<text x="32" y="242" font-size="12.5" font-weight="bold" fill="#34548A">Habits</text>
+<text x="32" y="259" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">1. Find which stream or parameter ...</text>
+<path d="M32,270 L304,270" fill="none" stroke="#D9D9DC" stroke-width="1.0"/>
+<text x="32" y="288" font-size="12.5" font-weight="bold" fill="#34548A">Components (generated)</text>
+<text x="32" y="305" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">- compressor: ports in, out; param...</text>
+<rect x="340" y="16" width="320" height="330" id="cb" rx="12" fill="#FFFFFF" stroke="#BDBDBD" stroke-width="2.0"/>
+<circle cx="367.5" cy="41" r="11.5" fill="#5F6B7A"/>
+<text x="367.5" y="45.5" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">b</text>
+<text x="386" y="46" font-size="15" font-weight="bold" fill="#333333">System message of the policy</text>
+<rect x="356" y="64" width="288" height="56" id="b1" rx="8" fill="#EEF3FA" stroke="#4C72B0" stroke-width="1.6"/>
+<text x="500" y="89.04" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#333333">Task instructions</text>
+<text x="500" y="105.01" font-size="12" text-anchor="middle" fill="#666666">always present</text>
+<rect x="356" y="134" width="288" height="56" id="b2" rx="8" fill="#F3F0F9" stroke="#8172B3" stroke-width="1.6" stroke-dasharray="6 3"/>
+<text x="500" y="159.04" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#333333">+ AGENTS.md</text>
+<text x="500" y="175.01" font-size="12" text-anchor="middle" fill="#666666">modes agents and agents+skills</text>
+<rect x="356" y="204" width="288" height="56" id="b3" rx="8" fill="#EAF6FA" stroke="#64B5CD" stroke-width="1.6" stroke-dasharray="6 3"/>
+<text x="500" y="229.04" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#333333">+ bodies of the selected skills</text>
+<text x="500" y="245.01" font-size="12" text-anchor="middle" fill="#666666">modes skills and agents+skills</text>
+<rect x="356" y="274" width="288" height="56" id="b4" rx="8" fill="#F7F7F8" stroke="#BDBDBD" stroke-width="1.6"/>
+<text x="500" y="299.04" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#333333">User message: the task prompt</text>
+<text x="500" y="315.01" font-size="12" text-anchor="middle" fill="#666666">plant text, site or ledger; solver feedback on a retry</text>
+<rect x="684" y="16" width="300" height="330" id="cc" rx="12" fill="#EDF7F0" stroke="#55A868" stroke-width="2.0"/>
+<circle cx="711.5" cy="41" r="11.5" fill="#55A868"/>
+<text x="711.5" y="45.5" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">c</text>
+<path d="M730,31 L745.48,31 L745.48,40.9 Q745.48,46.3 737.74,49 Q730,46.3 730,40.9 Z" fill="none" stroke="#2F6B3C" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M734.02,40 L736.97,43.24 L741.76,36.4" fill="none" stroke="#2F6B3C" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="756" y="46" font-size="15" font-weight="bold" fill="#2F6B3C">Skill library</text>
+<text x="700" y="66" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#666666">agent/skills/&lt;name&gt;/SKILL.md</text>
+<rect x="700" y="80" width="268" height="28" rx="7" fill="#FFFFFF" stroke="#55A868" stroke-width="1.2"/>
+<text x="710" y="98" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">absorption-chiller</text>
+<rect x="857.86" y="85" width="104.14" height="18" id="p1" rx="9" fill="#EAF6FA" stroke="#64B5CD" stroke-width="1.4"/>
+<text x="909.93" y="98.03" font-size="11.5" text-anchor="middle" fill="#2E7F96">absorption_chiller</text>
+<rect x="700" y="112" width="268" height="28" rx="7" fill="#FFFFFF" stroke="#55A868" stroke-width="1.2"/>
+<text x="710" y="130" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">design-catalog</text>
+<rect x="904.55" y="117" width="57.45" height="18" id="p2" rx="9" fill="#F3F0F9" stroke="#8172B3" stroke-width="1.4"/>
+<text x="933.27" y="130.03" font-size="11.5" text-anchor="middle" fill="#5A4B8A">task skill</text>
+<rect x="700" y="144" width="268" height="28" rx="7" fill="#FFFFFF" stroke="#55A868" stroke-width="1.2"/>
+<text x="710" y="162" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">exergy-audit</text>
+<rect x="904.55" y="149" width="57.45" height="18" id="p3" rx="9" fill="#F3F0F9" stroke="#8172B3" stroke-width="1.4"/>
+<text x="933.27" y="162.03" font-size="11.5" text-anchor="middle" fill="#5A4B8A">task skill</text>
+<rect x="700" y="176" width="268" height="28" rx="7" fill="#FFFFFF" stroke="#55A868" stroke-width="1.2"/>
+<text x="710" y="194" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">exergy-ledger</text>
+<rect x="904.55" y="181" width="57.45" height="18" id="p4" rx="9" fill="#F3F0F9" stroke="#8172B3" stroke-width="1.4"/>
+<text x="933.27" y="194.03" font-size="11.5" text-anchor="middle" fill="#5A4B8A">task skill</text>
+<rect x="700" y="208" width="268" height="28" rx="7" fill="#FFFFFF" stroke="#DD8452" stroke-width="1.8"/>
+<text x="710" y="226" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" font-weight="bold" fill="#8A4B06">gas-engine</text>
+<rect x="888.53" y="213" width="73.47" height="18" id="p5" rx="9" fill="#EAF6FA" stroke="#64B5CD" stroke-width="1.4"/>
+<text x="925.26" y="226.03" font-size="11.5" text-anchor="middle" fill="#2E7F96">gas_engine</text>
+<rect x="700" y="240" width="268" height="28" rx="7" fill="#FFFFFF" stroke="#55A868" stroke-width="1.2"/>
+<text x="710" y="258" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">heat-pump-district-heat</text>
+<rect x="874.15" y="245" width="87.85" height="18" id="p6" rx="9" fill="#EAF6FA" stroke="#64B5CD" stroke-width="1.4"/>
+<text x="918.07" y="258.02" font-size="11.5" text-anchor="middle" fill="#2E7F96">heat_pump +1</text>
+<rect x="700" y="272" width="268" height="28" rx="7" fill="#FFFFFF" stroke="#55A868" stroke-width="1.2"/>
+<text x="710" y="290" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">heat-rejector</text>
+<rect x="880.87" y="277" width="81.13" height="18" id="p7" rx="9" fill="#EAF6FA" stroke="#64B5CD" stroke-width="1.4"/>
+<text x="921.44" y="290.02" font-size="11.5" text-anchor="middle" fill="#2E7F96">heat_rejector</text>
+<rect x="700" y="304" width="268" height="28" rx="7" fill="#FFFFFF" stroke="#55A868" stroke-width="1.2"/>
+<text x="710" y="322" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">orc-bottoming</text>
+<rect x="854.34" y="309" width="107.66" height="18" id="p8" rx="9" fill="#EAF6FA" stroke="#64B5CD" stroke-width="1.4"/>
+<text x="908.17" y="322.02" font-size="11.5" text-anchor="middle" fill="#2E7F96">orc_evaporator +3</text>
+<g class="arrow" data-src="ca" data-dst="b2"><path d="M320,162 L348,162" fill="none" stroke="#8172B3" stroke-width="2.4" stroke-linejoin="round"/><polygon points="356,162 348,165.4 348,158.6" fill="#8172B3"/></g>
+<g class="arrow" data-src="cc" data-dst="b3"><path d="M684,232 L652,232" fill="none" stroke="#2E7F96" stroke-width="2.4" stroke-linejoin="round"/><polygon points="644,232 652,228.6 652,235.4" fill="#2E7F96"/></g>
+<rect x="16" y="362" width="560" height="296" id="cd" rx="12" fill="#FFFFFF" stroke="#8172B3" stroke-width="2.0"/>
+<circle cx="43.5" cy="387" r="11.5" fill="#8172B3"/>
+<text x="43.5" y="391.5" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">d</text>
+<text x="62" y="392" font-size="15" font-weight="bold" fill="#5A4B8A">Four harness modes</text>
+<text x="32" y="424" font-size="12" font-weight="bold" fill="#666666">mode</text>
+<text x="330" y="424" font-size="12" font-weight="bold" text-anchor="middle" fill="#666666">AGENTS.md</text>
+<text x="424" y="424" font-size="12" font-weight="bold" text-anchor="middle" fill="#666666">component skills</text>
+<text x="520" y="424" font-size="12" font-weight="bold" text-anchor="middle" fill="#666666">task skill</text>
+<rect x="28" y="436" width="536" height="32" rx="8" fill="#F7F7F8" stroke="#E6E6E8" stroke-width="1.0"/>
+<rect x="36" y="441" width="112" height="22" id="p9" rx="11" fill="#5F6B7A"/>
+<text x="92" y="456.2" font-size="12" font-weight="bold" text-anchor="middle" fill="#FFFFFF">none</text>
+<path d="M323,452 L337,452" fill="none" stroke="#8C8C8C" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M417,452 L431,452" fill="none" stroke="#8C8C8C" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M513,452 L527,452" fill="none" stroke="#8C8C8C" stroke-width="2.2" stroke-linecap="round"/>
+<rect x="28" y="474" width="536" height="32" rx="8" fill="#F7F7F8" stroke="#E6E6E8" stroke-width="1.0"/>
+<rect x="36" y="479" width="112" height="22" id="p10" rx="11" fill="#5A4B8A"/>
+<text x="92" y="494.2" font-size="12" font-weight="bold" text-anchor="middle" fill="#FFFFFF">agents</text>
+<path d="M322,490.8 L328.08,496.72 L338,483.6" fill="none" stroke="#2F6B3C" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M417,490 L431,490" fill="none" stroke="#8C8C8C" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M513,490 L527,490" fill="none" stroke="#8C8C8C" stroke-width="2.2" stroke-linecap="round"/>
+<rect x="28" y="512" width="536" height="32" rx="8" fill="#F7F7F8" stroke="#E6E6E8" stroke-width="1.0"/>
+<rect x="36" y="517" width="112" height="22" id="p11" rx="11" fill="#2E7F96"/>
+<text x="92" y="532.2" font-size="12" font-weight="bold" text-anchor="middle" fill="#FFFFFF">skills</text>
+<path d="M323,528 L337,528" fill="none" stroke="#8C8C8C" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M416,528.8 L422.08,534.72 L432,521.6" fill="none" stroke="#2F6B3C" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M512,528.8 L518.08,534.72 L528,521.6" fill="none" stroke="#2F6B3C" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="28" y="550" width="536" height="32" rx="8" fill="#F7F7F8" stroke="#E6E6E8" stroke-width="1.0"/>
+<rect x="36" y="555" width="112" height="22" id="p12" rx="11" fill="#34548A"/>
+<text x="92" y="570.2" font-size="12" font-weight="bold" text-anchor="middle" fill="#FFFFFF">agents+skills</text>
+<path d="M322,566.8 L328.08,572.72 L338,559.6" fill="none" stroke="#2F6B3C" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M416,566.8 L422.08,572.72 L432,559.6" fill="none" stroke="#2F6B3C" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M512,566.8 L518.08,572.72 L528,559.6" fill="none" stroke="#2F6B3C" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="32" y="606" font-size="11.5" fill="#666666">Component skills: those whose components appear in the plant (all of them when there is no plant yet,</text>
+<text x="32" y="620.5" font-size="11.5" fill="#666666">as in Design). Task skills: design design-catalog, audit exergy-audit, ledger exergy-ledger; Repair has</text>
+<text x="32" y="635" font-size="11.5" fill="#666666">none. Bodies are appended to the system message.</text>
+<rect x="592" y="362" width="392" height="296" id="ce" rx="12" fill="#FFF3E6" stroke="#DD8452" stroke-width="2.0"/>
+<circle cx="619.5" cy="387" r="11.5" fill="#B8561F"/>
+<text x="619.5" y="391.5" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">e</text>
+<path d="M647,377 L656,393.56 L638,393.56 Z" fill="none" stroke="#8A4B06" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M647,383.3 L647,388.7" fill="none" stroke="#8A4B06" stroke-width="2.0"/>
+<circle cx="647" cy="391.4" r="1.1" fill="#8A4B06"/>
+<text x="664" y="392" font-size="15" font-weight="bold" fill="#8A4B06">Held-out component: gas engine</text>
+<text x="608" y="416" font-size="12" fill="#333333">No Repair, Audit or Ledger row outside the held-out topology split</text>
+<text x="608" y="431.6" font-size="12" fill="#333333">contains it; with skills on, the skill below is its only description.</text>
+<text x="608" y="462" font-size="12" font-weight="bold" fill="#8A4B06">ports</text>
+<rect x="656" y="448" width="76" height="22" id="p13" rx="11" fill="#FFFFFF" stroke="#4C72B0" stroke-width="1.4"/>
+<text x="694" y="463.02" font-size="11.5" text-anchor="middle" fill="#34548A">air_in</text>
+<rect x="740" y="448" width="76" height="22" id="p14" rx="11" fill="#FFFFFF" stroke="#4C72B0" stroke-width="1.4"/>
+<text x="778" y="463.02" font-size="11.5" text-anchor="middle" fill="#34548A">fuel_in</text>
+<rect x="824" y="448" width="76" height="22" id="p15" rx="11" fill="#FFFFFF" stroke="#4C72B0" stroke-width="1.4"/>
+<text x="862" y="463.02" font-size="11.5" text-anchor="middle" fill="#34548A">exh_out</text>
+<text x="608" y="510" font-size="12" font-weight="bold" fill="#8A4B06">engine plants in the held-out topology split</text>
+<text x="608" y="534" font-size="12" font-weight="bold" fill="#34548A">repair</text>
+<rect x="666" y="524" width="200" height="12" rx="3" fill="#E6E6E8"/>
+<rect x="666" y="524" width="129.69" height="12" rx="3" fill="#4C72B0"/>
+<text x="874" y="535" font-size="12" font-weight="bold" fill="#333333">83 of 128</text>
+<text x="608" y="558" font-size="12" font-weight="bold" fill="#8A4B06">audit</text>
+<rect x="666" y="548" width="200" height="12" rx="3" fill="#E6E6E8"/>
+<rect x="666" y="548" width="124.14" height="12" rx="3" fill="#DD8452"/>
+<text x="874" y="559" font-size="12" font-weight="bold" fill="#333333">36 of 58</text>
+<rect x="608" y="574" width="360" height="70" rx="6" fill="#FFFFFF" stroke="#D9D9DC" stroke-width="1.2"/>
+<text x="616" y="590" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">SKILL gas-engine: Use when a plant contains a</text>
+<text x="616" y="604.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">gas_engine component: a reciprocating gas engine</text>
+<text x="616" y="619" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">sized by rated electrical output, with air, fuel</text>
+<text x="616" y="633.5" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">and exhaust ports.</text>
+<text x="16" y="686" font-size="11.5" fill="#666666">Files of the project: agent/AGENTS.md, agent/skills/*/SKILL.md, agent/harness.py (modes, skills_for, augment). Counts from the generated rows, seed 0.</text>
+</svg>

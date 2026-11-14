@@ -1,0 +1,11 @@
+\begingroup\small\renewcommand{\arraystretch}{1.12}\begin{tabular}{@{}p{3.0cm}rp{9.0cm}@{}}\toprule
+Section & lines excerpted & First excerpted line \\
+\midrule
+Conventions & 2 & \texttt{- SI units: K, Pa, W, kg/s. Efficiencies, second-law fractions (eps) and pressure-drop fractions (dp*) are fractions, never per...} \\
+What the verifiers check & 1 & \texttt{V1 mass balance, V2 energy balance, V3 exergy: closure and no negative exergy destruction in any component, V4 no temperature c...} \\
+Reading a solver error & 2 & \texttt{- E\_PROP\_RANGE: a value is non-positive, a unit slip, or outside the property data (a pressure of 20 Pa, a temperature of 1226 ...} \\
+Answer formats & 2 & \texttt{- Repair: <diagnosis> citing only numbers shown, then <edits> with lines SET <component>.<param> = <number>, SET @<stream>.<fie...} \\
+Habits & 2 & \texttt{1. Find which stream or parameter the error or failing check points at before editing anything.} \\
+Components & 2 & \texttt{- compressor: ports in, out; params PR, eta\_s} \\
+\bottomrule
+\end{tabular}\endgroup

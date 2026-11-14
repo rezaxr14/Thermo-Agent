@@ -1,0 +1,90 @@
+\documentclass[11pt]{article}
+
+% ---------------------------------------------------------------------------
+% Preamble
+% ---------------------------------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[round,authoryear]{natbib}
+\usepackage[colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
+\usepackage[nameinlink,capitalize]{cleveref}
+
+% Keep figures and tables near the paragraph that discusses them: every float is
+% geared [tbp] and a \FloatBarrier fires at each \section, so no figure can drift
+% past its section (or past the bibliography).
+\usepackage[section]{placeins}
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\bottomfraction}{0.55}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.88}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{5}
+\setlength{\floatsep}{10pt plus 2pt}
+\setlength{\textfloatsep}{12pt plus 3pt}
+
+\graphicspath{{figures/pdf/}}
+
+% Pending-result marker: every unfilled number in the draft is explicit.
+\newcommand{\todo}[1]{\textcolor{red}{\textbf{[#1]}}}
+% System name used throughout.
+\newcommand{\sys}{\textsc{thermo-agent}}
+% Measured numbers: one macro per value, defined in generated/values.tex from assets_summary.json.
+\input{generated/values}
+\newcommand{\val}[1]{\csname val@#1\endcsname}
+% Shorthand for symbols used in the method.
+\newcommand{\ED}{E_{\mathrm{D}}}
+\newcommand{\Tzero}{T_0}
+
+\title{\textbf{Second-Law-Verified Language-Model Agents for On-Site Power,\\ Cooling and Heat Recovery in AI Data Centers}}
+
+\author{%
+  Reza Nadimi\thanks{Corresponding author. \todo{Affiliations and co-author list to be
+  finalized.}}
+  \quad \todo{Second author name}
+  \quad \todo{Third author name}\\[4pt]
+  \todo{affiliations}
+}
+\date{\todo{date}}
+
+% ---------------------------------------------------------------------------
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\input{sections/00_abstract}
+\end{abstract}
+
+\input{sections/01_intro}
+\input{sections/02_related}
+\input{sections/03_method}
+\input{sections/04_experiments}
+\input{sections/04b_trace_fleet}
+\input{sections/05_limitations}
+\input{sections/06_conclusion}
+
+\section*{Data and code availability}
+The \sys{} package, the dataset generators and the paper build scripts are in the project
+repository. \todo{Add repository, dataset and model-checkpoint links and the licence before
+submission.}
+
+\FloatBarrier
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+\appendix
+\input{sections/07_appendix}
+
+\end{document}

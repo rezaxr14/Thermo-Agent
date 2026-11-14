@@ -1,0 +1,70 @@
+{
+ "study": "audit",
+ "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+ "seed": 0,
+ "n": 75,
+ "splits": {
+  "test_id": {
+   "n": 17,
+   "ranking_ndcg3_excluding_prime_mover": {
+    "random": 0.699,
+    "first_law": 0.587
+   },
+   "ranking_top1_excluding_prime_mover": {
+    "random": 0.253,
+    "first_law": 0
+   },
+   "rule_change (raise turbine inlet T 10%, else cut engine loss 10%)": {
+    "mean_gain_vs_best": 1.0,
+    "valid": "7/17"
+   },
+   "prediction_baselines_for_the_best_change (a_pred score)": {
+    "predict_zero": 0.0,
+    "predict_mean_relative_change": 0.645
+   },
+   "change_search_evaluations": 11.9,
+   "model_evaluations": 1
+  },
+  "test_ood_topology": {
+   "n": 58,
+   "ranking_ndcg3_excluding_prime_mover": {
+    "random": 0.665,
+    "first_law": 0.69
+   },
+   "ranking_top1_excluding_prime_mover": {
+    "random": 0.322,
+    "first_law": 0.121
+   },
+   "rule_change (raise turbine inlet T 10%, else cut engine loss 10%)": {
+    "mean_gain_vs_best": 0.121,
+    "valid": "43/58"
+   },
+   "prediction_baselines_for_the_best_change (a_pred score)": {
+    "predict_zero": 0.177,
+    "predict_mean_relative_change": 0.257
+   },
+   "change_search_evaluations": 11.8,
+   "model_evaluations": 1
+  }
+ },
+ "best_change_saving_share": {
+  "test_id": {
+   "median": 0.018449895081400332,
+   "min": 0.006645862183935025,
+   "max": 0.053173551625775056,
+   "n": 17
+  },
+  "test_ood_topology": {
+   "median": 0.0020409790329950395,
+   "min": 0.00045142191962474086,
+   "max": 0.015249213336976934,
+   "n": 58
+  },
+  "all": {
+   "median": 0.00300991438743494,
+   "min": 0.00045142191962474086,
+   "max": 0.053173551625775056,
+   "n": 75
+  }
+ }
+}

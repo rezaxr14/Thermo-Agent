@@ -1,0 +1,19 @@
+\begingroup\scriptsize\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}p{5.7cm}rp{3.1cm}p{3.1cm}l@{}}
+\toprule
+Baseline (no language model) & $n$ & Main result (95\% Wilson) & Cost or reference & Seed \\
+\midrule
+Repair: blind search, in-distribution & 12 & 92\% (65--99) & 174 solver calls & seed 0 \\
+Repair: blind search, held-out faults & 108 & 100\% (97--100) & 128 solver calls & seed 0 \\
+Repair: blind search, held-out topologies & 128 & 99\% (96--100) & 122 solver calls & seed 0 \\
+Design: enumerate defaults, 64 evaluations & 24 & 71\% within 2\% & gap 2.4\% & seed 0 \\
+Design: random search, 12 evaluations & 24 & 33\% within 2\% & gap 8.7\% & seed 0 \\
+Design: random search, 128 evaluations & 24 & 75\% within 2\% & gap 0.6\% & seed 0 \\
+Design: enumerate, then polish, 64 evaluations & 24 & 79\% within 2\% & gap 1.4\% & seed 0 \\
+Design: enumerate, then polish, 128 evaluations & 24 & 100\% within 2\% & gap 0.1\% & seed 0 \\
+Audit: first-law ranking top-1, in-distribution & 17 & 0\% (0--18) & random 25\% & seed 0 \\
+Audit: fixed rule change, in-distribution & 17 & 100\% of best gain & valid 7/17 & seed 0 \\
+Audit: first-law ranking top-1, held-out topologies & 58 & 12\% (6--23) & random 32\% & seed 0 \\
+Audit: fixed rule change, held-out topologies & 58 & 12\% of best gain & valid 43/58 & seed 0 \\
+\bottomrule
+\end{tabular}\endgroup

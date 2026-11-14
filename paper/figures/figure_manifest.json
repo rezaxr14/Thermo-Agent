@@ -1,0 +1,254 @@
+{
+ "figures": [
+  {
+   "figure": "fig_overview",
+   "tier": "core",
+   "svg": "figures/svg/fig_overview.svg",
+   "pdf": "figures/pdf/fig_overview.pdf",
+   "viewBox": "0 0 1000 748",
+   "caption_stub": "System overview. Offline, sampled plants, faults and a reference search give verified expert answers for SFT and the reward for GRPO. The environment (simulator, exergy accounting, verifiers V1 to V8) supplies the reward in training and the feedback at inference; online, the model proposes an answer, the solver and verifiers check it, and the model retries. No model has been trained yet.",
+   "alt_text": "Four cards: a data layer with four task chips, split bar and verified answers; a CPU environment with plant graph, exergy bars, eight verifier chips and reward and feedback pills; an inference policy loop with coloured prompt tokens, the model and a retry box; and a blue training card with reward diagnostics, SFT, GRPO and adapters. Numbered arrows trace the path.",
+   "data_sources": [],
+   "pending": [
+    "every trained-model statement is a pending note"
+   ]
+  },
+  {
+   "figure": "fig_plant_graph",
+   "tier": "core",
+   "svg": "figures/svg/fig_plant_graph.svg",
+   "pdf": "figures/pdf/fig_plant_graph.pdf",
+   "viewBox": "0 0 1000 724",
+   "caption_stub": "Plant graph of the data-centre model with real stream ids. Gas streams are orange and liquid streams blue; dashed streams are tear streams with fixed values that close a loop; dashed boxes are optional or alternative blocks (gas engine, district-heat exchanger, ORC loop, second heat rejector, heat pump).",
+   "alt_text": "Block diagram of a gas turbine with exhaust heat recovery chain, absorption chiller, IT load, heat rejector and an organic Rankine cycle loop, with labelled stream ids such as s5, hw_hot, chw_sup, rej_cold and o1 to o4.",
+   "data_sources": [
+    {
+     "asset": "assets/plant_graph.json",
+     "command": "synth.topologies.dc_chp(...) with all optional blocks",
+     "seed": null,
+     "n": 3,
+     "kind": "topology"
+    }
+   ],
+   "pending": []
+  },
+  {
+   "figure": "fig_exergy_flow",
+   "tier": "core",
+   "svg": "figures/svg/fig_exergy_flow.svg",
+   "pdf": "figures/pdf/fig_exergy_flow.pdf",
+   "viewBox": "0 0 1000 700",
+   "caption_stub": "Exergy flow of one solved plant (gas turbine, absorption cooling, dry cooler, district heat from the exhaust, 20 MW IT load). Ribbons are proportional to MW of exergy. Most fuel exergy is destroyed in the combustor; cooling and heat are small in exergy terms; the IT load's own destruction is not attributable to the plant.",
+   "alt_text": "Sankey-style diagram from fuel exergy through net electricity, delivered cooling and heat, destruction in each component and stack loss, to the IT load destruction, surplus electricity and delivered heat.",
+   "data_sources": [
+    {
+     "asset": "assets/exergy_flow.json",
+     "command": "core.solve.solve(synth.topologies.size_generation(dc_chp, **plant_kwargs))",
+     "seed": null,
+     "n": 1,
+     "kind": "simulation (one solved plant)"
+    }
+   ],
+   "pending": []
+  },
+  {
+   "figure": "fig_verifiers",
+   "tier": "core",
+   "svg": "figures/svg/fig_verifiers.svg",
+   "pdf": "figures/pdf/fig_verifiers.pdf",
+   "viewBox": "0 0 1000 914",
+   "caption_stub": "Verifiers V1 to V8 with tolerances and what each catches (left). Right: in the ledger task an error in any stream value or in T0 enters the closure sum with opposite signs and cancels; only errors in the destruction lines break closure, as the counts on generated rows show.",
+   "alt_text": "Eight verifier cards under four coloured group tabs, beside a panel with the closure equations and a list of four edits to a real ledger showing which ones change the closure residual, with two bars of row counts.",
+   "data_sources": [
+    {
+     "asset": "assets/ledger_symptoms.json",
+     "command": "ledger.data OUT -n 600 --seed 0; ledger.run_eval.symptoms(row) over all splits",
+     "seed": 0,
+     "n": 600,
+     "kind": "synthetic"
+    }
+   ],
+   "pending": []
+  },
+  {
+   "figure": "fig_tasks",
+   "tier": "core",
+   "svg": "figures/svg/fig_tasks.svg",
+   "pdf": "figures/pdf/fig_tasks.pdf",
+   "viewBox": "0 0 1000 1118",
+   "caption_stub": "The four tasks. For each: an excerpt of a generated input row, the expert answer the model must write, the reward channels with their weights, and the held-out splits. Excerpts are verbatim from generated rows; '...' marks omitted lines.",
+   "alt_text": "Four task cards with coloured tabs. Each shows a monospace input excerpt, an arrow to the expert answer, reward channels as bars scaled by weight, and coloured pills naming the held-out splits with row counts.",
+   "data_sources": [
+    {
+     "asset": "assets/excerpts.json",
+     "command": "rows of repair/design/audit/ledger_train.jsonl, the row at the 12.5th length percentile of each task; reward channels from REWARD_FUNCS and REWARD_WEIGHTS",
+     "seed": 0,
+     "n": 4,
+     "kind": "synthetic rows"
+    },
+    {
+     "asset": "assets/splits.json",
+     "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+     "seed": 0,
+     "n": 1265,
+     "kind": "synthetic"
+    }
+   ],
+   "pending": []
+  },
+  {
+   "figure": "fig_training",
+   "tier": "core",
+   "svg": "figures/svg/fig_training.svg",
+   "pdf": "figures/pdf/fig_training.pdf",
+   "viewBox": "0 0 1000 758",
+   "caption_stub": "Training pipeline and splits. Data generation, verification, reward diagnostics (CPU, before GPU time), SFT, merge, GRPO and evaluation; SFT, GRPO and evaluation share one rendered prompt text. Lower panel: rows per structural split for each task.",
+   "alt_text": "Five numbered panels: stacked split bars per task, an SFT token strip with masked prompt, reasoning and answer tokens, a reward-diagnostics line chart, a GRPO rollout illustration with reward and advantage bars, and an evaluation strip.",
+   "data_sources": [
+    {
+     "asset": "assets/splits.json",
+     "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+     "seed": 0,
+     "n": 1265,
+     "kind": "synthetic"
+    }
+   ],
+   "pending": []
+  },
+  {
+   "figure": "fig_ledger_symptoms",
+   "tier": "core",
+   "svg": "figures/svg/fig_ledger_symptoms.svg",
+   "pdf": "figures/pdf/fig_ledger_symptoms.pdf",
+   "viewBox": "0 0 1000 665",
+   "caption_stub": "Symptoms of injected ledger faults: share of single-fault rows showing a closure residual, a negative destruction, or either, by fault type and layer. Stream-line and constant faults never break closure and two constant faults show no symptom at all; parameter-range checks see none of these faults.",
+   "alt_text": "Table of 13 fault types grouped under coloured tabs, each with the number of rows, a blue bar for closure residual, an orange bar for negative destruction and a coloured pill for either symptom; four stat cards on the right, including a red one for the invisible constant faults.",
+   "data_sources": [
+    {
+     "asset": "assets/ledger_symptoms.json",
+     "command": "ledger.data OUT -n 600 --seed 0; ledger.run_eval.symptoms(row) over all splits",
+     "seed": 0,
+     "n": 600,
+     "kind": "synthetic"
+    }
+   ],
+   "pending": []
+  },
+  {
+   "figure": "fig_audit_first_vs_second_law",
+   "tier": "core",
+   "svg": "figures/svg/fig_audit_first_vs_second_law.svg",
+   "pdf": "figures/pdf/fig_audit_first_vs_second_law.pdf",
+   "viewBox": "0 0 1000 614",
+   "caption_stub": "First law against second law on one plant: energy dissipated to the surroundings and exergy destroyed per component (left), and the top-1 hit rate of the first-law ranking against random order with the prime mover excluded (right).",
+   "alt_text": "Two ranked columns of six components, energy dissipated on the left and exergy destroyed on the right, joined by lines with the heat rejector highlighted in red; a bar chart of top-1 hit rates with Wilson intervals on the right.",
+   "data_sources": [
+    {
+     "asset": "assets/audit_first_vs_second_law.json",
+     "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+     "seed": 0,
+     "n": 75,
+     "kind": "simulation"
+    }
+   ],
+   "pending": []
+  },
+  {
+   "figure": "fig_design_baselines",
+   "tier": "core",
+   "svg": "figures/svg/fig_design_baselines.svg",
+   "pdf": "figures/pdf/fig_design_baselines.pdf",
+   "viewBox": "0 0 1000 556",
+   "caption_stub": "Anytime curves of three non-model baselines on held-out and validation sites: share of sites whose best design is within 2 % of the reference against the number of design evaluations (log scale). The trained-model curve is pending and shown only as an empty box.",
+   "alt_text": "Line chart on a logarithmic x axis with three baseline curves and an empty dashed box labelled pending: model result.",
+   "data_sources": [
+    {
+     "asset": "assets/design_baselines.json",
+     "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+     "seed": 0,
+     "n": 24,
+     "kind": "simulation"
+    }
+   ],
+   "pending": [
+    "trained-model curve (empty dashed box)"
+   ]
+  },
+  {
+   "figure": "fig_design_feasibility",
+   "tier": "optional",
+   "svg": "figures/svg/fig_design_feasibility.svg",
+   "pdf": "figures/pdf/fig_design_feasibility.pdf",
+   "viewBox": "0 0 1000 556",
+   "caption_stub": "Best configuration family over chilled fraction and ambient temperature for a 20 MW IT load, among the 32 default specs. Numbers are fuel use in MW; hatched cells have no valid configuration in the model; circles mark cells where no engine plus absorption design is valid.",
+   "alt_text": "Heat map of seven ambient temperatures by nine chilled fractions coloured by winning prime mover and cooling type, with hatched cells and circle markers.",
+   "data_sources": [
+    {
+     "asset": "assets/design_feasibility.json",
+     "command": "design.search.enumerate_designs on Site(it_load_w=20e6, cooling_load_w=cf*20e6, T0=T, RH=0.5, supply 291.15 K, return 301.15 K); design.build.evaluate_design",
+     "seed": null,
+     "n": 63,
+     "kind": "simulation"
+    }
+   ],
+   "pending": []
+  },
+  {
+   "figure": "fig_part_load",
+   "tier": "optional",
+   "svg": "figures/svg/fig_part_load.svg",
+   "pdf": "figures/pdf/fig_part_load.pdf",
+   "viewBox": "0 0 1000 560",
+   "caption_stub": "Part-load behaviour on a synthetic trace: load histogram with the bin centres used (left) and the modularity penalty against the number of units with the ideal bound at zero (right). The trace is synthetic until the real trace is evaluated.",
+   "alt_text": "Histogram of IT load beside a line chart of extra fuel against unit count for turbine and engine units, with a dashed zero line.",
+   "data_sources": [
+    {
+     "asset": "assets/part_load.json",
+     "command": "numpy.random.default_rng(0): 2000 samples, IT load normal(24, 5) MW clipped to 8..30 MW; design.trace_eval.bin_trace(df, 10); design.modular.scan_units(units=1,2,3,4,6,8,12), spec default_spec(prime_mover, 'absorption', 'wet'), chilled fraction 0.5, step 1/6 h",
+     "seed": 0,
+     "n": 2000,
+     "kind": "SYNTHETIC trace (not Frontier data)"
+    }
+   ],
+   "pending": []
+  },
+  {
+   "figure": "fig_reward_signal",
+   "tier": "optional",
+   "svg": "figures/svg/fig_reward_signal.svg",
+   "pdf": "figures/pdf/fig_reward_signal.pdf",
+   "viewBox": "0 0 1000 556",
+   "caption_stub": "Reward signal before any GPU time: share of GRPO groups whose completions all receive the same reward, against the per-sample error rate of a simulated policy, for each task, with the cost of one reward evaluation.",
+   "alt_text": "Line chart with four task curves of zero-variance group share against error rate, beside a panel listing milliseconds per completion.",
+   "data_sources": [
+    {
+     "asset": "assets/reward_signal.json",
+     "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+     "seed": 0,
+     "n": 40,
+     "kind": "simulated policies on synthetic data (no model)"
+    }
+   ],
+   "pending": []
+  },
+  {
+   "figure": "fig_harness",
+   "tier": "optional",
+   "svg": "figures/svg/fig_harness.svg",
+   "pdf": "figures/pdf/fig_harness.pdf",
+   "viewBox": "0 0 1000 706",
+   "caption_stub": "Harness text: the component registry generates the AUTO sections of AGENTS.md and the skills; four modes add none, AGENTS.md, skills or both to the prompt; the gas engine is the component held out of the training topologies.",
+   "alt_text": "Five lettered cards: AGENTS.md sections with real excerpts, the system message stack with optional blocks, the skill library list, a table of the four harness modes with check marks, and an orange card on the held-out gas engine with its ports, row counts and skill text.",
+   "data_sources": [
+    {
+     "asset": "assets/harness.json",
+     "command": "agent.harness (MODES, skill_names, TASK_SKILLS), agent.build_harness.frontmatter, core.components.REQUIRED_PORTS; topologies of test_ood_topology rows",
+     "seed": 0,
+     "n": 8,
+     "kind": "files"
+    }
+   ],
+   "pending": []
+  }
+ ]
+}

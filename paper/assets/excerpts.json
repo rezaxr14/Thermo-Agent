@@ -1,0 +1,122 @@
+{
+ "command": "rows of repair/design/audit/ledger_train.jsonl, the row at the 12.5th length percentile of each task; reward channels from REWARD_FUNCS and REWARD_WEIGHTS",
+ "seed": 0,
+ "n": 4,
+ "kind": "synthetic rows",
+ "repair": {
+  "id": "rep-3-00019",
+  "prompt": "You repair energy-plant models. Units are SI (K, Pa, W, kg/s). Efficiencies, second-law fractions and pressure-drop fractions are fractions, never percent. A plant is valid when it solves, passes the physics checks (mass and energy balance, exergy closure, non-negative exergy destruction, no temperature cross, plausible ranges) and meets the site requirements. Answer with a short <diagnosis> that cites only numbers shown in the input, then <edits> with at most 6 lines of the form `SET <component>.<param> = <number>`, `SET @<stream>.<field> = <number>`, `REWIRE @<stream>.<to|from> = <component>.<port>` or `FLUID @<stream> = <fluid>`. You can only change numbers, endpoints and fluids that already exist. Change as little as possible.\nPLANT\nPLANT dc_electric_sampled T0=289.5749196372255 P0=101325.0 RH=0.7169645716017152\nC AC compressor {\"PR\":16.352425182678587,\"eta_s\":0.8548977073309872}\nC CC combustor {\"T_out\":1442.0192534391633,\"dp\":0.04,\"q_loss\":0.01}\nC GT turbine {\"P_out\":101325.0,\"eta_s\":0.8740130370516899}\nC DC dc_load {\"P_it\":10002695.173719998,\"chilled_fraction\":0.7793385256197696,\"T_return\":294.61727547108137}\nC CH electric_chiller {\"T_chw_out\":285.45022191952296,\"dT_rej\":8.32120018405002,\"eps\":0.4013767391881111}\nS air ext:air -> AC.in CGAM_AIR {\"m_dot\":32.046544220619666,\"fixed\":{\"T\":289.5749196372255,\"P\":101325.0}}\nS s2 AC.out -> CC.air_in CGAM_AIR\nS fuel ext:fuel -> CC.fuel_in CH4 {\"fixed\":{\"T\":289.5749196372255,\"P\":2000000.0}}\nS s4 CC.out -> GT.in FLUE\nS s5 GT.out -> ext:stack FLUE\nS chw_ret DC.out -> CH.evap_in Water\nS chw_sup CH.evap_out -> DC.in Water {\"fixed\":{\"T\":285.45022191952296,\"P\":300000.0}}\nS cw_in ext:cw -> CH.rej_in CGAM_AIR {\"fixed\":{\"T\":289.5749196372255,\"P\":101325.0}}\nS cw_out CH.rej_out -> ext:cw_out Water\n\nSITE\nit_load_w=10002695.173719998 cooling_load_w=7717530.851821818 grid_import_allowed=false\n\nRESULT\nSOLVER ERROR E_FLUID_MISMATCH: CH.rej_in expects a liquid stream but cw_in carries CGAM_AIR",
+  "completion": "<diagnosis>Stream cw_in is labelled CGAM_AIR, but it feeds CH.rej_in, which expects a stream of the other fluid class; its neighbours in the same loop carry Water.</diagnosis>\n<edits>\nFLUID @cw_in = Water\n</edits>",
+  "channels": [
+   {
+    "name": "format",
+    "weight": 0.5
+   },
+   {
+    "name": "valid",
+    "weight": 2.0
+   },
+   {
+    "name": "site",
+    "weight": 1.0
+   },
+   {
+    "name": "exact",
+    "weight": 1.0
+   },
+   {
+    "name": "minimal",
+    "weight": 0.5
+   },
+   {
+    "name": "grounded",
+    "weight": 0.5
+   }
+  ]
+ },
+ "design": {
+  "id": "des-1-00000",
+  "prompt": "You design on-site energy plants for AI data centres. Given a site, choose the plant configuration and set its parameters. The plant must solve, pass the physics checks (mass and energy balance, exergy closure, no negative exergy destruction, no temperature cross, plausible ranges) and meet the site: its IT electricity with no grid import, its chilled-water load, and any water limit. Among valid plants, the one that burns the least fuel wins. Answer with a short <rationale> that cites only quantities you expect the solved plant to show (MW, K), then a <design> block with one `key = value` per line and exactly the keys your choices require. Catalog: prime_mover in {turbine, engine}; cooling in {absorption, electric}; rejection in {dry, wet}; bottoming in {none, orc_r245fa, orc_cyclopentane, orc_toluene}; dT_rej in [5, 12]; PR in [10, 30]; T4 in [1300, 1600]; T_hw in [353.15, 383.15]; dT_hw in [5, 20]; P_orc_bar in [10, 25]; orc_frac in [0.1, 1]. PR and T4 apply only to a turbine; T_hw and dT_hw only to absorption cooling; P_orc_bar and orc_frac only when bottoming is an ORC (orc_frac 0.1 = smallest working-fluid flow, 1.0 = largest). If the site has a heat demand, also set heat_source = exhaust or heat_pump.\nSITE\nit_load_w=6981896.020919639 cooling_load_w=5560755.5387988435 ambient_T_K=289.8868636949644 ambient_RH=0.5468045609643586 coolant_supply_K=294.77946989549787 coolant_return_K=304.0269252194416 grid_import_allowed=false",
+  "completion": "<rationale>turbine with absorption cooling and a dry heat-rejection loop, an ORC on toluene bottoming. engine prime mover is rejected because its exhaust cannot supply the required heat duty; electric cooling is rejected because its exhaust is too hot for that ORC fluid at this site; wet rejection is rejected because its exhaust cannot supply the required heat duty; none bottoming would burn about 14 percent more fuel. Expected fuel input 17.6 MW, net electricity 7.2 MW and stack temperature 338 K.</rationale>\n<design>\nprime_mover = turbine\ncooling = absorption\nrejection = dry\nbottoming = orc_toluene\ndT_rej = 8.386204297341198\nPR = 23.53082942030091\nT4 = 1600.0\nT_hw = 365.099243769102\ndT_hw = 9.10321715509785\nP_orc_bar = 10.0\norc_frac = 0.9662492407484031\n</design>",
+  "channels": [
+   {
+    "name": "format",
+    "weight": 0.5
+   },
+   {
+    "name": "valid",
+    "weight": 2.0
+   },
+   {
+    "name": "quality",
+    "weight": 2.0
+   },
+   {
+    "name": "grounded",
+    "weight": 0.5
+   }
+  ]
+ },
+ "audit": {
+  "id": "aud-0-00041",
+  "prompt": "You audit solved energy plants for AI data centres. You are given the plant, the site, and an energy-level summary (exergy destruction is not shown). Answer with a short <analysis> citing only numbers (MW, K) the plant would show, then <ranking> listing up to 5 component ids by exergy destruction, largest first, written `A > B > C` (the combustor or gas engine is always the largest and is not scored; the order of the rest is); <change> with one line `SET <component>.<param> = <number>` that lowers fuel input for the same services (a set-point or loss parameter within about 20 percent of its current value; component efficiencies cannot be changed; the loop temperatures of the hot-water and heat-rejection loops cannot be changed); and <prediction> with `fuel_change_mw = <number>`, the change in fuel input in MW after the prime mover is resized to deliver the same net electricity (negative = saves fuel).\nPLANT\nPLANT dc_electric_sampled T0=298.2874350341205 P0=101325.0 RH=0.5208823813235925\nC AC compressor {\"PR\":14.253474637062384,\"eta_s\":0.8938775852940535}\nC CC combustor {\"T_out\":1458.9145696785054,\"dp\":0.04,\"q_loss\":0.01}\nC GT turbine {\"P_out\":101325.0,\"eta_s\":0.8589453195002288}\nC DC dc_load {\"P_it\":38580221.903768994,\"chilled_fraction\":0.5498844734838179,\"T_return\":300.98355203061936}\nC CH electric_chiller {\"T_chw_out\":289.11943015557625,\"dT_rej\":9.553371428876531,\"eps\":0.5492774970468453}\nS air ext:air -> AC.in CGAM_AIR {\"m_dot\":118.31810473777388,\"fixed\":{\"T\":298.2874350341205,\"P\":101325.0}}\nS s2 AC.out -> CC.air_in CGAM_AIR\nS fuel ext:fuel -> CC.fuel_in CH4 {\"fixed\":{\"T\":298.2874350341205,\"P\":2000000.0}}\nS s4 CC.out -> GT.in FLUE\nS s5 GT.out -> ext:stack FLUE\nS chw_ret DC.out -> CH.evap_in Water\nS chw_sup CH.evap_out -> DC.in Water {\"fixed\":{\"T\":289.11943015557625,\"P\":300000.0}}\nS cw_in ext:cw -> CH.rej_in Water {\"fixed\":{\"T\":298.2874350341205,\"P\":101325.0}}\nS cw_out CH.rej_out -> ext:cw_out Water\n\nSITE\nit_load_w=38580221.903768994 cooling_load_w=21002518.358358443 grid_import_allowed=false\n\nSUMMARY\nKPI fuel_MW=122.46 net_electricity_MW=39.74 cooling_MW=21.21 heat_MW=0.00 eta_II=0.312\nAC compressor W_MW=-45.26 Q_MW=0.00 loss_MW=0.00 T_min_K=298 T_max_K=663\nCC combustor W_MW=0.00 Q_MW=0.00 loss_MW=1.22 T_min_K=298 T_max_K=1459\nGT turbine W_MW=87.40 Q_MW=0.00 loss_MW=0.00 T_min_K=883 T_max_K=1459\nDC dc_load W_MW=-38.58 Q_MW=21.21 loss_MW=17.37 T_min_K=289 T_max_K=301\nCH electric_chiller W_MW=-2.40 Q_MW=21.21 loss_MW=0.00 T_min_K=289 T_max_K=308\nSTACK T_K=883 m_kg_s=120.8",
+  "completion": "<analysis>Exergy is destroyed mostly in CC (40.6 MW), GT (5.14 MW), AC (2.22 MW), with a fuel input of 122 MW. The change SET CC.T_out = 1604.81 should lower fuel input for the same services.</analysis>\n<ranking>CC > GT > AC > CH</ranking>\n<change>SET CC.T_out = 1604.81</change>\n<prediction>fuel_change_mw = -2.578</prediction>",
+  "channels": [
+   {
+    "name": "format",
+    "weight": 0.5
+   },
+   {
+    "name": "rank",
+    "weight": 1.5
+   },
+   {
+    "name": "valid",
+    "weight": 1.0
+   },
+   {
+    "name": "gain",
+    "weight": 2.0
+   },
+   {
+    "name": "pred",
+    "weight": 1.0
+   },
+   {
+    "name": "grounded",
+    "weight": 0.5
+   }
+  ]
+ },
+ "ledger": {
+  "id": "led-0-00262",
+  "prompt": "You debug exergy ledgers of energy plants. A ledger computes the exergy flow E[x] (MW) of every stream x from its state values, and the exergy destruction ED[c] (MW) of every component c as the exergy of its inlet streams minus the exergy of its outlet streams minus the work it delivers. A correct ledger gives ED >= 0 for every component and closes: the sum of all ED equals the exergy entering at the boundaries minus the exergy leaving minus the net work. You are given the ledger, the topology, the values and the result. Answer with a short <diagnosis> citing only numbers shown (MW), then <fix> with at most 4 lines `FIX T0 = <expr>`, `FIX E[<stream>] = <expr>` or `FIX ED[<component>] = <expr>`. Expressions use numbers, + - * /, parentheses, T0, and lookups m[x], h[x], s[x], g0[x], ech[x], E[x], W[c]. Change only what is wrong.\nLEDGER\nT0 = 292.3301358221059\nE[air] = m[air]*(h[air] - T0*s[air] - g0[air] + ech[air])/1e6\nE[s2] = m[s2]*(h[s2] - T0*s[s2] - g0[s2] + ech[s2])/1e6\nE[fuel] = m[fuel]*(h[fuel] - T0*s[fuel] - g0[fuel] + ech[fuel])/1e6\nE[s4] = m[s4]*(h[s4] - T0*s[s4] - g0[s4] + ech[s4])/1e6\nE[s5] = m[s5]*(h[s5] - T0*s[s5] - g0[s5] + ech[s5])/1e6\nE[chw_ret] = m[chw_ret]*(h[chw_ret] - T0*s[chw_ret] - g0[chw_ret] + ech[chw_ret])/1e6\nE[chw_sup] = m[chw_sup]*(h[chw_sup] - T0*s[chw_sup] - g0[chw_sup] + ech[chw_sup])/1e6\nE[cw_in] = m[cw_in]*(h[cw_in] - T0*s[cw_in] - g0[cw_in] + ech[cw_in])/1e6\nE[cw_out] = m[cw_out]*(h[cw_out] - T0*s[cw_out] - g0[cw_out] + ech[cw_out])/1e6\nED[AC] = E[air] - E[s2] - W[AC]\nED[CC] = E[s2] + E[fuel] - E[s4]\nED[GT] = E[s4] - E[s5] - W[GT]\nED[DC] = E[chw_sup] - E[chw_ret] - 0.5*W[DC]\nED[CH] = E[chw_ret] + E[cw_in] - E[chw_sup] - E[cw_out] - W[CH]\n\nAMBIENT T0_K=292.3301358221059\n\nTOPOLOGY\nAC compressor in: air out: s2\nCC combustor in: s2 fuel out: s4\nGT turbine in: s4 out: s5\nDC dc_load in: chw_sup out: chw_ret\nCH electric_chiller in: chw_ret cw_in out: chw_sup cw_out\nBOUNDARY in: air fuel cw_in out: s5 cw_out\n\nVALUES\nair: m=107.3 h=-1.704e+05 s=6935 g0=-2.198e+06 ech=-7.936e-12\ns2: m=107.3 h=2.707e+05 s=7018 g0=-2.198e+06 ech=-7.936e-12\nfuel: m=2.483 h=-4.663e+06 s=1.003e+04 g0=-8.046e+06 ech=5.188e+07\ns4: m=109.8 h=1.478e+05 s=8221 g0=-3.481e+06 ech=2.242e+04\ns5: m=109.8 h=-7.209e+05 s=8357 g0=-3.481e+06 ech=2.242e+04\nchw_ret: m=711.4 h=1.104e+05 s=384.8 g0=-2663 ech=0\nchw_sup: m=711.4 h=6.139e+04 s=217.9 g0=-2663 ech=0\ncw_in: m=1316 h=8.058e+04 s=284.7 g0=-2663 ech=0\ncw_out: m=1316 h=1.093e+05 s=381.9 g0=-2663 ech=0\nW (MW): AC=-47.33 GT=95.37 DC=-43.76 CH=-2.959\n\nRESULT\nED (MW): AC=2.575 CC=37.69 GT=4.349 DC=21.74 CH=2.662\nE (MW): air=-8.516e-16 s2=44.76 fuel=130 s4=137 s5=37.31 chw_ret=0.3928 chw_sup=0.2518 cw_in=0 cw_out=0.4373\nCLOSURE residual = -21.88 MW",
+  "completion": "<diagnosis>the term for DC in ED[DC] is multiplied by 0.5, which no balance has; ED[DC] evaluates to 21.74 MW, but destruction is inlet exergy minus outlet exergy minus work.</diagnosis>\n<fix>\nFIX ED[DC] = E[chw_sup] - E[chw_ret] - W[DC]\n</fix>",
+  "channels": [
+   {
+    "name": "format",
+    "weight": 0.5
+   },
+   {
+    "name": "closure",
+    "weight": 1.0
+   },
+   {
+    "name": "nonneg",
+    "weight": 0.5
+   },
+   {
+    "name": "exact",
+    "weight": 2.5
+   },
+   {
+    "name": "minimal",
+    "weight": 0.5
+   },
+   {
+    "name": "grounded",
+    "weight": 0.5
+   }
+  ]
+ }
+}

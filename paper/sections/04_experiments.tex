@@ -1,0 +1,194 @@
+\section{Experiments}\label{sec:experiments}
+
+Everything in this section that is a number was measured on the CPU with the project code and fixed seeds, on small samples, and
+every sample size is stated. All results are simulation-driven. No language model has been trained or evaluated; the model results
+(\cref{sec:modelresults,sec:ablations}) are skeletons whose cells are pending.
+
+\subsection{Frozen protocol}\label{sec:protocol}
+
+\paragraph{Models and harness.}
+We will evaluate the base Qwen3.5-4B, the model after supervised fine-tuning (SFT) and the model after GRPO, each under harness mode
+none and under \texttt{AGENTS.md} plus skills; the two other modes are used in the harness ablation.
+
+\paragraph{Decoding, attempts and budgets.}
+Decoding is greedy. Repair and Design allow three attempts with solver feedback; Audit and Ledger repair are single-turn. Cost is counted in
+solver calls (Repair) or design evaluations (Design). Design also has an anytime protocol: the model is told the fuel of each valid design and may
+refine, and we record the best gap to the reference after $b$ design evaluations, to compare with enumeration, random search and
+enumerate-then-polish at equal budgets.
+
+\paragraph{Metrics.}
+Repair: success (the repaired plant is valid and serves the site), first-turn success, exact restoration on deducible faults, and mean solver calls. Design: valid share, share within 1\% of the reference, mean fuel gap, mean
+evaluations. Audit: ranking score, validity of the change, gain and prediction score. Ledger repair: exactness, closure and the share of rows with all lines correct.
+
+\paragraph{Statistics.}
+Binary outcomes carry Wilson 95\% intervals \citep{wilson1927interval}. Two runs on the same examples are compared with an exact McNemar test for binary
+metrics \citep{mcnemar1947}, and with a paired bootstrap interval plus a sign-flip permutation test for other metrics; all comparisons reported together are
+Holm-corrected \citep{holm1979}. Per-example results are saved with each report. ThermoQA accuracy before and after training checks for forgetting.
+
+\paragraph{Research questions.}
+We fix five research questions before the runs and state no expected answer to any of them.
+\textbf{RQ1:} does a trained model match the success of verifier-guided search on held-out faults with fewer solver calls?
+\textbf{RQ2:} does the harness help on a held-out component, the gas engine?
+\textbf{RQ3:} does GRPO add over SFT on tasks where SFT is below about 90\% per-sample accuracy?
+\textbf{RQ4:} do the individual reward channels matter?
+\textbf{RQ5:} is there forgetting on ThermoQA?
+
+\subsection{Non-model baselines}\label{sec:baselines}
+
+Non-model baselines set the cost against which a trained model is compared. \Cref{tab:baselines} gives them with sample sizes.
+
+\begin{table}[tbp]
+\centering
+\input{generated/table_baselines.tex}
+\caption{Non-model baselines on generated rows (simulation, seed 0). Repair: all rows of each split ($n$ is the split size). Design:
+\val{des.n_sites} sites, of which \val{des.n_heat_sites} have a heat demand; ``within'' is the share of sites whose best design is within
+\val{des.tolerance_pct}\% of the reference. Audit: \val{aud.n_id} in-distribution and \val{aud.n_ood} held-out-topology plants.}
+\label{tab:baselines}
+\end{table}
+
+\paragraph{Repair.}
+A blind search tries single edits on every numeric slot with a fixed set of transforms (scalings, an offset of 273.15, a sign flip, default efficiencies), then structural edits (exchanging two same-fluid
+destinations, relabeling a fluid), taking slots named in the verifier output first, and accepts the first plant that solves and passes the hard checks. It does no learning. On the
+\val{rep.test_ood_fault.n} held-out-fault rows it repairs \val{rep.test_ood_fault.search_pct}\% (Wilson 95\% interval \val{rep.test_ood_fault.search_lo_pct} to
+\val{rep.test_ood_fault.search_hi_pct}\%), on the \val{rep.test_ood_topology.n} held-out-topology rows \val{rep.test_ood_topology.search_pct}\%, and on the \val{rep.test_id.n}
+in-distribution rows \val{rep.test_id.search_pct}\% (interval \val{rep.test_id.search_lo_pct} to \val{rep.test_id.search_hi_pct}\%), so that the in-distribution interval is wide. Doing nothing repairs \val{rep.test_id.noop_pct}\% in each split.
+Cost depends on the fault type, pooled over the three splits: \val{rep.f.sign_flip.calls} solver calls on average for \val{rep.f.sign_flip.n} sign flips, \val{rep.f.efficiency_gt_1.calls} for \val{rep.f.efficiency_gt_1.n} efficiencies above 1, \val{rep.f.unit_slip.calls} for
+\val{rep.f.unit_slip.n} unit slips, and \val{rep.f.swapped_ports.calls} and \val{rep.f.wrong_fluid.calls} for \val{rep.f.swapped_ports.n} swapped ports and \val{rep.f.wrong_fluid.n} wrong fluids. These are the numbers a trained model must beat to
+claim sample efficiency (RQ1). The search finds a valid plant, which need not be the original: it restores the original exactly in \val{rep.test_ood_fault.exact_pct}\% of the held-out-fault rows and \val{rep.test_ood_topology.exact_pct}\% of the held-out-topology rows.
+
+\paragraph{Design.}
+\Cref{fig:fig_design_baselines} shows the share of sites whose best design is within \val{des.tolerance_pct}\% of the reference against the number of design evaluations, on \val{des.n_sites} sites (\val{des.split.test_id} in-distribution,
+\val{des.split.test_ood_climate} hot-climate, \val{des.split.test_ood_load} high-chilled-fraction, \val{des.split.test_ood_scale} large-scale and \val{des.split.val} validation). Enumerating the defaults takes
+\val{des.enum_len_min} evaluations without a heat demand and \val{des.enum_len_max} with one; after \val{des.enum_len_max} evaluations \val{des.enum.b64.within_pct}\% of sites are within the tolerance, at a mean gap of
+\val{des.enum.b64.gap_pct}\%. Random search with 128 evaluations (its curve runs to \val{des.random_len}) reaches \val{des.rand.b128.within_pct}\% at a gap of \val{des.rand.b128.gap_pct}\%, and with 12 evaluations it is \val{des.rand.b12.gap_pct}\% from the reference and
+valid at \val{des.rand.b12.valid_pct}\% of sites. Enumerate-then-polish is the procedure that defines the reference (\val{des.polish_len_min} to \val{des.polish_len_max} evaluations), so its curve measures the speed of reaching the
+reference, not independent quality; it reaches \val{des.pol.b128.within_pct}\% of sites within the tolerance after 128 evaluations. A trained model has to be placed on these axes; its curve is pending.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\linewidth]{figures/pdf/fig_design_baselines.pdf}
+\caption{Anytime curves of three non-model baselines on \val{des.n_sites} held-out and validation sites (simulation): share of sites whose best design is within
+\val{des.tolerance_pct}\% of the reference against the number of design evaluations (logarithmic scale). The reference is the enumerate-then-polish result. The trained-model curve is pending and
+shown only as an empty box. Data: \texttt{assets/design\_baselines.json}.}
+\label{fig:fig_design_baselines}
+\end{figure}
+
+\paragraph{Audit.}
+On \val{audb.n_id} in-distribution and \val{audb.n_ood} held-out-topology plants, a fixed rule (raise the turbine inlet temperature by 10\%, or cut the engine loss fraction by 10\%) recovers
+\val{audb.rule_gain_id_pct}\% of the best allowed gain on the in-distribution plants, where it is valid for \val{audb.rule_valid_id} of \val{audb.n_id}, and \val{audb.rule_gain_ood_pct}\% on the held-out engine and steam-ORC plants, where it is
+valid for \val{audb.rule_valid_ood} of \val{audb.n_ood}. The best allowed change saves a median \val{audb.saving_median_id_pct}\% of fuel in-distribution (range \val{audb.saving_min_id_pct} to \val{audb.saving_max_id_pct}\%) and
+\val{audb.saving_median_ood_pct}\% on the held-out topologies (\val{audb.saving_min_ood_pct} to \val{audb.saving_max_ood_pct}\%); exhaustive search over the allowed changes costs about \val{audb.search_evals_id} evaluations. For the prediction channel,
+predicting no effect scores \val{audb.pred_zero_id} in-distribution and \val{audb.pred_zero_ood} held out, and predicting the mean relative effect of the other plants scores \val{audb.pred_mean_id} and \val{audb.pred_mean_ood}.
+
+\paragraph{Ledger.}
+A program that rebuilds each ledger line from the topology solves every row by construction, so there is no search baseline to report; the finding for this task is the symptom coverage of the faults (\cref{sec:ledger}).
+
+\subsection{Simulator findings}\label{sec:findings}
+
+These findings do not depend on a model. They characterize the simulator and the tasks under the assumed constants of \cref{tab:constants}.
+
+\subsubsection{Feasibility mechanisms of the catalog}\label{sec:feasibility}
+
+We evaluated the catalog at a 20~MW IT load (turbine exhaust about \val{mech.turbine_exhaust_K}~K, engine exhaust about \val{mech.engine_exhaust_K}~K), 25\,$^\circ$C ambient, 50\% relative humidity and
+chilled water at 18 to 28\,$^\circ$C (\cref{tab:mech}; chilled fraction in steps of 0.05, wet tower, no grid import; one site, one point per entry). Five mechanisms follow.
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+\item Exhaust-only recovery limits the engine. An engine with absorption cooling is valid up to \val{mech.engine_max_frac_pct}\% of the IT heat on the chilled loop, with a stack at \val{mech.engine_stack_K}~K; at \val{mech.engine_first_fail_pct}\%
+the temperature-cross check fails, and at a chilled fraction of 1.0 the exhaust cannot supply the required duty. A turbine carries 100\% of the heat, with the stack still at \val{mech.turbine_100_stack_K}~K.
+\item A single-stage ORC cannot use turbine exhaust: with none of the three fluids (valid for \val{mech.orc_turbine_valid} of \val{mech.orc_turbine_n}) can the evaporator accept an exhaust of about \val{mech.turbine_exhaust_K}~K without exceeding the vapor limit while leaving the stack above the floor.
+\item On the engine, bottoming helps with the right fluid. Cyclopentane lowers fuel from \val{mech.eng_none_fuel_mw} to \val{mech.eng_cyc_fuel_mw}~MW (\val{mech.eng_cyc_saving_pct}\%) with \val{mech.eng_cyc_orc_net_mw}~MW of net ORC output, and toluene gives \val{mech.eng_toluene_fuel_mw}~MW; R245fa is infeasible because the exhaust is too hot for its vapor limit.
+\item Dry rejection fails in heat. At 32\,$^\circ$C ambient an engine with a dry cooler and absorption cooling fails the temperature-cross check, while with a wet tower it is valid at \val{mech.amb305_wet_fuel_mw}~MW.
+\item A water limit rules out wet towers: with a site limit of 0.5~kg/s, a wet tower fails the water check (the tower's make-up bound is \val{mech.water_wet_use_kg_s}~kg/s) and the dry-cooler plant is valid.
+\end{itemize}
+
+\begin{table}[tbp]
+\centering
+\input{generated/table_mech.tex}
+\caption{Fuel use and stack temperature of engine and turbine plants with absorption cooling and a wet tower against the share of the IT heat carried by the chilled loop (20~MW IT load,
+simulation, $n=2$ plants per row, assumed constants). ``Infeasible'' marks a plant that fails a hard check or cannot be sized. Data: \texttt{assets/mechanisms.json}.}
+\label{tab:mech}
+\end{table}
+
+\Cref{fig:fig_design_feasibility} extends this to the whole catalog over \val{feas.n_cells} cells (chilled fraction and ambient temperature, \val{feas.n_specs} specifications each). Of the \val{feas.n_cells} cells, \val{feas.n_cells_none} (all at 283~K) have no valid design because the chiller's heat rejection (ambient plus approach)
+is not above its evaporator temperature; free cooling is not modeled, so this is a limit of the model and not an engineering infeasibility. In the other \val{feas.n_cells_valid} cells the mean number of valid specifications is \val{feas.mean_valid} of \val{feas.n_specs},
+the winners span \val{feas.n_winner_types} distinct configurations, the engine wins in \val{feas.win.engine_absorption} cells with absorption cooling and \val{feas.win.engine_electric} with electric cooling, and the turbine with absorption cooling wins in \val{feas.win.turbine_absorption}; in
+\val{feas.n_ea_none} cells no engine and absorption design is valid.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\linewidth]{figures/pdf/fig_design_feasibility.pdf}
+\caption{Best configuration family over chilled fraction and ambient temperature for a 20~MW IT load among the \val{feas.n_specs} default specifications (simulation, \val{feas.n_cells} cells). Numbers are fuel use in MW; hatched cells have no valid
+configuration in the model; circles mark cells where no engine plus absorption design is valid. Data: \texttt{assets/design\_feasibility.json}.}
+\label{fig:fig_design_feasibility}
+\end{figure}
+
+\subsubsection{First-law against second-law blame}\label{sec:audit}
+
+A first-law ranking blames the component that dissipates the most energy to the surroundings. In one audited plant (\texttt{aud-0-00000}, a turbine plant with absorption cooling, fuel input \val{aud.ex_fuel_mw}~MW) it blames the heat rejector
+\val{aud.ex_rej_id}, which dissipates \val{aud.ex_rej_energy_mw}~MW but destroys \val{aud.ex_rej_ed_mw}~MW of exergy, while exergy is destroyed in the prime mover \val{aud.ex_pm_id} (\val{aud.ex_pm_ed_mw}~MW, with \val{aud.ex_pm_energy_mw}~MW of energy dissipated) and, among the
+other components, mostly in \val{aud.ex_top_id} (\val{aud.ex_top_ed_mw}~MW). Over plants, with the prime mover excluded because it was the largest destroyer in every plant, the first-law top choice is the true top destroyer in
+\val{aud.fl_hits_id} of \val{aud.n_id} in-distribution plants (random order: \val{aud.rnd_top1_id_pct}\%) and \val{aud.fl_hits_ood} of \val{aud.n_ood} held-out-topology plants (\val{aud.fl_top1_ood_pct}\%, Wilson 95\% interval \val{aud.fl_ci_lo_ood_pct} to \val{aud.fl_ci_hi_ood_pct}\%; random
+order \val{aud.rnd_top1_ood_pct}\%). In nDCG@3 the first-law ranking scores \val{aud.ndcg_fl_id} and \val{aud.ndcg_fl_ood} against \val{aud.ndcg_rnd_id} and \val{aud.ndcg_rnd_ood} for random order. On this small sample the first-law view is therefore not better than random order, and it is below random order on top-1, which is why the Audit task hides the exergy destruction and asks for it. The model result is pending, and \cref{fig:fig_audit_first_vs_second_law} has no model bar.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\linewidth]{figures/pdf/fig_audit_first_vs_second_law.pdf}
+\caption{First law against second law. Left: energy dissipated to the surroundings and exergy destroyed per component for one plant (simulation, $n=1$). Right: top-1 hit rate of the first-law ranking against random order, prime mover
+excluded, on \val{aud.n_id} in-distribution and \val{aud.n_ood} held-out-topology plants (simulation, seed 0); whiskers are 95\% Wilson intervals. Data: \texttt{assets/audit\_first\_vs\_second\_law.json}.}
+\label{fig:fig_audit_first_vs_second_law}
+\end{figure}
+
+\subsubsection{Symptom coverage of ledger faults}\label{sec:ledger}
+
+For each of \val{led.n} generated ledger rows (\val{led.n_single} with one fault, \val{led.n_double} with two) we ask whether the ledger shows a second-law symptom: a closure residual or a negative exergy destruction.
+\Cref{fig:fig_ledger_symptoms} gives the shares per fault type on the \val{led.n_single} single-fault rows. The result has a structure. A closure residual appears when a destruction line is wrong: in \val{led.comp_closure} of
+\val{led.comp_rows} rows with a component-line fault. It does not appear for a fault in a stream line or in the constant: in \val{led.stream_closure} of \val{led.stream_rows} such rows, because an error in a stream value $E[x]$ or in $T_0$
+enters the destruction lines of its producer and consumer with opposite signs and cancels in the sum (\cref{fig:fig_verifiers}); dropping a work term, by contrast, changes the closure residual by \val{led.demo_drop_work_mw}~MW in the example of the figure.
+For those \val{led.stream_rows} rows the only symptom is a negative destruction, visible in \val{led.stream_neg} of them. Overall \val{led.any_pct}\% of the rows show at least one symptom and \val{led.none_pct}\% show none; the two constant faults (\texttt{t0\_celsius}, \texttt{t0\_offset}; \val{led.t0_celsius_n} rows each) show
+no symptom at all. Parameter-range checks (V6) see \val{led.range_checks} of these faults, because the faults are in the equations and not in the plant parameters. A model that repairs the ledger therefore has to localize the fault from the text of the lines, not from the checks alone.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\linewidth]{figures/pdf/fig_ledger_symptoms.pdf}
+\caption{Symptoms of injected ledger faults: share of single-fault rows ($n=\val{led.n_single}$ of \val{led.n} generated rows, simulation, seed 0) showing a closure residual, a negative destruction, or either, by fault type and layer.
+Stream-line and constant faults never break closure, and two constant faults show no symptom at all; parameter-range checks see none of these faults. Data: \texttt{assets/ledger\_symptoms.json}; the all-rows numbers are in \cref{app:faults}.}
+\label{fig:fig_ledger_symptoms}
+\end{figure}
+
+\subsection{Model results}\label{sec:modelresults}
+
+\Cref{tab:results} holds the skeleton for the model results. Every cell is pending: no model has been trained, and nothing in this paper estimates what the cells will contain. When the runs exist we report all rows of the table for the held-out splits, with the intervals and tests of
+\cref{sec:protocol}.
+
+\begin{table}[tbp]
+\centering
+\input{generated/table_results.tex}
+\caption{Skeleton of the model results for the four tasks: base, SFT and SFT plus GRPO, each with harness none and agents plus skills. Metrics per task are listed in \cref{sec:protocol}. All cells are pending.}
+\label{tab:results}
+\end{table}
+
+\subsection{Ablations}\label{sec:ablations}
+
+\Cref{tab:ablation} lists the planned ablations: the four harness modes on the held-out gas-engine topology (RQ2), the reward channels (RQ4), SFT against GRPO from the base model (RQ3), an optional encoder-decoder variant \citep{zhang2025t5gemma}, and ThermoQA accuracy before and after training (RQ5). All results are pending.
+
+\begin{table}[tbp]
+\centering
+\input{generated/table_ablation.tex}
+\caption{Skeleton of the ablations. All results are pending.}
+\label{tab:ablation}
+\end{table}
+
+\subsection{Reward diagnostics}\label{sec:rewarddiag}
+
+Before any GPU time we asked how often a group of \val{rd.G} completions would have identical rewards, which carry no gradient under group-normalized advantages. The probe uses simulated policies that return the expert answer with probability $1-e$ and a damaged answer otherwise
+(\val{rd.repair.groups} groups per task and level, seed 0; no model). At an error rate of 5\% the share of such groups is \val{rd.repair.zv_e5_pct}\% for Repair, \val{rd.design.zv_e5_pct}\% for Design, \val{rd.audit.zv_e5_pct}\% for Audit and \val{rd.ledger.zv_e5_pct}\% for Ledger repair;
+at 10\% it is \val{rd.repair.zv_e10_pct}, \val{rd.design.zv_e10_pct}, \val{rd.audit.zv_e10_pct} and \val{rd.ledger.zv_e10_pct}\%; at 30\% it is \val{rd.repair.zv_e30_pct}, \val{rd.design.zv_e30_pct}, \val{rd.audit.zv_e30_pct} and \val{rd.ledger.zv_e30_pct}\%; and at 60\% it is
+\val{rd.repair.zv_e60_pct}, \val{rd.design.zv_e60_pct}, \val{rd.audit.zv_e60_pct} and \val{rd.ledger.zv_e60_pct}\%. A task on which the SFT model is already accurate gives GRPO little to learn from, which is the reason for RQ3. A fresh reward evaluation costs
+\val{rd.ledger.eval_ms}~ms for the ledger, \val{rd.repair.eval_ms}~ms for Repair, \val{rd.audit.eval_ms}~ms for Audit and \val{rd.design.eval_ms}~ms for Design per completion on the authoring machine (one CPU), so the reward is cheap relative to generation. \Cref{fig:fig_reward_signal} shows the curves.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\linewidth]{figures/pdf/fig_reward_signal.pdf}
+\caption{Reward signal before any GPU time: share of GRPO groups whose completions all receive the same reward, against the per-sample error rate of a simulated policy, for each task, with the cost of one reward evaluation
+(simulated policies on synthetic data, no model; \val{rd.repair.groups} groups of \val{rd.G} per task and level, seed 0). Data: \texttt{assets/reward\_signal.json}.}
+\label{fig:fig_reward_signal}
+\end{figure}

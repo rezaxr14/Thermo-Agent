@@ -1,0 +1,62 @@
+\begingroup\scriptsize\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.1}
+\begin{longtable}{@{}p{3.1cm}p{2.9cm}p{6.6cm}p{2.0cm}@{}}
+\caption{Component parameter registry (\texttt{core.components.PARAMS}). ``required'' means no default; other entries are the code default.}\label{tab:params}\\
+\toprule
+Type & Parameter & Meaning & Default \\
+\midrule
+\endfirsthead
+\toprule
+Type & Parameter & Meaning & Default \\
+\midrule
+\endhead
+\texttt{compressor} & \texttt{PR} & pressure ratio (-) & required \\
+ & \texttt{eta\_s} & isentropic efficiency (-) & required \\
+\texttt{turbine} & \texttt{P\_out} & outlet pressure (Pa) & required \\
+ & \texttt{eta\_s} & isentropic efficiency (-) & required \\
+\texttt{orc\_turbine} & \texttt{P\_out} & outlet pressure (Pa) & required \\
+ & \texttt{eta\_s} & isentropic efficiency (-) & required \\
+\texttt{pump} & \texttt{P\_out} & outlet pressure (Pa) & required \\
+ & \texttt{eta\_s} & isentropic efficiency (-) & required \\
+\texttt{combustor} & \texttt{T\_out} & outlet temperature (K) & required \\
+ & \texttt{dp} & pressure-drop fraction (-) & 0 \\
+ & \texttt{q\_loss} & heat-loss fraction of fuel LHV (-) & 0 \\
+\texttt{recuperator} & \texttt{T\_cold\_out} & cold-side outlet temperature (K) & required \\
+ & \texttt{dp\_cold} & cold-side pressure-drop fraction (-) & 0 \\
+ & \texttt{dp\_hot} & hot-side pressure-drop fraction (-) & 0 \\
+ & \texttt{useful\_heat} & flag: duty counts as delivered heat & 0 \\
+\texttt{hrsg} & \texttt{P\_steam} & steam pressure (Pa) & required \\
+ & \texttt{dp\_gas} & gas-side pressure-drop fraction (-) & 0 \\
+ & \texttt{econ\_approach\_K} & economiser approach (K) & 15 \\
+\texttt{orc\_evaporator} & \texttt{pinch\_K} & pinch at the bubble point (K) & 3 \\
+ & \texttt{dp\_hot} & hot-side pressure-drop fraction (-) & 0 \\
+ & \texttt{flow\_frac} & working-fluid flow between its minimum (0) and maximum (1); used when the flow is not given & required if flow not given \\
+ & \texttt{T\_stack\_min} & minimum exhaust outlet temperature (K) & 333.15 \\
+ & \texttt{T\_max\_K} & maximum working-fluid vapour temperature (K) & 420 \\
+\texttt{condenser} & \texttt{dT\_cw} & cooling-water temperature rise (K) & required \\
+\texttt{dc\_load} & \texttt{P\_it} & IT electrical power (W) & required \\
+ & \texttt{chilled\_fraction} & share of the heat sent to the chilled loop (-) & 1 \\
+ & \texttt{T\_return} & coolant return temperature (K) & required \\
+\texttt{absorption\_chiller} & \texttt{T\_chw\_out} & chilled-water outlet temperature (K) & required \\
+ & \texttt{T\_gen\_out} & generator outlet temperature (K) & required \\
+ & \texttt{dT\_rej} & heat-rejection water temperature rise (K) & required \\
+ & \texttt{eps} & fraction of the reversible COP (-) & 0.27 \\
+ & \texttt{COP\_max} & first-law COP ceiling (-) & 0.8 \\
+\texttt{heat\_pump} & \texttt{T\_sink\_out} & sink outlet temperature (K) & required \\
+ & \texttt{eps} & fraction of the Lorenz COP (-) & 0.5 \\
+ & \texttt{approach\_K} & evaporator and condenser approach (K) & 5 \\
+ & \texttt{Q\_sink} & heat duty to deliver (W); sizes the source cooling & one of Q\_sink or dT\_src \\
+ & \texttt{dT\_src} & source-side temperature drop (K) & one of Q\_sink or dT\_src \\
+\texttt{electric\_chiller} & \texttt{T\_chw\_out} & chilled-water outlet temperature (K) & required \\
+ & \texttt{dT\_rej} & heat-rejection water temperature rise (K) & required \\
+ & \texttt{eps} & fraction of the reversible COP (-) & 0.5 \\
+ & \texttt{approach\_K} & evaporator and condenser approach (K) & 5 \\
+\texttt{heat\_rejector} & \texttt{kind} & 'dry' (dry cooler) or 'wet' (evaporative tower) & dry \\
+ & \texttt{approach\_K} & approach to dry-bulb or wet-bulb (K) & required \\
+ & \texttt{fan\_frac} & fan electricity as a fraction of heat rejected (-) & 0.015 \\
+\texttt{gas\_engine} & \texttt{P\_el} & rated electrical output (W) & required \\
+ & \texttt{eta\_el} & electrical efficiency on LHV (-) & required \\
+ & \texttt{f\_loss} & jacket and radiation heat, fraction of fuel energy, rejected to ambient (-) & required \\
+ & \texttt{air\_excess} & air flow over stoichiometric (-) & 1.8 \\
+ & \texttt{P\_exh} & exhaust pressure (Pa) & 110000 \\
+\bottomrule
+\end{longtable}\endgroup

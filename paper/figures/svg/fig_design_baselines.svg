@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 556" width="1000" height="556" font-family="Helvetica, Arial, 'Liberation Sans', sans-serif">
+<rect width="1000" height="556" fill="#FFFFFF"/>
+<text x="324" y="40" font-size="13" font-weight="bold" text-anchor="middle" fill="#333333">share of sites within 2 % of the best known fuel use</text>
+<path d="M88,70 L88,400" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<path d="M84,400 L88,400" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<text x="80" y="404" font-size="11.5" text-anchor="end" fill="#666666">0 %</text>
+<path d="M84,317.5 L88,317.5" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<text x="80" y="321.5" font-size="11.5" text-anchor="end" fill="#666666">25 %</text>
+<path d="M84,235 L88,235" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<text x="80" y="239" font-size="11.5" text-anchor="end" fill="#666666">50 %</text>
+<path d="M84,152.5 L88,152.5" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<text x="80" y="156.5" font-size="11.5" text-anchor="end" fill="#666666">75 %</text>
+<path d="M84,70 L88,70" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<text x="80" y="74" font-size="11.5" text-anchor="end" fill="#666666">100 %</text>
+<path d="M88,400 L560,400" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<path d="M88,400 L88,404" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<text x="88" y="420" font-size="11.5" text-anchor="middle" fill="#666666">1</text>
+<path d="M155.43,400 L155.43,404" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<text x="155.43" y="420" font-size="11.5" text-anchor="middle" fill="#666666">2</text>
+<path d="M222.86,400 L222.86,404" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<text x="222.86" y="420" font-size="11.5" text-anchor="middle" fill="#666666">4</text>
+<path d="M290.29,400 L290.29,404" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<text x="290.29" y="420" font-size="11.5" text-anchor="middle" fill="#666666">8</text>
+<path d="M357.71,400 L357.71,404" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<text x="357.71" y="420" font-size="11.5" text-anchor="middle" fill="#666666">16</text>
+<path d="M425.14,400 L425.14,404" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<text x="425.14" y="420" font-size="11.5" text-anchor="middle" fill="#666666">32</text>
+<path d="M492.57,400 L492.57,404" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<text x="492.57" y="420" font-size="11.5" text-anchor="middle" fill="#666666">64</text>
+<path d="M560,400 L560,404" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<text x="560" y="420" font-size="11.5" text-anchor="middle" fill="#666666">128</text>
+<text x="324" y="440" font-size="12" text-anchor="middle" fill="#666666">design evaluations (log scale)</text>
+<path d="M88,400 L155.43,400 L194.87,400 L222.86,400 L262.3,400 L290.29,400 L329.73,400 L357.71,400 L397.16,317.5 L425.14,290.11 L464.59,248.86 L492.57,166.36 L532.01,166.36 L560,166.36" fill="none" stroke="#8C8C8C" stroke-width="2.6" stroke-linejoin="round"/>
+<circle cx="88" cy="400" r="3.2" fill="#8C8C8C" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="155.43" cy="400" r="3.2" fill="#8C8C8C" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="194.87" cy="400" r="3.2" fill="#8C8C8C" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="222.86" cy="400" r="3.2" fill="#8C8C8C" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="262.3" cy="400" r="3.2" fill="#8C8C8C" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="290.29" cy="400" r="3.2" fill="#8C8C8C" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="329.73" cy="400" r="3.2" fill="#8C8C8C" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="357.71" cy="400" r="3.2" fill="#8C8C8C" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="397.16" cy="317.5" r="3.2" fill="#8C8C8C" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="425.14" cy="290.11" r="3.2" fill="#8C8C8C" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="464.59" cy="248.86" r="3.2" fill="#8C8C8C" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="492.57" cy="166.36" r="3.2" fill="#8C8C8C" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="532.01" cy="166.36" r="3.2" fill="#8C8C8C" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="560" cy="166.36" r="3.2" fill="#8C8C8C" stroke="#FFFFFF" stroke-width="1.0"/>
+<path d="M88,386.14 L155.43,358.75 L194.87,344.89 L222.86,344.89 L262.3,331.36 L290.29,290.11 L329.73,290.11 L357.71,290.11 L397.16,262.39 L425.14,248.86 L464.59,221.14 L492.57,179.89 L532.01,166.36 L560,152.5" fill="none" stroke="#DD8452" stroke-width="2.6" stroke-linejoin="round"/>
+<circle cx="88" cy="386.14" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="155.43" cy="358.75" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="194.87" cy="344.89" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="222.86" cy="344.89" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="262.3" cy="331.36" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="290.29" cy="290.11" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="329.73" cy="290.11" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="357.71" cy="290.11" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="397.16" cy="262.39" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="425.14" cy="248.86" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="464.59" cy="221.14" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="492.57" cy="179.89" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="532.01" cy="166.36" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="560" cy="152.5" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<path d="M88,400 L155.43,400 L194.87,400 L222.86,400 L262.3,400 L290.29,400 L329.73,400 L357.71,400 L397.16,317.5 L425.14,290.11 L464.59,235 L492.57,138.64 L532.01,97.39 L560,70" fill="none" stroke="#4C72B0" stroke-width="2.6" stroke-linejoin="round"/>
+<circle cx="88" cy="400" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="155.43" cy="400" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="194.87" cy="400" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="222.86" cy="400" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="262.3" cy="400" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="290.29" cy="400" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="329.73" cy="400" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="357.71" cy="400" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="397.16" cy="317.5" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="425.14" cy="290.11" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="464.59" cy="235" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="492.57" cy="138.64" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="532.01" cy="97.39" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="560" cy="70" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<text x="568" y="74" font-size="12.5" font-weight="bold" fill="#34548A">enumerate, then polish</text>
+<text x="568" y="156.5" font-size="12.5" font-weight="bold" fill="#8A4B06">random search</text>
+<text x="568" y="172.5" font-size="12.5" font-weight="bold" fill="#5B6472">enumerate the default catalog</text>
+<rect x="102" y="82" width="150" height="62" rx="8" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="1.6" stroke-dasharray="6 4"/>
+<text x="177" y="110" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#666666">pending:</text>
+<text x="177" y="127" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#666666">model result</text>
+<rect x="770" y="70" width="214" height="262" rx="10" fill="#F7F7F8" stroke="#BDBDBD" stroke-width="1.4"/>
+<text x="784" y="94" font-size="13" font-weight="bold" fill="#333333">Reading the curves</text>
+<text x="784" y="116" font-size="12" fill="#666666">24 sites held out of training</text>
+<text x="784" y="131.5" font-size="12" fill="#666666">(validation and test splits).</text>
+<text x="784" y="147" font-size="12" fill="#666666">Reference: the best of</text>
+<text x="784" y="162.5" font-size="12" fill="#666666">enumeration plus polishing, 144</text>
+<text x="784" y="178" font-size="12" fill="#666666">evaluations at most. After 16</text>
+<text x="784" y="193.5" font-size="12" fill="#666666">evaluations: enumeration 0 %,</text>
+<text x="784" y="209" font-size="12" fill="#666666">random 33 %, polish 0 %. After</text>
+<text x="784" y="224.5" font-size="12" fill="#666666">128: 71 %, 75 %, 100 %. The</text>
+<text x="784" y="240" font-size="12" fill="#666666">polish curve runs the procedure</text>
+<text x="784" y="255.5" font-size="12" fill="#666666">that defines the reference, so it</text>
+<text x="784" y="271" font-size="12" fill="#666666">shows speed to the reference, not</text>
+<text x="784" y="286.5" font-size="12" fill="#666666">independent quality.</text>
+<text x="16" y="492" font-size="11.5" fill="#666666">Simulation, n = 24 sites, seed 0; each point is the share of sites whose best design after that many evaluations is within 2 % of the reference (a site with no valid design counts as outside).</text>
+</svg>

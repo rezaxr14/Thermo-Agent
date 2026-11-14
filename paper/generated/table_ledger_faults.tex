@@ -1,0 +1,22 @@
+\begingroup\small\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}llrrrrrr@{}}
+\toprule
+ & & \multicolumn{4}{c}{single-fault rows} & \multicolumn{2}{c}{all rows} \\
+\cmidrule(lr){3-6}\cmidrule(lr){7-8}
+Layer & Fault & $n$ & closure & neg. $\ED$ & either & $n$ & either \\
+\midrule
+stream lines & \texttt{missing\_m} & 24 & 0.00 & 0.46 & 0.46 & 46 & 0.70 \\
+stream lines & \texttt{missing\_ech} & 12 & 0.00 & 0.33 & 0.33 & 27 & 0.70 \\
+stream lines & \texttt{sign\_T0} & 28 & 0.00 & 0.71 & 0.71 & 61 & 0.79 \\
+stream lines & \texttt{t0\_literal} & 26 & 0.00 & 0.73 & 0.73 & 59 & 0.86 \\
+stream lines & \texttt{wrong\_ref}$^*$ & 16 & 0.00 & 0.62 & 0.62 & 41 & 0.85 \\
+component lines & \texttt{dropped\_term} & 32 & 1.00 & 0.28 & 1.00 & 56 & 1.00 \\
+component lines & \texttt{dropped\_work}$^*$ & 28 & 1.00 & 0.46 & 1.00 & 48 & 1.00 \\
+component lines & \texttt{sign\_flip} & 26 & 1.00 & 0.31 & 1.00 & 60 & 1.00 \\
+component lines & \texttt{wrong\_factor} & 42 & 1.00 & 0.29 & 1.00 & 77 & 1.00 \\
+component lines & \texttt{wrong\_stream}$^*$ & 41 & 1.00 & 0.49 & 1.00 & 85 & 1.00 \\
+stream or component line & \texttt{unit\_slip} & 71 & 0.66 & 0.59 & 0.99 & 134 & 0.98 \\
+constants & \texttt{t0\_celsius} & 28 & 0.00 & 0.00 & 0.00 & 54 & 0.35 \\
+constants & \texttt{t0\_offset} & 28 & 0.00 & 0.00 & 0.00 & 50 & 0.42 \\
+\bottomrule
+\end{tabular}\endgroup

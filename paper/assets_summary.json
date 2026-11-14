@@ -1,0 +1,3078 @@
+{
+ "description": "every measured number quoted in the paper: value, TeX form, source asset, command, seed and sample size",
+ "n_keys": 384,
+ "values": {
+  "env.n_components": {
+   "value": 15,
+   "tex": "15",
+   "source": "assets/environment.json",
+   "command": "thermo_agent.core.components (REQUIRED_PORTS, PORT_CLASS, PARAMS); inspect.signature(synth.topologies.dc_chp); train.config; design.spec",
+   "seed": null,
+   "n": 15
+  },
+  "env.n_catalog": {
+   "value": 32,
+   "tex": "32",
+   "source": "assets/environment.json",
+   "command": "thermo_agent.core.components (REQUIRED_PORTS, PORT_CLASS, PARAMS); inspect.signature(synth.topologies.dc_chp); train.config; design.spec",
+   "seed": null,
+   "n": null
+  },
+  "env.n_catalog_heat": {
+   "value": 64,
+   "tex": "64",
+   "source": "assets/environment.json",
+   "command": "thermo_agent.core.components (REQUIRED_PORTS, PORT_CLASS, PARAMS); inspect.signature(synth.topologies.dc_chp); train.config; design.spec",
+   "seed": null,
+   "n": null
+  },
+  "env.n_repair_faults": {
+   "value": 5,
+   "tex": "5",
+   "source": "assets/environment.json",
+   "command": "thermo_agent.core.components (REQUIRED_PORTS, PORT_CLASS, PARAMS); inspect.signature(synth.topologies.dc_chp); train.config; design.spec",
+   "seed": null,
+   "n": null
+  },
+  "env.n_ledger_faults": {
+   "value": 13,
+   "tex": "13",
+   "source": "assets/ledger_symptoms.json",
+   "command": "ledger.data OUT -n 600 --seed 0; ledger.run_eval.symptoms(row) over all splits",
+   "seed": null,
+   "n": null
+  },
+  "env.n_skills": {
+   "value": 8,
+   "tex": "8",
+   "source": "assets/harness.json",
+   "command": "agent.harness (MODES, skill_names, TASK_SKILLS), agent.build_harness.frontmatter, core.components.REQUIRED_PORTS; topologies of test_ood_topology rows",
+   "seed": null,
+   "n": null
+  },
+  "env.n_params": {
+   "value": 49,
+   "tex": "49",
+   "source": "assets/environment.json",
+   "command": "thermo_agent.core.components (REQUIRED_PORTS, PORT_CLASS, PARAMS); inspect.signature(synth.topologies.dc_chp); train.config; design.spec",
+   "seed": null,
+   "n": null
+  },
+  "env.n_tests": {
+   "value": 234,
+   "tex": "234",
+   "source": "assets/environment.json",
+   "command": "python -m pytest -q",
+   "seed": null,
+   "n": null
+  },
+  "env.tests_minutes": {
+   "value": 3.0,
+   "tex": "3",
+   "source": "assets/environment.json",
+   "command": "python -m pytest -q",
+   "seed": null,
+   "n": null
+  },
+  "env.ver.CoolProp": {
+   "value": "8.0.0",
+   "tex": "8.0.0",
+   "source": "assets/environment.json",
+   "command": "library versions in the authoring sandbox",
+   "seed": null,
+   "n": null
+  },
+  "env.ver.numpy": {
+   "value": "2.4.4",
+   "tex": "2.4.4",
+   "source": "assets/environment.json",
+   "command": "library versions in the authoring sandbox",
+   "seed": null,
+   "n": null
+  },
+  "env.ver.scipy": {
+   "value": "1.17.1",
+   "tex": "1.17.1",
+   "source": "assets/environment.json",
+   "command": "library versions in the authoring sandbox",
+   "seed": null,
+   "n": null
+  },
+  "env.ver.pydantic": {
+   "value": "2.14.2",
+   "tex": "2.14.2",
+   "source": "assets/environment.json",
+   "command": "library versions in the authoring sandbox",
+   "seed": null,
+   "n": null
+  },
+  "env.ver.pandas": {
+   "value": "3.0.2",
+   "tex": "3.0.2",
+   "source": "assets/environment.json",
+   "command": "library versions in the authoring sandbox",
+   "seed": null,
+   "n": null
+  },
+  "env.ver.python": {
+   "value": "3.12.3",
+   "tex": "3.12.3",
+   "source": "assets/environment.json",
+   "command": "library versions in the authoring sandbox",
+   "seed": null,
+   "n": null
+  },
+  "xchk.wnet_rel_pct": {
+   "value": 0.0004,
+   "tex": "0.0004",
+   "source": "assets/crosscheck.json",
+   "command": "synth.topologies.cgam_orc(n_air=R['n_a']*1e3, T_cond=T11, T_cw_in=T11, dT_cw=10) solved by core.solve.solve; reference core.cgam_plant.solve()",
+   "seed": null,
+   "n": null
+  },
+  "xchk.etaI_rel_pct": {
+   "value": 0.026,
+   "tex": "0.026",
+   "source": "assets/crosscheck.json",
+   "command": "synth.topologies.cgam_orc(n_air=R['n_a']*1e3, T_cond=T11, T_cw_in=T11, dT_cw=10) solved by core.solve.solve; reference core.cgam_plant.solve()",
+   "seed": null,
+   "n": null
+  },
+  "xchk.etaII_diff_pct": {
+   "value": -1.05,
+   "tex": "$-$1.05",
+   "source": "assets/crosscheck.json",
+   "command": "synth.topologies.cgam_orc(n_air=R['n_a']*1e3, T_cond=T11, T_cw_in=T11, dT_cw=10) solved by core.solve.solve; reference core.cgam_plant.solve()",
+   "seed": null,
+   "n": null
+  },
+  "xchk.pinch_diff_K": {
+   "value": 0.004,
+   "tex": "0.004",
+   "source": "assets/crosscheck.json",
+   "command": "synth.topologies.cgam_orc(n_air=R['n_a']*1e3, T_cond=T11, T_cw_in=T11, dT_cw=10) solved by core.solve.solve; reference core.cgam_plant.solve()",
+   "seed": null,
+   "n": null
+  },
+  "xchk.closure_w": {
+   "value": 7.450580596923828e-09,
+   "tex": "$7.5\\times10^{-9}$",
+   "source": "assets/crosscheck.json",
+   "command": "synth.topologies.cgam_orc(n_air=R['n_a']*1e3, T_cond=T11, T_cw_in=T11, dT_cw=10) solved by core.solve.solve; reference core.cgam_plant.solve()",
+   "seed": null,
+   "n": null
+  },
+  "xchk.ed_max_rel_pct": {
+   "value": 0.97,
+   "tex": "0.97",
+   "source": "assets/crosscheck.json",
+   "command": "synth.topologies.cgam_orc(n_air=R['n_a']*1e3, T_cond=T11, T_cw_in=T11, dT_cw=10) solved by core.solve.solve; reference core.cgam_plant.solve()",
+   "seed": null,
+   "n": null
+  },
+  "ex.fuel_abs_mw": {
+   "value": 56.5,
+   "tex": "56.5",
+   "source": "assets/example_plant.json",
+   "command": "size_generation(dc_chp, P_it=20e6, chilled_fraction=0.5, cooling=C, prime_mover='turbine', rejection='ext'); core.solve.solve",
+   "seed": null,
+   "n": null
+  },
+  "ex.fuel_el_mw": {
+   "value": 58.6,
+   "tex": "58.6",
+   "source": "assets/example_plant.json",
+   "command": "size_generation(dc_chp, P_it=20e6, chilled_fraction=0.5, cooling=C, prime_mover='turbine', rejection='ext'); core.solve.solve",
+   "seed": null,
+   "n": null
+  },
+  "ex.etaII_abs_pct": {
+   "value": 34.9,
+   "tex": "34.9",
+   "source": "assets/example_plant.json",
+   "command": "size_generation(dc_chp, P_it=20e6, chilled_fraction=0.5, cooling=C, prime_mover='turbine', rejection='ext'); core.solve.solve",
+   "seed": null,
+   "n": null
+  },
+  "ex.etaII_el_pct": {
+   "value": 33.7,
+   "tex": "33.7",
+   "source": "assets/example_plant.json",
+   "command": "size_generation(dc_chp, P_it=20e6, chilled_fraction=0.5, cooling=C, prime_mover='turbine', rejection='ext'); core.solve.solve",
+   "seed": null,
+   "n": null
+  },
+  "ex.cop_abs": {
+   "value": 0.8,
+   "tex": "0.80",
+   "source": "assets/example_plant.json",
+   "command": "size_generation(dc_chp, P_it=20e6, chilled_fraction=0.5, cooling=C, prime_mover='turbine', rejection='ext'); core.solve.solve",
+   "seed": null,
+   "n": null
+  },
+  "ex.cop_el": {
+   "value": 9.1,
+   "tex": "9.1",
+   "source": "assets/example_plant.json",
+   "command": "size_generation(dc_chp, P_it=20e6, chilled_fraction=0.5, cooling=C, prime_mover='turbine', rejection='ext'); core.solve.solve",
+   "seed": null,
+   "n": null
+  },
+  "ex.ed_cc_mw": {
+   "value": 17.9,
+   "tex": "17.9",
+   "source": "assets/example_plant.json",
+   "command": "size_generation(dc_chp, P_it=20e6, chilled_fraction=0.5, cooling=C, prime_mover='turbine', rejection='ext'); core.solve.solve",
+   "seed": null,
+   "n": null
+  },
+  "ex.ed_hx_mw": {
+   "value": 5.5,
+   "tex": "5.5",
+   "source": "assets/example_plant.json",
+   "command": "size_generation(dc_chp, P_it=20e6, chilled_fraction=0.5, cooling=C, prime_mover='turbine', rejection='ext'); core.solve.solve",
+   "seed": null,
+   "n": null
+  },
+  "ex.ed_gt_mw": {
+   "value": 2.3,
+   "tex": "2.3",
+   "source": "assets/example_plant.json",
+   "command": "size_generation(dc_chp, P_it=20e6, chilled_fraction=0.5, cooling=C, prime_mover='turbine', rejection='ext'); core.solve.solve",
+   "seed": null,
+   "n": null
+  },
+  "ex.ed_ch_mw": {
+   "value": 1.9,
+   "tex": "1.9",
+   "source": "assets/example_plant.json",
+   "command": "size_generation(dc_chp, P_it=20e6, chilled_fraction=0.5, cooling=C, prime_mover='turbine', rejection='ext'); core.solve.solve",
+   "seed": null,
+   "n": null
+  },
+  "ex.ed_ac_mw": {
+   "value": 1.5,
+   "tex": "1.5",
+   "source": "assets/example_plant.json",
+   "command": "size_generation(dc_chp, P_it=20e6, chilled_fraction=0.5, cooling=C, prime_mover='turbine', rejection='ext'); core.solve.solve",
+   "seed": null,
+   "n": null
+  },
+  "ex.ed_dc_mw": {
+   "value": 20.1,
+   "tex": "20.1",
+   "source": "assets/example_plant.json",
+   "command": "size_generation(dc_chp, P_it=20e6, chilled_fraction=0.5, cooling=C, prime_mover='turbine', rejection='ext'); core.solve.solve",
+   "seed": null,
+   "n": null
+  },
+  "exf.fuel_mw": {
+   "value": 60.5,
+   "tex": "60.5",
+   "source": "assets/exergy_flow.json",
+   "command": "core.solve.solve(synth.topologies.size_generation(dc_chp, **plant_kwargs))",
+   "seed": null,
+   "n": 1
+  },
+  "exf.net_el_mw": {
+   "value": 20.6,
+   "tex": "20.6",
+   "source": "assets/exergy_flow.json",
+   "command": "core.solve.solve(synth.topologies.size_generation(dc_chp, **plant_kwargs))",
+   "seed": null,
+   "n": 1
+  },
+  "exf.cc_mw": {
+   "value": 18.3,
+   "tex": "18.3",
+   "source": "assets/exergy_flow.json",
+   "command": "core.solve.solve(synth.topologies.size_generation(dc_chp, **plant_kwargs))",
+   "seed": null,
+   "n": 1
+  },
+  "exf.cc_share_pct": {
+   "value": 30.0,
+   "tex": "30",
+   "source": "assets/exergy_flow.json",
+   "command": "core.solve.solve(synth.topologies.size_generation(dc_chp, **plant_kwargs))",
+   "seed": null,
+   "n": 1
+  },
+  "exf.stack_mw": {
+   "value": 7.4,
+   "tex": "7.4",
+   "source": "assets/exergy_flow.json",
+   "command": "core.solve.solve(synth.topologies.size_generation(dc_chp, **plant_kwargs))",
+   "seed": null,
+   "n": 1
+  },
+  "exf.stack_share_pct": {
+   "value": 12.0,
+   "tex": "12",
+   "source": "assets/exergy_flow.json",
+   "command": "core.solve.solve(synth.topologies.size_generation(dc_chp, **plant_kwargs))",
+   "seed": null,
+   "n": 1
+  },
+  "exf.hx_mw": {
+   "value": 5.6,
+   "tex": "5.6",
+   "source": "assets/exergy_flow.json",
+   "command": "core.solve.solve(synth.topologies.size_generation(dc_chp, **plant_kwargs))",
+   "seed": null,
+   "n": 1
+  },
+  "exf.dc_mw": {
+   "value": 20.1,
+   "tex": "20.1",
+   "source": "assets/exergy_flow.json",
+   "command": "core.solve.solve(synth.topologies.size_generation(dc_chp, **plant_kwargs))",
+   "seed": null,
+   "n": 1
+  },
+  "exf.plant_total_mw": {
+   "value": 32.0,
+   "tex": "32.0",
+   "source": "assets/exergy_flow.json",
+   "command": "core.solve.solve(synth.topologies.size_generation(dc_chp, **plant_kwargs))",
+   "seed": null,
+   "n": 1
+  },
+  "exf.cool_ex_mw": {
+   "value": 0.07,
+   "tex": "0.07",
+   "source": "assets/exergy_flow.json",
+   "command": "core.solve.solve(synth.topologies.size_generation(dc_chp, **plant_kwargs))",
+   "seed": null,
+   "n": 1
+  },
+  "exf.heat_ex_mw": {
+   "value": 0.42,
+   "tex": "0.42",
+   "source": "assets/exergy_flow.json",
+   "command": "core.solve.solve(synth.topologies.size_generation(dc_chp, **plant_kwargs))",
+   "seed": null,
+   "n": 1
+  },
+  "exf.cool_mw": {
+   "value": 10.0,
+   "tex": "10.0",
+   "source": "assets/exergy_flow.json",
+   "command": "core.solve.solve(synth.topologies.size_generation(dc_chp, **plant_kwargs))",
+   "seed": null,
+   "n": 1
+  },
+  "exf.heat_mw": {
+   "value": 4.0,
+   "tex": "4.0",
+   "source": "assets/exergy_flow.json",
+   "command": "core.solve.solve(synth.topologies.size_generation(dc_chp, **plant_kwargs))",
+   "seed": null,
+   "n": 1
+  },
+  "exf.rej_energy_mw": {
+   "value": 22.8,
+   "tex": "22.8",
+   "source": "assets/exergy_flow.json",
+   "command": "core.solve.solve(synth.topologies.size_generation(dc_chp, **plant_kwargs))",
+   "seed": null,
+   "n": 1
+  },
+  "exf.rej_ed_mw": {
+   "value": 1.2,
+   "tex": "1.2",
+   "source": "assets/exergy_flow.json",
+   "command": "core.solve.solve(synth.topologies.size_generation(dc_chp, **plant_kwargs))",
+   "seed": null,
+   "n": 1
+  },
+  "exf.solve_ms": {
+   "value": 14.0,
+   "tex": "14",
+   "source": "assets/exergy_flow.json",
+   "command": "core.solve.solve(synth.topologies.size_generation(dc_chp, **plant_kwargs))",
+   "seed": null,
+   "n": 1
+  },
+  "mech.engine_max_frac_pct": {
+   "value": 70,
+   "tex": "70",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": 15
+  },
+  "mech.engine_first_fail_pct": {
+   "value": 75,
+   "tex": "75",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": 15
+  },
+  "mech.engine_stack_K": {
+   "value": 388.0,
+   "tex": "388",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.engine_fuel_max_mw": {
+   "value": 49.0,
+   "tex": "49.0",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.engine_fail_reason": {
+   "value": "failed: V#a_no_temperature_cross",
+   "tex": "failed: V\\#a\\_no\\_temperature\\_cross",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.engine_100_reason": {
+   "value": "sizing: sizing run failed: HX: the hot stream cannot supply the required duty of # MW",
+   "tex": "sizing: sizing run failed: HX: the hot stream cannot supply the required duty of \\# MW",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.turbine_exhaust_K": {
+   "value": 860.0,
+   "tex": "860",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.engine_exhaust_K": {
+   "value": 869.0,
+   "tex": "869",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.turbine_100_valid": {
+   "value": 1,
+   "tex": "1",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.turbine_100_stack_K": {
+   "value": 483.0,
+   "tex": "483",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.turbine_100_fuel_mw": {
+   "value": 58.4,
+   "tex": "58.4",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.turbine_valid_all": {
+   "value": 1,
+   "tex": "1",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": 15
+  },
+  "mech.orc_turbine_valid": {
+   "value": 0,
+   "tex": "0",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": 3
+  },
+  "mech.orc_turbine_n": {
+   "value": 3,
+   "tex": "3",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.orc_turbine_reason": {
+   "value": "sizing: sizing run failed: EVA: exhaust at # K is too hot for Cyclopentane (vapour limit # K) while leaving the stack above # K; sizing: sizing run failed: EVA: exhaust at # K is too hot for R#fa (vapour limit # K) while leaving the stack above # K; sizing: sizing run failed: EVA: exhaust at # K is too hot for Toluene (vapour limit # K) while leaving the stack above # K",
+   "tex": "sizing: sizing run failed: EVA: exhaust at \\# K is too hot for Cyclopentane (vapour limit \\# K) while leaving the stack above \\# K; sizing: sizing run failed: EVA: exhaust at \\# K is too hot for R\\#fa (vapour limit \\# K) while leaving the stack above \\# K; sizing: sizing run failed: EVA: exhaust at \\# K is too hot for Toluene (vapour limit \\# K) while leaving the stack above \\# K",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.eng_none_fuel_mw": {
+   "value": 48.7,
+   "tex": "48.7",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.eng_cyc_fuel_mw": {
+   "value": 46.6,
+   "tex": "46.6",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.eng_cyc_saving_pct": {
+   "value": 4.2,
+   "tex": "4.2",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.eng_r245fa_valid": {
+   "value": 0,
+   "tex": "0",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.eng_r245fa_reason": {
+   "value": "sizing: sizing run failed: EVA: exhaust at # K is too hot for R#fa (vapour limit # K) while leaving the stack above # K",
+   "tex": "sizing: sizing run failed: EVA: exhaust at \\# K is too hot for R\\#fa (vapour limit \\# K) while leaving the stack above \\# K",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.eng_toluene_valid": {
+   "value": 1,
+   "tex": "1",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.eng_toluene_fuel_mw": {
+   "value": 47.1,
+   "tex": "47.1",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.eng_cyc_orc_net_mw": {
+   "value": 0.94,
+   "tex": "0.94",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.amb305_dry_valid": {
+   "value": 0,
+   "tex": "0",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.amb305_dry_reason": {
+   "value": "failed: V#a_no_temperature_cross",
+   "tex": "failed: V\\#a\\_no\\_temperature\\_cross",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.amb305_wet_valid": {
+   "value": 1,
+   "tex": "1",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.amb305_wet_fuel_mw": {
+   "value": 48.7,
+   "tex": "48.7",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.water_dry_valid": {
+   "value": 1,
+   "tex": "1",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.water_wet_valid": {
+   "value": 0,
+   "tex": "0",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.water_wet_reason": {
+   "value": "failed: V#e_water_limit",
+   "tex": "failed: V\\#e\\_water\\_limit",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "mech.water_wet_use_kg_s": {
+   "value": 9.2,
+   "tex": "9.2",
+   "source": "assets/mechanisms.json",
+   "command": "design.build.evaluate_design(Site(it_load_w=20e6, cooling_load_w=f*20e6, T0, RH=0.5, supply 291.15 K, return 301.15 K, no grid import), design.spec.default_spec(...))",
+   "seed": null,
+   "n": null
+  },
+  "feas.n_cells": {
+   "value": 63,
+   "tex": "63",
+   "source": "assets/design_feasibility.json",
+   "command": "design.search.enumerate_designs on Site(it_load_w=20e6, cooling_load_w=cf*20e6, T0=T, RH=0.5, supply 291.15 K, return 301.15 K); design.build.evaluate_design",
+   "seed": null,
+   "n": 63
+  },
+  "feas.n_specs": {
+   "value": 32,
+   "tex": "32",
+   "source": "assets/design_feasibility.json",
+   "command": "design.search.enumerate_designs on Site(it_load_w=20e6, cooling_load_w=cf*20e6, T0=T, RH=0.5, supply 291.15 K, return 301.15 K); design.build.evaluate_design",
+   "seed": null,
+   "n": null
+  },
+  "feas.n_cells_none": {
+   "value": 9,
+   "tex": "9",
+   "source": "assets/design_feasibility.json",
+   "command": "design.search.enumerate_designs on Site(it_load_w=20e6, cooling_load_w=cf*20e6, T0=T, RH=0.5, supply 291.15 K, return 301.15 K); design.build.evaluate_design",
+   "seed": null,
+   "n": null
+  },
+  "feas.mean_valid": {
+   "value": 7.8,
+   "tex": "7.8",
+   "source": "assets/design_feasibility.json",
+   "command": "design.search.enumerate_designs on Site(it_load_w=20e6, cooling_load_w=cf*20e6, T0=T, RH=0.5, supply 291.15 K, return 301.15 K); design.build.evaluate_design",
+   "seed": null,
+   "n": null
+  },
+  "feas.n_winner_types": {
+   "value": 11,
+   "tex": "11",
+   "source": "assets/design_feasibility.json",
+   "command": "design.search.enumerate_designs on Site(it_load_w=20e6, cooling_load_w=cf*20e6, T0=T, RH=0.5, supply 291.15 K, return 301.15 K); design.build.evaluate_design",
+   "seed": null,
+   "n": null
+  },
+  "feas.n_cells_valid": {
+   "value": 54,
+   "tex": "54",
+   "source": "assets/design_feasibility.json",
+   "command": "design.search.enumerate_designs on Site(it_load_w=20e6, cooling_load_w=cf*20e6, T0=T, RH=0.5, supply 291.15 K, return 301.15 K); design.build.evaluate_design",
+   "seed": null,
+   "n": null
+  },
+  "feas.n_ea_none": {
+   "value": 19,
+   "tex": "19",
+   "source": "assets/design_feasibility.json",
+   "command": "design.search.enumerate_designs on Site(it_load_w=20e6, cooling_load_w=cf*20e6, T0=T, RH=0.5, supply 291.15 K, return 301.15 K); design.build.evaluate_design",
+   "seed": null,
+   "n": null
+  },
+  "feas.n_cells_283": {
+   "value": 9,
+   "tex": "9",
+   "source": "assets/design_feasibility.json",
+   "command": "design.search.enumerate_designs on Site(it_load_w=20e6, cooling_load_w=cf*20e6, T0=T, RH=0.5, supply 291.15 K, return 301.15 K); design.build.evaluate_design",
+   "seed": null,
+   "n": null
+  },
+  "feas.chiller_reason_share_pct": {
+   "value": 100,
+   "tex": "100",
+   "source": "assets/design_feasibility.json",
+   "command": "design.search.enumerate_designs on Site(it_load_w=20e6, cooling_load_w=cf*20e6, T0=T, RH=0.5, supply 291.15 K, return 301.15 K); design.build.evaluate_design",
+   "seed": null,
+   "n": null
+  },
+  "feas.win.engine_absorption": {
+   "value": 35,
+   "tex": "35",
+   "source": "assets/design_feasibility.json",
+   "command": "design.search.enumerate_designs on Site(it_load_w=20e6, cooling_load_w=cf*20e6, T0=T, RH=0.5, supply 291.15 K, return 301.15 K); design.build.evaluate_design",
+   "seed": null,
+   "n": null
+  },
+  "feas.win.engine_electric": {
+   "value": 17,
+   "tex": "17",
+   "source": "assets/design_feasibility.json",
+   "command": "design.search.enumerate_designs on Site(it_load_w=20e6, cooling_load_w=cf*20e6, T0=T, RH=0.5, supply 291.15 K, return 301.15 K); design.build.evaluate_design",
+   "seed": null,
+   "n": null
+  },
+  "feas.win.turbine_absorption": {
+   "value": 2,
+   "tex": "2",
+   "source": "assets/design_feasibility.json",
+   "command": "design.search.enumerate_designs on Site(it_load_w=20e6, cooling_load_w=cf*20e6, T0=T, RH=0.5, supply 291.15 K, return 301.15 K); design.build.evaluate_design",
+   "seed": null,
+   "n": null
+  },
+  "led.n": {
+   "value": 600,
+   "tex": "600",
+   "source": "assets/ledger_symptoms.json",
+   "command": "ledger.data OUT -n 600 --seed 0; ledger.run_eval.symptoms(row) over all splits",
+   "seed": 0,
+   "n": 600
+  },
+  "led.n_single": {
+   "value": 402,
+   "tex": "402",
+   "source": "assets/ledger_symptoms.json",
+   "command": "ledger.data OUT -n 600 --seed 0; ledger.run_eval.symptoms(row) over all splits",
+   "seed": 0,
+   "n": 600
+  },
+  "led.n_double": {
+   "value": 198,
+   "tex": "198",
+   "source": "assets/ledger_symptoms.json",
+   "command": "ledger.data OUT -n 600 --seed 0; ledger.run_eval.symptoms(row) over all splits",
+   "seed": 0,
+   "n": 600
+  },
+  "led.any_pct": {
+   "value": 82.0,
+   "tex": "82",
+   "source": "assets/ledger_symptoms.json",
+   "command": "ledger.data OUT -n 600 --seed 0; ledger.run_eval.symptoms(row) over all splits",
+   "seed": 0,
+   "n": 600
+  },
+  "led.none_pct": {
+   "value": 18.0,
+   "tex": "18",
+   "source": "assets/ledger_symptoms.json",
+   "command": "ledger.data OUT -n 600 --seed 0; ledger.run_eval.symptoms(row) over all splits",
+   "seed": 0,
+   "n": 600
+  },
+  "led.range_checks": {
+   "value": 0,
+   "tex": "0",
+   "source": "assets/ledger_symptoms.json",
+   "command": "ledger.data OUT -n 600 --seed 0; ledger.run_eval.symptoms(row) over all splits",
+   "seed": 0,
+   "n": 600
+  },
+  "led.comp_rows": {
+   "value": 362,
+   "tex": "362",
+   "source": "assets/ledger_symptoms.json",
+   "command": "ledger.data OUT -n 600 --seed 0; ledger.run_eval.symptoms(row) over all splits",
+   "seed": 0,
+   "n": 600
+  },
+  "led.comp_closure": {
+   "value": 361,
+   "tex": "361",
+   "source": "assets/ledger_symptoms.json",
+   "command": "ledger.data OUT -n 600 --seed 0; ledger.run_eval.symptoms(row) over all splits",
+   "seed": 0,
+   "n": 600
+  },
+  "led.stream_rows": {
+   "value": 238,
+   "tex": "238",
+   "source": "assets/ledger_symptoms.json",
+   "command": "ledger.data OUT -n 600 --seed 0; ledger.run_eval.symptoms(row) over all splits",
+   "seed": 0,
+   "n": 600
+  },
+  "led.stream_closure": {
+   "value": 0,
+   "tex": "0",
+   "source": "assets/ledger_symptoms.json",
+   "command": "ledger.data OUT -n 600 --seed 0; ledger.run_eval.symptoms(row) over all splits",
+   "seed": 0,
+   "n": 600
+  },
+  "led.stream_either": {
+   "value": 131,
+   "tex": "131",
+   "source": "assets/ledger_symptoms.json",
+   "command": "ledger.data OUT -n 600 --seed 0; ledger.run_eval.symptoms(row) over all splits",
+   "seed": 0,
+   "n": 600
+  },
+  "led.stream_neg": {
+   "value": 131,
+   "tex": "131",
+   "source": "assets/ledger_symptoms.json",
+   "command": "ledger.data OUT -n 600 --seed 0; ledger.run_eval.symptoms(row) over all splits",
+   "seed": 0,
+   "n": 600
+  },
+  "led.t0_celsius_n": {
+   "value": 28,
+   "tex": "28",
+   "source": "assets/ledger_symptoms.json",
+   "command": "ledger.data OUT -n 600 --seed 0; ledger.run_eval.symptoms(row) over all splits",
+   "seed": 0,
+   "n": 600
+  },
+  "led.t0_offset_n": {
+   "value": 28,
+   "tex": "28",
+   "source": "assets/ledger_symptoms.json",
+   "command": "ledger.data OUT -n 600 --seed 0; ledger.run_eval.symptoms(row) over all splits",
+   "seed": 0,
+   "n": 600
+  },
+  "led.mean_prompt_chars": {
+   "value": 3325.0,
+   "tex": "3325",
+   "source": "assets/ledger_symptoms.json",
+   "command": "ledger.data OUT -n 600 --seed 0; ledger.run_eval.symptoms(row) over all splits",
+   "seed": 0,
+   "n": 600
+  },
+  "led.demo_drop_work_mw": {
+   "value": 8.7,
+   "tex": "8.7",
+   "source": "assets/ledger_symptoms.json",
+   "command": "ledger.data OUT -n 600 --seed 0; ledger.run_eval.symptoms(row) over all splits",
+   "seed": 0,
+   "n": 1
+  },
+  "led.held_out_n": {
+   "value": 85,
+   "tex": "85",
+   "source": "assets/ledger_symptoms.json",
+   "command": "ledger.data OUT -n 600 --seed 0; ledger.run_eval.symptoms(row) over all splits",
+   "seed": 0,
+   "n": 600
+  },
+  "aud.n_id": {
+   "value": 17,
+   "tex": "17",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 17
+  },
+  "aud.fl_hits_id": {
+   "value": 0,
+   "tex": "0",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 17
+  },
+  "aud.fl_top1_id_pct": {
+   "value": 0.0,
+   "tex": "0",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 17
+  },
+  "aud.fl_ci_lo_id_pct": {
+   "value": 0.0,
+   "tex": "0",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 17
+  },
+  "aud.fl_ci_hi_id_pct": {
+   "value": 18.0,
+   "tex": "18",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 17
+  },
+  "aud.rnd_top1_id_pct": {
+   "value": 25.0,
+   "tex": "25",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 17
+  },
+  "aud.ndcg_rnd_id": {
+   "value": 0.7,
+   "tex": "0.70",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 17
+  },
+  "aud.ndcg_fl_id": {
+   "value": 0.59,
+   "tex": "0.59",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 17
+  },
+  "aud.n_ood": {
+   "value": 58,
+   "tex": "58",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 58
+  },
+  "aud.fl_hits_ood": {
+   "value": 7,
+   "tex": "7",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 58
+  },
+  "aud.fl_top1_ood_pct": {
+   "value": 12.0,
+   "tex": "12",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 58
+  },
+  "aud.fl_ci_lo_ood_pct": {
+   "value": 6.0,
+   "tex": "6",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 58
+  },
+  "aud.fl_ci_hi_ood_pct": {
+   "value": 23.0,
+   "tex": "23",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 58
+  },
+  "aud.rnd_top1_ood_pct": {
+   "value": 32.0,
+   "tex": "32",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 58
+  },
+  "aud.ndcg_rnd_ood": {
+   "value": 0.67,
+   "tex": "0.67",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 58
+  },
+  "aud.ndcg_fl_ood": {
+   "value": 0.69,
+   "tex": "0.69",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 58
+  },
+  "aud.ex_rej_id": {
+   "value": "REJ",
+   "tex": "\\texttt{REJ}",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 1
+  },
+  "aud.ex_rej_energy_mw": {
+   "value": 72.7,
+   "tex": "72.7",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 1
+  },
+  "aud.ex_rej_ed_mw": {
+   "value": 2.5,
+   "tex": "2.5",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 1
+  },
+  "aud.ex_pm_id": {
+   "value": "CC",
+   "tex": "\\texttt{CC}",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 1
+  },
+  "aud.ex_pm_ed_mw": {
+   "value": 41.7,
+   "tex": "41.7",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 1
+  },
+  "aud.ex_pm_energy_mw": {
+   "value": 1.3,
+   "tex": "1.3",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 1
+  },
+  "aud.ex_top_id": {
+   "value": "HX",
+   "tex": "\\texttt{HX}",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 1
+  },
+  "aud.ex_top_ed_mw": {
+   "value": 17.0,
+   "tex": "17.0",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 1
+  },
+  "aud.ex_fuel_mw": {
+   "value": 127.0,
+   "tex": "127",
+   "source": "assets/audit_first_vs_second_law.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+   "seed": 0,
+   "n": 1
+  },
+  "audb.n_id": {
+   "value": 17,
+   "tex": "17",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 17
+  },
+  "audb.fl_top1_id_pct": {
+   "value": 0.0,
+   "tex": "0",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 17
+  },
+  "audb.rnd_top1_id_pct": {
+   "value": 25.0,
+   "tex": "25",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 17
+  },
+  "audb.rule_gain_id_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 17
+  },
+  "audb.rule_valid_id": {
+   "value": "7",
+   "tex": "7",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 17
+  },
+  "audb.pred_zero_id": {
+   "value": 0.0,
+   "tex": "0.00",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 17
+  },
+  "audb.pred_mean_id": {
+   "value": 0.65,
+   "tex": "0.65",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 17
+  },
+  "audb.search_evals_id": {
+   "value": 12.0,
+   "tex": "12",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 17
+  },
+  "audb.n_ood": {
+   "value": 58,
+   "tex": "58",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 58
+  },
+  "audb.fl_top1_ood_pct": {
+   "value": 12.0,
+   "tex": "12",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 58
+  },
+  "audb.rnd_top1_ood_pct": {
+   "value": 32.0,
+   "tex": "32",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 58
+  },
+  "audb.rule_gain_ood_pct": {
+   "value": 12.0,
+   "tex": "12",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 58
+  },
+  "audb.rule_valid_ood": {
+   "value": "43",
+   "tex": "43",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 58
+  },
+  "audb.pred_zero_ood": {
+   "value": 0.18,
+   "tex": "0.18",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 58
+  },
+  "audb.pred_mean_ood": {
+   "value": 0.26,
+   "tex": "0.26",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 58
+  },
+  "audb.search_evals_ood": {
+   "value": 12.0,
+   "tex": "12",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 58
+  },
+  "audb.saving_median_id_pct": {
+   "value": 1.8,
+   "tex": "1.8",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 17
+  },
+  "audb.saving_min_id_pct": {
+   "value": 0.66,
+   "tex": "0.66",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 17
+  },
+  "audb.saving_max_id_pct": {
+   "value": 5.3,
+   "tex": "5.3",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 17
+  },
+  "audb.saving_median_ood_pct": {
+   "value": 0.2,
+   "tex": "0.2",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 58
+  },
+  "audb.saving_min_ood_pct": {
+   "value": 0.05,
+   "tex": "0.05",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 58
+  },
+  "audb.saving_max_ood_pct": {
+   "value": 1.5,
+   "tex": "1.5",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 58
+  },
+  "audb.saving_median_all_pct": {
+   "value": 0.3,
+   "tex": "0.3",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 75
+  },
+  "audb.saving_min_all_pct": {
+   "value": 0.05,
+   "tex": "0.05",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 75
+  },
+  "audb.saving_max_all_pct": {
+   "value": 5.3,
+   "tex": "5.3",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 75
+  },
+  "audb.n_total": {
+   "value": 75,
+   "tex": "75",
+   "source": "assets/audit_baselines.json",
+   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "seed": 0,
+   "n": 75
+  },
+  "des.n_sites": {
+   "value": 24,
+   "tex": "24",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.n_heat_sites": {
+   "value": 9,
+   "tex": "9",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.split.test_id": {
+   "value": 5,
+   "tex": "5",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.split.test_ood_climate": {
+   "value": 11,
+   "tex": "11",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.split.test_ood_load": {
+   "value": 4,
+   "tex": "4",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.split.val": {
+   "value": 2,
+   "tex": "2",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.split.test_ood_scale": {
+   "value": 2,
+   "tex": "2",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.enum_len_min": {
+   "value": 32,
+   "tex": "32",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.enum_len_max": {
+   "value": 64,
+   "tex": "64",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.polish_len_min": {
+   "value": 104,
+   "tex": "104",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.polish_len_max": {
+   "value": 144,
+   "tex": "144",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.random_len": {
+   "value": 130,
+   "tex": "130",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.enum.b12.within_pct": {
+   "value": 0.0,
+   "tex": "0",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.enum.b12.gap_pct": {
+   "value": 13.1,
+   "tex": "13.1",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.enum.b12.valid_pct": {
+   "value": 96.0,
+   "tex": "96",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.enum.b24.within_pct": {
+   "value": 25.0,
+   "tex": "25",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.enum.b24.gap_pct": {
+   "value": 8.2,
+   "tex": "8.2",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.enum.b24.valid_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.enum.b32.within_pct": {
+   "value": 33.0,
+   "tex": "33",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.enum.b32.gap_pct": {
+   "value": 6.0,
+   "tex": "6.0",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.enum.b32.valid_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.enum.b48.within_pct": {
+   "value": 46.0,
+   "tex": "46",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.enum.b48.gap_pct": {
+   "value": 4.3,
+   "tex": "4.3",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.enum.b48.valid_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.enum.b64.within_pct": {
+   "value": 71.0,
+   "tex": "71",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.enum.b64.gap_pct": {
+   "value": 2.4,
+   "tex": "2.4",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.enum.b64.valid_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.enum.b96.within_pct": {
+   "value": 71.0,
+   "tex": "71",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.enum.b96.gap_pct": {
+   "value": 2.4,
+   "tex": "2.4",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.enum.b96.valid_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.enum.b128.within_pct": {
+   "value": 71.0,
+   "tex": "71",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.enum.b128.gap_pct": {
+   "value": 2.4,
+   "tex": "2.4",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.enum.b128.valid_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.rand.b12.within_pct": {
+   "value": 33.0,
+   "tex": "33",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.rand.b12.gap_pct": {
+   "value": 8.7,
+   "tex": "8.7",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.rand.b12.valid_pct": {
+   "value": 96.0,
+   "tex": "96",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.rand.b24.within_pct": {
+   "value": 42.0,
+   "tex": "42",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.rand.b24.gap_pct": {
+   "value": 5.0,
+   "tex": "5.0",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.rand.b24.valid_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.rand.b32.within_pct": {
+   "value": 46.0,
+   "tex": "46",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.rand.b32.gap_pct": {
+   "value": 3.6,
+   "tex": "3.6",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.rand.b32.valid_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.rand.b48.within_pct": {
+   "value": 54.0,
+   "tex": "54",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.rand.b48.gap_pct": {
+   "value": 2.9,
+   "tex": "2.9",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.rand.b48.valid_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.rand.b64.within_pct": {
+   "value": 67.0,
+   "tex": "67",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.rand.b64.gap_pct": {
+   "value": 1.6,
+   "tex": "1.6",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.rand.b64.valid_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.rand.b96.within_pct": {
+   "value": 71.0,
+   "tex": "71",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.rand.b96.gap_pct": {
+   "value": 0.9,
+   "tex": "0.9",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.rand.b96.valid_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.rand.b128.within_pct": {
+   "value": 75.0,
+   "tex": "75",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.rand.b128.gap_pct": {
+   "value": 0.6,
+   "tex": "0.6",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.rand.b128.valid_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.pol.b12.within_pct": {
+   "value": 0.0,
+   "tex": "0",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.pol.b12.gap_pct": {
+   "value": 13.1,
+   "tex": "13.1",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.pol.b12.valid_pct": {
+   "value": 96.0,
+   "tex": "96",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.pol.b24.within_pct": {
+   "value": 25.0,
+   "tex": "25",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.pol.b24.gap_pct": {
+   "value": 8.2,
+   "tex": "8.2",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.pol.b24.valid_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.pol.b32.within_pct": {
+   "value": 33.0,
+   "tex": "33",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.pol.b32.gap_pct": {
+   "value": 6.0,
+   "tex": "6.0",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.pol.b32.valid_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.pol.b48.within_pct": {
+   "value": 50.0,
+   "tex": "50",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.pol.b48.gap_pct": {
+   "value": 3.7,
+   "tex": "3.7",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.pol.b48.valid_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.pol.b64.within_pct": {
+   "value": 79.0,
+   "tex": "79",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.pol.b64.gap_pct": {
+   "value": 1.4,
+   "tex": "1.4",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.pol.b64.valid_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.pol.b96.within_pct": {
+   "value": 92.0,
+   "tex": "92",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.pol.b96.gap_pct": {
+   "value": 0.3,
+   "tex": "0.3",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.pol.b96.valid_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.pol.b128.within_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.pol.b128.gap_pct": {
+   "value": 0.1,
+   "tex": "0.1",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.pol.b128.valid_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.enum.b1.valid_pct": {
+   "value": 88.0,
+   "tex": "88",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.rand.b1.valid_pct": {
+   "value": 25.0,
+   "tex": "25",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "des.tolerance_pct": {
+   "value": 2.0,
+   "tex": "2",
+   "source": "assets/design_baselines.json",
+   "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+   "seed": 0,
+   "n": 24
+  },
+  "har.agents_lines": {
+   "value": 51,
+   "tex": "51",
+   "source": "assets/harness.json",
+   "command": "agent.harness (MODES, skill_names, TASK_SKILLS), agent.build_harness.frontmatter, core.components.REQUIRED_PORTS; topologies of test_ood_topology rows",
+   "seed": 0,
+   "n": null
+  },
+  "har.agents_chars": {
+   "value": 4655,
+   "tex": "4{,}655",
+   "source": "assets/harness.json",
+   "command": "agent.harness (MODES, skill_names, TASK_SKILLS), agent.build_harness.frontmatter, core.components.REQUIRED_PORTS; topologies of test_ood_topology rows",
+   "seed": 0,
+   "n": null
+  },
+  "har.engine_n_ports": {
+   "value": 3,
+   "tex": "3",
+   "source": "assets/harness.json",
+   "command": "agent.harness (MODES, skill_names, TASK_SKILLS), agent.build_harness.frontmatter, core.components.REQUIRED_PORTS; topologies of test_ood_topology rows",
+   "seed": 0,
+   "n": null
+  },
+  "har.heldout_repair_rows": {
+   "value": 128,
+   "tex": "128",
+   "source": "assets/harness.json",
+   "command": "agent.harness (MODES, skill_names, TASK_SKILLS), agent.build_harness.frontmatter, core.components.REQUIRED_PORTS; topologies of test_ood_topology rows",
+   "seed": 0,
+   "n": null
+  },
+  "har.heldout_repair_engine_rows": {
+   "value": 83,
+   "tex": "83",
+   "source": "assets/harness.json",
+   "command": "agent.harness (MODES, skill_names, TASK_SKILLS), agent.build_harness.frontmatter, core.components.REQUIRED_PORTS; topologies of test_ood_topology rows",
+   "seed": 0,
+   "n": null
+  },
+  "har.heldout_audit_rows": {
+   "value": 58,
+   "tex": "58",
+   "source": "assets/harness.json",
+   "command": "agent.harness (MODES, skill_names, TASK_SKILLS), agent.build_harness.frontmatter, core.components.REQUIRED_PORTS; topologies of test_ood_topology rows",
+   "seed": 0,
+   "n": null
+  },
+  "har.heldout_audit_engine_rows": {
+   "value": 36,
+   "tex": "36",
+   "source": "assets/harness.json",
+   "command": "agent.harness (MODES, skill_names, TASK_SKILLS), agent.build_harness.frontmatter, core.components.REQUIRED_PORTS; topologies of test_ood_topology rows",
+   "seed": 0,
+   "n": null
+  },
+  "pl.turbine.u1_pct": {
+   "value": 26.7,
+   "tex": "26.7",
+   "source": "assets/part_load.json",
+   "command": "numpy.random.default_rng(0): 2000 samples, IT load normal(24, 5) MW clipped to 8..30 MW; design.trace_eval.bin_trace(df, 10); design.modular.scan_units(units=1,2,3,4,6,8,12), spec default_spec(prime_mover, 'absorption', 'wet'), chilled fraction 0.5, step 1/6 h",
+   "seed": 0,
+   "n": 2000
+  },
+  "pl.turbine.u2_pct": {
+   "value": 26.7,
+   "tex": "26.7",
+   "source": "assets/part_load.json",
+   "command": "numpy.random.default_rng(0): 2000 samples, IT load normal(24, 5) MW clipped to 8..30 MW; design.trace_eval.bin_trace(df, 10); design.modular.scan_units(units=1,2,3,4,6,8,12), spec default_spec(prime_mover, 'absorption', 'wet'), chilled fraction 0.5, step 1/6 h",
+   "seed": 0,
+   "n": 2000
+  },
+  "pl.turbine.u3_pct": {
+   "value": 18.2,
+   "tex": "18.2",
+   "source": "assets/part_load.json",
+   "command": "numpy.random.default_rng(0): 2000 samples, IT load normal(24, 5) MW clipped to 8..30 MW; design.trace_eval.bin_trace(df, 10); design.modular.scan_units(units=1,2,3,4,6,8,12), spec default_spec(prime_mover, 'absorption', 'wet'), chilled fraction 0.5, step 1/6 h",
+   "seed": 0,
+   "n": 2000
+  },
+  "pl.turbine.u4_pct": {
+   "value": 14.0,
+   "tex": "14.0",
+   "source": "assets/part_load.json",
+   "command": "numpy.random.default_rng(0): 2000 samples, IT load normal(24, 5) MW clipped to 8..30 MW; design.trace_eval.bin_trace(df, 10); design.modular.scan_units(units=1,2,3,4,6,8,12), spec default_spec(prime_mover, 'absorption', 'wet'), chilled fraction 0.5, step 1/6 h",
+   "seed": 0,
+   "n": 2000
+  },
+  "pl.turbine.u6_pct": {
+   "value": 9.8,
+   "tex": "9.8",
+   "source": "assets/part_load.json",
+   "command": "numpy.random.default_rng(0): 2000 samples, IT load normal(24, 5) MW clipped to 8..30 MW; design.trace_eval.bin_trace(df, 10); design.modular.scan_units(units=1,2,3,4,6,8,12), spec default_spec(prime_mover, 'absorption', 'wet'), chilled fraction 0.5, step 1/6 h",
+   "seed": 0,
+   "n": 2000
+  },
+  "pl.turbine.u8_pct": {
+   "value": 6.1,
+   "tex": "6.1",
+   "source": "assets/part_load.json",
+   "command": "numpy.random.default_rng(0): 2000 samples, IT load normal(24, 5) MW clipped to 8..30 MW; design.trace_eval.bin_trace(df, 10); design.modular.scan_units(units=1,2,3,4,6,8,12), spec default_spec(prime_mover, 'absorption', 'wet'), chilled fraction 0.5, step 1/6 h",
+   "seed": 0,
+   "n": 2000
+  },
+  "pl.turbine.u12_pct": {
+   "value": 4.5,
+   "tex": "4.5",
+   "source": "assets/part_load.json",
+   "command": "numpy.random.default_rng(0): 2000 samples, IT load normal(24, 5) MW clipped to 8..30 MW; design.trace_eval.bin_trace(df, 10); design.modular.scan_units(units=1,2,3,4,6,8,12), spec default_spec(prime_mover, 'absorption', 'wet'), chilled fraction 0.5, step 1/6 h",
+   "seed": 0,
+   "n": 2000
+  },
+  "pl.engine.u1_pct": {
+   "value": 26.7,
+   "tex": "26.7",
+   "source": "assets/part_load.json",
+   "command": "numpy.random.default_rng(0): 2000 samples, IT load normal(24, 5) MW clipped to 8..30 MW; design.trace_eval.bin_trace(df, 10); design.modular.scan_units(units=1,2,3,4,6,8,12), spec default_spec(prime_mover, 'absorption', 'wet'), chilled fraction 0.5, step 1/6 h",
+   "seed": 0,
+   "n": 2000
+  },
+  "pl.engine.u2_pct": {
+   "value": 26.7,
+   "tex": "26.7",
+   "source": "assets/part_load.json",
+   "command": "numpy.random.default_rng(0): 2000 samples, IT load normal(24, 5) MW clipped to 8..30 MW; design.trace_eval.bin_trace(df, 10); design.modular.scan_units(units=1,2,3,4,6,8,12), spec default_spec(prime_mover, 'absorption', 'wet'), chilled fraction 0.5, step 1/6 h",
+   "seed": 0,
+   "n": 2000
+  },
+  "pl.engine.u3_pct": {
+   "value": 18.2,
+   "tex": "18.2",
+   "source": "assets/part_load.json",
+   "command": "numpy.random.default_rng(0): 2000 samples, IT load normal(24, 5) MW clipped to 8..30 MW; design.trace_eval.bin_trace(df, 10); design.modular.scan_units(units=1,2,3,4,6,8,12), spec default_spec(prime_mover, 'absorption', 'wet'), chilled fraction 0.5, step 1/6 h",
+   "seed": 0,
+   "n": 2000
+  },
+  "pl.engine.u4_pct": {
+   "value": 14.0,
+   "tex": "14.0",
+   "source": "assets/part_load.json",
+   "command": "numpy.random.default_rng(0): 2000 samples, IT load normal(24, 5) MW clipped to 8..30 MW; design.trace_eval.bin_trace(df, 10); design.modular.scan_units(units=1,2,3,4,6,8,12), spec default_spec(prime_mover, 'absorption', 'wet'), chilled fraction 0.5, step 1/6 h",
+   "seed": 0,
+   "n": 2000
+  },
+  "pl.engine.u6_pct": {
+   "value": 9.8,
+   "tex": "9.8",
+   "source": "assets/part_load.json",
+   "command": "numpy.random.default_rng(0): 2000 samples, IT load normal(24, 5) MW clipped to 8..30 MW; design.trace_eval.bin_trace(df, 10); design.modular.scan_units(units=1,2,3,4,6,8,12), spec default_spec(prime_mover, 'absorption', 'wet'), chilled fraction 0.5, step 1/6 h",
+   "seed": 0,
+   "n": 2000
+  },
+  "pl.engine.u8_pct": {
+   "value": 6.1,
+   "tex": "6.1",
+   "source": "assets/part_load.json",
+   "command": "numpy.random.default_rng(0): 2000 samples, IT load normal(24, 5) MW clipped to 8..30 MW; design.trace_eval.bin_trace(df, 10); design.modular.scan_units(units=1,2,3,4,6,8,12), spec default_spec(prime_mover, 'absorption', 'wet'), chilled fraction 0.5, step 1/6 h",
+   "seed": 0,
+   "n": 2000
+  },
+  "pl.engine.u12_pct": {
+   "value": 4.5,
+   "tex": "4.5",
+   "source": "assets/part_load.json",
+   "command": "numpy.random.default_rng(0): 2000 samples, IT load normal(24, 5) MW clipped to 8..30 MW; design.trace_eval.bin_trace(df, 10); design.modular.scan_units(units=1,2,3,4,6,8,12), spec default_spec(prime_mover, 'absorption', 'wet'), chilled fraction 0.5, step 1/6 h",
+   "seed": 0,
+   "n": 2000
+  },
+  "pl.n_samples": {
+   "value": 2000,
+   "tex": "2{,}000",
+   "source": "assets/part_load.json",
+   "command": "numpy.random.default_rng(0): 2000 samples, IT load normal(24, 5) MW clipped to 8..30 MW; design.trace_eval.bin_trace(df, 10); design.modular.scan_units(units=1,2,3,4,6,8,12), spec default_spec(prime_mover, 'absorption', 'wet'), chilled fraction 0.5, step 1/6 h",
+   "seed": 0,
+   "n": 2000
+  },
+  "pl.bins": {
+   "value": 10,
+   "tex": "10",
+   "source": "assets/part_load.json",
+   "command": "numpy.random.default_rng(0): 2000 samples, IT load normal(24, 5) MW clipped to 8..30 MW; design.trace_eval.bin_trace(df, 10); design.modular.scan_units(units=1,2,3,4,6,8,12), spec default_spec(prime_mover, 'absorption', 'wet'), chilled fraction 0.5, step 1/6 h",
+   "seed": 0,
+   "n": 2000
+  },
+  "pl.turbine.ideal_mwh": {
+   "value": 22686.0,
+   "tex": "22686",
+   "source": "assets/part_load.json",
+   "command": "numpy.random.default_rng(0): 2000 samples, IT load normal(24, 5) MW clipped to 8..30 MW; design.trace_eval.bin_trace(df, 10); design.modular.scan_units(units=1,2,3,4,6,8,12), spec default_spec(prime_mover, 'absorption', 'wet'), chilled fraction 0.5, step 1/6 h",
+   "seed": 0,
+   "n": 2000
+  },
+  "pl.turbine.fuel1_mwh": {
+   "value": 28736.0,
+   "tex": "28736",
+   "source": "assets/part_load.json",
+   "command": "numpy.random.default_rng(0): 2000 samples, IT load normal(24, 5) MW clipped to 8..30 MW; design.trace_eval.bin_trace(df, 10); design.modular.scan_units(units=1,2,3,4,6,8,12), spec default_spec(prime_mover, 'absorption', 'wet'), chilled fraction 0.5, step 1/6 h",
+   "seed": 0,
+   "n": 2000
+  },
+  "pl.units_max": {
+   "value": 12,
+   "tex": "12",
+   "source": "assets/part_load.json",
+   "command": "numpy.random.default_rng(0): 2000 samples, IT load normal(24, 5) MW clipped to 8..30 MW; design.trace_eval.bin_trace(df, 10); design.modular.scan_units(units=1,2,3,4,6,8,12), spec default_spec(prime_mover, 'absorption', 'wet'), chilled fraction 0.5, step 1/6 h",
+   "seed": 0,
+   "n": 2000
+  },
+  "pl.same_penalty": {
+   "value": 1,
+   "tex": "1",
+   "source": "assets/part_load.json",
+   "command": "numpy.random.default_rng(0): 2000 samples, IT load normal(24, 5) MW clipped to 8..30 MW; design.trace_eval.bin_trace(df, 10); design.modular.scan_units(units=1,2,3,4,6,8,12), spec default_spec(prime_mover, 'absorption', 'wet'), chilled fraction 0.5, step 1/6 h",
+   "seed": 0,
+   "n": 2000
+  },
+  "rd.repair.groups": {
+   "value": 40,
+   "tex": "40",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.repair.eval_ms": {
+   "value": 8.9,
+   "tex": "8.9",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.repair.zv_e5_pct": {
+   "value": 70.0,
+   "tex": "70",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.repair.zv_e10_pct": {
+   "value": 55.0,
+   "tex": "55",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.repair.zv_e20_pct": {
+   "value": 28.0,
+   "tex": "28",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.repair.zv_e30_pct": {
+   "value": 10.0,
+   "tex": "10",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.repair.zv_e45_pct": {
+   "value": 8.0,
+   "tex": "8",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.repair.zv_e60_pct": {
+   "value": 2.0,
+   "tex": "2",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.repair.zv_e80_pct": {
+   "value": 0.0,
+   "tex": "0",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.repair.zv_e100_pct": {
+   "value": 0.0,
+   "tex": "0",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.design.groups": {
+   "value": 40,
+   "tex": "40",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.design.eval_ms": {
+   "value": 44.8,
+   "tex": "44.8",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.design.zv_e5_pct": {
+   "value": 57.0,
+   "tex": "57",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.design.zv_e10_pct": {
+   "value": 52.0,
+   "tex": "52",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.design.zv_e20_pct": {
+   "value": 25.0,
+   "tex": "25",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.design.zv_e30_pct": {
+   "value": 15.0,
+   "tex": "15",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.design.zv_e45_pct": {
+   "value": 2.0,
+   "tex": "2",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.design.zv_e60_pct": {
+   "value": 0.0,
+   "tex": "0",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.design.zv_e80_pct": {
+   "value": 2.0,
+   "tex": "2",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.design.zv_e100_pct": {
+   "value": 12.0,
+   "tex": "12",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.audit.groups": {
+   "value": 40,
+   "tex": "40",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.audit.eval_ms": {
+   "value": 31.6,
+   "tex": "31.6",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.audit.zv_e5_pct": {
+   "value": 68.0,
+   "tex": "68",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.audit.zv_e10_pct": {
+   "value": 55.0,
+   "tex": "55",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.audit.zv_e20_pct": {
+   "value": 25.0,
+   "tex": "25",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.audit.zv_e30_pct": {
+   "value": 8.0,
+   "tex": "8",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.audit.zv_e45_pct": {
+   "value": 5.0,
+   "tex": "5",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.audit.zv_e60_pct": {
+   "value": 0.0,
+   "tex": "0",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.audit.zv_e80_pct": {
+   "value": 0.0,
+   "tex": "0",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.audit.zv_e100_pct": {
+   "value": 0.0,
+   "tex": "0",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.ledger.groups": {
+   "value": 40,
+   "tex": "40",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.ledger.eval_ms": {
+   "value": 1.4,
+   "tex": "1.4",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.ledger.zv_e5_pct": {
+   "value": 65.0,
+   "tex": "65",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.ledger.zv_e10_pct": {
+   "value": 57.0,
+   "tex": "57",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.ledger.zv_e20_pct": {
+   "value": 30.0,
+   "tex": "30",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.ledger.zv_e30_pct": {
+   "value": 12.0,
+   "tex": "12",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.ledger.zv_e45_pct": {
+   "value": 5.0,
+   "tex": "5",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.ledger.zv_e60_pct": {
+   "value": 2.0,
+   "tex": "2",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.ledger.zv_e80_pct": {
+   "value": 0.0,
+   "tex": "0",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.ledger.zv_e100_pct": {
+   "value": 0.0,
+   "tex": "0",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": 40
+  },
+  "rd.G": {
+   "value": 8,
+   "tex": "8",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "seed": 0,
+   "n": null
+  },
+  "split.repair.test_id": {
+   "value": 12,
+   "tex": "12",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 12
+  },
+  "split.repair.test_ood_fault": {
+   "value": 108,
+   "tex": "108",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 108
+  },
+  "split.repair.test_ood_topology": {
+   "value": 128,
+   "tex": "128",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 128
+  },
+  "split.repair.train": {
+   "value": 125,
+   "tex": "125",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 125
+  },
+  "split.repair.val": {
+   "value": 15,
+   "tex": "15",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 15
+  },
+  "split.repair.total": {
+   "value": 388,
+   "tex": "388",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 388
+  },
+  "split.design.test_id": {
+   "value": 8,
+   "tex": "8",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 8
+  },
+  "split.design.test_ood_climate": {
+   "value": 19,
+   "tex": "19",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 19
+  },
+  "split.design.test_ood_load": {
+   "value": 10,
+   "tex": "10",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 10
+  },
+  "split.design.test_ood_scale": {
+   "value": 4,
+   "tex": "4",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 4
+  },
+  "split.design.train": {
+   "value": 41,
+   "tex": "41",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 41
+  },
+  "split.design.val": {
+   "value": 3,
+   "tex": "3",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 3
+  },
+  "split.design.total": {
+   "value": 85,
+   "tex": "85",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 85
+  },
+  "split.audit.test_id": {
+   "value": 17,
+   "tex": "17",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 17
+  },
+  "split.audit.test_ood_topology": {
+   "value": 58,
+   "tex": "58",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 58
+  },
+  "split.audit.train": {
+   "value": 103,
+   "tex": "103",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 103
+  },
+  "split.audit.val": {
+   "value": 14,
+   "tex": "14",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 14
+  },
+  "split.audit.total": {
+   "value": 192,
+   "tex": "192",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 192
+  },
+  "split.ledger.test_id": {
+   "value": 33,
+   "tex": "33",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 33
+  },
+  "split.ledger.test_ood_fault": {
+   "value": 109,
+   "tex": "109",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 109
+  },
+  "split.ledger.test_ood_topology": {
+   "value": 198,
+   "tex": "198",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 198
+  },
+  "split.ledger.train": {
+   "value": 227,
+   "tex": "227",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 227
+  },
+  "split.ledger.val": {
+   "value": 33,
+   "tex": "33",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 33
+  },
+  "split.ledger.total": {
+   "value": 600,
+   "tex": "600",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 600
+  },
+  "split.total": {
+   "value": 1265,
+   "tex": "1{,}265",
+   "source": "assets/splits.json",
+   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "seed": 0,
+   "n": 1265
+  },
+  "rep.test_id.n": {
+   "value": 12,
+   "tex": "12",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 12
+  },
+  "rep.test_id.rows": {
+   "value": 12,
+   "tex": "12",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 12
+  },
+  "rep.test_id.noop_pct": {
+   "value": 0.0,
+   "tex": "0",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 12
+  },
+  "rep.test_id.search_pct": {
+   "value": 92.0,
+   "tex": "92",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 12
+  },
+  "rep.test_id.search_lo_pct": {
+   "value": 65.0,
+   "tex": "65",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 12
+  },
+  "rep.test_id.search_hi_pct": {
+   "value": 99.0,
+   "tex": "99",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 12
+  },
+  "rep.test_id.exact_pct": {
+   "value": 58.0,
+   "tex": "58",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 12
+  },
+  "rep.test_id.calls": {
+   "value": 174.0,
+   "tex": "174",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 12
+  },
+  "rep.test_id.expert_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 12
+  },
+  "rep.test_id.efficiency_gt_1.n": {
+   "value": 4,
+   "tex": "4",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 4
+  },
+  "rep.test_id.unit_slip.n": {
+   "value": 1,
+   "tex": "1",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 1
+  },
+  "rep.test_id.wrong_fluid.n": {
+   "value": 7,
+   "tex": "7",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 7
+  },
+  "rep.test_ood_fault.n": {
+   "value": 108,
+   "tex": "108",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 108
+  },
+  "rep.test_ood_fault.rows": {
+   "value": 108,
+   "tex": "108",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 108
+  },
+  "rep.test_ood_fault.noop_pct": {
+   "value": 0.0,
+   "tex": "0",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 108
+  },
+  "rep.test_ood_fault.search_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 108
+  },
+  "rep.test_ood_fault.search_lo_pct": {
+   "value": 97.0,
+   "tex": "97",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 108
+  },
+  "rep.test_ood_fault.search_hi_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 108
+  },
+  "rep.test_ood_fault.exact_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 108
+  },
+  "rep.test_ood_fault.calls": {
+   "value": 128.0,
+   "tex": "128",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 108
+  },
+  "rep.test_ood_fault.expert_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 108
+  },
+  "rep.test_ood_fault.sign_flip.n": {
+   "value": 54,
+   "tex": "54",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 54
+  },
+  "rep.test_ood_fault.swapped_ports.n": {
+   "value": 54,
+   "tex": "54",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 54
+  },
+  "rep.test_ood_topology.n": {
+   "value": 128,
+   "tex": "128",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 128
+  },
+  "rep.test_ood_topology.rows": {
+   "value": 128,
+   "tex": "128",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 128
+  },
+  "rep.test_ood_topology.noop_pct": {
+   "value": 0.0,
+   "tex": "0",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 128
+  },
+  "rep.test_ood_topology.search_pct": {
+   "value": 99.0,
+   "tex": "99",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 128
+  },
+  "rep.test_ood_topology.search_lo_pct": {
+   "value": 96.0,
+   "tex": "96",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 128
+  },
+  "rep.test_ood_topology.search_hi_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 128
+  },
+  "rep.test_ood_topology.exact_pct": {
+   "value": 77.0,
+   "tex": "77",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 128
+  },
+  "rep.test_ood_topology.calls": {
+   "value": 122.0,
+   "tex": "122",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 128
+  },
+  "rep.test_ood_topology.expert_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 128
+  },
+  "rep.test_ood_topology.efficiency_gt_1.n": {
+   "value": 26,
+   "tex": "26",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 26
+  },
+  "rep.test_ood_topology.sign_flip.n": {
+   "value": 26,
+   "tex": "26",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 26
+  },
+  "rep.test_ood_topology.swapped_ports.n": {
+   "value": 17,
+   "tex": "17",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 17
+  },
+  "rep.test_ood_topology.unit_slip.n": {
+   "value": 26,
+   "tex": "26",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 26
+  },
+  "rep.test_ood_topology.wrong_fluid.n": {
+   "value": 33,
+   "tex": "33",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 33
+  },
+  "rep.f.efficiency_gt_1.n": {
+   "value": 30,
+   "tex": "30",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 30
+  },
+  "rep.f.efficiency_gt_1.search_pct": {
+   "value": 93.0,
+   "tex": "93",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 30
+  },
+  "rep.f.efficiency_gt_1.calls": {
+   "value": 26.0,
+   "tex": "26",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 30
+  },
+  "rep.f.unit_slip.n": {
+   "value": 27,
+   "tex": "27",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 27
+  },
+  "rep.f.unit_slip.search_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 27
+  },
+  "rep.f.unit_slip.calls": {
+   "value": 48.0,
+   "tex": "48",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 27
+  },
+  "rep.f.wrong_fluid.n": {
+   "value": 40,
+   "tex": "40",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 40
+  },
+  "rep.f.wrong_fluid.search_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 40
+  },
+  "rep.f.wrong_fluid.calls": {
+   "value": 268.0,
+   "tex": "268",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 40
+  },
+  "rep.f.sign_flip.n": {
+   "value": 80,
+   "tex": "80",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 80
+  },
+  "rep.f.sign_flip.search_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 80
+  },
+  "rep.f.sign_flip.calls": {
+   "value": 8.0,
+   "tex": "8",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 80
+  },
+  "rep.f.swapped_ports.n": {
+   "value": 71,
+   "tex": "71",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 71
+  },
+  "rep.f.swapped_ports.search_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 71
+  },
+  "rep.f.swapped_ports.calls": {
+   "value": 232.0,
+   "tex": "232",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": 71
+  },
+  "rep.total_n": {
+   "value": 248,
+   "tex": "248",
+   "source": "assets/repair_baselines.json",
+   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "seed": 0,
+   "n": null
+  }
+ }
+}

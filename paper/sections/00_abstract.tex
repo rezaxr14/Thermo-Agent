@@ -1,0 +1,18 @@
+AI data centers are adding on-site gas generation, and the heat it leaves is low grade.
+Choosing the plant layout, keeping a plant model physically consistent and locating the exergy
+losses are expert tasks, and a plant model can solve and still violate the second law.
+We build a second-law-verified environment for these tasks: a physics-based simulator with
+\val{env.n_components} component models and exergy accounting against an explicit dead state,
+and eight verifiers whose checks are an exact, cheap reward. A small open model
+(Qwen3.5-4B) is to be trained with LoRA supervised fine-tuning on programmatically verified
+answers and then with GRPO against the verifiers, on four task families with structural
+out-of-distribution splits: plant Repair, Design, exergy Audit and Ledger repair. All results
+are simulation-driven: measured load and coolant traces set operating points of a physics model
+with assumed technology constants, and no measured on-site-generation data center is involved.
+Three model-independent simulator findings come from small samples. Of \val{led.n} generated
+ledger rows with injected equation faults, \val{led.any_pct}\% show a closure residual or a
+negative exergy destruction, and parameter-range checks see none. A first-law ranking of exergy
+destroyers, prime mover excluded, finds the true top destroyer in \val{aud.fl_hits_ood} of
+\val{aud.n_ood} held-out plants. Exhaust-only recovery limits a gas engine to about
+\val{mech.engine_max_frac_pct}\% of the IT heat for absorption cooling.
+\todo{headline model result}\ All trained-model results are pending.

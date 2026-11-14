@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 914" width="1000" height="914" font-family="Helvetica, Arial, 'Liberation Sans', sans-serif">
+<rect width="1000" height="914" fill="#FFFFFF"/>
+<rect x="16" y="16" width="162.21" height="22" rx="6" fill="#34548A"/>
+<text x="97.1" y="31.38" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">CONSERVATION LAWS</text>
+<rect x="16" y="44" width="590" height="75.5" rx="8" fill="#FFFFFF" stroke="#4C72B0" stroke-width="1.6"/>
+<rect x="16" y="44" width="6" height="75.5" rx="3" fill="#4C72B0"/>
+<rect x="34" y="54" width="44" height="24" rx="6" fill="#34548A"/>
+<text x="56" y="71" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">V1</text>
+<text x="90" y="71" font-size="14" font-weight="bold" fill="#333333">Mass balance</text>
+<rect x="548" y="55" width="46" height="22" id="p1" rx="11" fill="#EDF7F0" stroke="#55A868" stroke-width="1.4"/>
+<text x="571" y="70.2" font-size="12" font-weight="bold" text-anchor="middle" fill="#2F6B3C">hard</text>
+<text x="90" y="94" font-size="12.5" fill="#333333">residual of every component within 1e-6 of the largest flow</text>
+<path d="M96.5,99.5 L103,111.46 L90,111.46 Z" fill="none" stroke="#B5383C" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M96.5,104.05 L96.5,107.95" fill="none" stroke="#B5383C" stroke-width="2.0"/>
+<circle cx="96.5" cy="109.9" r="1.1" fill="#B5383C"/>
+<text x="108" y="110.5" font-size="12.5" font-style="italic" fill="#666666">catches: streams wired to the wrong port, dropped or doubled streams</text>
+<rect x="16" y="127.5" width="590" height="75.5" rx="8" fill="#FFFFFF" stroke="#4C72B0" stroke-width="1.6"/>
+<rect x="16" y="127.5" width="6" height="75.5" rx="3" fill="#4C72B0"/>
+<rect x="34" y="137.5" width="44" height="24" rx="6" fill="#34548A"/>
+<text x="56" y="154.5" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">V2</text>
+<text x="90" y="154.5" font-size="14" font-weight="bold" fill="#333333">Energy balance</text>
+<rect x="548" y="138.5" width="46" height="22" id="p2" rx="11" fill="#EDF7F0" stroke="#55A868" stroke-width="1.4"/>
+<text x="571" y="153.7" font-size="12" font-weight="bold" text-anchor="middle" fill="#2F6B3C">hard</text>
+<text x="90" y="177.5" font-size="12.5" fill="#333333">first-law residual of every component within 1e-6 (relative)</text>
+<path d="M96.5,183 L103,194.96 L90,194.96 Z" fill="none" stroke="#B5383C" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M96.5,187.55 L96.5,191.45" fill="none" stroke="#B5383C" stroke-width="2.0"/>
+<circle cx="96.5" cy="193.4" r="1.1" fill="#B5383C"/>
+<text x="108" y="194" font-size="12.5" font-style="italic" fill="#666666">catches: wrong enthalpy or work, an efficiency applied twice</text>
+<rect x="16" y="211" width="590" height="75.5" rx="8" fill="#FFFFFF" stroke="#4C72B0" stroke-width="1.6"/>
+<rect x="16" y="211" width="6" height="75.5" rx="3" fill="#4C72B0"/>
+<rect x="34" y="221" width="44" height="24" rx="6" fill="#34548A"/>
+<text x="56" y="238" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">V3</text>
+<text x="90" y="238" font-size="14" font-weight="bold" fill="#333333">Second law</text>
+<rect x="548" y="222" width="46" height="22" id="p3" rx="11" fill="#EDF7F0" stroke="#55A868" stroke-width="1.4"/>
+<text x="571" y="237.2" font-size="12" font-weight="bold" text-anchor="middle" fill="#2F6B3C">hard</text>
+<text x="90" y="261" font-size="12.5" fill="#333333">no component with negative E_D; exergy closure within 1e-6</text>
+<path d="M96.5,266.5 L103,278.46 L90,278.46 Z" fill="none" stroke="#B5383C" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M96.5,271.05 L96.5,274.95" fill="none" stroke="#B5383C" stroke-width="2.0"/>
+<circle cx="96.5" cy="276.9" r="1.1" fill="#B5383C"/>
+<text x="108" y="277.5" font-size="12.5" font-style="italic" fill="#666666">catches: sign errors, exergy that is not conserved</text>
+<rect x="16" y="298.5" width="131.42" height="22" rx="6" fill="#B8561F"/>
+<text x="81.71" y="313.88" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">PHYSICAL LIMITS</text>
+<rect x="16" y="326.5" width="590" height="75.5" rx="8" fill="#FFFFFF" stroke="#DD8452" stroke-width="1.6"/>
+<rect x="16" y="326.5" width="6" height="75.5" rx="3" fill="#DD8452"/>
+<rect x="34" y="336.5" width="44" height="24" rx="6" fill="#B8561F"/>
+<text x="56" y="353.5" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">V4</text>
+<text x="90" y="353.5" font-size="14" font-weight="bold" fill="#333333">Pinch</text>
+<rect x="516" y="337.5" width="78" height="22" id="p4" rx="11" fill="#EDF7F0" stroke="#55A868" stroke-width="1.4"/>
+<text x="555" y="352.7" font-size="12" font-weight="bold" text-anchor="middle" fill="#2F6B3C">hard / soft</text>
+<text x="90" y="376.5" font-size="12.5" fill="#333333">no temperature cross (hard); approach of at least 1 K (soft)</text>
+<path d="M96.5,382 L103,393.96 L90,393.96 Z" fill="none" stroke="#B5383C" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M96.5,386.55 L96.5,390.45" fill="none" stroke="#B5383C" stroke-width="2.0"/>
+<circle cx="96.5" cy="392.4" r="1.1" fill="#B5383C"/>
+<text x="108" y="393" font-size="12.5" font-style="italic" fill="#666666">catches: heat flowing uphill, crossing profiles</text>
+<rect x="16" y="410" width="590" height="91" rx="8" fill="#FFFFFF" stroke="#DD8452" stroke-width="1.6"/>
+<rect x="16" y="410" width="6" height="91" rx="3" fill="#DD8452"/>
+<rect x="34" y="420" width="44" height="24" rx="6" fill="#B8561F"/>
+<text x="56" y="437" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">V5</text>
+<text x="90" y="437" font-size="14" font-weight="bold" fill="#333333">Efficiency limits</text>
+<rect x="548" y="421" width="46" height="22" id="p5" rx="11" fill="#EDF7F0" stroke="#55A868" stroke-width="1.4"/>
+<text x="571" y="436.2" font-size="12" font-weight="bold" text-anchor="middle" fill="#2F6B3C">hard</text>
+<text x="90" y="460" font-size="12.5" fill="#333333">eta_II in [0, 1]; power and ORC below Carnot; every COP below its</text>
+<text x="90" y="475.5" font-size="12.5" fill="#333333">reversible limit</text>
+<path d="M96.5,481 L103,492.96 L90,492.96 Z" fill="none" stroke="#B5383C" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M96.5,485.55 L96.5,489.45" fill="none" stroke="#B5383C" stroke-width="2.0"/>
+<circle cx="96.5" cy="491.4" r="1.1" fill="#B5383C"/>
+<text x="108" y="492" font-size="12.5" font-style="italic" fill="#666666">catches: efficiencies above Carnot, impossible COPs</text>
+<rect x="16" y="509" width="590" height="91" rx="8" fill="#FFFFFF" stroke="#DD8452" stroke-width="1.6"/>
+<rect x="16" y="509" width="6" height="91" rx="3" fill="#DD8452"/>
+<rect x="34" y="519" width="44" height="24" rx="6" fill="#B8561F"/>
+<text x="56" y="536" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">V6</text>
+<text x="90" y="536" font-size="14" font-weight="bold" fill="#333333">Units and ranges</text>
+<rect x="548" y="520" width="46" height="22" id="p6" rx="11" fill="#EDF7F0" stroke="#55A868" stroke-width="1.4"/>
+<text x="571" y="535.2" font-size="12" font-weight="bold" text-anchor="middle" fill="#2F6B3C">hard</text>
+<text x="90" y="559" font-size="12.5" fill="#333333">efficiencies in (0, 1], PR above 1, 150 to 2500 K, 1 kPa to 100 MPa,</text>
+<text x="90" y="574.5" font-size="12.5" fill="#333333">flows above 0, pressure direction</text>
+<path d="M96.5,580 L103,591.96 L90,591.96 Z" fill="none" stroke="#B5383C" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M96.5,584.55 L96.5,588.45" fill="none" stroke="#B5383C" stroke-width="2.0"/>
+<circle cx="96.5" cy="590.4" r="1.1" fill="#B5383C"/>
+<text x="108" y="591" font-size="12.5" font-style="italic" fill="#666666">catches: unit slips, sign flips, absurd temperatures</text>
+<rect x="16" y="612" width="101.78" height="22" rx="6" fill="#5A4B8A"/>
+<text x="66.89" y="627.38" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">GROUNDING</text>
+<rect x="16" y="640" width="590" height="91" rx="8" fill="#FFFFFF" stroke="#8172B3" stroke-width="1.6"/>
+<rect x="16" y="640" width="6" height="91" rx="3" fill="#8172B3"/>
+<rect x="34" y="650" width="44" height="24" rx="6" fill="#5A4B8A"/>
+<text x="56" y="667" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">V7</text>
+<text x="90" y="667" font-size="14" font-weight="bold" fill="#333333">Number grounding</text>
+<rect x="534.65" y="651" width="59.35" height="22" id="p7" rx="11" fill="#FFF3E6" stroke="#DD8452" stroke-width="1.4"/>
+<text x="564.32" y="666.2" font-size="12" font-weight="bold" text-anchor="middle" fill="#8A4B06">reward</text>
+<text x="90" y="690" font-size="12.5" fill="#333333">numbers with units in the text match the solver within 0.5 % (3 % for</text>
+<text x="90" y="705.5" font-size="12.5" fill="#333333">predicted design values)</text>
+<path d="M96.5,711 L103,722.96 L90,722.96 Z" fill="none" stroke="#B5383C" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M96.5,715.55 L96.5,719.45" fill="none" stroke="#B5383C" stroke-width="2.0"/>
+<circle cx="96.5" cy="721.4" r="1.1" fill="#B5383C"/>
+<text x="108" y="722" font-size="12.5" font-style="italic" fill="#666666">catches: quoted numbers the solver does not support</text>
+<rect x="16" y="743" width="51.78" height="22" rx="6" fill="#2F7D45"/>
+<text x="41.89" y="758.38" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">SITE</text>
+<rect x="16" y="771" width="590" height="91" rx="8" fill="#FFFFFF" stroke="#55A868" stroke-width="1.6"/>
+<rect x="16" y="771" width="6" height="91" rx="3" fill="#55A868"/>
+<rect x="34" y="781" width="44" height="24" rx="6" fill="#2F7D45"/>
+<text x="56" y="798" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">V8</text>
+<text x="90" y="798" font-size="14" font-weight="bold" fill="#333333">Site</text>
+<rect x="548" y="782" width="46" height="22" id="p8" rx="11" fill="#EDF7F0" stroke="#55A868" stroke-width="1.4"/>
+<text x="571" y="797.2" font-size="12" font-weight="bold" text-anchor="middle" fill="#2F6B3C">hard</text>
+<text x="90" y="821" font-size="12.5" fill="#333333">IT load within 1 %; no electricity deficit unless grid import is allowed;</text>
+<text x="90" y="836.5" font-size="12.5" fill="#333333">cooling and heat at least 99 %; water limit</text>
+<path d="M96.5,842 L103,853.96 L90,853.96 Z" fill="none" stroke="#B5383C" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M96.5,846.55 L96.5,850.45" fill="none" stroke="#B5383C" stroke-width="2.0"/>
+<circle cx="96.5" cy="852.4" r="1.1" fill="#B5383C"/>
+<text x="108" y="853" font-size="12.5" font-style="italic" fill="#666666">catches: a valid plant that does not serve the site</text>
+<rect x="626" y="16" width="358" height="569" rx="12" fill="#F7F7F8" stroke="#BDBDBD" stroke-width="1.8"/>
+<circle cx="649.6" cy="35.6" r="5.7" fill="#FFFFFF" stroke="#34548A" stroke-width="1.8"/>
+<path d="M653.78,39.78 L660.05,46.05" fill="none" stroke="#34548A" stroke-width="2.4" stroke-linecap="round"/>
+<text x="668" y="44" font-size="14" font-weight="bold" fill="#34548A">Why the closure check misses stream errors</text>
+<text x="642" y="66" font-size="12" fill="#666666">ledger task: ED_c = sum E_in - sum E_out - W_c</text>
+<rect x="688" y="86" width="70" height="44" id="gA" rx="8" fill="#EEF3FA" stroke="#4C72B0" stroke-width="1.6"/>
+<text x="723" y="113.02" font-size="14" font-weight="bold" text-anchor="middle" fill="#333333">A</text>
+<rect x="852" y="86" width="70" height="44" id="gB" rx="8" fill="#EEF3FA" stroke="#4C72B0" stroke-width="1.6"/>
+<text x="887" y="113.02" font-size="14" font-weight="bold" text-anchor="middle" fill="#333333">B</text>
+<g class="arrow" data-dst="gA"><path d="M644,108 L680,108" fill="none" stroke="#DD8452" stroke-width="2.2" stroke-linejoin="round"/><polygon points="688,108 680,111.4 680,104.6" fill="#DD8452"/></g>
+<g class="arrow" data-src="gA" data-dst="gB"><path d="M758,108 L844,108" fill="none" stroke="#4C72B0" stroke-width="2.2" stroke-linejoin="round"/><polygon points="852,108 844,111.4 844,104.6" fill="#4C72B0"/></g>
+<g class="arrow" data-src="gB"><path d="M922,108 L962,108" fill="none" stroke="#DD8452" stroke-width="2.2" stroke-linejoin="round"/><polygon points="970,108 962,111.4 962,104.6" fill="#DD8452"/></g>
+<text x="660" y="100" font-size="12.5" font-family="Courier, 'Liberation Mono', monospace" font-weight="bold" text-anchor="middle" fill="#8A4B06">E_f</text>
+<text x="805" y="100" font-size="12.5" font-family="Courier, 'Liberation Mono', monospace" font-weight="bold" text-anchor="middle" fill="#34548A">E_x</text>
+<text x="948" y="100" font-size="12.5" font-family="Courier, 'Liberation Mono', monospace" font-weight="bold" text-anchor="middle" fill="#8A4B06">E_g</text>
+<text x="642" y="158" font-size="12" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">ED_A = E_f - E_x - W_A</text>
+<text x="642" y="175" font-size="12" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">ED_B = E_x - E_g - W_B</text>
+<text x="642" y="192" font-size="12" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">closure = ED_A + ED_B</text>
+<text x="714.01" y="209" font-size="12" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">- (E_f - E_g - W_A - W_B)</text>
+<text x="699.61" y="226" font-size="12" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">= 0 for any E_f, E_x, E_g</text>
+<text x="642" y="257" font-size="13" font-weight="bold" fill="#333333">Closure residual after one edit to a real ledger</text>
+<rect x="640" y="273" width="330" height="32" rx="7" fill="#EDF7F0" stroke="#55A868" stroke-width="1.3"/>
+<path d="M650,289.7 L655.32,294.88 L664,283.4" fill="none" stroke="#2F6B3C" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="672" y="294" font-size="12" fill="#333333">double E[s2], an internal stream</text>
+<text x="960" y="294" font-size="12.5" font-weight="bold" text-anchor="end" fill="#2F6B3C">0</text>
+<rect x="640" y="313" width="330" height="32" rx="7" fill="#EDF7F0" stroke="#55A868" stroke-width="1.3"/>
+<path d="M650,329.7 L655.32,334.88 L664,323.4" fill="none" stroke="#2F6B3C" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="672" y="334" font-size="12" fill="#333333">double E[fuel], a boundary stream</text>
+<text x="960" y="334" font-size="12.5" font-weight="bold" text-anchor="end" fill="#2F6B3C">0</text>
+<rect x="640" y="353" width="330" height="32" rx="7" fill="#EDF7F0" stroke="#55A868" stroke-width="1.3"/>
+<path d="M650,369.7 L655.32,374.88 L664,363.4" fill="none" stroke="#2F6B3C" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="672" y="374" font-size="12" fill="#333333">change T0 to 273.15 K</text>
+<text x="960" y="374" font-size="12.5" font-weight="bold" text-anchor="end" fill="#2F6B3C">0</text>
+<rect x="640" y="393" width="330" height="32" rx="7" fill="#FBECEC" stroke="#B5383C" stroke-width="1.3"/>
+<path d="M652,404 L662,414 M662,404 L652,414" fill="none" stroke="#B5383C" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="672" y="414" font-size="12" fill="#333333">drop the work term from ED[AC]</text>
+<text x="960" y="414" font-size="12.5" font-weight="bold" text-anchor="end" fill="#8E2A2E">-8.73 MW</text>
+<text x="642" y="439" font-size="12" font-weight="bold" fill="#34548A">Only an error inside an ED line moves the residual; a</text>
+<text x="642" y="454.6" font-size="12" font-weight="bold" fill="#34548A">wrong stream value never does.</text>
+<text x="642" y="485" font-size="13" font-weight="bold" fill="#333333">Across all generated ledger rows</text>
+<text x="642" y="513" font-size="12" fill="#333333">stream-line or constant faults only</text>
+<rect x="642" y="521" width="200" height="12" rx="3" fill="#E6E6E8"/>
+<text x="850" y="532" font-size="12.5" font-weight="bold" fill="#2F6B3C">0 of 238 rows</text>
+<text x="642" y="559" font-size="12" fill="#333333">a component-line fault present</text>
+<rect x="642" y="567" width="200" height="12" rx="3" fill="#E6E6E8"/>
+<rect x="642" y="567" width="199.45" height="12" rx="3" fill="#B5383C"/>
+<text x="850" y="578" font-size="12.5" font-weight="bold" fill="#8E2A2E">361 of 362 rows</text>
+<text x="16" y="898" font-size="11.5" fill="#666666">Tolerances from verify/verifiers.py and verify/grounding.py. Closure counts: synthetic ledger rows, n = 600, seed 0; worked example: row led-0-00001.</text>
+</svg>

@@ -1,0 +1,303 @@
+{
+ "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+ "seed": 0,
+ "n": 24,
+ "kind": "simulation",
+ "tolerance": 0.02,
+ "budgets": [
+  1,
+  2,
+  3,
+  4,
+  6,
+  8,
+  12,
+  16,
+  24,
+  32,
+  48,
+  64,
+  96,
+  128
+ ],
+ "split_counts": {
+  "test_id": 5,
+  "test_ood_climate": 11,
+  "test_ood_load": 4,
+  "val": 2,
+  "test_ood_scale": 2
+ },
+ "sites_with_heat_demand": 9,
+ "curves": {
+  "enumerate_defaults": [
+   {
+    "budget": 1,
+    "valid": 0.875,
+    "within_tol": 0.0,
+    "mean_gap_pct": 19.48
+   },
+   {
+    "budget": 2,
+    "valid": 0.875,
+    "within_tol": 0.0,
+    "mean_gap_pct": 19.21
+   },
+   {
+    "budget": 3,
+    "valid": 0.875,
+    "within_tol": 0.0,
+    "mean_gap_pct": 17.4
+   },
+   {
+    "budget": 4,
+    "valid": 0.875,
+    "within_tol": 0.0,
+    "mean_gap_pct": 14.35
+   },
+   {
+    "budget": 6,
+    "valid": 0.875,
+    "within_tol": 0.0,
+    "mean_gap_pct": 13.36
+   },
+   {
+    "budget": 8,
+    "valid": 0.875,
+    "within_tol": 0.0,
+    "mean_gap_pct": 12.62
+   },
+   {
+    "budget": 12,
+    "valid": 0.958,
+    "within_tol": 0.0,
+    "mean_gap_pct": 13.07
+   },
+   {
+    "budget": 16,
+    "valid": 0.958,
+    "within_tol": 0.0,
+    "mean_gap_pct": 12.37
+   },
+   {
+    "budget": 24,
+    "valid": 1.0,
+    "within_tol": 0.25,
+    "mean_gap_pct": 8.15
+   },
+   {
+    "budget": 32,
+    "valid": 1.0,
+    "within_tol": 0.333,
+    "mean_gap_pct": 5.97
+   },
+   {
+    "budget": 48,
+    "valid": 1.0,
+    "within_tol": 0.458,
+    "mean_gap_pct": 4.3
+   },
+   {
+    "budget": 64,
+    "valid": 1.0,
+    "within_tol": 0.708,
+    "mean_gap_pct": 2.37
+   },
+   {
+    "budget": 96,
+    "valid": 1.0,
+    "within_tol": 0.708,
+    "mean_gap_pct": 2.37
+   },
+   {
+    "budget": 128,
+    "valid": 1.0,
+    "within_tol": 0.708,
+    "mean_gap_pct": 2.37
+   }
+  ],
+  "enumerate_defaults_lengths": {
+   "min": 32,
+   "max": 64
+  },
+  "random": [
+   {
+    "budget": 1,
+    "valid": 0.25,
+    "within_tol": 0.042,
+    "mean_gap_pct": 19.03
+   },
+   {
+    "budget": 2,
+    "valid": 0.375,
+    "within_tol": 0.125,
+    "mean_gap_pct": 16.13
+   },
+   {
+    "budget": 3,
+    "valid": 0.625,
+    "within_tol": 0.167,
+    "mean_gap_pct": 13.56
+   },
+   {
+    "budget": 4,
+    "valid": 0.75,
+    "within_tol": 0.167,
+    "mean_gap_pct": 15.52
+   },
+   {
+    "budget": 6,
+    "valid": 0.75,
+    "within_tol": 0.208,
+    "mean_gap_pct": 12.84
+   },
+   {
+    "budget": 8,
+    "valid": 0.833,
+    "within_tol": 0.333,
+    "mean_gap_pct": 9.56
+   },
+   {
+    "budget": 12,
+    "valid": 0.958,
+    "within_tol": 0.333,
+    "mean_gap_pct": 8.65
+   },
+   {
+    "budget": 16,
+    "valid": 0.958,
+    "within_tol": 0.333,
+    "mean_gap_pct": 6.58
+   },
+   {
+    "budget": 24,
+    "valid": 1.0,
+    "within_tol": 0.417,
+    "mean_gap_pct": 5.02
+   },
+   {
+    "budget": 32,
+    "valid": 1.0,
+    "within_tol": 0.458,
+    "mean_gap_pct": 3.57
+   },
+   {
+    "budget": 48,
+    "valid": 1.0,
+    "within_tol": 0.542,
+    "mean_gap_pct": 2.93
+   },
+   {
+    "budget": 64,
+    "valid": 1.0,
+    "within_tol": 0.667,
+    "mean_gap_pct": 1.58
+   },
+   {
+    "budget": 96,
+    "valid": 1.0,
+    "within_tol": 0.708,
+    "mean_gap_pct": 0.95
+   },
+   {
+    "budget": 128,
+    "valid": 1.0,
+    "within_tol": 0.75,
+    "mean_gap_pct": 0.56
+   }
+  ],
+  "random_lengths": {
+   "min": 130,
+   "max": 130
+  },
+  "enumerate_then_polish": [
+   {
+    "budget": 1,
+    "valid": 0.875,
+    "within_tol": 0.0,
+    "mean_gap_pct": 19.48
+   },
+   {
+    "budget": 2,
+    "valid": 0.875,
+    "within_tol": 0.0,
+    "mean_gap_pct": 19.21
+   },
+   {
+    "budget": 3,
+    "valid": 0.875,
+    "within_tol": 0.0,
+    "mean_gap_pct": 17.4
+   },
+   {
+    "budget": 4,
+    "valid": 0.875,
+    "within_tol": 0.0,
+    "mean_gap_pct": 14.35
+   },
+   {
+    "budget": 6,
+    "valid": 0.875,
+    "within_tol": 0.0,
+    "mean_gap_pct": 13.36
+   },
+   {
+    "budget": 8,
+    "valid": 0.875,
+    "within_tol": 0.0,
+    "mean_gap_pct": 12.62
+   },
+   {
+    "budget": 12,
+    "valid": 0.958,
+    "within_tol": 0.0,
+    "mean_gap_pct": 13.07
+   },
+   {
+    "budget": 16,
+    "valid": 0.958,
+    "within_tol": 0.0,
+    "mean_gap_pct": 12.37
+   },
+   {
+    "budget": 24,
+    "valid": 1.0,
+    "within_tol": 0.25,
+    "mean_gap_pct": 8.15
+   },
+   {
+    "budget": 32,
+    "valid": 1.0,
+    "within_tol": 0.333,
+    "mean_gap_pct": 5.97
+   },
+   {
+    "budget": 48,
+    "valid": 1.0,
+    "within_tol": 0.5,
+    "mean_gap_pct": 3.67
+   },
+   {
+    "budget": 64,
+    "valid": 1.0,
+    "within_tol": 0.792,
+    "mean_gap_pct": 1.45
+   },
+   {
+    "budget": 96,
+    "valid": 1.0,
+    "within_tol": 0.917,
+    "mean_gap_pct": 0.31
+   },
+   {
+    "budget": 128,
+    "valid": 1.0,
+    "within_tol": 1.0,
+    "mean_gap_pct": 0.13
+   }
+  ],
+  "enumerate_then_polish_lengths": {
+   "min": 104,
+   "max": 144
+  }
+ }
+}

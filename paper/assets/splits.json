@@ -1,0 +1,55 @@
+{
+ "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+ "seed": 0,
+ "n": 1265,
+ "kind": "synthetic",
+ "counts": {
+  "repair": {
+   "test_id": 12,
+   "test_ood_fault": 108,
+   "test_ood_topology": 128,
+   "train": 125,
+   "val": 15
+  },
+  "design": {
+   "test_id": 8,
+   "test_ood_climate": 19,
+   "test_ood_load": 10,
+   "test_ood_scale": 4,
+   "train": 41,
+   "val": 3
+  },
+  "audit": {
+   "test_id": 17,
+   "test_ood_topology": 58,
+   "train": 103,
+   "val": 14
+  },
+  "ledger": {
+   "test_id": 33,
+   "test_ood_fault": 109,
+   "test_ood_topology": 198,
+   "train": 227,
+   "val": 33
+  }
+ },
+ "definitions": {
+  "repair": {
+   "test_ood_topology": "steam-ORC plant and gas-engine plants",
+   "test_ood_fault": "sign flip, swapped ports"
+  },
+  "design": {
+   "test_ood_scale": "IT load of 45 MW or more",
+   "test_ood_climate": "ambient 305 K or more",
+   "test_ood_load": "chilled fraction 0.85 or more"
+  },
+  "audit": {
+   "test_ood_topology": "steam-ORC plant and gas-engine plants"
+  },
+  "ledger": {
+   "test_ood_topology": "steam-ORC plant and gas-engine plants",
+   "test_ood_fault": "wrong_stream, dropped_work, wrong_ref"
+  }
+ },
+ "in_distribution": "train, val and test_id are separated by a hash of the example id"
+}

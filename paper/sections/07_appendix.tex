@@ -1,0 +1,105 @@
+\section{Verifier definitions}\label{app:verifiers}
+
+The verifiers in \cref{tab:verifiers} act on a solved plant and, for V7 and V8, on the answer text and the site. They return a boolean and a short detail string. The detail is the feedback given to a model on a retry. A plant is valid when it solves and all hard checks pass. The statements below complement the table.
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+\item V1 and V2 are residuals per component of the solved balances. V2 is scaled by the sum of the net work, the fuel energy and 1~MW, so that plants of different size share one tolerance.
+\item V3a allows a small negative destruction of $10^{-5}$ of the fuel exergy to absorb round-off; V3b is the plant-level closure of \cref{sec:exergy}.
+\item V4a is the hard temperature-cross check on every heat exchanger, and V4b the soft practical-pinch check of 1~K.
+\item V5 contains four bounds: $\eta_{\mathrm{II}}\in[0,1]$; the power efficiency below the Carnot bound $1-T_0/T_{\max}$; the ORC efficiency below $1-T_{\mathrm{cond}}/T_{\mathrm{hot}}$; and the COP of every chiller and heat pump at or below the reversible COP of its stream temperatures.
+\item V6 checks ranges: efficiencies in $(0,1]$, pressure ratio above 1, pressure drops in $[0,0.3]$, temperatures 150 to 2500~K, pressures 1~kPa to 100~MPa, and the direction of pressure change across compressors, pumps and turbines.
+\item V7 compares every number with a unit in a reasoning text with solver or plant values within 0.5\% (3\% for predicted Design quantities).
+\item V8 checks that the IT load is within 1\%, that electricity balances when grid import is not allowed, that cooling and heat are delivered to at least 99\% of the load, and the water limit.
+\end{itemize}
+
+\section{Component parameter registry}\label{app:registry}
+
+\input{generated/table_params.tex}
+
+\section{Fault catalogs}\label{app:faults}
+
+\Cref{tab:faults} lists the fault types of the Repair and Ledger tasks, and \cref{tab:ledgerfaults} gives the symptom shares behind \cref{fig:fig_ledger_symptoms} on the single-fault rows and, for comparison, the share showing either symptom on all rows (which include the \val{led.n_double} two-fault rows; a
+stream-line fault combined with a component-line fault breaks closure, so the all-rows closure shares for stream-line faults are not zero).
+
+\begin{table}[tbp]
+\centering
+\input{generated/table_faults.tex}
+\caption{Fault catalogs. Repair: \val{env.n_repair_faults} parameter-level types; Ledger repair: \val{env.n_ledger_faults} equation-level types in three layers. The held-out Repair faults are sign flip and swapped ports.}
+\label{tab:faults}
+\end{table}
+
+\begin{table}[tbp]
+\centering
+\input{generated/table_ledger_faults.tex}
+\caption{Symptom shares per ledger fault type (simulation, \val{led.n} generated rows, seed 0). Columns are the share of rows showing a closure residual, a negative exergy destruction or either, on single-fault rows
+and on all rows. $^*$ marks a held-out fault type. Data: \texttt{assets/ledger\_symptoms.json}.}
+\label{tab:ledgerfaults}
+\end{table}
+
+\section{Dataset cards}\label{app:datasets}
+
+All four datasets are synthetic: plants and sites are sampled by the code in the repository and labeled by the simulator and the verifiers. They are not measurements, and no measured data is inside them. Files are written per task and split
+with a metadata file that records the seed, the settings and the CoolProp and schema versions. The data files are not in the repository; the generators reproduce them. The licence has not been chosen: \todo{licence}.
+
+\paragraph{Ledger.} Repair an equation-level fault in the exergy ledger of a solved plant (\val{env.n_ledger_faults} fault types in three layers; one fault in 70\% of rows, two otherwise). Held out: topologies (steam-ORC and gas-engine plants) and the fault types \texttt{wrong\_stream}, \texttt{dropped\_work}, \texttt{wrong\_ref}.
+
+\paragraph{Repair.} Fix a plant that fails the solver or the verifiers; one fault of \val{env.n_repair_faults} types is injected into a sampled valid plant of one of five topologies, and only faults that the solver or the verifiers detect are kept. Turbine plants are drawn three times as often as the held-out topologies. Exact restoration applies only when the fault is deducible.
+
+\paragraph{Design.} Choose a plant for a sampled site (IT load 5 to 60~MW, log-uniform; chilled fraction 0.3 to 0.95; ambient 283 to 310~K; humidity 0.2 to 0.9; optional heat demand and water limit). The reference is the best of enumeration and a Nelder--Mead polish with at least 60 evaluations (a 15-evaluation polish was measured to be 1.6 to 3.1\% worse). Held out: IT load of 45~MW or more, ambient of 305~K or more, chilled fraction of 0.85 or more.
+
+\paragraph{Audit.} Rank exergy destroyers, propose one allowed change and predict its fuel effect on sampled valid plants, some with ORC bottoming and district heat; only plants in which at least one allowed change saves fuel are kept. Held out: topologies.
+
+\begin{table}[tbp]
+\centering
+\input{generated/table_datasets.tex}
+\caption{Rows per split of the datasets generated for this paper (seed 0; Repair 400 rows requested, Audit 200, Ledger 600; Design in 16 chunks of 6 sites, of which \val{des.n_sites} sites were used for the baselines). Splits for the in-distribution sets are separated by a hash of the example identifier. Data: \texttt{assets/splits.json}.}
+\label{tab:datasets}
+\end{table}
+
+\section{Reward formulas}\label{app:rewards}
+
+With weights in brackets (\cref{tab:tasks}). \textbf{Repair} [0.5, 2, 1, 1, 0.5, 0.5]: format; validity (1 if the plant solves and passes all hard checks, else $0.5\times$ the fraction of checks passed); site requirements; exact restoration when the fault is deducible; minimality $1/(1+\text{extra edits beyond the minimum})$; grounding.
+\textbf{Design} [0.5, 2, 2, 0.5]: format; validity (1 valid, 0.2 built but invalid); quality $1-(F-F_{\mathrm{ref}})/(0.1\,F_{\mathrm{ref}})$ clipped to $[0,1.05]$; grounding of predicted numbers.
+\textbf{Audit} [0.5, 1.5, 1, 2, 1, 0.5]: format; nDCG@3 of the ranking with the prime mover removed; validity of the change; gain (saved fuel over the best allowed saving, clipped to $[0,1.05]$); prediction $1-|\hat y-y|/\max(|y|,0.002\,F)$; grounding.
+\textbf{Ledger} [0.5, 1, 0.5, 2.5, 0.5, 0.5]: format; closure (1 when $|\text{residual}|\le10^{-6}$ of fuel exergy, falling to 0 at 1\%); share of components with $\ED\ge0$; exactness (faulty lines that now evaluate to the true value minus correct lines now broken, over faulty lines); minimality $1/(1+\text{extra lines})$ once everything is correct; diagnosis numbers in MW must appear in the prompt.
+
+\section{Hyperparameters and compute}\label{app:compute}
+
+The training settings are in \cref{tab:training}. SFT, merge and GRPO have never been run on a GPU. The supported hardware, from the project runbook, is: an RTX PRO 6000 (48~GB) or RTX 4090 (24~GB) for bf16 LoRA with the default settings (vLLM optional for GRPO); a single Kaggle T4 (16~GB) with \texttt{--dtype float16 --qlora}; Kaggle TPUs are not supported by these scripts; and a 6~GB laptop GPU is only for data generation, tests and non-model baselines. GPU hours, wall-clock times and costs of the runs: \todo{pending}.
+Everything in \cref{sec:baselines,sec:findings,sec:trace} was computed on one CPU core with \val{env.n_tests} passing tests (\val{env.tests_minutes}~minutes) and library versions CoolProp~\val{env.ver.CoolProp}, NumPy~\val{env.ver.numpy}, SciPy~\val{env.ver.scipy}, pydantic~\val{env.ver.pydantic}, pandas~\val{env.ver.pandas} and Python~\val{env.ver.python}.
+
+\section{Harness text}\label{app:harness}
+
+The harness file \texttt{AGENTS.md} has \val{har.agents_lines} lines (\val{har.agents_chars} characters), whose sections are listed in \cref{tab:agents}. The skills are listed in \cref{tab:skills} and the modes in \cref{tab:modes}. The held-out component is the gas engine, with \val{har.engine_n_ports} ports; it appears in the held-out-topology splits, with \val{har.heldout_repair_engine_rows} of \val{har.heldout_repair_rows} Repair rows and \val{har.heldout_audit_engine_rows} of \val{har.heldout_audit_rows} Audit rows in those splits involving an engine plant (the others use the steam-ORC plant).
+
+\begin{table}[tbp]
+\centering
+\input{generated/table_agents.tex}
+\caption{Sections of \texttt{AGENTS.md} with the number of lines excerpted into the harness data and the first line of each (truncated). Data: \texttt{assets/harness.json}.}
+\label{tab:agents}
+\end{table}
+
+\begin{table}[tbp]
+\centering
+\input{generated/table_skills.tex}
+\caption{The \val{env.n_skills} skills and the components each covers; port and parameter sections of component skills are generated from the registry.}
+\label{tab:skills}
+\end{table}
+
+\begin{table}[tbp]
+\centering
+\input{generated/table_harness_modes.tex}
+\caption{Harness modes. In skill modes the bodies of the selected skills are appended to the system message.}
+\label{tab:modes}
+\end{table}
+
+\section{Runbook summary and reproducibility checklist}\label{app:runbook}
+
+The steps below are in the project runbook, and every number in this paper from a baseline or a simulator study is regenerated by \texttt{tools/generate\_paper\_assets.py} with the commands recorded in \texttt{assets\_summary.json}.
+\begin{enumerate}[leftmargin=*,itemsep=1pt]
+\item Install the locked requirements and the package; check that the generated harness text is in sync (the harness builder has a check mode) and that all \val{env.n_tests} tests pass.
+\item Generate the data on the CPU: Repair, Audit, Design (with at least 60 evaluations for the reference) and Ledger, with fixed seeds; run the data report, whose \texttt{problems} field must be empty.
+\item Run the non-model baselines (one evaluation module per task) and the reward diagnostics.
+\item Evaluate the base model with and without the harness; check the chat template with the SFT print-sample; run SFT (smoke test, then full), evaluate, merge, and run GRPO per task from the merged model.
+\item Run the ablations, the ThermoQA before and after, the Design anytime protocol and the paired comparisons (\texttt{eval.compare}); evaluate the Frontier trace when the file is available, giving the sampling interval explicitly.
+\end{enumerate}
+Checklist: seeds are fixed (seed 0 for all generated data in this paper); sample sizes are stated at every number; pending items are red \texttt{\textbackslash todo} markers; no figure shows a trained-model result. Steps 4 and 5 are pending \todo{pending}.

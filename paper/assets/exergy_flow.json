@@ -1,0 +1,128 @@
+{
+ "solve_ms_mean_of_10": 14.23812749999911,
+ "command": "core.solve.solve(synth.topologies.size_generation(dc_chp, **plant_kwargs))",
+ "seed": null,
+ "n": 1,
+ "kind": "simulation (one solved plant)",
+ "plant_kwargs": {
+  "P_it": 20000000.0,
+  "chilled_fraction": 0.5,
+  "cooling": "absorption",
+  "prime_mover": "turbine",
+  "rejection": "dry",
+  "T_amb": 298.15,
+  "RH": 0.6,
+  "heat_demand_w": 4000000.0,
+  "heat_source": "exhaust"
+ },
+ "units": "MW (exergy, unless stated)",
+ "fuel_exergy": 60.50788677491881,
+ "air_exergy": 0.0,
+ "dh_return_exergy": 0.2174571132327277,
+ "net_electricity": 20.6,
+ "it_load_power": 20.0,
+ "surplus_electricity": 0.6,
+ "delivered_cooling_exergy": 0.06852501241998887,
+ "delivered_heat_exergy": 0.4191929665673895,
+ "stack_exergy": 7.446432753971436,
+ "boundary_out": {
+  "s7": 7.446432753971436,
+  "dh_out": 0.6366500798001172
+ },
+ "destruction": {
+  "AC": {
+   "type": "compressor",
+   "mw": 1.5217226321547068
+  },
+  "CC": {
+   "type": "combustor",
+   "mw": 18.306990327216237
+  },
+  "GT": {
+   "type": "turbine",
+   "mw": 2.30821846833127
+  },
+  "DC": {
+   "type": "dc_load",
+   "mw": 20.068525012419986
+  },
+  "REJ": {
+   "type": "heat_rejector",
+   "mw": 1.2068487348538441
+  },
+  "HXD": {
+   "type": "recuperator",
+   "mw": 1.7809480409548004
+  },
+  "HX": {
+   "type": "recuperator",
+   "mw": 5.550110030610729
+  },
+  "CH": {
+   "type": "absorption_chiller",
+   "mw": 1.2988978078384101
+  }
+ },
+ "destruction_plant_total": 31.97373604196,
+ "destruction_it_load": 20.068525012419986,
+ "heat_dissipated_to_ambient_mw": {
+  "AC": 0.0,
+  "CC": 0.5778900409923949,
+  "GT": 0.0,
+  "DC": 10.0,
+  "REJ": 22.837499999999995,
+  "HXD": 0.0,
+  "HX": 0.0,
+  "CH": 0.0
+ },
+ "heat_rejector_dissipated_mw": 22.837499999999995,
+ "cooling_load_mw": 10.0,
+ "heat_delivered_mw": 3.9999999999999982,
+ "fuel_energy_mw": 57.789004099239484,
+ "component_params": {
+  "AC": {
+   "PR": 18.0,
+   "eta_s": 0.86
+  },
+  "CC": {
+   "T_out": 1500.0,
+   "dp": 0.04,
+   "q_loss": 0.01
+  },
+  "GT": {
+   "P_out": 105513.90190565448,
+   "eta_s": 0.88
+  },
+  "DC": {
+   "P_it": 20000000.0,
+   "chilled_fraction": 0.5,
+   "T_return": 301.15
+  },
+  "REJ": {
+   "approach_K": 8.0,
+   "fan_frac": 0.015,
+   "kind": "dry"
+  },
+  "HXD": {
+   "T_cold_out": 343.15,
+   "dp_hot": 0.01,
+   "useful_heat": true
+  },
+  "HX": {
+   "T_cold_out": 368.15,
+   "dp_hot": 0.03
+  },
+  "CH": {
+   "T_chw_out": 291.15,
+   "T_gen_out": 358.15,
+   "dT_rej": 8.0,
+   "eps": 0.27,
+   "COP_max": 0.8
+  }
+ },
+ "eta_II": 0.3485118899860253,
+ "eta_I": 0.5987298196138207,
+ "COP_absorption": 0.8,
+ "closure_residual_mw": 0.0,
+ "balance_check_mw": 0.0
+}

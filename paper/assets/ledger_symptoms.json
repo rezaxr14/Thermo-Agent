@@ -1,0 +1,236 @@
+{
+ "command": "ledger.data OUT -n 600 --seed 0; ledger.run_eval.symptoms(row) over all splits",
+ "seed": 0,
+ "n": 600,
+ "kind": "synthetic",
+ "unit": "share of rows showing the symptom",
+ "layers": {
+  "stream lines": [
+   "missing_m",
+   "missing_ech",
+   "sign_T0",
+   "t0_literal",
+   "wrong_ref"
+  ],
+  "component lines": [
+   "dropped_term",
+   "dropped_work",
+   "sign_flip",
+   "wrong_factor",
+   "wrong_stream"
+  ],
+  "stream or component line": [
+   "unit_slip"
+  ],
+  "constants": [
+   "t0_celsius",
+   "t0_offset"
+  ]
+ },
+ "held_out_fault_types": [
+  "dropped_work",
+  "wrong_ref",
+  "wrong_stream"
+ ],
+ "rows_with_one_fault": 402,
+ "rows_with_two_faults": 198,
+ "by_fault_single_fault_rows": {
+  "dropped_term": {
+   "n": 32,
+   "closure": 1.0,
+   "negative_ed": 0.281,
+   "either": 1.0
+  },
+  "dropped_work": {
+   "n": 28,
+   "closure": 1.0,
+   "negative_ed": 0.464,
+   "either": 1.0
+  },
+  "missing_ech": {
+   "n": 12,
+   "closure": 0.0,
+   "negative_ed": 0.333,
+   "either": 0.333
+  },
+  "missing_m": {
+   "n": 24,
+   "closure": 0.0,
+   "negative_ed": 0.458,
+   "either": 0.458
+  },
+  "sign_T0": {
+   "n": 28,
+   "closure": 0.0,
+   "negative_ed": 0.714,
+   "either": 0.714
+  },
+  "sign_flip": {
+   "n": 26,
+   "closure": 1.0,
+   "negative_ed": 0.308,
+   "either": 1.0
+  },
+  "t0_celsius": {
+   "n": 28,
+   "closure": 0.0,
+   "negative_ed": 0.0,
+   "either": 0.0
+  },
+  "t0_literal": {
+   "n": 26,
+   "closure": 0.0,
+   "negative_ed": 0.731,
+   "either": 0.731
+  },
+  "t0_offset": {
+   "n": 28,
+   "closure": 0.0,
+   "negative_ed": 0.0,
+   "either": 0.0
+  },
+  "unit_slip": {
+   "n": 71,
+   "closure": 0.662,
+   "negative_ed": 0.592,
+   "either": 0.986
+  },
+  "wrong_factor": {
+   "n": 42,
+   "closure": 1.0,
+   "negative_ed": 0.286,
+   "either": 1.0
+  },
+  "wrong_ref": {
+   "n": 16,
+   "closure": 0.0,
+   "negative_ed": 0.625,
+   "either": 0.625
+  },
+  "wrong_stream": {
+   "n": 41,
+   "closure": 1.0,
+   "negative_ed": 0.488,
+   "either": 1.0
+  }
+ },
+ "by_fault_all_rows": {
+  "dropped_term": {
+   "n": 56,
+   "closure": 1.0,
+   "negative_ed": 0.393,
+   "either": 1.0
+  },
+  "dropped_work": {
+   "n": 48,
+   "closure": 1.0,
+   "negative_ed": 0.604,
+   "either": 1.0
+  },
+  "missing_ech": {
+   "n": 27,
+   "closure": 0.333,
+   "negative_ed": 0.556,
+   "either": 0.704
+  },
+  "missing_m": {
+   "n": 46,
+   "closure": 0.174,
+   "negative_ed": 0.652,
+   "either": 0.696
+  },
+  "sign_T0": {
+   "n": 61,
+   "closure": 0.246,
+   "negative_ed": 0.754,
+   "either": 0.787
+  },
+  "sign_flip": {
+   "n": 60,
+   "closure": 1.0,
+   "negative_ed": 0.5,
+   "either": 1.0
+  },
+  "t0_celsius": {
+   "n": 54,
+   "closure": 0.204,
+   "negative_ed": 0.259,
+   "either": 0.352
+  },
+  "t0_literal": {
+   "n": 59,
+   "closure": 0.356,
+   "negative_ed": 0.78,
+   "either": 0.864
+  },
+  "t0_offset": {
+   "n": 50,
+   "closure": 0.22,
+   "negative_ed": 0.26,
+   "either": 0.42
+  },
+  "unit_slip": {
+   "n": 134,
+   "closure": 0.687,
+   "negative_ed": 0.687,
+   "either": 0.985
+  },
+  "wrong_factor": {
+   "n": 77,
+   "closure": 0.987,
+   "negative_ed": 0.429,
+   "either": 1.0
+  },
+  "wrong_ref": {
+   "n": 41,
+   "closure": 0.341,
+   "negative_ed": 0.805,
+   "either": 0.854
+  },
+  "wrong_stream": {
+   "n": 85,
+   "closure": 1.0,
+   "negative_ed": 0.6,
+   "either": 1.0
+  }
+ },
+ "rows_with_any_symptom": 0.822,
+ "rows_with_no_symptom": 0.178,
+ "closure_by_row_group": {
+  "component_line": {
+   "rows": 362,
+   "closure_residual": 361,
+   "negative_ed": 180,
+   "either": 362
+  },
+  "stream_or_constant_only": {
+   "rows": 238,
+   "closure_residual": 0,
+   "negative_ed": 131,
+   "either": 131
+  }
+ },
+ "parameter_range_checks_seeing_equation_faults": 0,
+ "mean_prompt_chars": 3325.0,
+ "closure_demo": {
+  "ledger_row_id": "led-0-00001",
+  "baseline_closure": 0.0,
+  "double_internal_stream_E": {
+   "line": "E[s2]",
+   "closure": -3.552713678800501e-15
+  },
+  "double_boundary_stream_E": {
+   "line": "E[fuel]",
+   "closure": 0.0
+  },
+  "change_T0": {
+   "line": "T0",
+   "closure": 0.0
+  },
+  "drop_work_term": {
+   "line": "ED[AC]",
+   "closure": -8.729132260616813
+  },
+  "units": "MW"
+ }
+}

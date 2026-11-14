@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560" font-family="Helvetica, Arial, 'Liberation Sans', sans-serif">
+<rect width="1000" height="560" fill="#FFFFFF"/>
+<text x="270" y="40" font-size="13" font-weight="bold" text-anchor="middle" fill="#333333">IT load of the synthetic trace</text>
+<path d="M70,70 L70,380" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<path d="M66,380 L70,380" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<text x="62" y="384" font-size="11.5" text-anchor="end" fill="#666666">0</text>
+<path d="M66,302.5 L70,302.5" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<text x="62" y="306.5" font-size="11.5" text-anchor="end" fill="#666666">100</text>
+<path d="M66,225 L70,225" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<text x="62" y="229" font-size="11.5" text-anchor="end" fill="#666666">200</text>
+<path d="M66,147.5 L70,147.5" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<text x="62" y="151.5" font-size="11.5" text-anchor="end" fill="#666666">300</text>
+<path d="M66,70 L70,70" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<text x="62" y="74" font-size="11.5" text-anchor="end" fill="#666666">400</text>
+<text x="20" y="225" font-size="12" text-anchor="middle" transform="rotate(-90 20 225)" fill="#666666">samples per MW</text>
+<path d="M70,380 L470,380" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<rect x="71" y="376.12" width="16.18" height="3.88" rx="1" fill="#8FB0DC"/>
+<rect x="89.18" y="375.35" width="16.18" height="4.65" rx="1" fill="#8FB0DC"/>
+<rect x="107.36" y="379.23" width="16.18" height="0.78" rx="1" fill="#8FB0DC"/>
+<rect x="125.55" y="373.8" width="16.18" height="6.2" rx="1" fill="#8FB0DC"/>
+<rect x="143.73" y="370.7" width="16.18" height="9.3" rx="1" fill="#8FB0DC"/>
+<rect x="161.91" y="369.93" width="16.18" height="10.07" rx="1" fill="#8FB0DC"/>
+<rect x="180.09" y="356.75" width="16.18" height="23.25" rx="1" fill="#8FB0DC"/>
+<rect x="198.27" y="356.75" width="16.18" height="23.25" rx="1" fill="#8FB0DC"/>
+<rect x="216.45" y="335.05" width="16.18" height="44.95" rx="1" fill="#8FB0DC"/>
+<rect x="234.64" y="319.55" width="16.18" height="60.45" rx="1" fill="#8FB0DC"/>
+<rect x="252.82" y="300.18" width="16.18" height="79.83" rx="1" fill="#8FB0DC"/>
+<rect x="271" y="308.7" width="16.18" height="71.3" rx="1" fill="#8FB0DC"/>
+<rect x="289.18" y="275.38" width="16.18" height="104.62" rx="1" fill="#8FB0DC"/>
+<rect x="307.36" y="277.7" width="16.18" height="102.3" rx="1" fill="#8FB0DC"/>
+<rect x="325.55" y="252.12" width="16.18" height="127.88" rx="1" fill="#8FB0DC"/>
+<rect x="343.73" y="251.35" width="16.18" height="128.65" rx="1" fill="#8FB0DC"/>
+<rect x="361.91" y="276.15" width="16.18" height="103.85" rx="1" fill="#8FB0DC"/>
+<rect x="380.09" y="246.7" width="16.18" height="133.3" rx="1" fill="#8FB0DC"/>
+<rect x="398.27" y="283.12" width="16.18" height="96.88" rx="1" fill="#8FB0DC"/>
+<rect x="416.45" y="280.8" width="16.18" height="99.2" rx="1" fill="#8FB0DC"/>
+<rect x="434.64" y="304.82" width="16.18" height="75.17" rx="1" fill="#8FB0DC"/>
+<rect x="452.82" y="139.75" width="16.18" height="240.25" rx="1" fill="#8FB0DC"/>
+<text x="70" y="398" font-size="11.5" text-anchor="middle" fill="#666666">8</text>
+<text x="142.73" y="398" font-size="11.5" text-anchor="middle" fill="#666666">12</text>
+<text x="215.45" y="398" font-size="11.5" text-anchor="middle" fill="#666666">16</text>
+<text x="288.18" y="398" font-size="11.5" text-anchor="middle" fill="#666666">20</text>
+<text x="360.91" y="398" font-size="11.5" text-anchor="middle" fill="#666666">24</text>
+<text x="433.64" y="398" font-size="11.5" text-anchor="middle" fill="#666666">28</text>
+<text x="270" y="418" font-size="12" text-anchor="middle" fill="#666666">IT load (MW)</text>
+<path d="M211.64,382 L211.64,388" fill="none" stroke="#DD8452" stroke-width="2.0"/>
+<path d="M263.27,382 L263.27,388" fill="none" stroke="#DD8452" stroke-width="2.0"/>
+<path d="M297.27,382 L297.27,388" fill="none" stroke="#DD8452" stroke-width="2.0"/>
+<path d="M323.45,382 L323.45,388" fill="none" stroke="#DD8452" stroke-width="2.0"/>
+<path d="M346.91,382 L346.91,388" fill="none" stroke="#DD8452" stroke-width="2.0"/>
+<path d="M371.64,382 L371.64,388" fill="none" stroke="#DD8452" stroke-width="2.0"/>
+<path d="M393.45,382 L393.45,388" fill="none" stroke="#DD8452" stroke-width="2.0"/>
+<path d="M420.91,382 L420.91,388" fill="none" stroke="#DD8452" stroke-width="2.0"/>
+<path d="M450.55,382 L450.55,388" fill="none" stroke="#DD8452" stroke-width="2.0"/>
+<path d="M470,382 L470,388" fill="none" stroke="#DD8452" stroke-width="2.0"/>
+<text x="84" y="82" font-size="11.5" fill="#8A4B06">orange ticks: the 10 load-bin centres used by the scan</text>
+<text x="780" y="40" font-size="13" font-weight="bold" text-anchor="middle" fill="#333333">modularity penalty against unit count</text>
+<path d="M600,70 L600,380" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<path d="M596,380 L600,380" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<text x="592" y="384" font-size="11.5" text-anchor="end" fill="#666666">0 %</text>
+<path d="M596,276.67 L600,276.67" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<text x="592" y="280.67" font-size="11.5" text-anchor="end" fill="#666666">10 %</text>
+<path d="M596,173.33 L600,173.33" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<text x="592" y="177.33" font-size="11.5" text-anchor="end" fill="#666666">20 %</text>
+<path d="M596,70 L600,70" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<text x="592" y="74" font-size="11.5" text-anchor="end" fill="#666666">30 %</text>
+<text x="544" y="225" font-size="12" text-anchor="middle" transform="rotate(-90 544 225)" fill="#666666">extra fuel against the ideal bound</text>
+<path d="M600,380 L960,380" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
+<path d="M600,380 L960,380" fill="none" stroke="#55A868" stroke-width="2.2" stroke-dasharray="6 4"/>
+<text x="960" y="372" font-size="12" text-anchor="end" fill="#2F6B3C">ideal part-load bound: 0</text>
+<text x="625.71" y="400" font-size="12" text-anchor="middle" fill="#666666">1</text>
+<text x="677.14" y="400" font-size="12" text-anchor="middle" fill="#666666">2</text>
+<text x="728.57" y="400" font-size="12" text-anchor="middle" fill="#666666">3</text>
+<text x="780" y="400" font-size="12" text-anchor="middle" fill="#666666">4</text>
+<text x="831.43" y="400" font-size="12" text-anchor="middle" fill="#666666">6</text>
+<text x="882.86" y="400" font-size="12" text-anchor="middle" fill="#666666">8</text>
+<text x="934.29" y="400" font-size="12" text-anchor="middle" fill="#666666">12</text>
+<text x="780" y="420" font-size="12" text-anchor="middle" fill="#666666">number of units</text>
+<path d="M625.71,104.41 L677.14,104.41 L728.57,191.62 L780,235.33 L831.43,278.94 L882.86,317.07 L934.29,333.5" fill="none" stroke="#DD8452" stroke-width="2.4" stroke-linejoin="round"/>
+<circle cx="625.71" cy="104.41" r="3.4" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="677.14" cy="104.41" r="3.4" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="728.57" cy="191.62" r="3.4" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="780" cy="235.33" r="3.4" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="831.43" cy="278.94" r="3.4" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="882.86" cy="317.07" r="3.4" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="934.29" cy="333.5" r="3.4" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<path d="M628.71,104.41 L680.14,104.41 L731.57,191.62 L783,235.33 L834.43,278.94 L885.86,317.07 L937.29,333.5" fill="none" stroke="#4C72B0" stroke-width="2.4" stroke-linejoin="round"/>
+<circle cx="628.71" cy="104.41" r="3.4" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="680.14" cy="104.41" r="3.4" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="731.57" cy="191.62" r="3.4" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="783" cy="235.33" r="3.4" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="834.43" cy="278.94" r="3.4" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="885.86" cy="317.07" r="3.4" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="937.29" cy="333.5" r="3.4" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<text x="960" y="82" font-size="12" text-anchor="end" fill="#666666">turbine (orange) and engine (blue) coincide</text>
+<rect x="16" y="456" width="968" height="54" rx="8" fill="#FFF4D6" stroke="#C9A227" stroke-width="1.4"/>
+<text x="30" y="478" font-size="12.5" fill="#333333">Synthetic trace: 2000 samples, load drawn from a normal distribution (mean 24 MW, standard deviation 5 MW) and clipped to 8 to 30 MW; it stands in until the real trace</text>
+<text x="30" y="494.25" font-size="12.5" fill="#333333">is evaluated.</text>
+<text x="16" y="534" font-size="11.5" fill="#666666">Simulation on a synthetic trace, seed 0, n = 2000; design.modular.scan_units, 10 load bins, chilled fraction 0.5.</text>
+</svg>

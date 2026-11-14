@@ -1,0 +1,74 @@
+\section{Related work}\label{sec:related}
+
+\paragraph{Thermodynamics benchmarks and agents.}
+ThermoQA is a benchmark of thermodynamic questions for language models; it is a single-author
+preprint \citep{duzkar2026thermoqa}. Song et al.\ built ReAct agents for gas-path analysis of
+gas turbines and found that smaller models struggled with tool use and parameter extraction
+\citep{song2024gaspath}. Both evaluate models; neither trains one against a simulator.
+
+\paragraph{Design and flowsheet agents.}
+Text2Sim uses multiple prompted agents, with a frozen model, to turn a text description into a
+chemical-process simulation \citep{tian2026text2sim}. Li et al.\ treat thermodynamic cycle co-design
+as a graph-based hierarchical reinforcement-learning problem with a learned surrogate and no language
+model \citep{li2026thermocycle}. Our Design task uses a language model to choose a configuration and
+continuous parameters, but the final check is the physical simulator rather than a surrogate.
+
+\paragraph{Reinforcement learning with verifiable and solver-grounded rewards.}
+GRPO \citep{shao2024deepseekmath} and its use for reasoning \citep{guo2025deepseekr1} replace a learned
+value function with group-normalized rewards. Tulu~3 introduced reinforcement learning with verifiable
+rewards for post-training and motivates a supervised stage first: sparse verifiable rewards need a policy
+that already succeeds sometimes \citep{lambert2024tulu3}. Solver-informed reinforcement learning uses
+a solver in the loop for optimization modeling \citep{chen2025sirl}. Reinforcement learning from execution feedback
+in code uses test outcomes as the reward \citep{gehring2024rlef}, and the loss we use follows the DAPO
+variant of GRPO \citep{yu2025dapo}. The closest methodological precedent is Luo et al., who run
+supervised fine-tuning followed by GRPO with a solver-grounded reward for modeling nuclear
+thermal-hydraulic systems, with LoRA rank 8 and a group of 8; they report solver convergence rising
+from 72.4\% after supervised fine-tuning to 88.8\% after GRPO \citep{luo2026nuclear}. Our work follows the same
+two stages with a different reward: the physical second-law checks of \cref{sec:verifiers}.
+
+\paragraph{Parameter-efficient reinforcement learning.}
+LoRA \citep{hu2021lora} is the adapter method we use. Reinforcement learning has been reported to need little adapter capacity, with a learning
+rate about ten times that of full fine-tuning \citep{schulman2025lora}; our GRPO stage uses a smaller
+rank than the SFT stage for that reason. Adapting a decoder-only model into an encoder-decoder model
+\citep{zhang2025t5gemma} is an optional ablation only, because reinforcement-learning tooling
+targets decoder-only models.
+
+\paragraph{Data-center on-site generation, waste heat and absorption cooling.}
+Combined heat and power for data centers was assessed in an Oak Ridge report \citep{darrow2009chp}.
+Published measurements of the Frontier supercomputer give the load and the coolant temperatures that
+set our operating points \citep{sun2024frontier,jadhav2026frontierml}. The coefficient of performance
+of a single-effect absorption chiller was measured at 0.55 to 0.70 with 88\,$^\circ$C hot water,
+12.5\,$^\circ$C chilled water and 31\,$^\circ$C cooling water \citep{ochoa2019absorption}; our
+absorption model is a system-level fraction of the reversible COP, capped at 0.8, not a property model
+(\cref{sec:limits}). Exergy analysis and its use in design follows standard texts \citep{bejan1996thermal}.
+Gas properties come from the GRI-Mech 3.0 polynomials \citep{smith1999grimech} and liquid properties
+from CoolProp \citep{bell2014coolprop}.
+
+\paragraph{Positioning.}
+The ingredients exist: GRPO, verifiable rewards, solver-grounded reinforcement learning and language
+models for process design. The combination for data-center energy systems, with second-law verifiers
+as the reward, four task families with structural splits, an equation-level ledger benchmark and
+accounting in solver calls, is what we contribute. \Cref{tab:positioning} summarizes how the cited
+methods differ.
+
+\begin{table}[tbp]
+\centering\small\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}p{3.4cm}p{1.9cm}p{2.4cm}p{2.4cm}p{1.7cm}p{1.7cm}@{}}
+\toprule
+Work & Language model & Trained with solver or verifier reward & Exergy or second-law checks & Data-center domain & Equation-level fault repair \\
+\midrule
+ThermoQA \citep{duzkar2026thermoqa} & evaluated & no & \todo{check} & no & no \\
+Gas-path agents \citep{song2024gaspath} & prompted & no & \todo{check} & no & no \\
+Text2Sim \citep{tian2026text2sim} & prompted, frozen & no & \todo{check} & no & no \\
+Cycle co-design RL \citep{li2026thermocycle} & none (graph RL) & learned surrogate & \todo{check} & no & no \\
+Solver-informed RL \citep{chen2025sirl} & trained & solver & \todo{check} & no & no \\
+Nuclear TH modeling \citep{luo2026nuclear} & trained & solver & \todo{check} & no & no \\
+\textbf{This work} (\sys) & to be trained & simulator and verifiers & yes (V3, V5) & yes & yes \\
+\bottomrule
+\end{tabular}
+\caption{Positioning among cited work. Entries for prior work follow the descriptions recorded in
+the project notes for each paper; ``no'' means the property is not part of the described method, and the
+second-law column is not yet checked against the papers themselves. The last row describes the design;
+the trained model is pending.}
+\label{tab:positioning}
+\end{table}

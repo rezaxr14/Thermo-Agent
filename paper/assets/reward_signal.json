@@ -1,0 +1,242 @@
+{
+ "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+ "seed": 0,
+ "n": 40,
+ "kind": "simulated policies on synthetic data (no model)",
+ "levels": [
+  0.05,
+  0.1,
+  0.2,
+  0.3,
+  0.45,
+  0.6,
+  0.8,
+  1.0
+ ],
+ "tasks": {
+  "repair": {
+   "groups": 40,
+   "G": 8,
+   "fresh_evaluation_ms": 8.9,
+   "max_total_reward": 5.5,
+   "by_error_rate": {
+    "0.05": {
+     "zero_variance_groups": 0.7,
+     "expected_all_intact": 0.663,
+     "mean_within_group_std": 0.496,
+     "ms_per_completion": 1.5
+    },
+    "0.1": {
+     "zero_variance_groups": 0.55,
+     "expected_all_intact": 0.43,
+     "mean_within_group_std": 0.626,
+     "ms_per_completion": 0.6
+    },
+    "0.2": {
+     "zero_variance_groups": 0.275,
+     "expected_all_intact": 0.168,
+     "mean_within_group_std": 1.306,
+     "ms_per_completion": 1.3
+    },
+    "0.3": {
+     "zero_variance_groups": 0.1,
+     "expected_all_intact": 0.058,
+     "mean_within_group_std": 1.81,
+     "ms_per_completion": 1.8
+    },
+    "0.45": {
+     "zero_variance_groups": 0.075,
+     "expected_all_intact": 0.008,
+     "mean_within_group_std": 1.878,
+     "ms_per_completion": 2.5
+    },
+    "0.6": {
+     "zero_variance_groups": 0.025,
+     "expected_all_intact": 0.001,
+     "mean_within_group_std": 2.089,
+     "ms_per_completion": 3.2
+    },
+    "0.8": {
+     "zero_variance_groups": 0.0,
+     "expected_all_intact": 0.0,
+     "mean_within_group_std": 2.22,
+     "ms_per_completion": 3.9
+    },
+    "1.0": {
+     "zero_variance_groups": 0.0,
+     "expected_all_intact": 0.0,
+     "mean_within_group_std": 2.025,
+     "ms_per_completion": 5.1
+    }
+   }
+  },
+  "design": {
+   "groups": 40,
+   "G": 8,
+   "fresh_evaluation_ms": 44.8,
+   "max_total_reward": 5.0,
+   "by_error_rate": {
+    "0.05": {
+     "zero_variance_groups": 0.575,
+     "expected_all_intact": 0.663,
+     "mean_within_group_std": 0.728,
+     "ms_per_completion": 7.4
+    },
+    "0.1": {
+     "zero_variance_groups": 0.525,
+     "expected_all_intact": 0.43,
+     "mean_within_group_std": 0.79,
+     "ms_per_completion": 1.7
+    },
+    "0.2": {
+     "zero_variance_groups": 0.25,
+     "expected_all_intact": 0.168,
+     "mean_within_group_std": 1.175,
+     "ms_per_completion": 3.5
+    },
+    "0.3": {
+     "zero_variance_groups": 0.15,
+     "expected_all_intact": 0.058,
+     "mean_within_group_std": 1.673,
+     "ms_per_completion": 3.5
+    },
+    "0.45": {
+     "zero_variance_groups": 0.025,
+     "expected_all_intact": 0.008,
+     "mean_within_group_std": 2.088,
+     "ms_per_completion": 8.4
+    },
+    "0.6": {
+     "zero_variance_groups": 0.0,
+     "expected_all_intact": 0.001,
+     "mean_within_group_std": 2.27,
+     "ms_per_completion": 9.4
+    },
+    "0.8": {
+     "zero_variance_groups": 0.025,
+     "expected_all_intact": 0.0,
+     "mean_within_group_std": 2.141,
+     "ms_per_completion": 8.8
+    },
+    "1.0": {
+     "zero_variance_groups": 0.125,
+     "expected_all_intact": 0.0,
+     "mean_within_group_std": 1.814,
+     "ms_per_completion": 12.9
+    }
+   }
+  },
+  "audit": {
+   "groups": 40,
+   "G": 8,
+   "fresh_evaluation_ms": 31.6,
+   "max_total_reward": 6.5,
+   "by_error_rate": {
+    "0.05": {
+     "zero_variance_groups": 0.675,
+     "expected_all_intact": 0.663,
+     "mean_within_group_std": 0.533,
+     "ms_per_completion": 4.1
+    },
+    "0.1": {
+     "zero_variance_groups": 0.55,
+     "expected_all_intact": 0.43,
+     "mean_within_group_std": 0.692,
+     "ms_per_completion": 1.2
+    },
+    "0.2": {
+     "zero_variance_groups": 0.25,
+     "expected_all_intact": 0.168,
+     "mean_within_group_std": 1.24,
+     "ms_per_completion": 3.0
+    },
+    "0.3": {
+     "zero_variance_groups": 0.075,
+     "expected_all_intact": 0.058,
+     "mean_within_group_std": 2.042,
+     "ms_per_completion": 4.3
+    },
+    "0.45": {
+     "zero_variance_groups": 0.05,
+     "expected_all_intact": 0.008,
+     "mean_within_group_std": 2.113,
+     "ms_per_completion": 6.3
+    },
+    "0.6": {
+     "zero_variance_groups": 0.0,
+     "expected_all_intact": 0.001,
+     "mean_within_group_std": 2.545,
+     "ms_per_completion": 7.2
+    },
+    "0.8": {
+     "zero_variance_groups": 0.0,
+     "expected_all_intact": 0.0,
+     "mean_within_group_std": 2.683,
+     "ms_per_completion": 9.9
+    },
+    "1.0": {
+     "zero_variance_groups": 0.0,
+     "expected_all_intact": 0.0,
+     "mean_within_group_std": 2.785,
+     "ms_per_completion": 12.9
+    }
+   }
+  },
+  "ledger": {
+   "groups": 40,
+   "G": 8,
+   "fresh_evaluation_ms": 1.4,
+   "max_total_reward": 5.5,
+   "by_error_rate": {
+    "0.05": {
+     "zero_variance_groups": 0.65,
+     "expected_all_intact": 0.663,
+     "mean_within_group_std": 0.666,
+     "ms_per_completion": 0.2
+    },
+    "0.1": {
+     "zero_variance_groups": 0.575,
+     "expected_all_intact": 0.43,
+     "mean_within_group_std": 0.797,
+     "ms_per_completion": 0.1
+    },
+    "0.2": {
+     "zero_variance_groups": 0.3,
+     "expected_all_intact": 0.168,
+     "mean_within_group_std": 1.194,
+     "ms_per_completion": 0.2
+    },
+    "0.3": {
+     "zero_variance_groups": 0.125,
+     "expected_all_intact": 0.058,
+     "mean_within_group_std": 1.741,
+     "ms_per_completion": 0.2
+    },
+    "0.45": {
+     "zero_variance_groups": 0.05,
+     "expected_all_intact": 0.008,
+     "mean_within_group_std": 2.134,
+     "ms_per_completion": 0.3
+    },
+    "0.6": {
+     "zero_variance_groups": 0.025,
+     "expected_all_intact": 0.001,
+     "mean_within_group_std": 2.198,
+     "ms_per_completion": 0.4
+    },
+    "0.8": {
+     "zero_variance_groups": 0.0,
+     "expected_all_intact": 0.0,
+     "mean_within_group_std": 2.325,
+     "ms_per_completion": 0.4
+    },
+    "1.0": {
+     "zero_variance_groups": 0.0,
+     "expected_all_intact": 0.0,
+     "mean_within_group_std": 2.11,
+     "ms_per_completion": 0.6
+    }
+   }
+  }
+ }
+}
