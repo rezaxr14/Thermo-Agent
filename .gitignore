@@ -53,3 +53,10 @@ desktop.ini
 !.gitattributes
 logs/
 reports/*.completions.jsonl
+data/processed_arch/
+data/memory/
+data/sft/
+data/frontier/
+data/scratch_arch/
+reports/combine.json
+reports/data_report.json
