@@ -1,17 +1,21 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-  Run long jobs in a detached tmux session inside WSL, so they survive SSH disconnects.
+  Start and inspect long-running jobs. Jobs are created through WMI (Win32_Process.Create), so their parent is WmiPrvSE,
+  not the SSH session: they keep running after the connection closes, which Start-Process children do not.
 
 .EXAMPLE
-  pwsh scripts/long.ps1 start pytest ".venv/Scripts/python.exe -m pytest -q"
+  pwsh scripts/long.ps1 start gen-data "scripts/gen_data.ps1"
 
 .EXAMPLE
-  pwsh scripts/long.ps1 tail pytest -Lines 80
+  pwsh scripts/long.ps1 status gen-data -Lines 40
+
+.EXAMPLE
+  pwsh scripts/long.ps1 list
 #>
 param(
     [Parameter(Mandatory, Position = 0)]
-    [ValidateSet('start', 'list', 'tail', 'kill', 'logs')]
+    [ValidateSet('start', 'list', 'tail', 'kill', 'logs', 'status')]
     [string]$Action,
 
     [Parameter(Position = 1)]
@@ -24,68 +28,80 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$distro   = 'Ubuntu-24.04'
-$repoWin  = Split-Path -Parent $PSScriptRoot
-$drive    = $repoWin.Substring(0, 1).ToLower()
-$rest     = $repoWin.Substring(2) -replace '\\', '/'
-$repoWsl  = "/mnt/$drive$rest"
-$logsWin  = Join-Path $repoWin 'logs'
+$root = Split-Path -Parent $PSScriptRoot
+$logs = Join-Path $root 'logs'
+New-Item -ItemType Directory -Force -Path $logs | Out-Null
+
+function Get-JobInfo([string]$jobName) {
+    $pidFile = Join-Path $logs "$jobName.pid"
+    if (-not (Test-Path $pidFile)) { return $null }
+    $id = (Get-Content $pidFile -Raw).Trim()
+    $proc = Get-Process -Id $id -ErrorAction SilentlyContinue
+    [pscustomobject]@{
+        Name  = $jobName
+        Pid   = [int]$id
+        Alive = [bool]$proc
+        Cpu   = if ($proc) { [math]::Round($proc.CPU, 1) } else { $null }
+        Log   = (Join-Path $logs "$jobName.log")
+    }
+}
 
 switch ($Action) {
     'start' {
-        if (-not $Command) { throw 'Provide -Command, e.g. start pytest ".venv/Scripts/python.exe -m pytest -q"' }
-        New-Item -ItemType Directory -Force -Path $logsWin | Out-Null
-
+        if (-not $Command) { throw 'Provide a script to run, e.g. start gen-data "scripts/gen_data.ps1"' }
+        $jobScript = Join-Path $logs "$Name.ps1"
+        $logPath = Join-Path $logs "$Name.log"
         $body = @"
-#!/usr/bin/env bash
-cd "$repoWsl" || { echo "cannot cd to $repoWsl"; exit 127; }
-mkdir -p logs
-exec > >(tee -a "logs/$Name.log") 2>&1
-echo "=== START `$(date -Is) [$Name] ==="
+`$ErrorActionPreference = 'Continue'
+Set-Location '$root'
+`$env:Path = "`$env:USERPROFILE\.local\bin;`$env:USERPROFILE\tools\bin;`$env:Path"
+Start-Transcript -Path '$logPath' -Append -Force | Out-Null
+Write-Output "=== START `$(Get-Date -Format o) [$Name] ==="
+try {
 $Command
-rc=`$?
-echo "=== EXIT=`$rc `$(date -Is) [$Name] ==="
-exit `$rc
+} catch {
+    Write-Output "JOB ERROR: `$_"
+}
+Write-Output "=== EXIT=`$LASTEXITCODE `$(Get-Date -Format o) [$Name] ==="
+Stop-Transcript | Out-Null
 "@
-        $body = $body -replace "`r`n", "`n"
-        $shPath = Join-Path $logsWin "$Name.sh"
-        [System.IO.File]::WriteAllText($shPath, $body, (New-Object System.Text.UTF8Encoding($false)))
+        Set-Content -Path $jobScript -Value $body -Encoding utf8
 
-        & wsl -d $distro -- tmux kill-session -t $Name 2>&1 | Out-Null
-        & wsl -d $distro -- tmux new-session -d -s $Name bash "logs/$Name.sh"
-        if ($LASTEXITCODE -ne 0) { throw "tmux failed to start session '$Name'" }
-        Write-Output "started tmux session '$Name'"
-        Write-Output "repo (wsl): $repoWsl"
-        Write-Output "log: $logsWin\$Name.log"
-        Write-Output "attach: wsl -d $distro -- tmux attach -t $Name"
+        $cmdLine = 'pwsh -NoProfile -ExecutionPolicy Bypass -File "{0}"' -f $jobScript
+        $res = Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{ CommandLine = $cmdLine } -ErrorAction Stop
+        if ($res.ReturnValue -ne 0) { throw "Win32_Process.Create failed: return=$($res.ReturnValue)" }
+        Set-Content -Path (Join-Path $logs "$Name.pid") -Value $res.ProcessId
+        Write-Output "started '$Name' pid=$($res.ProcessId) (detached)"
+        Write-Output "log: $logPath"
+    }
+
+    'status' {
+        $info = Get-JobInfo $Name
+        if (-not $info) { Write-Output "no job '$Name'"; return }
+        if ($info.Alive) { Write-Output "'$Name' RUNNING pid=$($info.Pid) cpu_s=$($info.Cpu)" }
+        else { Write-Output "'$Name' FINISHED (or died) pid=$($info.Pid)" }
+        if (Test-Path $info.Log) { Write-Output '--- last lines ---'; Get-Content $info.Log -Tail $Lines }
     }
 
     'list' {
-        $out = & wsl -d $distro -- tmux ls 2>&1
-        if ($LASTEXITCODE -ne 0) { Write-Output 'no sessions' } else { $out }
+        $rows = Get-ChildItem $logs -Filter *.pid -ErrorAction SilentlyContinue | ForEach-Object { Get-JobInfo $_.BaseName }
+        if (-not $rows) { Write-Output 'no jobs recorded' } else { $rows | Format-Table -AutoSize | Out-String -Width 120 }
     }
 
     'tail' {
-        $pane = & wsl -d $distro -- tmux capture-pane -p -t $Name 2>&1
-        if ($LASTEXITCODE -ne 0) {
-            Write-Output "(no live session '$Name'; showing log tail)"
-        }
-        $log = Join-Path $logsWin "$Name.log"
-        if (Test-Path $log) {
-            Get-Content $log -Tail $Lines
-        } else {
-            Write-Output "no log yet: $log"
-        }
+        $log = Join-Path $logs "$Name.log"
+        if (Test-Path $log) { Get-Content $log -Tail $Lines } else { Write-Output "no log: $log" }
     }
 
     'logs' {
-        Get-ChildItem -Path $logsWin -Filter *.log -ErrorAction SilentlyContinue |
+        Get-ChildItem $logs -Filter *.log -ErrorAction SilentlyContinue |
             Select-Object Name, @{n = 'KB'; e = { [math]::Round($_.Length / 1KB, 1) } }, LastWriteTime |
-            Format-Table -AutoSize
+            Format-Table -AutoSize | Out-String -Width 120
     }
 
     'kill' {
-        & wsl -d $distro -- tmux kill-session -t $Name 2>&1
-        Write-Output "killed '$Name'"
+        $info = Get-JobInfo $Name
+        if ($info -and $info.Alive) { Stop-Process -Id $info.Pid -Force; Write-Output "killed '$Name' pid=$($info.Pid)" }
+        else { Write-Output "'$Name' is not running" }
     }
 }
