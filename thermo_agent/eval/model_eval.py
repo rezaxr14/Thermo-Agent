@@ -3,9 +3,12 @@
     python -m thermo_agent.eval.model_eval DATA_DIR --model Qwen/Qwen3.5-4B [--adapter runs/grpo_repair] \\
         [--tasks repair design audit] [--limit 40] [--harness none|agents|skills|agents+skills] --out reports/base.json
 
+    # a served model instead of local weights (LM Studio, vLLM, Ollama):
+    python -m thermo_agent.eval.model_eval DATA_DIR --backend openai --api-model qwen3.5-4b --out reports/local.json
+
 Nothing here depends on torch except HFGenerator; every evaluator takes any callable generate(messages) -> str."""
 from __future__ import annotations
-import argparse, json, pathlib, platform, re, statistics as st, time
+import argparse, json, pathlib, platform, re, statistics as st, time, urllib.request
 from typing import Callable
 from ..agent import harness as H
 from ..agent.loop import repair_loop
@@ -44,6 +47,51 @@ class HFGenerator:
         with torch.no_grad():
             out = self.model.generate(**inputs, max_new_tokens=self.max_new_tokens, do_sample=False)
         return _THINK.sub("", self.tok.decode(out[0][inputs["input_ids"].shape[1]:], skip_special_tokens=True)).strip()
+
+
+class OpenAIGenerator:
+    """Chat generation against any OpenAI-compatible endpoint: LM Studio, Ollama, vLLM, llama.cpp server.
+
+    Greedy by default (temperature 0) so the protocol matches the HF evaluator. Requests use urllib, so evaluating a
+    served model needs no extra package. The server applies its own chat template; for Qwen3-style checkpoints thinking
+    is switched off through chat_template_kwargs, and any reasoning trace is stripped from the answer."""
+
+    def __init__(self, base_url="http://127.0.0.1:1234/v1", model=None, api_key="lm-studio", max_new_tokens=400,
+                 temperature=0.0, seed=None, timeout=900, enable_thinking=False, retries=3):
+        self.base_url = base_url.rstrip("/"); self.model = model; self.api_key = api_key
+        self.max_new_tokens = max_new_tokens; self.temperature = temperature; self.seed = seed
+        self.timeout = timeout; self.enable_thinking = enable_thinking; self.retries = retries
+
+    def _request(self, path, payload=None):
+        data = None if payload is None else json.dumps(payload).encode()
+        req = urllib.request.Request(f"{self.base_url}{path}", data=data, method="GET" if data is None else "POST",
+                                     headers={"Content-Type": "application/json", "Authorization": f"Bearer {self.api_key}"})
+        with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+            return json.loads(resp.read().decode())
+
+    def resolve_model(self):
+        """Use --api-model if given, else the first model the server lists."""
+        if not self.model:
+            ids = [m.get("id") for m in self._request("/models").get("data", []) if m.get("id")]
+            if not ids: raise RuntimeError(f"no model served at {self.base_url}/models")
+            self.model = ids[0]
+        return self.model
+
+    def __call__(self, messages: list[dict] | str) -> str:
+        if isinstance(messages, str): messages = [{"role": "user", "content": messages}]
+        payload = {"model": self.resolve_model(), "messages": messages, "temperature": self.temperature,
+                   "max_tokens": self.max_new_tokens, "stream": False}
+        if self.seed is not None: payload["seed"] = self.seed
+        if self.enable_thinking is not None: payload["chat_template_kwargs"] = {"enable_thinking": bool(self.enable_thinking)}
+        last = None
+        for attempt in range(self.retries):
+            try:
+                out = self._request("/chat/completions", payload)
+                msg = out["choices"][0]["message"]
+                return _THINK.sub("", (msg.get("content") or msg.get("reasoning_content") or "")).strip()
+            except Exception as exc:  # transient server or connection errors are retried
+                last = exc; time.sleep(1 + attempt)
+        raise RuntimeError(f"chat completion failed after {self.retries} attempts: {last}")
 
 
 def wilson(k: int, n: int, z: float = 1.96):
@@ -146,11 +194,27 @@ def main():
     ap.add_argument("--max-turns", type=int, default=3); ap.add_argument("--polish-evals", type=int, default=0)
     ap.add_argument("--refine-turns", type=int, default=0, help="Design: anytime protocol, the model sees the fuel of each valid design and may improve it (records an anytime curve)")
     ap.add_argument("--dtype", default="bfloat16"); ap.add_argument("--load-4bit", action="store_true"); ap.add_argument("--out", required=True)
+    ap.add_argument("--max-new-tokens", type=int, default=400)
+    ap.add_argument("--backend", default="hf", choices=["hf", "openai"], help="hf loads weights with transformers; openai calls a served model (LM Studio, vLLM, Ollama)")
+    ap.add_argument("--base-url", default="http://127.0.0.1:1234/v1", help="openai backend: endpoint root")
+    ap.add_argument("--api-model", default=None, help="openai backend: served model id (default: first model listed)")
+    ap.add_argument("--api-key", default="lm-studio")
+    ap.add_argument("--temperature", type=float, default=0.0)
+    ap.add_argument("--seed", type=int, default=None)
+    ap.add_argument("--thinking", action="store_true", help="openai backend: leave the model's reasoning mode enabled")
     a = ap.parse_args()
-    gen = HFGenerator(a.model, a.adapter, a.dtype, a.load_4bit)
+    if a.backend == "openai":
+        gen = OpenAIGenerator(a.base_url, a.api_model, a.api_key, a.max_new_tokens, a.temperature, a.seed,
+                              enable_thinking=(None if a.thinking else False))
+        model_label = a.api_model or f"(auto) {a.base_url}"
+    else:
+        gen = HFGenerator(a.model, a.adapter, a.dtype, a.load_4bit, a.max_new_tokens)
+        model_label = a.model
     report, log = run(gen, a.data, a.tasks, a.splits, a.limit, a.harness, a.max_turns, a.polish_evals, a.refine_turns)
     import importlib.metadata as md
-    meta = {"model": a.model, "adapter": a.adapter, "harness": a.harness, "limit": a.limit, "max_turns": a.max_turns, "polish_evals": a.polish_evals, "refine_turns": a.refine_turns,
+    meta = {"model": model_label, "adapter": a.adapter, "backend": a.backend, "base_url": (a.base_url if a.backend == "openai" else None),
+            "harness": a.harness, "limit": a.limit, "max_turns": a.max_turns, "polish_evals": a.polish_evals, "refine_turns": a.refine_turns,
+            "temperature": (a.temperature if a.backend == "openai" else 0.0), "max_new_tokens": a.max_new_tokens,
             "python": platform.python_version(), **{p: (md.version(p) if _has(p) else None) for p in ("torch", "transformers", "peft", "trl", "CoolProp")}}
     out = pathlib.Path(a.out); out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps({"meta": meta, **report}, indent=1)); out.with_suffix(".completions.jsonl").write_text("\n".join(json.dumps(x) for x in log))

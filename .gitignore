@@ -51,3 +51,5 @@ desktop.ini
 # --- Archives (keep the repo lean) ---
 *.zip
 !.gitattributes
+logs/
+reports/*.completions.jsonl
