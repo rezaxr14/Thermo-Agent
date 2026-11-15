@@ -1,0 +1,724 @@
+{
+ "study": "corpus",
+ "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+ "seed": 0,
+ "n": 65,
+ "architectures": [
+  {
+   "name": "turbine-absorption-ext",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "absorption",
+   "rejection": "ext",
+   "orc": false,
+   "heat": "none",
+   "held_out": false
+  },
+  {
+   "name": "turbine-absorption-ext-dh_exhaust",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "absorption",
+   "rejection": "ext",
+   "orc": false,
+   "heat": "exhaust",
+   "held_out": false
+  },
+  {
+   "name": "turbine-absorption-ext-orc",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "absorption",
+   "rejection": "ext",
+   "orc": true,
+   "heat": "none",
+   "held_out": false
+  },
+  {
+   "name": "turbine-absorption-ext-orc-dh_exhaust",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "absorption",
+   "rejection": "ext",
+   "orc": true,
+   "heat": "exhaust",
+   "held_out": false
+  },
+  {
+   "name": "turbine-absorption-dry",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "absorption",
+   "rejection": "dry",
+   "orc": false,
+   "heat": "none",
+   "held_out": false
+  },
+  {
+   "name": "turbine-absorption-dry-dh_exhaust",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "absorption",
+   "rejection": "dry",
+   "orc": false,
+   "heat": "exhaust",
+   "held_out": false
+  },
+  {
+   "name": "turbine-absorption-dry-dh_heat_pump",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "absorption",
+   "rejection": "dry",
+   "orc": false,
+   "heat": "heat_pump",
+   "held_out": false
+  },
+  {
+   "name": "turbine-absorption-dry-orc",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "absorption",
+   "rejection": "dry",
+   "orc": true,
+   "heat": "none",
+   "held_out": false
+  },
+  {
+   "name": "turbine-absorption-dry-orc-dh_exhaust",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "absorption",
+   "rejection": "dry",
+   "orc": true,
+   "heat": "exhaust",
+   "held_out": false
+  },
+  {
+   "name": "turbine-absorption-dry-orc-dh_heat_pump",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "absorption",
+   "rejection": "dry",
+   "orc": true,
+   "heat": "heat_pump",
+   "held_out": false
+  },
+  {
+   "name": "turbine-absorption-wet",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "absorption",
+   "rejection": "wet",
+   "orc": false,
+   "heat": "none",
+   "held_out": false
+  },
+  {
+   "name": "turbine-absorption-wet-dh_exhaust",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "absorption",
+   "rejection": "wet",
+   "orc": false,
+   "heat": "exhaust",
+   "held_out": false
+  },
+  {
+   "name": "turbine-absorption-wet-dh_heat_pump",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "absorption",
+   "rejection": "wet",
+   "orc": false,
+   "heat": "heat_pump",
+   "held_out": false
+  },
+  {
+   "name": "turbine-absorption-wet-orc",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "absorption",
+   "rejection": "wet",
+   "orc": true,
+   "heat": "none",
+   "held_out": false
+  },
+  {
+   "name": "turbine-absorption-wet-orc-dh_exhaust",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "absorption",
+   "rejection": "wet",
+   "orc": true,
+   "heat": "exhaust",
+   "held_out": false
+  },
+  {
+   "name": "turbine-absorption-wet-orc-dh_heat_pump",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "absorption",
+   "rejection": "wet",
+   "orc": true,
+   "heat": "heat_pump",
+   "held_out": false
+  },
+  {
+   "name": "turbine-electric-ext",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "electric",
+   "rejection": "ext",
+   "orc": false,
+   "heat": "none",
+   "held_out": false
+  },
+  {
+   "name": "turbine-electric-ext-dh_exhaust",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "electric",
+   "rejection": "ext",
+   "orc": false,
+   "heat": "exhaust",
+   "held_out": false
+  },
+  {
+   "name": "turbine-electric-ext-orc",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "electric",
+   "rejection": "ext",
+   "orc": true,
+   "heat": "none",
+   "held_out": false
+  },
+  {
+   "name": "turbine-electric-ext-orc-dh_exhaust",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "electric",
+   "rejection": "ext",
+   "orc": true,
+   "heat": "exhaust",
+   "held_out": false
+  },
+  {
+   "name": "turbine-electric-dry",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "electric",
+   "rejection": "dry",
+   "orc": false,
+   "heat": "none",
+   "held_out": false
+  },
+  {
+   "name": "turbine-electric-dry-dh_exhaust",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "electric",
+   "rejection": "dry",
+   "orc": false,
+   "heat": "exhaust",
+   "held_out": false
+  },
+  {
+   "name": "turbine-electric-dry-dh_heat_pump",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "electric",
+   "rejection": "dry",
+   "orc": false,
+   "heat": "heat_pump",
+   "held_out": false
+  },
+  {
+   "name": "turbine-electric-dry-orc",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "electric",
+   "rejection": "dry",
+   "orc": true,
+   "heat": "none",
+   "held_out": false
+  },
+  {
+   "name": "turbine-electric-dry-orc-dh_exhaust",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "electric",
+   "rejection": "dry",
+   "orc": true,
+   "heat": "exhaust",
+   "held_out": false
+  },
+  {
+   "name": "turbine-electric-dry-orc-dh_heat_pump",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "electric",
+   "rejection": "dry",
+   "orc": true,
+   "heat": "heat_pump",
+   "held_out": false
+  },
+  {
+   "name": "turbine-electric-wet",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "electric",
+   "rejection": "wet",
+   "orc": false,
+   "heat": "none",
+   "held_out": false
+  },
+  {
+   "name": "turbine-electric-wet-dh_exhaust",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "electric",
+   "rejection": "wet",
+   "orc": false,
+   "heat": "exhaust",
+   "held_out": false
+  },
+  {
+   "name": "turbine-electric-wet-dh_heat_pump",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "electric",
+   "rejection": "wet",
+   "orc": false,
+   "heat": "heat_pump",
+   "held_out": false
+  },
+  {
+   "name": "turbine-electric-wet-orc",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "electric",
+   "rejection": "wet",
+   "orc": true,
+   "heat": "none",
+   "held_out": false
+  },
+  {
+   "name": "turbine-electric-wet-orc-dh_exhaust",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "electric",
+   "rejection": "wet",
+   "orc": true,
+   "heat": "exhaust",
+   "held_out": false
+  },
+  {
+   "name": "turbine-electric-wet-orc-dh_heat_pump",
+   "kind": "dc",
+   "prime": "turbine",
+   "cooling": "electric",
+   "rejection": "wet",
+   "orc": true,
+   "heat": "heat_pump",
+   "held_out": false
+  },
+  {
+   "name": "engine-absorption-ext",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "absorption",
+   "rejection": "ext",
+   "orc": false,
+   "heat": "none",
+   "held_out": true
+  },
+  {
+   "name": "engine-absorption-ext-dh_exhaust",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "absorption",
+   "rejection": "ext",
+   "orc": false,
+   "heat": "exhaust",
+   "held_out": true
+  },
+  {
+   "name": "engine-absorption-ext-orc",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "absorption",
+   "rejection": "ext",
+   "orc": true,
+   "heat": "none",
+   "held_out": true
+  },
+  {
+   "name": "engine-absorption-ext-orc-dh_exhaust",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "absorption",
+   "rejection": "ext",
+   "orc": true,
+   "heat": "exhaust",
+   "held_out": true
+  },
+  {
+   "name": "engine-absorption-dry",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "absorption",
+   "rejection": "dry",
+   "orc": false,
+   "heat": "none",
+   "held_out": true
+  },
+  {
+   "name": "engine-absorption-dry-dh_exhaust",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "absorption",
+   "rejection": "dry",
+   "orc": false,
+   "heat": "exhaust",
+   "held_out": true
+  },
+  {
+   "name": "engine-absorption-dry-dh_heat_pump",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "absorption",
+   "rejection": "dry",
+   "orc": false,
+   "heat": "heat_pump",
+   "held_out": true
+  },
+  {
+   "name": "engine-absorption-dry-orc",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "absorption",
+   "rejection": "dry",
+   "orc": true,
+   "heat": "none",
+   "held_out": true
+  },
+  {
+   "name": "engine-absorption-dry-orc-dh_exhaust",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "absorption",
+   "rejection": "dry",
+   "orc": true,
+   "heat": "exhaust",
+   "held_out": true
+  },
+  {
+   "name": "engine-absorption-dry-orc-dh_heat_pump",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "absorption",
+   "rejection": "dry",
+   "orc": true,
+   "heat": "heat_pump",
+   "held_out": true
+  },
+  {
+   "name": "engine-absorption-wet",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "absorption",
+   "rejection": "wet",
+   "orc": false,
+   "heat": "none",
+   "held_out": true
+  },
+  {
+   "name": "engine-absorption-wet-dh_exhaust",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "absorption",
+   "rejection": "wet",
+   "orc": false,
+   "heat": "exhaust",
+   "held_out": true
+  },
+  {
+   "name": "engine-absorption-wet-dh_heat_pump",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "absorption",
+   "rejection": "wet",
+   "orc": false,
+   "heat": "heat_pump",
+   "held_out": true
+  },
+  {
+   "name": "engine-absorption-wet-orc",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "absorption",
+   "rejection": "wet",
+   "orc": true,
+   "heat": "none",
+   "held_out": true
+  },
+  {
+   "name": "engine-absorption-wet-orc-dh_exhaust",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "absorption",
+   "rejection": "wet",
+   "orc": true,
+   "heat": "exhaust",
+   "held_out": true
+  },
+  {
+   "name": "engine-absorption-wet-orc-dh_heat_pump",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "absorption",
+   "rejection": "wet",
+   "orc": true,
+   "heat": "heat_pump",
+   "held_out": true
+  },
+  {
+   "name": "engine-electric-ext",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "electric",
+   "rejection": "ext",
+   "orc": false,
+   "heat": "none",
+   "held_out": true
+  },
+  {
+   "name": "engine-electric-ext-dh_exhaust",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "electric",
+   "rejection": "ext",
+   "orc": false,
+   "heat": "exhaust",
+   "held_out": true
+  },
+  {
+   "name": "engine-electric-ext-orc",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "electric",
+   "rejection": "ext",
+   "orc": true,
+   "heat": "none",
+   "held_out": true
+  },
+  {
+   "name": "engine-electric-ext-orc-dh_exhaust",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "electric",
+   "rejection": "ext",
+   "orc": true,
+   "heat": "exhaust",
+   "held_out": true
+  },
+  {
+   "name": "engine-electric-dry",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "electric",
+   "rejection": "dry",
+   "orc": false,
+   "heat": "none",
+   "held_out": true
+  },
+  {
+   "name": "engine-electric-dry-dh_exhaust",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "electric",
+   "rejection": "dry",
+   "orc": false,
+   "heat": "exhaust",
+   "held_out": true
+  },
+  {
+   "name": "engine-electric-dry-dh_heat_pump",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "electric",
+   "rejection": "dry",
+   "orc": false,
+   "heat": "heat_pump",
+   "held_out": true
+  },
+  {
+   "name": "engine-electric-dry-orc",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "electric",
+   "rejection": "dry",
+   "orc": true,
+   "heat": "none",
+   "held_out": true
+  },
+  {
+   "name": "engine-electric-dry-orc-dh_exhaust",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "electric",
+   "rejection": "dry",
+   "orc": true,
+   "heat": "exhaust",
+   "held_out": true
+  },
+  {
+   "name": "engine-electric-dry-orc-dh_heat_pump",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "electric",
+   "rejection": "dry",
+   "orc": true,
+   "heat": "heat_pump",
+   "held_out": true
+  },
+  {
+   "name": "engine-electric-wet",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "electric",
+   "rejection": "wet",
+   "orc": false,
+   "heat": "none",
+   "held_out": true
+  },
+  {
+   "name": "engine-electric-wet-dh_exhaust",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "electric",
+   "rejection": "wet",
+   "orc": false,
+   "heat": "exhaust",
+   "held_out": true
+  },
+  {
+   "name": "engine-electric-wet-dh_heat_pump",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "electric",
+   "rejection": "wet",
+   "orc": false,
+   "heat": "heat_pump",
+   "held_out": true
+  },
+  {
+   "name": "engine-electric-wet-orc",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "electric",
+   "rejection": "wet",
+   "orc": true,
+   "heat": "none",
+   "held_out": true
+  },
+  {
+   "name": "engine-electric-wet-orc-dh_exhaust",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "electric",
+   "rejection": "wet",
+   "orc": true,
+   "heat": "exhaust",
+   "held_out": true
+  },
+  {
+   "name": "engine-electric-wet-orc-dh_heat_pump",
+   "kind": "dc",
+   "prime": "engine",
+   "cooling": "electric",
+   "rejection": "wet",
+   "orc": true,
+   "heat": "heat_pump",
+   "held_out": true
+  },
+  {
+   "name": "cgam_steam_orc",
+   "kind": "cgam",
+   "prime": "turbine",
+   "cooling": "none",
+   "rejection": "ext",
+   "orc": true,
+   "heat": "steam",
+   "held_out": true
+  }
+ ],
+ "n_architectures": 65,
+ "n_dc": 64,
+ "n_turbine": 33,
+ "n_engine": 32,
+ "n_orc": 33,
+ "n_heat": 41,
+ "by_rejection": {
+  "ext": 16,
+  "dry": 24,
+  "wet": 24
+ },
+ "by_cooling": {
+  "absorption": 32,
+  "electric": 32
+ },
+ "arch_rows_requested": 400,
+ "arch_rows_by_split": {
+  "test_id": 9,
+  "test_ood_fault": 60,
+  "test_ood_topology": 135,
+  "train": 61,
+  "val": 11
+ },
+ "arch_distinct_by_split": {
+  "test_id": 6,
+  "test_ood_fault": 21,
+  "test_ood_topology": 27,
+  "train": 23,
+  "val": 9
+ },
+ "paraphrase_variants_by_fault": {
+  "unit_slip": {
+   "min": 20,
+   "max": 20,
+   "n": 44
+  },
+  "wrong_fluid": {
+   "min": 80,
+   "max": 80,
+   "n": 39
+  },
+  "efficiency_gt_1": {
+   "min": 25,
+   "max": 25,
+   "n": 42
+  }
+ },
+ "combine": {
+  "variants_default": 4,
+  "harness_fraction": 0.35,
+  "k_memory": 3,
+  "max_prompt_chars": 14000
+ },
+ "sampler": {
+  "temperature": 0.8,
+  "max_tokens": 800
+ },
+ "validation": {
+  "audit_ndcg_min": 0.5,
+  "audit_pred_err_max": 0.5,
+  "grounding_min": 0.8
+ },
+ "memory": {
+  "min_score": 0.02,
+  "fault_boost": 0.25
+ }
+}

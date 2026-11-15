@@ -26,6 +26,11 @@ thermal-hydraulic systems, with LoRA rank 8 and a group of 8; they report solver
 from 72.4\% after supervised fine-tuning to 88.8\% after GRPO \citep{luo2026nuclear}. Our work follows the same
 two stages with a different reward: the physical second-law checks of \cref{sec:verifiers}.
 
+\paragraph{Verifier-filtered teacher data and failure memory.}
+Fine-tuning a small model on answers from a larger one, keeping only the answers that a checker accepts, and retrieving earlier mistakes into the prompt are established ideas
+\todo{cite: rejection-sampling fine-tuning, retrieval-augmented generation, verbal reflection and failure memory}. Our variant gates the teacher with a physics tool suite instead of a learned judge or a unit test,
+keeps the rejected attempts as notes that name a class of mistake, and varies the corpus over wording and over whole plant diagrams so that held-out diagrams test generalization.
+
 \paragraph{Parameter-efficient reinforcement learning.}
 LoRA \citep{hu2021lora} is the adapter method we use. Reinforcement learning has been reported to need little adapter capacity, with a learning
 rate about ten times that of full fine-tuning \citep{schulman2025lora}; our GRPO stage uses a smaller
@@ -47,7 +52,7 @@ from CoolProp \citep{bell2014coolprop}.
 \paragraph{Positioning.}
 The ingredients exist: GRPO, verifiable rewards, solver-grounded reinforcement learning and language
 models for process design. The combination for data-center energy systems, with second-law verifiers
-as the reward, four task families with structural splits, an equation-level ledger benchmark and
+as the reward and as the gate on a teacher's answers, a varied diagram corpus, a failure memory, four task families with structural splits, an equation-level ledger benchmark and
 accounting in solver calls, is what we contribute. \Cref{tab:positioning} summarizes how the cited
 methods differ.
 

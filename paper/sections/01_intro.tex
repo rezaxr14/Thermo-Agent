@@ -24,9 +24,9 @@ mass, energy and exergy balances.
 \paragraph{Idea.}
 A physics simulator and a set of second-law verifiers form an environment whose checks are an
 exact, cheap and verifiable reward. A small open model, Qwen3.5-4B \citep{qwen2026qwen35}, is to be
-trained in two stages: LoRA supervised fine-tuning \citep{hu2021lora} on expert answers written
-programmatically from the ground truth, then GRPO \citep{shao2024deepseekmath} against the
-verifiers. The model formulates and diagnoses; the solver and the verifiers judge. \Cref{fig:fig_overview}
+trained in two stages: LoRA supervised fine-tuning \citep{hu2021lora}, then GRPO \citep{shao2024deepseekmath} against the
+verifiers. The training corpus is built to be varied, so that the model cannot memorize it: ground-truth traces in many true phrasings, a catalog of plant diagrams in which whole diagrams are held out, and answers and plants from frontier models that enter the corpus only if the physics tool suite accepts them.
+Every attempt is recorded, and the rejected ones become a retrievable memory of the usual failure reasons, so that the small model learns to recheck its answer before giving it. The model formulates and diagnoses; the solver and the verifiers judge. \Cref{fig:fig_overview}
 shows the system.
 
 \begin{figure}[tbp]
@@ -37,7 +37,7 @@ expert answers for supervised fine-tuning and the reward for GRPO. The environme
 exergy accounting, verifiers V1 to V8) supplies the reward in training and the feedback at inference;
 online, the model proposes an answer, the solver and the verifiers check it, and the model retries.
 The figure shows the design, not results: no model has been trained, and every trained-model
-statement is marked pending.}
+statement is marked pending. \todo{update the figure with the teacher, the architecture corpus, the failure memory and data-parallel training}}
 \label{fig:fig_overview}
 \end{figure}
 
@@ -46,6 +46,7 @@ statement is marked pending.}
 \item A second-law-verified environment for data-center energy systems: \val{env.n_components}
 component models, exergy accounting against an explicit dead state, and verifiers V1 to V8
 whose checks are the reward (\cref{sec:method}).
+\item A verifier-gated training corpus: paraphrased ground-truth traces, a catalog of \val{corp.n_arch} plant diagrams with whole diagrams held out, frontier-model answers and plants accepted only by the physics tool suite, and a retrievable memory of rejected attempts (\cref{sec:corpus}).
 \item Four task families with structural out-of-distribution splits: Repair (parameter-level faults,
 \val{env.n_repair_faults} types), Design (a catalog of \val{env.n_catalog} configurations,
 \val{env.n_catalog_heat} when there is a heat demand, plus continuous parameters), Audit (rank
@@ -53,8 +54,8 @@ exergy destroyers, propose one allowed change, predict its fuel effect) and Ledg
 (\val{env.n_ledger_faults} equation-level fault types in an exergy ledger, which range checks cannot
 see).
 \item An evaluation that counts solver calls: non-model baselines, an anytime protocol for sample
-efficiency, paired statistics, and ablations that include an agent harness (an \texttt{AGENTS.md}
-file plus generated skills) with a held-out component.
+efficiency, paired statistics, a comparison with frontier and other models, and ablations of the corpus, the agent harness (an \texttt{AGENTS.md}
+file plus generated skills), the failure memory and a held-out component.
 \item Simulator findings that do not depend on a model: feasibility limits of the catalog, first-law
 against second-law blame, the symptom coverage of equation faults, and trace and modular-fleet bounds
 (\cref{sec:experiments,sec:trace}).
@@ -62,7 +63,7 @@ against second-law blame, the symptom coverage of equation faults, and trace and
 
 \paragraph{What we do not claim.}
 We do not claim that a trained model beats numerical optimization on the final optimum for a fixed
-superstructure. We do not claim any validation against a real plant, and there is no measured
+superstructure, and we do not claim that the teacher's answers are good because a model wrote them: they are in the corpus only if the physics tool suite accepts them. We do not claim any validation against a real plant, and there is no measured
 on-site-generation data center in this work: measured load and coolant traces from published data
 set the operating points of a physics model, and all training data is synthetic. No model has been
 trained, so we make no claim about trained-model results; for the trained model we intend to claim
@@ -70,7 +71,7 @@ only sample efficiency and breadth, and only once the pending runs exist.
 
 \paragraph{Paper map.}
 \Cref{sec:related} places the work among related studies. \Cref{sec:method} describes the
-environment, the verifiers, the tasks, the rewards, the training recipe and the agent harness.
+environment, the verifiers, the tasks, the rewards, the training corpus, the training recipe and the agent harness.
 \Cref{sec:experiments} states the frozen evaluation protocol, reports the non-model baselines and
 simulator findings that were measured, and gives the skeletons of the pending model results.
 \Cref{sec:trace} covers trace and fleet bounds, \cref{sec:limits} lists the limits, and the appendix

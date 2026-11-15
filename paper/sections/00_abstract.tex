@@ -4,9 +4,10 @@ losses are expert tasks, and a plant model can solve and still violate the secon
 We build a second-law-verified environment for these tasks: a physics-based simulator with
 \val{env.n_components} component models and exergy accounting against an explicit dead state,
 and eight verifiers whose checks are an exact, cheap reward. A small open model
-(Qwen3.5-4B) is to be trained with LoRA supervised fine-tuning on programmatically verified
-answers and then with GRPO against the verifiers, on four task families with structural
-out-of-distribution splits: plant Repair, Design, exergy Audit and Ledger repair. All results
+(Qwen3.5-4B) is to be trained on a verifier-gated corpus (paraphrased ground-truth traces, a catalog of
+\val{corp.n_arch} plant diagrams, frontier-model answers and plants that the physics tool suite accepts, and a retrievable
+memory of rejected attempts) with LoRA supervised fine-tuning and then GRPO against the verifiers, data-parallel on two T4 GPUs,
+on four task families with structural out-of-distribution splits: plant Repair, Design, exergy Audit and Ledger repair. All results
 are simulation-driven: measured load and coolant traces set operating points of a physics model
 with assumed technology constants, and no measured on-site-generation data center is involved.
 Three model-independent simulator findings come from small samples. Of \val{led.n} generated

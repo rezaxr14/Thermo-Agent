@@ -556,9 +556,10 @@
   "sft": {
    "lr": 0.0002,
    "epochs": 2,
-   "max_length": 3072,
+   "max_length": 4096,
    "per_device_batch": 2,
-   "grad_accum": 8
+   "grad_accum": 8,
+   "max_grad_norm": 1.0
   },
   "sft_lora": {
    "r": 16,
@@ -568,15 +569,16 @@
   },
   "grpo": {
    "lr": 5e-05,
-   "num_generations": 8,
+   "num_generations": 4,
    "max_completion_length": 320,
    "temperature": 1.0,
-   "per_device_batch": 8,
+   "per_device_batch": 4,
    "grad_accum": 2,
    "max_steps": 300,
    "loss_type": "dapo",
    "beta": 0.0,
-   "mask_truncated": true
+   "mask_truncated": true,
+   "max_grad_norm": 1.0
   },
   "grpo_lora": {
    "r": 8,
@@ -660,8 +662,8 @@
   "python": "3.12.3"
  },
  "tests": {
-  "passed": 234,
-  "seconds": 157.17,
+  "passed": 286,
+  "seconds": 178.61,
   "command": "python -m pytest -q"
  }
 }

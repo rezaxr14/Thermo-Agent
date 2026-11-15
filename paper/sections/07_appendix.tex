@@ -48,10 +48,16 @@ with a metadata file that records the seed, the settings and the CoolProp and sc
 
 \paragraph{Audit.} Rank exergy destroyers, propose one allowed change and predict its fuel effect on sampled valid plants, some with ORC bottoming and district heat; only plants in which at least one allowed change saves fuel are kept. Held out: topologies.
 
+\paragraph{Architecture corpus.} Repair rows built from the catalog of \val{corp.n_arch} diagrams (\val{corp.n_dc} data-center plants and the steam plant), with the same fault injectors as the Repair set. Held out: every engine plant and the steam plant. In a seed-0 sample of \val{corp.arch_requested} requested rows, \val{corp.arch_kept} were kept
+(train \val{corp.arch_rows.train}, validation \val{corp.arch_rows.val}, in-distribution test \val{corp.arch_rows.test_id}, held-out faults \val{corp.arch_rows.test_ood_fault}, held-out diagrams \val{corp.arch_rows.test_ood_topology}).
+
+\paragraph{Teacher answers, teacher-authored diagrams and memory notes.} Teacher answers are stored with the verdict of the tool suite; accepted answers become rows with the source tag \texttt{frontier}, and every rejected attempt is kept. Teacher-authored plants are stored with the checks they passed or failed, and accepted plants enter the catalog as new diagrams. Memory notes are mined from rejected attempts and carry the task, fault class, diagram, symptom, lesson and fix; the record that a note was mined from is stored so that it can be excluded at retrieval.
+Sizes of the final corpus: \todo{rows per source, task and split}.
+
 \begin{table}[tbp]
 \centering
 \input{generated/table_datasets.tex}
-\caption{Rows per split of the datasets generated for this paper (seed 0; Repair 400 rows requested, Audit 200, Ledger 600; Design in 16 chunks of 6 sites, of which \val{des.n_sites} sites were used for the baselines). Splits for the in-distribution sets are separated by a hash of the example identifier. Data: \texttt{assets/splits.json}.}
+\caption{Rows per split of the small datasets generated for the baselines of this paper (seed 0; Repair 400 rows requested, Audit 200, Ledger 600; Design in 16 chunks of 6 sites, of which \val{des.n_sites} sites were used for the baselines); the training corpus is larger and its sizes are \todo{pending}. Splits for the in-distribution sets are separated by a hash of the example identifier. Data: \texttt{assets/splits.json}.}
 \label{tab:datasets}
 \end{table}
 
@@ -64,12 +70,13 @@ With weights in brackets (\cref{tab:tasks}). \textbf{Repair} [0.5, 2, 1, 1, 0.5,
 
 \section{Hyperparameters and compute}\label{app:compute}
 
-The training settings are in \cref{tab:training}. SFT, merge and GRPO have never been run on a GPU. The supported hardware, from the project runbook, is: an RTX PRO 6000 (48~GB) or RTX 4090 (24~GB) for bf16 LoRA with the default settings (vLLM optional for GRPO); a single Kaggle T4 (16~GB) with \texttt{--dtype float16 --qlora}; Kaggle TPUs are not supported by these scripts; and a 6~GB laptop GPU is only for data generation, tests and non-model baselines. GPU hours, wall-clock times and costs of the runs: \todo{pending}.
+The training settings are in \cref{tab:training}. SFT, merge and GRPO have never been run on a GPU. The training target is a Kaggle notebook with two T4 GPUs (16~GB each): two data-parallel ranks, fp16 LoRA, no 4-bit weights, with an estimated 11 to 12~GB per GPU for SFT and about 11~GB for GRPO (estimates, not measured). The frontier teacher is not self-hosted: it runs through Kaggle's model access and needs no GPU of ours. Larger GPUs (bf16, 24 to 48~GB) use the same scripts with other settings; Kaggle TPUs are not supported by these scripts; and a laptop with a 6~GB GPU is used for data generation, tests, non-model baselines and smoke checks with a locally served model, never for training.
+GPU hours, wall-clock times and costs of the runs: \todo{pending}.
 Everything in \cref{sec:baselines,sec:findings,sec:trace} was computed on one CPU core with \val{env.n_tests} passing tests (\val{env.tests_minutes}~minutes) and library versions CoolProp~\val{env.ver.CoolProp}, NumPy~\val{env.ver.numpy}, SciPy~\val{env.ver.scipy}, pydantic~\val{env.ver.pydantic}, pandas~\val{env.ver.pandas} and Python~\val{env.ver.python}.
 
 \section{Harness text}\label{app:harness}
 
-The harness file \texttt{AGENTS.md} has \val{har.agents_lines} lines (\val{har.agents_chars} characters), whose sections are listed in \cref{tab:agents}. The skills are listed in \cref{tab:skills} and the modes in \cref{tab:modes}. The held-out component is the gas engine, with \val{har.engine_n_ports} ports; it appears in the held-out-topology splits, with \val{har.heldout_repair_engine_rows} of \val{har.heldout_repair_rows} Repair rows and \val{har.heldout_audit_engine_rows} of \val{har.heldout_audit_rows} Audit rows in those splits involving an engine plant (the others use the steam-ORC plant).
+The harness file \texttt{AGENTS.md} has \val{har.agents_lines} lines (\val{har.agents_chars} characters), whose sections are listed in \cref{tab:agents}. The skills are listed in \cref{tab:skills} and the modes in \cref{tab:modes}. The memory layer is separate from the four modes (\cref{sec:harness}). The held-out component is the gas engine, with \val{har.engine_n_ports} ports; it appears in the held-out-topology splits, with \val{har.heldout_repair_engine_rows} of \val{har.heldout_repair_rows} Repair rows and \val{har.heldout_audit_engine_rows} of \val{har.heldout_audit_rows} Audit rows in those splits involving an engine plant (the others use the steam-ORC plant).
 
 \begin{table}[tbp]
 \centering
@@ -97,9 +104,10 @@ The harness file \texttt{AGENTS.md} has \val{har.agents_lines} lines (\val{har.a
 The steps below are in the project runbook, and every number in this paper from a baseline or a simulator study is regenerated by \texttt{tools/generate\_paper\_assets.py} with the commands recorded in \texttt{assets\_summary.json}.
 \begin{enumerate}[leftmargin=*,itemsep=1pt]
 \item Install the locked requirements and the package; check that the generated harness text is in sync (the harness builder has a check mode) and that all \val{env.n_tests} tests pass.
-\item Generate the data on the CPU: Repair, Audit, Design (with at least 60 evaluations for the reference) and Ledger, with fixed seeds; run the data report, whose \texttt{problems} field must be empty.
+\item Generate the data on the CPU: Repair, Audit, Design (with at least 60 evaluations for the reference), Ledger and the architecture corpus, with fixed seeds, and mine the first memory notes; run the data report, whose \texttt{problems} field must be empty.
 \item Run the non-model baselines (one evaluation module per task) and the reward diagnostics.
-\item Evaluate the base model with and without the harness; check the chat template with the SFT print-sample; run SFT (smoke test, then full), evaluate, merge, and run GRPO per task from the merged model.
+\item Export the prompts, run them against the frontier models through Kaggle's model access, validate the completions locally (resumable; every attempt is logged), check the acceptance rates on a small limit, then scale up and rebuild the combined corpus.
+\item Evaluate the base model with and without the harness; check the chat template with the SFT print-sample; run SFT (smoke test, then full) and GRPO per task from the merged model with the two-rank launcher of the repository, and evaluate each stage.
 \item Run the ablations, the ThermoQA before and after, the Design anytime protocol and the paired comparisons (\texttt{eval.compare}); evaluate the Frontier trace when the file is available, giving the sampling interval explicitly.
 \end{enumerate}
-Checklist: seeds are fixed (seed 0 for all generated data in this paper); sample sizes are stated at every number; pending items are red \texttt{\textbackslash todo} markers; no figure shows a trained-model result. Steps 4 and 5 are pending \todo{pending}.
+Checklist: seeds are fixed (seed 0 for all generated data in this paper); sample sizes are stated at every number; pending items are red \texttt{\textbackslash todo} markers; no figure shows a trained-model result. The last steps are pending \todo{pending}.

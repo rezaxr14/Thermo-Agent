@@ -7,8 +7,9 @@ every sample size is stated. All results are simulation-driven. No language mode
 \subsection{Frozen protocol}\label{sec:protocol}
 
 \paragraph{Models and harness.}
-We will evaluate the base Qwen3.5-4B, the model after supervised fine-tuning (SFT) and the model after GRPO, each under harness mode
-none and under \texttt{AGENTS.md} plus skills; the two other modes are used in the harness ablation.
+We will evaluate the base Qwen3.5-4B, the model after supervised fine-tuning (SFT) on ground-truth traces only, the model after SFT on the full corpus, and the model after GRPO, and compare them with the frontier teacher models and
+with other open models (\todo{names of the compared models}). The evaluator sends the same messages to any OpenAI-compatible endpoint (a locally served model, the teacher or a hosted model), with greedy decoding, thinking disabled and a 400-token budget, so every arm sees the same prompt.
+Each model runs with no added text and with the full inference text (\texttt{AGENTS.md}, skills and memory notes); the other harness modes and the memory layer are varied in the ablations.
 
 \paragraph{Decoding, attempts and budgets.}
 Decoding is greedy. Repair and Design allow three attempts with solver feedback; Audit and Ledger repair are single-turn. Cost is counted in
@@ -26,12 +27,15 @@ metrics \citep{mcnemar1947}, and with a paired bootstrap interval plus a sign-fl
 Holm-corrected \citep{holm1979}. Per-example results are saved with each report. ThermoQA accuracy before and after training checks for forgetting.
 
 \paragraph{Research questions.}
-We fix five research questions before the runs and state no expected answer to any of them.
+We fix eight research questions before the runs and state no expected answer to any of them.
 \textbf{RQ1:} does a trained model match the success of verifier-guided search on held-out faults with fewer solver calls?
 \textbf{RQ2:} does the harness help on a held-out component, the gas engine?
 \textbf{RQ3:} does GRPO add over SFT on tasks where SFT is below about 90\% per-sample accuracy?
 \textbf{RQ4:} do the individual reward channels matter?
 \textbf{RQ5:} is there forgetting on ThermoQA?
+\textbf{RQ6:} does the varied corpus (paraphrases, the diagram catalog and verified teacher answers) improve success on held-out diagrams over ground-truth traces alone?
+\textbf{RQ7:} does retrieving failure notes improve success or the first-attempt acceptance rate, and does it help more than random notes?
+\textbf{RQ8:} how close does the trained 4B model come to the teacher and to other models at equal prompts and an equal tool budget?
 
 \subsection{Non-model baselines}\label{sec:baselines}
 
@@ -156,19 +160,19 @@ Stream-line and constant faults never break closure, and two constant faults sho
 
 \subsection{Model results}\label{sec:modelresults}
 
-\Cref{tab:results} holds the skeleton for the model results. Every cell is pending: no model has been trained, and nothing in this paper estimates what the cells will contain. When the runs exist we report all rows of the table for the held-out splits, with the intervals and tests of
+\Cref{tab:results} holds the skeleton for the model results, with the teacher and another open model as reference rows. Every cell is pending: no model has been trained, the teacher acceptance statistics are pending (\cref{tab:corpusstatus}), and nothing in this paper estimates what the cells will contain. When the runs exist we report all rows of the table for the held-out splits, with the intervals and tests of
 \cref{sec:protocol}.
 
 \begin{table}[tbp]
 \centering
 \input{generated/table_results.tex}
-\caption{Skeleton of the model results for the four tasks: base, SFT and SFT plus GRPO, each with harness none and agents plus skills. Metrics per task are listed in \cref{sec:protocol}. All cells are pending.}
+\caption{Skeleton of the model results for the four tasks: base model, SFT on ground truth only, SFT on the full corpus, SFT plus GRPO, the teacher and another open model, each with the full inference text. Metrics per task are listed in \cref{sec:protocol}. All cells are pending.}
 \label{tab:results}
 \end{table}
 
 \subsection{Ablations}\label{sec:ablations}
 
-\Cref{tab:ablation} lists the planned ablations: the four harness modes on the held-out gas-engine topology (RQ2), the reward channels (RQ4), SFT against GRPO from the base model (RQ3), an optional encoder-decoder variant \citep{zhang2025t5gemma}, and ThermoQA accuracy before and after training (RQ5). All results are pending.
+\Cref{tab:ablation} lists the planned ablations: the inference text on the held-out gas-engine diagrams (RQ2), the training corpus and the number of paraphrase variants per row (RQ6), the memory retrieval against random notes (RQ7), the reward channels (RQ4), SFT against GRPO from the base model (RQ3), an optional encoder-decoder variant \citep{zhang2025t5gemma}, and ThermoQA accuracy before and after training (RQ5). All results are pending.
 
 \begin{table}[tbp]
 \centering

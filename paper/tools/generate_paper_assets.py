@@ -63,9 +63,9 @@ def study_environment(project, tests_log):
                       "params": {k: {"doc": v[0], "default": v[1]} for k, v in C.PARAMS.get(t, {}).items()}})
     sig = inspect.signature(dc_chp)
     defaults = {k: v.default for k, v in sig.parameters.items() if v.default is not inspect.Parameter.empty}
-    cfg = {"sft": {k: getattr(TC.SftSettings(), k) for k in ("lr", "epochs", "max_length", "per_device_batch", "grad_accum")},
+    cfg = {"sft": {k: getattr(TC.SftSettings(), k) for k in ("lr", "epochs", "max_length", "per_device_batch", "grad_accum", "max_grad_norm")},
            "sft_lora": vars(TC.SftSettings().lora), "grpo": {k: getattr(TC.GrpoSettings(), k) for k in
-                                                              ("lr", "num_generations", "max_completion_length", "temperature", "per_device_batch", "grad_accum", "max_steps", "loss_type", "beta", "mask_truncated")},
+                                                              ("lr", "num_generations", "max_completion_length", "temperature", "per_device_batch", "grad_accum", "max_steps", "loss_type", "beta", "mask_truncated", "max_grad_norm")},
            "grpo_lora": vars(TC.GrpoSettings().lora), "base_model": TC.BASE_MODEL}
     tests = None
     if tests_log and pathlib.Path(tests_log).exists():
@@ -174,6 +174,45 @@ def study_mechanisms():
                               "seed": None, "n": len(out["sweep_f"]), **out})
 
 
+def _src_default(path, pattern, cast=float):
+    m = re.search(pattern, path.read_text())
+    if not m:
+        raise RuntimeError(f"pattern not found in {path}: {pattern}")
+    return cast(m.group(1))
+
+
+def study_corpus(project, scratch):
+    from thermo_agent.synth import architectures as A, paraphrase as P
+    arch = A.ARCHITECTURES
+    d = scratch / "arch"; d.mkdir(parents=True, exist_ok=True)
+    if not (d / "repair_train.jsonl").exists():
+        subprocess.run([sys.executable, "-m", "thermo_agent.synth.architectures", str(d), "-n", "400", "--seed", str(SEED), "--workers", "1"], cwd=project, check=True)
+    counts, archs = {}, {}
+    for f in sorted(d.glob("repair_*.jsonl")):
+        sp = f.stem.replace("repair_", ""); rows = [json.loads(l) for l in open(f)]
+        counts[sp] = len(rows); archs[sp] = sorted({r["topology"] for r in rows})
+    rep = scratch / "repair" / "repair_train.jsonl"
+    var = collections.defaultdict(list)
+    for l in open(rep):
+        r = json.loads(l); var[r["fault_type"]].append(P.variant_count(r))
+    t = project / "thermo_agent" / "teacher"; sy = project / "thermo_agent" / "synth"
+    jdump("corpus.json", {
+        "study": "corpus", "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+        "seed": SEED, "n": len(arch),
+        "architectures": [{**a, "held_out": a["prime"] == "engine" or a["name"] == "cgam_steam_orc"} for a in arch],
+        "n_architectures": len(arch), "n_dc": sum(1 for a in arch if a["kind"] == "dc"), "n_turbine": sum(1 for a in arch if a["prime"] == "turbine"),
+        "n_engine": sum(1 for a in arch if a["prime"] == "engine"), "n_orc": sum(1 for a in arch if a["orc"]), "n_heat": sum(1 for a in arch if a["heat"] not in ("none",)),
+        "by_rejection": dict(collections.Counter(a["rejection"] for a in arch if a["kind"] == "dc")), "by_cooling": dict(collections.Counter(a["cooling"] for a in arch if a["kind"] == "dc")),
+        "arch_rows_requested": 400, "arch_rows_by_split": counts, "arch_distinct_by_split": {k: len(v) for k, v in archs.items()},
+        "paraphrase_variants_by_fault": {k: {"min": min(v), "max": max(v), "n": len(v)} for k, v in var.items()},
+        "combine": {"variants_default": _src_default(sy / "combine.py", r'"--variants", type=int, default=(\d+)', int), "harness_fraction": _src_default(sy / "combine.py", r'"--harness-fraction", type=float, default=([\d.]+)'),
+                    "k_memory": _src_default(sy / "combine.py", r'"--k-memory", type=int, default=(\d+)', int), "max_prompt_chars": _src_default(sy / "combine.py", r'"--max-prompt-chars", type=int, default=(\d+)', int)},
+        "sampler": {"temperature": _src_default(t / "sample.py", r'"--temperature", type=float, default=([\d.]+)'), "max_tokens": _src_default(t / "sample.py", r'"--max-tokens", type=int, default=(\d+)', int)},
+        "validation": {"audit_ndcg_min": _src_default(t / "validate.py", r'e\["ndcg"\] < ([\d.]+)'), "audit_pred_err_max": _src_default(t / "validate.py", r'e\["pred_err"\] > ([\d.]+)'),
+                       "grounding_min": _src_default(t / "validate.py", r'e\["grounded"\] < ([\d.]+)')},
+        "memory": {"min_score": _src_default(t / "memory.py", r"min_score: float = ([\d.]+)"), "fault_boost": _src_default(t / "memory.py", r"base \+= ([\d.]+)\n    if note.architecture")}})
+
+
 def _ensure_data(project, scratch, task, n, extra=()):
     d = scratch / task; d.mkdir(parents=True, exist_ok=True)
     first = {"repair": "repair_test_id.jsonl", "audit": "audit_test_id.jsonl"}[task]
@@ -246,7 +285,7 @@ def derive_values():
     E = jload("environment.json"); X = jload("crosscheck.json"); P = jload("example_plant.json"); M = jload("mechanisms.json")
     L = jload("ledger_symptoms.json"); A = jload("audit_first_vs_second_law.json"); D = jload("design_baselines.json"); F = jload("design_feasibility.json")
     PL = jload("part_load.json"); RS = jload("reward_signal.json"); S = jload("splits.json"); XF = jload("exergy_flow.json"); H = jload("harness.json")
-    RP = jload("repair_baselines.json"); AB = jload("audit_baselines.json")
+    RP = jload("repair_baselines.json"); AB = jload("audit_baselines.json"); CO = jload("corpus.json")
     # ---- environment
     s = "assets/environment.json"; c = E["command"]
     put("env.n_components", len(E["components"]), src=s, cmd=c, n=len(E["components"]))
@@ -261,6 +300,28 @@ def derive_values():
         putf("env.tests_minutes", E["tests"]["seconds"] / 60, 0, s, E["tests"]["command"])
     for k, v in E["versions"].items():
         put(f"env.ver.{k}", v, src=s, cmd="library versions in the authoring sandbox")
+    # ---- corpus (read from the repository)
+    s = "assets/corpus.json"; c = CO["command"]; sd = CO["seed"]
+    for k in ("n_architectures", "n_dc", "n_turbine", "n_engine", "n_orc", "n_heat"):
+        put("corp." + k.replace("n_architectures", "n_arch"), CO[k], src=s, cmd=c)
+    for k, v in CO["combine"].items():
+        put("corp." + k, v if k != "harness_fraction" else int(round(v * 100)), src=s, cmd=c)
+    for k, v in CO["sampler"].items():
+        put("corp.samp_" + k, v, src=s, cmd=c)
+    put("corp.ndcg_min", CO["validation"]["audit_ndcg_min"], src=s, cmd=c); put("corp.pred_err_max", CO["validation"]["audit_pred_err_max"], src=s, cmd=c); put("corp.ground_min_pct", int(round(CO["validation"]["grounding_min"] * 100)), src=s, cmd=c)
+    put("corp.mem_min_score", CO["memory"]["min_score"], src=s, cmd=c)
+    vv = CO["paraphrase_variants_by_fault"]
+    put("corp.var_min", min(v["min"] for v in vv.values()), src=s, cmd=c, seed=sd); put("corp.var_max", max(v["max"] for v in vv.values()), src=s, cmd=c, seed=sd)
+    for f_, v in vv.items():
+        put(f"corp.var.{f_}.min", v["min"], src=s, cmd=c, seed=sd, n=v["n"]); put(f"corp.var.{f_}.max", v["max"], src=s, cmd=c, seed=sd, n=v["n"])
+    put("corp.arch_requested", CO["arch_rows_requested"], src=s, cmd=c, seed=sd); put("corp.arch_kept", sum(CO["arch_rows_by_split"].values()), src=s, cmd=c, seed=sd)
+    putf("corp.arch_kept_pct", sum(CO["arch_rows_by_split"].values()) / CO["arch_rows_requested"] * 100, 0, s, c, sd, CO["arch_rows_requested"])
+    for sp_, v in CO["arch_rows_by_split"].items():
+        put(f"corp.arch_rows.{sp_}", v, src=s, cmd=c, seed=sd, n=v); put(f"corp.arch_distinct.{sp_}", CO["arch_distinct_by_split"][sp_], src=s, cmd=c, seed=sd, n=v)
+    tc = E["training_config"]; s = "assets/environment.json"; c = E["command"]
+    put("tr.group", tc["grpo"]["num_generations"], src=s, cmd=c); put("tr.completion_len", tc["grpo"]["max_completion_length"], src=s, cmd=c); put("tr.sft_len", tc["sft"]["max_length"], src=s, cmd=c)
+    put("tr.sft_batch_eff", tc["sft"]["per_device_batch"] * tc["sft"]["grad_accum"] * 2, src=s, cmd=c + "; two ranks from the dual-T4 recipe")
+    put("tr.grpo_batch_eff", tc["grpo"]["per_device_batch"] * tc["grpo"]["grad_accum"] * 2, src=s, cmd=c + "; two ranks from the dual-T4 recipe")
     # ---- cross-check
     s = "assets/crosscheck.json"; c = X["command"]
     putf("xchk.wnet_rel_pct", abs(X["w_net_rel_err"]), 4, s, c, scale=100)
@@ -616,39 +677,54 @@ def table_constants(E):
 
 def table_training(E):
     c = E["training_config"]; sl, gl = c["sft_lora"], c["grpo_lora"]; s, g = c["sft"], c["grpo"]
+    ranks = 2
     rows = [("Base model", tt(c["base_model"]), tt(c["base_model"])), ("Method", "LoRA SFT, all tasks in one adapter", "GRPO per task on the merged SFT model"),
+            ("Precision and parallelism", f"fp16 LoRA, DDP over {ranks} ranks (2 T4), no 4-bit", f"fp16 LoRA, DDP over {ranks} ranks, no 4-bit"),
             ("LoRA rank / alpha / dropout", f"{sl['r']} / {sl['alpha']} / {sl['dropout']:g}", f"{gl['r']} / {gl['alpha']} / {gl['dropout']:g}"),
             ("Target modules", tex(sl["target_modules"]), tex(gl["target_modules"])), ("Learning rate", f"{s['lr']:g}", f"{g['lr']:g}"),
             ("Epochs or steps", f"{s['epochs']} epochs", f"{g['max_steps']} steps (maximum)"), ("Maximum length (tokens)", f"{s['max_length']}", f"completion {g['max_completion_length']}"),
-            ("Batch per device / accumulation", f"{s['per_device_batch']} / {s['grad_accum']}", f"{g['per_device_batch']} / {g['grad_accum']}"),
-            ("Group size / temperature", "--", f"{g['num_generations']} / {g['temperature']:g}"), ("Loss", "causal LM, completion tokens only", f"{tex(g['loss_type'])}-style, KL coefficient {g['beta']:g}, truncated completions masked"),
+            ("Batch per device / accumulation / ranks", f"{s['per_device_batch']} / {s['grad_accum']} / {ranks}", f"{g['per_device_batch']} / {g['grad_accum']} / {ranks}"),
+            ("Effective batch", f"{s['per_device_batch'] * s['grad_accum'] * ranks} sequences", f"{g['per_device_batch'] * g['grad_accum'] * ranks} prompts, {g['num_generations']} completions each"),
+            ("Group size / temperature", "--", f"{g['num_generations']} / {g['temperature']:g}"), ("Gradient clipping", f"max norm {s['max_grad_norm']:g}", f"max norm {g['max_grad_norm']:g}"),
+            ("Loss", "causal LM, completion tokens only", f"{tex(g['loss_type'])}-style, KL coefficient {g['beta']:g}, truncated completions masked"),
             ("Prompt rendering", "tokenizer generation prompt, thinking disabled", "same text as SFT and evaluation")]
     body = "\n".join(f"{a} & {b} & {c_} \\\\" for a, b, c_ in rows)
     return ("\\begingroup\\small\\renewcommand{\\arraystretch}{1.12}\n\\begin{tabular}{@{}p{4.2cm}p{5.4cm}p{5.6cm}@{}}\n\\toprule\n & Stage 1: SFT & Stage 2: GRPO \\\\\n\\midrule\n" + body + "\n\\bottomrule\n\\end{tabular}\\endgroup\n")
 
 
 def table_results_skeleton():
-    keys = {"Repair": ["success", "first-turn success", "exact on deducible", "mean solver calls"], "Design": ["valid", "within 1\\%", "mean gap (\\%)", "mean evaluations"],
-            "Audit": ["rank", "valid", "gain", "prediction"], "Ledger repair": ["exact", "closure", "all correct"]}
+    keys = {"Repair": ["success", "first-turn", "exact", "solver calls"], "Design": ["valid", "within 1\\%", "gap (\\%)", "evaluations"],
+            "Audit": ["rank", "valid", "gain", "prediction"], "Ledger repair": ["exact", "closure", "all correct", "--"]}
+    models = ["Qwen3.5-4B base", "SFT, ground truth only", "SFT, full corpus", "SFT + GRPO", "Teacher model \\todo{name}", "Other open model \\todo{name}"]
     rows = []
     for task, ks in keys.items():
-        for model in ("base", "SFT", "SFT + GRPO"):
-            for h in ("none", "agents+skills"):
-                rows.append(f"{task if (model, h) == ('base', 'none') else ''} & {model} & {h} & " + " & ".join(["\\todo{pending}"] * len(ks)) + " & " + " & ".join(["--"] * (4 - len(ks))) + " \\\\")
+        for k_, m in enumerate(models):
+            cells = ["\\todo{pending}" if x != "--" else "--" for x in ks]
+            rows.append(f"{task if k_ == 0 else ''} & {m} & " + " & ".join(cells) + " \\\\")
         rows.append("\\midrule")
     rows.pop()
-    return ("\\begingroup\\scriptsize\\setlength{\\tabcolsep}{3pt}\n\\begin{tabular}{@{}llllllll@{}}\n\\toprule\nTask & Model & Harness & \\multicolumn{4}{c}{Metrics (per task; see text)} \\\\\n\\midrule\n"
+    head = {"Repair": ks_ for ks_ in []}
+    return ("\\begingroup\\scriptsize\\setlength{\\tabcolsep}{3pt}\n\\begin{tabular}{@{}p{1.3cm}p{4.4cm}p{1.9cm}p{1.9cm}p{1.9cm}p{1.9cm}@{}}\n\\toprule\nTask & Model (full inference text) & \\multicolumn{4}{c}{Metrics (per task; see text)} \\\\\n\\midrule\n"
             + "\n".join(rows) + "\n\\bottomrule\n\\end{tabular}\\endgroup\n")
 
 
 def table_ablation_skeleton():
-    rows = [("Harness mode on the held-out gas-engine topology", "none / agents / skills / agents+skills (base and trained)", "success"),
+    rows = [("Inference text on the held-out gas-engine diagrams", "none / \\texttt{AGENTS.md} / skills / both / both plus memory (base and trained)", "success"),
+            ("Training corpus", "ground truth only / plus architecture corpus / plus teacher traces / plus harness and memory text", "success on held-out diagrams"),
+            ("Paraphrase variants per row", "1 / 3 / 20 or more", "success on held-out faults"),
+            ("Memory retrieval", "none / retrieved notes / random notes", "success and acceptance rate"),
             ("Reward channels", "full / without site / without minimality / without grounding", "success and valid share"),
             ("SFT against GRPO from the base model", "SFT only / SFT + GRPO / GRPO from base", "success"),
             ("Encoder-decoder variant (optional)", "decoder-only / encoder-decoder", "success"),
             ("ThermoQA before and after training", "base / SFT / SFT + GRPO", "accuracy")]
     body = "\n".join(f"{a} & {b} & {c} & \\todo{{pending}} \\\\" for a, b, c in rows)
-    return ("\\begingroup\\small\\renewcommand{\\arraystretch}{1.15}\n\\begin{tabular}{@{}p{4.6cm}p{5.6cm}p{2.7cm}l@{}}\n\\toprule\nAblation & Arms & Metric & Result \\\\\n\\midrule\n" + body + "\n\\bottomrule\n\\end{tabular}\\endgroup\n")
+    return ("\\begingroup\\small\\renewcommand{\\arraystretch}{1.15}\n\\begin{tabular}{@{}p{4.3cm}p{6.1cm}p{2.9cm}l@{}}\n\\toprule\nAblation & Arms & Metric & Result \\\\\n\\midrule\n" + body + "\n\\bottomrule\n\\end{tabular}\\endgroup\n")
+
+
+def table_corpus_skeleton():
+    tasks = ["Repair", "Ledger repair", "Audit", "Design"]
+    rows = [f"{t} & \\todo{{pending}} & \\todo{{pending}} & \\todo{{pending}} & \\todo{{pending}} \\\\" for t in tasks]
+    return ("\\begingroup\\small\\renewcommand{\\arraystretch}{1.15}\n\\begin{tabular}{@{}p{2.3cm}p{2.6cm}p{2.6cm}p{3.1cm}p{3.1cm}@{}}\n\\toprule\nTask & Teacher attempts & Accepted (share) & Rejected, kept as notes & Distinct architectures accepted \\\\\n\\midrule\n" + "\n".join(rows) + "\n\\bottomrule\n\\end{tabular}\\endgroup\n")
 
 
 def table_datasets(S, L):
@@ -724,7 +800,7 @@ def derive():
     M = jload("mechanisms.json")
     tabs = {"table_components.tex": table_components(E), "table_params.tex": table_params(E), "table_verifiers.tex": table_verifiers(), "table_tasks.tex": table_tasks(S, ex),
             "table_faults.tex": table_faults(E, L, S), "table_baselines.tex": table_baselines(RP, AB, D), "table_constants.tex": table_constants(E), "table_training.tex": table_training(E),
-            "table_results.tex": table_results_skeleton(), "table_ablation.tex": table_ablation_skeleton(), "table_datasets.tex": table_datasets(S, L),
+            "table_results.tex": table_results_skeleton(), "table_ablation.tex": table_ablation_skeleton(), "table_corpus_status.tex": table_corpus_skeleton(), "table_datasets.tex": table_datasets(S, L),
             "table_ledger_faults.tex": table_ledger_faults(L), "table_mech.tex": table_mech(M)}
     hm, sk = table_harness(H); tabs["table_harness_modes.tex"] = hm; tabs["table_skills.tex"] = sk; tabs["table_agents.tex"] = table_agents(H)
     GEN.mkdir(exist_ok=True)
@@ -743,12 +819,15 @@ def main():
     ap.add_argument("--tests-log", default=None, help="output of `python -m pytest -q`, used for the test count")
     ap.add_argument("--repair-limits", default="test_id=12,test_ood_fault=40,test_ood_topology=40")
     a = ap.parse_args()
-    stages = a.stage if a.stage != ["all"] else ["environment", "crosscheck", "example", "mechanisms", "repair", "audit", "derive"]
+    stages = a.stage if a.stage != ["all"] else ["environment", "crosscheck", "example", "mechanisms", "corpus", "repair", "audit", "derive"]
     project = pathlib.Path(a.project).resolve() if a.project else None
+    if project:
+        sys.path.insert(0, str(project))
+        import os; os.environ["PYTHONPATH"] = str(project) + os.pathsep + os.environ.get("PYTHONPATH", "")
     scratch = pathlib.Path(a.scratch).resolve(); scratch.mkdir(parents=True, exist_ok=True)
     limits = {k: int(v) for k, v in (x.split("=") for x in a.repair_limits.split(","))}
     todo = {"environment": ("environment.json", lambda: study_environment(project, a.tests_log)), "crosscheck": ("crosscheck.json", study_crosscheck), "example": ("example_plant.json", study_example),
-            "mechanisms": ("mechanisms.json", study_mechanisms), "repair": ("repair_baselines.json", lambda: study_repair(project, scratch, limits)), "audit": ("audit_baselines.json", lambda: study_audit(project, scratch))}
+            "mechanisms": ("mechanisms.json", study_mechanisms), "corpus": ("corpus.json", lambda: study_corpus(project, scratch)), "repair": ("repair_baselines.json", lambda: study_repair(project, scratch, limits)), "audit": ("audit_baselines.json", lambda: study_audit(project, scratch))}
     for s in stages:
         if s == "derive":
             derive(); continue

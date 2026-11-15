@@ -1,8 +1,9 @@
 \section{Method}\label{sec:method}
 
-The method has four parts: a plant simulator with exergy accounting (\cref{sec:env,sec:exergy}), verifiers
+The method has five parts: a plant simulator with exergy accounting (\cref{sec:env,sec:exergy}), verifiers
 that decide whether a plant is acceptable (\cref{sec:verifiers}), four task families built on them
-(\cref{sec:tasks,sec:rewards}), and a two-stage training recipe with an optional agent harness
+(\cref{sec:tasks,sec:rewards}), a verifier-gated training corpus with varied traces, a teacher model and a
+retrievable failure memory (\cref{sec:corpus}), and a two-stage training recipe with an agent harness
 (\cref{sec:training,sec:harness}). Constants marked as assumed are model settings, not measurements;
 \cref{tab:constants} lists them and \cref{sec:limits} discusses what they do to the results.
 
@@ -240,43 +241,113 @@ measured; no model has been trained. Data: \texttt{assets/splits.json}.}
 \label{fig:fig_training}
 \end{figure}
 
+\subsection{Training corpus}\label{sec:corpus}
+
+A model that sees one wording of one fault on one diagram can memorize it. The corpus therefore varies several axes at once, and every row is
+accepted by the physics tool suite, not by its appearance. It has four sources, kept distinguishable by a source tag, plus the harness text (\cref{tab:corpus}). \todo{figure of the corpus composition: diagram catalog with held-out diagrams, paraphrase variants per fault class, teacher acceptance funnel}
+
+\begin{table}[tbp]
+\centering\small\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}p{2.7cm}p{3.2cm}p{3.7cm}p{1.9cm}p{3.1cm}@{}}
+\toprule
+Source & Produced by & Gate & Varies & Role in training \\
+\midrule
+Ground truth with paraphrases & simulator and fault injectors & correct by construction (the original plant is restored) & wording & SFT rows with a fully known answer \\
+Architecture corpus & catalog of labeled diagrams (\val{corp.n_arch} at the seed-0 sample) & the solver or the verifiers detect the injected fault & diagram & SFT rows on many system layouts; whole diagrams held out \\
+Teacher answers & frontier models through Kaggle's model access & the physics tool suite accepts the answer & reasoning and edits & SFT rows with a second style of reasoning \\
+Teacher-authored diagrams & the same models, writing plants in the plant language & the plant solves and passes the verifiers & diagram & new plants for the fault, ledger and audit rows \\
+Hindsight memory & rejected attempts with the ground-truth pattern & notes name a class of mistake, not the answer & what to recheck & failure notes in prompts at training and inference \\
+Harness text & \texttt{AGENTS.md} and skills & none & prompt text & added to \val{corp.harness_fraction}\% of rows \\
+\bottomrule
+\end{tabular}
+\caption{Sources of the training corpus. The corpus builder combines them and records, per source, the rows kept and the prompts dropped.}
+\label{tab:corpus}
+\end{table}
+
+\paragraph{Ground truth with paraphrases.}
+Every Repair row is rendered from the injected fault and its inverse patch. For the seed-0 training rows, the paraphrase module has between \val{corp.var_min} and \val{corp.var_max} true renderings per fault class;
+a row picks one by a hash of its identifier, and the corpus builder emits several per row (default \val{corp.variants_default}). Wording varies while the content cannot drift, because every rendering comes from the same facts.
+The final corpus uses \todo{variants per row; target 20 or more}. The other tasks vary through sampled plants, faults and sites; paraphrase variants for them are \todo{variants for Ledger, Audit and Design rows}.
+
+\paragraph{Architecture corpus.}
+The catalog is a list of labeled plant diagrams. It contains the data-center cogeneration plants (prime mover, cooling, rejection, ORC bottoming and district heat; a heat pump needs a rejection loop, so eight combinations are skipped), the steam-and-HRSG plant with an ORC,
+and further families: standalone Rankine cycles with reheat and regeneration, ORC-only systems, further cogeneration and trigeneration layouts, and combined cycles (\todo{final list of families, diagrams per family and components added}).
+At the seed-0 sample, the catalog has \val{corp.n_arch} diagrams, of which \val{corp.n_dc} are data-center plants; \val{corp.n_turbine} have a gas turbine and \val{corp.n_engine} a gas engine, \val{corp.n_orc} carry an ORC and \val{corp.n_heat} supply district heat.
+Whole diagrams are held out, not single parameters: every engine plant and the steam plant are in the held-out-topology split, so the model is tested on layouts it never saw (\todo{held-out diagrams of the added families}).
+In a seed-0 sample of \val{corp.arch_requested} requested rows, \val{corp.arch_kept} (\val{corp.arch_kept_pct}\%) kept a fault that the solver or the verifiers detect; \val{corp.arch_distinct.train} distinct diagrams are in the training split and \val{corp.arch_distinct.test_ood_topology} in the held-out-topology split.
+
+\paragraph{Teacher answers.}
+Frontier models propose answers to the same prompts that the small model will see, with the harness text and retrieved memory notes in the prompt. They are reached through Kaggle's own model access (Kaggle Benchmarks and the Kaggle command line), using Claude, OpenAI and Gemini models (\todo{model names and versions}), within the quota of the platform. Prompts are exported to a file, run in a notebook, and the completions are downloaded and validated locally.
+The sampler records every attempt, accepted or not, with its timestamp, elapsed time, prompt size, verdict and reward, and a resumed run does not spend quota again on attempts already logged. Sampling is at temperature \val{corp.samp_temperature} with at most \val{corp.samp_max_tokens} tokens. The teacher never sees the ground truth.
+An attempt becomes a training row only if the tool suite accepts it:
+a Repair answer must parse, apply to the broken plant, re-solve and pass the verifiers and the site check; a Ledger answer must close the ledger, leave no negative destruction and reproduce the true lines;
+an Audit answer needs a valid change, a ranking with nDCG@3 of at least \val{corp.ndcg_min}, a prediction within a relative error of \val{corp.pred_err_max}, and at least \val{corp.ground_min_pct}\% of the numbers in its analysis grounded in the plant; a Design answer must build, pass the verifiers and ground its numbers to the same share.
+These checks are the verifiers of \cref{tab:verifiers}: balances, the first and second laws, the temperature cross in exchangers such as a preheater or an HRSG, and the limits on each component.
+Rejected attempts are not discarded; they feed the memory.
+
+\paragraph{Teacher-authored diagrams.}
+The teacher is also asked to write whole plants in the plant language, for a stated purpose such as a cogeneration plant for a given site or a Rankine cycle with a given steam condition. The solver and the verifiers check each plant: it must solve, close every balance, show no temperature cross
+and keep every component inside its limits, and a plant that fails is kept with its reasons. An accepted plant becomes a new diagram. The fault injectors, the ledger program and the audit procedure then turn it into Repair, Ledger and Audit rows with a known answer, and the teacher can be sampled on those rows in turn. The model therefore reads diagrams that the catalog builders did not write
+(\todo{number of teacher-authored diagrams accepted, and the families they cover}).
+
+\paragraph{Hindsight failure memory.}
+Each rejected attempt becomes a short note: the task, the fault class, the diagram, the symptom that the verifiers reported, the class of the mistake and the correct pattern from the ground truth. Notes are retrieved by lexical token overlap with the current plant text,
+with a small boost when the query names the note's fault class or diagram, a minimum score of \val{corp.mem_min_score} and a limit of \val{corp.k_memory} notes, and any note mined from the same record is excluded. Notes describe classes of mistakes and never the answer to the current row;
+they are appended after the harness text so that the model reads the usual failure modes for a plant of this kind and rechecks its answer. The sampler writes new notes into a shared memory directory, so the next prompt and the student read them. The retrieval is lexical and not an embedding search. A check that notes mined from training records cannot leak information into a held-out split is \todo{pending}.
+
+\paragraph{Combination.}
+The corpus builder merges the sources into one file per task and split, appends the harness text to a fixed share (\val{corp.harness_fraction}\%) of the rows, adds retrieved notes, measures every prompt and drops rows above \val{corp.max_prompt_chars} characters, so that no row is truncated silently to fit the sequence length. It writes a report of dropped prompts, rows per source and a check of the expert reward.
+The sizes of the final corpus are \todo{rows per source, task and split}.
+
+\begin{table}[tbp]
+\centering
+\input{generated/table_corpus_status.tex}
+\caption{Teacher acceptance statistics, the counts that show how much of the corpus the teacher supplies. All cells are pending: the teacher has not been run at scale.}
+\label{tab:corpusstatus}
+\end{table}
+
 \subsection{Training}\label{sec:training}
 
 \paragraph{Stage 1: supervised fine-tuning.}
-Qwen3.5-4B is fine-tuned with LoRA on expert answers written programmatically from the ground truth, with one adapter for all four tasks. Prompts are rendered with the tokenizer's
+Qwen3.5-4B is fine-tuned with LoRA on the combined corpus of \cref{sec:corpus}, with one adapter for all four tasks. Prompts are rendered with the tokenizer's
 generation prompt (thinking disabled) as plain prompt and completion text, exactly as GRPO and evaluation render them, so that no template mismatch arises between training and
-inference. Supervised fine-tuning comes first because verifiable rewards are sparse for a policy that never succeeds \citep{lambert2024tulu3}.
+inference. Supervised fine-tuning comes first because verifiable rewards are sparse for a policy that never succeeds \citep{lambert2024tulu3}. The maximum length is \val{tr.sft_len} tokens, and a prompt that is too long is dropped and counted, never truncated.
 
 \paragraph{Stage 2: GRPO.}
-The adapter is merged, and GRPO is run per task from the merged model with a new LoRA adapter, a group of 8 completions, temperature 1, at most 320 completion tokens, a DAPO-style loss
+The adapter is merged, and GRPO is run per task from the merged model with a new LoRA adapter, a group of \val{tr.group} completions, temperature 1, at most \val{tr.completion_len} completion tokens, a DAPO-style loss
 \citep{yu2025dapo} without a KL term, group-normalized rewards, and truncated completions masked. The reward is the weighted channel sum of
-\cref{tab:tasks}. The code is written against TRL \citep{vonwerra2020trl} and is untested on a GPU; loading the model, the library's argument names, 4-bit loading and
-merging, and generation-length cutoffs are the known risks. \Cref{tab:training} lists the settings.
+\cref{tab:tasks}. A group of 8 completions at 320 tokens does not fit the memory of a T4, which is why the group is smaller than in related work \citep{luo2026nuclear}.
+
+\paragraph{Data parallelism.}
+Training targets two T4 GPUs on one host, joined by PCIe without NVLink. The base model is replicated on each GPU (distributed data parallel), so that only the LoRA gradients, tens of megabytes in fp16, cross the link, once per optimizer step; sharding the 4B weights would move about 8~GB per step over the same link.
+The T4 has no bf16 kernels, so the model runs in fp16 with dynamic loss scaling, gradient clipping and fp32 accumulation in matmuls, and 4-bit weights are not used. The effective batch is \val{tr.sft_batch_eff} sequences for SFT and \val{tr.grpo_batch_eff} prompts of \val{tr.group} completions for GRPO (\cref{tab:training}).
+The code is written against TRL \citep{vonwerra2020trl} and has not been run on a GPU; loading the model, the library's argument names, fp16 overflow, merging and generation-length cutoffs are the known risks.
 
 \begin{table}[tbp]
 \centering
 \input{generated/table_training.tex}
-\caption{Training settings, read from \texttt{train/config.py}. None of this has been run on a GPU.}
+\caption{Training settings, read from \texttt{train/config.py} (ranks from the dual-T4 recipe of the repository). None of this has been run on a GPU.}
 \label{tab:training}
 \end{table}
 
 \paragraph{Reward diagnostics.}
 Before any GPU time, each reward is probed with simulated policies that return the expert answer with probability $1-e$ and a damaged answer otherwise. For groups of
-\val{rd.G} completions the diagnostic reports the share of groups whose rewards are all equal. Such groups carry no gradient under group-normalized advantages, so they indicate the error rate below
+\val{rd.G} completions the diagnostic reports the share of groups whose rewards are all equal; the training group is \val{tr.group}, for which equal groups are more frequent, so the diagnostic is \todo{re-run with the training group size}. Such groups carry no gradient under group-normalized advantages, so they indicate the error rate below
 which GRPO stops being informative for a task (\cref{sec:rewarddiag}).
 
-\subsection{Agent harness}\label{sec:harness}
+\subsection{Agent harness and memory}\label{sec:harness}
 
 The harness is text added to the system message. An \texttt{AGENTS.md} file holds conventions, verifier meanings, how to read solver errors and the answer formats; \val{env.n_skills} skills cover the gas
 engine, heat rejector, absorption chiller, ORC bottoming, heat pump and district heat, the exergy audit, the design catalog and the exergy ledger. The port and parameter sections of the
-skills are generated from the component registry, and a test fails if they drift from it. There are four modes: none, \texttt{AGENTS.md}, skills, and both. In the skill modes the bodies of the selected skills
-are appended to the system message (they are not loaded on demand); a component skill is selected when its component appears in the plant, and all component skills are given when there is no plant yet, as in Design.
-The planned ablation holds the gas engine out of the training topologies, so that its skill is its only description (\cref{sec:experiments}).
+skills are generated from the component registry, and a test fails if they drift from it. There are four harness modes: none, \texttt{AGENTS.md}, skills, and both. In the skill modes the bodies of the selected skills
+are appended to the system message (they are not loaded on demand); a component skill is selected when its component appears in the plant. When there is no plant yet, as in Design, only the task's own skill (the design catalog, which lists the components and their parameters) is given, because every component skill at once would push a Design or Ledger prompt past the length limit.
+The hindsight memory (\cref{sec:corpus}) is a separate layer that can be switched on independently of the mode, in the SFT prompts, in the GRPO rollouts and in evaluation, so that the harness ablation stays a four-mode comparison and memory adds a second factor.
+The planned ablation holds the gas engine out of the training diagrams, so that its skill is its only description (\cref{sec:experiments}).
 
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=\linewidth]{figures/pdf/fig_harness.pdf}
 \caption{Harness text: the component registry generates the AUTO sections of \texttt{AGENTS.md} and of the skills; four modes add none, \texttt{AGENTS.md}, skills or both to the prompt; the gas engine is the
-component held out of the training topologies. Data: \texttt{assets/harness.json} (files of the project, $n=\val{env.n_skills}$ skills).}
+component held out of the training topologies. The memory layer is not drawn \todo{add the memory layer to the figure}. Data: \texttt{assets/harness.json} (files of the project, $n=\val{env.n_skills}$ skills).}
 \label{fig:fig_harness}
 \end{figure}

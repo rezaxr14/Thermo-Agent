@@ -19,15 +19,21 @@ The other files in `assets/` and everything in `figures/` come from the figure b
 
 ## Pending items (`\todo`)
 
-- Authors, affiliations and date (title block), repository, dataset and checkpoint links (data and code availability), dataset licence (appendix D).
-- `headline model result` (abstract, conclusion).
-- Model results: base, SFT and SFT+GRPO per task, with harness none and agents+skills (table `tab:results`); ablations (table `tab:ablation`); GPU hours and costs (appendix F); runbook steps 4 and 5.
-- `Frontier trace results` (section 5): the Frontier file has not been downloaded.
-- Positioning table (section 2): the second-law column of six prior works is `\todo{check}`.
+- Authors, affiliations and date, repository, dataset and checkpoint links, dataset licence.
+- `headline model result`; model results and ablations (`tab:results`, `tab:ablation`); names of the compared models; GPU hours and costs.
+- Corpus: variants per row (target 20 or more) for Repair and the other tasks; final corpus sizes per source, task and split; teacher models and quota; teacher acceptance statistics (`tab:corpusstatus`); number and families of teacher-authored diagrams; final catalog (families, diagrams, held-out diagrams); leakage check for memory notes.
+- Reward diagnostic re-run with the training group size (4); `Frontier trace results`.
+- Related work: citations for rejection-sampling fine-tuning, retrieval-augmented generation and failure memory; second-law column of six prior works in the positioning table.
+- Figures marked with `\todo` in their captions: `fig_overview`, `fig_harness`, new `fig_corpus`; `fig_training` and `fig_reward_signal` need the new settings.
+
+## Described in the paper, to be built in the repository
+
+The paper describes the intended system. These parts are not in the repository at the time of writing and each has a matching `\todo`:
+teacher-authored diagrams (plants written by the teacher, checked, then turned into fault, ledger and audit rows); catalog families beyond the data-center plants and the steam-and-HRSG plant (Rankine, ORC-only, further cogeneration, combined cycles) with the components they need; failure-memory retrieval in the evaluator and in GRPO; paraphrase variants for Ledger, Audit and Design rows and 20 or more variants for Repair; export and ingest helpers for the Kaggle teacher pass.
 
 ## Placeholder figures
 
-None. All 13 figures are the final vector figures (SVG with a PDF twin) from the figure build.
+None. All 13 figures are vector figures (SVG with a PDF twin) from the figure build; four of them are out of date against the repository (see above).
 
 ## References marked TODO-verify
 
