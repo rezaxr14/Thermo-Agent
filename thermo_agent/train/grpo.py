@@ -28,7 +28,7 @@ TASKS = {"repair": (repair_rewards.REWARD_FUNCS, repair_rewards.REWARD_WEIGHTS, 
 
 def load_rows(data_dir, split="train", task="repair"):
     cols = TASKS[task][2]
-    return [{k: json.loads(l)[k] for k in cols} for l in open(pathlib.Path(data_dir) / f"{task}_{split}.jsonl")]
+    return [{k: json.loads(l)[k] for k in cols} for l in open(pathlib.Path(data_dir) / f"{task}_{split}.jsonl", encoding="utf-8")]
 
 
 def _report_topology(dtype: str, num_generations: int, s: GrpoSettings) -> None:

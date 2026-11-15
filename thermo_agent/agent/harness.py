@@ -25,13 +25,19 @@ def read_skill(name: str) -> str:
 
 
 def skills_for(plant: Plant | None, task: str) -> list[str]:
-    """Component skills whose components appear in the plant (all of them when there is no plant yet, as in Design),
-    plus the task's own skills."""
+    """The task's own skill plus the component skills whose components appear in the plant.
+
+    When there is no plant yet (Design), only the task skill is included. Every component skill at once adds
+    about 12k characters, which pushes a design or ledger prompt past the 4096-token training limit; the
+    design-catalog skill already lists the components and their parameters.
+    """
     out = list(TASK_SKILLS.get(task, []))
+    if plant is None:
+        return out
     for n in skill_names():
         comps = frontmatter((ROOT / "skills" / n / "SKILL.md").read_text()).get("components")
         if not comps: continue
-        if plant is None or any(c.type in comps for c in plant.components): out.append(n)
+        if any(c.type in comps for c in plant.components): out.append(n)
     return out
 
 

@@ -13,7 +13,10 @@ Sources, all kept distinguishable by `source`:
 Every prompt is measured before it is written; rows over `--max-prompt-chars` are dropped and counted, so no
 SFT row can be silently truncated to fit the T4 sequence length.
 
-    python -m thermo_agent.synth.combine data/processed data/frontier data/memory data/sft --variants 3
+Output files are `{task}_{split}.jsonl`, which is exactly what `thermo_agent.train.sft` and
+`thermo_agent.train.grpo` read, plus `sft_report.json` for the provenance and the checks.
+
+    python -m thermo_agent.synth.combine data/processed data/frontier data/memory data/sft --variants 4
 """
 from __future__ import annotations
 
@@ -31,6 +34,12 @@ from ..teacher import memory, validate
 
 TASKS = ("repair", "ledger", "audit", "design")
 VARIANTS = {"repair": True, "ledger": False, "audit": False, "design": False}
+SPLITS = {
+    "repair": ("train", "val", "test_id", "test_ood_fault", "test_ood_topology"),
+    "ledger": ("train", "val", "test_id", "test_ood_fault", "test_ood_topology"),
+    "audit": ("train", "val", "test_id", "test_ood_fault", "test_ood_topology"),
+    "design": ("train", "val", "test_id", "test_ood_climate", "test_ood_scale", "test_ood_load"),
+}
 
 
 def _plant(task: str, row: dict) -> Plant | None:
@@ -111,10 +120,9 @@ def _check(task: str, rows: list[dict], limit: int, problems: list[str]) -> dict
     return {"checked": ok + bad, "accepted": ok, "rejected": bad}
 
 
-def build(processed, frontier, memory_dir, out_dir, tasks=TASKS, variants: int = 3,
+def build(processed, frontier, memory_dir, out_dir, tasks=TASKS, variants: int = 4,
           harness_fraction: float = 0.35, k_memory: int = 3, max_chars: int = 14000,
-          splits=("train", "val", "test_id", "test_ood_fault", "test_ood_topology"),
-          check_limit: int = 0, extra_processed=()) -> dict:
+          splits=None, check_limit: int = 0, extra_processed=()) -> dict:
     proc_dirs = [pathlib.Path(processed)] + [pathlib.Path(p) for p in extra_processed]
     front, mem = pathlib.Path(frontier), pathlib.Path(memory_dir)
     out = pathlib.Path(out_dir)
@@ -130,7 +138,8 @@ def build(processed, frontier, memory_dir, out_dir, tasks=TASKS, variants: int =
     seen_ids: dict[str, str] = {}
     for task in tasks:
         report["tasks"][task] = {}
-        for split in splits:
+        task_splits = splits or SPLITS[task]
+        for split in task_splits:
             rows = []
             for d in proc_dirs:
                 rows += _read(d / f"{task}_{split}.jsonl")
@@ -163,7 +172,7 @@ def build(processed, frontier, memory_dir, out_dir, tasks=TASKS, variants: int =
                     problems.append(f"no_edits:{r['id']}")
                 if task == "repair" and "<diagnosis>" not in text:
                     problems.append(f"no_diagnosis:{r['id']}")
-            path = out / f"sft_{task}_{split}.jsonl"
+            path = out / f"{task}_{split}.jsonl"
             with path.open("w", encoding="utf-8") as fh:
                 for r in emitted:
                     fh.write(json.dumps(r) + "\n")
@@ -180,7 +189,8 @@ def build(processed, frontier, memory_dir, out_dir, tasks=TASKS, variants: int =
             if check_limit:
                 report["tasks"][task][split]["check"] = _check(task, emitted, check_limit, problems)
     report["stats"] = dict(stats)
-    report["splits"] = {s: sum(report["tasks"][t].get(s, {}).get("n", 0) for t in report["tasks"]) for s in splits}
+    all_splits = sorted({s for t in report["tasks"] for s in report["tasks"][t]})
+    report["splits"] = {s: sum(report["tasks"][t].get(s, {}).get("n", 0) for t in report["tasks"]) for s in all_splits}
     pathlib.Path(out / "sft_report.json").write_text(json.dumps(report, indent=1, sort_keys=True), encoding="utf-8")
     return report
 
@@ -192,15 +202,16 @@ def main():
     ap.add_argument("memory")
     ap.add_argument("out")
     ap.add_argument("--tasks", nargs="+", default=list(TASKS), choices=list(TASKS))
-    ap.add_argument("--variants", type=int, default=3)
+    ap.add_argument("--variants", type=int, default=4)
     ap.add_argument("--harness-fraction", type=float, default=0.35)
     ap.add_argument("--k-memory", type=int, default=3)
     ap.add_argument("--max-prompt-chars", type=int, default=14000)
     ap.add_argument("--check-limit", type=int, default=0)
+    ap.add_argument("--splits", nargs="*", default=None, help="override the per-task split lists")
     ap.add_argument("--extra-processed", nargs="*", default=[], help="more processed dirs, e.g. the architecture corpus")
     a = ap.parse_args()
     r = build(a.processed, a.frontier, a.memory, a.out, a.tasks, a.variants, a.harness_fraction,
-              a.k_memory, a.max_prompt_chars, check_limit=a.check_limit, extra_processed=a.extra_processed)
+              a.k_memory, a.max_prompt_chars, a.splits, a.check_limit, a.extra_processed)
     print(json.dumps({"tasks": {t: {s: v["n"] for s, v in d.items()} for t, d in r["tasks"].items()},
                       "problems": len(r["problems"]), "first_problems": r["problems"][:10],
                       "memory_notes": r["memory_notes_available"]}, indent=1))

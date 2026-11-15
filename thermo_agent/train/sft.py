@@ -23,7 +23,7 @@ def read_rows(data_dir, tasks, split, seed=0, limit=None):
     rows = []
     for t in tasks:
         p = pathlib.Path(data_dir) / f"{t}_{split}.jsonl"
-        if p.exists(): rows += [json.loads(l) for l in open(p)]
+        if p.exists(): rows += [json.loads(l) for l in open(p, encoding="utf-8")]
     random.Random(seed).shuffle(rows)
     return rows[:limit] if limit else rows
 

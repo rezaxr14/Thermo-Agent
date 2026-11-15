@@ -58,33 +58,23 @@ Steps, in order: repair -> audit -> ledger -> design -> architecture corpus -> h
 combine. `reports/data_report.json` and `data/sft/sft_report.json` must both have an empty `problems` list. If a
 report names a missing split, raise the matching `THERMO_N_*` value and rerun; the finished steps are skipped.
 
-Measured on this 16-core machine with 14 workers: repair 12000 in about 2 minutes; ledger about 7.8 CPU-seconds per
-row (about 84 minutes); design about 26 CPU-seconds per site (about 2 hours at 4000 sites and 60 evaluations); the
-architecture corpus 400 rows in 36 seconds. Design writes its split files only when all sites finish.
+Measured on this 16-core machine with 14 workers: repair 12000 in about 2 minutes; audit 3000 in about 2 minutes;
+ledger 9000 in about 3 minutes; design about 26 CPU-seconds per site (about 2 hours at 4000 sites and 60
+evaluations); the architecture corpus 400 rows in 36 seconds (about 5 minutes at 3000). Design writes its split
+files only when all sites finish, so a machine sleep during that step loses the whole step; the meta-based resume
+simply reruns it.
 
 The architecture corpus (`data/processed_arch/`) holds 65 diagrams: turbine and gas-engine prime movers, absorption
 and electric cooling, wet/dry/extended rejection, with and without an ORC bottoming cycle, plus the
 `cgam_steam_orc` steam cycle. Whole diagrams are held out: `engine-*` and `cgam_steam_orc` go to
 `test_ood_topology`, and the sign-flip / swapped-port faults go to `test_ood_fault`.
 
-## 2b. Frontier teacher on Kaggle (optional, needs credentials)
-The second half of the training data is produced by a frontier open model, validated by the tool suite. Kaggle has
-no inference API, so a notebook serves vLLM and publishes a cloudflared tunnel:
-
-1. Open `kaggle/teacher.ipynb` in a Kaggle notebook with Accelerator `GPU T4 x2` and Internet on.
-2. Upload `kaggle/serve_teacher.py` as a private dataset named `thermo-teacher` (or paste it into a cell).
-3. Run the cells and copy the `TEACHER_BASE_URL=...` line.
-4. On this machine:
-
-```powershell
-pwsh scripts/kaggle_teacher.ps1 -Url https://<random>.trycloudflare.com -Samples 2 -Limit 50
-```
-
-The default model is `Qwen/Qwen2.5-32B-Instruct-AWQ` (about 19 GB, tensor parallel 2); an fp16 32B does not fit
-2xT4. Every attempt is written raw to `data/frontier/`; only answers that pass `thermo_agent.teacher.validate`
-become SFT rows, and rejections become hindsight notes in `data/memory/`. Sampling is resumable, so a dropped
-tunnel costs only the rows in flight. Start with `-Limit 50` and check the printed `attempts / accepted / rejected`
-before spending the weekly GPU quota.
+## 2b. Frontier teacher on Kaggle (deferred)
+The second half of the training data will come from a frontier model, validated by the same tool suite. That pass
+runs through Kaggle's own model access (Kaggle Benchmarks / CLI: Claude Sonnet/Haiku, OpenAI, Gemini), not a
+self-hosted model behind a tunnel. It is deferred until the local corpus and the training pipeline are finished;
+`combine` already reads `data/frontier/frontier_{task}_{split}.jsonl`, so the accepted teacher rows drop into the
+same corpus without any other change. See `kaggle/README.md`.
 
 ## 3. Non-model baselines (the numbers a model has to beat)
 `scripts/baselines.ps1` runs every split with environment-driven limits:
@@ -136,8 +126,9 @@ empty thinking block). `PREFIX CHECK` may say `prefix_matches: false`; that is w
 
 ## 6. SFT (dual T4)
 `data/sft/` is the combined corpus: ground-truth paraphrases, validated teacher traces, the architecture corpus and
-retrieved hindsight notes, with the harness injected on 35 percent of rows. Prompts longer than 14000 characters are
-dropped and counted, never truncated; `max_length` is 4096.
+retrieved hindsight notes, with the harness injected on 35 percent of rows. Files are `{task}_{split}.jsonl`
+(exactly what the trainers read) plus `sft_report.json`. Prompts longer than 14000 characters are dropped and
+counted, never truncated; `max_length` is 4096.
 
 ```bash
 # smoke, then the full run (one adapter for all four tasks)

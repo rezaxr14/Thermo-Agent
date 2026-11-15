@@ -34,8 +34,11 @@ def test_gas_engine_skill_is_selected_only_for_engine_plants():
     assert "SKILL gas-engine" in text and "AGENTS.md" not in text
     assert "SKILL exergy-audit" in H.augment(MSGS, "skills", "audit", turb)[0]["content"]
 
-def test_design_gets_every_component_skill_and_its_catalog_skill():
-    s = H.skills_for(None, "design"); assert "design-catalog" in s and "gas-engine" in s and "orc-bottoming" in s
+def test_design_without_a_plant_gets_only_its_catalog_skill():
+    s = H.skills_for(None, "design")
+    assert s == ["design-catalog"], "all component skills at once do not fit the 4096-token prompt budget"
+    assert H.skills_for(None, "ledger") == ["exergy-ledger"]
 
 def test_harness_size_is_bounded():
-    assert len(H.augment(MSGS, "agents+skills", "design")[0]["content"]) < 25000
+    # AGENTS.md plus one task skill must leave room for the plant text inside max_length 4096.
+    assert len(H.augment(MSGS, "agents+skills", "design")[0]["content"]) < 9000

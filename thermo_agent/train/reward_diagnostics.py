@@ -54,7 +54,7 @@ def main():
     for t in a.tasks:
         p = pathlib.Path(a.data) / f"{t}_train.jsonl"
         if not p.exists(): continue
-        res[t] = diagnose([json.loads(l) for l in open(p)], t, a.levels, a.groups); notes += advise(t, res[t])
+        res[t] = diagnose([json.loads(l) for l in open(p, encoding="utf-8")], t, a.levels, a.groups); notes += advise(t, res[t])
     res["notes"] = notes
     if a.out: pathlib.Path(a.out).parent.mkdir(parents=True, exist_ok=True); pathlib.Path(a.out).write_text(json.dumps(res, indent=1))
     print(json.dumps(res, indent=1))

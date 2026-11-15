@@ -1,4 +1,5 @@
-"""Prompt construction for the teacher must match what the student will see, and the client must normalise URLs."""
+"""Prompt construction for the teacher must match what the student will see, the client must normalise URLs,
+and a resumed sampling run must never re-spend quota on rows it already attempted."""
 import json
 
 from thermo_agent.teacher import memory, sample
@@ -39,3 +40,37 @@ def test_load_rows_merges_extra_directories(tmp_path):
     rows = sample.load_rows(a, "repair", extra=[b])
     assert [r["id"] for r in rows] == ["x", "y"]
     assert sample.load_rows(a, "repair", limit=1, extra=[b]) == [{"id": "x"}]
+
+
+class _RejectingTeacher:
+    model = "fake-frontier"
+
+    def chat(self, messages):
+        return "<diagnosis>no edits</diagnosis>"
+
+
+def test_sample_resumes_after_the_requested_attempts(tmp_path):
+    row = make_row("wrong_fluid")
+    out, mem = tmp_path / "frontier", tmp_path / "memory"
+    first = sample.sample([row], _RejectingTeacher(), "repair", 2, out, mem)
+    assert first["attempts"] == 2 and first["accepted"] == 0 and first["rejected"] == 2
+    assert first["acceptance_rate"] == 0.0
+
+    second = sample.sample([row], _RejectingTeacher(), "repair", 2, out, mem)
+    assert second["attempts"] == 0 and second["skipped"] == 1
+
+    raw = [json.loads(l) for l in (out / "frontier_repair_train_raw.jsonl").open(encoding="utf-8")]
+    assert len(raw) == 2
+    assert all({"ts", "elapsed_s", "prompt_chars", "reasons", "accepted"} <= set(r) for r in raw)
+    runs = [json.loads(l) for l in (out / "frontier_repair_train_runs.jsonl").open(encoding="utf-8")]
+    assert len(runs) == 2 and runs[0]["task"] == "repair"
+
+
+def test_sample_writes_rejections_into_the_shared_memory_dir(tmp_path):
+    row = make_row("sign_flip")
+    out, mem = tmp_path / "frontier", tmp_path / "memory"
+    stats = sample.sample([row], _RejectingTeacher(), "repair", 1, out, mem)
+    assert stats["memory_notes"] == 1
+    notes = memory.load(mem / "memory_repair.jsonl")
+    assert len(notes) == 1 and notes[0].task == "repair" and not notes[0].accepted
+    assert not (out / "memory_repair.jsonl").exists()

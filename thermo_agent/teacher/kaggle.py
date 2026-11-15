@@ -1,9 +1,11 @@
-"""Helpers for pointing the teacher sampler at a Kaggle-hosted endpoint.
+"""Helpers for OpenAI-compatible teacher endpoints.
 
-Kaggle does not expose a general inference API; it gives GPU notebooks. The teacher therefore runs in a Kaggle
-notebook (see `kaggle/serve_teacher.py`), serves an OpenAI-compatible API with vLLM, and publishes a
-cloudflared quick-tunnel URL. This module normalises that URL and checks the endpoint before a long sampling
-run starts.
+`teacher.sample` can talk to any OpenAI-compatible chat endpoint: a self-hosted vLLM server, or LM Studio for a
+format smoke check (LM Studio output never enters the training data). These helpers normalise the base URL and
+probe `/v1/models` before a long sampling run.
+
+Kaggle-hosted frontier models (Claude, Gemini, OpenAI) are reached through Kaggle Benchmarks / the Kaggle CLI,
+not through this module; see `kaggle/README.md`.
 """
 from __future__ import annotations
 
@@ -28,7 +30,7 @@ def normalize_base_url(url: str) -> str:
 
 
 def tunnel_url(text: str) -> str | None:
-    """Pull the quick-tunnel URL out of cloudflared's stderr."""
+    """Pull a cloudflared quick-tunnel URL out of its stderr (self-hosted servers only)."""
     m = _TUNNEL.search(text or "")
     return m.group(0) if m else None
 

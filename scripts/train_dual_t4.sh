@@ -5,11 +5,20 @@
 #   scripts/train_dual_t4.sh grpo repair
 #   scripts/train_dual_t4.sh all
 #   scripts/train_dual_t4.sh merge runs/sft/checkpoint-N runs/sft_merged
+#
+# Environment:
+#   DATA=data/sft        combined corpus written by thermo_agent.synth.combine
+#   OUT=runs             adapter / checkpoint root
+#   MODEL=Qwen/Qwen3.5-4B
+#   TASKS="repair design audit ledger"
+#   INIT=runs/sft_merged merged SFT model that GRPO starts from
+#   NGPU / WORKERS       auto-detected; set to override
+#   STEPS / ROWS         optional smoke limits (--max-steps / --limit-rows)
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-DATA=${DATA:-data/processed}
+DATA=${DATA:-data/sft}
 OUT=${OUT:-runs}
 MODEL=${MODEL:-Qwen/Qwen3.5-4B}
 TASKS=${TASKS:-"repair design audit ledger"}
@@ -33,6 +42,10 @@ export NCCL_DEBUG=${NCCL_DEBUG:-WARN}
 export NCCL_IB_DISABLE=1           # no InfiniBand on Kaggle; avoids a probe that can stall
 # export NCCL_P2P_DISABLE=1        # only if NCCL hangs or reports an unsupported P2P setup
 
+LIMITS=()
+[ -n "${STEPS:-}" ] && LIMITS+=(--max-steps "$STEPS")
+[ -n "${ROWS:-}" ] && LIMITS+=(--limit-rows "$ROWS")
+
 preflight() {
   "$PY" - <<'PY'
 import sys
@@ -54,7 +67,7 @@ run_sft() {
   preflight
   torchrun --standalone --nproc_per_node="$NGPU" --module thermo_agent.train.sft \
     "$DATA" "$OUT/sft" --model "$MODEL" --dtype float16 --tasks $TASKS \
-    --per-device-batch 2 --grad-accum 8 --grad-norm 1.0 --num-workers "$WORKERS"
+    --per-device-batch 2 --grad-accum 8 --grad-norm 1.0 --num-workers "$WORKERS" "${LIMITS[@]}"
 }
 
 run_grpo() {
@@ -62,7 +75,7 @@ run_grpo() {
   preflight
   torchrun --standalone --nproc_per_node="$NGPU" --module thermo_agent.train.grpo \
     "$DATA" "$OUT/grpo_$task" --task "$task" --init "$INIT" --dtype float16 \
-    --per-device-batch 4 --grad-accum 2 --grad-norm 1.0 --num-workers "$WORKERS"
+    --per-device-batch 4 --grad-accum 2 --grad-norm 1.0 --num-workers "$WORKERS" "${LIMITS[@]}"
 }
 
 run_merge() {
