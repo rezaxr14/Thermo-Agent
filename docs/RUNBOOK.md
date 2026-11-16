@@ -138,16 +138,20 @@ the prompt mix when it stays above about 50 percent). Fresh reward evaluation co
 
 ## 4. Base model, no training
 ```
-python -m thermo_agent.eval.model_eval data/processed --model Qwen/Qwen3.5-4B --limit 30 --harness none          --out reports/base_none.json
-python -m thermo_agent.eval.model_eval data/processed --model Qwen/Qwen3.5-4B --limit 30 --harness agents+skills --out reports/base_harness.json
+python -m thermo_agent.eval.model_eval data/processed data/processed_arch --model Qwen/Qwen3.5-4B --limit 30 --harness none          --out reports/base_none.json
+python -m thermo_agent.eval.model_eval data/processed data/processed_arch --model Qwen/Qwen3.5-4B --limit 30 --harness agents+skills --out reports/base_harness.json
 ```
+Evaluation always reads the ground-truth datasets — `data/processed` plus `data/processed_arch` for the architecture
+diagrams — and never `data/sft`: the combined corpus's prompts already carry the harness on 35 percent of rows, so
+evaluating there would double-augment and make the `--harness` ablation meaningless. `--limit 30` samples 30 rows
+across both directories.
 Add `--dtype float16 --load-4bit` on a T4. Check `reports/base_none.completions.jsonl`: are answers in the
 requested format? If almost none parse, the model is not following the format (expected for the base model); if the
 text starts with a thinking block, tell me.
 
 ## 5. Check the chat template before training
 ```
-python -m thermo_agent.train.sft data/processed runs/tmp --tasks repair design audit ledger --print-sample
+python -m thermo_agent.train.sft data/sft runs/tmp --tasks repair design audit ledger --print-sample
 ```
 Send back the output. `PROMPT TAIL` must end where the assistant answer starts (for Qwen3-style templates, with an
 empty thinking block). `PREFIX CHECK` may say `prefix_matches: false`; that is why SFT uses the plain-text format of
@@ -169,8 +173,8 @@ On a single 24 GB GPU the equivalent is `python -m thermo_agent.train.sft data/s
 audit ledger` (add `--dtype float16 --qlora` on one T4). Note the seconds per step from the smoke log and that the
 loss goes down. Then evaluate the last `checkpoint-*`:
 ```
-python -m thermo_agent.eval.model_eval data/sft --model Qwen/Qwen3.5-4B --adapter runs/sft/checkpoint-N --limit 30 --out reports/sft_none.json
-python -m thermo_agent.eval.model_eval data/sft --model Qwen/Qwen3.5-4B --adapter runs/sft/checkpoint-N --limit 30 --harness agents+skills --out reports/sft_harness.json
+python -m thermo_agent.eval.model_eval data/processed data/processed_arch --model Qwen/Qwen3.5-4B --adapter runs/sft/checkpoint-N --limit 30 --out reports/sft_none.json
+python -m thermo_agent.eval.model_eval data/processed data/processed_arch --model Qwen/Qwen3.5-4B --adapter runs/sft/checkpoint-N --limit 30 --harness agents+skills --out reports/sft_harness.json
 ```
 Expect Repair and Audit format and Design validity to be high after SFT. If the format is still poor, the problem is
 the template or the data, not GRPO; stop and report.
@@ -186,7 +190,7 @@ function and the reward standard deviation. If the standard deviation is zero fo
 group scores the same and nothing is learned: tell me which task and the reward means. Ledger is a cheap, exact
 reward (pure arithmetic), so start GRPO there if time is short. Evaluate each result:
 ```
-python -m thermo_agent.eval.model_eval data/sft --model runs/sft_merged --adapter runs/grpo_repair/checkpoint-N --tasks repair --limit 30 --out reports/grpo_repair.json
+python -m thermo_agent.eval.model_eval data/processed data/processed_arch --model runs/sft_merged --adapter runs/grpo_repair/checkpoint-N --tasks repair --limit 30 --out reports/grpo_repair.json
 ```
 
 ## 8. Ablations and forgetting
@@ -216,8 +220,8 @@ Design sample efficiency (the central claim): run the anytime protocol, in which
 valid design and may improve it, then plot best-result-after-b-evaluations against enumeration, random search and
 the enumerate-then-polish reference:
 ```
-python -m thermo_agent.eval.model_eval data/sft --model runs/sft_merged --adapter runs/grpo_design/checkpoint-N --tasks design --refine-turns 6 --limit 30 --out reports/grpo_design_refine.json
-python -m thermo_agent.design.curves data/sft --split test_id --limit 20 --report reports/grpo_design_refine.json --out paper/generated/design_anytime.png
+python -m thermo_agent.eval.model_eval data/processed --model runs/sft_merged --adapter runs/grpo_design/checkpoint-N --tasks design --refine-turns 6 --limit 30 --out reports/grpo_design_refine.json
+python -m thermo_agent.design.curves data/processed --split test_id --limit 20 --report reports/grpo_design_refine.json --out paper/generated/design_anytime.png
 ```
 Paired comparisons for the ablations (same examples, exact McNemar test for binary metrics, permutation test
 otherwise, Holm correction across everything listed):

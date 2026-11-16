@@ -1,7 +1,10 @@
 """Evaluate a model (base or LoRA adapter) on Repair, Design and Audit, with an optional agent-harness mode.
 
-    python -m thermo_agent.eval.model_eval DATA_DIR --model Qwen/Qwen3.5-4B [--adapter runs/grpo_repair] \\
+    python -m thermo_agent.eval.model_eval DATA_DIR [DATA_DIR ...] --model Qwen/Qwen3.5-4B [--adapter runs/grpo_repair] \\
         [--tasks repair design audit] [--limit 40] [--harness none|agents|skills|agents+skills] --out reports/base.json
+
+    # the second directory is the architecture corpus, so the held-out diagrams are evaluated too:
+    python -m thermo_agent.eval.model_eval data/processed data/processed_arch --model Qwen/Qwen3.5-4B --out reports/base.json
 
     # a served model instead of local weights (LM Studio, vLLM, Ollama):
     python -m thermo_agent.eval.model_eval DATA_DIR --backend openai --api-model qwen3.5-4b --out reports/local.json
@@ -166,17 +169,39 @@ def eval_ledger(generate, rows, mode="none", log=None):
     return out
 
 
-def load_rows(data_dir, task, split, limit):
-    p = pathlib.Path(data_dir) / f"{task}_{split}.jsonl"
-    return [json.loads(l) for l in open(p)][:limit] if p.exists() else None
+def load_rows(data_dirs, task, split, limit):
+    """Rows for one split from one or more data directories, de-duplicated by id.
+
+    Evaluation reads the ground-truth datasets (`data/processed`, plus `data/processed_arch` for the architecture
+    diagrams), never the combined corpus: the combined prompts already carry the harness on a fraction of rows, so
+    evaluating there would both double-augment and make the `--harness` ablation meaningless.
+    """
+    dirs = [data_dirs] if isinstance(data_dirs, (str, pathlib.Path)) else list(data_dirs)
+    rows, seen = [], set()
+    for d in dirs:
+        p = pathlib.Path(d) / f"{task}_{split}.jsonl"
+        if not p.exists():
+            continue
+        for line in p.open(encoding="utf-8"):
+            if not line.strip():
+                continue
+            row = json.loads(line)
+            rid = row.get("id")
+            if rid in seen:
+                continue
+            seen.add(rid)
+            rows.append(row)
+    if not rows:
+        return None
+    return rows[:limit] if limit else rows
 
 
-def run(generate, data_dir, tasks, splits=None, limit=40, mode="none", max_turns=3, polish_evals=0, refine_turns=0) -> tuple[dict, list]:
+def run(generate, data_dirs, tasks, splits=None, limit=40, mode="none", max_turns=3, polish_evals=0, refine_turns=0) -> tuple[dict, list]:
     report, log = {}, []
     for task in tasks:
         report[task] = {}
         for sp in (splits or DEFAULT_SPLITS[task]):
-            rows = load_rows(data_dir, task, sp, limit)
+            rows = load_rows(data_dirs, task, sp, limit)
             if not rows: report[task][sp] = None; continue
             t = time.time()
             if task == "repair": m = eval_repair(generate, rows, mode, max_turns, log)
@@ -188,7 +213,7 @@ def run(generate, data_dir, tasks, splits=None, limit=40, mode="none", max_turns
 
 
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument("data"); ap.add_argument("--model", default="Qwen/Qwen3.5-4B"); ap.add_argument("--adapter")
+    ap = argparse.ArgumentParser(); ap.add_argument("data", nargs="+", help="ground-truth data dirs, e.g. data/processed data/processed_arch"); ap.add_argument("--model", default="Qwen/Qwen3.5-4B"); ap.add_argument("--adapter")
     ap.add_argument("--tasks", nargs="+", default=["repair", "design", "audit", "ledger"]); ap.add_argument("--splits", nargs="*")
     ap.add_argument("--limit", type=int, default=40); ap.add_argument("--harness", default="none", choices=list(H.MODES))
     ap.add_argument("--max-turns", type=int, default=3); ap.add_argument("--polish-evals", type=int, default=0)
@@ -212,7 +237,7 @@ def main():
         model_label = a.model
     report, log = run(gen, a.data, a.tasks, a.splits, a.limit, a.harness, a.max_turns, a.polish_evals, a.refine_turns)
     import importlib.metadata as md
-    meta = {"model": model_label, "adapter": a.adapter, "backend": a.backend, "base_url": (a.base_url if a.backend == "openai" else None),
+    meta = {"model": model_label, "adapter": a.adapter, "backend": a.backend, "data": a.data, "base_url": (a.base_url if a.backend == "openai" else None),
             "harness": a.harness, "limit": a.limit, "max_turns": a.max_turns, "polish_evals": a.polish_evals, "refine_turns": a.refine_turns,
             "temperature": (a.temperature if a.backend == "openai" else 0.0), "max_new_tokens": a.max_new_tokens,
             "python": platform.python_version(), **{p: (md.version(p) if _has(p) else None) for p in ("torch", "transformers", "peft", "trl", "CoolProp")}}

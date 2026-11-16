@@ -70,3 +70,13 @@ def test_summary_shows_intervals(data, tmp_path):
     rep, _ = ME.run(_expert(data), data, ["repair", "design"], splits=["test_id"], limit=3)
     p = tmp_path / "r.json"; p.write_text(json.dumps({"meta": {"adapter": None, "harness": "none"}, **rep}))
     t = summarize.table([p]); assert "[" in t.split("### repair")[1].split("### design")[0].splitlines()[3]
+
+def test_load_rows_merges_directories_and_drops_duplicate_ids(tmp_path):
+    """Evaluation reads the ground-truth dirs, so the architecture corpus has to be merged in; ids never collide."""
+    a, b = tmp_path / "processed", tmp_path / "arch"
+    a.mkdir(); b.mkdir()
+    (a / "repair_test_id.jsonl").write_text(json.dumps({"id": "rep-1"}) + "\n" + json.dumps({"id": "rep-2"}) + "\n", encoding="utf-8")
+    (b / "repair_test_id.jsonl").write_text(json.dumps({"id": "arch-1"}) + "\n" + json.dumps({"id": "rep-1"}) + "\n", encoding="utf-8")
+    assert [r["id"] for r in ME.load_rows([a, b], "repair", "test_id", None)] == ["rep-1", "rep-2", "arch-1"]
+    assert ME.load_rows(a, "repair", "test_id", 1) == [{"id": "rep-1"}], "one directory still works"
+    assert ME.load_rows(tmp_path / "nope", "repair", "test_id", None) is None
