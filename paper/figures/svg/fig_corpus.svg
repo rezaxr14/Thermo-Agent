@@ -1,0 +1,310 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 948" width="1000" height="948" font-family="Helvetica, Arial, 'Liberation Sans', sans-serif">
+<rect width="1000" height="948" fill="#FFFFFF"/>
+<rect x="16" y="16" width="624" height="478" id="ca" rx="12" fill="#FFFFFF" stroke="#4C72B0" stroke-width="2.0"/>
+<circle cx="43.5" cy="41" r="11.5" fill="#4C72B0"/>
+<text x="43.5" y="45.5" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">a</text>
+<text x="62" y="46" font-size="15" font-weight="bold" fill="#34548A">Diagram catalog</text>
+<text x="32" y="66" font-size="12" fill="#666666">65 diagrams: 64 data-centre plants and the steam plant; 33 held out (every engine plant and the steam plant)</text>
+<rect x="184" y="98" width="132" height="22" id="p1" rx="11" fill="#5F6B7A"/>
+<text x="250" y="113.03" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">external rejection</text>
+<text x="217" y="136" font-size="11.5" text-anchor="middle" fill="#666666">no ORC</text>
+<text x="283" y="136" font-size="11.5" text-anchor="middle" fill="#666666">ORC</text>
+<rect x="334" y="98" width="132" height="22" id="p2" rx="11" fill="#5F6B7A"/>
+<text x="400" y="113.03" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">dry cooler</text>
+<text x="367" y="136" font-size="11.5" text-anchor="middle" fill="#666666">no ORC</text>
+<text x="433" y="136" font-size="11.5" text-anchor="middle" fill="#666666">ORC</text>
+<rect x="484" y="98" width="132" height="22" id="p3" rx="11" fill="#5F6B7A"/>
+<text x="550" y="113.03" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">wet tower</text>
+<text x="517" y="136" font-size="11.5" text-anchor="middle" fill="#666666">no ORC</text>
+<text x="583" y="136" font-size="11.5" text-anchor="middle" fill="#666666">ORC</text>
+<text x="34" y="165" font-size="13" font-weight="bold" fill="#333333">turbine</text>
+<text x="34" y="182" font-size="11.5" fill="#666666">absorption</text>
+<rect x="184" y="144" width="62" height="50" rx="6" fill="#FFFFFF" stroke="#E6E6E8" stroke-width="1.0"/>
+<circle cx="197" cy="169" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="216" cy="169" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="235" cy="169" r="6.5" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="1.3"/>
+<rect x="250" y="144" width="62" height="50" rx="6" fill="#FFFFFF" stroke="#E6E6E8" stroke-width="1.0"/>
+<circle cx="263" cy="169" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="282" cy="169" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="301" cy="169" r="6.5" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="1.3"/>
+<rect x="334" y="144" width="62" height="50" rx="6" fill="#FFFFFF" stroke="#E6E6E8" stroke-width="1.0"/>
+<circle cx="347" cy="169" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="366" cy="169" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="385" cy="169" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<rect x="400" y="144" width="62" height="50" rx="6" fill="#FFFFFF" stroke="#E6E6E8" stroke-width="1.0"/>
+<circle cx="413" cy="169" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="432" cy="169" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="451" cy="169" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<rect x="484" y="144" width="62" height="50" rx="6" fill="#FFFFFF" stroke="#E6E6E8" stroke-width="1.0"/>
+<circle cx="497" cy="169" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="516" cy="169" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="535" cy="169" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<rect x="550" y="144" width="62" height="50" rx="6" fill="#FFFFFF" stroke="#E6E6E8" stroke-width="1.0"/>
+<circle cx="563" cy="169" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="582" cy="169" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="601" cy="169" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<text x="34" y="221" font-size="13" font-weight="bold" fill="#333333">turbine</text>
+<text x="34" y="238" font-size="11.5" fill="#666666">electric chiller</text>
+<rect x="184" y="200" width="62" height="50" rx="6" fill="#FFFFFF" stroke="#E6E6E8" stroke-width="1.0"/>
+<circle cx="197" cy="225" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="216" cy="225" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="235" cy="225" r="6.5" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="1.3"/>
+<rect x="250" y="200" width="62" height="50" rx="6" fill="#FFFFFF" stroke="#E6E6E8" stroke-width="1.0"/>
+<circle cx="263" cy="225" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="282" cy="225" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="301" cy="225" r="6.5" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="1.3"/>
+<rect x="334" y="200" width="62" height="50" rx="6" fill="#FFFFFF" stroke="#E6E6E8" stroke-width="1.0"/>
+<circle cx="347" cy="225" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="366" cy="225" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="385" cy="225" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<rect x="400" y="200" width="62" height="50" rx="6" fill="#FFFFFF" stroke="#E6E6E8" stroke-width="1.0"/>
+<circle cx="413" cy="225" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="432" cy="225" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="451" cy="225" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<rect x="484" y="200" width="62" height="50" rx="6" fill="#FFFFFF" stroke="#E6E6E8" stroke-width="1.0"/>
+<circle cx="497" cy="225" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="516" cy="225" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="535" cy="225" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<rect x="550" y="200" width="62" height="50" rx="6" fill="#FFFFFF" stroke="#E6E6E8" stroke-width="1.0"/>
+<circle cx="563" cy="225" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="582" cy="225" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="601" cy="225" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
+<rect x="24" y="253" width="608" height="56" rx="8" fill="#F3F0F9"/>
+<text x="34" y="277" font-size="13" font-weight="bold" fill="#5A4B8A">engine</text>
+<text x="34" y="294" font-size="11.5" fill="#666666">absorption</text>
+<rect x="104" y="264" width="64" height="18" id="p4" rx="9" fill="#8172B3"/>
+<text x="136" y="277.02" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">held out</text>
+<rect x="184" y="256" width="62" height="50" rx="6" fill="#FFFFFF" stroke="#E6E6E8" stroke-width="1.0"/>
+<circle cx="197" cy="281" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="216" cy="281" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="235" cy="281" r="6.5" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="1.3"/>
+<rect x="250" y="256" width="62" height="50" rx="6" fill="#FFFFFF" stroke="#E6E6E8" stroke-width="1.0"/>
+<circle cx="263" cy="281" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="282" cy="281" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="301" cy="281" r="6.5" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="1.3"/>
+<rect x="334" y="256" width="62" height="50" rx="6" fill="#FFFFFF" stroke="#E6E6E8" stroke-width="1.0"/>
+<circle cx="347" cy="281" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="366" cy="281" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="385" cy="281" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<rect x="400" y="256" width="62" height="50" rx="6" fill="#FFFFFF" stroke="#E6E6E8" stroke-width="1.0"/>
+<circle cx="413" cy="281" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="432" cy="281" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="451" cy="281" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<rect x="484" y="256" width="62" height="50" rx="6" fill="#FFFFFF" stroke="#E6E6E8" stroke-width="1.0"/>
+<circle cx="497" cy="281" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="516" cy="281" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="535" cy="281" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<rect x="550" y="256" width="62" height="50" rx="6" fill="#FFFFFF" stroke="#E6E6E8" stroke-width="1.0"/>
+<circle cx="563" cy="281" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="582" cy="281" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="601" cy="281" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<rect x="24" y="309" width="608" height="56" rx="8" fill="#F3F0F9"/>
+<text x="34" y="333" font-size="13" font-weight="bold" fill="#5A4B8A">engine</text>
+<text x="34" y="350" font-size="11.5" fill="#666666">electric chiller</text>
+<rect x="104" y="320" width="64" height="18" id="p5" rx="9" fill="#8172B3"/>
+<text x="136" y="333.02" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">held out</text>
+<rect x="184" y="312" width="62" height="50" rx="6" fill="#FFFFFF" stroke="#E6E6E8" stroke-width="1.0"/>
+<circle cx="197" cy="337" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="216" cy="337" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="235" cy="337" r="6.5" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="1.3"/>
+<rect x="250" y="312" width="62" height="50" rx="6" fill="#FFFFFF" stroke="#E6E6E8" stroke-width="1.0"/>
+<circle cx="263" cy="337" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="282" cy="337" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="301" cy="337" r="6.5" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="1.3"/>
+<rect x="334" y="312" width="62" height="50" rx="6" fill="#FFFFFF" stroke="#E6E6E8" stroke-width="1.0"/>
+<circle cx="347" cy="337" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="366" cy="337" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="385" cy="337" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<rect x="400" y="312" width="62" height="50" rx="6" fill="#FFFFFF" stroke="#E6E6E8" stroke-width="1.0"/>
+<circle cx="413" cy="337" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="432" cy="337" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="451" cy="337" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<rect x="484" y="312" width="62" height="50" rx="6" fill="#FFFFFF" stroke="#E6E6E8" stroke-width="1.0"/>
+<circle cx="497" cy="337" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="516" cy="337" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="535" cy="337" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<rect x="550" y="312" width="62" height="50" rx="6" fill="#FFFFFF" stroke="#E6E6E8" stroke-width="1.0"/>
+<circle cx="563" cy="337" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="582" cy="337" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<circle cx="601" cy="337" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<rect x="32" y="374" width="290" height="60" rx="8" fill="#F3F0F9" stroke="#8172B3" stroke-width="1.8"/>
+<circle cx="48" cy="400" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
+<text x="62" y="396" font-size="13" font-weight="bold" fill="#5A4B8A">steam plant with ORC</text>
+<text x="62" y="414" font-size="11.5" font-family="Courier, 'Liberation Mono', monospace" fill="#666666">cgam_steam_orc, held out</text>
+<rect x="334" y="374" width="294" height="60" rx="8" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="1.6" stroke-dasharray="6 4"/>
+<text x="346" y="396" font-size="13" font-weight="bold" fill="#666666">added families: pending</text>
+<text x="346" y="412" font-size="11.5" fill="#666666">Rankine, ORC-only, further cogeneration, combined</text>
+<text x="346" y="425" font-size="11.5" fill="#666666">cycles</text>
+<text x="32" y="464" font-size="11.5" font-weight="bold" fill="#666666">dots in a cell, left to right:</text>
+<circle cx="190" cy="460" r="6" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="1.3"/>
+<text x="200" y="464" font-size="11.5" fill="#333333">1 no district heat</text>
+<circle cx="302.38" cy="460" r="6" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="1.3"/>
+<text x="312.38" y="464" font-size="11.5" fill="#333333">2 exhaust exchanger</text>
+<circle cx="437.15" cy="460" r="6" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="1.3"/>
+<text x="447.15" y="464" font-size="11.5" fill="#333333">3 heat pump</text>
+<circle cx="38" cy="484" r="6.5" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.3"/>
+<text x="50" y="488" font-size="11.5" fill="#333333">diagram used for training</text>
+<circle cx="203.21" cy="484" r="6.5" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.3"/>
+<text x="215.21" y="488" font-size="11.5" fill="#333333">held-out diagram</text>
+<circle cx="327.52" cy="484" r="6.5" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="1.3"/>
+<text x="339.52" y="488" font-size="11.5" fill="#333333">not built: a heat pump needs a rejection loop</text>
+<rect x="652" y="16" width="332" height="478" id="cb" rx="12" fill="#FFFFFF" stroke="#55A868" stroke-width="2.0"/>
+<circle cx="679.5" cy="41" r="11.5" fill="#55A868"/>
+<text x="679.5" y="45.5" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">b</text>
+<text x="698" y="46" font-size="15" font-weight="bold" fill="#2F6B3C">True renderings per fault class</text>
+<text x="668" y="66" font-size="12" fill="#666666">paraphrase module, seed-0 Repair training rows; bar =</text>
+<text x="668" y="81.6" font-size="12" fill="#666666">renderings per row (min to max)</text>
+<path d="M676.89,108 L676.89,400" fill="none" stroke="#8A4B06" stroke-width="1.8" stroke-dasharray="4 3"/>
+<path d="M712.44,108 L712.44,400" fill="none" stroke="#B8561F" stroke-width="1.8" stroke-dasharray="2 3"/>
+<text x="680.89" y="100" font-size="11.5" fill="#8A4B06">4 per row (default)</text>
+<rect x="665.5" y="114.16" width="113.01" height="12.96" fill="#FFFFFF"/>
+<text x="668" y="124" font-size="12" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">efficiency_gt_1</text>
+<rect x="668" y="132" width="200" height="16" rx="4" fill="#E6E6E8"/>
+<rect x="668" y="132" width="55.56" height="16" rx="4" fill="#4C72B0"/>
+<path d="M723.56,129 L723.56,151" fill="none" stroke="#222222" stroke-width="1.8"/>
+<text x="878" y="145" font-size="12.5" font-weight="bold" fill="#333333">25</text>
+<text x="912" y="145" font-size="11.5" fill="#666666">n = 42</text>
+<rect x="665.5" y="170.16" width="69.81" height="12.96" fill="#FFFFFF"/>
+<text x="668" y="180" font-size="12" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">sign_flip</text>
+<rect x="668" y="188" width="200" height="16" rx="4" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="1.2"/>
+<path d="M669,203 L669,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M669,195 L677,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M671,189 L685,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M679,189 L693,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M687,189 L701,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M695,189 L709,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M703,189 L717,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M711,189 L725,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M719,189 L733,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M727,189 L741,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M735,189 L749,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M743,189 L757,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M751,189 L765,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M759,189 L773,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M767,189 L781,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M775,189 L789,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M783,189 L797,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M791,189 L805,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M799,189 L813,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M807,189 L821,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M815,189 L829,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M823,189 L837,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M831,189 L845,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M839,189 L853,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M847,189 L861,203" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M855,189 L867,201" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M863,189 L867,193" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<text x="878" y="201" font-size="11.5" fill="#666666">held out</text>
+<rect x="665.5" y="226.16" width="98.61" height="12.96" fill="#FFFFFF"/>
+<text x="668" y="236" font-size="12" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">swapped_ports</text>
+<rect x="668" y="244" width="200" height="16" rx="4" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="1.2"/>
+<path d="M669,259 L669,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M669,251 L677,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M671,245 L685,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M679,245 L693,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M687,245 L701,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M695,245 L709,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M703,245 L717,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M711,245 L725,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M719,245 L733,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M727,245 L741,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M735,245 L749,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M743,245 L757,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M751,245 L765,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M759,245 L773,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M767,245 L781,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M775,245 L789,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M783,245 L797,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M791,245 L805,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M799,245 L813,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M807,245 L821,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M815,245 L829,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M823,245 L837,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M831,245 L845,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M839,245 L853,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M847,245 L861,259" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M855,245 L867,257" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<path d="M863,245 L867,249" fill="none" stroke="#D9D9DC" stroke-width="1.2"/>
+<text x="878" y="257" font-size="11.5" fill="#666666">held out</text>
+<rect x="665.5" y="282.16" width="69.81" height="12.96" fill="#FFFFFF"/>
+<text x="668" y="292" font-size="12" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">unit_slip</text>
+<rect x="668" y="300" width="200" height="16" rx="4" fill="#E6E6E8"/>
+<rect x="668" y="300" width="44.44" height="16" rx="4" fill="#4C72B0"/>
+<path d="M712.44,297 L712.44,319" fill="none" stroke="#222222" stroke-width="1.8"/>
+<text x="878" y="313" font-size="12.5" font-weight="bold" fill="#333333">20</text>
+<text x="912" y="313" font-size="11.5" fill="#666666">n = 44</text>
+<rect x="665.5" y="338.16" width="84.21" height="12.96" fill="#FFFFFF"/>
+<text x="668" y="348" font-size="12" font-family="Courier, 'Liberation Mono', monospace" fill="#333333">wrong_fluid</text>
+<rect x="668" y="356" width="200" height="16" rx="4" fill="#E6E6E8"/>
+<rect x="668" y="356" width="177.78" height="16" rx="4" fill="#4C72B0"/>
+<path d="M845.78,353 L845.78,375" fill="none" stroke="#222222" stroke-width="1.8"/>
+<text x="878" y="369" font-size="12.5" font-weight="bold" fill="#333333">80</text>
+<text x="912" y="369" font-size="11.5" fill="#666666">n = 39</text>
+<rect x="674" y="412" width="220" height="22" id="p6" rx="11" fill="#FFFFFF" stroke="#DD8452" stroke-width="1.4" stroke-dasharray="4 3"/>
+<text x="784" y="427.02" font-size="11.5" text-anchor="middle" fill="#8A4B06">target: 20 or more, pending</text>
+<rect x="16" y="510" width="968" height="404" id="cc" rx="12" fill="#FFFFFF" stroke="#DD8452" stroke-width="2.0"/>
+<circle cx="43.5" cy="535" r="11.5" fill="#B8561F"/>
+<text x="43.5" y="539.5" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">c</text>
+<text x="62" y="540" font-size="15" font-weight="bold" fill="#8A4B06">Acceptance funnel</text>
+<rect x="772" y="524" width="196" height="24" id="p7" rx="12" fill="#FFFFFF" stroke="#DD8452" stroke-width="1.4" stroke-dasharray="4 3"/>
+<text x="870" y="540.02" font-size="11.5" text-anchor="middle" fill="#8A4B06">pending: no results yet</text>
+<rect x="32" y="580" width="170" height="112" rx="8" fill="#FFFFFF" stroke="#DD8452" stroke-width="1.8" stroke-dasharray="6 4"/>
+<text x="117" y="602" font-size="13" font-weight="bold" text-anchor="middle" fill="#8A4B06">Attempts</text>
+<text x="117" y="620" font-size="11.5" text-anchor="middle" fill="#666666">answers and authored</text>
+<text x="117" y="634.5" font-size="11.5" text-anchor="middle" fill="#666666">plants, each logged with</text>
+<text x="117" y="649" font-size="11.5" text-anchor="middle" fill="#666666">time, prompt size, verdict</text>
+<text x="117" y="663.5" font-size="11.5" text-anchor="middle" fill="#666666">and reward</text>
+<rect x="236" y="580" width="210" height="112" id="ts" rx="8" fill="#EDF7F0" stroke="#55A868" stroke-width="2.0"/>
+<text x="341" y="602" font-size="13" font-weight="bold" text-anchor="middle" fill="#2F6B3C">Physics tool suite</text>
+<text x="341" y="620" font-size="11.5" text-anchor="middle" fill="#666666">first law, second law, component</text>
+<text x="341" y="634.5" font-size="11.5" text-anchor="middle" fill="#666666">limits, eight verifiers</text>
+<path d="M332,658 L347.48,658 L347.48,667.9 Q347.48,673.3 339.74,676 Q332,673.3 332,667.9 Z" fill="none" stroke="#2F6B3C" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M336.02,667 L338.97,670.24 L343.76,663.4" fill="none" stroke="#2F6B3C" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="486" y="570" width="190" height="56" rx="8" fill="#FFFFFF" stroke="#55A868" stroke-width="1.8" stroke-dasharray="6 4"/>
+<text x="581" y="592" font-size="13" font-weight="bold" text-anchor="middle" fill="#2F6B3C">Accepted</text>
+<text x="581" y="610" font-size="11.5" text-anchor="middle" fill="#666666">n = pending</text>
+<rect x="486" y="646" width="190" height="56" rx="8" fill="#FFFFFF" stroke="#B5383C" stroke-width="1.8" stroke-dasharray="6 4"/>
+<text x="581" y="668" font-size="13" font-weight="bold" text-anchor="middle" fill="#8E2A2E">Rejected</text>
+<text x="581" y="686" font-size="11.5" text-anchor="middle" fill="#666666">n = pending</text>
+<rect x="716" y="566" width="250" height="40" rx="8" fill="#FFFFFF" stroke="#55A868" stroke-width="1.8" stroke-dasharray="6 4"/>
+<text x="841" y="592" font-size="13" font-weight="bold" text-anchor="middle" fill="#2F6B3C">Corpus rows</text>
+<rect x="716" y="614" width="250" height="40" rx="8" fill="#FFFFFF" stroke="#55A868" stroke-width="1.8" stroke-dasharray="6 4"/>
+<text x="841" y="640" font-size="13" font-weight="bold" text-anchor="middle" fill="#2F6B3C">New diagrams</text>
+<rect x="716" y="662" width="250" height="40" rx="8" fill="#FFFFFF" stroke="#DD8452" stroke-width="1.8" stroke-dasharray="6 4"/>
+<text x="841" y="688" font-size="13" font-weight="bold" text-anchor="middle" fill="#8A4B06">Failure-memory notes</text>
+<g class="arrow" data-dst="ts"><path d="M202,636 L228,636" fill="none" stroke="#666666" stroke-width="2.0" stroke-linejoin="round"/><polygon points="236,636 228,639.4 228,632.6" fill="#666666"/></g>
+<g class="arrow" data-src="ts"><path d="M446,618 L462,618 Q466,618 466,614 L466,602 Q466,598 470,598 L478,598" fill="none" stroke="#2F7D45" stroke-width="2.0" stroke-linejoin="round"/><polygon points="486,598 478,601.4 478,594.6" fill="#2F7D45"/></g>
+<g class="arrow" data-src="ts"><path d="M446,654 L462,654 Q466,654 466,658 L466,670 Q466,674 470,674 L478,674" fill="none" stroke="#B5383C" stroke-width="2.0" stroke-linejoin="round"/><polygon points="486,674 478,677.4 478,670.6" fill="#B5383C"/></g>
+<g class="arrow"><path d="M676,598 L693,598 Q696,598 696,595 L696,589 Q696,586 699,586 L708,586" fill="none" stroke="#2F7D45" stroke-width="2.0" stroke-linejoin="round"/><polygon points="716,586 708,589.4 708,582.6" fill="#2F7D45"/></g>
+<g class="arrow"><path d="M676,598 L693,598 Q696,598 696,601 L696,631 Q696,634 699,634 L708,634" fill="none" stroke="#2F7D45" stroke-width="2.0" stroke-linejoin="round"/><polygon points="716,634 708,637.4 708,630.6" fill="#2F7D45"/></g>
+<g class="arrow"><path d="M676,674 L708.16,680.43" fill="none" stroke="#B5383C" stroke-width="2.0" stroke-linejoin="round"/><polygon points="716,682 707.49,683.77 708.82,677.1" fill="#B5383C"/></g>
+<g class="arrow"><path d="M841,702 L841,711 Q841,716 836,716 L122,716 Q117,716 117,711 L117,700" fill="none" stroke="#8A6D1F" stroke-width="1.8" stroke-linejoin="round" stroke-dasharray="6 3"/><polygon points="117,692 120.4,700 113.6,700" fill="#8A6D1F"/></g>
+<rect x="404.3" y="706.57" width="151.39" height="12.42" fill="#FFFFFF"/>
+<text x="480" y="716" font-size="11.5" text-anchor="middle" fill="#8A6D1F">notes enter the next prompts</text>
+<text x="32" y="748" font-size="12" fill="#666666">Sampler: temperature 0.8, at most 800 tokens per answer. A failed authored plant is kept with its reasons; an accepted one becomes a diagram.</text>
+<rect x="32" y="768" width="224" height="118" rx="8" fill="#EEF3FA" stroke="#4C72B0" stroke-width="1.6"/>
+<rect x="42" y="778" width="72" height="20" id="p8" rx="10" fill="#34548A"/>
+<text x="78" y="792.02" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">repair</text>
+<text x="44" y="820" font-size="11.5" fill="#333333">parse, apply to the broken plant,</text>
+<text x="44" y="834.5" font-size="11.5" fill="#333333">re-solve, pass the verifiers and the site</text>
+<text x="44" y="849" font-size="11.5" fill="#333333">check</text>
+<rect x="264" y="768" width="224" height="118" rx="8" fill="#F3F0F9" stroke="#8172B3" stroke-width="1.6"/>
+<rect x="274" y="778" width="72" height="20" id="p9" rx="10" fill="#5A4B8A"/>
+<text x="310" y="792.02" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">ledger</text>
+<text x="276" y="820" font-size="11.5" fill="#333333">close the ledger, leave no negative</text>
+<text x="276" y="834.5" font-size="11.5" fill="#333333">destruction, reproduce the true lines</text>
+<rect x="496" y="768" width="224" height="118" rx="8" fill="#FFF3E6" stroke="#DD8452" stroke-width="1.6"/>
+<rect x="506" y="778" width="72" height="20" id="p10" rx="10" fill="#B8561F"/>
+<text x="542" y="792.02" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">audit</text>
+<text x="508" y="820" font-size="11.5" fill="#333333">valid change; nDCG@3 ≥ 0.5;</text>
+<text x="508" y="834.5" font-size="11.5" fill="#333333">prediction within relative error 0.5; ≥</text>
+<text x="508" y="849" font-size="11.5" fill="#333333">80 % of numbers grounded</text>
+<rect x="728" y="768" width="224" height="118" rx="8" fill="#EDF7F0" stroke="#55A868" stroke-width="1.6"/>
+<rect x="738" y="778" width="72" height="20" id="p11" rx="10" fill="#2F7D45"/>
+<text x="774" y="792.02" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#FFFFFF">design</text>
+<text x="740" y="820" font-size="11.5" fill="#333333">build, pass the verifiers, ground the</text>
+<text x="740" y="834.5" font-size="11.5" fill="#333333">numbers (≥ 80 %)</text>
+<text x="32" y="904" font-size="11.5" font-style="italic" fill="#666666">acceptance gate per task</text>
+<text x="16" y="926" font-size="11.5" fill="#666666">Catalog and paraphrase counts: paper/assets/corpus.json (architecture catalog, seed 0; 400 architecture rows requested). Funnel counts do not exist yet: the teacher has not been run at</text>
+<text x="16" y="940.95" font-size="11.5" fill="#666666">scale.</text>
+</svg>

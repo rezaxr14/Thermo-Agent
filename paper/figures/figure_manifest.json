@@ -5,11 +5,48 @@
    "tier": "core",
    "svg": "figures/svg/fig_overview.svg",
    "pdf": "figures/pdf/fig_overview.pdf",
-   "viewBox": "0 0 1000 748",
-   "caption_stub": "System overview. Offline, sampled plants, faults and a reference search give verified expert answers for SFT and the reward for GRPO. The environment (simulator, exergy accounting, verifiers V1 to V8) supplies the reward in training and the feedback at inference; online, the model proposes an answer, the solver and verifiers check it, and the model retries. No model has been trained yet.",
-   "alt_text": "Four cards: a data layer with four task chips, split bar and verified answers; a CPU environment with plant graph, exergy bars, eight verifier chips and reward and feedback pills; an inference policy loop with coloured prompt tokens, the model and a retry box; and a blue training card with reward diagnostics, SFT, GRPO and adapters. Numbered arrows trace the path.",
-   "data_sources": [],
+   "viewBox": "0 0 1000 860",
+   "caption_stub": "System overview. Four sources feed one corpus: ground-truth paraphrases, the architecture catalog, frontier-model answers and frontier-authored plants (reached through Kaggle's model access, not self-hosted). Every candidate must pass the physics tool suite (first law, second law, component limits); accepted rows go to the corpus, rejected attempts go to the failure memory, which feeds back into the prompts. Harness text is added to 35 % of the rows, and SFT and GRPO run data-parallel on two T4 GPUs. The teacher paths are designed and their results are pending; no model has been trained.",
+   "alt_text": "Four cards: sources (four coloured source rows, two dashed for the pending teacher paths), the CPU environment with a plant graph, the three tool-suite checks and accept, reject, reward and feedback pills, and the policy loop with coloured prompt tokens, the model and a retry box. Below them a corpus box and a failure-memory box, and a blue training card with two GPU chips, reward diagnostics, SFT, GRPO and adapters. Numbered arrows trace the path.",
+   "data_sources": [
+    {
+     "asset": "assets/corpus.json",
+     "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+     "seed": 0,
+     "n": 65,
+     "kind": null
+    },
+    {
+     "asset": "assets/environment.json",
+     "command": "thermo_agent.core.components (REQUIRED_PORTS, PORT_CLASS, PARAMS); inspect.signature(synth.topologies.dc_chp); train.config; design.spec",
+     "seed": null,
+     "n": 15,
+     "kind": null
+    },
+    {
+     "asset": "assets/harness.json",
+     "command": "agent.harness (MODES, skill_names, TASK_SKILLS), agent.build_harness.frontmatter, core.components.REQUIRED_PORTS; topologies of test_ood_topology rows",
+     "seed": 0,
+     "n": 8,
+     "kind": "files"
+    },
+    {
+     "asset": "assets/exergy_flow.json",
+     "command": "core.solve.solve(synth.topologies.size_generation(dc_chp, **plant_kwargs))",
+     "seed": null,
+     "n": 1,
+     "kind": "simulation (one solved plant)"
+    },
+    {
+     "asset": "assets/reward_signal.json",
+     "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+     "seed": 0,
+     "n": 40,
+     "kind": "simulated policies on synthetic data (no model)"
+    }
+   ],
    "pending": [
+    "teacher paths (frontier answers, frontier-authored plants): designed, results pending",
     "every trained-model statement is a pending note"
    ]
   },
@@ -101,9 +138,9 @@
    "tier": "core",
    "svg": "figures/svg/fig_training.svg",
    "pdf": "figures/pdf/fig_training.pdf",
-   "viewBox": "0 0 1000 758",
-   "caption_stub": "Training pipeline and splits. Data generation, verification, reward diagnostics (CPU, before GPU time), SFT, merge, GRPO and evaluation; SFT, GRPO and evaluation share one rendered prompt text. Lower panel: rows per structural split for each task.",
-   "alt_text": "Five numbered panels: stacked split bars per task, an SFT token strip with masked prompt, reasoning and answer tokens, a reward-diagnostics line chart, a GRPO rollout illustration with reward and advantage bars, and an evaluation strip.",
+   "viewBox": "0 0 1000 884",
+   "caption_stub": "Training pipeline. Tagged sources are combined (harness text on 35 % of rows, failure notes added, prompts above 14000 characters dropped and counted), then SFT on two DDP ranks in fp16 with LoRA r 16, merge, and GRPO per task with G = 4 and 16 prompts per step; reward diagnostics run on the CPU first, and evaluation compares against frontier and other models. Lower panel: rows per split in the small seed-0 run and the architecture corpus; the final corpus sizes and all evaluation results are pending.",
+   "alt_text": "Six numbered panels: tagged sources, the combine step with a harness-share bar, note tokens and a prompt-length limit, SFT with token strip and two GPU chips, a reward-diagnostics line chart, a GRPO rollout illustration with reward and advantage bars, and an evaluation panel with a dashed trained-model pill; below, stacked split bars for five datasets.",
    "data_sources": [
     {
      "asset": "assets/splits.json",
@@ -111,9 +148,33 @@
      "seed": 0,
      "n": 1265,
      "kind": "synthetic"
+    },
+    {
+     "asset": "assets/reward_signal.json",
+     "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+     "seed": 0,
+     "n": 40,
+     "kind": "simulated policies on synthetic data (no model)"
+    },
+    {
+     "asset": "assets/corpus.json",
+     "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+     "seed": 0,
+     "n": 65,
+     "kind": null
+    },
+    {
+     "asset": "assets/environment.json",
+     "command": "thermo_agent.core.components (REQUIRED_PORTS, PORT_CLASS, PARAMS); inspect.signature(synth.topologies.dc_chp); train.config; design.spec",
+     "seed": null,
+     "n": 15,
+     "kind": null
     }
    ],
-   "pending": []
+   "pending": [
+    "final corpus sizes",
+    "evaluation results (frontier models, other models, trained model)"
+   ]
   },
   {
    "figure": "fig_ledger_symptoms",
@@ -218,12 +279,12 @@
    "svg": "figures/svg/fig_reward_signal.svg",
    "pdf": "figures/pdf/fig_reward_signal.pdf",
    "viewBox": "0 0 1000 556",
-   "caption_stub": "Reward signal before any GPU time: share of GRPO groups whose completions all receive the same reward, against the per-sample error rate of a simulated policy, for each task, with the cost of one reward evaluation.",
-   "alt_text": "Line chart with four task curves of zero-variance group share against error rate, beside a panel listing milliseconds per completion.",
+   "caption_stub": "Reward signal before any GPU time: share of GRPO groups whose completions all receive the same reward, against the per-sample error rate of a simulated policy, for each task, at the training group size G = 4 (solid) and at G = 8 (dashed), with the cost of one reward evaluation.",
+   "alt_text": "Line chart with four solid task curves for G = 4 and four dashed curves for G = 8, a dotted line for the expected share with all completions intact, and a panel listing milliseconds per fresh evaluation.",
    "data_sources": [
     {
      "asset": "assets/reward_signal.json",
-     "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+     "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
      "seed": 0,
      "n": 40,
      "kind": "simulated policies on synthetic data (no model)"
@@ -236,9 +297,9 @@
    "tier": "optional",
    "svg": "figures/svg/fig_harness.svg",
    "pdf": "figures/pdf/fig_harness.pdf",
-   "viewBox": "0 0 1000 706",
-   "caption_stub": "Harness text: the component registry generates the AUTO sections of AGENTS.md and the skills; four modes add none, AGENTS.md, skills or both to the prompt; the gas engine is the component held out of the training topologies.",
-   "alt_text": "Five lettered cards: AGENTS.md sections with real excerpts, the system message stack with optional blocks, the skill library list, a table of the four harness modes with check marks, and an orange card on the held-out gas engine with its ports, row counts and skill text.",
+   "viewBox": "0 0 1000 740",
+   "caption_stub": "Harness and memory. AGENTS.md and the skill library are generated from the component registry; four harness modes add none, AGENTS.md, skills or both to the system message, and the failure-memory layer (lexical retrieval, k = 3, notes from the same record excluded) is a separate switch, giving eight settings. With no plant (Design) only the task skill is added. The gas engine is the component held out of training.",
+   "alt_text": "Six lettered cards: AGENTS.md sections, the prompt stack with optional blocks including the memory layer, the skill library, a table of four modes with a memory off or on switch, the failure-memory card, and an orange card on the held-out gas engine.",
    "data_sources": [
     {
      "asset": "assets/harness.json",
@@ -246,9 +307,46 @@
      "seed": 0,
      "n": 8,
      "kind": "files"
+    },
+    {
+     "asset": "assets/corpus.json",
+     "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+     "seed": 0,
+     "n": 65,
+     "kind": null
     }
    ],
    "pending": []
+  },
+  {
+   "figure": "fig_corpus",
+   "tier": "core",
+   "svg": "figures/svg/fig_corpus.svg",
+   "pdf": "figures/pdf/fig_corpus.pdf",
+   "viewBox": "0 0 1000 948",
+   "caption_stub": "Corpus composition. (a) The diagram catalog: prime mover and cooling against rejection and ORC, with the district-heat options as dots; engine plants and the steam plant are held out, and added families are pending. (b) True renderings per fault class in the paraphrase module (min to max), with the held-out fault classes hatched. (c) The acceptance funnel from attempts through the physics tool suite to corpus rows, new diagrams and failure-memory notes, drawn as an empty skeleton: every count is pending.",
+   "alt_text": "Three panels: a matrix of 64 data-centre diagrams and the steam plant with coloured dots for training and held-out diagrams, horizontal bars of renderings per fault class, and a dashed funnel skeleton with four acceptance-gate cards.",
+   "data_sources": [
+    {
+     "asset": "assets/corpus.json",
+     "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+     "seed": 0,
+     "n": 65,
+     "kind": null
+    },
+    {
+     "asset": "assets/environment.json",
+     "command": "thermo_agent.core.components (REQUIRED_PORTS, PORT_CLASS, PARAMS); inspect.signature(synth.topologies.dc_chp); train.config; design.spec",
+     "seed": null,
+     "n": 15,
+     "kind": null
+    }
+   ],
+   "pending": [
+    "added diagram families",
+    "acceptance funnel counts",
+    "paraphrase target of 20 or more renderings per fault class"
+   ]
   }
  ]
 }

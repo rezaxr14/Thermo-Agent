@@ -1,12 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 748" width="1000" height="748" font-family="Helvetica, Arial, 'Liberation Sans', sans-serif">
-<rect width="1000" height="748" fill="#FFFFFF"/>
-<rect x="16" y="16" width="314" height="404" id="cL" rx="12" fill="#FFFFFF" stroke="#4C72B0" stroke-width="2.0"/>
-<rect x="354" y="16" width="300" height="404" id="cE" rx="12" fill="#FAFDFB" stroke="#55A868" stroke-width="2.0"/>
-<rect x="678" y="16" width="306" height="404" id="cP" rx="12" fill="#FFFFFF" stroke="#BDBDBD" stroke-width="2.0"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 860" width="1000" height="860" font-family="Helvetica, Arial, 'Liberation Sans', sans-serif">
+<rect width="1000" height="860" fill="#FFFFFF"/>
+<rect x="16" y="16" width="314" height="380" id="cS" rx="12" fill="#FFFFFF" stroke="#4C72B0" stroke-width="2.0"/>
+<rect x="354" y="16" width="300" height="380" id="cE" rx="12" fill="#FAFDFB" stroke="#55A868" stroke-width="2.0"/>
+<rect x="678" y="16" width="306" height="380" id="cP" rx="12" fill="#FFFFFF" stroke="#BDBDBD" stroke-width="2.0"/>
 <ellipse cx="39.74" cy="34" rx="7.74" ry="2.8" fill="none" stroke="#34548A" stroke-width="1.5"/>
 <path d="M32,34 L32,46 A7.74,2.8 0 0 0 47.48,46 L47.48,34" fill="none" stroke="#34548A" stroke-width="1.5" stroke-linejoin="round"/>
 <path d="M32,40 A7.74,2.8 0 0 0 47.48,40" fill="none" stroke="#34548A" stroke-width="1.2" stroke-linejoin="round"/>
-<text x="58" y="46" font-size="15" font-weight="bold" fill="#34548A">Data layer (offline)</text>
+<text x="58" y="46" font-size="15" font-weight="bold" fill="#34548A">Sources (offline)</text>
 <circle cx="379" cy="40" r="4.05" fill="#FFFFFF" stroke="#2F6B3C" stroke-width="1.6"/>
 <path d="M385.12,40 L388,40" fill="none" stroke="#2F6B3C" stroke-width="2.2"/>
 <path d="M383.33,44.33 L385.36,46.36" fill="none" stroke="#2F6B3C" stroke-width="2.2"/>
@@ -21,38 +21,27 @@
 <path d="M696.5,40 L705.54,40" fill="none" stroke="#333333" stroke-width="1.2"/>
 <path d="M696.5,43.6 L705.54,43.6" fill="none" stroke="#333333" stroke-width="1.2"/>
 <text x="720" y="46" font-size="15" font-weight="bold" fill="#333333">Policy loop (inference)</text>
-<rect x="32" y="64" width="138" height="52" rx="8" fill="#EEF3FA" stroke="#4C72B0" stroke-width="1.6"/>
-<rect x="32" y="64" width="6" height="52" rx="3" fill="#4C72B0"/>
-<text x="48" y="86" font-size="13.5" font-weight="bold" fill="#34548A">Repair</text>
-<text x="48" y="104" font-size="12" fill="#666666">fix a broken plant</text>
-<rect x="176" y="64" width="138" height="52" rx="8" fill="#EDF7F0" stroke="#55A868" stroke-width="1.6"/>
-<rect x="176" y="64" width="6" height="52" rx="3" fill="#55A868"/>
-<text x="192" y="86" font-size="13.5" font-weight="bold" fill="#2F6B3C">Design</text>
-<text x="192" y="104" font-size="12" fill="#666666">site to plant</text>
-<rect x="32" y="124" width="138" height="52" rx="8" fill="#FFF3E6" stroke="#DD8452" stroke-width="1.6"/>
-<rect x="32" y="124" width="6" height="52" rx="3" fill="#DD8452"/>
-<text x="48" y="146" font-size="13.5" font-weight="bold" fill="#8A4B06">Audit</text>
-<text x="48" y="164" font-size="12" fill="#666666">rank the losses</text>
-<rect x="176" y="124" width="138" height="52" rx="8" fill="#F3F0F9" stroke="#8172B3" stroke-width="1.6"/>
-<rect x="176" y="124" width="6" height="52" rx="3" fill="#8172B3"/>
-<text x="192" y="146" font-size="13.5" font-weight="bold" fill="#5A4B8A">Ledger</text>
-<text x="192" y="164" font-size="12" fill="#666666">fix exergy lines</text>
-<text x="32" y="202" font-size="12.5" fill="#666666">plants, sites and ledgers sampled with fixed seeds,</text>
-<text x="32" y="218.25" font-size="12.5" fill="#666666">then split by structure:</text>
-<rect x="32" y="238" width="90.85" height="18" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.2"/>
-<rect x="122.85" y="238" width="10.9" height="18" fill="#9DB6D8" stroke="#FFFFFF" stroke-width="1.2"/>
-<rect x="133.75" y="238" width="8.72" height="18" fill="#55A868" stroke="#FFFFFF" stroke-width="1.2"/>
-<rect x="142.47" y="238" width="93.03" height="18" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.2"/>
-<rect x="235.51" y="238" width="78.49" height="18" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.2"/>
-<text x="32" y="276" font-size="12" fill="#34548A">in-distribution</text>
-<text x="314" y="276" font-size="12" font-weight="bold" text-anchor="end" fill="#5A4B8A">held out</text>
-<rect x="32" y="318" width="282" height="86" id="vea" rx="10" fill="#EDF7F0" stroke="#55A868" stroke-width="2.0"/>
-<path d="M46,330 L62.34,330 L62.34,340.45 Q62.34,346.15 54.17,349 Q46,346.15 46,340.45 Z" fill="none" stroke="#2F6B3C" stroke-width="1.6" stroke-linejoin="round"/>
-<path d="M50.25,339.5 L53.35,342.92 L58.42,335.7" fill="none" stroke="#2F6B3C" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
-<text x="74" y="346" font-size="14" font-weight="bold" fill="#2F6B3C">Verified expert answers</text>
-<text x="46" y="372" font-size="12" fill="#666666">reference search and verifiers; every answer</text>
-<text x="46" y="387.6" font-size="12" fill="#666666">passes all checks</text>
-<g class="arrow" data-dst="vea"><path d="M173,284 L173,310" fill="none" stroke="#2F6B3C" stroke-width="2.0" stroke-linejoin="round"/><polygon points="173,318 169.6,310 176.4,310" fill="#2F6B3C"/></g>
+<text x="32" y="66" font-size="12" fill="#666666">for four tasks: Repair, Design, Audit, Ledger</text>
+<rect x="32" y="78" width="282" height="64" rx="8" fill="#EEF3FA" stroke="#4C72B0" stroke-width="1.6"/>
+<rect x="32" y="78" width="6" height="64" rx="3" fill="#4C72B0"/>
+<text x="48" y="100" font-size="13" font-weight="bold" fill="#34548A">Ground truth with paraphrases</text>
+<text x="48" y="118" font-size="11.5" fill="#666666">simulator and fault injectors</text>
+<rect x="32" y="148" width="282" height="64" rx="8" fill="#EAF6FA" stroke="#64B5CD" stroke-width="1.6"/>
+<rect x="32" y="148" width="6" height="64" rx="3" fill="#64B5CD"/>
+<text x="48" y="170" font-size="13" font-weight="bold" fill="#2E7F96">Architecture catalog</text>
+<text x="48" y="188" font-size="11.5" fill="#666666">65 labeled diagrams; whole diagrams held out</text>
+<rect x="32" y="218" width="282" height="64" rx="8" fill="#FFF3E6" stroke="#DD8452" stroke-width="1.6" stroke-dasharray="6 3"/>
+<rect x="32" y="218" width="6" height="64" rx="3" fill="#DD8452"/>
+<text x="48" y="240" font-size="13" font-weight="bold" fill="#8A4B06">Frontier-model answers</text>
+<text x="48" y="258" font-size="11.5" fill="#666666">through Kaggle's model access; the teacher never</text>
+<text x="48" y="272.5" font-size="11.5" fill="#666666">sees the ground truth</text>
+<rect x="32" y="288" width="282" height="64" rx="8" fill="#FFF3E6" stroke="#DD8452" stroke-width="1.6" stroke-dasharray="6 3"/>
+<rect x="32" y="288" width="6" height="64" rx="3" fill="#DD8452"/>
+<text x="48" y="310" font-size="13" font-weight="bold" fill="#8A4B06">Frontier-authored plants</text>
+<text x="48" y="328" font-size="11.5" fill="#666666">plants written in the plant language and checked</text>
+<text x="48" y="342.5" font-size="11.5" fill="#666666">by the solver</text>
+<rect x="32" y="362" width="282" height="22" id="p1" rx="11" fill="#FFFFFF" stroke="#DD8452" stroke-width="1.4" stroke-dasharray="4 3"/>
+<text x="173" y="377.02" font-size="11.5" text-anchor="middle" fill="#8A4B06">teacher paths: designed, results pending</text>
 <rect x="372" y="68" width="42" height="26" rx="5" fill="#FFFFFF" stroke="#4C72B0" stroke-width="1.5"/>
 <text x="393" y="86" font-size="12" font-weight="bold" text-anchor="middle" fill="#34548A">AC</text>
 <g class="arrow"><path d="M414,81 L432,81" fill="none" stroke="#DD8452" stroke-width="1.8" stroke-linejoin="round"/><polygon points="438,81 432,83.6 432,78.4" fill="#DD8452"/></g>
@@ -71,179 +60,187 @@
 <rect x="372" y="118" width="42" height="26" rx="5" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="1.5" stroke-dasharray="4 3"/>
 <text x="393" y="136" font-size="12" font-weight="bold" text-anchor="middle" fill="#666666">DC</text>
 <text x="372" y="168" font-size="12" fill="#666666">15 component types, one solve about 14 ms</text>
-<text x="372" y="198" font-size="12.5" font-weight="bold" fill="#333333">exergy destroyed per component, MW</text>
-<text x="372" y="218" font-size="12" font-weight="bold" fill="#333333">CC</text>
-<rect x="402" y="208" width="190" height="11" rx="3" fill="#E6E6E8"/>
-<rect x="402" y="208" width="190" height="11" rx="3" fill="#B5383C"/>
-<text x="600" y="218" font-size="11.5" fill="#666666">18.3</text>
-<text x="372" y="238" font-size="12" font-weight="bold" fill="#333333">HX</text>
-<rect x="402" y="228" width="190" height="11" rx="3" fill="#E6E6E8"/>
-<rect x="402" y="228" width="57.6" height="11" rx="3" fill="#B5383C"/>
-<text x="600" y="238" font-size="11.5" fill="#666666">5.6</text>
-<text x="372" y="258" font-size="12" font-weight="bold" fill="#333333">GT</text>
-<rect x="402" y="248" width="190" height="11" rx="3" fill="#E6E6E8"/>
-<rect x="402" y="248" width="23.96" height="11" rx="3" fill="#B5383C"/>
-<text x="600" y="258" font-size="11.5" fill="#666666">2.3</text>
-<text x="372" y="278" font-size="12" font-weight="bold" fill="#333333">HXD</text>
-<rect x="402" y="268" width="190" height="11" rx="3" fill="#E6E6E8"/>
-<rect x="402" y="268" width="18.48" height="11" rx="3" fill="#B5383C"/>
-<text x="600" y="278" font-size="11.5" fill="#666666">1.8</text>
-<text x="372" y="306" font-size="12.5" font-weight="bold" fill="#333333">eight verifiers</text>
-<rect x="372" y="314" width="64" height="22" rx="11" fill="#FFFFFF" stroke="#55A868" stroke-width="1.4"/>
-<path d="M380,325.05 L384.18,329.12 L391,320.1" fill="none" stroke="#2F6B3C" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
-<text x="396" y="329.5" font-size="12" font-weight="bold" fill="#2F6B3C">V1</text>
-<rect x="442" y="314" width="64" height="22" rx="11" fill="#FFFFFF" stroke="#55A868" stroke-width="1.4"/>
-<path d="M450,325.05 L454.18,329.12 L461,320.1" fill="none" stroke="#2F6B3C" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
-<text x="466" y="329.5" font-size="12" font-weight="bold" fill="#2F6B3C">V2</text>
-<rect x="512" y="314" width="64" height="22" rx="11" fill="#FFFFFF" stroke="#55A868" stroke-width="1.4"/>
-<path d="M520,325.05 L524.18,329.12 L531,320.1" fill="none" stroke="#2F6B3C" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
-<text x="536" y="329.5" font-size="12" font-weight="bold" fill="#2F6B3C">V3</text>
-<rect x="582" y="314" width="64" height="22" rx="11" fill="#FFFFFF" stroke="#55A868" stroke-width="1.4"/>
-<path d="M590,325.05 L594.18,329.12 L601,320.1" fill="none" stroke="#2F6B3C" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
-<text x="606" y="329.5" font-size="12" font-weight="bold" fill="#2F6B3C">V4</text>
-<rect x="372" y="341" width="64" height="22" rx="11" fill="#FFFFFF" stroke="#55A868" stroke-width="1.4"/>
-<path d="M380,352.05 L384.18,356.12 L391,347.1" fill="none" stroke="#2F6B3C" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
-<text x="396" y="356.5" font-size="12" font-weight="bold" fill="#2F6B3C">V5</text>
-<rect x="442" y="341" width="64" height="22" rx="11" fill="#FFFFFF" stroke="#55A868" stroke-width="1.4"/>
-<path d="M450,352.05 L454.18,356.12 L461,347.1" fill="none" stroke="#2F6B3C" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
-<text x="466" y="356.5" font-size="12" font-weight="bold" fill="#2F6B3C">V6</text>
-<rect x="512" y="341" width="64" height="22" rx="11" fill="#FFFFFF" stroke="#55A868" stroke-width="1.4"/>
-<path d="M520,352.05 L524.18,356.12 L531,347.1" fill="none" stroke="#2F6B3C" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
-<text x="536" y="356.5" font-size="12" font-weight="bold" fill="#2F6B3C">V7</text>
-<rect x="582" y="341" width="64" height="22" rx="11" fill="#FFFFFF" stroke="#55A868" stroke-width="1.4"/>
-<path d="M590,352.05 L594.18,356.12 L601,347.1" fill="none" stroke="#2F6B3C" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
-<text x="606" y="356.5" font-size="12" font-weight="bold" fill="#2F6B3C">V8</text>
-<rect x="372" y="374" width="96" height="28" id="pR" rx="14" fill="#B8561F"/>
-<text x="420" y="392.2" font-size="12" font-weight="bold" text-anchor="middle" fill="#FFFFFF">reward</text>
-<rect x="548" y="374" width="96" height="28" id="pF" rx="14" fill="#34548A"/>
-<text x="596" y="392.2" font-size="12" font-weight="bold" text-anchor="middle" fill="#FFFFFF">feedback</text>
-<rect x="694" y="64" width="274" height="112" id="prm" rx="8" fill="#FFFFFF" stroke="#D9D9DC" stroke-width="1.4"/>
-<text x="706" y="86" font-size="13" font-weight="bold" fill="#333333">prompt</text>
-<rect x="706" y="96" width="12" height="12" rx="2.5" fill="#8172B3"/>
-<rect x="721" y="96" width="12" height="12" rx="2.5" fill="#8172B3"/>
-<rect x="736" y="96" width="12" height="12" rx="2.5" fill="#8172B3"/>
-<rect x="751" y="96" width="12" height="12" rx="2.5" fill="#8172B3"/>
-<rect x="766" y="96" width="12" height="12" rx="2.5" fill="#4C72B0"/>
-<rect x="781" y="96" width="12" height="12" rx="2.5" fill="#4C72B0"/>
-<rect x="796" y="96" width="12" height="12" rx="2.5" fill="#4C72B0"/>
-<rect x="811" y="96" width="12" height="12" rx="2.5" fill="#4C72B0"/>
-<rect x="826" y="96" width="12" height="12" rx="2.5" fill="#4C72B0"/>
-<rect x="841" y="96" width="12" height="12" rx="2.5" fill="#4C72B0"/>
-<rect x="856" y="96" width="12" height="12" rx="2.5" fill="#4C72B0"/>
-<rect x="871" y="96" width="12" height="12" rx="2.5" fill="#4C72B0"/>
-<rect x="886" y="96" width="12" height="12" rx="2.5" fill="#DD8452"/>
-<rect x="901" y="96" width="12" height="12" rx="2.5" fill="#DD8452"/>
-<rect x="916" y="96" width="12" height="12" rx="2.5" fill="#DD8452"/>
-<rect x="706" y="120" width="11" height="11" rx="2.5" fill="#8172B3"/>
-<text x="724" y="130" font-size="12" fill="#666666">harness text (optional)</text>
-<rect x="706" y="137" width="11" height="11" rx="2.5" fill="#4C72B0"/>
-<text x="724" y="147" font-size="12" fill="#666666">task prompt</text>
-<rect x="706" y="154" width="11" height="11" rx="2.5" fill="#DD8452"/>
-<text x="724" y="164" font-size="12" fill="#666666">feedback on a retry</text>
-<rect x="694" y="194" width="274" height="76" id="mod" rx="10" fill="#EEF3FA" stroke="#4C72B0" stroke-width="2.2"/>
-<text x="831" y="218" font-size="15" font-weight="bold" text-anchor="middle" fill="#34548A">Qwen3.5-4B</text>
-<path d="M712,239.5 L727,239.5" fill="none" stroke="#4C72B0" stroke-width="2.0" stroke-linecap="round"/>
-<path d="M715.75,233 L723.25,246" fill="none" stroke="#4C72B0" stroke-width="2.0" stroke-linecap="round"/>
-<path d="M723.25,233 L715.75,246" fill="none" stroke="#4C72B0" stroke-width="2.0" stroke-linecap="round"/>
-<text x="732" y="245" font-size="12" fill="#666666">frozen base</text>
-<path d="M830.5,230 C836.45,235.1 838.15,239.35 834.24,244.45 C832.2,247 828.46,247 826.76,244.45 C823.36,240.2 826.25,235.95 828.46,233.74 C828.8,236.8 829.82,237.65 830.5,238.5 C830.84,235.1 830.5,232.55 830.5,230 Z" fill="#DD8452" stroke="#B8561F" stroke-width="1.0" stroke-linejoin="round"/>
-<path d="M830.5,240.54 C832.54,242.24 832.2,245.3 830.5,245.64 C828.46,245.3 828.46,242.24 830.5,240.54 Z" fill="#F6C85F"/>
-<text x="844" y="245" font-size="12" fill="#666666">LoRA, pending</text>
-<rect x="694" y="292" width="274" height="62" id="ans" rx="8" fill="#EDF7F0" stroke="#55A868" stroke-width="1.6"/>
-<text x="706" y="312" font-size="13" font-weight="bold" fill="#2F6B3C">answer</text>
-<rect x="762" y="302" width="12" height="12" rx="2.5" fill="#55A868"/>
-<rect x="777" y="302" width="12" height="12" rx="2.5" fill="#55A868"/>
-<rect x="792" y="302" width="12" height="12" rx="2.5" fill="#55A868"/>
-<rect x="807" y="302" width="12" height="12" rx="2.5" fill="#55A868"/>
-<rect x="822" y="302" width="12" height="12" rx="2.5" fill="#55A868"/>
-<rect x="837" y="302" width="12" height="12" rx="2.5" fill="#55A868"/>
-<rect x="852" y="302" width="12" height="12" rx="2.5" fill="#55A868"/>
-<text x="706" y="336" font-size="12" fill="#666666">edits, design, ranking, or fixed lines</text>
-<rect x="694" y="366" width="274" height="44" id="rt" rx="8" fill="#FFF3E6" stroke="#DD8452" stroke-width="1.6"/>
-<path d="M715,378 L724,394.56 L706,394.56 Z" fill="none" stroke="#8A4B06" stroke-width="1.8" stroke-linejoin="round"/>
-<path d="M715,384.3 L715,389.7" fill="none" stroke="#8A4B06" stroke-width="2.0"/>
-<circle cx="715" cy="392.4" r="1.1" fill="#8A4B06"/>
-<text x="734" y="392" font-size="12" fill="#8A4B06">retry, up to 3 turns (Repair, Design)</text>
-<g class="arrow" data-src="prm" data-dst="mod"><path d="M831,176 L831,186" fill="none" stroke="#666666" stroke-width="1.8" stroke-linejoin="round"/><polygon points="831,194 827.6,186 834.4,186" fill="#666666"/></g>
-<g class="arrow" data-src="mod" data-dst="ans"><path d="M831,270 L831,284" fill="none" stroke="#666666" stroke-width="1.8" stroke-linejoin="round"/><polygon points="831,292 827.6,284 834.4,284" fill="#666666"/></g>
-<g class="arrow" data-src="rt" data-dst="prm"><path d="M968,388 L973,388 Q978,388 978,383 L978,121.5 Q978,120 976.5,120 L975,120" fill="none" stroke="#DD8452" stroke-width="1.8" stroke-linejoin="round"/><polygon points="968,120 975,117 975,123" fill="#DD8452"/></g>
-<rect x="16" y="452" width="968" height="244" id="cT" rx="12" fill="#FFFFFF" stroke="#4C72B0" stroke-width="2.2"/>
-<path d="M41,469 C47.3,474.4 49.1,478.9 44.96,484.3 C42.8,487 38.84,487 37.04,484.3 C33.44,479.8 36.5,475.3 38.84,472.96 C39.2,476.2 40.28,477.1 41,478 C41.36,474.4 41,471.7 41,469 Z" fill="#DD8452" stroke="#B8561F" stroke-width="1.0" stroke-linejoin="round"/>
-<path d="M41,480.16 C43.16,481.96 42.8,485.2 41,485.56 C38.84,485.2 38.84,481.96 41,480.16 Z" fill="#F6C85F"/>
-<text x="58" y="484" font-size="15" font-weight="bold" fill="#34548A">Training (GPU)</text>
-<rect x="32" y="504" width="188" height="172" id="dg" rx="10" fill="#FFF3E6" stroke="#DD8452" stroke-width="1.8"/>
-<text x="44" y="526.8" font-size="13.5" font-weight="bold" fill="#8A4B06">Reward diagnostics</text>
-<text x="44" y="547.35" font-size="12" fill="#666666">CPU only, before GPU time:</text>
-<text x="44" y="563.19" font-size="12" fill="#666666">does a group of completions</text>
-<text x="44" y="579.03" font-size="12" fill="#666666">carry a learning signal?</text>
-<rect x="244" y="504" width="214" height="172" id="sft" rx="10" fill="#EEF3FA" stroke="#4C72B0" stroke-width="1.8"/>
-<text x="256" y="526.8" font-size="13.5" font-weight="bold" fill="#34548A">SFT on verified answers</text>
-<text x="256" y="547.35" font-size="12" fill="#666666">LoRA r 16, one adapter for four</text>
-<text x="256" y="563.19" font-size="12" fill="#666666">tasks</text>
-<rect x="258" y="593.03" width="11" height="11" rx="2.5" fill="#D9D9DC"/>
-<rect x="272" y="593.03" width="11" height="11" rx="2.5" fill="#D9D9DC"/>
-<rect x="286" y="593.03" width="11" height="11" rx="2.5" fill="#D9D9DC"/>
-<rect x="300" y="593.03" width="11" height="11" rx="2.5" fill="#D9D9DC"/>
-<rect x="314" y="593.03" width="11" height="11" rx="2.5" fill="#D9D9DC"/>
-<rect x="336" y="593.03" width="11" height="11" rx="2.5" fill="#55A868"/>
-<rect x="350" y="593.03" width="11" height="11" rx="2.5" fill="#55A868"/>
-<rect x="364" y="593.03" width="11" height="11" rx="2.5" fill="#55A868"/>
-<rect x="378" y="593.03" width="11" height="11" rx="2.5" fill="#55A868"/>
-<rect x="392" y="593.03" width="11" height="11" rx="2.5" fill="#55A868"/>
-<rect x="406" y="593.03" width="11" height="11" rx="2.5" fill="#55A868"/>
-<text x="258" y="623.03" font-size="11.5" fill="#666666">input, masked</text>
-<text x="336" y="623.03" font-size="11.5" fill="#2F6B3C">loss on the answer</text>
-<path d="M48,636 L204,636" fill="none" stroke="#8C8C8C" stroke-width="1.2"/>
-<path d="M48,604.87 L48,636" fill="none" stroke="#8C8C8C" stroke-width="1.2"/>
-<path d="M48,614.21 L56.21,618.88 L72.63,627.44 L89.05,632.89 L113.68,633.67 L138.32,635.22 L171.16,636 L204,636" fill="none" stroke="#DD8452" stroke-width="2.4" stroke-linejoin="round"/>
-<circle cx="48" cy="614.21" r="2.8" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="56.21" cy="618.88" r="2.8" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="72.63" cy="627.44" r="2.8" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="89.05" cy="632.89" r="2.8" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="113.68" cy="633.67" r="2.8" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="138.32" cy="635.22" r="2.8" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="171.16" cy="636" r="2.8" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="204" cy="636" r="2.8" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
-<text x="126" y="664" font-size="11.5" text-anchor="middle" fill="#666666">groups with identical rewards</text>
-<rect x="482" y="504" width="262" height="172" id="gr" rx="10" fill="#EEF3FA" stroke="#4C72B0" stroke-width="1.8"/>
-<text x="494" y="526.8" font-size="13.5" font-weight="bold" fill="#34548A">GRPO per task</text>
-<text x="494" y="547.35" font-size="12" fill="#666666">LoRA r 8, 8 completions per prompt, no KL</text>
-<text x="494" y="563.19" font-size="12" fill="#666666">term; reward is a weighted sum of verifier</text>
-<text x="494" y="579.03" font-size="12" fill="#666666">channels</text>
-<rect x="496" y="610.87" width="108" height="22" id="p1" rx="11" fill="#FFFFFF" stroke="#4C72B0" stroke-width="1.4"/>
-<text x="550" y="625.89" font-size="11.5" text-anchor="middle" fill="#34548A">format</text>
-<rect x="614" y="610.87" width="108" height="22" id="p2" rx="11" fill="#FFFFFF" stroke="#4C72B0" stroke-width="1.4"/>
-<text x="668" y="625.89" font-size="11.5" text-anchor="middle" fill="#34548A">validity</text>
-<rect x="496" y="638.87" width="108" height="22" id="p3" rx="11" fill="#FFFFFF" stroke="#4C72B0" stroke-width="1.4"/>
-<text x="550" y="653.89" font-size="11.5" text-anchor="middle" fill="#34548A">task score</text>
-<rect x="614" y="638.87" width="108" height="22" id="p4" rx="11" fill="#FFFFFF" stroke="#4C72B0" stroke-width="1.4"/>
-<text x="668" y="653.89" font-size="11.5" text-anchor="middle" fill="#34548A">grounded</text>
-<rect x="768" y="504" width="200" height="172" id="ad" rx="10" fill="#EDF7F0" stroke="#55A868" stroke-width="2.2"/>
-<text x="780" y="526.8" font-size="13.5" font-weight="bold" fill="#2F6B3C">LoRA adapters</text>
-<text x="780" y="547.35" font-size="12" fill="#666666">merged after SFT, then one per</text>
-<text x="780" y="563.19" font-size="12" fill="#666666">task after GRPO</text>
-<path d="M870,596 C878.4,603.2 880.8,609.2 875.28,616.4 C872.4,620 867.12,620 864.72,616.4 C859.92,610.4 864,604.4 867.12,601.28 C867.6,605.6 869.04,606.8 870,608 C870.48,603.2 870,599.6 870,596 Z" fill="#DD8452" stroke="#B8561F" stroke-width="1.0" stroke-linejoin="round"/>
-<path d="M870,610.88 C872.88,613.28 872.4,617.6 870,618.08 C867.12,617.6 867.12,613.28 870,610.88 Z" fill="#F6C85F"/>
-<rect x="804" y="636" width="128" height="24" id="p5" rx="12" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="1.4" stroke-dasharray="4 3"/>
-<text x="868" y="652.2" font-size="12" text-anchor="middle" fill="#666666">pending</text>
-<g class="arrow" data-src="dg" data-dst="sft"><path d="M220,590 L236,590" fill="none" stroke="#666666" stroke-width="2.0" stroke-linejoin="round"/><polygon points="244,590 236,593.4 236,586.6" fill="#666666"/></g>
-<g class="arrow" data-src="sft" data-dst="gr"><path d="M458,590 L474,590" fill="none" stroke="#666666" stroke-width="2.0" stroke-linejoin="round"/><polygon points="482,590 474,593.4 474,586.6" fill="#666666"/></g>
-<g class="arrow" data-src="gr" data-dst="ad"><path d="M744,590 L760,590" fill="none" stroke="#666666" stroke-width="2.0" stroke-linejoin="round"/><polygon points="768,590 760,593.4 760,586.6" fill="#666666"/></g>
-<g class="arrow" data-src="vea" data-dst="sft"><path d="M173,404 L173,432 Q173,438 179,438 L345,438 Q351,438 351,444 L351,496" fill="none" stroke="#2F6B3C" stroke-width="2.2" stroke-linejoin="round"/><polygon points="351,504 347.6,496 354.4,496" fill="#2F6B3C"/></g>
-<g class="arrow" data-src="pR" data-dst="gr"><path d="M420,402 L420,432 Q420,438 426,438 L607,438 Q613,438 613,444 L613,496" fill="none" stroke="#B8561F" stroke-width="2.2" stroke-linejoin="round"/><polygon points="613,504 609.6,496 616.4,496" fill="#B8561F"/></g>
-<g class="arrow" data-src="ad" data-dst="cP"><path d="M868,504 L868,428" fill="none" stroke="#DD8452" stroke-width="2.2" stroke-linejoin="round"/><polygon points="868,420 871.4,428 864.6,428" fill="#DD8452"/></g>
-<g class="arrow" data-src="ans" data-dst="cE"><path d="M694,323 L662,323" fill="none" stroke="#4C72B0" stroke-width="2.2" stroke-linejoin="round"/><polygon points="654,323 662,319.6 662,326.4" fill="#4C72B0"/></g>
-<g class="arrow" data-src="pF" data-dst="rt"><path d="M644,388 L686,388" fill="none" stroke="#34548A" stroke-width="2.2" stroke-linejoin="round"/><polygon points="694,388 686,391.4 686,384.6" fill="#34548A"/></g>
-<circle cx="262" cy="438" r="10.5" fill="#55A868"/>
-<text x="262" y="442.32" font-size="12" font-weight="bold" text-anchor="middle" fill="#FFFFFF">1</text>
-<circle cx="516" cy="438" r="10.5" fill="#B8561F"/>
-<text x="516" y="442.32" font-size="12" font-weight="bold" text-anchor="middle" fill="#FFFFFF">2</text>
-<circle cx="868" cy="462" r="10.5" fill="#B8561F"/>
-<text x="868" y="466.32" font-size="12" font-weight="bold" text-anchor="middle" fill="#FFFFFF">3</text>
-<circle cx="666" cy="323" r="10.5" fill="#4C72B0"/>
-<text x="666" y="327.32" font-size="12" font-weight="bold" text-anchor="middle" fill="#FFFFFF">4</text>
-<circle cx="676" cy="395" r="10.5" fill="#4C72B0"/>
-<text x="676" y="399.32" font-size="12" font-weight="bold" text-anchor="middle" fill="#FFFFFF">5</text>
-<text x="16" y="722" font-size="12" fill="#666666">Numbered path: 1 verified answers to SFT, 2 reward to GRPO, 3 adapters to the policy, 4 answer to the environment, 5 feedback to the prompt. Pipeline as implemented; no model</text>
-<text x="16" y="737.6" font-size="12" fill="#666666">has been trained.</text>
+<text x="372" y="196" font-size="12.5" font-weight="bold" fill="#333333">physics tool suite</text>
+<rect x="372" y="204" width="66" height="22" id="p2" rx="11" fill="#FFFFFF" stroke="#55A868" stroke-width="1.4"/>
+<text x="405" y="219.03" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#2F6B3C">first law</text>
+<rect x="445" y="204" width="80" height="22" id="p3" rx="11" fill="#FFFFFF" stroke="#55A868" stroke-width="1.4"/>
+<text x="485" y="219.03" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#2F6B3C">second law</text>
+<rect x="532" y="204" width="108" height="22" id="p4" rx="11" fill="#FFFFFF" stroke="#55A868" stroke-width="1.4"/>
+<text x="586" y="219.03" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#2F6B3C">component limits</text>
+<text x="372" y="246" font-size="11.5" fill="#666666">eight verifiers (V1 to V8): balances, pinch, limits,</text>
+<text x="372" y="260.5" font-size="11.5" fill="#666666">number grounding, site</text>
+<text x="372" y="290" font-size="12" font-weight="bold" fill="#333333">exergy destroyed per component, MW</text>
+<text x="372" y="308" font-size="11.5" font-weight="bold" fill="#333333">CC</text>
+<rect x="404" y="298" width="180" height="10" rx="3" fill="#E6E6E8"/>
+<rect x="404" y="298" width="178.12" height="10" rx="3" fill="#B5383C"/>
+<text x="592" y="308" font-size="11.5" fill="#666666">18.3</text>
+<text x="372" y="326" font-size="11.5" font-weight="bold" fill="#333333">HX</text>
+<rect x="404" y="316" width="180" height="10" rx="3" fill="#E6E6E8"/>
+<rect x="404" y="316" width="54" height="10" rx="3" fill="#B5383C"/>
+<text x="592" y="326" font-size="11.5" fill="#666666">5.6</text>
+<rect x="365" y="384" width="70" height="24" id="pA" rx="12" fill="#2F7D45"/>
+<text x="400" y="400.2" font-size="12" font-weight="bold" text-anchor="middle" fill="#FFFFFF">accept</text>
+<rect x="477" y="384" width="70" height="24" id="pR" rx="12" fill="#B8561F"/>
+<text x="512" y="400.2" font-size="12" font-weight="bold" text-anchor="middle" fill="#FFFFFF">reward</text>
+<rect x="584" y="384" width="70" height="24" id="pJ" rx="12" fill="#B5383C"/>
+<text x="619" y="400.2" font-size="12" font-weight="bold" text-anchor="middle" fill="#FFFFFF">reject</text>
+<rect x="556" y="343" width="84" height="24" id="pF" rx="12" fill="#34548A"/>
+<text x="598" y="359.2" font-size="12" font-weight="bold" text-anchor="middle" fill="#FFFFFF">feedback</text>
+<rect x="694" y="64" width="274" height="122" id="prm" rx="8" fill="#FFFFFF" stroke="#D9D9DC" stroke-width="1.4"/>
+<text x="706" y="84" font-size="13" font-weight="bold" fill="#333333">prompt</text>
+<rect x="706" y="92" width="10" height="10" rx="2.5" fill="#8172B3"/>
+<rect x="719" y="92" width="10" height="10" rx="2.5" fill="#8172B3"/>
+<rect x="732" y="92" width="10" height="10" rx="2.5" fill="#8172B3"/>
+<rect x="745" y="92" width="10" height="10" rx="2.5" fill="#8172B3"/>
+<rect x="758" y="92" width="10" height="10" rx="2.5" fill="#C9A227"/>
+<rect x="771" y="92" width="10" height="10" rx="2.5" fill="#C9A227"/>
+<rect x="784" y="92" width="10" height="10" rx="2.5" fill="#C9A227"/>
+<rect x="797" y="92" width="10" height="10" rx="2.5" fill="#4C72B0"/>
+<rect x="810" y="92" width="10" height="10" rx="2.5" fill="#4C72B0"/>
+<rect x="823" y="92" width="10" height="10" rx="2.5" fill="#4C72B0"/>
+<rect x="836" y="92" width="10" height="10" rx="2.5" fill="#4C72B0"/>
+<rect x="849" y="92" width="10" height="10" rx="2.5" fill="#4C72B0"/>
+<rect x="862" y="92" width="10" height="10" rx="2.5" fill="#4C72B0"/>
+<rect x="875" y="92" width="10" height="10" rx="2.5" fill="#4C72B0"/>
+<rect x="888" y="92" width="10" height="10" rx="2.5" fill="#4C72B0"/>
+<rect x="901" y="92" width="10" height="10" rx="2.5" fill="#DD8452"/>
+<rect x="914" y="92" width="10" height="10" rx="2.5" fill="#DD8452"/>
+<rect x="927" y="92" width="10" height="10" rx="2.5" fill="#DD8452"/>
+<rect x="706" y="112" width="11" height="11" rx="2.5" fill="#8172B3"/>
+<text x="724" y="122" font-size="12" fill="#666666">harness text, on 35 % of training rows</text>
+<rect x="706" y="129" width="11" height="11" rx="2.5" fill="#C9A227"/>
+<text x="724" y="139" font-size="12" fill="#666666">failure notes, k = 3</text>
+<rect x="706" y="146" width="11" height="11" rx="2.5" fill="#4C72B0"/>
+<text x="724" y="156" font-size="12" fill="#666666">task prompt</text>
+<rect x="706" y="163" width="11" height="11" rx="2.5" fill="#DD8452"/>
+<text x="724" y="173" font-size="12" fill="#666666">feedback on a retry</text>
+<rect x="694" y="200" width="274" height="60" id="mod" rx="10" fill="#EEF3FA" stroke="#4C72B0" stroke-width="2.2"/>
+<text x="831" y="222" font-size="14.5" font-weight="bold" text-anchor="middle" fill="#34548A">Qwen3.5-4B</text>
+<path d="M722,239 L736,239" fill="none" stroke="#4C72B0" stroke-width="2.0" stroke-linecap="round"/>
+<path d="M725.5,232.94 L732.5,245.06" fill="none" stroke="#4C72B0" stroke-width="2.0" stroke-linecap="round"/>
+<path d="M732.5,232.94 L725.5,245.06" fill="none" stroke="#4C72B0" stroke-width="2.0" stroke-linecap="round"/>
+<text x="741" y="244" font-size="12" fill="#666666">frozen base</text>
+<path d="M834,230 C839.6,234.8 841.2,238.8 837.52,243.6 C835.6,246 832.08,246 830.48,243.6 C827.28,239.6 830,235.6 832.08,233.52 C832.4,236.4 833.36,237.2 834,238 C834.32,234.8 834,232.4 834,230 Z" fill="#DD8452" stroke="#B8561F" stroke-width="1.0" stroke-linejoin="round"/>
+<path d="M834,239.92 C835.92,241.52 835.6,244.4 834,244.72 C832.08,244.4 832.08,241.52 834,239.92 Z" fill="#F6C85F"/>
+<text x="846" y="244" font-size="12" fill="#666666">LoRA, pending</text>
+<rect x="694" y="274" width="274" height="52" id="ans" rx="8" fill="#EDF7F0" stroke="#55A868" stroke-width="1.6"/>
+<text x="706" y="294" font-size="13" font-weight="bold" fill="#2F6B3C">answer</text>
+<rect x="762" y="284" width="12" height="12" rx="2.5" fill="#55A868"/>
+<rect x="777" y="284" width="12" height="12" rx="2.5" fill="#55A868"/>
+<rect x="792" y="284" width="12" height="12" rx="2.5" fill="#55A868"/>
+<rect x="807" y="284" width="12" height="12" rx="2.5" fill="#55A868"/>
+<rect x="822" y="284" width="12" height="12" rx="2.5" fill="#55A868"/>
+<rect x="837" y="284" width="12" height="12" rx="2.5" fill="#55A868"/>
+<rect x="852" y="284" width="12" height="12" rx="2.5" fill="#55A868"/>
+<text x="706" y="314" font-size="12" fill="#666666">edits, design, ranking, or fixed lines</text>
+<rect x="694" y="336" width="274" height="38" id="rt" rx="8" fill="#FFF3E6" stroke="#DD8452" stroke-width="1.6"/>
+<path d="M712.5,345 L721,360.64 L704,360.64 Z" fill="none" stroke="#8A4B06" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M712.5,350.95 L712.5,356.05" fill="none" stroke="#8A4B06" stroke-width="2.0"/>
+<circle cx="712.5" cy="358.6" r="1.1" fill="#8A4B06"/>
+<text x="730" y="360" font-size="12" fill="#8A4B06">retry, up to 3 turns (Repair, Design)</text>
+<g class="arrow" data-src="prm" data-dst="mod"><path d="M831,186 L831,192" fill="none" stroke="#666666" stroke-width="1.8" stroke-linejoin="round"/><polygon points="831,200 827.6,192 834.4,192" fill="#666666"/></g>
+<g class="arrow" data-src="mod" data-dst="ans"><path d="M831,260 L831,266" fill="none" stroke="#666666" stroke-width="1.8" stroke-linejoin="round"/><polygon points="831,274 827.6,266 834.4,266" fill="#666666"/></g>
+<g class="arrow" data-src="rt" data-dst="prm"><path d="M968,355 L973,355 Q978,355 978,350 L978,126.5 Q978,125 976.5,125 L975,125" fill="none" stroke="#DD8452" stroke-width="1.8" stroke-linejoin="round"/><polygon points="968,125 975,122 975,128" fill="#DD8452"/></g>
+<rect x="16" y="420" width="314" height="94" id="cor" rx="10" fill="#EDF7F0" stroke="#55A868" stroke-width="2.0"/>
+<text x="28" y="442.8" font-size="13.5" font-weight="bold" fill="#2F6B3C">Corpus</text>
+<text x="28" y="463.35" font-size="12" fill="#666666">accepted rows, tagged by source; harness text on</text>
+<text x="28" y="479.19" font-size="12" fill="#666666">35 % of rows; prompts over 14000 characters are</text>
+<text x="28" y="495.03" font-size="12" fill="#666666">dropped and counted</text>
+<rect x="678" y="420" width="306" height="94" id="mem" rx="10" fill="#FFF3E6" stroke="#DD8452" stroke-width="2.0"/>
+<text x="690" y="442.8" font-size="13.5" font-weight="bold" fill="#8A4B06">Failure memory</text>
+<text x="690" y="463.35" font-size="12" fill="#666666">rejected attempts become notes; lexical retrieval,</text>
+<text x="690" y="479.19" font-size="12" fill="#666666">k = 3, notes from the same record excluded</text>
+<rect x="16" y="538" width="968" height="262" id="cT" rx="12" fill="#FFFFFF" stroke="#4C72B0" stroke-width="2.2"/>
+<path d="M41,555 C47.3,560.4 49.1,564.9 44.96,570.3 C42.8,573 38.84,573 37.04,570.3 C33.44,565.8 36.5,561.3 38.84,558.96 C39.2,562.2 40.28,563.1 41,564 C41.36,560.4 41,557.7 41,555 Z" fill="#DD8452" stroke="#B8561F" stroke-width="1.0" stroke-linejoin="round"/>
+<path d="M41,566.16 C43.16,567.96 42.8,571.2 41,571.56 C38.84,571.2 38.84,567.96 41,566.16 Z" fill="#F6C85F"/>
+<text x="58" y="570" font-size="15" font-weight="bold" fill="#34548A">Training (GPU)</text>
+<rect x="568" y="552" width="80" height="26" rx="6" fill="#EDF7F0" stroke="#55A868" stroke-width="1.6"/>
+<rect x="574" y="558" width="14" height="14" rx="2" fill="#FFFFFF" stroke="#55A868" stroke-width="1.4"/>
+<text x="594" y="570" font-size="11.5" font-weight="bold" fill="#2F6B3C">T4 rank 0</text>
+<rect x="656" y="552" width="80" height="26" rx="6" fill="#EDF7F0" stroke="#55A868" stroke-width="1.6"/>
+<rect x="662" y="558" width="14" height="14" rx="2" fill="#FFFFFF" stroke="#55A868" stroke-width="1.4"/>
+<text x="682" y="570" font-size="11.5" font-weight="bold" fill="#2F6B3C">T4 rank 1</text>
+<rect x="756" y="553" width="132" height="24" id="p5" rx="12" fill="#FFFFFF" stroke="#4C72B0" stroke-width="1.4"/>
+<text x="822" y="569.02" font-size="11.5" text-anchor="middle" fill="#34548A">DDP, fp16, no 4-bit</text>
+<rect x="32" y="590" width="180" height="192" id="dg" rx="10" fill="#FFF3E6" stroke="#DD8452" stroke-width="1.8"/>
+<text x="44" y="612.8" font-size="13.5" font-weight="bold" fill="#8A4B06">Reward diagnostics</text>
+<text x="44" y="633.35" font-size="12" fill="#666666">CPU only, before GPU time:</text>
+<text x="44" y="649.19" font-size="12" fill="#666666">do groups of completions</text>
+<text x="44" y="665.03" font-size="12" fill="#666666">carry a signal?</text>
+<path d="M56,752 L196,752" fill="none" stroke="#8C8C8C" stroke-width="1.2"/>
+<path d="M56,690.87 L56,752" fill="none" stroke="#8C8C8C" stroke-width="1.2"/>
+<path d="M56,704.62 L63.37,707.68 L78.11,719.91 L92.84,724.49 L114.95,745.89 L137.05,745.89 L166.53,744.36 L196,747.42" fill="none" stroke="#DD8452" stroke-width="2.4" stroke-linejoin="round"/>
+<circle cx="56" cy="704.62" r="2.8" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="63.37" cy="707.68" r="2.8" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="78.11" cy="719.91" r="2.8" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="92.84" cy="724.49" r="2.8" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="114.95" cy="745.89" r="2.8" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="137.05" cy="745.89" r="2.8" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="166.53" cy="744.36" r="2.8" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="196" cy="747.42" r="2.8" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<text x="122" y="772" font-size="11.5" text-anchor="middle" fill="#666666">identical-reward groups, G = 4</text>
+<rect x="232" y="590" width="224" height="192" id="sft" rx="10" fill="#EEF3FA" stroke="#4C72B0" stroke-width="1.8"/>
+<text x="244" y="612.8" font-size="13.5" font-weight="bold" fill="#34548A">SFT on the corpus</text>
+<text x="244" y="633.35" font-size="12" fill="#666666">LoRA r 16, one adapter for four</text>
+<text x="244" y="649.19" font-size="12" fill="#666666">tasks; two DDP ranks; batch 2 × 8 ×</text>
+<text x="244" y="665.03" font-size="12" fill="#666666">2 = 32 sequences, length 4096</text>
+<rect x="246" y="694.87" width="11" height="11" rx="2.5" fill="#D9D9DC"/>
+<rect x="260" y="694.87" width="11" height="11" rx="2.5" fill="#D9D9DC"/>
+<rect x="274" y="694.87" width="11" height="11" rx="2.5" fill="#D9D9DC"/>
+<rect x="288" y="694.87" width="11" height="11" rx="2.5" fill="#D9D9DC"/>
+<rect x="302" y="694.87" width="11" height="11" rx="2.5" fill="#D9D9DC"/>
+<rect x="324" y="694.87" width="11" height="11" rx="2.5" fill="#55A868"/>
+<rect x="338" y="694.87" width="11" height="11" rx="2.5" fill="#55A868"/>
+<rect x="352" y="694.87" width="11" height="11" rx="2.5" fill="#55A868"/>
+<rect x="366" y="694.87" width="11" height="11" rx="2.5" fill="#55A868"/>
+<rect x="380" y="694.87" width="11" height="11" rx="2.5" fill="#55A868"/>
+<rect x="394" y="694.87" width="11" height="11" rx="2.5" fill="#55A868"/>
+<text x="246" y="724.87" font-size="11.5" fill="#666666">input, masked</text>
+<text x="324" y="724.87" font-size="11.5" fill="#2F6B3C">loss on the answer</text>
+<rect x="476" y="590" width="262" height="192" id="gr" rx="10" fill="#EEF3FA" stroke="#4C72B0" stroke-width="1.8"/>
+<text x="488" y="612.8" font-size="13.5" font-weight="bold" fill="#34548A">GRPO per task</text>
+<text x="488" y="633.35" font-size="12" fill="#666666">LoRA r 8, G = 4 completions per prompt, 16</text>
+<text x="488" y="649.19" font-size="12" fill="#666666">prompts per step (4 × 2 × 2 ranks), no KL</text>
+<text x="488" y="665.03" font-size="12" fill="#666666">term</text>
+<rect x="490" y="694.87" width="108" height="22" id="p6" rx="11" fill="#FFFFFF" stroke="#4C72B0" stroke-width="1.4"/>
+<text x="544" y="709.89" font-size="11.5" text-anchor="middle" fill="#34548A">format</text>
+<rect x="608" y="694.87" width="108" height="22" id="p7" rx="11" fill="#FFFFFF" stroke="#4C72B0" stroke-width="1.4"/>
+<text x="662" y="709.89" font-size="11.5" text-anchor="middle" fill="#34548A">validity</text>
+<rect x="490" y="722.87" width="108" height="22" id="p8" rx="11" fill="#FFFFFF" stroke="#4C72B0" stroke-width="1.4"/>
+<text x="544" y="737.89" font-size="11.5" text-anchor="middle" fill="#34548A">task score</text>
+<rect x="608" y="722.87" width="108" height="22" id="p9" rx="11" fill="#FFFFFF" stroke="#4C72B0" stroke-width="1.4"/>
+<text x="662" y="737.89" font-size="11.5" text-anchor="middle" fill="#34548A">grounded</text>
+<rect x="762" y="590" width="206" height="192" id="ad" rx="10" fill="#EDF7F0" stroke="#55A868" stroke-width="2.2"/>
+<text x="774" y="612.8" font-size="13.5" font-weight="bold" fill="#2F6B3C">LoRA adapters</text>
+<text x="774" y="633.35" font-size="12" fill="#666666">merged after SFT, then one per</text>
+<text x="774" y="649.19" font-size="12" fill="#666666">task after GRPO</text>
+<path d="M864,683.03 C872.4,690.23 874.8,696.23 869.28,703.43 C866.4,707.03 861.12,707.03 858.72,703.43 C853.92,697.43 858,691.43 861.12,688.31 C861.6,692.63 863.04,693.83 864,695.03 C864.48,690.23 864,686.63 864,683.03 Z" fill="#DD8452" stroke="#B8561F" stroke-width="1.0" stroke-linejoin="round"/>
+<path d="M864,697.91 C866.88,700.31 866.4,704.63 864,705.11 C861.12,704.63 861.12,700.31 864,697.91 Z" fill="#F6C85F"/>
+<rect x="800" y="717.03" width="130" height="24" id="p10" rx="12" fill="#FFFFFF" stroke="#8C8C8C" stroke-width="1.4" stroke-dasharray="4 3"/>
+<text x="865" y="733.23" font-size="12" text-anchor="middle" fill="#666666">pending</text>
+<g class="arrow" data-src="dg" data-dst="sft"><path d="M212,686 L224,686" fill="none" stroke="#666666" stroke-width="2.0" stroke-linejoin="round"/><polygon points="232,686 224,689.4 224,682.6" fill="#666666"/></g>
+<g class="arrow" data-src="sft" data-dst="gr"><path d="M456,686 L468,686" fill="none" stroke="#666666" stroke-width="2.0" stroke-linejoin="round"/><polygon points="476,686 468,689.4 468,682.6" fill="#666666"/></g>
+<g class="arrow" data-src="gr" data-dst="ad"><path d="M738,686 L754,686" fill="none" stroke="#666666" stroke-width="2.0" stroke-linejoin="round"/><polygon points="762,686 754,689.4 754,682.6" fill="#666666"/></g>
+<g class="arrow" data-src="cS" data-dst="cE"><path d="M330,200 L347,200" fill="none" stroke="#34548A" stroke-width="2.2" stroke-linejoin="round"/><polygon points="354,200 347,203 347,197" fill="#34548A"/></g>
+<g class="arrow" data-src="pA" data-dst="cor"><path d="M400,408 L400,461 Q400,467 394,467 L338,467" fill="none" stroke="#2F7D45" stroke-width="2.2" stroke-linejoin="round"/><polygon points="330,467 338,463.6 338,470.4" fill="#2F7D45"/></g>
+<g class="arrow" data-src="pR" data-dst="gr"><path d="M512,408 L512,582" fill="none" stroke="#B8561F" stroke-width="2.2" stroke-linejoin="round"/><polygon points="512,590 508.6,582 515.4,582" fill="#B8561F"/></g>
+<g class="arrow" data-src="pJ" data-dst="mem"><path d="M619,408 L619,461 Q619,467 625,467 L670,467" fill="none" stroke="#B5383C" stroke-width="2.2" stroke-linejoin="round"/><polygon points="678,467 670,470.4 670,463.6" fill="#B5383C"/></g>
+<g class="arrow" data-src="mem" data-dst="cP"><path d="M840,420 L840,403" fill="none" stroke="#8A6D1F" stroke-width="2.2" stroke-linejoin="round"/><polygon points="840,396 843,403 837,403" fill="#8A6D1F"/></g>
+<g class="arrow" data-src="cor" data-dst="sft"><path d="M300,514 L300,582" fill="none" stroke="#2F6B3C" stroke-width="2.2" stroke-linejoin="round"/><polygon points="300,590 296.6,582 303.4,582" fill="#2F6B3C"/></g>
+<g class="arrow" data-src="ans" data-dst="cE"><path d="M694,300 L661,300" fill="none" stroke="#4C72B0" stroke-width="2.2" stroke-linejoin="round"/><polygon points="654,300 661,297 661,303" fill="#4C72B0"/></g>
+<g class="arrow" data-src="pF" data-dst="rt"><path d="M640,355 L687,355" fill="none" stroke="#34548A" stroke-width="2.2" stroke-linejoin="round"/><polygon points="694,355 687,358 687,352" fill="#34548A"/></g>
+<circle cx="342" cy="184" r="10.5" fill="#4C72B0"/>
+<text x="342" y="188.32" font-size="12" font-weight="bold" text-anchor="middle" fill="#FFFFFF">1</text>
+<circle cx="400" cy="438" r="10.5" fill="#55A868"/>
+<text x="400" y="442.32" font-size="12" font-weight="bold" text-anchor="middle" fill="#FFFFFF">2</text>
+<circle cx="619" cy="438" r="10.5" fill="#B5383C"/>
+<text x="619" y="442.32" font-size="12" font-weight="bold" text-anchor="middle" fill="#FFFFFF">3</text>
+<circle cx="862" cy="408" r="10.5" fill="#B8561F"/>
+<text x="862" y="412.32" font-size="12" font-weight="bold" text-anchor="middle" fill="#FFFFFF">4</text>
+<circle cx="300" cy="552" r="10.5" fill="#55A868"/>
+<text x="300" y="556.32" font-size="12" font-weight="bold" text-anchor="middle" fill="#FFFFFF">5</text>
+<circle cx="512" cy="502" r="10.5" fill="#B8561F"/>
+<text x="512" y="506.32" font-size="12" font-weight="bold" text-anchor="middle" fill="#FFFFFF">6</text>
+<text x="16" y="820" font-size="11.5" fill="#666666">Numbered path: 1 candidate rows to the tool suite, 2 accepted rows to the corpus, 3 rejected attempts to the failure memory, 4 notes into prompts, 5 corpus to SFT, 6 reward to GRPO.</text>
+<text x="16" y="834.95" font-size="11.5" fill="#666666">Teacher paths are designed; their results are pending. Pipeline as implemented; no model has been trained.</text>
 </svg>

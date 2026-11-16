@@ -30,64 +30,73 @@
 <path d="M640,400 L640,404" fill="none" stroke="#8C8C8C" stroke-width="1.4"/>
 <text x="640" y="420" font-size="11.5" text-anchor="middle" fill="#666666">100</text>
 <text x="360" y="440" font-size="12" text-anchor="middle" fill="#666666">per-sample error rate of the simulated policy (%)</text>
-<path d="M80,181.21 L109.47,258.1 L168.42,344.56 L227.37,380.86 L315.79,397.36 L404.21,399.67 L522.11,400 L640,400" fill="none" stroke="#8C8C8C" stroke-width="1.8" stroke-linejoin="round" stroke-dasharray="5 4"/>
-<path d="M310,84 L340,84" fill="none" stroke="#8C8C8C" stroke-width="1.8" stroke-dasharray="5 4"/>
-<text x="348" y="88" font-size="11.5" fill="#666666">(1 - p)^8: all eight completions intact</text>
-<path d="M80,169 L109.47,218.5 L168.42,309.25 L227.37,367 L315.79,375.25 L404.21,391.75 L522.11,400 L640,400" fill="none" stroke="#4C72B0" stroke-width="2.4" stroke-linejoin="round"/>
-<circle cx="80" cy="169" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="109.47" cy="218.5" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="168.42" cy="309.25" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="227.37" cy="367" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="315.79" cy="375.25" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="404.21" cy="391.75" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="522.11" cy="400" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="640" cy="400" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
-<path d="M80,210.25 L109.47,226.75 L168.42,317.5 L227.37,350.5 L315.79,391.75 L404.21,400 L522.11,391.75 L640,358.75" fill="none" stroke="#DD8452" stroke-width="2.4" stroke-linejoin="round"/>
-<circle cx="80" cy="210.25" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="109.47" cy="226.75" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="168.42" cy="317.5" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="227.37" cy="350.5" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="315.79" cy="391.75" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="404.21" cy="400" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<path d="M80,131.05 L109.47,183.52 L168.42,264.7 L227.37,320.8 L315.79,369.64 L404.21,391.42 L522.11,399.34 L640,400" fill="none" stroke="#8C8C8C" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="2 3"/>
+<path d="M80,169 L109.47,218.5 L168.42,309.25 L227.37,367 L315.79,375.25 L404.21,391.75 L522.11,400 L640,400" fill="none" stroke="#4C72B0" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="6 4"/>
+<path d="M80,210.25 L109.47,226.75 L168.42,317.5 L227.37,350.5 L315.79,391.75 L404.21,400 L522.11,391.75 L640,358.75" fill="none" stroke="#55A868" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="6 4"/>
+<path d="M80,177.25 L109.47,218.5 L168.42,317.5 L227.37,375.25 L315.79,383.5 L404.21,400 L522.11,400 L640,400" fill="none" stroke="#DD8452" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="6 4"/>
+<path d="M80,185.5 L109.47,210.25 L168.42,301 L227.37,358.75 L315.79,383.5 L404.21,391.75 L522.11,400 L640,400" fill="none" stroke="#8172B3" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="6 4"/>
+<path d="M80,144.25 L109.47,160.75 L168.42,226.75 L227.37,251.5 L315.79,367 L404.21,367 L522.11,358.75 L640,375.25" fill="none" stroke="#4C72B0" stroke-width="2.6" stroke-linejoin="round"/>
+<circle cx="80" cy="144.25" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="109.47" cy="160.75" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="168.42" cy="226.75" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="227.37" cy="251.5" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="315.79" cy="367" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="404.21" cy="367" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="522.11" cy="358.75" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="640" cy="375.25" r="3.2" fill="#4C72B0" stroke="#FFFFFF" stroke-width="1.0"/>
+<path d="M80,127.75 L109.47,169 L168.42,218.5 L227.37,243.25 L315.79,375.25 L404.21,350.5 L522.11,350.5 L640,284.5" fill="none" stroke="#55A868" stroke-width="2.6" stroke-linejoin="round"/>
+<circle cx="80" cy="127.75" r="3.2" fill="#55A868" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="109.47" cy="169" r="3.2" fill="#55A868" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="168.42" cy="218.5" r="3.2" fill="#55A868" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="227.37" cy="243.25" r="3.2" fill="#55A868" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="315.79" cy="375.25" r="3.2" fill="#55A868" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="404.21" cy="350.5" r="3.2" fill="#55A868" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="522.11" cy="350.5" r="3.2" fill="#55A868" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="640" cy="284.5" r="3.2" fill="#55A868" stroke="#FFFFFF" stroke-width="1.0"/>
+<path d="M80,127.75 L109.47,185.5 L168.42,243.25 L227.37,292.75 L315.79,350.5 L404.21,367 L522.11,391.75 L640,400" fill="none" stroke="#DD8452" stroke-width="2.6" stroke-linejoin="round"/>
+<circle cx="80" cy="127.75" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="109.47" cy="185.5" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="168.42" cy="243.25" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="227.37" cy="292.75" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="315.79" cy="350.5" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="404.21" cy="367" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
 <circle cx="522.11" cy="391.75" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="640" cy="358.75" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
-<path d="M80,177.25 L109.47,218.5 L168.42,317.5 L227.37,375.25 L315.79,383.5 L404.21,400 L522.11,400 L640,400" fill="none" stroke="#55A868" stroke-width="2.4" stroke-linejoin="round"/>
-<circle cx="80" cy="177.25" r="3.2" fill="#55A868" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="109.47" cy="218.5" r="3.2" fill="#55A868" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="168.42" cy="317.5" r="3.2" fill="#55A868" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="227.37" cy="375.25" r="3.2" fill="#55A868" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="315.79" cy="383.5" r="3.2" fill="#55A868" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="404.21" cy="400" r="3.2" fill="#55A868" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="522.11" cy="400" r="3.2" fill="#55A868" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="640" cy="400" r="3.2" fill="#55A868" stroke="#FFFFFF" stroke-width="1.0"/>
-<path d="M80,185.5 L109.47,210.25 L168.42,301 L227.37,358.75 L315.79,383.5 L404.21,391.75 L522.11,400 L640,400" fill="none" stroke="#8172B3" stroke-width="2.4" stroke-linejoin="round"/>
-<circle cx="80" cy="185.5" r="3.2" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="109.47" cy="210.25" r="3.2" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="168.42" cy="301" r="3.2" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="227.37" cy="358.75" r="3.2" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="315.79" cy="383.5" r="3.2" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="404.21" cy="391.75" r="3.2" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.0"/>
-<circle cx="522.11" cy="400" r="3.2" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="640" cy="400" r="3.2" fill="#DD8452" stroke="#FFFFFF" stroke-width="1.0"/>
+<path d="M80,119.5 L109.47,152.5 L168.42,235 L227.37,268 L315.79,342.25 L404.21,375.25 L522.11,391.75 L640,400" fill="none" stroke="#8172B3" stroke-width="2.6" stroke-linejoin="round"/>
+<circle cx="80" cy="119.5" r="3.2" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="109.47" cy="152.5" r="3.2" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="168.42" cy="235" r="3.2" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="227.37" cy="268" r="3.2" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="315.79" cy="342.25" r="3.2" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="404.21" cy="375.25" r="3.2" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.0"/>
+<circle cx="522.11" cy="391.75" r="3.2" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.0"/>
 <circle cx="640" cy="400" r="3.2" fill="#8172B3" stroke="#FFFFFF" stroke-width="1.0"/>
-<text x="650" y="402" font-size="12.5" font-weight="bold" fill="#34548A">repair</text>
-<text x="650" y="386" font-size="12.5" font-weight="bold" fill="#5A4B8A">ledger</text>
-<text x="650" y="370" font-size="12.5" font-weight="bold" fill="#2F6B3C">audit</text>
-<text x="650" y="354" font-size="12.5" font-weight="bold" fill="#8A4B06">design</text>
+<text x="650" y="402" font-size="12.5" font-weight="bold" fill="#5A4B8A">ledger</text>
+<text x="650" y="386" font-size="12.5" font-weight="bold" fill="#8A4B06">audit</text>
+<text x="650" y="370" font-size="12.5" font-weight="bold" fill="#34548A">repair</text>
+<text x="650" y="288.5" font-size="12.5" font-weight="bold" fill="#2F6B3C">design</text>
+<path d="M280,80 L310,80" fill="none" stroke="#8C8C8C" stroke-width="2.6"/>
+<text x="318" y="84" font-size="11.5" fill="#333333">G = 4, the training group size</text>
+<path d="M280,98 L310,98" fill="none" stroke="#8C8C8C" stroke-width="1.6" stroke-dasharray="6 4"/>
+<text x="318" y="102" font-size="11.5" fill="#333333">G = 8, the earlier setting</text>
+<path d="M280,116 L310,116" fill="none" stroke="#8C8C8C" stroke-width="1.6" stroke-dasharray="2 3"/>
+<text x="318" y="120" font-size="11.5" fill="#333333">(1 - p)^4: all 4 completions intact</text>
 <rect x="740" y="70" width="244" height="330" rx="10" fill="#F7F7F8" stroke="#BDBDBD" stroke-width="1.4"/>
 <text x="754" y="94" font-size="13" font-weight="bold" fill="#333333">Cost of one reward</text>
 <text x="754" y="118" font-size="12.5" font-weight="bold" fill="#34548A">repair</text>
-<text x="970" y="118" font-size="12.5" text-anchor="end" fill="#333333">8.9 ms</text>
-<text x="754" y="142" font-size="12.5" font-weight="bold" fill="#8A4B06">design</text>
-<text x="970" y="142" font-size="12.5" text-anchor="end" fill="#333333">44.8 ms</text>
-<text x="754" y="166" font-size="12.5" font-weight="bold" fill="#2F6B3C">audit</text>
-<text x="970" y="166" font-size="12.5" text-anchor="end" fill="#333333">31.6 ms</text>
+<text x="970" y="118" font-size="12.5" text-anchor="end" fill="#333333">11.4 ms</text>
+<text x="754" y="142" font-size="12.5" font-weight="bold" fill="#2F6B3C">design</text>
+<text x="970" y="142" font-size="12.5" text-anchor="end" fill="#333333">39.6 ms</text>
+<text x="754" y="166" font-size="12.5" font-weight="bold" fill="#8A4B06">audit</text>
+<text x="970" y="166" font-size="12.5" text-anchor="end" fill="#333333">25.2 ms</text>
 <text x="754" y="190" font-size="12.5" font-weight="bold" fill="#5A4B8A">ledger</text>
-<text x="970" y="190" font-size="12.5" text-anchor="end" fill="#333333">1.4 ms</text>
+<text x="970" y="190" font-size="12.5" text-anchor="end" fill="#333333">0.9 ms</text>
 <text x="754" y="228" font-size="12" fill="#666666">time for one fresh evaluation of a</text>
 <text x="754" y="243.5" font-size="12" fill="#666666">completion (solve and all checks) on</text>
 <text x="754" y="259" font-size="12" fill="#666666">one CPU core. A group whose</text>
 <text x="754" y="274.5" font-size="12" fill="#666666">completions all earn the same reward</text>
-<text x="754" y="290" font-size="12" fill="#666666">gives GRPO no learning signal.</text>
-<text x="16" y="458" font-size="11.5" fill="#666666">Simulation, no model: 40 groups of 8 completions per task and level, seed 0; train.reward_diagnostics.diagnose on training rows. Each simulated completion is the expert answer, damaged</text>
-<text x="16" y="472.95" font-size="11.5" fill="#666666">with probability p (the error rate).</text>
+<text x="754" y="290" font-size="12" fill="#666666">gives GRPO no learning signal; smaller</text>
+<text x="754" y="305.5" font-size="12" fill="#666666">groups make that more likely.</text>
+<text x="16" y="458" font-size="11.5" fill="#666666">Simulation, no model: 40 groups per task and level, seed 0; train.reward_diagnostics.diagnose on training rows. Each simulated completion is the expert answer, damaged with probability p</text>
+<text x="16" y="472.95" font-size="11.5" fill="#666666">(the error rate).</text>
 </svg>
