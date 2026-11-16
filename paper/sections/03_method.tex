@@ -234,17 +234,21 @@ gaming is impossible, and we do not claim it.
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=\linewidth]{figures/pdf/fig_training.pdf}
-\caption{Training pipeline and splits: data generation, verification, reward diagnostics (CPU, before GPU time), supervised
-fine-tuning, merge, GRPO and evaluation; SFT, GRPO and evaluation share one rendered prompt text. The lower panel shows rows per structural split for each task
-(\val{split.total} rows in total, synthetic, seed 0). The GRPO rollout rewards drawn in the figure are illustrative, not
-measured; no model has been trained. Data: \texttt{assets/splits.json}.}
+\caption{Training pipeline and splits. Tagged sources are combined (harness text on \val{corp.harness_fraction}\% of rows, failure notes added, prompts above \val{corp.max_prompt_chars} characters dropped and counted), then SFT on two data-parallel ranks in fp16 with LoRA, merge, and GRPO per task with a group of \val{tr.group} and \val{tr.grpo_batch_eff} prompts per step; reward diagnostics run on the CPU first, and evaluation compares against frontier and other models. Lower panel: rows per split in the small seed-0 run (\val{split.total} rows) and the architecture corpus (\val{corp.arch_kept} kept of \val{corp.arch_requested} requested); the final corpus sizes and all evaluation results are pending. Data: \texttt{assets/splits.json}, \texttt{assets/corpus.json} (simulation, synthetic rows).}
 \label{fig:fig_training}
 \end{figure}
 
 \subsection{Training corpus}\label{sec:corpus}
 
 A model that sees one wording of one fault on one diagram can memorize it. The corpus therefore varies several axes at once, and every row is
-accepted by the physics tool suite, not by its appearance. It has four sources, kept distinguishable by a source tag, plus the harness text (\cref{tab:corpus}). \todo{figure of the corpus composition: diagram catalog with held-out diagrams, paraphrase variants per fault class, teacher acceptance funnel}
+accepted by the physics tool suite, not by its appearance. It has four sources, kept distinguishable by a source tag, plus the harness text (\cref{tab:corpus}). \Cref{fig:fig_corpus} shows the composition.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\linewidth]{figures/pdf/fig_corpus.pdf}
+\caption{Corpus composition. (a) The diagram catalog (\val{corp.n_arch} diagrams at the seed-0 sample): prime mover and cooling against rejection and ORC, with the district-heat options as dots; the \val{corp.n_engine} engine plants and the steam plant are held out, and added families are pending. (b) True renderings per fault class in the paraphrase module (\val{corp.var_min} to \val{corp.var_max}), with the held-out fault classes hatched. (c) The acceptance funnel from attempts through the physics tool suite to corpus rows, new diagrams and failure-memory notes, drawn as an empty skeleton: every count is pending. Data: \texttt{assets/corpus.json} (simulation).}
+\label{fig:fig_corpus}
+\end{figure}
 
 \begin{table}[tbp]
 \centering\small\renewcommand{\arraystretch}{1.15}
@@ -332,7 +336,7 @@ The code is written against TRL \citep{vonwerra2020trl} and has not been run on 
 
 \paragraph{Reward diagnostics.}
 Before any GPU time, each reward is probed with simulated policies that return the expert answer with probability $1-e$ and a damaged answer otherwise. For groups of
-\val{rd.G} completions the diagnostic reports the share of groups whose rewards are all equal; the training group is \val{tr.group}, for which equal groups are more frequent, so the diagnostic is \todo{re-run with the training group size}. Such groups carry no gradient under group-normalized advantages, so they indicate the error rate below
+\val{rd.G} completions the diagnostic reports the share of groups whose rewards are all equal; the training group is \val{tr.group}, so the diagnostic is run at that size and, for comparison, at 8, where equal groups are less frequent. Such groups carry no gradient under group-normalized advantages, so they indicate the error rate below
 which GRPO stops being informative for a task (\cref{sec:rewarddiag}).
 
 \subsection{Agent harness and memory}\label{sec:harness}
@@ -347,7 +351,6 @@ The planned ablation holds the gas engine out of the training diagrams, so that 
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=\linewidth]{figures/pdf/fig_harness.pdf}
-\caption{Harness text: the component registry generates the AUTO sections of \texttt{AGENTS.md} and of the skills; four modes add none, \texttt{AGENTS.md}, skills or both to the prompt; the gas engine is the
-component held out of the training topologies. The memory layer is not drawn \todo{add the memory layer to the figure}. Data: \texttt{assets/harness.json} (files of the project, $n=\val{env.n_skills}$ skills).}
+\caption{Harness and memory. \texttt{AGENTS.md} and the skill library (\val{env.n_skills} skills) are generated from the component registry; four harness modes add none, \texttt{AGENTS.md}, skills or both to the system message, and the failure-memory layer (lexical retrieval, at most \val{corp.k_memory} notes, notes from the same record excluded) is a separate switch, giving eight settings. With no plant (Design) only the task skill is added. The gas engine is the component held out of training. Data: \texttt{assets/harness.json}, \texttt{assets/corpus.json}.}
 \label{fig:fig_harness}
 \end{figure}

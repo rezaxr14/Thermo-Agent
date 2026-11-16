@@ -1,6 +1,6 @@
 {
  "description": "every measured number quoted in the paper: value, TeX form, source asset, command, seed and sample size",
- "n_keys": 426,
+ "n_keys": 458,
  "values": {
   "env.n_components": {
    "value": 15,
@@ -2462,79 +2462,79 @@
    "value": 40,
    "tex": "40",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.repair.eval_ms": {
-   "value": 8.9,
-   "tex": "8.9",
+   "value": 11.4,
+   "tex": "11.4",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.repair.zv_e5_pct": {
-   "value": 70.0,
-   "tex": "70",
+   "value": 78.0,
+   "tex": "78",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.repair.zv_e10_pct": {
-   "value": 55.0,
-   "tex": "55",
+   "value": 72.0,
+   "tex": "72",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.repair.zv_e20_pct": {
-   "value": 28.0,
-   "tex": "28",
+   "value": 52.0,
+   "tex": "52",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.repair.zv_e30_pct": {
-   "value": 10.0,
-   "tex": "10",
+   "value": 45.0,
+   "tex": "45",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.repair.zv_e45_pct": {
-   "value": 8.0,
-   "tex": "8",
+   "value": 10.0,
+   "tex": "10",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.repair.zv_e60_pct": {
-   "value": 2.0,
-   "tex": "2",
+   "value": 10.0,
+   "tex": "10",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.repair.zv_e80_pct": {
-   "value": 0.0,
-   "tex": "0",
+   "value": 12.0,
+   "tex": "12",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.repair.zv_e100_pct": {
-   "value": 0.0,
-   "tex": "0",
+   "value": 8.0,
+   "tex": "8",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
@@ -2542,79 +2542,79 @@
    "value": 40,
    "tex": "40",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.design.eval_ms": {
-   "value": 44.8,
-   "tex": "44.8",
+   "value": 39.6,
+   "tex": "39.6",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.design.zv_e5_pct": {
-   "value": 57.0,
-   "tex": "57",
+   "value": 82.0,
+   "tex": "82",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.design.zv_e10_pct": {
-   "value": 52.0,
-   "tex": "52",
+   "value": 70.0,
+   "tex": "70",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.design.zv_e20_pct": {
-   "value": 25.0,
-   "tex": "25",
+   "value": 55.0,
+   "tex": "55",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.design.zv_e30_pct": {
-   "value": 15.0,
-   "tex": "15",
+   "value": 48.0,
+   "tex": "48",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.design.zv_e45_pct": {
-   "value": 2.0,
-   "tex": "2",
+   "value": 8.0,
+   "tex": "8",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.design.zv_e60_pct": {
-   "value": 0.0,
-   "tex": "0",
+   "value": 15.0,
+   "tex": "15",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.design.zv_e80_pct": {
-   "value": 2.0,
-   "tex": "2",
+   "value": 15.0,
+   "tex": "15",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.design.zv_e100_pct": {
-   "value": 12.0,
-   "tex": "12",
+   "value": 35.0,
+   "tex": "35",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
@@ -2622,71 +2622,71 @@
    "value": 40,
    "tex": "40",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.audit.eval_ms": {
-   "value": 31.6,
-   "tex": "31.6",
+   "value": 25.2,
+   "tex": "25.2",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.audit.zv_e5_pct": {
-   "value": 68.0,
-   "tex": "68",
+   "value": 82.0,
+   "tex": "82",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.audit.zv_e10_pct": {
-   "value": 55.0,
-   "tex": "55",
+   "value": 65.0,
+   "tex": "65",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.audit.zv_e20_pct": {
-   "value": 25.0,
-   "tex": "25",
+   "value": 48.0,
+   "tex": "48",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.audit.zv_e30_pct": {
-   "value": 8.0,
-   "tex": "8",
+   "value": 32.0,
+   "tex": "32",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.audit.zv_e45_pct": {
-   "value": 5.0,
-   "tex": "5",
+   "value": 15.0,
+   "tex": "15",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.audit.zv_e60_pct": {
-   "value": 0.0,
-   "tex": "0",
+   "value": 10.0,
+   "tex": "10",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.audit.zv_e80_pct": {
-   "value": 0.0,
-   "tex": "0",
+   "value": 2.0,
+   "tex": "2",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
@@ -2694,7 +2694,7 @@
    "value": 0.0,
    "tex": "0",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
@@ -2702,71 +2702,71 @@
    "value": 40,
    "tex": "40",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.ledger.eval_ms": {
-   "value": 1.4,
-   "tex": "1.4",
+   "value": 0.9,
+   "tex": "0.9",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.ledger.zv_e5_pct": {
-   "value": 65.0,
-   "tex": "65",
+   "value": 85.0,
+   "tex": "85",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.ledger.zv_e10_pct": {
-   "value": 57.0,
-   "tex": "57",
+   "value": 75.0,
+   "tex": "75",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.ledger.zv_e20_pct": {
-   "value": 30.0,
-   "tex": "30",
+   "value": 50.0,
+   "tex": "50",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.ledger.zv_e30_pct": {
-   "value": 12.0,
-   "tex": "12",
+   "value": 40.0,
+   "tex": "40",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.ledger.zv_e45_pct": {
-   "value": 5.0,
-   "tex": "5",
+   "value": 18.0,
+   "tex": "18",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.ledger.zv_e60_pct": {
-   "value": 2.0,
-   "tex": "2",
+   "value": 8.0,
+   "tex": "8",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.ledger.zv_e80_pct": {
-   "value": 0.0,
-   "tex": "0",
+   "value": 2.0,
+   "tex": "2",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
@@ -2774,17 +2774,273 @@
    "value": 0.0,
    "tex": "0",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": 40
   },
   "rd.G": {
-   "value": 8,
-   "tex": "8",
+   "value": 4,
+   "tex": "4",
    "source": "assets/reward_signal.json",
-   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=8, seed=0)",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
    "seed": 0,
    "n": null
+  },
+  "rd8.repair.zv_e5_pct": {
+   "value": 70.0,
+   "tex": "70",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.repair.zv_e10_pct": {
+   "value": 55.0,
+   "tex": "55",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.repair.zv_e20_pct": {
+   "value": 28.0,
+   "tex": "28",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.repair.zv_e30_pct": {
+   "value": 10.0,
+   "tex": "10",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.repair.zv_e45_pct": {
+   "value": 8.0,
+   "tex": "8",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.repair.zv_e60_pct": {
+   "value": 2.0,
+   "tex": "2",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.repair.zv_e80_pct": {
+   "value": 0.0,
+   "tex": "0",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.repair.zv_e100_pct": {
+   "value": 0.0,
+   "tex": "0",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.design.zv_e5_pct": {
+   "value": 57.0,
+   "tex": "57",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.design.zv_e10_pct": {
+   "value": 52.0,
+   "tex": "52",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.design.zv_e20_pct": {
+   "value": 25.0,
+   "tex": "25",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.design.zv_e30_pct": {
+   "value": 15.0,
+   "tex": "15",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.design.zv_e45_pct": {
+   "value": 2.0,
+   "tex": "2",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.design.zv_e60_pct": {
+   "value": 0.0,
+   "tex": "0",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.design.zv_e80_pct": {
+   "value": 2.0,
+   "tex": "2",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.design.zv_e100_pct": {
+   "value": 12.0,
+   "tex": "12",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.audit.zv_e5_pct": {
+   "value": 68.0,
+   "tex": "68",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.audit.zv_e10_pct": {
+   "value": 55.0,
+   "tex": "55",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.audit.zv_e20_pct": {
+   "value": 25.0,
+   "tex": "25",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.audit.zv_e30_pct": {
+   "value": 8.0,
+   "tex": "8",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.audit.zv_e45_pct": {
+   "value": 5.0,
+   "tex": "5",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.audit.zv_e60_pct": {
+   "value": 0.0,
+   "tex": "0",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.audit.zv_e80_pct": {
+   "value": 0.0,
+   "tex": "0",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.audit.zv_e100_pct": {
+   "value": 0.0,
+   "tex": "0",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.ledger.zv_e5_pct": {
+   "value": 65.0,
+   "tex": "65",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.ledger.zv_e10_pct": {
+   "value": 57.0,
+   "tex": "57",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.ledger.zv_e20_pct": {
+   "value": 30.0,
+   "tex": "30",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.ledger.zv_e30_pct": {
+   "value": 12.0,
+   "tex": "12",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.ledger.zv_e45_pct": {
+   "value": 5.0,
+   "tex": "5",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.ledger.zv_e60_pct": {
+   "value": 2.0,
+   "tex": "2",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.ledger.zv_e80_pct": {
+   "value": 0.0,
+   "tex": "0",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
+  },
+  "rd8.ledger.zv_e100_pct": {
+   "value": 0.0,
+   "tex": "0",
+   "source": "assets/reward_signal.json",
+   "command": "train.reward_diagnostics.diagnose(train rows, task, levels, groups=40, G=4, seed=0); tasks_g8: the same call with G=8",
+   "seed": 0,
+   "n": 40
   },
   "split.repair.test_id": {
    "value": 12,

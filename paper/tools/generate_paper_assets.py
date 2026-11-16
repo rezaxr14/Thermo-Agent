@@ -509,6 +509,9 @@ def derive_values():
         for lv, row in d_["by_error_rate"].items():
             putf(f"rd.{t_}.zv_e{int(round(float(lv) * 100))}_pct", row["zero_variance_groups"] * 100, 0, s, c, sd, d_["groups"])
     put("rd.G", RS["tasks"]["repair"]["G"], src=s, cmd=c, seed=sd)
+    for t_, d_ in RS["tasks_g8"].items():
+        for lv, row in d_["by_error_rate"].items():
+            putf(f"rd8.{t_}.zv_e{int(round(float(lv) * 100))}_pct", row["zero_variance_groups"] * 100, 0, s, c, sd, d_["groups"])
     # ---- splits
     s = "assets/splits.json"; c = S["command"]; sd = S["seed"]
     tot = 0

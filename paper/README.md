@@ -24,7 +24,6 @@ The other files in `assets/` and everything in `figures/` come from the figure b
 - Corpus: variants per row (target 20 or more) for Repair and the other tasks; final corpus sizes per source, task and split; teacher models and quota; teacher acceptance statistics (`tab:corpusstatus`); number and families of teacher-authored diagrams; final catalog (families, diagrams, held-out diagrams); leakage check for memory notes.
 - Reward diagnostic re-run with the training group size (4); `Frontier trace results`.
 - Related work: citations for rejection-sampling fine-tuning, retrieval-augmented generation and failure memory; second-law column of six prior works in the positioning table.
-- Figures marked with `\todo` in their captions: `fig_overview`, `fig_harness`, new `fig_corpus`; `fig_training` and `fig_reward_signal` need the new settings.
 
 ## Described in the paper, to be built in the repository
 
@@ -33,7 +32,7 @@ teacher-authored diagrams (plants written by the teacher, checked, then turned i
 
 ## Placeholder figures
 
-None. All 13 figures are vector figures (SVG with a PDF twin) from the figure build; four of them are out of date against the repository (see above).
+None. All 13 figures are vector figures (SVG with a PDF twin) from the figure build.
 
 ## References marked TODO-verify
 

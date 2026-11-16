@@ -186,13 +186,12 @@ Stream-line and constant faults never break closure, and two constant faults sho
 Before any GPU time we asked how often a group of \val{rd.G} completions would have identical rewards, which carry no gradient under group-normalized advantages. The probe uses simulated policies that return the expert answer with probability $1-e$ and a damaged answer otherwise
 (\val{rd.repair.groups} groups per task and level, seed 0; no model). At an error rate of 5\% the share of such groups is \val{rd.repair.zv_e5_pct}\% for Repair, \val{rd.design.zv_e5_pct}\% for Design, \val{rd.audit.zv_e5_pct}\% for Audit and \val{rd.ledger.zv_e5_pct}\% for Ledger repair;
 at 10\% it is \val{rd.repair.zv_e10_pct}, \val{rd.design.zv_e10_pct}, \val{rd.audit.zv_e10_pct} and \val{rd.ledger.zv_e10_pct}\%; at 30\% it is \val{rd.repair.zv_e30_pct}, \val{rd.design.zv_e30_pct}, \val{rd.audit.zv_e30_pct} and \val{rd.ledger.zv_e30_pct}\%; and at 60\% it is
-\val{rd.repair.zv_e60_pct}, \val{rd.design.zv_e60_pct}, \val{rd.audit.zv_e60_pct} and \val{rd.ledger.zv_e60_pct}\%. A task on which the SFT model is already accurate gives GRPO little to learn from, which is the reason for RQ3. A fresh reward evaluation costs
+\val{rd.repair.zv_e60_pct}, \val{rd.design.zv_e60_pct}, \val{rd.audit.zv_e60_pct} and \val{rd.ledger.zv_e60_pct}\%. With the smaller group, equal groups are more frequent: at an error rate of 10\% the shares at a group of 8 are \val{rd8.repair.zv_e10_pct}, \val{rd8.design.zv_e10_pct}, \val{rd8.audit.zv_e10_pct} and \val{rd8.ledger.zv_e10_pct}\%. A task on which the SFT model is already accurate gives GRPO little to learn from, which is the reason for RQ3. A fresh reward evaluation costs
 \val{rd.ledger.eval_ms}~ms for the ledger, \val{rd.repair.eval_ms}~ms for Repair, \val{rd.audit.eval_ms}~ms for Audit and \val{rd.design.eval_ms}~ms for Design per completion on the authoring machine (one CPU), so the reward is cheap relative to generation. \Cref{fig:fig_reward_signal} shows the curves.
 
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=\linewidth]{figures/pdf/fig_reward_signal.pdf}
-\caption{Reward signal before any GPU time: share of GRPO groups whose completions all receive the same reward, against the per-sample error rate of a simulated policy, for each task, with the cost of one reward evaluation
-(simulated policies on synthetic data, no model; \val{rd.repair.groups} groups of \val{rd.G} per task and level, seed 0). Data: \texttt{assets/reward\_signal.json}.}
+\caption{Reward signal before any GPU time: share of GRPO groups whose completions all receive the same reward, against the per-sample error rate of a simulated policy, for each task, at the training group size of \val{rd.G} (solid) and at 8 (dashed), with the cost of one reward evaluation (simulated policies on synthetic data, no model; \val{rd.repair.groups} groups per task and level, seed 0). Data: \texttt{assets/reward\_signal.json}.}
 \label{fig:fig_reward_signal}
 \end{figure}
