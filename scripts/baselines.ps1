@@ -20,9 +20,9 @@ $nAudit  = EnvInt 'THERMO_EVAL_AUDIT' 100
 $nLedger = EnvInt 'THERMO_EVAL_LEDGER' 400
 $nGroups = EnvInt 'THERMO_DIAG_GROUPS' 20
 
-function Run([string]$name, [string]$module, [string[]]$args) {
+function Run([string]$name, [string]$module, [string[]]$cliArgs) {
     Step $name
-    & $py -m $module @args 2>&1 | Tee-Object -FilePath "reports/$name.txt"
+    & $py -m $module @cliArgs 2>&1 | Tee-Object -FilePath "reports/$name.txt"
     if ($LASTEXITCODE -ne 0) { throw "$name failed ($LASTEXITCODE)" }
 }
 

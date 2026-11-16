@@ -61,7 +61,7 @@ def export(sft_dir, out_dir, tasks=TASKS, split: str = "train", per_task: int = 
     src, out = pathlib.Path(sft_dir), pathlib.Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     manifest = {"source": str(src), "split": split, "per_task": per_task, "seed": seed,
-                "tasks": {}, "rows": 0, "prompt_tokens": {}}
+                "tasks": {}, "rows": 0}
     for task in tasks:
         rows = select(_read(src / f"{task}_{split}.jsonl"), per_task, seed)
         path = out / f"{task}_{split}.jsonl"

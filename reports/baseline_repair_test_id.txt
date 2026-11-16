@@ -1,4 +1,4 @@
 test_id
-  efficiency_gt_1 {'n': 12, 'noop': 0, 'search_success': 10, 'search_exact': 0, 'expert_success': 12, 'search_mean_solves_when_solved': 25.8}
-  unit_slip {'n': 13, 'noop': 0, 'search_success': 13, 'search_exact': 13, 'expert_success': 13, 'search_mean_solves_when_solved': 55.9}
-  wrong_fluid {'n': 15, 'noop': 0, 'search_success': 15, 'search_exact': 12, 'expert_success': 15, 'search_mean_solves_when_solved': 261.1}
+  efficiency_gt_1 {'n': 62, 'noop': 0, 'search_success': 51, 'search_exact': 6, 'expert_success': 62, 'search_mean_solves_when_solved': 19.4}
+  unit_slip {'n': 65, 'noop': 0, 'search_success': 65, 'search_exact': 65, 'expert_success': 65, 'search_mean_solves_when_solved': 52.6}
+  wrong_fluid {'n': 73, 'noop': 0, 'search_success': 73, 'search_exact': 66, 'expert_success': 73, 'search_mean_solves_when_solved': 268.2}
