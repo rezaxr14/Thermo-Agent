@@ -76,10 +76,16 @@ writes enters the corpus unverified. The hand-off is three commands:
 
 ```powershell
 python -m thermo_agent.teacher.transfer export data/sft data/frontier_export --per-task 400   # prompts, no answers
-# paste kaggle/teacher_benchmark.py into a notebook from kaggle.com/benchmarks/tasks/new, download completions.jsonl
+Compress-Archive -Path data/frontier_export -DestinationPath data/frontier_export.zip -Force
+python kaggle/make_notebook.py                                                              # kaggle/teacher.ipynb
+# upload the zip as a private Kaggle dataset, import kaggle/teacher.ipynb, Run all, download completions.jsonl
 python -m thermo_agent.teacher.transfer ingest data/frontier_export completions.jsonl data/frontier `
     --memory-dir data/memory --model anthropic/claude-sonnet-5-5@default
 ```
+
+The Kaggle half needs only a browser: the local CLI returns 403 until the account's phone/identity verification is
+done, and nothing about the hand-off depends on it. `kaggle/teacher.ipynb` is generated from
+`kaggle/teacher_benchmark.py`, and a test fails if the checked-in notebook is stale.
 
 Accepted answers are appended to `data/frontier/frontier_{task}_train.jsonl` with their reward and the verifier's
 reasons; rejections become hindsight notes in `data/memory/frontier_notes.jsonl`. Ingest is resumable and never

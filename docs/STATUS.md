@@ -128,15 +128,17 @@ Trainings have not been run yet: the 4050 cannot hold a 4B model for training, a
 
 ## Kaggle (teacher pass)
 
-`kaggle/README.md` has the three-step hand-off: export prompts here, run `kaggle/teacher_benchmark.py` in a notebook
-from kaggle.com/benchmarks/tasks/new, then ingest and validate here. Nothing in the notebook decides what is true:
-`teacher.validate` does, and rejections land in `data/memory/frontier_notes.jsonl`.
+`kaggle/README.md` has the three-step hand-off: export the prompts and zip them here, upload the zip as a private
+dataset and import `kaggle/teacher.ipynb` (built by `kaggle/make_notebook.py` from `kaggle/teacher_benchmark.py`),
+then ingest and validate here. The Kaggle half needs only a browser, so the local CLI's 403 (account verification
+pending) does not block it. Nothing in the notebook decides what is true: `teacher.validate` does, and rejections
+land in `data/memory/frontier_notes.jsonl`.
 
 ## Next
 
 1. Decide the paraphrase count for the train split (4 as built, or 20 as originally planned: 20 costs about 4x the
    SFT time, roughly 20 hours per epoch at the measured step time).
-2. Run `scripts/baselines.ps1` on the final splits.
+2. Run the Kaggle teacher pass: upload `data/frontier_export.zip`, import `kaggle/teacher.ipynb`, download
+   `completions.jsonl`, ingest. This is the only step that needs the user (a browser and a Kaggle session).
 3. Smoke-test SFT/GRPO on Kaggle (`STEPS=20 ROWS=64 bash scripts/train_dual_t4.sh sft`, then `grpo ledger`).
-4. Export the teacher prompts and run the first Kaggle Benchmarks pass.
-5. Replace the small-sample numbers in `paper/sections/` and add the four-source corpus and dual-T4 recipe.
+4. Replace the small-sample numbers in `paper/sections/` and add the four-source corpus and dual-T4 recipe.
