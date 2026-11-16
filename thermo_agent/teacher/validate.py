@@ -134,7 +134,7 @@ def teacher_row(task: str, completion: str, row: dict, verdict: dict, tag: str =
     if not verdict["accepted"]:
         raise ValueError("refusing to build a training row from a rejected answer")
     suffix = tag or hashlib.md5(completion.encode()).hexdigest()[:8]
-    out = {"id": f"{row['id']}-t-{suffix}", "split": row["split"], "task": task, "source": "frontier",
+    out = {"id": f"{row['id']}-t-{suffix}", "record_id": row["id"], "split": row["split"], "task": task, "source": "frontier",
            "prompt": row["prompt"], "completion": [{"role": "assistant", "content": completion}],
            "validation": {"reward": verdict["reward"], "reasons": verdict["reasons"]}}
     for k in KEEP[task]:

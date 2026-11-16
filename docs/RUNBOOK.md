@@ -69,12 +69,35 @@ and electric cooling, wet/dry/extended rejection, with and without an ORC bottom
 `cgam_steam_orc` steam cycle. Whole diagrams are held out: `engine-*` and `cgam_steam_orc` go to
 `test_ood_topology`, and the sign-flip / swapped-port faults go to `test_ood_fault`.
 
-## 2b. Frontier teacher on Kaggle (deferred)
-The second half of the training data will come from a frontier model, validated by the same tool suite. That pass
-runs through Kaggle's own model access (Kaggle Benchmarks / CLI: Claude Sonnet/Haiku, OpenAI, Gemini), not a
-self-hosted model behind a tunnel. It is deferred until the local corpus and the training pipeline are finished;
-`combine` already reads `data/frontier/frontier_{task}_{split}.jsonl`, so the accepted teacher rows drop into the
-same corpus without any other change. See `kaggle/README.md`.
+## 2b. Frontier teacher on Kaggle
+The second half of the training data comes from a frontier model, validated by the same tool suite. Kaggle supplies
+the model access (Kaggle Benchmarks with Kaggle's own quota); the physics checks run here, so nothing the teacher
+writes enters the corpus unverified. The hand-off is three commands:
+
+```powershell
+python -m thermo_agent.teacher.transfer export data/sft data/frontier_export --per-task 400   # prompts, no answers
+# paste kaggle/teacher_benchmark.py into a notebook from kaggle.com/benchmarks/tasks/new, download completions.jsonl
+python -m thermo_agent.teacher.transfer ingest data/frontier_export completions.jsonl data/frontier `
+    --memory-dir data/memory --model anthropic/claude-sonnet-5-5@default
+```
+
+Accepted answers are appended to `data/frontier/frontier_{task}_train.jsonl` with their reward and the verifier's
+reasons; rejections become hindsight notes in `data/memory/frontier_notes.jsonl`. Ingest is resumable and never
+duplicates a row, and `combine` already reads `data/frontier/`. See `kaggle/README.md`.
+
+## 2c. Build the two corpora and prove they fit
+`scripts/build_corpus.ps1` stages `data/sft` (harness on 35 percent of rows, memory where it retrieves) and
+`data/grpo` (no harness, no memory: GRPO samples four completions per prompt, so a long prompt costs four times the
+KV cache), audits both with the real `Qwen/Qwen3.5-4B` tokenizer, and only then swaps them into place.
+
+```powershell
+pwsh scripts/build_corpus.ps1                 # variants 4
+pwsh scripts/build_corpus.ps1 -Variants 20    # 20 paraphrases per ground-truth repair row
+python -m thermo_agent.train.token_audit data/sft --max-length 4096
+```
+
+Every row is dropped and counted if it does not fit, never truncated. The tokenizer is `$THERMO_TOKENIZER` or the
+cached `~/.cache/thermo/qwen3.5-4b/tokenizer.json`; without it the audit falls back to characters and says so.
 
 ## 3. Non-model baselines (the numbers a model has to beat)
 `scripts/baselines.ps1` runs every split with environment-driven limits:
@@ -127,8 +150,10 @@ empty thinking block). `PREFIX CHECK` may say `prefix_matches: false`; that is w
 ## 6. SFT (dual T4)
 `data/sft/` is the combined corpus: ground-truth paraphrases, validated teacher traces, the architecture corpus and
 retrieved hindsight notes, with the harness injected on 35 percent of rows. Files are `{task}_{split}.jsonl`
-(exactly what the trainers read) plus `sft_report.json`. Prompts longer than 14000 characters are dropped and
-counted, never truncated; `max_length` is 4096.
+(exactly what the trainers read) plus `sft_report.json`. `data/grpo/` has the same prompts without the harness or
+the memory notes. Two gates drop (never truncate) oversized rows: 11500 characters, and 4000 tokens measured with
+the real tokenizer (prompt + completion + a 96-token reserve for the chat markers) under `max_length` 4096.
+`python -m thermo_agent.train.token_audit data/sft` re-measures the written files and fails if any row would be cut.
 
 ```bash
 # smoke, then the full run (one adapter for all four tasks)

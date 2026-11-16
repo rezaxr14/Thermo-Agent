@@ -5,7 +5,7 @@ description = "Second-law-verified AI agents for on-site CHP and heat recovery i
 requires-python = ">=3.10"
 dependencies = ["CoolProp==8.0.0", "numpy", "scipy", "pydantic>=2", "pandas", "openpyxl"]
 [project.optional-dependencies]
-dev = ["pytest", "cantera"]   # cantera only to regenerate core/data/nasa7_gri30.json
+dev = ["pytest", "cantera", "tokenizers"]   # cantera regenerates core/data/nasa7_gri30.json; tokenizers runs the token audit
 train = ["torch", "transformers", "datasets", "accelerate", "peft", "trl", "bitsandbytes"]   # TRL 1.17.1 was the version inspected when writing the scripts
 [tool.pytest.ini_options]
 testpaths = ["tests"]

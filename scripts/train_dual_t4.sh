@@ -8,6 +8,7 @@
 #
 # Environment:
 #   DATA=data/sft        combined corpus written by thermo_agent.synth.combine
+#   GRPO_DATA=data/grpo  same prompts with no harness and no memory (short prompts for G rollouts)
 #   OUT=runs             adapter / checkpoint root
 #   MODEL=Qwen/Qwen3.5-4B
 #   TASKS="repair design audit ledger"
@@ -18,7 +19,8 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-DATA=${DATA:-data/sft}
+DATA=${DATA:-data/sft}          # combined SFT corpus (harness on 35% of rows)
+GRPO_DATA=${GRPO_DATA:-data/grpo}  # same prompts without harness/memory: GRPO samples G=4 per prompt
 OUT=${OUT:-runs}
 MODEL=${MODEL:-Qwen/Qwen3.5-4B}
 TASKS=${TASKS:-"repair design audit ledger"}
@@ -74,7 +76,7 @@ run_grpo() {
   local task=${1:?task required: repair|design|audit|ledger}
   preflight
   torchrun --standalone --nproc_per_node="$NGPU" --module thermo_agent.train.grpo \
-    "$DATA" "$OUT/grpo_$task" --task "$task" --init "$INIT" --dtype float16 \
+    "$GRPO_DATA" "$OUT/grpo_$task" --task "$task" --init "$INIT" --dtype float16 \
     --per-device-batch 4 --grad-accum 2 --grad-norm 1.0 --num-workers "$WORKERS" "${LIMITS[@]}"
 }
 

@@ -60,3 +60,8 @@ data/frontier/
 data/scratch_arch/
 reports/combine.json
 reports/data_report.json
+data/grpo/
+data/frontier_export/
+reports/combine_*.json
+reports/token_audit_*.json
+reports/frontier_ingest.json

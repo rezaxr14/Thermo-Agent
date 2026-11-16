@@ -21,7 +21,7 @@ class LoraSettings:
 class SftSettings:
     lr: float = 2e-4
     epochs: int = 2
-    max_length: int = 4096             # prompt (harness + memory, capped at 14k chars) + completion
+    max_length: int = 4096             # prompt + completion, both gated at 4000 tokens by synth.combine
     per_device_batch: int = 2
     grad_accum: int = 8
     max_grad_norm: float = 1.0         # fp16 needs clipping before the optimizer step
@@ -34,8 +34,8 @@ class GrpoSettings:
     num_generations: int = 4           # group size G; 8 x 320-token rollouts on a T4 exceed 15 GB
     max_completion_length: int = 320
     temperature: float = 1.0
-    per_device_batch: int = 4          # prompts per device; 4 divides G=4 and 4x2x2 = 16 does too
-    grad_accum: int = 2
+    per_device_batch: int = 4          # TRL requires the per-device batch to be a multiple of G; 4 x G=4 = 16 sequences
+    grad_accum: int = 2                # 4 x 2 x 2 ranks = 16 prompts per optimizer step
     max_steps: int = 300
     loss_type: str = "dapo"            # TRL default; 'grpo' reproduces the original length normalisation
     beta: float = 0.0                  # no KL term -> no reference model in memory

@@ -1,0 +1,77 @@
+"""The teacher export must not leak answers, and ingest must keep only what the tool suite accepts."""
+import json
+
+from thermo_agent.teacher import memory, transfer
+
+from _rows import make_row
+
+
+def write(path, rows):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(json.dumps(r) for r in rows) + "\n", encoding="utf-8")
+
+
+def read(path):
+    return [json.loads(l) for l in path.open(encoding="utf-8")]
+
+
+def sft_row(row, rid, source="ground_truth", harness="agents+skills"):
+    return dict(row, id=rid, task="repair", source=source, harness=harness, memory_notes=[], tokens=1234)
+
+
+def test_export_keeps_one_prompt_per_plant_and_never_the_answer(tmp_path):
+    src, out = tmp_path / "sft", tmp_path / "export"
+    a = make_row("wrong_fluid")
+    b = dict(make_row("unit_slip"), id="row-b")
+    write(src / "repair_train.jsonl", [sft_row(a, "row-a#v0"), sft_row(a, "row-a#v3"),
+                                       sft_row(b, "row-b"), sft_row(b, "row-b-t-x", source="frontier")])
+    manifest = transfer.export(src, out, tasks=("repair",), per_task=10)
+    rows = read(out / "repair_train.jsonl")
+    assert len(rows) == 2, "one prompt per ground-truth plant, frontier rows are not re-exported"
+    assert all("completion" not in r for r in rows), "the answer must not travel to the teacher"
+    assert all(r["prompt"] for r in rows)
+    assert manifest["tasks"]["repair"]["n"] == 2 and manifest["rows"] == 2
+    assert manifest["tasks"]["repair"]["max_prompt_tokens"] == 1234
+
+
+def test_export_respects_the_per_task_cap(tmp_path):
+    src, out = tmp_path / "sft", tmp_path / "export"
+    rows = [sft_row(dict(make_row("wrong_fluid"), id=f"r{i}"), f"r{i}") for i in range(6)]
+    write(src / "repair_train.jsonl", rows)
+    transfer.export(src, out, tasks=("repair",), per_task=3)
+    assert len(read(out / "repair_train.jsonl")) == 3
+
+
+def test_ingest_keeps_accepted_answers_and_turns_rejections_into_memory(tmp_path):
+    src, out, mem = tmp_path / "sft", tmp_path / "frontier", tmp_path / "memory"
+    row = make_row("wrong_fluid")
+    other = dict(make_row("unit_slip"), id="row-b")
+    write(src / "repair_train.jsonl", [sft_row(row, "row-a"), sft_row(other, "row-b")])
+    transfer.export(src, tmp_path / "export", tasks=("repair",), per_task=10)
+    good = row["completion"][0]["content"]
+    bad = "<diagnosis>Candidate repair.</diagnosis>"
+    comps = tmp_path / "completions.jsonl"
+    write(comps, [{"id": "row-a", "completion": good}, {"id": "row-b", "completion": bad}])
+
+    report = transfer.ingest(tmp_path / "export", comps, out, mem, tasks=("repair",), model="claude-sonnet")
+    kept = read(out / "frontier_repair_train.jsonl")
+    assert len(kept) == 1 and kept[0]["source"] == "frontier" and kept[0]["task"] == "repair"
+    assert kept[0]["validation"]["reasons"]
+    assert "plant_broken" in kept[0], "label columns must survive for the GRPO reward functions"
+    assert report["accepted"] == 1 and report["attempts"] == 2
+    assert report["stats"]["rejected:repair"] == 1
+    notes = memory.load(mem / "frontier_notes.jsonl")
+    assert len(notes) == 1 and notes[0].source.startswith("frontier:")
+
+
+def test_ingest_is_resumable(tmp_path):
+    src, out = tmp_path / "sft", tmp_path / "frontier"
+    row = make_row("wrong_fluid")
+    write(src / "repair_train.jsonl", [sft_row(row, "row-a")])
+    transfer.export(src, tmp_path / "export", tasks=("repair",), per_task=10)
+    comps = tmp_path / "completions.jsonl"
+    write(comps, [{"id": "row-a", "completion": row["completion"][0]["content"]}])
+    transfer.ingest(tmp_path / "export", comps, out, None, tasks=("repair",))
+    report = transfer.ingest(tmp_path / "export", comps, out, None, tasks=("repair",))
+    assert len(read(out / "frontier_repair_train.jsonl")) == 1, "a second ingest must not duplicate the row"
+    assert report["stats"]["skipped_already_accepted"] == 1
