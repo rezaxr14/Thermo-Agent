@@ -30,6 +30,7 @@ from ..core.schema import RepairRecord, Site, SCHEMA_VERSION
 from ..core.solve import solve
 from ..verify.verifiers import run_all
 from .faults import INJECTORS, NotApplicable
+from .splits import is_ood_topology
 from .meta import write_meta
 from .sft_data import to_row
 from .topologies import cgam_orc, dc_chp, size_generation
@@ -164,8 +165,8 @@ def make_records(n: int, seed: int = 0, architectures: list[dict] | None = None)
 
 
 def split_for(rec: RepairRecord, architecture: str) -> str:
-    """Hold out whole diagrams, not single parameters: every engine plant and the steam/HRSG plant are OOD."""
-    if architecture == "cgam_steam_orc" or architecture.startswith("engine-"):
+    """Hold out diagram *combinations*, not families: the steam/HRSG export plant and engine-with-ideal-rejection."""
+    if is_ood_topology(architecture):
         return "test_ood_topology"
     if rec.faults[0].type in ("sign_flip", "swapped_ports"):
         return "test_ood_fault"

@@ -1,7 +1,13 @@
-"""Ledger-repair dataset. python -m thermo_agent.ledger.data OUT_DIR -n 1500 --seed 0 [--workers 4] -> ledger_<split>.jsonl"""
+"""Ledger-repair dataset. python -m thermo_agent.ledger.data OUT_DIR -n 1500 --seed 0 [--workers 4] [--architectures] -> ledger_<split>.jsonl
+
+`--architectures` cycles the 65-diagram catalog (ORC bottoming, gas engines, the steam/HRSG plant, district heat)
+instead of the five-plant `MIX`; only the held-out combinations go to `test_ood_topology` (`synth/splits.py`).
+"""
 from __future__ import annotations
 import argparse, collections, hashlib, json, pathlib, random
 from ..synth.meta import write_meta
+from ..synth.splits import is_ood_topology
+from ..synth import architectures
 from ..synth.repair_dataset import sample_plant, MIX
 from ..core.solve import solve
 from . import program as P, faults as F
@@ -35,7 +41,7 @@ def expert_completion(recs: list[dict], data: dict, result: dict) -> str:
 
 
 def split_of(topology: str, types: set, sid: str) -> str:
-    if topology == "cgam_orc" or topology.startswith("dc_engine"): return "test_ood_topology"
+    if is_ood_topology(topology): return "test_ood_topology"
     if types & F.HELD_OUT: return "test_ood_fault"
     h = int(hashlib.md5(sid.encode()).hexdigest(), 16) % 10
     return "val" if h == 0 else ("test_id" if h == 1 else "train")
@@ -66,12 +72,29 @@ def _job(args):
     return make_row(sid, plant, rng)
 
 
-def build(out_dir, n: int, seed: int = 0, workers: int = 1) -> dict:
-    jobs = [(f"led-{seed}-{i:05d}", seed, MIX[i % len(MIX)]) for i in range(n)]
+def _job_arch(args):
+    """One ledger row on a catalog diagram: the plant is already solved and verifier-clean."""
+    sid, seed, name = args
+    rng = random.Random(f"{seed}-{sid}")
+    try: plant, _, _ = architectures.sample_plant(architectures.by_name(name), rng)
+    except RuntimeError: return None
+    return make_row(sid, plant, rng)
+
+
+def build(out_dir, n: int, seed: int = 0, workers: int = 1, arch: bool = False,
+          names: list[str] | None = None) -> dict:
+    catalog: list[str] = []
+    if arch:
+        catalog = names or [a["name"] for a in architectures.ARCHITECTURES]
+        jobs = [(f"led-arch-{seed}-{i:05d}", seed, catalog[i % len(catalog)]) for i in range(n)]
+        job = _job_arch
+    else:
+        jobs = [(f"led-{seed}-{i:05d}", seed, MIX[i % len(MIX)]) for i in range(n)]
+        job = _job
     if workers > 1:
         import multiprocessing as mp
-        with mp.Pool(workers) as pool: rows = pool.map(_job, jobs, chunksize=8)
-    else: rows = [_job(j) for j in jobs]
+        with mp.Pool(workers) as pool: rows = pool.map(job, jobs, chunksize=8)
+    else: rows = [job(j) for j in jobs]
     out = pathlib.Path(out_dir); out.mkdir(parents=True, exist_ok=True); counts = collections.Counter(); files = {}
     for r in rows:
         if r is None: continue
@@ -79,11 +102,14 @@ def build(out_dir, n: int, seed: int = 0, workers: int = 1) -> dict:
         if sp not in files: files[sp] = open(out / f"ledger_{sp}.jsonl", "w")
         files[sp].write(json.dumps(r) + "\n"); counts[sp] += 1
     for f in files.values(): f.close()
-    write_meta(out, "ledger", n=n, seed=seed, workers=workers, counts=dict(counts))
+    write_meta(out, "ledger_arch" if arch else "ledger", n=n, seed=seed, workers=workers,
+               architectures=len(catalog) if arch else len(MIX), counts=dict(counts))
     return dict(counts)
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("out"); ap.add_argument("-n", type=int, default=1500)
     ap.add_argument("--seed", type=int, default=0); ap.add_argument("--workers", type=int, default=1)
-    a = ap.parse_args(); print(build(a.out, a.n, a.seed, a.workers))
+    ap.add_argument("--architectures", action="store_true", help="cycle the 65-diagram catalog instead of MIX")
+    ap.add_argument("--only", nargs="*", help="architecture names (with --architectures)")
+    a = ap.parse_args(); print(build(a.out, a.n, a.seed, a.workers, a.architectures, a.only))

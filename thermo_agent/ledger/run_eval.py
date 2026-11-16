@@ -8,6 +8,7 @@
               Parameter-range checks (V6) see none of these."""
 from __future__ import annotations
 import argparse, collections, json, pathlib
+from ..eval.rows import load_split
 from . import program as P
 
 
@@ -18,11 +19,11 @@ def symptoms(row: dict) -> dict:
     return {"closure": closure, "negative_ed": negative, "either": closure or negative}
 
 
-def run(path, limit=None) -> dict:
-    rows = [json.loads(l) for l in open(path)][:limit]; by = collections.defaultdict(lambda: collections.Counter()); regen = 0
+def score(rows: list[dict]) -> dict:
+    by = collections.defaultdict(lambda: collections.Counter()); regen = 0
     for r in rows:
         L = json.loads(r["ledger"]); data = L["data"]
-        fixed = P.run(data["lines"], data); regen += all(P.matches_truth(fixed, data, k) for k in data["lines"])       # regenerate = the correct ledger
+        fixed = P.run(data["lines"], data); regen += all(P.matches_truth(fixed, data, k) for k in data["lines"])
         s = symptoms(r)
         for t in r["fault_types"]:
             by[t]["n"] += 1
@@ -32,6 +33,12 @@ def run(path, limit=None) -> dict:
             "symptom_rate_by_fault": {t: {k: round(c[k] / c["n"], 2) for k in ("closure", "negative_ed", "either")} | {"n": c["n"]} for t, c in sorted(by.items())}}
 
 
+def run(path, limit=None) -> dict:
+    return score([json.loads(l) for l in open(path)][:limit])
+
+
 if __name__ == "__main__":
-    ap = argparse.ArgumentParser(); ap.add_argument("data"); ap.add_argument("--split", default="test_id"); ap.add_argument("--limit", type=int, default=200)
-    a = ap.parse_args(); print(a.split, json.dumps(run(pathlib.Path(a.data) / f"ledger_{a.split}.jsonl", a.limit), indent=1))
+    ap = argparse.ArgumentParser(); ap.add_argument("data", nargs="+", help="ground-truth dirs, e.g. data/processed data/processed_arch")
+    ap.add_argument("--split", default="test_id"); ap.add_argument("--limit", type=int, default=200)
+    a = ap.parse_args(); rows = load_split(a.data, "ledger", a.split)[: a.limit]
+    print(a.split, json.dumps(score(rows), indent=1))

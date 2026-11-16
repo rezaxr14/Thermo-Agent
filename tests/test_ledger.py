@@ -83,7 +83,11 @@ def test_fix_syntax_is_enforced():
         with pytest.raises((ValueError, ExprError)): R.parse_fixes(bad, set(L["lines"]))
 
 def test_splits_are_structural():
-    assert split_of("cgam_orc", {"sign_flip"}, "a") == "test_ood_topology" and split_of("dc_engine_electric", set(), "a") == "test_ood_topology"
+    # held out: the steam/HRSG export plant and the engine with the ideal rejection boundary, never a whole family
+    assert split_of("cgam_steam_orc", {"sign_flip"}, "a") == "test_ood_topology"
+    assert split_of("engine-absorption-ext", set(), "a") == "test_ood_topology"
+    assert split_of("cgam_orc", {"wrong_stream"}, "a") == "test_ood_fault"    # ORC trains, the fault type is OOD
+    assert split_of("dc_engine_electric", set(), "a") in ("train", "val", "test_id")   # an engine, but not held out
     assert split_of("dc_absorption", {"wrong_stream"}, "a") == "test_ood_fault" and split_of("dc_absorption", {"sign_flip"}, "a") in ("train", "val", "test_id")
 
 def test_builder_files_meta_and_baselines(tmp_path):

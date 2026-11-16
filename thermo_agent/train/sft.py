@@ -7,7 +7,8 @@ Dual T4 (see docs/DUAL_T4.md):
         --dtype float16 --per-device-batch 2 --grad-accum 8
 DDP replicates the frozen base model; only LoRA gradients cross PCIe. fp16 runs under the Trainer's AMP
 GradScaler, so loss overflows are rescaled automatically, and gradients are clipped at --grad-norm before
-each optimizer step.
+each optimizer step. Checkpoints are written every --save-steps steps (default 200) and a rerun of the same
+command resumes from the newest one, because one epoch does not fit in a single Kaggle session.
 Prompts are rendered with the tokenizer exactly as GRPO and inference will render them (see train/render.py).
 If the checkpoint loads only through an image-text class, load that class and pass the model object to
 SFTTrainer instead of the string."""
@@ -15,6 +16,7 @@ from __future__ import annotations
 import argparse, json, pathlib, random
 
 from . import ddp
+from .checkpoint import latest
 from .config import BASE_MODEL, SftSettings
 from .render import render_pair, prefix_report
 
@@ -51,11 +53,13 @@ def main():
     ap.add_argument("--qlora", action="store_true", help="4-bit base weights; only for cards under 10 GB, not the T4 path")
     ap.add_argument("--max-steps", type=int, default=-1); ap.add_argument("--limit-rows", type=int); ap.add_argument("--print-sample", action="store_true")
     ap.add_argument("--per-device-batch", type=int); ap.add_argument("--grad-accum", type=int); ap.add_argument("--grad-norm", type=float)
+    ap.add_argument("--save-steps", type=int, help="checkpoint interval; a rerun of the same command resumes automatically")
     ap.add_argument("--num-workers", type=int, default=2)
     a = ap.parse_args(); s = SftSettings()
     if a.per_device_batch: s.per_device_batch = a.per_device_batch
     if a.grad_accum: s.grad_accum = a.grad_accum
     if a.grad_norm is not None: s.max_grad_norm = a.grad_norm
+    if a.save_steps: s.save_steps = s.eval_steps = a.save_steps
     world = ddp.world_size_from_env()
     if a.qlora and world > 1:
         raise SystemExit("QLoRA + DDP is not supported here: use full fp16 LoRA (drop --qlora), as in docs/DUAL_T4.md")
@@ -84,13 +88,17 @@ def main():
     cfg = SFTConfig(output_dir=a.out, learning_rate=s.lr, num_train_epochs=s.epochs, max_steps=a.max_steps, max_length=s.max_length,
                     per_device_train_batch_size=s.per_device_batch, gradient_accumulation_steps=s.grad_accum, max_grad_norm=s.max_grad_norm,
                     gradient_checkpointing=True, dataloader_num_workers=a.num_workers,
-                    logging_steps=5, eval_strategy="epoch" if val else "no", save_strategy="epoch", save_total_limit=2,
+                    logging_steps=5, eval_strategy="steps" if val else "no", eval_steps=s.eval_steps,
+                    save_strategy="steps", save_steps=s.save_steps, save_total_limit=2,
                     completion_only_loss=True, model_init_kwargs=init, report_to="none", seed=0,
                     fp16=(a.dtype == "float16"), bf16=(a.dtype == "bfloat16"),
                     gradient_as_bucket_view=True, ddp_find_unused_parameters=False, ddp_bucket_cap_mb=64,
                     optim="adamw_torch")
     lora = LoraConfig(r=s.lora.r, lora_alpha=s.lora.alpha, lora_dropout=s.lora.dropout, target_modules=s.lora.target_modules, task_type="CAUSAL_LM")
-    SFTTrainer(model=a.model, args=cfg, train_dataset=train, eval_dataset=val, peft_config=lora).train()
+    resume = latest(a.out)
+    if resume:
+        print(f"resuming SFT from {resume}", flush=True)
+    SFTTrainer(model=a.model, args=cfg, train_dataset=train, eval_dataset=val, peft_config=lora).train(resume_from_checkpoint=resume)
 
 
 if __name__ == "__main__":

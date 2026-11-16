@@ -14,6 +14,7 @@ from __future__ import annotations
 import argparse, json, pathlib
 
 from . import ddp
+from .checkpoint import latest
 from .config import BASE_MODEL, GrpoSettings
 from . import rewards as repair_rewards
 from ..design import rewards as design_rewards
@@ -52,11 +53,13 @@ def main():
     ap.add_argument("--vllm", action="store_true", help="colocate vLLM for generation (single process, needs a >=24 GB GPU)")
     ap.add_argument("--qlora", action="store_true"); ap.add_argument("--max-steps", type=int); ap.add_argument("--limit-rows", type=int)
     ap.add_argument("--per-device-batch", type=int); ap.add_argument("--grad-accum", type=int); ap.add_argument("--grad-norm", type=float)
+    ap.add_argument("--save-steps", type=int, help="checkpoint interval; a rerun of the same command resumes automatically")
     ap.add_argument("--num-workers", type=int, default=2)
     a = ap.parse_args(); g = GrpoSettings()
     if a.per_device_batch: g.per_device_batch = a.per_device_batch
     if a.grad_accum: g.grad_accum = a.grad_accum
     if a.grad_norm is not None: g.max_grad_norm = a.grad_norm
+    if a.save_steps: g.save_steps = a.save_steps
     world = ddp.world_size_from_env()
     if a.vllm and world > 1:
         raise SystemExit("--vllm colocate mode is single-process; under DDP let each rank use HF generate")
@@ -83,12 +86,15 @@ def main():
                      max_grad_norm=g.max_grad_norm, dataloader_num_workers=a.num_workers,
                      gradient_as_bucket_view=True, ddp_find_unused_parameters=False, ddp_bucket_cap_mb=64,
                      optim="adamw_torch", save_total_limit=2, seed=0,
-                     logging_steps=5, save_steps=50, model_init_kwargs=init, report_to="none",
+                     logging_steps=5, save_steps=g.save_steps, model_init_kwargs=init, report_to="none",
                      fp16=(a.dtype == "float16"), bf16=(a.dtype == "bfloat16"))
     lora = LoraConfig(r=g.lora.r, lora_alpha=g.lora.alpha, lora_dropout=g.lora.dropout,
                       target_modules=g.lora.target_modules, task_type="CAUSAL_LM")
+    resume = latest(a.out)
+    if resume:
+        print(f"resuming GRPO from {resume}", flush=True)
     GRPOTrainer(model=a.init, reward_funcs=TASKS[a.task][0], args=cfg, train_dataset=Dataset.from_list(rows),
-                peft_config=lora).train()
+                peft_config=lora).train(resume_from_checkpoint=resume)
 
 
 if __name__ == "__main__":

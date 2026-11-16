@@ -44,9 +44,10 @@ def test_extra_edits_reduce_minimality_reward():
     kw = KW([r]); assert R.r_minimal(None, [padded], **kw)[0] < R.r_minimal(None, [good], **kw)[0]
 
 def test_splits_are_structural():
+    from thermo_agent.synth.splits import is_ood_topology
     names = {r["split"] for r in ROWS}
     for r in ROWS:
-        if r["topology"] == "cgam_orc" or r["topology"].startswith("dc_engine"): assert r["split"] == "test_ood_topology"
+        if is_ood_topology(r["topology"]): assert r["split"] == "test_ood_topology"
         elif r["fault_type"] in ("sign_flip", "swapped_ports"): assert r["split"] == "test_ood_fault"
         else: assert r["split"] in ("train", "val", "test_id")
 

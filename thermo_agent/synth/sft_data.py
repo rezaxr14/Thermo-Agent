@@ -8,6 +8,7 @@ from ..agent.dsl import patch_to_edits_text
 from ..train.prompts import repair_messages
 from ..verify.verifiers import run_all
 from ..core.solve import solve
+from .splits import is_ood_topology
 
 
 def _target(path: str, plant) -> tuple[str, str]:
@@ -51,9 +52,9 @@ def topology_of(rec: RepairRecord) -> str:
 
 
 def assign_split(rec: RepairRecord) -> str:
-    """Splits are by structure, never random: unseen fault type, unseen topology (new components), then in-distribution."""
+    """Splits are by structure, never random: unseen diagram combination, unseen fault type, then in-distribution."""
     topo, ft = topology_of(rec), rec.faults[0].type
-    if topo == "cgam_orc" or topo.startswith("dc_engine"): return "test_ood_topology"      # steam/ORC plant, gas engine: new components
+    if is_ood_topology(topo): return "test_ood_topology"      # steam/HRSG export plant, engine with ideal rejection
     if ft in ("sign_flip", "swapped_ports"): return "test_ood_fault"
     h = int(hashlib.md5(rec.id.encode()).hexdigest(), 16) % 10
     return "val" if h == 0 else ("test_id" if h == 1 else "train")

@@ -204,7 +204,7 @@ def _check(task: str, rows: list[dict], limit: int, problems: list[str]) -> dict
     return {"checked": ok + bad, "accepted": ok, "rejected": bad}
 
 
-def build(processed, frontier, memory_dir, out_dir, tasks=TASKS, variants: int = 4,
+def build(processed, frontier, memory_dir, out_dir, tasks=TASKS, variants: int = 20,
           harness_fraction: float = 0.35, k_memory: int = 3, max_chars: int = 11500,
           splits=None, check_limit: int = 0, extra_processed=(), max_tokens: int = 4000) -> dict:
     proc_dirs = [pathlib.Path(processed)] + [pathlib.Path(p) for p in extra_processed]
@@ -290,7 +290,7 @@ def main():
     ap.add_argument("memory")
     ap.add_argument("out")
     ap.add_argument("--tasks", nargs="+", default=list(TASKS), choices=list(TASKS))
-    ap.add_argument("--variants", type=int, default=4)
+    ap.add_argument("--variants", type=int, default=20)
     ap.add_argument("--harness-fraction", type=float, default=0.35)
     ap.add_argument("--k-memory", type=int, default=3)
     ap.add_argument("--max-prompt-chars", type=int, default=11500)

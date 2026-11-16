@@ -6,7 +6,7 @@
 #   THERMO_N_ARCH     default 3000 (requested rows; about 70% survive detection)
 #   THERMO_MAX_EVALS  default 60         THERMO_SEED      default 0
 #   THERMO_WORKERS    default: auto      THERMO_N_MEMORY  default 1000
-#   THERMO_VARIANTS   default 4          THERMO_SKIP      comma list of steps to skip
+#   THERMO_VARIANTS   default 20         THERMO_SKIP      comma list of steps to skip
 #
 # Auto worker count leaves two cores for the OS and the SSH session, and never asks for more RAM than is free
 # (about 300 MB per worker). Resumable: a step is skipped when its meta_*.json already records n >= target.
@@ -52,16 +52,18 @@ $nAudit  = EnvInt 'THERMO_N_AUDIT' 3000
 $nLedger = EnvInt 'THERMO_N_LEDGER' 9000
 $nDesign = EnvInt 'THERMO_N_DESIGN' 4000
 $nArch   = EnvInt 'THERMO_N_ARCH' 3000
+$nArchAudit  = EnvInt 'THERMO_N_ARCH_AUDIT' 2000
+$nArchLedger = EnvInt 'THERMO_N_ARCH_LEDGER' 3000
 $nMemory = EnvInt 'THERMO_N_MEMORY' 1000
 $maxEvals = EnvInt 'THERMO_MAX_EVALS' 60
 $seed = EnvInt 'THERMO_SEED' 0
-$variants = EnvInt 'THERMO_VARIANTS' 4
+$variants = EnvInt 'THERMO_VARIANTS' 20
 $workers = Get-Workers
 $skip = @()
 if ($env:THERMO_SKIP) { $skip = $env:THERMO_SKIP.Split(',') | ForEach-Object { $_.Trim() } }
 
-Step ("workers={0} (cpu={1}) repair={2} audit={3} ledger={4} design={5} arch={6} max_evals={7}" -f `
-    $workers, [Environment]::ProcessorCount, $nRepair, $nAudit, $nLedger, $nDesign, $nArch, $maxEvals)
+Step ("workers={0} (cpu={1}) repair={2} audit={3} ledger={4} design={5} arch={6}/{7}/{8} max_evals={9}" -f `
+    $workers, [Environment]::ProcessorCount, $nRepair, $nAudit, $nLedger, $nDesign, $nArch, $nArchAudit, $nArchLedger, $maxEvals)
 
 if ('repair' -notin $skip) {
     if (HasN 'data/processed' 'repair' $nRepair) { Step "repair: meta already has n>=$nRepair, skip" } else {
@@ -92,10 +94,20 @@ if ('design' -notin $skip) {
     }
 }
 if ('arch' -notin $skip) {
-    if (HasN 'data/processed_arch' 'repair_arch' $nArch) { Step "architectures: meta already has n>=$nArch, skip" } else {
+    if (HasN 'data/processed_arch' 'repair_arch' $nArch) { Step "architectures: repair meta already has n>=$nArch, skip" } else {
         Step "architecture repair dataset (n=$nArch over 65 diagrams, workers=$workers)"
         & $py -m thermo_agent.synth.architectures data/processed_arch -n $nArch --seed $seed --workers $workers
         if ($LASTEXITCODE -ne 0) { throw "architecture dataset failed ($LASTEXITCODE)" }
+    }
+    if (HasN 'data/processed_arch' 'audit_arch' $nArchAudit) { Step "architectures: audit meta already has n>=$nArchAudit, skip" } else {
+        Step "architecture audit dataset (n=$nArchAudit over 65 diagrams, workers=$workers)"
+        & $py -m thermo_agent.audit.data data/processed_arch -n $nArchAudit --seed $seed --workers $workers --architectures
+        if ($LASTEXITCODE -ne 0) { throw "architecture audit dataset failed ($LASTEXITCODE)" }
+    }
+    if (HasN 'data/processed_arch' 'ledger_arch' $nArchLedger) { Step "architectures: ledger meta already has n>=$nArchLedger, skip" } else {
+        Step "architecture ledger dataset (n=$nArchLedger over 65 diagrams, workers=$workers)"
+        & $py -m thermo_agent.ledger.data data/processed_arch -n $nArchLedger --seed $seed --workers $workers --architectures
+        if ($LASTEXITCODE -ne 0) { throw "architecture ledger dataset failed ($LASTEXITCODE)" }
     }
 }
 if ('memory' -notin $skip) {
@@ -109,11 +121,9 @@ if ('report' -notin $skip) {
     if ($LASTEXITCODE -ne 0) { throw "data report failed ($LASTEXITCODE)" }
 }
 if ('combine' -notin $skip) {
-    Step "combine SFT corpus (variants=$variants)"
-    & $py -m thermo_agent.synth.combine data/processed data/frontier data/memory data/sft `
-        --extra-processed data/processed_arch --variants $variants --harness-fraction 0.35 --check-limit 25 |
-        Tee-Object -FilePath 'reports/combine.json'
-    if ($LASTEXITCODE -ne 0) { throw "combine failed ($LASTEXITCODE)" }
+    Step "build both corpora, token audit and swap (scripts/build_corpus.ps1 -Variants $variants)"
+    & ./scripts/build_corpus.ps1 -Variants $variants
+    if ($LASTEXITCODE -ne 0) { throw "build_corpus failed ($LASTEXITCODE)" }
 }
 
 Step 'done'

@@ -35,26 +35,23 @@ Never give a job the same name as the script it runs.
 The corpus has four sources, all deterministic or verifier-grounded (no free-form CoT labels):
 
 1. **Ground-truth paraphrases** (`thermo_agent/synth/paraphrase.py`): every ground-truth repair row is re-emitted
-   with `--variants 4` truthful phrasings built from the fault facts. The four are drawn by a hash of the row id, so
-   the corpus as a whole covers the full phrasing space: the current train split has **80 distinct paraphrases**,
-   the ceiling for the `wrong_fluid` class. Paraphrases are a train-split device only; the eval splits keep one row
+   with `--variants 20` truthful phrasings built from the fault facts. The 20 are drawn by a hash of the row id, so
+   the corpus as a whole covers the full phrasing space: the current train split has **1,064,200 repair rows** (5,321 base plants × 20), the ceiling for the `wrong_fluid` class (25 phrasings). Paraphrases are a train-split device only; the eval splits keep one row
    per plant so a model evaluation never counts the same plant twice.
 2. **Architecture corpus** (`thermo_agent/synth/architectures.py`): 65 plant diagrams (turbine/engine prime mover,
    absorption/electric cooling, wet/dry/extended rejection, with/without ORC, plus `cgam_steam_orc`), each with ORC
-   pressures chosen per working fluid. Whole diagrams are held out for the OOD splits: `engine-*` and
-   `cgam_steam_orc` go to `test_ood_topology`.
+   pressures chosen per working fluid. **Diagram combinations** are held out for the OOD splits: `cgam_steam_orc` and `engine-*-ext*` go to `test_ood_topology`. ORC, engines, turbines, district heat all train.
 3. **Frontier teacher traces** (`thermo_agent/teacher/transfer.py` + `validate.py`): prompts are exported without
    their answers, answered on Kaggle Benchmarks, then every answer is re-run through the tool suite here. Only
    accepted answers become rows; rejections become hindsight memory.
 4. **Hindsight failure memory** (`thermo_agent/teacher/memory.py`): lessons mined from rejected attempts are
-   retrieved per prompt (k=3) and injected as "known failure modes". Only repair has notes today (20 from the
+   retrieved per prompt (k=3) and injected as "known failure modes". Only repair has notes today (24 from the
    adversarial miner), so only repair rows carry a memory block.
 
 `scripts/build_corpus.ps1` stages, audits and swaps two corpora:
 
 - `data/sft/{task}_{split}.jsonl` — harness on 35 percent of rows, memory where it retrieves;
-- `data/grpo/{task}_{split}.jsonl` — same prompts with no harness and no memory, because GRPO samples four
-  completions per prompt and a long prompt costs four times the KV cache.
+- `data/grpo/{task}_{split}.jsonl` — **same prompts as SFT** (with harness/memory), just without reference completions. GRPO samples G=4 completions per prompt; the prompts carry the harness text the model learned during SFT.
 
 ### Token budget (the gate that matches the trainer)
 
@@ -72,23 +69,23 @@ Measured harness cost per task (200 train rows, tokens, p50 / max):
 | design | 502 / 519 | 1832 / 1849 | 944 / 961 | 2273 / 2290 | agents+skills |
 
 Audit is the outlier: an audit plant can carry many components, so AGENTS.md plus its skills does not fit; audit
-therefore trains with the skill block only. Ledger is the task whose harness rows hit the token ceiling, so 795
-ledger candidates were dropped by the token gate (8 percent of its rows).
+therefore trains with the skill block only. Ledger is the task whose harness rows hit the token ceiling, so ~985
+ledger candidates were dropped by the token gate.
 
-### Current corpus (variants 4, harness 0.35, memory 3)
+### Current corpus (variants 20, harness 0.35, memory 3)
 
 | corpus | rows | train rows | max row | rows over 4096 |
 |---|---|---|---|---|
-| `data/sft` | 36,429 | 20,658 | 3,998 tokens | 0 |
-| `data/grpo` | 42,651 | 24,022 | 3,338 tokens | 0 |
+| `data/sft` | 129,684 | 111,809 | 3,998 tokens | 0 |
+| `data/grpo` | 28,585 | 16,290 | 4,000 tokens | 0 |
 
-Train split by task: repair 14,144 (2,888 harness, memory on every row, 26 architectures), ledger 3,204
-(958 harness), audit 1,542 (532 harness), design 1,768 (635 harness). `sft_report.json` reports `problems: []` for
+Train split by task (SFT): repair 106,420 (29,368 harness, memory on every repair row, 49 architectures), ledger 5,602
+(1,523 harness), audit 3,019 (892 harness), design 1,768 (635 harness). `sft_report.json` reports `problems: []` for
 both corpora, and `reports/token_audit_{sft,grpo}.json` report `fits: true`.
 
-At 32 sequences per optimizer step (2 per device x 8 accumulation x 2 ranks) one SFT epoch is 645 steps. A 4B fp16
-LoRA step at 1.5k average tokens costs roughly 30 s on two T4s, so one epoch is about 5 to 6 hours: plan one epoch
-per Kaggle session and resume, or lower `--variants`.
+At 32 sequences per optimizer step (2 per device x 8 accumulation x 2 ranks) one SFT epoch is ~3,494 steps. A 4B fp16
+LoRA step at 1.5k average tokens costs roughly 30 s on two T4s, so one epoch is about 29 hours: plan resume across
+2–3 Kaggle sessions (12 h each). Checkpoints every 200 steps via `save_strategy="steps"`.
 
 ## Baselines (small-sample reference values)
 
@@ -99,6 +96,33 @@ per Kaggle session and resume, or lower `--variants`.
 - ledger, `test_ood_fault`: no-op solves none; the regenerate rule solves all; at least one second-law symptom in
   87 to 100 % of rows by fault type, closure broken in 26 to 100 %.
 - design: pending the final split; `scripts/baselines.ps1` runs the OOD climate/load/speed splits.
+
+## Qwen3.5-4B architecture (for LoRA)
+
+`Qwen3_5ForConditionalGeneration` with separate text + vision configs:
+
+**Text backbone** (32 layers, hybrid linear/full attention):
+- `hidden_size=2560`, `intermediate_size=9216` (SwiGLU), `num_attention_heads=16`, `num_key_value_heads=4` (GQA)
+- `head_dim=256`, `partial_rotary_factor=0.25`, `rope_theta=10_000_000`
+- **Layer pattern** (every 4th layer is full attention, indices 3,7,11,15,19,23,27,31):
+  ```
+  linear_attention, linear_attention, linear_attention, full_attention,
+  linear_attention, linear_attention, linear_attention, full_attention,
+  ...
+  ```
+- Linear attention layers use **gated delta nets** (SSM-like): `linear_q_proj`, `linear_k_proj`, `linear_v_proj`, `linear_out_proj` with `linear_conv_kernel_dim=4`, `linear_num_key_heads=16`, `linear_num_value_heads=32`, `linear_key_head_dim=128`, `linear_value_head_dim=128`
+- Full attention layers: standard `q_proj`, `k_proj`, `v_proj`, `o_proj`
+- FFN (all 32 layers): `gate_proj`, `up_proj`, `down_proj`
+- MTP (multi-token prediction): 1 extra layer `mtp_num_hidden_layers=1`
+
+**Vision encoder** (24 layers, 1024 hidden, patch_size=16, out=2560):
+- `qwen3_5_vision` config, `gelu_pytorch_tanh` act, axial RoPE
+- We **do not train vision** — our data is text-only plant JSON.
+
+**LoRA targets** (full fp16, rank 16 SFT / rank 8 GRPO, all-linear on text):
+- Attention: `q_proj`, `k_proj`, `v_proj`, `o_proj`, `linear_q_proj`, `linear_k_proj`, `linear_v_proj`, `linear_out_proj`
+- FFN: `gate_proj`, `up_proj`, `down_proj`
+- (Skip `patch_embed.proj` and vision attention/FFN — not used)
 
 ## Training path (dual T4)
 
@@ -111,18 +135,21 @@ per Kaggle session and resume, or lower `--variants`.
   accumulation micro-steps, `gradient_as_bucket_view`, `ddp_bucket_cap_mb=64`);
 - overflow handling: AMP `GradScaler`, `max_grad_norm=1.0`, `adamw_torch`, fp32 matmul reductions;
 - batch arithmetic: SFT 2 x 8 x 2 = 32; GRPO G = 4 with 4 x 2 x 2 = 16 prompts per step. TRL requires the
-  per-device batch to be a multiple of G, so 4 is the smallest legal choice; the KV-cache risk is handled on the data
-  side by training GRPO on `data/grpo`, whose longest prompt is 3,338 tokens;
+  per-device batch to be a multiple of G, so 4 is the smallest legal choice;
+- **Resume**: both trainers save every 200 steps (`save_strategy="steps", save_steps=200`) and auto-resume from
+  `latest(out_dir)` via `transformers.trainer_utils.get_last_checkpoint`. One SFT epoch ≈ 3,494 steps ≈ 29 h.
 - SFT `max_length` 4096; rows are gated at 4,000 tokens when the corpus is built, so nothing is truncated.
+- GRPO uses the **same prompts** as SFT (with harness/memory), just no reference completion.
 
 Trainings have not been run yet: the 4050 cannot hold a 4B model for training, and the Kaggle run is the next step.
 
 ## Tests
 
-- Full CPU suite: **295 passed** in 6.2 minutes. `paper/methods_draft.md` exists again, so its constant checks
+- Full CPU suite: **299 passed** in 6.2 minutes. `paper/methods_draft.md` exists again, so its constant checks
   run instead of skipping at module level.
 - New this round: `tests/test_token_audit.py` (the audit must flag truncation), `tests/test_transfer.py` (export must
-  not leak answers; ingest must keep only verified rows, record rejections as memory, and be resumable), and
+  not leak answers; ingest must keep only verified rows, record rejections as memory, and be resumable),
+  `tests/test_checkpoint.py` (resume logic), `tests/test_splits.py` (new diagram-combination holdout rule), and
   `tests/test_combine.py` grew the per-task harness, train-only paraphrase and token-gate cases.
 - Run `pytest -q` before any commit that touches `thermo_agent/`.
 
@@ -136,9 +163,7 @@ land in `data/memory/frontier_notes.jsonl`.
 
 ## Next
 
-1. Decide the paraphrase count for the train split (4 as built, or 20 as originally planned: 20 costs about 4x the
-   SFT time, roughly 20 hours per epoch at the measured step time).
-2. Run the Kaggle teacher pass: upload `data/frontier_export.zip`, import `kaggle/teacher.ipynb`, download
+1. Run the Kaggle teacher pass: upload `data/frontier_export.zip`, import `kaggle/teacher.ipynb`, download
    `completions.jsonl`, ingest. This is the only step that needs the user (a browser and a Kaggle session).
-3. Smoke-test SFT/GRPO on Kaggle (`STEPS=20 ROWS=64 bash scripts/train_dual_t4.sh sft`, then `grpo ledger`).
-4. Replace the small-sample numbers in `paper/sections/` and add the four-source corpus and dual-T4 recipe.
+2. Smoke-test SFT/GRPO on Kaggle (`STEPS=20 ROWS=64 bash scripts/train_dual_t4.sh sft`, then `grpo ledger`).
+3. Replace the small-sample numbers in `paper/sections/` and add the four-source corpus and dual-T4 recipe.

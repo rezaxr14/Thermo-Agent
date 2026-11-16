@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse, json, pathlib, random, statistics as st
 from ..core.schema import Plant
 from ..core.solve import solve
+from ..eval.rows import load_split
 from .rewards import ndcg
 from .truth import first_law_ranking
 
@@ -19,9 +20,9 @@ def _rule_change_gain(plant, r):
     return (max(0.0, -e["delta_w"] / r["best_gain_w"]), e["delta_w"]) if e["valid"] else None
 
 
-def run(path, limit=None, seed=0) -> dict:
+def score(rows: list[dict], seed: int = 0) -> dict:
     """Ranking is scored on the components other than the combustor / gas engine (always the largest destroyer)."""
-    rows = [json.loads(l) for l in open(path)][:limit]; rng = random.Random(seed)
+    rng = random.Random(seed)
     nd = {"random": [], "first_law": []}; top1 = {"random": [], "first_law": []}; ncand = []; rule_gain = []
     for r in rows:
         plant = Plant.model_validate_json(r["plant"]); ed = json.loads(r["ed_json"])
@@ -44,6 +45,13 @@ def run(path, limit=None, seed=0) -> dict:
             "change_search_evaluations": round(st.mean(ncand), 1), "model_evaluations": 1}
 
 
+def run(path, limit=None, seed=0) -> dict:
+    """Baselines for one split file; kept for callers that already have a file path."""
+    return score([json.loads(l) for l in open(path)][:limit], seed)
+
+
 if __name__ == "__main__":
-    ap = argparse.ArgumentParser(); ap.add_argument("data"); ap.add_argument("--split", default="test_id"); ap.add_argument("--limit", type=int, default=40)
-    a = ap.parse_args(); print(a.split, json.dumps(run(pathlib.Path(a.data) / f"audit_{a.split}.jsonl", a.limit)))
+    ap = argparse.ArgumentParser(); ap.add_argument("data", nargs="+", help="ground-truth dirs, e.g. data/processed data/processed_arch")
+    ap.add_argument("--split", default="test_id"); ap.add_argument("--limit", type=int, default=40)
+    a = ap.parse_args(); rows = load_split(a.data, "audit", a.split)[: a.limit]
+    print(a.split, json.dumps(score(rows)))

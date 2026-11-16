@@ -1,11 +1,12 @@
 """Will GRPO get a learning signal? Simulates policies of several qualities (expert answers damaged with probability `level`),
 draws groups of G completions per prompt, and reports what the training reward would look like. CPU only, no model.
-    python -m thermo_agent.train.reward_diagnostics DATA_DIR [--tasks repair design audit ledger] [--groups 12] [--levels 0 0.3 0.6 1] --out reports/reward_diagnostics.json
+    python -m thermo_agent.train.reward_diagnostics DATA_DIR [DATA_DIR ...] [--tasks repair design audit ledger] [--groups 12] [--levels 0 0.3 0.6 1] --out reports/reward_diagnostics.json
 A group whose rewards are all equal gives zero advantage (TRL normalises by the group's standard deviation), so it teaches nothing."""
 from __future__ import annotations
 import argparse, importlib, json, pathlib, random, statistics as st, time
 from .grpo import TASKS
 from .perturb import simulate_policy
+from ..eval.rows import load_split
 
 
 def total_reward(per_func: list[list], weights: list[float], i: int) -> float:
@@ -13,7 +14,7 @@ def total_reward(per_func: list[list], weights: list[float], i: int) -> float:
     return sum(w * v for w, v in vals)
 
 
-def diagnose(rows: list[dict], task: str, levels, groups: int = 12, G: int = 8, seed: int = 0) -> dict:
+def diagnose(rows: list[dict], task: str, levels, groups: int = 12, G: int = 4, seed: int = 0) -> dict:
     funcs, weights, cols = TASKS[task]; cols = [c for c in cols if c != "prompt"]; rng = random.Random(seed)
     chosen = rng.sample(rows, min(groups, len(rows))); out = {}
     for level in levels:
@@ -48,13 +49,15 @@ def advise(task: str, d: dict) -> list[str]:
 
 
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument("data"); ap.add_argument("--tasks", nargs="+", default=list(TASKS), choices=list(TASKS))
+    ap = argparse.ArgumentParser(); ap.add_argument("data", nargs="+", help="ground-truth dirs, e.g. data/processed data/processed_arch")
+    ap.add_argument("--tasks", nargs="+", default=list(TASKS), choices=list(TASKS))
     ap.add_argument("--groups", type=int, default=12); ap.add_argument("--levels", nargs="+", type=float, default=[0.0, 0.05, 0.1, 0.3, 0.6, 1.0]); ap.add_argument("--out")
+    ap.add_argument("--generations", type=int, default=4, help="group size G, must match GrpoSettings.num_generations")
     a = ap.parse_args(); res = {}; notes = []
     for t in a.tasks:
-        p = pathlib.Path(a.data) / f"{t}_train.jsonl"
-        if not p.exists(): continue
-        res[t] = diagnose([json.loads(l) for l in open(p, encoding="utf-8")], t, a.levels, a.groups); notes += advise(t, res[t])
+        rows = load_split(a.data, t, "train")
+        if not rows: continue
+        res[t] = diagnose(rows, t, a.levels, a.groups, a.generations); notes += advise(t, res[t])
     res["notes"] = notes
     if a.out: pathlib.Path(a.out).parent.mkdir(parents=True, exist_ok=True); pathlib.Path(a.out).write_text(json.dumps(res, indent=1))
     print(json.dumps(res, indent=1))

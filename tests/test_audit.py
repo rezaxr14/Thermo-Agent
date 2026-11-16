@@ -3,6 +3,7 @@ from thermo_agent.core.schema import Site, Plant
 from thermo_agent.core.solve import solve
 from thermo_agent.synth.topologies import dc_chp, size_generation
 from thermo_agent.synth.repair_dataset import sample_plant
+from thermo_agent.synth.splits import is_ood_topology
 from thermo_agent.audit import changes as ch, rewards as R
 from thermo_agent.audit.spec import parse_audit, AuditError
 from thermo_agent.audit.truth import truth, ranking, first_law_ranking, summary_text
@@ -74,4 +75,4 @@ def test_data_builder_rows_and_files_agree(tmp_path):
     for f in tmp_path.glob("audit_*.jsonl"):
         for l in open(f):
             r = json.loads(l); assert r["best_gain_w"] > 0 and r["split"] in f.stem
-            assert "dc_engine" not in r["topology"] or r["split"] == "test_ood_topology"
+            assert (r["split"] == "test_ood_topology") == is_ood_topology(r["topology"])

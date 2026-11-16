@@ -20,11 +20,15 @@ class LoraSettings:
 @dataclass
 class SftSettings:
     lr: float = 2e-4
-    epochs: int = 2
+    epochs: int = 1                    # one pass over the 20-variant corpus is ~37 h on two T4s; more would not fit quota
     max_length: int = 4096             # prompt + completion, both gated at 4000 tokens by synth.combine
     per_device_batch: int = 2
     grad_accum: int = 8
     max_grad_norm: float = 1.0         # fp16 needs clipping before the optimizer step
+    # An epoch of the 20-variant corpus is ~37 h on two T4s, far longer than one 12 h Kaggle session. Save and
+    # validate every few hundred steps so a dropped session resumes from its last checkpoint instead of restarting.
+    save_steps: int = 200
+    eval_steps: int = 200
     lora: LoraSettings = field(default_factory=LoraSettings)
 
 
@@ -37,6 +41,7 @@ class GrpoSettings:
     per_device_batch: int = 4          # TRL requires the per-device batch to be a multiple of G; 4 x G=4 = 16 sequences
     grad_accum: int = 2                # 4 x 2 x 2 ranks = 16 prompts per optimizer step
     max_steps: int = 300
+    save_steps: int = 50
     loss_type: str = "dapo"            # TRL default; 'grpo' reproduces the original length normalisation
     beta: float = 0.0                  # no KL term -> no reference model in memory
     mask_truncated: bool = True

@@ -27,20 +27,20 @@ function Run([string]$name, [string]$module, [string[]]$cliArgs) {
 }
 
 foreach ($split in @('test_id', 'test_ood_fault', 'test_ood_topology')) {
-    Run "baseline_repair_$split" 'thermo_agent.eval.run_eval' @('data/processed', '--split', $split, '--limit', "$nRepair", '--by-fault')
+    Run "baseline_repair_$split" 'thermo_agent.eval.run_eval' @('data/processed', 'data/processed_arch', '--split', $split, '--limit', "$nRepair", '--by-fault')
 }
 foreach ($split in @('test_ood_climate', 'test_ood_load', 'test_ood_scale')) {
-    Run "baseline_design_$split" 'thermo_agent.design.run_eval' @('data/processed', '--split', $split, '--limit', "$nDesign")
+    Run "baseline_design_$split" 'thermo_agent.design.run_eval' @('data/processed', 'data/processed_arch', '--split', $split, '--limit', "$nDesign")
 }
 foreach ($split in @('test_ood_topology', 'test_id')) {
-    Run "baseline_audit_$split" 'thermo_agent.audit.run_eval' @('data/processed', '--split', $split, '--limit', "$nAudit")
+    Run "baseline_audit_$split" 'thermo_agent.audit.run_eval' @('data/processed', 'data/processed_arch', '--split', $split, '--limit', "$nAudit")
 }
 foreach ($split in @('test_ood_fault', 'test_ood_topology')) {
-    Run "baseline_ledger_$split" 'thermo_agent.ledger.run_eval' @('data/processed', '--split', $split, '--limit', "$nLedger")
+    Run "baseline_ledger_$split" 'thermo_agent.ledger.run_eval' @('data/processed', 'data/processed_arch', '--split', $split, '--limit', "$nLedger")
 }
 
 Step 'reward diagnostics'
-& $py -m thermo_agent.train.reward_diagnostics data/processed --groups $nGroups --out reports/reward_diagnostics.json 2>&1 |
+& $py -m thermo_agent.train.reward_diagnostics data/processed data/processed_arch --groups $nGroups --generations 4 --out reports/reward_diagnostics.json 2>&1 |
     Tee-Object -FilePath 'reports/reward_diagnostics.txt'
 if ($LASTEXITCODE -ne 0) { throw "reward diagnostics failed ($LASTEXITCODE)" }
 

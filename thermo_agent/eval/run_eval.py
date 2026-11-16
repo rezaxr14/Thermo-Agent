@@ -9,8 +9,9 @@ from .repair import score_patch
 from ..train.prompts import describe_failure
 
 
-def run(path, limit=None, by_fault=False) -> dict:
-    rows = [json.loads(l) for l in open(path)][:limit]
+def run(data_dirs, split, limit=None, by_fault=False) -> dict:
+    from ..eval.rows import load_split
+    rows = load_split(data_dirs, "repair", split)[:limit]
     if by_fault:
         out = {}
         for ft in sorted({r["fault_type"] for r in rows}):
@@ -18,7 +19,7 @@ def run(path, limit=None, by_fault=False) -> dict:
             import tempfile, os
             with tempfile.NamedTemporaryFile("w", suffix=".jsonl", delete=False) as f:
                 f.write("\n".join(json.dumps(r) for r in sub))
-            out[ft] = run(f.name); os.unlink(f.name)
+            out[ft] = run(data_dirs, split, len(sub), False); os.unlink(f.name)
         return out
     out = {"n": len(rows), "noop": 0, "search_success": 0, "search_exact": 0, "search_solves": [], "expert_success": 0}
     for r in rows:
@@ -35,6 +36,7 @@ def run(path, limit=None, by_fault=False) -> dict:
 
 
 if __name__ == "__main__":
-    ap = argparse.ArgumentParser(); ap.add_argument("data"); ap.add_argument("--split", default="test_id"); ap.add_argument("--limit", type=int, default=40); ap.add_argument("--by-fault", action="store_true")
-    a = ap.parse_args(); res = run(pathlib.Path(a.data) / f"repair_{a.split}.jsonl", a.limit, a.by_fault)
+    ap = argparse.ArgumentParser(); ap.add_argument("data", nargs="+", help="ground-truth dirs, e.g. data/processed data/processed_arch")
+    ap.add_argument("--split", default="test_id"); ap.add_argument("--limit", type=int, default=40); ap.add_argument("--by-fault", action="store_true")
+    a = ap.parse_args(); res = run(a.data, a.split, a.limit, a.by_fault)
     print(a.split); [print(" ", k, v) for k, v in (res.items() if a.by_fault else [("all", res)])]
