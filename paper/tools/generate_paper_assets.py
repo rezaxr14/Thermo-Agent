@@ -826,8 +826,8 @@ def table_comparison(MR):
     """One row per arm/task/split with the comparison axes explicit, for the model-comparison paragraph."""
     rows = (MR or {}).get("rows") or []
     if not rows:
-        return ("\\begingroup\\small\n\\begin{tabular}{@{}lllll}\n\\toprule\nArm & Family & Inference text & Tools & Result \\\\\n\\midrule\n"
-                "Model reports are pending; see \\texttt{paper/assets/model\\_results\\_manifest.json}. \\\\\n\\bottomrule\n\\end{tabular}\\endgroup\n")
+        return ("\\begingroup\\small\\setlength{\\tabcolsep}{2pt}\n\\begin{tabular}{@{}p{3.2cm}p{2.4cm}p{2.8cm}p{1.6cm}p{5.4cm}@{}}\n\\toprule\nArm & Family & Inference text & Tools & Result \\\\\n\\midrule\n"
+                "Reports pending & --- & --- & --- & manifest (JSON) \\\\\n\\bottomrule\n\\end{tabular}\\endgroup\n")
     body = []
     for r in rows:
         metric = ", ".join(f"{k} {v:.2f}" for k, v in r["metrics"].items() if v is not None)

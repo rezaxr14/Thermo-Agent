@@ -5,11 +5,11 @@
  "kind": "synthetic",
  "counts": {
   "repair": {
-   "test_id": 784,
-   "test_ood_fault": 5295,
-   "train": 6688,
-   "val": 827,
-   "test_ood_topology": 279
+   "test_id": 744,
+   "test_ood_fault": 4964,
+   "test_ood_topology": 1116,
+   "train": 6276,
+   "val": 773
   },
   "design": {
    "test_id": 204,
@@ -20,17 +20,17 @@
    "val": 235
   },
   "audit": {
-   "test_id": 425,
-   "train": 3299,
-   "val": 417,
-   "test_ood_topology": 141
+   "test_id": 415,
+   "test_ood_topology": 276,
+   "train": 3188,
+   "val": 403
   },
   "ledger": {
-   "test_id": 806,
-   "test_ood_fault": 2875,
-   "train": 6313,
-   "val": 828,
-   "test_ood_topology": 292
+   "test_id": 764,
+   "test_ood_fault": 2693,
+   "test_ood_topology": 932,
+   "train": 5943,
+   "val": 782
   }
  },
  "definitions": {

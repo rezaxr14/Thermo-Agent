@@ -7,62 +7,62 @@
   "test_id": {
    "n": 100,
    "ranking_ndcg3_excluding_prime_mover": {
-    "random": 0.695,
-    "first_law": 0.63
+    "random": 0.693,
+    "first_law": 0.627
    },
    "ranking_top1_excluding_prime_mover": {
-    "random": 0.243,
-    "first_law": 0.01
+    "random": 0.234,
+    "first_law": 0
    },
    "rule_change (raise turbine inlet T 10%, else cut engine loss 10%)": {
-    "mean_gain_vs_best": 0.635,
-    "valid": "54/100"
+    "mean_gain_vs_best": 0.647,
+    "valid": "53/100"
    },
    "prediction_baselines_for_the_best_change (a_pred score)": {
-    "predict_zero": 0.042,
-    "predict_mean_relative_change": 0.461
+    "predict_zero": 0.039,
+    "predict_mean_relative_change": 0.469
    },
-   "change_search_evaluations": 12.3,
+   "change_search_evaluations": 12.4,
    "model_evaluations": 1
   },
   "test_ood_topology": {
    "n": 100,
    "ranking_ndcg3_excluding_prime_mover": {
-    "random": 0.65,
-    "first_law": 0.864
+    "random": 0.865,
+    "first_law": 1.0
    },
    "ranking_top1_excluding_prime_mover": {
-    "random": 0.401,
-    "first_law": 0.63
+    "random": 0.811,
+    "first_law": 1
    },
    "rule_change (raise turbine inlet T 10%, else cut engine loss 10%)": {
-    "mean_gain_vs_best": 0.471,
-    "valid": "87/100"
+    "mean_gain_vs_best": 0.227,
+    "valid": "100/100"
    },
    "prediction_baselines_for_the_best_change (a_pred score)": {
-    "predict_zero": 0.114,
-    "predict_mean_relative_change": 0.359
+    "predict_zero": 0.221,
+    "predict_mean_relative_change": 0.342
    },
-   "change_search_evaluations": 11.6,
+   "change_search_evaluations": 7.8,
    "model_evaluations": 1
   }
  },
  "best_change_saving_share": {
   "test_id": {
-   "median": 0.01666402044818875,
+   "median": 0.01673976231937098,
    "min": 0.0007351612855858404,
    "max": 0.05835100826966219,
    "n": 100
   },
   "test_ood_topology": {
-   "median": 0.002711361705931536,
-   "min": 0.0006490276196476023,
-   "max": 0.015259535248349389,
+   "median": 0.0016226466984134843,
+   "min": 0.0006980608987279848,
+   "max": 0.012802648817007283,
    "n": 100
   },
   "all": {
-   "median": 0.005418712958592385,
-   "min": 0.0006490276196476023,
+   "median": 0.0037396721586992997,
+   "min": 0.0006980608987279848,
    "max": 0.05835100826966219,
    "n": 200
   }

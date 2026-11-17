@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
-"""Draw a paper figure from the measured example traces (vector only: SVG + PDF).
+"""Draw a paper figure from measured traces, in the project's house SVG style.
 
     python paper/tools/figures_from_examples.py --examples paper/assets/examples.json \
         [--tool-usage reports/tool_usage.json] [--models paper/assets/model_results.json] \
         --out paper/figures
 
-The panels show (a) a real fault, its diagnosis and the applied edits, (b) how many physics tools the frontier model
-called and what it reasoned, (c) a scored GRPO rollout, and (d) the comparison arms. Every string and number comes
-from a stage output; nothing is drawn by hand.
+Four cards: a fault and its diagnosis, a frontier interaction with tool calls and cost, a scored GRPO group, and
+the comparison arms. Every string and number is copied from a stage output. The palette, rounded cards, colour bars
+and typography match `paper/figures/svg/fig_overview.svg`; SVG and PDF are drawn by the same code, so they cannot
+drift.
 """
 from __future__ import annotations
 
@@ -16,14 +17,10 @@ import json
 import pathlib
 import textwrap
 
-
-def _wrap(text, width=54, lines=6):
-    out = []
-    for chunk in str(text or "").split("\n"):
-        out += textwrap.wrap(chunk, width)[:lines]
-        if len(out) >= lines:
-            break
-    return "\n".join(out[:lines]) or "--"
+BLUE = "#4C72B0"; DARK = "#34548A"; TEAL = "#2E7F96"; GREEN = "#55A868"
+ORANGE = "#DD8452"; INK = "#333333"; GREY = "#666666"
+PALE = {"blue": "#EEF3FA", "teal": "#EAF6FA", "green": "#EAF6EE", "orange": "#FDF1E7"}
+ACCENT = {"blue": BLUE, "teal": TEAL, "green": GREEN, "orange": ORANGE}
 
 
 def _load(path):
@@ -31,71 +28,154 @@ def _load(path):
     return json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
 
 
+def _plain(value):
+    """Text may be a string or a chat-style list of dicts; take the assistant content when present."""
+    if isinstance(value, str):
+        if value.startswith("[{'") or value.startswith('[{"'):
+            try:
+                import ast
+                value = ast.literal_eval(value)
+            except Exception:
+                return value
+        else:
+            return value
+    if isinstance(value, list):
+        return "\n".join(str(m.get("content", "")) for m in value if isinstance(m, dict))
+    return str(value or "")
+
+
+def _wrap(text, width):
+    lines = []
+    for chunk in _plain(text).replace("<diagnosis>", "").replace("</diagnosis>", "").split("\n"):
+        lines += textwrap.wrap(chunk, width) or [""]
+    return lines
+
+
 def draw(examples, tool_usage, models, out_dir):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+    from matplotlib.patches import FancyBboxPatch, Rectangle
 
     ex = examples.get("examples", [])
     pick = lambda src: next((e for e in ex if e["source"] == src), None)
     dat, harness, grpo = pick("datagen"), pick("harness"), pick("grpo")
-    fig = plt.figure(figsize=(11.5, 8.2), facecolor="white")
-    gs = fig.add_gridspec(2, 2, hspace=0.42, wspace=0.28, left=0.07, right=0.97, top=0.92, bottom=0.07)
-    blue, red, green = "#2E5E8C", "#B5383C", "#2E7F5E"
 
-    ax = fig.add_subplot(gs[0, 0]); ax.axis("off"); ax.set_title("(a) A fault from the deterministic corpus", loc="left", color=blue, weight="bold")
+    fig = plt.figure(figsize=(10, 8.6), facecolor="white")
+    ax = fig.add_axes([0, 0, 1, 1]); ax.set_xlim(0, 1000); ax.set_ylim(860, 0); ax.axis("off")
+
+    def text(x, y, s, size=11.5, color=INK, weight="normal", mono=False, va="top"):
+        ax.text(x, y, s, fontsize=size, color=color, weight=weight, va=va, ha="left",
+                family="DejaVu Sans Mono" if mono else "DejaVu Sans", zorder=6)
+
+    def block(x, y, w, value, size=10.5, color=INK, mono=False, width_chars=None):
+        # DejaVu glyphs in this 1000x860 coordinate system are about 0.78 * fontsize pixels wide (sans).
+        chars = width_chars or max(12, int((w - 16) / (0.84 * size if mono else 0.78 * size)))
+        lines = _wrap(value, chars)
+        for i, line in enumerate(lines):
+            text(x, y + i * (size + 3.4), line, size, color, mono=mono)
+
+    def card(x, y, w, h, key, title, subtitle, tag):
+        c = ACCENT[key]
+        ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0,rounding_size=12",
+                                    facecolor="white", edgecolor=c, linewidth=2, zorder=1))
+        ax.add_patch(FancyBboxPatch((x + 1, y + 1), 6, h - 2, boxstyle="round,pad=0,rounding_size=3",
+                                    facecolor=c, edgecolor="none", zorder=2))
+        text(x + 22, y + 24, title, 15, c, "bold")
+        text(x + 22, y + 45, subtitle, 11.5, GREY)
+        ax.add_patch(FancyBboxPatch((x + w - 14 - 12 * len(tag), y + 16), 12 * len(tag) + 4, 22,
+                                    boxstyle="round,pad=0,rounding_size=5",
+                                    facecolor=PALE[key], edgecolor=c, linewidth=1.1, zorder=3))
+        ax.text(x + w - 14 - 6 * len(tag) - 2, y + 27, tag, fontsize=9.5, color=c, weight="bold",
+                ha="center", va="center", family="DejaVu Sans", zorder=6)
+
+    def subbox(x, y, w, h, key, label, value, mono=False, size=10.2):
+        c = ACCENT[key]
+        ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0,rounding_size=8",
+                                    facecolor=PALE[key], edgecolor=c, linewidth=1.4, zorder=3))
+        text(x + 12, y + 12, label, 11.5, c, "bold")
+        block(x + 12, y + 32, w - 24, value, size, INK, mono)
+
+    text(16, 20, "Measured interactions: corpus, frontier tools, GRPO and evaluation", 16, DARK, "bold")
+    text(16, 40, "Every panel is generated from a stage output; see assets/examples.json and examples_schema.json", 11, GREY)
+
+    # (a) deterministic fault
+    card(16, 58, 470, 360, "blue", "(a) Fault from the corpus", "deterministic ground truth, no model", "DATA")
     if dat:
-        f = dat["fields"]
-        ax.text(0.02, 0.92, f"{dat.get('fault')} on {dat.get('topology')}", transform=ax.transAxes, weight="bold")
-        ax.text(0.02, 0.74, "Diagnosis\n" + _wrap(f.get("diagnosis")), transform=ax.transAxes, va="top", fontsize=9, family="monospace")
-        ax.text(0.02, 0.28, "Expert edits are applied in the answer; the verifiers decide.", transform=ax.transAxes, fontsize=8, color="#666")
-    ax.set_xlim(0, 1); ax.set_ylim(0, 1)
+        f = dat["fields"]; g = dat.get("graph") or {}
+        block(38, 136, 426, f"{dat.get('fault', '?')} on {dat.get('topology', '?')}", 13, DARK)
+        comps = " | ".join(str(c) for c in g.get("components", [])[:5]) or "plant graph"
+        block(38, 160, 426, f"{len(g.get('components', []))} components / {g.get('streams', '?')} streams: {comps}", 10.5, GREY)
+        subbox(38, 188, 426, 132, "blue", "Diagnosis (verbatim)", f.get("diagnosis", ""))
+        block(38, 330, 426, "Expert edits are applied in the answer; the verifiers judge the result.", 10.5, GREY)
+        block(38, 356, 426, "file: " + pathlib.Path(dat.get("file", "")).name, 9.5, GREY, mono=True)
+    else:
+        text(38, 140, "No ground-truth example available.", 11, GREY)
 
-    ax = fig.add_subplot(gs[0, 1]); ax.axis("off"); ax.set_title("(b) Frontier model with our physics tools", loc="left", color=green, weight="bold")
+    # (b) frontier tools
+    card(502, 58, 482, 360, "teal", "(b) Frontier + physics tools", "tool calls, reasoning and cost per answer", "TOOLS")
     if harness:
         calls = harness["fields"].get("tool_calls") or []
-        ax.text(0.02, 0.92, f"{len(calls)} calls to check_answer; usage recorded per call", transform=ax.transAxes, weight="bold", fontsize=10)
-        ax.text(0.02, 0.76, "Reasoning\n" + _wrap(harness["fields"].get("reasoning")), transform=ax.transAxes, va="top", fontsize=9)
-        ax.text(0.02, 0.30, "Answer\n" + _wrap(harness["fields"].get("completion")), transform=ax.transAxes, va="top", fontsize=9, family="monospace")
-    tu = (tool_usage or {}).get("by_task") or {}
-    if tu:
-        tasks = sorted(tu)
-        calls = [tu[t]["calls"] for t in tasks]
-        ax2 = ax.inset_axes([0.08, 0.05, 0.84, 0.18])
-        ax2.bar(range(len(tasks)), calls, color=green, alpha=0.75)
-        ax2.set_xticks(range(len(tasks)), tasks, fontsize=8); ax2.set_ylabel("calls", fontsize=8); ax2.tick_params(labelsize=8)
-    ax.set_xlim(0, 1); ax.set_ylim(0, 1)
+        usage = harness["fields"].get("usage") or {}
+        block(524, 136, 438, f"{len(calls)} calls to check_answer", 13, TEAL)
+        block(524, 160, 438,
+              f"cost: {usage.get('total_cost_nanodollars', '?')} nanodollars | tokens {usage.get('input_tokens', '?')} in / {usage.get('output_tokens', '?')} out",
+              10.5, GREY)
+        subbox(524, 188, 438, 100, "teal", "Reasoning trace", harness["fields"].get("reasoning", ""))
+        subbox(524, 298, 438, 96, "teal", "Final answer", harness["fields"].get("completion", ""), mono=True, size=9.5)
+    else:
+        text(524, 140, "Frontier tool traces appear after the Kaggle harness run.", 11, GREY)
 
-    ax = fig.add_subplot(gs[1, 0]); ax.set_title("(c) A scored GRPO rollout", loc="left", color=red, weight="bold")
-    if grpo:
-        rewards = grpo["fields"].get("rewards") or []
+    # (c) scored rollout
+    card(16, 436, 470, 388, "green", "(c) Scored GRPO rollout", "group-normalized advantage needs reward spread", "GRPO")
+    rewards = (grpo or {}).get("fields", {}).get("rewards") or []
+    if rewards:
         names = grpo["fields"].get("reward_functions") or []
+        spread = grpo["fields"].get("spread")
+        block(38, 514, 426, f"reward spread {spread}: " +
+              ("signal for learning" if spread else "flat group, no gradient"), 12, GREEN)
+        y = 556
         for i, vals in enumerate(rewards):
             if not vals:
                 continue
-            ax.plot(range(len(vals)), vals, "o-", label=f"{names[i] if i < len(names) else 'reward'}", alpha=0.8)
-        ax.set_xlabel("completion in the group"); ax.set_ylabel("reward"); ax.legend(fontsize=7); ax.grid(alpha=0.25)
-        ax.text(0.02, 0.03, f"spread {grpo['fields'].get('spread')}: a group with signal, so the policy can learn",
-                transform=ax.transAxes, fontsize=8, color="#555")
-
-    ax = fig.add_subplot(gs[1, 1]); ax.axis("off"); ax.set_title("(d) Comparison arms (from result JSON)", loc="left", color=blue, weight="bold")
-    arms = (models or {}).get("rows") or []
-    if arms:
-        labels = []
-        for r in arms[:12]:
-            labels.append(f"{r['display_name']} | {r['model_family']} | {r['harness']} | tools {r['tool_access']}")
-        ax.text(0.02, 0.94, "\n".join(_wrap(s, 62, 1) for s in labels), transform=ax.transAxes, va="top", fontsize=9, family="monospace")
+            block(38, y, 140, names[i] if i < len(names) else "reward", 10, INK, mono=True)
+            x0 = 196
+            for j, v in enumerate(vals):
+                w = max(4.0, min(24.0, float(v) * 22))
+                ax.add_patch(Rectangle((x0 + j * 30, y + 1), w, 13,
+                                       facecolor=[BLUE, TEAL, ORANGE, GREEN][i % 4], edgecolor="none", zorder=4))
+                text(x0 + j * 30 + w + 3, y, f"{float(v):.2f}", 9, GREY)
+            y += 32
+        block(38, 770, 426, "Prompt and completions are stored verbatim in assets/examples.json.", 10, GREY)
     else:
-        ax.text(0.02, 0.90, "No trained-model reports yet.\n\nThe axes are recorded in\nassets/model_results_manifest.json:\n  model family\n  inference text\n  tool access\n  zero-shot flag", transform=ax.transAxes, va="top", fontsize=10)
-    ax.set_xlim(0, 1); ax.set_ylim(0, 1)
+        text(38, 518, "Rollout bars appear after the first GRPO session.", 11, GREY)
 
-    fig.suptitle("Measured interactions: corpus, frontier tools, GRPO and evaluation", fontsize=14, weight="bold")
+    # (d) comparison arms
+    card(502, 436, 482, 388, "orange", "(d) Comparison arms", "family / inference text / tool access", "EVAL")
+    arms = (models or {}).get("rows") or []
+    y = 512
+    if arms:
+        for r in arms[:9]:
+            label = f"{r['display_name']} | {r['model_family']} | {r['harness']} | tools {r['tool_access']}"
+            ax.add_patch(FancyBboxPatch((524, y - 5), 438, 25, boxstyle="round,pad=0,rounding_size=5",
+                                        facecolor=PALE["orange"], edgecolor="none", zorder=3))
+            block(534, y, 420, label, 9.8, INK, mono=True)
+            y += 30
+    else:
+        for line in ("No trained-model reports yet.", "The axes are fixed in", "assets/model_results_manifest.json:",
+                     "  model family", "  inference text", "  tool access", "  zero-shot flag"):
+            text(524, y, line, 11.5, GREY if line.startswith("  ") else INK, mono=line.startswith("  "))
+            y += 27
+    block(524, 790, 438, "Tables are generated from model_eval reports, never transcribed.", 10, GREY)
+
+    text(16, 842, "Sources: assets/examples.json, examples_schema.json, reports/tool_usage.json, assets/model_results.json", 9.5, GREY)
+
     out = pathlib.Path(out_dir); out.mkdir(parents=True, exist_ok=True)
     (out / "svg").mkdir(exist_ok=True); (out / "pdf").mkdir(exist_ok=True)
     paths = []
     for ext in ("svg", "pdf"):
         p = out / ext / f"fig_trace_walkthrough.{ext}"
-        fig.savefig(p, bbox_inches="tight")
+        fig.savefig(p, bbox_inches="tight", facecolor="white")
         paths.append(p)
     plt.close(fig)
     return paths

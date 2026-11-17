@@ -4,11 +4,11 @@
  "seed": 0,
  "n": 600,
  "split_rows": {
-  "test_id": 784,
-  "test_ood_fault": 5295,
-  "train": 6688,
-  "val": 827,
-  "test_ood_topology": 279
+  "test_id": 744,
+  "test_ood_fault": 4964,
+  "test_ood_topology": 1116,
+  "train": 6276,
+  "val": 773
  },
  "splits": {
   "test_id": {
@@ -16,38 +16,38 @@
     "n": 200,
     "noop": 0,
     "search_success": 193,
-    "search_exact": 130,
+    "search_exact": 137,
     "expert_success": 200,
-    "search_mean_solves_when_solved": 129.5
+    "search_mean_solves_when_solved": 135.1
    },
    "by_fault": {
     "efficiency_gt_1": {
-     "n": 65,
+     "n": 59,
      "noop": 0,
-     "search_success": 58,
-     "search_exact": 4,
-     "expert_success": 65,
-     "search_mean_solves_when_solved": 23.5
+     "search_success": 52,
+     "search_exact": 5,
+     "expert_success": 59,
+     "search_mean_solves_when_solved": 25.7
     },
     "unit_slip": {
-     "n": 58,
+     "n": 60,
      "noop": 0,
-     "search_success": 58,
-     "search_exact": 57,
-     "expert_success": 58,
-     "search_mean_solves_when_solved": 46.7
+     "search_success": 60,
+     "search_exact": 59,
+     "expert_success": 60,
+     "search_mean_solves_when_solved": 47.6
     },
     "wrong_fluid": {
-     "n": 77,
+     "n": 81,
      "noop": 0,
-     "search_success": 77,
-     "search_exact": 69,
-     "expert_success": 77,
-     "search_mean_solves_when_solved": 271.6
+     "search_success": 81,
+     "search_exact": 73,
+     "expert_success": 81,
+     "search_mean_solves_when_solved": 270.2
     }
    },
    "limit": 200,
-   "seconds": 81.2
+   "seconds": 77.9
   },
   "test_ood_fault": {
    "all": {
@@ -56,82 +56,82 @@
     "search_success": 200,
     "search_exact": 200,
     "expert_success": 200,
-    "search_mean_solves_when_solved": 116.7
+    "search_mean_solves_when_solved": 115.1
    },
    "by_fault": {
     "sign_flip": {
-     "n": 106,
+     "n": 109,
      "noop": 0,
-     "search_success": 106,
-     "search_exact": 106,
-     "expert_success": 106,
+     "search_success": 109,
+     "search_exact": 109,
+     "expert_success": 109,
      "search_mean_solves_when_solved": 8
     },
     "swapped_ports": {
-     "n": 94,
+     "n": 91,
      "noop": 0,
-     "search_success": 94,
-     "search_exact": 94,
-     "expert_success": 94,
-     "search_mean_solves_when_solved": 239.3
+     "search_success": 91,
+     "search_exact": 91,
+     "expert_success": 91,
+     "search_mean_solves_when_solved": 243.4
     }
    },
    "limit": 200,
-   "seconds": 179.3
+   "seconds": 164.0
   },
   "test_ood_topology": {
    "all": {
     "n": 200,
     "noop": 0,
-    "search_success": 193,
-    "search_exact": 152,
+    "search_success": 200,
+    "search_exact": 163,
     "expert_success": 200,
-    "search_mean_solves_when_solved": 105.0
+    "search_mean_solves_when_solved": 95.8
    },
    "by_fault": {
     "efficiency_gt_1": {
-     "n": 41,
+     "n": 37,
      "noop": 0,
-     "search_success": 39,
-     "search_exact": 2,
-     "expert_success": 41,
-     "search_mean_solves_when_solved": 7.9
+     "search_success": 37,
+     "search_exact": 1,
+     "expert_success": 37,
+     "search_mean_solves_when_solved": 5.8
     },
     "sign_flip": {
-     "n": 48,
-     "noop": 0,
-     "search_success": 48,
-     "search_exact": 48,
-     "expert_success": 48,
-     "search_mean_solves_when_solved": 9.4
-    },
-    "swapped_ports": {
-     "n": 38,
-     "noop": 0,
-     "search_success": 38,
-     "search_exact": 38,
-     "expert_success": 38,
-     "search_mean_solves_when_solved": 262.6
-    },
-    "unit_slip": {
      "n": 43,
      "noop": 0,
      "search_success": 43,
-     "search_exact": 39,
+     "search_exact": 43,
      "expert_success": 43,
-     "search_mean_solves_when_solved": 56.9
+     "search_mean_solves_when_solved": 8
+    },
+    "swapped_ports": {
+     "n": 46,
+     "noop": 0,
+     "search_success": 46,
+     "search_exact": 46,
+     "expert_success": 46,
+     "search_mean_solves_when_solved": 202.0
+    },
+    "unit_slip": {
+     "n": 39,
+     "noop": 0,
+     "search_success": 39,
+     "search_exact": 38,
+     "expert_success": 39,
+     "search_mean_solves_when_solved": 45.9
     },
     "wrong_fluid": {
-     "n": 30,
+     "n": 35,
      "noop": 0,
-     "search_success": 25,
-     "search_exact": 25,
-     "expert_success": 30,
-     "search_mean_solves_when_solved": 283.4
+     "search_success": 35,
+     "search_exact": 35,
+     "expert_success": 35,
+     "search_mean_solves_when_solved": 215.1
     }
    },
    "limit": 200,
-   "seconds": 136.9
+   "seconds": 84.4
   }
  }
 }

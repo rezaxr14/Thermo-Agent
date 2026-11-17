@@ -3,7 +3,8 @@
   {
    "fault": "efficiency_gt_1",
    "fields": {
-    "diagnosis": "[{'role': 'assistant', 'content': '<diagnosis>ENG.eta_el = 43.8554 is a percentage entered where a fraction is required.</diagnosis>\\n<edits>\\nSET ENG.eta_el = 0.4385535708751113\\n</edits>'}]",
+    "diagnosis": "ENG.eta_el = 43.8554 is a percentage entered where a fraction is required.",
+    "edits": "\nSET ENG.eta_el = 0.4385535708751113\n",
     "prompt_tail": "PLANT\nPLANT dc_engine_electric_sampled T0=289.81583689783804 P0=101325.0 RH=0.6896411495184748\nC ENG gas_engine {\"P_el\":45417471.59047652,\"eta_el\":43.855357,\"f_loss\":0.11686372635949754,\"air_excess\":1.559763909543629,\"P_exh\":101325.0}\nC DC dc_load {\"P_it\":39872825.099120244,\"chilled_fraction\":0.8886 ..."
    },
    "file": "data\\processed\\repair_test_id.jsonl",
@@ -27,7 +28,8 @@
   {
    "fault": "unit_slip",
    "fields": {
-    "diagnosis": "[{'role': 'assistant', 'content': \"<diagnosis>@fuel.fixed.P = 1.2e+11 Pa is far from the loop's other pressures, a bar/Pa or kPa/Pa unit slip.</diagnosis>\\n<edits>\\nSET @fuel.fixed.P = 1200000.0\\n</edits>\"}]",
+    "diagnosis": "@fuel.fixed.P = 1.2e+11 Pa is far from the loop's other pressures, a bar/Pa or kPa/Pa unit slip.",
+    "edits": "\nSET @fuel.fixed.P = 1200000.0\n",
     "prompt_tail": "PLANT\nPLANT cgam_orc_sampled T0=298.15 P0=101325.0 RH=0.6\nC AC compressor {\"PR\":10.421663424505795,\"eta_s\":0.8950650815162641}\nC AP recuperator {\"T_cold_out\":821.5442255908162,\"dp_cold\":0.05,\"dp_hot\":0.03}\nC CC combustor {\"T_out\":1518.2949778659827,\"dp\":0.05,\"q_loss\":0.02}\nC GT turbine {\"P_out\":1099 ..."
    },
    "file": "data\\processed\\repair_test_id.jsonl",
@@ -56,7 +58,8 @@
   {
    "fault": "wrong_fluid",
    "fields": {
-    "diagnosis": "[{'role': 'assistant', 'content': '<diagnosis>Stream fuel is labelled Water, but it feeds CC.fuel_in, which expects a stream of the other fluid class; its neighbours in the same loop carry CH4.</diagnosis>\\n<edits>\\nFLUID @fuel = CH4\\n</edits>'}]",
+    "diagnosis": "Stream fuel is labelled Water, but it feeds CC.fuel_in, which expects a stream of the other fluid class; its neighbours in the same loop carry CH4.",
+    "edits": "\nFLUID @fuel = CH4\n",
     "prompt_tail": "PLANT\nPLANT dc_electric_sampled T0=296.3611263046365 P0=101325.0 RH=0.7316625915541004\nC AC compressor {\"PR\":19.95302123622318,\"eta_s\":0.8509346404426589}\nC CC combustor {\"T_out\":1494.177841809613,\"dp\":0.04,\"q_loss\":0.01}\nC GT turbine {\"P_out\":101325.0,\"eta_s\":0.8432923041068288}\nC DC dc_load {\"P_it ..."
    },
    "file": "data\\processed\\repair_test_id.jsonl",
@@ -81,7 +84,8 @@
   {
    "fault": "sign_flip",
    "fields": {
-    "diagnosis": "[{'role': 'assistant', 'content': '<diagnosis>REJ.approach_K = -8 is negative; this quantity must be non-negative, so the sign was flipped.</diagnosis>\\n<edits>\\nSET REJ.approach_K = 8.0\\n</edits>'}]",
+    "diagnosis": "REJ.approach_K = -8 is negative; this quantity must be non-negative, so the sign was flipped.",
+    "edits": "\nSET REJ.approach_K = 8.0\n",
     "prompt_tail": "PLANT\nPLANT dc_absorption_sampled T0=300.07430820183725 P0=101325.0 RH=0.6925238798117384\nC AC compressor {\"PR\":21.14735310015176,\"eta_s\":0.8250387419408959}\nC CC combustor {\"T_out\":1444.3407792428372,\"dp\":0.04,\"q_loss\":0.01}\nC GT turbine {\"P_out\":104458.76288659793,\"eta_s\":0.9041913278380465}\nC DC  ..."
    },
    "file": "data\\processed\\repair_test_ood_fault.jsonl",
@@ -108,7 +112,8 @@
   {
    "fault": "swapped_ports",
    "fields": {
-    "diagnosis": "[{'role': 'assistant', 'content': \"<diagnosis>Streams rej_cold and hw_hot enter CH through each other's ports; the solver output shows the inlet conditions at CH do not match the roles of those ports, so the two connections are exchanged.</diagnosis>\\n<edits>\\nREWIRE @rej_cold.to = CH.rej_in\\nREWIRE @hw_hot.to = CH.gen_in\\n</edits>\"}]",
+    "diagnosis": "Streams rej_cold and hw_hot enter CH through each other's ports; the solver output shows the inlet conditions at CH do not match the roles of those ports, so the two connections are exchanged.",
+    "edits": "\nREWIRE @rej_cold.to = CH.rej_in\nREWIRE @hw_hot.to = CH.gen_in\n",
     "prompt_tail": "PLANT\nPLANT dc_absorption_sampled T0=304.68209558846956 P0=101325.0 RH=0.43002810432214655\nC AC compressor {\"PR\":13.04322813210078,\"eta_s\":0.8759458243388429}\nC CC combustor {\"T_out\":1536.6996770967485,\"dp\":0.04,\"q_loss\":0.01}\nC GT turbine {\"P_out\":104458.76288659793,\"eta_s\":0.8980552603143602}\nC DC ..."
    },
    "file": "data\\processed\\repair_test_ood_fault.jsonl",
@@ -135,7 +140,8 @@
   {
    "fault": "efficiency_gt_1",
    "fields": {
-    "diagnosis": "[{'role': 'assistant', 'content': '<diagnosis>ENG.eta_el = 40.1758 is a percentage entered where a fraction is required.</diagnosis>\\n<edits>\\nSET ENG.eta_el = 0.4017583838069296\\n</edits>'}]",
+    "diagnosis": "ENG.eta_el = 40.1758 is a percentage entered where a fraction is required.",
+    "edits": "\nSET ENG.eta_el = 0.4017583838069296\n",
     "prompt_tail": "PLANT\nPLANT dc_engine_electric_sampled T0=299.41672281473996 P0=101325.0 RH=0.7606845772056596\nC ENG gas_engine {\"P_el\":18933309.52062943,\"eta_el\":40.175838,\"f_loss\":0.10977318783796224,\"air_excess\":2.0817187695477415,\"P_exh\":101325.0}\nC DC dc_load {\"P_it\":17686747.533986866,\"chilled_fraction\":0.322 ..."
    },
    "file": "data\\processed\\repair_test_ood_topology.jsonl",
@@ -158,7 +164,8 @@
   {
    "fault": "sign_flip",
    "fields": {
-    "diagnosis": "[{'role': 'assistant', 'content': '<diagnosis>CH.dT_rej = -9.15081 is negative; this quantity must be non-negative, so the sign was flipped.</diagnosis>\\n<edits>\\nSET CH.dT_rej = 9.150811672998715\\n</edits>'}]",
+    "diagnosis": "CH.dT_rej = -9.15081 is negative; this quantity must be non-negative, so the sign was flipped.",
+    "edits": "\nSET CH.dT_rej = 9.150811672998715\n",
     "prompt_tail": "PLANT\nPLANT dc_engine_absorption_sampled T0=297.74102146472825 P0=101325.0 RH=0.3738473489073113\nC ENG gas_engine {\"P_el\":5359423.69522908,\"eta_el\":0.43491449197108945,\"f_loss\":0.17112052310106063,\"air_excess\":2.1457757174706575,\"P_exh\":104458.76288659793}\nC DC dc_load {\"P_it\":5203323.975950562,\"chi ..."
    },
    "file": "data\\processed\\repair_test_ood_topology.jsonl",
@@ -182,7 +189,8 @@
   {
    "fault": "swapped_ports",
    "fields": {
-    "diagnosis": "[{'role': 'assistant', 'content': \"<diagnosis>Streams cw_in and hw_hot enter CH through each other's ports; the solver output shows the inlet conditions at CH do not match the roles of those ports, so the two connections are exchanged.</diagnosis>\\n<edits>\\nREWIRE @cw_in.to = CH.rej_in\\nREWIRE @hw_hot.to = CH.gen_in\\n</edits>\"}]",
+    "diagnosis": "Streams cw_in and hw_hot enter CH through each other's ports; the solver output shows the inlet conditions at CH do not match the roles of those ports, so the two connections are exchanged.",
+    "edits": "\nREWIRE @cw_in.to = CH.rej_in\nREWIRE @hw_hot.to = CH.gen_in\n",
     "prompt_tail": "PLANT\nPLANT dc_engine_absorption_sampled T0=291.3267810040068 P0=101325.0 RH=0.7786688434244406\nC ENG gas_engine {\"P_el\":31927227.437904324,\"eta_el\":0.4144970685451632,\"f_loss\":0.1682222548205755,\"air_excess\":1.68834812538783,\"P_exh\":104458.76288659793}\nC DC dc_load {\"P_it\":30997308.19214012,\"chille ..."
    },
    "file": "data\\processed\\repair_test_ood_topology.jsonl",
@@ -206,7 +214,8 @@
   {
    "fault": "unit_slip",
    "fields": {
-    "diagnosis": "[{'role': 'assistant', 'content': \"<diagnosis>@cw_in.fixed.P = 1.01325e+10 Pa is far from the loop's other pressures, a bar/Pa or kPa/Pa unit slip.</diagnosis>\\n<edits>\\nSET @cw_in.fixed.P = 101325.0\\n</edits>\"}]",
+    "diagnosis": "@cw_in.fixed.P = 1.01325e+10 Pa is far from the loop's other pressures, a bar/Pa or kPa/Pa unit slip.",
+    "edits": "\nSET @cw_in.fixed.P = 101325.0\n",
     "prompt_tail": "PLANT\nPLANT dc_engine_absorption_sampled T0=298.88204058674893 P0=101325.0 RH=0.4212907058863104\nC ENG gas_engine {\"P_el\":14245625.558062628,\"eta_el\":0.4342755045879509,\"f_loss\":0.10441685559334277,\"air_excess\":1.6682033430410195,\"P_exh\":104458.76288659793}\nC DC dc_load {\"P_it\":13830704.425303522,\"c ..."
    },
    "file": "data\\processed\\repair_test_ood_topology.jsonl",
@@ -230,7 +239,8 @@
   {
    "fault": "wrong_fluid",
    "fields": {
-    "diagnosis": "[{'role': 'assistant', 'content': '<diagnosis>Stream cw_in is labelled FLUE, but it feeds CH.rej_in, which expects a stream of the other fluid class; its neighbours in the same loop carry Water.</diagnosis>\\n<edits>\\nFLUID @cw_in = Water\\n</edits>'}]",
+    "diagnosis": "Stream cw_in is labelled FLUE, but it feeds CH.rej_in, which expects a stream of the other fluid class; its neighbours in the same loop carry Water.",
+    "edits": "\nFLUID @cw_in = Water\n",
     "prompt_tail": "PLANT\nPLANT dc_engine_electric_sampled T0=294.27040719330483 P0=101325.0 RH=0.44729499559414665\nC ENG gas_engine {\"P_el\":7932836.620122649,\"eta_el\":0.41757855752072637,\"f_loss\":0.1081247475635331,\"air_excess\":1.597477077798198,\"P_exh\":101325.0}\nC DC dc_load {\"P_it\":7224288.563030908,\"chilled_fractio ..."
    },
    "file": "data\\processed\\repair_test_ood_topology.jsonl",
@@ -253,7 +263,8 @@
   {
    "fault": "efficiency_gt_1",
    "fields": {
-    "diagnosis": "[{'role': 'assistant', 'content': '<diagnosis>ENG.eta_el = 40.6251 is a percentage entered where a fraction is required.</diagnosis>\\n<edits>\\nSET ENG.eta_el = 0.40625125690457137\\n</edits>'}]",
+    "diagnosis": "ENG.eta_el = 40.6251 is a percentage entered where a fraction is required.",
+    "edits": "\nSET ENG.eta_el = 0.40625125690457137\n",
     "prompt_tail": "PLANT\nPLANT engine-absorption-wet-dh_exhaust T0=300.2107988945984 P0=101325.0 RH=0.3136099150625232\nC ENG gas_engine {\"P_el\":52845164.00204797,\"eta_el\":40.625126,\"f_loss\":0.19829233420643297,\"air_excess\":1.9247632100481389,\"P_exh\":105513.90190565448}\nC DC dc_load {\"P_it\":50629843.38458197,\"chilled_f ..."
    },
    "file": "data\\processed_arch\\repair_test_id.jsonl",
@@ -279,7 +290,8 @@
   {
    "fault": "unit_slip",
    "fields": {
-    "diagnosis": "[{'role': 'assistant', 'content': '<diagnosis>DC.P_it = 46958.4 W is not a credible electrical power; it is off by a power-of-ten factor, a W/kW/MW unit slip.</diagnosis>\\n<edits>\\nSET DC.P_it = 46958430.23500699\\n</edits>'}]",
+    "diagnosis": "DC.P_it = 46958.4 W is not a credible electrical power; it is off by a power-of-ten factor, a W/kW/MW unit slip.",
+    "edits": "\nSET DC.P_it = 46958430.23500699\n",
     "prompt_tail": "PLANT\nPLANT turbine-absorption-dry-dh_exhaust T0=290.7213562434172 P0=101325.0 RH=0.4115489104293264\nC AC compressor {\"PR\":23.33194650056798,\"eta_s\":0.8653977873433987}\nC CC combustor {\"T_out\":1541.8012068372661,\"dp\":0.04,\"q_loss\":0.01}\nC GT turbine {\"P_out\":105513.90190565448,\"eta_s\":0.894053000259 ..."
    },
    "file": "data\\processed_arch\\repair_test_id.jsonl",
@@ -307,7 +319,8 @@
   {
    "fault": "wrong_fluid",
    "fields": {
-    "diagnosis": "[{'role': 'assistant', 'content': '<diagnosis>Stream rej_hot is labelled CGAM_AIR, but it feeds HP.src_in, which expects a stream of the other fluid class; its neighbours in the same loop carry Water.</diagnosis>\\n<edits>\\nFLUID @rej_hot = Water\\n</edits>'}]",
+    "diagnosis": "Stream rej_hot is labelled CGAM_AIR, but it feeds HP.src_in, which expects a stream of the other fluid class; its neighbours in the same loop carry Water.",
+    "edits": "\nFLUID @rej_hot = Water\n",
     "prompt_tail": "PLANT\nPLANT turbine-absorption-dry-dh_heat_pump T0=295.5459662185527 P0=101325.0 RH=0.43805815803471726\nC AC compressor {\"PR\":12.015673083039294,\"eta_s\":0.8911465056738899}\nC CC combustor {\"T_out\":1473.0243803358737,\"dp\":0.04,\"q_loss\":0.01}\nC GT turbine {\"P_out\":104458.76288659793,\"eta_s\":0.90893616 ..."
    },
    "file": "data\\processed_arch\\repair_test_id.jsonl",
@@ -335,7 +348,8 @@
   {
    "fault": "sign_flip",
    "fields": {
-    "diagnosis": "[{'role': 'assistant', 'content': '<diagnosis>CC.dp = -0.04 is negative; this quantity must be non-negative, so the sign was flipped.</diagnosis>\\n<edits>\\nSET CC.dp = 0.04\\n</edits>'}]",
+    "diagnosis": "CC.dp = -0.04 is negative; this quantity must be non-negative, so the sign was flipped.",
+    "edits": "\nSET CC.dp = 0.04\n",
     "prompt_tail": "PLANT\nPLANT turbine-absorption-ext-dh_exhaust T0=300.4071397204222 P0=101325.0 RH=0.7494191439839968\nC AC compressor {\"PR\":23.869143692092678,\"eta_s\":0.8973285094216608}\nC CC combustor {\"T_out\":1573.061985554328,\"dp\":-0.04,\"q_loss\":0.01}\nC GT turbine {\"P_out\":105513.90190565448,\"eta_s\":0.87339068435 ..."
    },
    "file": "data\\processed_arch\\repair_test_ood_fault.jsonl",
@@ -362,7 +376,8 @@
   {
    "fault": "swapped_ports",
    "fields": {
-    "diagnosis": "[{'role': 'assistant', 'content': \"<diagnosis>Streams cw_in and hw_hot enter CH through each other's ports; the solver output shows the inlet conditions at CH do not match the roles of those ports, so the two connections are exchanged.</diagnosis>\\n<edits>\\nREWIRE @cw_in.to = CH.rej_in\\nREWIRE @hw_hot.to = CH.gen_in\\n</edits>\"}]",
+    "diagnosis": "Streams cw_in and hw_hot enter CH through each other's ports; the solver output shows the inlet conditions at CH do not match the roles of those ports, so the two connections are exchanged.",
+    "edits": "\nREWIRE @cw_in.to = CH.rej_in\nREWIRE @hw_hot.to = CH.gen_in\n",
     "prompt_tail": "PLANT\nPLANT turbine-absorption-ext-orc-dh_exhaust T0=290.6895467070655 P0=101325.0 RH=0.3809770350989421\nC AC compressor {\"PR\":20.85664878285505,\"eta_s\":0.8920078441912608}\nC CC combustor {\"T_out\":1583.5022245518057,\"dp\":0.04,\"q_loss\":0.01}\nC GT turbine {\"P_out\":105513.90190565448,\"eta_s\":0.90123632 ..."
    },
    "file": "data\\processed_arch\\repair_test_ood_fault.jsonl",
@@ -393,7 +408,8 @@
   {
    "fault": "efficiency_gt_1",
    "fields": {
-    "diagnosis": "[{'role': 'assistant', 'content': '<diagnosis>ENG.eta_el = 45.9246 is a percentage entered where a fraction is required.</diagnosis>\\n<edits>\\nSET ENG.eta_el = 0.45924565706831755\\n</edits>'}]",
+    "diagnosis": "ENG.eta_el = 45.9246 is a percentage entered where a fraction is required.",
+    "edits": "\nSET ENG.eta_el = 0.45924565706831755\n",
     "prompt_tail": "PLANT\nPLANT engine-absorption-ext-dh_exhaust T0=291.5371133843762 P0=101325.0 RH=0.41573332703536264\nC ENG gas_engine {\"P_el\":32376244.224436924,\"eta_el\":45.924566,\"f_loss\":0.1402962065955663,\"air_excess\":2.1306665104409848,\"P_exh\":105513.90190565448}\nC DC dc_load {\"P_it\":31433246.81984167,\"chilled_ ..."
    },
    "file": "data\\processed_arch\\repair_test_ood_topology.jsonl",
@@ -418,7 +434,8 @@
   {
    "fault": "sign_flip",
    "fields": {
-    "diagnosis": "[{'role': 'assistant', 'content': '<diagnosis>COND.dT_cw = -8.74709 is negative; this quantity must be non-negative, so the sign was flipped.</diagnosis>\\n<edits>\\nSET COND.dT_cw = 8.747085506234704\\n</edits>'}]",
+    "diagnosis": "COND.dT_cw = -8.74709 is negative; this quantity must be non-negative, so the sign was flipped.",
+    "edits": "\nSET COND.dT_cw = 8.747085506234704\n",
     "prompt_tail": "PLANT\nPLANT engine-absorption-ext-orc-dh_exhaust T0=289.5476410182706 P0=101325.0 RH=0.313811444862418\nC ENG gas_engine {\"P_el\":46829451.864750996,\"eta_el\":0.41117615421402753,\"f_loss\":0.16310630237160112,\"air_excess\":2.1787163658580924,\"P_exh\":105513.90190565448}\nC DC dc_load {\"P_it\":47509329.66217 ..."
    },
    "file": "data\\processed_arch\\repair_test_ood_topology.jsonl",
@@ -447,7 +464,8 @@
   {
    "fault": "swapped_ports",
    "fields": {
-    "diagnosis": "[{'role': 'assistant', 'content': \"<diagnosis>Streams chw_ret and cw_in enter CH through each other's ports; the solver output shows the inlet conditions at CH do not match the roles of those ports, so the two connections are exchanged.</diagnosis>\\n<edits>\\nREWIRE @chw_ret.to = CH.evap_in\\nREWIRE @cw_in.to = CH.rej_in\\n</edits>\"}]",
+    "diagnosis": "Streams chw_ret and cw_in enter CH through each other's ports; the solver output shows the inlet conditions at CH do not match the roles of those ports, so the two connections are exchanged.",
+    "edits": "\nREWIRE @chw_ret.to = CH.evap_in\nREWIRE @cw_in.to = CH.rej_in\n",
     "prompt_tail": "PLANT\nPLANT engine-absorption-ext T0=300.77339729527273 P0=101325.0 RH=0.42024680195688063\nC ENG gas_engine {\"P_el\":14950581.692646481,\"eta_el\":0.4193889200261869,\"f_loss\":0.10999742146977844,\"air_excess\":1.63073288225745,\"P_exh\":104458.76288659793}\nC DC dc_load {\"P_it\":14515127.85693833,\"chilled_fr ..."
    },
    "file": "data\\processed_arch\\repair_test_ood_topology.jsonl",
@@ -471,7 +489,8 @@
   {
    "fault": "unit_slip",
    "fields": {
-    "diagnosis": "[{'role': 'assistant', 'content': '<diagnosis>ENG.P_el = 3.60773e+10 W is not a credible electrical power; it is off by a power-of-ten factor, a W/kW/MW unit slip.</diagnosis>\\n<edits>\\nSET ENG.P_el = 36077260.320510395\\n</edits>'}]",
+    "diagnosis": "ENG.P_el = 3.60773e+10 W is not a credible electrical power; it is off by a power-of-ten factor, a W/kW/MW unit slip.",
+    "edits": "\nSET ENG.P_el = 36077260.320510395\n",
     "prompt_tail": "PLANT\nPLANT engine-absorption-ext-orc T0=300.895528979471 P0=101325.0 RH=0.37613653985311274\nC ENG gas_engine {\"P_el\":36077260320.51039,\"eta_el\":0.4103591908539347,\"f_loss\":0.11299788585269335,\"air_excess\":1.8240224916972794,\"P_exh\":104458.76288659793}\nC DC dc_load {\"P_it\":35271926.70478766,\"chilled ..."
    },
    "file": "data\\processed_arch\\repair_test_ood_topology.jsonl",
@@ -499,7 +518,8 @@
   {
    "fault": "wrong_fluid",
    "fields": {
-    "diagnosis": "[{'role': 'assistant', 'content': '<diagnosis>Stream cw_in is labelled CGAM_AIR, but it feeds CH.rej_in, which expects a stream of the other fluid class; its neighbours in the same loop carry Water.</diagnosis>\\n<edits>\\nFLUID @cw_in = Water\\n</edits>'}]",
+    "diagnosis": "Stream cw_in is labelled CGAM_AIR, but it feeds CH.rej_in, which expects a stream of the other fluid class; its neighbours in the same loop carry Water.",
+    "edits": "\nFLUID @cw_in = Water\n",
     "prompt_tail": "PLANT\nPLANT engine-absorption-ext-dh_exhaust T0=296.40582758908494 P0=101325.0 RH=0.5642681070227569\nC ENG gas_engine {\"P_el\":47426820.08702779,\"eta_el\":0.42905937891759693,\"f_loss\":0.1172688127273551,\"air_excess\":1.6554456076010617,\"P_exh\":105513.90190565448}\nC DC dc_load {\"P_it\":46045456.39517261, ..."
    },
    "file": "data\\processed_arch\\repair_test_ood_topology.jsonl",

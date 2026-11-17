@@ -32,8 +32,14 @@ def _read(path):
     return [json.loads(l) for l in p.open(encoding="utf-8") if l.strip()] if p.exists() else []
 
 
+def _completion_text(value):
+    if isinstance(value, list):
+        return "\n".join(str(m.get("content", "")) for m in value if isinstance(m, dict))
+    return str(value or "")
+
+
 def _excerpt(text, n=700):
-    s = str(text or "")
+    s = _completion_text(text)
     return s if len(s) <= n else s[:n] + " ..."
 
 
@@ -57,10 +63,13 @@ def from_datagen(dirs, limit=400):
                 if ft not in picked or len(r.get("completion", "")) > len(picked[ft].get("completion", "")):
                     picked[ft] = r
             for ft, r in sorted(picked.items()):
+                full = _completion_text(r.get("completion"))
+                diag = full.split("<diagnosis>", 1)[1].split("</diagnosis>", 1)[0] if "<diagnosis>" in full else full
+                edits = full.split("<edits>", 1)[1].split("</edits>", 1)[0] if "<edits>" in full else ""
                 out.append({"source": "datagen", "id": r["id"], "file": str(path), "task": "repair",
                             "split": split, "fault": ft, "topology": r.get("topology"),
                             "title": f"Ground truth: {ft}", "graph": _graph(r),
-                            "fields": {"diagnosis": _excerpt(r.get("completion", "")),
+                            "fields": {"diagnosis": _excerpt(diag), "edits": _excerpt(edits),
                                        "prompt_tail": _excerpt(r.get("prompt", [{}])[-1].get("content"), 300)}})
     return out
 

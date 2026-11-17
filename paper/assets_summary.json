@@ -59,16 +59,16 @@
    "n": null
   },
   "env.n_tests": {
-   "value": 325,
-   "tex": "325",
+   "value": 357,
+   "tex": "357",
    "source": "assets/environment.json",
    "command": "python -m pytest -q",
    "seed": null,
    "n": null
   },
   "env.tests_minutes": {
-   "value": 6.0,
-   "tex": "6",
+   "value": 5.0,
+   "tex": "5",
    "source": "assets/environment.json",
    "command": "python -m pytest -q",
    "seed": null,
@@ -288,7 +288,7 @@
    "source": "assets/corpus.json",
    "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
-   "n": 1882
+   "n": 1746
   },
   "corp.var.unit_slip.max": {
    "value": 20,
@@ -296,7 +296,7 @@
    "source": "assets/corpus.json",
    "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
-   "n": 1882
+   "n": 1746
   },
   "corp.var.wrong_fluid.min": {
    "value": 80,
@@ -304,7 +304,7 @@
    "source": "assets/corpus.json",
    "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
-   "n": 2079
+   "n": 1942
   },
   "corp.var.wrong_fluid.max": {
    "value": 80,
@@ -312,7 +312,7 @@
    "source": "assets/corpus.json",
    "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
-   "n": 2079
+   "n": 1942
   },
   "corp.var.efficiency_gt_1.min": {
    "value": 25,
@@ -320,7 +320,7 @@
    "source": "assets/corpus.json",
    "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
-   "n": 1909
+   "n": 1770
   },
   "corp.var.efficiency_gt_1.max": {
    "value": 25,
@@ -328,7 +328,7 @@
    "source": "assets/corpus.json",
    "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
-   "n": 1909
+   "n": 1770
   },
   "corp.arch_requested": {
    "value": 3000,
@@ -435,24 +435,24 @@
    "n": 110
   },
   "corp.rows": {
-   "value": 129684,
-   "tex": "129{,}684",
+   "value": 122655,
+   "tex": "122{,}655",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
    "n": null
   },
   "corp.rows_train": {
-   "value": 116809,
-   "tex": "116{,}809",
+   "value": 109151,
+   "tex": "109{,}151",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
    "n": null
   },
   "corp.rows.audit.test_id": {
-   "value": 397,
-   "tex": "397",
+   "value": 322,
+   "tex": "322",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
@@ -467,24 +467,24 @@
    "n": null
   },
   "corp.rows.audit.test_ood_topology": {
-   "value": 122,
-   "tex": "122",
+   "value": 238,
+   "tex": "238",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
    "n": null
   },
   "corp.rows.audit.train": {
-   "value": 3019,
-   "tex": "3{,}019",
+   "value": 2576,
+   "tex": "2{,}576",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
    "n": null
   },
   "corp.rows.audit.val": {
-   "value": 392,
-   "tex": "392",
+   "value": 339,
+   "tex": "339",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
@@ -539,80 +539,80 @@
    "n": null
   },
   "corp.rows.ledger.test_id": {
-   "value": 728,
-   "tex": "728",
+   "value": 687,
+   "tex": "687",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
    "n": null
   },
   "corp.rows.ledger.test_ood_fault": {
-   "value": 2603,
-   "tex": "2{,}603",
+   "value": 2433,
+   "tex": "2{,}433",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
    "n": null
   },
   "corp.rows.ledger.test_ood_topology": {
-   "value": 251,
-   "tex": "251",
+   "value": 858,
+   "tex": "858",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
    "n": null
   },
   "corp.rows.ledger.train": {
-   "value": 5602,
-   "tex": "5{,}602",
+   "value": 5247,
+   "tex": "5{,}247",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
    "n": null
   },
   "corp.rows.ledger.val": {
-   "value": 740,
-   "tex": "740",
+   "value": 699,
+   "tex": "699",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
    "n": null
   },
   "corp.rows.repair.test_id": {
-   "value": 598,
-   "tex": "598",
+   "value": 560,
+   "tex": "560",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
    "n": null
   },
   "corp.rows.repair.test_ood_fault": {
-   "value": 4260,
-   "tex": "4{,}260",
+   "value": 3966,
+   "tex": "3{,}966",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
    "n": null
   },
   "corp.rows.repair.test_ood_topology": {
-   "value": 202,
-   "tex": "202",
+   "value": 864,
+   "tex": "864",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
    "n": null
   },
   "corp.rows.repair.train": {
-   "value": 106420,
-   "tex": "106{,}420",
+   "value": 99560,
+   "tex": "99{,}560",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
    "n": null
   },
   "corp.rows.repair.val": {
-   "value": 657,
-   "tex": "657",
+   "value": 613,
+   "tex": "613",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
@@ -691,8 +691,8 @@
    "n": null
   },
   "xchk.closure_w": {
-   "value": 7.450580596923828e-09,
-   "tex": "$7.5\\times10^{-9}$",
+   "value": 0.0,
+   "tex": "0",
    "source": "assets/crosscheck.json",
    "command": "synth.topologies.cgam_orc(n_air=R['n_a']*1e3, T_cond=T11, T_cw_in=T11, dT_cw=10) solved by core.solve.solve; reference core.cgam_plant.solve()",
    "seed": null,
@@ -1491,16 +1491,16 @@
    "n": 100
   },
   "aud.fl_hits_id": {
-   "value": 1,
-   "tex": "1",
+   "value": 0,
+   "tex": "0",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
    "n": 100
   },
   "aud.fl_top1_id_pct": {
-   "value": 1.0,
-   "tex": "1",
+   "value": 0.0,
+   "tex": "0",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
@@ -1515,32 +1515,32 @@
    "n": 100
   },
   "aud.fl_ci_hi_id_pct": {
-   "value": 5.0,
-   "tex": "5",
+   "value": 4.0,
+   "tex": "4",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
    "n": 100
   },
   "aud.rnd_top1_id_pct": {
-   "value": 24.0,
-   "tex": "24",
+   "value": 23.0,
+   "tex": "23",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
    "n": 100
   },
   "aud.ndcg_rnd_id": {
-   "value": 0.695,
-   "tex": "0.695",
+   "value": 0.693,
+   "tex": "0.693",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
    "n": 100
   },
   "aud.ndcg_fl_id": {
-   "value": 0.63,
-   "tex": "0.630",
+   "value": 0.627,
+   "tex": "0.627",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
@@ -1555,32 +1555,32 @@
    "n": 100
   },
   "audb.fl_top1_id_pct": {
-   "value": 1.0,
-   "tex": "1",
+   "value": 0.0,
+   "tex": "0",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
    "n": 100
   },
   "audb.rnd_top1_id_pct": {
-   "value": 24.0,
-   "tex": "24",
+   "value": 23.0,
+   "tex": "23",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
    "n": 100
   },
   "audb.rule_gain_id_pct": {
-   "value": 64.0,
-   "tex": "64",
+   "value": 65.0,
+   "tex": "65",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
    "n": 100
   },
   "audb.rule_valid_id": {
-   "value": "54",
-   "tex": "54",
+   "value": "53",
+   "tex": "53",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
@@ -1595,8 +1595,8 @@
    "n": 100
   },
   "audb.pred_mean_id": {
-   "value": 0.46,
-   "tex": "0.46",
+   "value": 0.47,
+   "tex": "0.47",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
@@ -1619,56 +1619,56 @@
    "n": 100
   },
   "aud.fl_hits_ood": {
-   "value": 63,
-   "tex": "63",
+   "value": 100,
+   "tex": "100",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
    "n": 100
   },
   "aud.fl_top1_ood_pct": {
-   "value": 63.0,
-   "tex": "63",
+   "value": 100.0,
+   "tex": "100",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
    "n": 100
   },
   "aud.fl_ci_lo_ood_pct": {
-   "value": 53.0,
-   "tex": "53",
+   "value": 96.0,
+   "tex": "96",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
    "n": 100
   },
   "aud.fl_ci_hi_ood_pct": {
-   "value": 72.0,
-   "tex": "72",
+   "value": 100.0,
+   "tex": "100",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
    "n": 100
   },
   "aud.rnd_top1_ood_pct": {
-   "value": 40.0,
-   "tex": "40",
+   "value": 81.0,
+   "tex": "81",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
    "n": 100
   },
   "aud.ndcg_rnd_ood": {
-   "value": 0.65,
-   "tex": "0.650",
+   "value": 0.865,
+   "tex": "0.865",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
    "n": 100
   },
   "aud.ndcg_fl_ood": {
-   "value": 0.864,
-   "tex": "0.864",
+   "value": 1.0,
+   "tex": "1.000",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
@@ -1683,56 +1683,56 @@
    "n": 100
   },
   "audb.fl_top1_ood_pct": {
-   "value": 63.0,
-   "tex": "63",
+   "value": 100.0,
+   "tex": "100",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
    "n": 100
   },
   "audb.rnd_top1_ood_pct": {
-   "value": 40.0,
-   "tex": "40",
+   "value": 81.0,
+   "tex": "81",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
    "n": 100
   },
   "audb.rule_gain_ood_pct": {
-   "value": 47.0,
-   "tex": "47",
+   "value": 23.0,
+   "tex": "23",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
    "n": 100
   },
   "audb.rule_valid_ood": {
-   "value": "87",
-   "tex": "87",
+   "value": "100",
+   "tex": "100",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
    "n": 100
   },
   "audb.pred_zero_ood": {
-   "value": 0.11,
-   "tex": "0.11",
+   "value": 0.22,
+   "tex": "0.22",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
    "n": 100
   },
   "audb.pred_mean_ood": {
-   "value": 0.36,
-   "tex": "0.36",
+   "value": 0.34,
+   "tex": "0.34",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
    "n": 100
   },
   "audb.search_evals_ood": {
-   "value": 12.0,
-   "tex": "12",
+   "value": 8.0,
+   "tex": "8",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
@@ -1763,40 +1763,40 @@
    "n": 100
   },
   "audb.saving_median_ood_pct": {
-   "value": 0.3,
-   "tex": "0.3",
+   "value": 0.2,
+   "tex": "0.2",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
    "n": 100
   },
   "audb.saving_min_ood_pct": {
-   "value": 0.06,
-   "tex": "0.06",
+   "value": 0.07,
+   "tex": "0.07",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
    "n": 100
   },
   "audb.saving_max_ood_pct": {
-   "value": 1.5,
-   "tex": "1.5",
+   "value": 1.3,
+   "tex": "1.3",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
    "n": 100
   },
   "audb.saving_median_all_pct": {
-   "value": 0.5,
-   "tex": "0.5",
+   "value": 0.4,
+   "tex": "0.4",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
    "n": 200
   },
   "audb.saving_min_all_pct": {
-   "value": 0.06,
-   "tex": "0.06",
+   "value": 0.07,
+   "tex": "0.07",
    "source": "assets/audit_baselines.json",
    "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
@@ -3243,44 +3243,44 @@
    "n": 40
   },
   "split.repair.test_id": {
-   "value": 784,
-   "tex": "784",
+   "value": 744,
+   "tex": "744",
    "source": "assets/splits.json",
    "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 784
+   "n": 744
   },
   "split.repair.test_ood_fault": {
-   "value": 5295,
-   "tex": "5{,}295",
+   "value": 4964,
+   "tex": "4{,}964",
    "source": "assets/splits.json",
    "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 5295
-  },
-  "split.repair.train": {
-   "value": 6688,
-   "tex": "6{,}688",
-   "source": "assets/splits.json",
-   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
-   "seed": 0,
-   "n": 6688
-  },
-  "split.repair.val": {
-   "value": 827,
-   "tex": "827",
-   "source": "assets/splits.json",
-   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
-   "seed": 0,
-   "n": 827
+   "n": 4964
   },
   "split.repair.test_ood_topology": {
-   "value": 279,
-   "tex": "279",
+   "value": 1116,
+   "tex": "1{,}116",
    "source": "assets/splits.json",
    "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 279
+   "n": 1116
+  },
+  "split.repair.train": {
+   "value": 6276,
+   "tex": "6{,}276",
+   "source": "assets/splits.json",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
+   "seed": 0,
+   "n": 6276
+  },
+  "split.repair.val": {
+   "value": 773,
+   "tex": "773",
+   "source": "assets/splits.json",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
+   "seed": 0,
+   "n": 773
   },
   "split.repair.total": {
    "value": 13873,
@@ -3347,36 +3347,36 @@
    "n": 3693
   },
   "split.audit.test_id": {
-   "value": 425,
-   "tex": "425",
+   "value": 415,
+   "tex": "415",
    "source": "assets/splits.json",
    "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 425
-  },
-  "split.audit.train": {
-   "value": 3299,
-   "tex": "3{,}299",
-   "source": "assets/splits.json",
-   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
-   "seed": 0,
-   "n": 3299
-  },
-  "split.audit.val": {
-   "value": 417,
-   "tex": "417",
-   "source": "assets/splits.json",
-   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
-   "seed": 0,
-   "n": 417
+   "n": 415
   },
   "split.audit.test_ood_topology": {
-   "value": 141,
-   "tex": "141",
+   "value": 276,
+   "tex": "276",
    "source": "assets/splits.json",
    "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 141
+   "n": 276
+  },
+  "split.audit.train": {
+   "value": 3188,
+   "tex": "3{,}188",
+   "source": "assets/splits.json",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
+   "seed": 0,
+   "n": 3188
+  },
+  "split.audit.val": {
+   "value": 403,
+   "tex": "403",
+   "source": "assets/splits.json",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
+   "seed": 0,
+   "n": 403
   },
   "split.audit.total": {
    "value": 4282,
@@ -3387,44 +3387,44 @@
    "n": 4282
   },
   "split.ledger.test_id": {
-   "value": 806,
-   "tex": "806",
+   "value": 764,
+   "tex": "764",
    "source": "assets/splits.json",
    "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 806
+   "n": 764
   },
   "split.ledger.test_ood_fault": {
-   "value": 2875,
-   "tex": "2{,}875",
+   "value": 2693,
+   "tex": "2{,}693",
    "source": "assets/splits.json",
    "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 2875
-  },
-  "split.ledger.train": {
-   "value": 6313,
-   "tex": "6{,}313",
-   "source": "assets/splits.json",
-   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
-   "seed": 0,
-   "n": 6313
-  },
-  "split.ledger.val": {
-   "value": 828,
-   "tex": "828",
-   "source": "assets/splits.json",
-   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
-   "seed": 0,
-   "n": 828
+   "n": 2693
   },
   "split.ledger.test_ood_topology": {
-   "value": 292,
-   "tex": "292",
+   "value": 932,
+   "tex": "932",
    "source": "assets/splits.json",
    "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 292
+   "n": 932
+  },
+  "split.ledger.train": {
+   "value": 5943,
+   "tex": "5{,}943",
+   "source": "assets/splits.json",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
+   "seed": 0,
+   "n": 5943
+  },
+  "split.ledger.val": {
+   "value": 782,
+   "tex": "782",
+   "source": "assets/splits.json",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
+   "seed": 0,
+   "n": 782
   },
   "split.ledger.total": {
    "value": 11114,
@@ -3451,12 +3451,12 @@
    "n": 200
   },
   "rep.test_id.rows": {
-   "value": 784,
-   "tex": "784",
+   "value": 744,
+   "tex": "744",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 784
+   "n": 744
   },
   "rep.test_id.noop_pct": {
    "value": 0.0,
@@ -3491,16 +3491,16 @@
    "n": 200
   },
   "rep.test_id.exact_pct": {
-   "value": 65.0,
-   "tex": "65",
+   "value": 68.0,
+   "tex": "68",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
    "n": 200
   },
   "rep.test_id.calls": {
-   "value": 130.0,
-   "tex": "130",
+   "value": 135.0,
+   "tex": "135",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
@@ -3515,28 +3515,28 @@
    "n": 200
   },
   "rep.test_id.efficiency_gt_1.n": {
-   "value": 65,
-   "tex": "65",
+   "value": 59,
+   "tex": "59",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 65
+   "n": 59
   },
   "rep.test_id.unit_slip.n": {
-   "value": 58,
-   "tex": "58",
+   "value": 60,
+   "tex": "60",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 58
+   "n": 60
   },
   "rep.test_id.wrong_fluid.n": {
-   "value": 77,
-   "tex": "77",
+   "value": 81,
+   "tex": "81",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 77
+   "n": 81
   },
   "rep.test_ood_fault.n": {
    "value": 200,
@@ -3547,12 +3547,12 @@
    "n": 200
   },
   "rep.test_ood_fault.rows": {
-   "value": 5295,
-   "tex": "5{,}295",
+   "value": 4964,
+   "tex": "4{,}964",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 5295
+   "n": 4964
   },
   "rep.test_ood_fault.noop_pct": {
    "value": 0.0,
@@ -3595,8 +3595,8 @@
    "n": 200
   },
   "rep.test_ood_fault.calls": {
-   "value": 117.0,
-   "tex": "117",
+   "value": 115.0,
+   "tex": "115",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
@@ -3611,20 +3611,20 @@
    "n": 200
   },
   "rep.test_ood_fault.sign_flip.n": {
-   "value": 106,
-   "tex": "106",
+   "value": 109,
+   "tex": "109",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 106
+   "n": 109
   },
   "rep.test_ood_fault.swapped_ports.n": {
-   "value": 94,
-   "tex": "94",
+   "value": 91,
+   "tex": "91",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 94
+   "n": 91
   },
   "rep.test_ood_topology.n": {
    "value": 200,
@@ -3635,12 +3635,12 @@
    "n": 200
   },
   "rep.test_ood_topology.rows": {
-   "value": 279,
-   "tex": "279",
+   "value": 1116,
+   "tex": "1{,}116",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 279
+   "n": 1116
   },
   "rep.test_ood_topology.noop_pct": {
    "value": 0.0,
@@ -3651,22 +3651,14 @@
    "n": 200
   },
   "rep.test_ood_topology.search_pct": {
-   "value": 96.0,
-   "tex": "96",
+   "value": 100.0,
+   "tex": "100",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
    "n": 200
   },
   "rep.test_ood_topology.search_lo_pct": {
-   "value": 93.0,
-   "tex": "93",
-   "source": "assets/repair_baselines.json",
-   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
-   "seed": 0,
-   "n": 200
-  },
-  "rep.test_ood_topology.search_hi_pct": {
    "value": 98.0,
    "tex": "98",
    "source": "assets/repair_baselines.json",
@@ -3674,17 +3666,25 @@
    "seed": 0,
    "n": 200
   },
+  "rep.test_ood_topology.search_hi_pct": {
+   "value": 100.0,
+   "tex": "100",
+   "source": "assets/repair_baselines.json",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
+   "seed": 0,
+   "n": 200
+  },
   "rep.test_ood_topology.exact_pct": {
-   "value": 76.0,
-   "tex": "76",
+   "value": 82.0,
+   "tex": "82",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
    "n": 200
   },
   "rep.test_ood_topology.calls": {
-   "value": 105.0,
-   "tex": "105",
+   "value": 96.0,
+   "tex": "96",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
@@ -3699,30 +3699,14 @@
    "n": 200
   },
   "rep.test_ood_topology.efficiency_gt_1.n": {
-   "value": 41,
-   "tex": "41",
+   "value": 37,
+   "tex": "37",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 41
+   "n": 37
   },
   "rep.test_ood_topology.sign_flip.n": {
-   "value": 48,
-   "tex": "48",
-   "source": "assets/repair_baselines.json",
-   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
-   "seed": 0,
-   "n": 48
-  },
-  "rep.test_ood_topology.swapped_ports.n": {
-   "value": 38,
-   "tex": "38",
-   "source": "assets/repair_baselines.json",
-   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
-   "seed": 0,
-   "n": 38
-  },
-  "rep.test_ood_topology.unit_slip.n": {
    "value": 43,
    "tex": "43",
    "source": "assets/repair_baselines.json",
@@ -3730,29 +3714,45 @@
    "seed": 0,
    "n": 43
   },
-  "rep.test_ood_topology.wrong_fluid.n": {
-   "value": 30,
-   "tex": "30",
+  "rep.test_ood_topology.swapped_ports.n": {
+   "value": 46,
+   "tex": "46",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 30
+   "n": 46
+  },
+  "rep.test_ood_topology.unit_slip.n": {
+   "value": 39,
+   "tex": "39",
+   "source": "assets/repair_baselines.json",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
+   "seed": 0,
+   "n": 39
+  },
+  "rep.test_ood_topology.wrong_fluid.n": {
+   "value": 35,
+   "tex": "35",
+   "source": "assets/repair_baselines.json",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
+   "seed": 0,
+   "n": 35
   },
   "rep.f.efficiency_gt_1.n": {
-   "value": 106,
-   "tex": "106",
+   "value": 96,
+   "tex": "96",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 106
+   "n": 96
   },
   "rep.f.efficiency_gt_1.search_pct": {
-   "value": 92.0,
-   "tex": "92",
+   "value": 93.0,
+   "tex": "93",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 106
+   "n": 96
   },
   "rep.f.efficiency_gt_1.calls": {
    "value": 16.0,
@@ -3760,15 +3760,15 @@
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 106
+   "n": 96
   },
   "rep.f.unit_slip.n": {
-   "value": 101,
-   "tex": "101",
+   "value": 99,
+   "tex": "99",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 101
+   "n": 99
   },
   "rep.f.unit_slip.search_pct": {
    "value": 100.0,
@@ -3776,47 +3776,47 @@
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 101
+   "n": 99
   },
   "rep.f.unit_slip.calls": {
-   "value": 52.0,
-   "tex": "52",
+   "value": 47.0,
+   "tex": "47",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 101
+   "n": 99
   },
   "rep.f.wrong_fluid.n": {
-   "value": 107,
-   "tex": "107",
+   "value": 116,
+   "tex": "116",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 107
+   "n": 116
   },
   "rep.f.wrong_fluid.search_pct": {
-   "value": 95.0,
-   "tex": "95",
+   "value": 100.0,
+   "tex": "100",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 107
+   "n": 116
   },
   "rep.f.wrong_fluid.calls": {
-   "value": 278.0,
-   "tex": "278",
+   "value": 243.0,
+   "tex": "243",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 107
+   "n": 116
   },
   "rep.f.sign_flip.n": {
-   "value": 154,
-   "tex": "154",
+   "value": 152,
+   "tex": "152",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 154
+   "n": 152
   },
   "rep.f.sign_flip.search_pct": {
    "value": 100.0,
@@ -3824,23 +3824,23 @@
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 154
+   "n": 152
   },
   "rep.f.sign_flip.calls": {
-   "value": 9.0,
-   "tex": "9",
+   "value": 8.0,
+   "tex": "8",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 154
+   "n": 152
   },
   "rep.f.swapped_ports.n": {
-   "value": 132,
-   "tex": "132",
+   "value": 137,
+   "tex": "137",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 132
+   "n": 137
   },
   "rep.f.swapped_ports.search_pct": {
    "value": 100.0,
@@ -3848,15 +3848,15 @@
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 132
+   "n": 137
   },
   "rep.f.swapped_ports.calls": {
-   "value": 251.0,
-   "tex": "251",
+   "value": 223.0,
+   "tex": "223",
    "source": "assets/repair_baselines.json",
    "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 132
+   "n": 137
   },
   "rep.total_n": {
    "value": 600,
