@@ -555,7 +555,7 @@
  "training_config": {
   "sft": {
    "lr": 0.0002,
-   "epochs": 2,
+   "epochs": 1,
    "max_length": 4096,
    "per_device_batch": 2,
    "grad_accum": 8,
@@ -662,8 +662,8 @@
   "python": "3.12.3"
  },
  "tests": {
-  "passed": 286,
-  "seconds": 178.61,
+  "passed": 320,
+  "seconds": 299.7,
   "command": "python -m pytest -q"
  }
 }

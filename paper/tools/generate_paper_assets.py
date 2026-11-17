@@ -183,30 +183,57 @@ def _src_default(path, pattern, cast=float):
 
 def study_corpus(project, scratch):
     from thermo_agent.synth import architectures as A, paraphrase as P
+    from thermo_agent.synth.splits import is_ood_topology
+    project = pathlib.Path(project) if project else pathlib.Path(__file__).resolve().parents[2]
     arch = A.ARCHITECTURES
-    d = scratch / "arch"; d.mkdir(parents=True, exist_ok=True)
-    if not (d / "repair_train.jsonl").exists():
-        subprocess.run([sys.executable, "-m", "thermo_agent.synth.architectures", str(d), "-n", "400", "--seed", str(SEED), "--workers", "1"], cwd=project, check=True)
+    # Prefer the corpus that is actually on disk: a fresh 400-row sample of the architecture generator can miss a
+    # whole split (no held-out diagram in that draw), and then the paper would quote 0 rows for test_ood_topology.
+    real_arch, real_repair = project / "data" / "processed_arch", project / "data" / "processed"
+    source = "data/processed_arch" if (real_arch / "repair_train.jsonl").exists() else "generated (seed 0, n=400)"
+    if source == "data/processed_arch":
+        d = real_arch
+    else:
+        d = scratch / "arch"; d.mkdir(parents=True, exist_ok=True)
+        if not (d / "repair_train.jsonl").exists():
+            subprocess.run([sys.executable, "-m", "thermo_agent.synth.architectures", str(d), "-n", "1200", "--seed", str(SEED), "--workers", "1"], cwd=project, check=True)
     counts, archs = {}, {}
     for f in sorted(d.glob("repair_*.jsonl")):
         sp = f.stem.replace("repair_", ""); rows = [json.loads(l) for l in open(f)]
         counts[sp] = len(rows); archs[sp] = sorted({r["topology"] for r in rows})
-    rep = scratch / "repair" / "repair_train.jsonl"
+    requested = 1200
+    meta = d / "meta_repair_arch.json"
+    if meta.exists():
+        requested = json.loads(meta.read_text())["params"]["n"]
+    elif (d / "meta_repair.json").exists():
+        requested = json.loads((d / "meta_repair.json").read_text())["params"]["n"]
+    if source == "data/processed_arch":
+        rep = real_repair / "repair_train.jsonl"
+    else:
+        rep = _ensure_data(project, scratch, "repair", 400, ("--workers", "1")) / "repair_train.jsonl"
     var = collections.defaultdict(list)
     for l in open(rep):
         r = json.loads(l); var[r["fault_type"]].append(P.variant_count(r))
+    corpus = None
+    sft_report = project / "data" / "sft" / "sft_report.json"
+    if sft_report.exists():
+        rr = json.loads(sft_report.read_text(encoding="utf-8"))
+        corpus = {"source": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+                  "splits": rr["splits"],
+                  "tasks": {t: {sp: v["n"] for sp, v in d.items()} for t, d in rr["tasks"].items()}}
     t = project / "thermo_agent" / "teacher"; sy = project / "thermo_agent" / "synth"
     jdump("corpus.json", {
-        "study": "corpus", "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+        "study": "corpus", "command": ("synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); " if source == "data/processed_arch" else "synth.architectures OUT -n 1200 --seed 0; ") + "synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
         "seed": SEED, "n": len(arch),
-        "architectures": [{**a, "held_out": a["prime"] == "engine" or a["name"] == "cgam_steam_orc"} for a in arch],
+        "architectures": [{**a, "held_out": is_ood_topology(a["name"])} for a in arch],
         "n_architectures": len(arch), "n_dc": sum(1 for a in arch if a["kind"] == "dc"), "n_turbine": sum(1 for a in arch if a["prime"] == "turbine"),
         "n_engine": sum(1 for a in arch if a["prime"] == "engine"), "n_orc": sum(1 for a in arch if a["orc"]), "n_heat": sum(1 for a in arch if a["heat"] not in ("none",)),
         "by_rejection": dict(collections.Counter(a["rejection"] for a in arch if a["kind"] == "dc")), "by_cooling": dict(collections.Counter(a["cooling"] for a in arch if a["kind"] == "dc")),
-        "arch_rows_requested": 400, "arch_rows_by_split": counts, "arch_distinct_by_split": {k: len(v) for k, v in archs.items()},
+        "arch_rows_requested": requested, "arch_rows_by_split": counts, "arch_distinct_by_split": {k: len(v) for k, v in archs.items()}, "data_source": source,
         "paraphrase_variants_by_fault": {k: {"min": min(v), "max": max(v), "n": len(v)} for k, v in var.items()},
+        "corpus": corpus,
         "combine": {"variants_default": _src_default(sy / "combine.py", r'"--variants", type=int, default=(\d+)', int), "harness_fraction": _src_default(sy / "combine.py", r'"--harness-fraction", type=float, default=([\d.]+)'),
-                    "k_memory": _src_default(sy / "combine.py", r'"--k-memory", type=int, default=(\d+)', int), "max_prompt_chars": _src_default(sy / "combine.py", r'"--max-prompt-chars", type=int, default=(\d+)', int)},
+                    "k_memory": _src_default(sy / "combine.py", r'"--k-memory", type=int, default=(\d+)', int), "max_prompt_chars": _src_default(sy / "combine.py", r'"--max-prompt-chars", type=int, default=(\d+)', int),
+                    "max_prompt_tokens": _src_default(sy / "combine.py", r'"--max-prompt-tokens", type=int, default=(\d+)', int)},
         "sampler": {"temperature": _src_default(t / "sample.py", r'"--temperature", type=float, default=([\d.]+)'), "max_tokens": _src_default(t / "sample.py", r'"--max-tokens", type=int, default=(\d+)', int)},
         "validation": {"audit_ndcg_min": _src_default(t / "validate.py", r'e\["ndcg"\] < ([\d.]+)'), "audit_pred_err_max": _src_default(t / "validate.py", r'e\["pred_err"\] > ([\d.]+)'),
                        "grounding_min": _src_default(t / "validate.py", r'e\["grounded"\] < ([\d.]+)')},
@@ -318,6 +345,13 @@ def derive_values():
     putf("corp.arch_kept_pct", sum(CO["arch_rows_by_split"].values()) / CO["arch_rows_requested"] * 100, 0, s, c, sd, CO["arch_rows_requested"])
     for sp_, v in CO["arch_rows_by_split"].items():
         put(f"corp.arch_rows.{sp_}", v, src=s, cmd=c, seed=sd, n=v); put(f"corp.arch_distinct.{sp_}", CO["arch_distinct_by_split"][sp_], src=s, cmd=c, seed=sd, n=v)
+    if CO.get("corpus"):
+        C = CO["corpus"]; cs = "assets/corpus.json"
+        put("corp.rows", sum(C["splits"].values()), src=cs, cmd=C["source"])
+        put("corp.rows_train", C["splits"].get("train", 0), src=cs, cmd=C["source"])
+        for t_, d_ in C["tasks"].items():
+            for sp_, n_ in d_.items():
+                put(f"corp.rows.{t_}.{sp_}", n_, src=cs, cmd=C["source"])
     tc = E["training_config"]; s = "assets/environment.json"; c = E["command"]
     put("tr.group", tc["grpo"]["num_generations"], src=s, cmd=c); put("tr.completion_len", tc["grpo"]["max_completion_length"], src=s, cmd=c); put("tr.sft_len", tc["sft"]["max_length"], src=s, cmd=c)
     put("tr.sft_batch_eff", tc["sft"]["per_device_batch"] * tc["sft"]["grad_accum"] * 2, src=s, cmd=c + "; two ranks from the dual-T4 recipe")
@@ -685,7 +719,7 @@ def table_training(E):
             ("Precision and parallelism", f"fp16 LoRA, DDP over {ranks} ranks (2 T4), no 4-bit", f"fp16 LoRA, DDP over {ranks} ranks, no 4-bit"),
             ("LoRA rank / alpha / dropout", f"{sl['r']} / {sl['alpha']} / {sl['dropout']:g}", f"{gl['r']} / {gl['alpha']} / {gl['dropout']:g}"),
             ("Target modules", tex(sl["target_modules"]), tex(gl["target_modules"])), ("Learning rate", f"{s['lr']:g}", f"{g['lr']:g}"),
-            ("Epochs or steps", f"{s['epochs']} epochs", f"{g['max_steps']} steps (maximum)"), ("Maximum length (tokens)", f"{s['max_length']}", f"completion {g['max_completion_length']}"),
+            ("Epochs or steps", f"{s['epochs']} epoch" + ("s" if s["epochs"] != 1 else ""), f"{g['max_steps']} steps (maximum)"), ("Maximum length (tokens)", f"{s['max_length']}", f"completion {g['max_completion_length']}"),
             ("Batch per device / accumulation / ranks", f"{s['per_device_batch']} / {s['grad_accum']} / {ranks}", f"{g['per_device_batch']} / {g['grad_accum']} / {ranks}"),
             ("Effective batch", f"{s['per_device_batch'] * s['grad_accum'] * ranks} sequences", f"{g['per_device_batch'] * g['grad_accum'] * ranks} prompts, {g['num_generations']} completions each"),
             ("Group size / temperature", "--", f"{g['num_generations']} / {g['temperature']:g}"), ("Gradient clipping", f"max norm {s['max_grad_norm']:g}", f"max norm {g['max_grad_norm']:g}"),

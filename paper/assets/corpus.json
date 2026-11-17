@@ -1,6 +1,6 @@
 {
  "study": "corpus",
- "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+ "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
  "seed": 0,
  "n": 65,
  "architectures": [
@@ -372,7 +372,7 @@
    "rejection": "dry",
    "orc": false,
    "heat": "none",
-   "held_out": true
+   "held_out": false
   },
   {
    "name": "engine-absorption-dry-dh_exhaust",
@@ -382,7 +382,7 @@
    "rejection": "dry",
    "orc": false,
    "heat": "exhaust",
-   "held_out": true
+   "held_out": false
   },
   {
    "name": "engine-absorption-dry-dh_heat_pump",
@@ -392,7 +392,7 @@
    "rejection": "dry",
    "orc": false,
    "heat": "heat_pump",
-   "held_out": true
+   "held_out": false
   },
   {
    "name": "engine-absorption-dry-orc",
@@ -402,7 +402,7 @@
    "rejection": "dry",
    "orc": true,
    "heat": "none",
-   "held_out": true
+   "held_out": false
   },
   {
    "name": "engine-absorption-dry-orc-dh_exhaust",
@@ -412,7 +412,7 @@
    "rejection": "dry",
    "orc": true,
    "heat": "exhaust",
-   "held_out": true
+   "held_out": false
   },
   {
    "name": "engine-absorption-dry-orc-dh_heat_pump",
@@ -422,7 +422,7 @@
    "rejection": "dry",
    "orc": true,
    "heat": "heat_pump",
-   "held_out": true
+   "held_out": false
   },
   {
    "name": "engine-absorption-wet",
@@ -432,7 +432,7 @@
    "rejection": "wet",
    "orc": false,
    "heat": "none",
-   "held_out": true
+   "held_out": false
   },
   {
    "name": "engine-absorption-wet-dh_exhaust",
@@ -442,7 +442,7 @@
    "rejection": "wet",
    "orc": false,
    "heat": "exhaust",
-   "held_out": true
+   "held_out": false
   },
   {
    "name": "engine-absorption-wet-dh_heat_pump",
@@ -452,7 +452,7 @@
    "rejection": "wet",
    "orc": false,
    "heat": "heat_pump",
-   "held_out": true
+   "held_out": false
   },
   {
    "name": "engine-absorption-wet-orc",
@@ -462,7 +462,7 @@
    "rejection": "wet",
    "orc": true,
    "heat": "none",
-   "held_out": true
+   "held_out": false
   },
   {
    "name": "engine-absorption-wet-orc-dh_exhaust",
@@ -472,7 +472,7 @@
    "rejection": "wet",
    "orc": true,
    "heat": "exhaust",
-   "held_out": true
+   "held_out": false
   },
   {
    "name": "engine-absorption-wet-orc-dh_heat_pump",
@@ -482,7 +482,7 @@
    "rejection": "wet",
    "orc": true,
    "heat": "heat_pump",
-   "held_out": true
+   "held_out": false
   },
   {
    "name": "engine-electric-ext",
@@ -532,7 +532,7 @@
    "rejection": "dry",
    "orc": false,
    "heat": "none",
-   "held_out": true
+   "held_out": false
   },
   {
    "name": "engine-electric-dry-dh_exhaust",
@@ -542,7 +542,7 @@
    "rejection": "dry",
    "orc": false,
    "heat": "exhaust",
-   "held_out": true
+   "held_out": false
   },
   {
    "name": "engine-electric-dry-dh_heat_pump",
@@ -552,7 +552,7 @@
    "rejection": "dry",
    "orc": false,
    "heat": "heat_pump",
-   "held_out": true
+   "held_out": false
   },
   {
    "name": "engine-electric-dry-orc",
@@ -562,7 +562,7 @@
    "rejection": "dry",
    "orc": true,
    "heat": "none",
-   "held_out": true
+   "held_out": false
   },
   {
    "name": "engine-electric-dry-orc-dh_exhaust",
@@ -572,7 +572,7 @@
    "rejection": "dry",
    "orc": true,
    "heat": "exhaust",
-   "held_out": true
+   "held_out": false
   },
   {
    "name": "engine-electric-dry-orc-dh_heat_pump",
@@ -582,7 +582,7 @@
    "rejection": "dry",
    "orc": true,
    "heat": "heat_pump",
-   "held_out": true
+   "held_out": false
   },
   {
    "name": "engine-electric-wet",
@@ -592,7 +592,7 @@
    "rejection": "wet",
    "orc": false,
    "heat": "none",
-   "held_out": true
+   "held_out": false
   },
   {
    "name": "engine-electric-wet-dh_exhaust",
@@ -602,7 +602,7 @@
    "rejection": "wet",
    "orc": false,
    "heat": "exhaust",
-   "held_out": true
+   "held_out": false
   },
   {
    "name": "engine-electric-wet-dh_heat_pump",
@@ -612,7 +612,7 @@
    "rejection": "wet",
    "orc": false,
    "heat": "heat_pump",
-   "held_out": true
+   "held_out": false
   },
   {
    "name": "engine-electric-wet-orc",
@@ -622,7 +622,7 @@
    "rejection": "wet",
    "orc": true,
    "heat": "none",
-   "held_out": true
+   "held_out": false
   },
   {
    "name": "engine-electric-wet-orc-dh_exhaust",
@@ -632,7 +632,7 @@
    "rejection": "wet",
    "orc": true,
    "heat": "exhaust",
-   "held_out": true
+   "held_out": false
   },
   {
    "name": "engine-electric-wet-orc-dh_heat_pump",
@@ -642,7 +642,7 @@
    "rejection": "wet",
    "orc": true,
    "heat": "heat_pump",
-   "held_out": true
+   "held_out": false
   },
   {
    "name": "cgam_steam_orc",
@@ -670,43 +670,89 @@
   "absorption": 32,
   "electric": 32
  },
- "arch_rows_requested": 400,
+ "arch_rows_requested": 3000,
  "arch_rows_by_split": {
-  "test_id": 9,
-  "test_ood_fault": 60,
-  "test_ood_topology": 135,
-  "train": 61,
-  "val": 11
+  "test_id": 95,
+  "test_ood_fault": 761,
+  "test_ood_topology": 279,
+  "train": 818,
+  "val": 110
  },
  "arch_distinct_by_split": {
-  "test_id": 6,
-  "test_ood_fault": 21,
-  "test_ood_topology": 27,
-  "train": 23,
-  "val": 9
+  "test_id": 37,
+  "test_ood_fault": 44,
+  "test_ood_topology": 8,
+  "train": 45,
+  "val": 39
  },
+ "data_source": "data/processed_arch",
  "paraphrase_variants_by_fault": {
   "unit_slip": {
    "min": 20,
    "max": 20,
-   "n": 44
+   "n": 1882
   },
   "wrong_fluid": {
    "min": 80,
    "max": 80,
-   "n": 39
+   "n": 2079
   },
   "efficiency_gt_1": {
    "min": 25,
    "max": 25,
-   "n": 42
+   "n": 1909
+  }
+ },
+ "corpus": {
+  "source": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+  "splits": {
+   "test_id": 1927,
+   "test_ood_climate": 615,
+   "test_ood_fault": 6863,
+   "test_ood_load": 411,
+   "test_ood_scale": 460,
+   "test_ood_topology": 575,
+   "train": 116809,
+   "val": 2024
+  },
+  "tasks": {
+   "audit": {
+    "test_id": 397,
+    "test_ood_fault": 0,
+    "test_ood_topology": 122,
+    "train": 3019,
+    "val": 392
+   },
+   "design": {
+    "test_id": 204,
+    "test_ood_climate": 615,
+    "test_ood_load": 411,
+    "test_ood_scale": 460,
+    "train": 1768,
+    "val": 235
+   },
+   "ledger": {
+    "test_id": 728,
+    "test_ood_fault": 2603,
+    "test_ood_topology": 251,
+    "train": 5602,
+    "val": 740
+   },
+   "repair": {
+    "test_id": 598,
+    "test_ood_fault": 4260,
+    "test_ood_topology": 202,
+    "train": 106420,
+    "val": 657
+   }
   }
  },
  "combine": {
-  "variants_default": 4,
+  "variants_default": 20,
   "harness_fraction": 0.35,
   "k_memory": 3,
-  "max_prompt_chars": 14000
+  "max_prompt_chars": 11500,
+  "max_prompt_tokens": 4000
  },
  "sampler": {
   "temperature": 0.8,

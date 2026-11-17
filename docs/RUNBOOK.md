@@ -99,19 +99,23 @@ duplicates a row, and `combine` already reads `data/frontier/`. See `kaggle/READ
 ## 2c. Build the two corpora and prove they fit
 
 `scripts/build_corpus.ps1` stages `data/sft` (harness on 35% of rows, memory where it retrieves) and
-`data/grpo` (**same prompts as SFT** — with harness/memory where SFT has them, just without reference completions —
-because GRPO samples G=4 completions per prompt and the model already learned the harness behaviour in SFT),
-audits both with the real `Qwen/Qwen3.5-4B` tokenizer, and only then swaps them into place.
+`data/grpo` (**same prompts as SFT**, one per plant, because GRPO samples G=4 completions per prompt and the model
+already learned the harness behaviour in SFT), audits both with the real `Qwen/Qwen3.5-4B` tokenizer, verifies both
+against the report, and only then swaps them into place. The GRPO trainer keeps only the prompt and the reward
+columns, so the reference completion stays in the file for auditing but is never read.
 
 ```powershell
 pwsh scripts/build_corpus.ps1                 # variants 20
 # pwsh scripts/build_corpus.ps1 -Variants 20 -GrpoVariants 1   # overrides (default already correct)
 python -m thermo_agent.train.token_audit data/sft --max-length 4096
-python -m thermo_agent.train.token_audit data/grpo --max-length 4096
+python -m thermo_agent.synth.verify data/sft  # row counts, ids, splits, token gate
+python -m thermo_agent.synth.verify data/grpo --allow-missing-completion
 ```
 
 Every row is dropped and counted if it does not fit, never truncated. The tokenizer is `$THERMO_TOKENIZER` or the
 cached `~/.cache/thermo/qwen3.5-4b/tokenizer.json`; without it the audit falls back to characters and says so.
+`synth.verify` is the check that notices a corpus which no longer matches its report (a moved folder, a killed
+copy); run it before a training session if anything touched `data/`.
 
 ## 3. Non-model baselines (the numbers a model has to beat)
 
@@ -123,13 +127,15 @@ cached `~/.cache/thermo/qwen3.5-4b/tokenizer.json`; without it the audit falls b
 pwsh scripts/baselines.ps1
 ```
 
-Reference values measured on small samples: Repair, verifier-guided search repairs 92 to 100 percent with 8 to 45
-solver calls (numeric faults) and about 220 to 280 (swapped ports, wrong fluid). Design, enumerating the defaults
-takes 43 to 48 evaluations at 0.7 to 1.2 percent from the best known design; random search with 12 evaluations is
-7 to 10 percent worse. Ledger, the table of second-law symptom coverage (closure residual, negative destruction)
-by fault type; about 86 percent of rows show at least one symptom. Audit, first-law ranking hits the true top-1
-(prime mover excluded) in 0 to 19 percent of plants; the fixed rule "raise turbine inlet temperature 10 percent"
-recovers 94 percent of the best gain on turbine plants and 33 percent on held-out engine plants.
+Reference values measured on small samples: Repair, verifier-guided search repairs 97 to 100 percent of the
+numeric faults and all of the held-out sign and port faults, but at 114 to 124 solver calls per row (the 60-evaluation
+budget leaves 1 to 3 unsolved rows in each of several classes); exact restoration of the original plant is rarer
+(35 to 49 of 58 to 77 in-distribution rows). Design, enumerating the defaults takes 38 to 44 evaluations and lands
+3.1 to 3.4 percent from the best known design, the polish reaches 0 at 126 to 148 evaluations, and random search with
+12 evaluations is 8.8 to 12.7 percent worse. Ledger, at least one second-law symptom appears in 90 to 100 percent of
+rows by fault type, closure alone is broken in 32 to 100 percent. Audit, first-law ranking has nDCG@3 0.864 against
+0.65 for random and top-1 0.63 against 0.401 (prime mover excluded); the fixed rule "raise turbine inlet temperature
+10 percent" is valid in 87 of 100 plants and captures 47 percent of the best saving on average.
 
 ## 3b. Will GRPO get a learning signal? (CPU, before any GPU time)
 
@@ -140,12 +146,12 @@ python -m thermo_agent.train.reward_diagnostics data/processed data/processed_ar
 It simulates policies that answer correctly with probability 1 minus the error rate and draws groups of 4, then
 reports the reward spread inside groups and the share of groups whose rewards are all equal (those groups teach
 nothing, because GRPO normalises by the group's spread). Measured on small samples: with a 5 percent error rate
-about 70 to 90 percent of groups are flat, at 10 percent about 30 to 50 percent, at 30 percent about 20 percent,
-at 60 percent none. Practical reading: once an SFT model answers a task correctly more than about 90 percent of the
-time, GRPO on that distribution has little to learn from; train GRPO on the tasks and splits where SFT is clearly
+90 to 95 percent of groups are flat, at 10 percent 60 to 70 percent, at 30 percent 45 to 50 percent, and at 60
+percent 0 to 10 percent. Practical reading: once an SFT model answers a task correctly more than about 90 percent of
+the time, GRPO on that distribution has little to learn from; train GRPO on the tasks and splits where SFT is clearly
 below that, and watch the share of zero-variance groups in the training log (stop or change the prompt mix when it
-stays above about 50 percent). Fresh reward evaluation costs about 1 ms (ledger), 8 ms (repair), 23 ms (audit) and
-35 ms (design) per completion, so rewards will not be the bottleneck next to generation.
+stays above about 50 percent). Fresh reward evaluation costs about 0.6 ms (ledger), 5 ms (repair), 11 ms (audit) and
+23 ms (design) per completion, so rewards will not be the bottleneck next to generation.
 
 ## 4. Base model, no training
 
@@ -169,19 +175,23 @@ text starts with a thinking block, tell me.
 python -m thermo_agent.train.sft data/sft runs/tmp --tasks repair design audit ledger --print-sample
 ```
 
-Send back the output. `PROMPT TAIL` must end where the assistant answer starts (for Qwen3-style templates, with an
-empty thinking block). `PREFIX CHECK` may say `prefix_matches: false`; that is why SFT uses the plain-text format of
-`train/render.py`, which is what GRPO and evaluation render.
+Checked on the authoring machine with the cached `Qwen/Qwen3.5-4B` tokenizer: `PREFIX CHECK` reports
+`prefix_matches: true`, and `PROMPT TAIL` ends at `<|im_start|>assistant\n<think>\n\n</think>\n\n` — the generation
+prompt, with the empty thinking block, exactly where the completion starts. If a future tokenizer changes that tail,
+the check fails loudly here rather than silently at GRPO time.
 
 ## 6. SFT (dual T4)
 
 `data/sft/` is the combined corpus: ground-truth paraphrases (20 variants per repair row), validated teacher traces,
 the architecture corpus and retrieved hindsight notes, with the harness injected on 35 percent of rows. Files are
-`{task}_{split}.jsonl` (exactly what the trainers read) plus `sft_report.json`. `data/grpo/` has the same prompts
-without reference completions. Two gates drop (never truncate) oversized rows: 11500 characters, and 4000 tokens
-measured with the real tokenizer (prompt + completion + a 96-token reserve for the chat markers) under `max_length`
-4096. `python -m thermo_agent.train.token_audit data/sft` re-measures the written files and fails if any row would
-be cut.
+`{task}_{split}.jsonl` (exactly what the trainers read) plus `sft_report.json`. `data/grpo/` has the same prompts,
+one per plant; the GRPO loader drops everything but the prompt and the reward columns. Two gates drop (never
+truncate) oversized rows: 11500 characters, and 4000 tokens measured with the real tokenizer (prompt + completion + a
+96-token reserve for the chat markers) under `max_length` 4096. `python -m thermo_agent.train.token_audit data/sft`
+re-measures the written files and fails if any row would be cut; `python -m thermo_agent.synth.verify data/sft`
+compares the files with the report.
+
+Current SFT corpus: 129,684 rows, 116,809 in train (repair 106,420, ledger 5,602, audit 3,019, design 1,768).
 
 ```bash
 # smoke, then the full run (one adapter for all four tasks)
@@ -201,7 +211,7 @@ Expect Repair and Audit format and Design validity to be high after SFT. If the 
 the template or the data, not GRPO; stop and report.
 
 **Resume**: SFT saves every 200 steps (`save_strategy="steps", save_steps=200`) and auto-resumes from
-`latest(out_dir)` via `transformers.trainer_utils.get_last_checkpoint`. One SFT epoch ≈ 3,494 steps ≈ 29 h; plan
+`latest(out_dir)` via `transformers.trainer_utils.get_last_checkpoint`. One SFT epoch ≈ 3,650 steps ≈ 30 h; plan
 2–3 Kaggle sessions (12 h each).
 
 ## 7. GRPO (one task at a time, starting from the merged SFT model)

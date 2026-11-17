@@ -1,0 +1,18 @@
+test_ood_load {
+ "n": 30,
+ "enum_defaults": {
+  "valid": "30/30",
+  "mean_gap_pct": 3.43,
+  "evals": 40.5
+ },
+ "enum_polish": {
+  "valid": "30/30",
+  "mean_gap_pct": 0.0,
+  "evals": 125.8
+ },
+ "random_12": {
+  "valid": "29/30",
+  "mean_gap_pct": 8.79,
+  "evals": 12
+ }
+}

@@ -48,16 +48,16 @@ with a metadata file that records the seed, the settings and the CoolProp and sc
 
 \paragraph{Audit.} Rank exergy destroyers, propose one allowed change and predict its fuel effect on sampled valid plants, some with ORC bottoming and district heat; only plants in which at least one allowed change saves fuel are kept. Held out: topologies.
 
-\paragraph{Architecture corpus.} Repair rows built from the catalog of \val{corp.n_arch} diagrams (\val{corp.n_dc} data-center plants and the steam plant), with the same fault injectors as the Repair set. Held out: every engine plant and the steam plant. In a seed-0 sample of \val{corp.arch_requested} requested rows, \val{corp.arch_kept} were kept
+\paragraph{Architecture corpus.} Repair rows built from the catalog of \val{corp.n_arch} diagrams (\val{corp.n_dc} data-center plants and the steam plant), with the same fault injectors as the Repair set. Held out: the eight gas-engine plants with the ideal-rejection boundary and the steam plant. The generator was asked for \val{corp.arch_requested} fault injections and kept \val{corp.arch_kept}
 (train \val{corp.arch_rows.train}, validation \val{corp.arch_rows.val}, in-distribution test \val{corp.arch_rows.test_id}, held-out faults \val{corp.arch_rows.test_ood_fault}, held-out diagrams \val{corp.arch_rows.test_ood_topology}).
 
 \paragraph{Teacher answers, teacher-authored diagrams and memory notes.} Teacher answers are stored with the verdict of the tool suite; accepted answers become rows with the source tag \texttt{frontier}, and every rejected attempt is kept. Teacher-authored plants are stored with the checks they passed or failed, and accepted plants enter the catalog as new diagrams. Memory notes are mined from rejected attempts and carry the task, fault class, diagram, symptom, lesson and fix; the record that a note was mined from is stored so that it can be excluded at retrieval.
-Sizes of the final corpus: \todo{rows per source, task and split}.
+Sizes of the final corpus: \val{corp.rows} rows, \val{corp.rows_train} in the training split (Repair \val{corp.rows.repair.train}, Ledger \val{corp.rows.ledger.train}, Audit \val{corp.rows.audit.train}, Design \val{corp.rows.design.train}); the held-out-diagram split has \val{corp.rows.repair.test_ood_topology} Repair, \val{corp.rows.audit.test_ood_topology} Audit and \val{corp.rows.ledger.test_ood_topology} Ledger rows.
 
 \begin{table}[tbp]
 \centering
 \input{generated/table_datasets.tex}
-\caption{Rows per split of the small datasets generated for the baselines of this paper (seed 0; Repair 400 rows requested, Audit 200, Ledger 600; Design in 16 chunks of 6 sites, of which \val{des.n_sites} sites were used for the baselines); the training corpus is larger and its sizes are \todo{pending}. Splits for the in-distribution sets are separated by a hash of the example identifier. Data: \texttt{assets/splits.json}.}
+\caption{Rows per split of the small datasets generated for the baselines of this paper (seed 0; Repair 400 rows requested, Audit 200, Ledger 600; Design in 16 chunks of 6 sites, of which \val{des.n_sites} sites were used for the baselines); the training corpus has \val{corp.rows} rows. Splits for the in-distribution sets are separated by a hash of the example identifier. Data: \texttt{assets/splits.json}.}
 \label{tab:datasets}
 \end{table}
 

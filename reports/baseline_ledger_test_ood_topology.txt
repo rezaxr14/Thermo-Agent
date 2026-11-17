@@ -1,0 +1,85 @@
+test_ood_topology {
+ "n": 292,
+ "no_op_solved": 0.0,
+ "regenerate_solved": 1.0,
+ "symptom_rate_by_fault": {
+  "dropped_term": {
+   "closure": 1.0,
+   "negative_ed": 0.55,
+   "either": 1.0,
+   "n": 29
+  },
+  "dropped_work": {
+   "closure": 1.0,
+   "negative_ed": 0.71,
+   "either": 1.0,
+   "n": 21
+  },
+  "missing_ech": {
+   "closure": 0.44,
+   "negative_ed": 0.56,
+   "either": 0.78,
+   "n": 9
+  },
+  "missing_m": {
+   "closure": 0.3,
+   "negative_ed": 0.3,
+   "either": 0.55,
+   "n": 33
+  },
+  "sign_T0": {
+   "closure": 0.26,
+   "negative_ed": 0.81,
+   "either": 0.85,
+   "n": 27
+  },
+  "sign_flip": {
+   "closure": 1.0,
+   "negative_ed": 0.42,
+   "either": 1.0,
+   "n": 36
+  },
+  "t0_celsius": {
+   "closure": 0.16,
+   "negative_ed": 0.24,
+   "either": 0.32,
+   "n": 25
+  },
+  "t0_literal": {
+   "closure": 0.09,
+   "negative_ed": 0.69,
+   "either": 0.72,
+   "n": 32
+  },
+  "t0_offset": {
+   "closure": 0.29,
+   "negative_ed": 0.33,
+   "either": 0.48,
+   "n": 21
+  },
+  "unit_slip": {
+   "closure": 0.7,
+   "negative_ed": 0.71,
+   "either": 0.95,
+   "n": 56
+  },
+  "wrong_factor": {
+   "closure": 1.0,
+   "negative_ed": 0.39,
+   "either": 1.0,
+   "n": 31
+  },
+  "wrong_ref": {
+   "closure": 0.31,
+   "negative_ed": 0.76,
+   "either": 0.86,
+   "n": 29
+  },
+  "wrong_stream": {
+   "closure": 1.0,
+   "negative_ed": 0.42,
+   "either": 1.0,
+   "n": 38
+  }
+ }
+}

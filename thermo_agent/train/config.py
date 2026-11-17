@@ -20,12 +20,12 @@ class LoraSettings:
 @dataclass
 class SftSettings:
     lr: float = 2e-4
-    epochs: int = 1                    # one pass over the 20-variant corpus is ~37 h on two T4s; more would not fit quota
+    epochs: int = 1                    # one pass over the 20-variant corpus is ~30 h on two T4s; more would not fit quota
     max_length: int = 4096             # prompt + completion, both gated at 4000 tokens by synth.combine
     per_device_batch: int = 2
     grad_accum: int = 8
     max_grad_norm: float = 1.0         # fp16 needs clipping before the optimizer step
-    # An epoch of the 20-variant corpus is ~37 h on two T4s, far longer than one 12 h Kaggle session. Save and
+    # An epoch of the 20-variant corpus is ~30 h on two T4s, far longer than one 12 h Kaggle session. Save and
     # validate every few hundred steps so a dropped session resumes from its last checkpoint instead of restarting.
     save_steps: int = 200
     eval_steps: int = 200

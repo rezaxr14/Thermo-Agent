@@ -20,6 +20,10 @@ are a student-side device), the harness and the retrieved failure notes already 
 ground-truth completion**, so the notebook cannot leak the answer to the teacher. `export_manifest.json` records the
 counts, the harness mix and the maximum prompt length. The zip is what Kaggle's dataset uploader wants.
 
+The current export is 1,600 prompts (400 per task) over 36 to 44 diagrams per task, 1.8 MB zipped; the longest
+prompt is 3,998 tokens, so every prompt fits the model's 4,096-token training window with room for the answer. The
+export is deterministic: re-running the command reproduces the same ids and prompts from the same corpus.
+
 ## 2. Run the teacher (Kaggle, browser only)
 
 1. <https://www.kaggle.com/datasets> -> **New dataset** -> drag `data/frontier_export.zip` -> name it

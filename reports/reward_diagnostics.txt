@@ -1,0 +1,383 @@
+{
+ "repair": {
+  "groups": 20,
+  "G": 4,
+  "by_policy_error_rate": {
+   "0.0": {
+    "mean_reward": 5.15,
+    "mean_within_group_std": 0.0,
+    "zero_variance_groups": 1.0,
+    "zero_variance_expected_if_all_correct_or_all_wrong_alike": 1.0,
+    "ms_per_completion": 5.0,
+    "channel_means": {
+     "r_format": 1.0,
+     "r_valid": 1.0,
+     "r_site": 1.0,
+     "r_exact": 1.0,
+     "r_minimal": 1.0,
+     "r_grounded": 1.0
+    }
+   },
+   "0.05": {
+    "mean_reward": 5.081,
+    "mean_within_group_std": 0.119,
+    "zero_variance_groups": 0.95,
+    "zero_variance_expected_if_all_correct_or_all_wrong_alike": 0.815,
+    "ms_per_completion": 0.2,
+    "channel_means": {
+     "r_format": 0.988,
+     "r_valid": 0.988,
+     "r_site": 1.0,
+     "r_exact": 0.985,
+     "r_minimal": 0.988,
+     "r_grounded": 0.988
+    }
+   },
+   "0.1": {
+    "mean_reward": 4.681,
+    "mean_within_group_std": 0.652,
+    "zero_variance_groups": 0.7,
+    "zero_variance_expected_if_all_correct_or_all_wrong_alike": 0.656,
+    "ms_per_completion": 1.4,
+    "channel_means": {
+     "r_format": 0.912,
+     "r_valid": 0.9,
+     "r_site": 1.0,
+     "r_exact": 0.912,
+     "r_minimal": 0.9,
+     "r_grounded": 0.925
+    }
+   },
+   "0.3": {
+    "mean_reward": 4.468,
+    "mean_within_group_std": 1.107,
+    "zero_variance_groups": 0.45,
+    "zero_variance_expected_if_all_correct_or_all_wrong_alike": 0.24,
+    "ms_per_completion": 2.9,
+    "channel_means": {
+     "r_format": 0.904,
+     "r_valid": 0.868,
+     "r_site": 0.979,
+     "r_exact": 0.868,
+     "r_minimal": 0.863,
+     "r_grounded": 0.875
+    }
+   },
+   "0.6": {
+    "mean_reward": 3.289,
+    "mean_within_group_std": 1.828,
+    "zero_variance_groups": 0.1,
+    "zero_variance_expected_if_all_correct_or_all_wrong_alike": 0.026,
+    "ms_per_completion": 7.1,
+    "channel_means": {
+     "r_format": 0.729,
+     "r_valid": 0.625,
+     "r_site": 0.961,
+     "r_exact": 0.632,
+     "r_minimal": 0.613,
+     "r_grounded": 0.662
+    }
+   },
+   "1.0": {
+    "mean_reward": 2.164,
+    "mean_within_group_std": 1.812,
+    "zero_variance_groups": 0.0,
+    "zero_variance_expected_if_all_correct_or_all_wrong_alike": 0.0,
+    "ms_per_completion": 8.9,
+    "channel_means": {
+     "r_format": 0.545,
+     "r_valid": 0.408,
+     "r_site": 0.851,
+     "r_exact": 0.353,
+     "r_minimal": 0.375,
+     "r_grounded": 0.55
+    }
+   }
+  },
+  "max_total_reward": 5.5,
+  "fresh_evaluation_ms": 15.0
+ },
+ "design": {
+  "groups": 20,
+  "G": 4,
+  "by_policy_error_rate": {
+   "0.0": {
+    "mean_reward": 5.0,
+    "mean_within_group_std": 0.0,
+    "zero_variance_groups": 1.0,
+    "zero_variance_expected_if_all_correct_or_all_wrong_alike": 1.0,
+    "ms_per_completion": 23.1,
+    "channel_means": {
+     "d_format": 1.0,
+     "d_valid": 1.0,
+     "d_quality": 1.0,
+     "d_grounded": 1.0
+    }
+   },
+   "0.05": {
+    "mean_reward": 4.935,
+    "mean_within_group_std": 0.112,
+    "zero_variance_groups": 0.9,
+    "zero_variance_expected_if_all_correct_or_all_wrong_alike": 0.815,
+    "ms_per_completion": 1.3,
+    "channel_means": {
+     "d_format": 0.988,
+     "d_valid": 0.988,
+     "d_quality": 0.988,
+     "d_grounded": 0.983
+    }
+   },
+   "0.1": {
+    "mean_reward": 4.498,
+    "mean_within_group_std": 0.687,
+    "zero_variance_groups": 0.65,
+    "zero_variance_expected_if_all_correct_or_all_wrong_alike": 0.656,
+    "ms_per_completion": 4.0,
+    "channel_means": {
+     "d_format": 0.9,
+     "d_valid": 0.9,
+     "d_quality": 0.9,
+     "d_grounded": 0.896
+    }
+   },
+   "0.3": {
+    "mean_reward": 4.248,
+    "mean_within_group_std": 1.12,
+    "zero_variance_groups": 0.45,
+    "zero_variance_expected_if_all_correct_or_all_wrong_alike": 0.24,
+    "ms_per_completion": 10.8,
+    "channel_means": {
+     "d_format": 0.85,
+     "d_valid": 0.85,
+     "d_quality": 0.85,
+     "d_grounded": 0.846
+    }
+   },
+   "0.6": {
+    "mean_reward": 2.496,
+    "mean_within_group_std": 2.238,
+    "zero_variance_groups": 0.05,
+    "zero_variance_expected_if_all_correct_or_all_wrong_alike": 0.026,
+    "ms_per_completion": 10.4,
+    "channel_means": {
+     "d_format": 0.5,
+     "d_valid": 0.5,
+     "d_quality": 0.5,
+     "d_grounded": 0.492
+    }
+   },
+   "1.0": {
+    "mean_reward": 1.46,
+    "mean_within_group_std": 1.592,
+    "zero_variance_groups": 0.3,
+    "zero_variance_expected_if_all_correct_or_all_wrong_alike": 0.0,
+    "ms_per_completion": 26.9,
+    "channel_means": {
+     "d_format": 0.282,
+     "d_valid": 0.3,
+     "d_quality": 0.3,
+     "d_grounded": 0.237
+    }
+   }
+  },
+  "max_total_reward": 5.0,
+  "fresh_evaluation_ms": 96.4
+ },
+ "ledger": {
+  "groups": 20,
+  "G": 4,
+  "by_policy_error_rate": {
+   "0.0": {
+    "mean_reward": 5.5,
+    "mean_within_group_std": 0.0,
+    "zero_variance_groups": 1.0,
+    "zero_variance_expected_if_all_correct_or_all_wrong_alike": 1.0,
+    "ms_per_completion": 0.6,
+    "channel_means": {
+     "l_format": 1.0,
+     "l_closure": 1.0,
+     "l_nonneg": 1.0,
+     "l_exact": 1.0,
+     "l_minimal": 1.0,
+     "l_grounded": 1.0
+    }
+   },
+   "0.05": {
+    "mean_reward": 5.431,
+    "mean_within_group_std": 0.119,
+    "zero_variance_groups": 0.95,
+    "zero_variance_expected_if_all_correct_or_all_wrong_alike": 0.815,
+    "ms_per_completion": 0.1,
+    "channel_means": {
+     "l_format": 0.988,
+     "l_closure": 0.988,
+     "l_nonneg": 0.988,
+     "l_exact": 0.988,
+     "l_minimal": 0.988,
+     "l_grounded": 0.988
+    }
+   },
+   "0.1": {
+    "mean_reward": 4.992,
+    "mean_within_group_std": 0.879,
+    "zero_variance_groups": 0.6,
+    "zero_variance_expected_if_all_correct_or_all_wrong_alike": 0.656,
+    "ms_per_completion": 0.2,
+    "channel_means": {
+     "l_format": 0.929,
+     "l_closure": 0.9,
+     "l_nonneg": 0.918,
+     "l_exact": 0.9,
+     "l_minimal": 0.9,
+     "l_grounded": 0.938
+    }
+   },
+   "0.3": {
+    "mean_reward": 4.786,
+    "mean_within_group_std": 1.062,
+    "zero_variance_groups": 0.45,
+    "zero_variance_expected_if_all_correct_or_all_wrong_alike": 0.24,
+    "ms_per_completion": 0.2,
+    "channel_means": {
+     "l_format": 0.899,
+     "l_closure": 0.863,
+     "l_nonneg": 0.88,
+     "l_exact": 0.863,
+     "l_minimal": 0.863,
+     "l_grounded": 0.894
+    }
+   },
+   "0.6": {
+    "mean_reward": 3.566,
+    "mean_within_group_std": 2.02,
+    "zero_variance_groups": 0.1,
+    "zero_variance_expected_if_all_correct_or_all_wrong_alike": 0.026,
+    "ms_per_completion": 0.7,
+    "channel_means": {
+     "l_format": 0.776,
+     "l_closure": 0.625,
+     "l_nonneg": 0.712,
+     "l_exact": 0.6,
+     "l_minimal": 0.6,
+     "l_grounded": 0.794
+    }
+   },
+   "1.0": {
+    "mean_reward": 2.099,
+    "mean_within_group_std": 1.773,
+    "zero_variance_groups": 0.0,
+    "zero_variance_expected_if_all_correct_or_all_wrong_alike": 0.0,
+    "ms_per_completion": 0.9,
+    "channel_means": {
+     "l_format": 0.514,
+     "l_closure": 0.338,
+     "l_nonneg": 0.396,
+     "l_exact": 0.325,
+     "l_minimal": 0.312,
+     "l_grounded": 0.675
+    }
+   }
+  },
+  "max_total_reward": 5.5,
+  "fresh_evaluation_ms": 2.0
+ },
+ "audit": {
+  "groups": 20,
+  "G": 4,
+  "by_policy_error_rate": {
+   "0.0": {
+    "mean_reward": 6.5,
+    "mean_within_group_std": 0.0,
+    "zero_variance_groups": 1.0,
+    "zero_variance_expected_if_all_correct_or_all_wrong_alike": 1.0,
+    "ms_per_completion": 11.3,
+    "channel_means": {
+     "a_format": 1.0,
+     "a_rank": 1.0,
+     "a_valid": 1.0,
+     "a_gain": 1.0,
+     "a_pred": 1.0,
+     "a_grounded": 1.0
+    }
+   },
+   "0.05": {
+    "mean_reward": 6.486,
+    "mean_within_group_std": 0.024,
+    "zero_variance_groups": 0.9,
+    "zero_variance_expected_if_all_correct_or_all_wrong_alike": 0.815,
+    "ms_per_completion": 1.1,
+    "channel_means": {
+     "a_format": 1.0,
+     "a_rank": 1.0,
+     "a_valid": 1.0,
+     "a_gain": 1.0,
+     "a_pred": 0.987,
+     "a_grounded": 0.997
+    }
+   },
+   "0.1": {
+    "mean_reward": 5.989,
+    "mean_within_group_std": 0.766,
+    "zero_variance_groups": 0.6,
+    "zero_variance_expected_if_all_correct_or_all_wrong_alike": 0.656,
+    "ms_per_completion": 4.0,
+    "channel_means": {
+     "a_format": 0.938,
+     "a_rank": 0.938,
+     "a_valid": 0.912,
+     "a_gain": 0.912,
+     "a_pred": 0.912,
+     "a_grounded": 0.928
+    }
+   },
+   "0.3": {
+    "mean_reward": 5.82,
+    "mean_within_group_std": 1.147,
+    "zero_variance_groups": 0.5,
+    "zero_variance_expected_if_all_correct_or_all_wrong_alike": 0.24,
+    "ms_per_completion": 4.2,
+    "channel_means": {
+     "a_format": 0.9,
+     "a_rank": 0.9,
+     "a_valid": 0.9,
+     "a_gain": 0.9,
+     "a_pred": 0.875,
+     "a_grounded": 0.89
+    }
+   },
+   "0.6": {
+    "mean_reward": 4.439,
+    "mean_within_group_std": 2.335,
+    "zero_variance_groups": 0.0,
+    "zero_variance_expected_if_all_correct_or_all_wrong_alike": 0.026,
+    "ms_per_completion": 15.8,
+    "channel_means": {
+     "a_format": 0.765,
+     "a_rank": 0.75,
+     "a_valid": 0.65,
+     "a_gain": 0.65,
+     "a_pred": 0.625,
+     "a_grounded": 0.713
+    }
+   },
+   "1.0": {
+    "mean_reward": 3.429,
+    "mean_within_group_std": 2.703,
+    "zero_variance_groups": 0.0,
+    "zero_variance_expected_if_all_correct_or_all_wrong_alike": 0.0,
+    "ms_per_completion": 28.6,
+    "channel_means": {
+     "a_format": 0.605,
+     "a_rank": 0.575,
+     "a_valid": 0.537,
+     "a_gain": 0.537,
+     "a_pred": 0.412,
+     "a_grounded": 0.478
+    }
+   }
+  },
+  "max_total_reward": 6.5,
+  "fresh_evaluation_ms": 66.8
+ },
+ "notes": []
+}

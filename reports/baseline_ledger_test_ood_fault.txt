@@ -1,85 +1,85 @@
 test_ood_fault {
- "n": 200,
+ "n": 400,
  "no_op_solved": 0.0,
  "regenerate_solved": 1.0,
  "symptom_rate_by_fault": {
   "dropped_term": {
    "closure": 1.0,
-   "negative_ed": 0.75,
+   "negative_ed": 0.56,
    "either": 1.0,
-   "n": 8
+   "n": 16
   },
   "dropped_work": {
    "closure": 1.0,
-   "negative_ed": 0.56,
+   "negative_ed": 0.54,
    "either": 1.0,
-   "n": 52
+   "n": 120
   },
   "missing_ech": {
    "closure": 1.0,
-   "negative_ed": 0.0,
-   "either": 1.0,
-   "n": 1
-  },
-  "missing_m": {
-   "closure": 0.86,
-   "negative_ed": 0.57,
-   "either": 1.0,
-   "n": 7
-  },
-  "sign_T0": {
-   "closure": 0.62,
-   "negative_ed": 1.0,
-   "either": 1.0,
-   "n": 8
-  },
-  "sign_flip": {
-   "closure": 1.0,
-   "negative_ed": 0.67,
-   "either": 1.0,
-   "n": 6
-  },
-  "t0_celsius": {
-   "closure": 0.75,
-   "negative_ed": 0.75,
-   "either": 1.0,
-   "n": 4
-  },
-  "t0_literal": {
-   "closure": 0.64,
-   "negative_ed": 0.91,
-   "either": 1.0,
-   "n": 11
-  },
-  "t0_offset": {
-   "closure": 0.6,
-   "negative_ed": 0.6,
+   "negative_ed": 0.4,
    "either": 1.0,
    "n": 5
   },
-  "unit_slip": {
-   "closure": 0.92,
-   "negative_ed": 0.58,
+  "missing_m": {
+   "closure": 0.85,
+   "negative_ed": 0.54,
    "either": 1.0,
-   "n": 12
+   "n": 13
   },
-  "wrong_factor": {
+  "sign_T0": {
+   "closure": 0.69,
+   "negative_ed": 1.0,
+   "either": 1.0,
+   "n": 13
+  },
+  "sign_flip": {
    "closure": 1.0,
+   "negative_ed": 0.62,
+   "either": 1.0,
+   "n": 16
+  },
+  "t0_celsius": {
+   "closure": 0.6,
    "negative_ed": 0.8,
    "either": 1.0,
    "n": 10
   },
+  "t0_literal": {
+   "closure": 0.74,
+   "negative_ed": 0.91,
+   "either": 1.0,
+   "n": 23
+  },
+  "t0_offset": {
+   "closure": 0.55,
+   "negative_ed": 0.82,
+   "either": 1.0,
+   "n": 11
+  },
+  "unit_slip": {
+   "closure": 0.94,
+   "negative_ed": 0.71,
+   "either": 1.0,
+   "n": 31
+  },
+  "wrong_factor": {
+   "closure": 1.0,
+   "negative_ed": 0.7,
+   "either": 1.0,
+   "n": 20
+  },
   "wrong_ref": {
-   "closure": 0.26,
-   "negative_ed": 0.85,
-   "either": 0.87,
-   "n": 62
+   "closure": 0.32,
+   "negative_ed": 0.86,
+   "either": 0.9,
+   "n": 112
   },
   "wrong_stream": {
    "closure": 1.0,
-   "negative_ed": 0.54,
+   "negative_ed": 0.51,
    "either": 1.0,
-   "n": 97
+   "n": 195
   }
  }
 }

@@ -1,0 +1,18 @@
+test_ood_scale {
+ "n": 30,
+ "enum_defaults": {
+  "valid": "30/30",
+  "mean_gap_pct": 3.1,
+  "evals": 38.4
+ },
+ "enum_polish": {
+  "valid": "30/30",
+  "mean_gap_pct": 0.0,
+  "evals": 139.3
+ },
+ "random_12": {
+  "valid": "24/30",
+  "mean_gap_pct": 12.66,
+  "evals": 12
+ }
+}

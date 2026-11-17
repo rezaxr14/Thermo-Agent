@@ -1,6 +1,6 @@
 {
  "description": "every measured number quoted in the paper: value, TeX form, source asset, command, seed and sample size",
- "n_keys": 458,
+ "n_keys": 482,
  "values": {
   "env.n_components": {
    "value": 15,
@@ -59,16 +59,16 @@
    "n": null
   },
   "env.n_tests": {
-   "value": 286,
-   "tex": "286",
+   "value": 320,
+   "tex": "320",
    "source": "assets/environment.json",
    "command": "python -m pytest -q",
    "seed": null,
    "n": null
   },
   "env.tests_minutes": {
-   "value": 3.0,
-   "tex": "3",
+   "value": 5.0,
+   "tex": "5",
    "source": "assets/environment.json",
    "command": "python -m pytest -q",
    "seed": null,
@@ -126,7 +126,7 @@
    "value": 65,
    "tex": "65",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": null,
    "n": null
   },
@@ -134,7 +134,7 @@
    "value": 64,
    "tex": "64",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": null,
    "n": null
   },
@@ -142,7 +142,7 @@
    "value": 33,
    "tex": "33",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": null,
    "n": null
   },
@@ -150,7 +150,7 @@
    "value": 32,
    "tex": "32",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": null,
    "n": null
   },
@@ -158,7 +158,7 @@
    "value": 33,
    "tex": "33",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": null,
    "n": null
   },
@@ -166,15 +166,15 @@
    "value": 41,
    "tex": "41",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": null,
    "n": null
   },
   "corp.variants_default": {
-   "value": 4,
-   "tex": "4",
+   "value": 20,
+   "tex": "20",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": null,
    "n": null
   },
@@ -182,7 +182,7 @@
    "value": 35,
    "tex": "35",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": null,
    "n": null
   },
@@ -190,15 +190,23 @@
    "value": 3,
    "tex": "3",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": null,
    "n": null
   },
   "corp.max_prompt_chars": {
-   "value": 14000,
-   "tex": "14{,}000",
+   "value": 11500,
+   "tex": "11{,}500",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "seed": null,
+   "n": null
+  },
+  "corp.max_prompt_tokens": {
+   "value": 4000,
+   "tex": "4{,}000",
+   "source": "assets/corpus.json",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": null,
    "n": null
   },
@@ -206,7 +214,7 @@
    "value": 0.8,
    "tex": "0.8",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": null,
    "n": null
   },
@@ -214,7 +222,7 @@
    "value": 800,
    "tex": "800",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": null,
    "n": null
   },
@@ -222,7 +230,7 @@
    "value": 0.5,
    "tex": "0.5",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": null,
    "n": null
   },
@@ -230,7 +238,7 @@
    "value": 0.5,
    "tex": "0.5",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": null,
    "n": null
   },
@@ -238,7 +246,7 @@
    "value": 80,
    "tex": "80",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": null,
    "n": null
   },
@@ -246,7 +254,7 @@
    "value": 0.02,
    "tex": "0.02",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": null,
    "n": null
   },
@@ -254,7 +262,7 @@
    "value": 20,
    "tex": "20",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
    "n": null
   },
@@ -262,7 +270,7 @@
    "value": 80,
    "tex": "80",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
    "n": null
   },
@@ -270,63 +278,63 @@
    "value": 20,
    "tex": "20",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
-   "n": 44
+   "n": 1882
   },
   "corp.var.unit_slip.max": {
    "value": 20,
    "tex": "20",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
-   "n": 44
+   "n": 1882
   },
   "corp.var.wrong_fluid.min": {
    "value": 80,
    "tex": "80",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
-   "n": 39
+   "n": 2079
   },
   "corp.var.wrong_fluid.max": {
    "value": 80,
    "tex": "80",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
-   "n": 39
+   "n": 2079
   },
   "corp.var.efficiency_gt_1.min": {
    "value": 25,
    "tex": "25",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
-   "n": 42
+   "n": 1909
   },
   "corp.var.efficiency_gt_1.max": {
    "value": 25,
    "tex": "25",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
-   "n": 42
+   "n": 1909
   },
   "corp.arch_requested": {
-   "value": 400,
-   "tex": "400",
+   "value": 3000,
+   "tex": "3{,}000",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
    "n": null
   },
   "corp.arch_kept": {
-   "value": 276,
-   "tex": "276",
+   "value": 2063,
+   "tex": "2{,}063",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
    "n": null
   },
@@ -334,89 +342,273 @@
    "value": 69.0,
    "tex": "69",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
-   "n": 400
+   "n": 3000
   },
   "corp.arch_rows.test_id": {
-   "value": 9,
-   "tex": "9",
+   "value": 95,
+   "tex": "95",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
-   "n": 9
+   "n": 95
   },
   "corp.arch_distinct.test_id": {
-   "value": 6,
-   "tex": "6",
+   "value": 37,
+   "tex": "37",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
-   "n": 9
+   "n": 95
   },
   "corp.arch_rows.test_ood_fault": {
-   "value": 60,
-   "tex": "60",
+   "value": 761,
+   "tex": "761",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
-   "n": 60
+   "n": 761
   },
   "corp.arch_distinct.test_ood_fault": {
-   "value": 21,
-   "tex": "21",
+   "value": 44,
+   "tex": "44",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
-   "n": 60
+   "n": 761
   },
   "corp.arch_rows.test_ood_topology": {
-   "value": 135,
-   "tex": "135",
+   "value": 279,
+   "tex": "279",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
-   "n": 135
+   "n": 279
   },
   "corp.arch_distinct.test_ood_topology": {
-   "value": 27,
-   "tex": "27",
+   "value": 8,
+   "tex": "8",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
-   "n": 135
+   "n": 279
   },
   "corp.arch_rows.train": {
-   "value": 61,
-   "tex": "61",
+   "value": 818,
+   "tex": "818",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
-   "n": 61
+   "n": 818
   },
   "corp.arch_distinct.train": {
-   "value": 23,
-   "tex": "23",
+   "value": 45,
+   "tex": "45",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
-   "n": 61
+   "n": 818
   },
   "corp.arch_rows.val": {
-   "value": 11,
-   "tex": "11",
+   "value": 110,
+   "tex": "110",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
-   "n": 11
+   "n": 110
   },
   "corp.arch_distinct.val": {
-   "value": 9,
-   "tex": "9",
+   "value": 39,
+   "tex": "39",
    "source": "assets/corpus.json",
-   "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": 0,
-   "n": 11
+   "n": 110
+  },
+  "corp.rows": {
+   "value": 129684,
+   "tex": "129{,}684",
+   "source": "assets/corpus.json",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "seed": null,
+   "n": null
+  },
+  "corp.rows_train": {
+   "value": 116809,
+   "tex": "116{,}809",
+   "source": "assets/corpus.json",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "seed": null,
+   "n": null
+  },
+  "corp.rows.audit.test_id": {
+   "value": 397,
+   "tex": "397",
+   "source": "assets/corpus.json",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "seed": null,
+   "n": null
+  },
+  "corp.rows.audit.test_ood_fault": {
+   "value": 0,
+   "tex": "0",
+   "source": "assets/corpus.json",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "seed": null,
+   "n": null
+  },
+  "corp.rows.audit.test_ood_topology": {
+   "value": 122,
+   "tex": "122",
+   "source": "assets/corpus.json",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "seed": null,
+   "n": null
+  },
+  "corp.rows.audit.train": {
+   "value": 3019,
+   "tex": "3{,}019",
+   "source": "assets/corpus.json",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "seed": null,
+   "n": null
+  },
+  "corp.rows.audit.val": {
+   "value": 392,
+   "tex": "392",
+   "source": "assets/corpus.json",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "seed": null,
+   "n": null
+  },
+  "corp.rows.design.test_id": {
+   "value": 204,
+   "tex": "204",
+   "source": "assets/corpus.json",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "seed": null,
+   "n": null
+  },
+  "corp.rows.design.test_ood_climate": {
+   "value": 615,
+   "tex": "615",
+   "source": "assets/corpus.json",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "seed": null,
+   "n": null
+  },
+  "corp.rows.design.test_ood_load": {
+   "value": 411,
+   "tex": "411",
+   "source": "assets/corpus.json",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "seed": null,
+   "n": null
+  },
+  "corp.rows.design.test_ood_scale": {
+   "value": 460,
+   "tex": "460",
+   "source": "assets/corpus.json",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "seed": null,
+   "n": null
+  },
+  "corp.rows.design.train": {
+   "value": 1768,
+   "tex": "1{,}768",
+   "source": "assets/corpus.json",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "seed": null,
+   "n": null
+  },
+  "corp.rows.design.val": {
+   "value": 235,
+   "tex": "235",
+   "source": "assets/corpus.json",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "seed": null,
+   "n": null
+  },
+  "corp.rows.ledger.test_id": {
+   "value": 728,
+   "tex": "728",
+   "source": "assets/corpus.json",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "seed": null,
+   "n": null
+  },
+  "corp.rows.ledger.test_ood_fault": {
+   "value": 2603,
+   "tex": "2{,}603",
+   "source": "assets/corpus.json",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "seed": null,
+   "n": null
+  },
+  "corp.rows.ledger.test_ood_topology": {
+   "value": 251,
+   "tex": "251",
+   "source": "assets/corpus.json",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "seed": null,
+   "n": null
+  },
+  "corp.rows.ledger.train": {
+   "value": 5602,
+   "tex": "5{,}602",
+   "source": "assets/corpus.json",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "seed": null,
+   "n": null
+  },
+  "corp.rows.ledger.val": {
+   "value": 740,
+   "tex": "740",
+   "source": "assets/corpus.json",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "seed": null,
+   "n": null
+  },
+  "corp.rows.repair.test_id": {
+   "value": 598,
+   "tex": "598",
+   "source": "assets/corpus.json",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "seed": null,
+   "n": null
+  },
+  "corp.rows.repair.test_ood_fault": {
+   "value": 4260,
+   "tex": "4{,}260",
+   "source": "assets/corpus.json",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "seed": null,
+   "n": null
+  },
+  "corp.rows.repair.test_ood_topology": {
+   "value": 202,
+   "tex": "202",
+   "source": "assets/corpus.json",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "seed": null,
+   "n": null
+  },
+  "corp.rows.repair.train": {
+   "value": 106420,
+   "tex": "106{,}420",
+   "source": "assets/corpus.json",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "seed": null,
+   "n": null
+  },
+  "corp.rows.repair.val": {
+   "value": 657,
+   "tex": "657",
+   "source": "assets/corpus.json",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "seed": null,
+   "n": null
   },
   "tr.group": {
    "value": 4,

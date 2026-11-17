@@ -56,6 +56,7 @@ reports/*.completions.jsonl
 data/processed_arch/
 data/memory/
 data/sft/
+data/*.debug/
 data/frontier/
 data/scratch_arch/
 reports/combine.json
@@ -64,4 +65,5 @@ data/grpo/
 data/frontier_export/
 reports/combine_*.json
 reports/token_audit_*.json
+reports/verify_*.json
 reports/frontier_ingest.json
