@@ -7,12 +7,15 @@
 #   scripts/train_dual_t4.sh merge runs/sft/checkpoint-N runs/sft_merged
 #
 # Environment:
-#   DATA=data/sft        combined corpus written by thermo_agent.synth.combine
+#   #   THERMO_HF_SYNC   auto (default) | on | off -- push full resume state to the private HF repo
+#   HF_TOKEN         from .env locally, from a Kaggle Secret in the notebook
+#   HF_REPO_ID       optional; must still be <token owner>/thermo-agent-checkpoints
+DATA=data/sft        combined corpus written by thermo_agent.synth.combine
 #   GRPO_DATA=data/grpo  same prompts with no harness and no memory (short prompts for G rollouts)
 #   OUT=runs             adapter / checkpoint root
 #   MODEL=Qwen/Qwen3.5-4B
 #   TASKS="repair design audit ledger"
-#   INIT=runs/sft_merged merged SFT model that GRPO starts from
+#   INIT=runs/sft_merged merged SFT model that GRPO starts from (or hf:merged/sft to pull it from the private HF repo)
 #   NGPU / WORKERS       auto-detected; set to override
 #   STEPS / ROWS         optional smoke limits (--max-steps / --limit-rows)
 set -euo pipefail
@@ -81,7 +84,7 @@ run_grpo() {
 }
 
 run_merge() {
-  "$PY" -m thermo_agent.train.merge "${1:?checkpoint dir}" "${2:?output dir}"
+  "$PY" -m thermo_agent.train.merge "${1:?checkpoint dir}" "${2:?output dir}" --dtype float16
 }
 
 case "${1:-all}" in

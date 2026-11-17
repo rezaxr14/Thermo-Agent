@@ -54,4 +54,8 @@ def build(py_path=None, out_path=None) -> pathlib.Path:
 
 
 if __name__ == "__main__":
-    print(build())
+    import sys
+    pairs = [(HERE / "teacher_benchmark.py", HERE / "teacher.ipynb"),
+             (HERE / "train_runner.py", HERE / "train.ipynb")]
+    built = [build(*pair) for pair in pairs]
+    print("\n".join(str(p) for p in built))

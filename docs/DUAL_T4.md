@@ -109,6 +109,28 @@ If only rank 0 appears, or `nvidia-smi` shows one busy GPU, the launch did not d
 - **Not supported under DDP**: `--vllm` (colocate vLLM is a single-process mode; the script refuses it when
   `WORLD_SIZE > 1`).
 
+## Resume across Kaggle sessions (private Hugging Face repo)
+
+One SFT epoch is longer than a Kaggle session. Every Trainer save therefore pushes the **full resume state** —
+LoRA adapter, optimizer moments, scheduler, GradScaler, RNG and `trainer_state.json` — to one private repo,
+`Reza-Nadimi/thermo-agent-checkpoints`. The merged SFT model is pushed under `merged/sft` so GRPO can start in a
+fresh session with `--init hf:merged/sft`.
+
+- The token is read from `HF_TOKEN` (environment or `.env`); the Kaggle notebook reads a Kaggle Secret. Nothing
+  is written to a notebook or a command line.
+- `hf_sync` refuses any repo other than `<token owner>/thermo-agent-checkpoints` and refuses a repo that is not
+  private, so no other Hugging Face repo is touched. Create it once with
+  `python -m thermo_agent.train.hf_sync init`.
+- `sft.py`, `grpo.py` and `merge.py` sync by default when a token is present (`--hf-sync auto`); `--hf-sync off`
+  keeps a run local. A restarted session pulls the highest `checkpoint-N` before the Trainer is constructed, so
+  the existing `latest(out)` logic resumes from it. Under DDP only rank 0 pulls and pushes.
+- Inspect the state with `python -m thermo_agent.train.hf_sync status --stage sft` (also `push`, `pull`,
+  `push-merged`, `pull-merged`). Stage names are `sft`, `grpo_repair`, `grpo_design`, `grpo_audit`, `grpo_ledger`.
+- `python scripts/smoke_hf_resume.py` trains a tiny CPU model for two steps, pushes it to the private repo,
+  restores it and resumes for one more step. It was run successfully before the first T4 session.
+- Kaggle: import `kaggle/train.ipynb` (generated from `kaggle/train_runner.py`), attach the code and corpus
+  datasets described there, add the `HF_TOKEN` secret, and run one stage per cell. Re-running a cell resumes.
+
 ## Expectations on T4
 
 T4 fp16 is ~65 TFLOPS peak with a narrow memory bus. SFT on 4B with 3072-token sequences will be slow

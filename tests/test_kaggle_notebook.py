@@ -6,6 +6,7 @@ model to prove the loop is resumable and records failures, and re-check that the
 """
 import importlib.util
 import json
+import re
 import pathlib
 import sys
 import types
@@ -122,3 +123,20 @@ def test_export_never_carries_a_completion(tmp_path):
     transfer.export(src, tmp_path / "export", tasks=("repair",), per_task=5)
     exported = [json.loads(l) for l in (tmp_path / "export" / "repair_train.jsonl").open(encoding="utf-8")]
     assert exported and all("completion" not in r for r in exported)
+
+def test_train_notebook_is_generated_and_has_no_token():
+    """The training notebook comes from train_runner.py and resumes from the private HF repo."""
+    make_notebook = _load_make_notebook()
+    out = pathlib.Path(make_notebook.build(KAGGLE / "train_runner.py", KAGGLE / "_train_check.ipynb"))
+    try:
+        assert json.loads(out.read_text(encoding="utf-8")) == json.loads(
+            (KAGGLE / "train.ipynb").read_text(encoding="utf-8")), (
+            "kaggle/train.ipynb is stale: run `python kaggle/make_notebook.py`")
+        code = "".join("".join(c["source"]) for c in json.loads(out.read_text(encoding="utf-8"))["cells"]
+                       if c["cell_type"] == "code")
+        assert "torchrun" in code and "--hf-sync" in code and "hf:merged/sft" in code
+        assert "hf_sync.ensure_private_repo" in code
+        assert "get_secret(\"HF_TOKEN\")" in code, "the token must come from Kaggle Secrets"
+        assert not re.search(r"hf_[A-Za-z0-9]{20,}", code), "no token literal in the notebook"
+    finally:
+        out.unlink(missing_ok=True)

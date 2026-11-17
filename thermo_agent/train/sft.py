@@ -13,11 +13,12 @@ Prompts are rendered with the tokenizer exactly as GRPO and inference will rende
 If the checkpoint loads only through an image-text class, load that class and pass the model object to
 SFTTrainer instead of the string."""
 from __future__ import annotations
-import argparse, json, pathlib, random
+import argparse, json, os, pathlib, random
 
 from . import ddp
 from .checkpoint import latest
 from .config import BASE_MODEL, SftSettings
+from . import hf_sync
 from .render import render_pair, prefix_report
 
 
@@ -55,6 +56,9 @@ def main():
     ap.add_argument("--per-device-batch", type=int); ap.add_argument("--grad-accum", type=int); ap.add_argument("--grad-norm", type=float)
     ap.add_argument("--save-steps", type=int, help="checkpoint interval; a rerun of the same command resumes automatically")
     ap.add_argument("--num-workers", type=int, default=2)
+    ap.add_argument("--hf-sync", choices=("auto", "on", "off"), default=os.environ.get("THERMO_HF_SYNC", "auto"),
+                    help="push full resume state to the private HF repo after each save (auto: only when a token exists)")
+    ap.add_argument("--hf-repo", default=None, help="must be <token owner>/thermo-agent-checkpoints")
     a = ap.parse_args(); s = SftSettings()
     if a.per_device_batch: s.per_device_batch = a.per_device_batch
     if a.grad_accum: s.grad_accum = a.grad_accum
@@ -95,10 +99,13 @@ def main():
                     gradient_as_bucket_view=True, ddp_find_unused_parameters=False, ddp_bucket_cap_mb=64,
                     optim="adamw_torch")
     lora = LoraConfig(r=s.lora.r, lora_alpha=s.lora.alpha, lora_dropout=s.lora.dropout, target_modules=s.lora.target_modules, task_type="CAUSAL_LM")
+    repo, callback = hf_sync.prepare(a.hf_repo, "sft", a.out, a.hf_sync)
     resume = latest(a.out)
     if resume:
         print(f"resuming SFT from {resume}", flush=True)
-    SFTTrainer(model=a.model, args=cfg, train_dataset=train, eval_dataset=val, peft_config=lora).train(resume_from_checkpoint=resume)
+    hooks = [callback] if callback else []
+    SFTTrainer(model=a.model, args=cfg, train_dataset=train, eval_dataset=val, peft_config=lora,
+               callbacks=hooks).train(resume_from_checkpoint=resume)
 
 
 if __name__ == "__main__":

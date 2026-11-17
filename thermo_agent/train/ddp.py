@@ -84,6 +84,14 @@ def assert_grpo_batches(per_device: int, grad_accum: int, world_size: int, num_g
         )
 
 
+def barrier() -> None:
+    """Wait for all ranks. No-op for a single process; used before a shared checkpoint is read."""
+    import torch.distributed as dist
+
+    if dist.is_available() and dist.is_initialized():
+        dist.barrier()
+
+
 def describe_runtime() -> dict:
     """GPU names, capabilities and the chosen dtype. Imports torch lazily so CPU tests stay light."""
     import torch

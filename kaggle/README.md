@@ -60,3 +60,17 @@ rejections become hindsight-memory notes in `data/memory/frontier_notes.jsonl`.
 
 Ingest is resumable and never duplicates a row. `combine` already reads `data/frontier/`, so the next
 `pwsh scripts/build_corpus.ps1` folds the accepted traces into `data/sft/` as extra `source: frontier` rows.
+
+## Training notebook (dual T4, resumable)
+
+`kaggle/train.ipynb` is generated from `kaggle/train_runner.py` by `python kaggle/make_notebook.py`, exactly like the
+teacher notebook. It expects two private Kaggle datasets:
+
+- `thermo-agent-code`: upload `kaggle_bundle.zip`, built locally by `pwsh scripts/make_kaggle_bundle.ps1`.
+- `thermo-agent-corpus`: the `data/sft` and `data/grpo` directories from the local corpus build.
+
+Add a Kaggle Secret `HF_TOKEN` (the same value as `.env` locally). The setup cell creates/verifies the private repo
+`Reza-Nadimi/thermo-agent-checkpoints`; the SFT, merge and GRPO cells each resume from its newest checkpoint, so
+a cell can be re-run in another 12 h session without losing progress. Set `STEPS`/`ROWS` for a smoke run, and
+`TASK=ledger` (or repair/design/audit) for the GRPO cell. The notebook never contains a token literal and never
+writes to any Hugging Face repo other than that one.

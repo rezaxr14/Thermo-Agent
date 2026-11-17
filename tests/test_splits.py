@@ -49,6 +49,15 @@ def test_mix_turbine_with_ideal_rejection_is_not_held_out():
     assert not is_ood_topology(topology_label(_mix_plant("turbine", "ext")))
 
 
+def test_ledger_rows_from_mix_engine_ext_are_held_out():
+    from thermo_agent.synth.splits import topology_label as label
+    plant = _mix_plant("engine", "ext")
+    row = ledger_data.make_row("led-mix-ext", plant, random.Random("led-mix-ext"))
+    assert row is not None
+    assert row["topology"] == label(plant) == "dc_engine_absorption-ext"
+    assert row["split"] == "test_ood_topology"
+
+
 def test_the_catalog_keeps_orc_engines_and_steam_in_training():
     """At least one ORC, one engine and one turbine diagram must survive into training."""
     training = [a["name"] for a in A.ARCHITECTURES if not is_ood_topology(a["name"])]

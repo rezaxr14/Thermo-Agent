@@ -32,24 +32,31 @@ Ledger pipeline:
 
     python -m thermo_agent.ledger.data data/processed -n 3000 --seed 0 --workers 4
     python -m thermo_agent.ledger.run_eval data/processed --split test_ood_fault
-    python -m thermo_agent.train.grpo data/processed runs/grpo_ledger --task ledger --init runs/sft_merged
+    python -m thermo_agent.train.grpo data/grpo runs/grpo_ledger --task ledger --init runs/sft_merged
 
 Audit pipeline:
 
     python -m thermo_agent.audit.data data/processed -n 400 --seed 0 --workers 4
     python -m thermo_agent.audit.run_eval data/processed --split test_ood_topology
-    python -m thermo_agent.train.grpo data/processed runs/grpo_audit --task audit --init runs/sft_audit
+    python -m thermo_agent.train.grpo data/grpo runs/grpo_audit --task audit --init runs/sft_merged
 
 Design pipeline:
 
     python -m thermo_agent.design.data data/processed -n 600 --seed 0 --workers 4 --max-evals 60
     python -m thermo_agent.design.run_eval data/processed --split test_ood_climate
-    python -m thermo_agent.train.sft data/processed runs/sft_design --task design
-    python -m thermo_agent.train.grpo data/processed runs/grpo_design --task design --init runs/sft_design
+    python -m thermo_agent.train.sft data/sft runs/sft --tasks design
+    python -m thermo_agent.train.grpo data/grpo runs/grpo_design --task design --init runs/sft_merged
 
 Repair pipeline:
 
     python -m thermo_agent.synth.build_repair_data data/processed -n 3000 --seed 0
-    python -m thermo_agent.eval.run_eval data/processed --split test_ood_fault
-    python -m thermo_agent.train.sft data/processed runs/sft          # LoRA SFT on Qwen3.5-4B
-    python -m thermo_agent.train.grpo data/processed runs/grpo --init runs/sft
+    python -m thermo_agent.eval.run_eval data/processed data/processed_arch --split test_ood_fault
+    python -m thermo_agent.train.sft data/sft runs/sft --tasks repair   # LoRA SFT on Qwen3.5-4B
+    python -m thermo_agent.train.grpo data/grpo runs/grpo_repair --task repair --init runs/sft_merged
+
+Resumable training: with `HF_TOKEN` in `.env` (or a Kaggle Secret), each Trainer save pushes the full resume state
+(adapter, optimizer, scheduler, scaler, RNG, trainer state) to the single private repo
+`<token owner>/thermo-agent-checkpoints`; a restarted session pulls the newest checkpoint automatically.
+`python -m thermo_agent.train.hf_sync init` creates the repo; `status`, `push`, `pull`, `push-merged` and
+`pull-merged` inspect or move the state. Nothing is written to any other Hugging Face repo. The Kaggle training
+notebook is `kaggle/train.ipynb` (generated from `train_runner.py`); see `docs/DUAL_T4.md`.

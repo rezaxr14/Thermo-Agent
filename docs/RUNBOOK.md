@@ -213,7 +213,13 @@ the template or the data, not GRPO; stop and report.
 
 **Resume**: SFT saves every 200 steps (`save_strategy="steps", save_steps=200`) and auto-resumes from
 `latest(out_dir)` via `transformers.trainer_utils.get_last_checkpoint`. One SFT epoch ≈ 3,650 steps ≈ 30 h; plan
-2–3 Kaggle sessions (12 h each).
+2–3 Kaggle sessions (12 h each). Since the local `/kaggle/working` tree is lost between sessions, every save is
+also pushed to the single private Hugging Face repo `Reza-Nadimi/thermo-agent-checkpoints` (adapter, optimizer,
+scheduler, scaler, RNG and trainer state). A new session pulls the highest checkpoint before the Trainer starts;
+`python -m thermo_agent.train.hf_sync status --stage sft` compares local and remote steps. The token comes from
+`HF_TOKEN` in `.env` or a Kaggle Secret; the sync refuses any other repo id and any non-private repo. Set
+`THERMO_HF_SYNC=off` for a purely local run. `python scripts/smoke_hf_resume.py` exercises the whole round trip on
+a tiny CPU model. See `docs/DUAL_T4.md` and `kaggle/README.md` for the notebook path.
 
 ## 7. GRPO (one task at a time, starting from the merged SFT model)
 
