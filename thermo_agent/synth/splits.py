@@ -24,10 +24,30 @@ def is_ood_topology(name: str | None) -> bool:
     """True for the diagram combinations reserved for `test_ood_topology`.
 
     Names arrive in both spellings the repo uses: `dc_engine_absorption` from the base generators and
-    `engine-absorption-ext` from the architecture catalog.
+    `engine-absorption-ext` from the architecture catalog. For a MIX plant whose name omits the rejection
+    boundary, call `topology_label(plant)` first.
     """
     n = (name or "").replace("_sampled", "").replace("_", "-").lower()
     if n == STEAM_EXPORT.replace("_", "-"):
         return True
     parts = n.split("-")
     return all(part in parts for part in HELD_OUT_PARTS)
+
+
+def topology_label(plant) -> str:
+    """Canonical diagram label of a plant, including the rejection boundary the MIX names leave out.
+
+    `_sample_dc` names every engine plant `dc_engine_{cooling}_sampled` whether it rejects through an ideal
+    boundary (`ext`) or a dry/wet cooling tower. Using that name alone put ideal-rejection engines in the
+    training split while the catalog's `engine-*-ext*` diagrams were held out -- a leak of the held-out
+    topology. Read the graph instead: the ideal boundary sends the chiller rejection stream straight to
+    `ext:cw` with no heat-rejector component. The plant's prompt is unchanged; only this metadata label and
+    the split derived from it change.
+    """
+    name = (getattr(plant, "name", "") or "").replace("_sampled", "")
+    if is_ood_topology(name):
+        return name
+    ideal_chiller_rejection = any(str(s.src).startswith("ext:") and str(s.dst).startswith("CH.rej_in")
+                                  for s in plant.streams)
+    engine = any(c.type == "gas_engine" for c in plant.components)
+    return f"{name}-ext" if engine and ideal_chiller_rejection else name

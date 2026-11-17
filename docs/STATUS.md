@@ -121,6 +121,14 @@ same 100+100 row run as the baseline table. The SVG and PDF of `fig_audit_first_
 `fig_corpus` were drawn by a tool outside this repository and still show their earlier pilot samples and split bar;
 they must be rebuilt from `paper/figures/figure_manifest.json` and the current assets before the camera-ready PDF.
 
+**Pending data regeneration.** The five-template MIX generators named engine plants without their rejection
+boundary, so ideal-rejection engines from `data/processed` leaked into `train`/`test_id` while the catalog's
+`engine-*-ext*` diagrams were held out. `synth.splits.topology_label` now recovers the boundary from the plant graph
+and Repair, Audit and Ledger use it for both the `topology` field and the split. The checked-in datasets and all
+paper numbers above are still from the pre-fix data: re-run `scripts/gen_data.ps1`, `build_corpus.ps1` and the paper
+asset stages after the teacher pass, before freezing the final corpus. Prompts are unchanged (the label is metadata),
+so `data/frontier_export` stays valid for the teacher.
+
 ## Qwen3.5-4B architecture (for LoRA)
 
 `Qwen3_5ForConditionalGeneration` with separate text + vision configs:
@@ -173,10 +181,12 @@ Trainings have not been run yet: the 4050 cannot hold a 4B model for training, a
 
 ## Tests
 
-- Full CPU suite: **320 passed** in 5.0 minutes. `paper/methods_draft.md` exists, so its constant checks run instead
+- Full CPU suite: **325 passed** in 6.4 minutes. `paper/methods_draft.md` exists, so its constant checks run instead
   of skipping at module level.
-- New this round: `tests/test_verify.py` (the corpus verifier must notice a missing file, a row-count mismatch, a
-  leak across splits and a row over the token gate), plus the earlier `test_token_audit.py`, `test_transfer.py`,
+- New this round: `tests/test_run_eval.py` (the Repair per-fault breakdown must score the rows it names) and three
+  cases in `tests/test_splits.py` (the MIX generators must put ideal-rejection engines in `test_ood_topology`);
+  the round before added `tests/test_verify.py` (the corpus verifier must notice a missing file, a row-count mismatch,
+  a leak across splits and a row over the token gate), plus the earlier `test_token_audit.py`, `test_transfer.py`,
   `test_checkpoint.py`, `test_splits.py` and the per-task harness, train-only paraphrase and token-gate cases in
   `test_combine.py`.
 - Run `pytest -q` before any commit that touches `thermo_agent/`; `paper/tools/verify_paper.py` checks that every

@@ -59,16 +59,16 @@
    "n": null
   },
   "env.n_tests": {
-   "value": 321,
-   "tex": "321",
+   "value": 325,
+   "tex": "325",
    "source": "assets/environment.json",
    "command": "python -m pytest -q",
    "seed": null,
    "n": null
   },
   "env.tests_minutes": {
-   "value": 5.0,
-   "tex": "5",
+   "value": 6.0,
+   "tex": "6",
    "source": "assets/environment.json",
    "command": "python -m pytest -q",
    "seed": null,

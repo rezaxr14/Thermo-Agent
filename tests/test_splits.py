@@ -12,7 +12,8 @@ import pytest
 from thermo_agent.audit import data as audit_data
 from thermo_agent.ledger import data as ledger_data
 from thermo_agent.synth import architectures as A
-from thermo_agent.synth.splits import is_ood_topology
+from thermo_agent.synth.splits import is_ood_topology, topology_label
+from thermo_agent.synth.topologies import dc_chp, size_generation
 
 
 def test_held_out_combinations_are_the_steam_plant_and_engine_with_ideal_rejection():
@@ -27,6 +28,25 @@ def test_families_the_model_must_learn_are_not_held_out():
                  "turbine-absorption-dry-orc", "engine-absorption-wet", "turbine-electric-wet-orc-dh_exhaust",
                  "engine-absorption-wet-orc-dh_heat_pump"):
         assert not is_ood_topology(name), f"{name} must be training data"
+
+
+def _mix_plant(prime_mover, rejection):
+    """The five-template generator names engine plants without encoding their rejection boundary."""
+    return size_generation(dc_chp, P_it=20e6, cooling="absorption", prime_mover=prime_mover,
+                           rejection=rejection, name=f"dc_{prime_mover}_absorption_sampled")
+
+
+@pytest.mark.parametrize("rejection", ["ext", "dry", "wet"])
+def test_mix_engine_rejection_is_in_the_topology_label(rejection):
+    """Otherwise ideal-rejection engines leak into train through `data/processed`."""
+    plant = _mix_plant("engine", rejection)
+    assert topology_label(plant) == ("dc_engine_absorption-ext" if rejection == "ext" else "dc_engine_absorption")
+    assert is_ood_topology(topology_label(plant)) == (rejection == "ext")
+    assert (audit_data.split_of(plant, "aud-test") == "test_ood_topology") == (rejection == "ext")
+
+
+def test_mix_turbine_with_ideal_rejection_is_not_held_out():
+    assert not is_ood_topology(topology_label(_mix_plant("turbine", "ext")))
 
 
 def test_the_catalog_keeps_orc_engines_and_steam_in_training():

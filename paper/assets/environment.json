@@ -662,8 +662,8 @@
   "python": "3.12.3"
  },
  "tests": {
-  "passed": 321,
-  "seconds": 284.89,
+  "passed": 325,
+  "seconds": 384.69,
   "command": "python -m pytest -q"
  }
 }

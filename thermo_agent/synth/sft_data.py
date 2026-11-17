@@ -8,7 +8,7 @@ from ..agent.dsl import patch_to_edits_text
 from ..train.prompts import repair_messages
 from ..verify.verifiers import run_all
 from ..core.solve import solve
-from .splits import is_ood_topology
+from .splits import is_ood_topology, topology_label
 
 
 def _target(path: str, plant) -> tuple[str, str]:
@@ -48,7 +48,7 @@ def expert_completion(rec: RepairRecord) -> str:
 
 
 def topology_of(rec: RepairRecord) -> str:
-    return rec.plant_original.name.replace("_sampled", "")
+    return topology_label(rec.plant_original)
 
 
 def assign_split(rec: RepairRecord) -> str:

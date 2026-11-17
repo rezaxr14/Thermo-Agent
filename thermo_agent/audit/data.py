@@ -7,7 +7,7 @@ repair. Only the held-out combinations (`synth/splits.py`) go to `test_ood_topol
 from __future__ import annotations
 import argparse, collections, hashlib, json, pathlib, random
 from ..synth.meta import write_meta
-from ..synth.splits import is_ood_topology
+from ..synth.splits import is_ood_topology, topology_label
 from ..synth import architectures
 from ..core.schema import Site
 from ..synth.repair_dataset import sample_plant, MIX
@@ -23,7 +23,7 @@ def site_of(plant, res) -> Site | None:
 
 
 def split_of(plant, sid: str) -> str:
-    topo = plant.name.replace("_sampled", "")
+    topo = topology_label(plant)
     if is_ood_topology(topo): return "test_ood_topology"
     h = int(hashlib.md5(sid.encode()).hexdigest(), 16) % 10
     return "val" if h == 0 else ("test_id" if h == 1 else "train")
@@ -42,7 +42,7 @@ def make_row(sid: str, plant) -> dict | None:
     from ..core.solve import solve
     res = solve(plant); site = site_of(plant, res); T = truth(plant, site)
     if T is None or T["best"] is None or T["best_gain_w"] <= 0: return None
-    return {"id": sid, "split": split_of(plant, sid), "topology": plant.name.replace("_sampled", ""),
+    return {"id": sid, "split": split_of(plant, sid), "topology": topology_label(plant),
             "prompt": audit_messages(plant, site, T["result"]),
             "completion": [{"role": "assistant", "content": expert_completion(plant, T)}],
             "plant": plant.model_dump_json(by_alias=True), "site": site.model_dump_json() if site else "",

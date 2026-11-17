@@ -6,7 +6,7 @@ instead of the five-plant `MIX`; only the held-out combinations go to `test_ood_
 from __future__ import annotations
 import argparse, collections, hashlib, json, pathlib, random
 from ..synth.meta import write_meta
-from ..synth.splits import is_ood_topology
+from ..synth.splits import is_ood_topology, topology_label
 from ..synth import architectures
 from ..synth.repair_dataset import sample_plant, MIX
 from ..core.solve import solve
@@ -57,7 +57,7 @@ def make_row(sid: str, plant, rng: random.Random) -> dict | None:
     else: return None
     lines, recs = inj; result = P.run(lines, data)
     if result["errors"]: return None
-    topo = plant.name.replace("_sampled", "")
+    topo = topology_label(plant)
     ledger = {"data": data, "lines": lines, "faulty": [r["key"] for r in recs], "numbers": numbers_shown(data, result)}
     return {"id": sid, "split": split_of(topo, {r["type"] for r in recs}, sid), "topology": topo, "fault_types": [r["type"] for r in recs],
             "prompt": ledger_messages(data, lines, result), "completion": [{"role": "assistant", "content": expert_completion(recs, data, result)}],
