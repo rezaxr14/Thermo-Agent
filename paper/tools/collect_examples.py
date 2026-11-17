@@ -49,7 +49,8 @@ def _graph(row):
 def from_datagen(dirs, limit=400):
     out = []
     for d in dirs:
-        for path in sorted(pathlib.Path(d).glob("repair_test_id.jsonl")):
+        for path in sorted(pathlib.Path(d).glob("repair_test_*.jsonl")):
+            split = path.stem[len("repair_"):]
             picked = {}
             for r in _read(path)[:limit]:
                 ft = r.get("fault_type", "?")
@@ -57,7 +58,7 @@ def from_datagen(dirs, limit=400):
                     picked[ft] = r
             for ft, r in sorted(picked.items()):
                 out.append({"source": "datagen", "id": r["id"], "file": str(path), "task": "repair",
-                            "split": "test_id", "fault": ft, "topology": r.get("topology"),
+                            "split": split, "fault": ft, "topology": r.get("topology"),
                             "title": f"Ground truth: {ft}", "graph": _graph(r),
                             "fields": {"diagnosis": _excerpt(r.get("completion", "")),
                                        "prompt_tail": _excerpt(r.get("prompt", [{}])[-1].get("content"), 300)}})
