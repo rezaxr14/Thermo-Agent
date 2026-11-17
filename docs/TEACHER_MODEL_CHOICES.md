@@ -58,3 +58,22 @@ our physics tools exposed to the frontier model through `llm.prompt(..., tools=[
 reasoning traces and `Usage` cost in `harness_completions.jsonl`, under a different progress prefix so the two arms
 never overwrite each other. This gives the paper three distinct frontier arms: zero-shot, with our inference text,
 and with our tools — plus the trained 4B model and the non-model baselines.
+
+## Measured decision (2026-11-18, CLI proxy)
+
+A short probe through `python -m thermo_agent.teacher.cli_runner probe` tested the eight models in this account's
+interactive roster. Two were unavailable (404: `deepseek-ai/deepseek-r1-0528`, `qwen/qwen3-next-80b-a3b-instruct`),
+one returned no message content (`openai/gpt-oss-120b`), and `ibm/granite-4.0-h-small` returned a `<think>` block
+that consumed the output budget. Four models answered cleanly. The two cheapest clean models were then graded on 12
+real Repair prompts through `teacher.transfer.ingest` (source files `data/teacher_runs/probe_gemini.jsonl` and
+`probe_gptnano.jsonl`):
+
+| Model | Accepted / attempts | Cost (USD) | Cost per accepted row | Decision |
+|---|---|---|---|---|
+| `google/gemini-3.1-flash-lite-preview` | 10 / 12 | 0.00549 | 0.00055 | **primary teacher** |
+| `openai/gpt-5.4-nano-2026-03-17` | 6 / 12 | 0.00367 | 0.00061 | second arm for comparison |
+
+The choice is the lower cost per *accepted* row, not the lower token price: Gemini's higher acceptance rate more than
+pays for its slightly higher token price. The full campaign therefore runs Gemini over all 1,600 prompts and GPT nano
+over the same prompts as a second frontier arm. The primary run is resumable from
+`data/teacher_runs/completions.jsonl` and from `teacher/progress.jsonl` in the private HF repo.
