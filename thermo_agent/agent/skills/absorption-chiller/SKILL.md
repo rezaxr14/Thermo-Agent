@@ -25,5 +25,4 @@ Params: `T_chw_out`: chilled-water outlet temperature (K), required; `T_gen_out`
 - Swapped `gen_in` and `rej_in` streams: the generator sees cooling water, E_PROP_RANGE.
 
 ## State: constant versus changing
-- Constant: the refrigerant/absorbent pair, chilled-water set-point `T_chw_out`, generator inlet set-point, and the cooling-water loop's fluid. Generator, chilled-water and rejection flows are solved, not specified.
-- Changing: generator heat drives the cycle, the chilled stream returns warmer than `T_chw_out`, and the rejection stream carries generator plus evaporated heat away. `eps` and `COP_max` bound the duty; raising `dT_rej` lowers the achievable rejection temperature.
+Fixed: refrigerant pair, `T_chw_out` and the loop fluids; generator, chilled and rejection flows are solved. Generator heat drives the cycle; temperatures and duties change within `eps`/`COP_max`, and `dT_rej` sets the rejection temperature.

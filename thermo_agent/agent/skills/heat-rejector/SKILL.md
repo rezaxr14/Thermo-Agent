@@ -23,6 +23,4 @@ Params: `kind`: 'dry' (dry cooler) or 'wet' (evaporative tower), dry; `approach_
 - `kind` not `dry` or `wet`, `approach_K` of 0 or negative, `fan_frac` above 0.1.
 
 ## State: constant versus changing
-- Constant: ambient dry-bulb (or wet-bulb) temperature and pressure, loop water mass flow, and the fluid (water).
-- Changing: the warm loop inlet cools to outlet temperature; the fan consumes `fan_frac` of the rejected heat; a wet tower also consumes make-up water. The tear stream's fixed outlet T must track `approach_K` and `kind` together.
-- Energy leaves at near-ambient temperature: large duty, small exergy destruction. This is why a first-law ranking blames the rejector while the second-law ranking does not.
+Fixed: water flow and ambient T/P; outlet T = wet/dry bulb + `approach_K`, fan uses `fan_frac` of rejected heat, and the tear stream's fixed T must match. Heat leaves near ambient: large duty, small exergy loss.
