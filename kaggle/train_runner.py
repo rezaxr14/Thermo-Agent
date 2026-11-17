@@ -126,6 +126,7 @@ run([PY, "-m", "torchrun", "--standalone", "--nproc_per_node=2", "--module", "th
      ROOT / "data" / "grpo", ROOT / "runs" / f"grpo_{TASK}", "--task", TASK,
      "--init", "hf:merged/sft", "--dtype", "float16",
      "--per-device-batch", "4", "--grad-accum", "2", "--num-workers", "2",
+     "--rollout-log", ROOT / "runs" / f"grpo_{TASK}" / "rollouts.jsonl",
      "--hf-sync", SYNC, *LIMITS])
 
 # %%

@@ -34,3 +34,8 @@ Params: `dT_cw`: cooling-water temperature rise (K), required
 - Pump `P_out` at or below the condensing pressure; turbine `P_out` not matching the tear pressure (E_NOT_CONVERGED).
 - Working-fluid stream labelled with a gas fluid: E_FLUID_MISMATCH.
 - `flow_frac` outside (0, 1].
+
+## State: constant versus changing
+- Constant: working-fluid identity (R245fa, Cyclopentane or Toluene), its mass flow once `flow_frac` is set, pump and turbine pressures, and the condensing pressure set by the tear stream.
+- Changing: the fluid evaporates at (roughly) constant high pressure, expands to the low pressure, condenses at constant low pressure, and is pumped back up. Enthalpy and temperature change at every component; the exhaust gives up heat and cools.
+- The pump only raises pressure (small temperature rise); the turbine only converts enthalpy drop to work. A wrong fluid class or a `P_out` below condensing pressure breaks the loop.

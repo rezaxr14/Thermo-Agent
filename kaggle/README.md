@@ -84,3 +84,9 @@ token/cost usage per row in `harness_completions.jsonl`, and mirrors progress to
 `teacher/harness_progress.jsonl` in the same private repo. Attach `thermo-agent-code`, `thermo-teacher-prompts` and
 the `HF_TOKEN` secret. Together with the zero-shot and prompt-only frontier arms and the trained 4B, this lets the
 paper measure how much our harness and tools help a frontier model.
+
+## Evaluation notebook and paper figures
+
+`kaggle/eval.ipynb` (source `eval_runner.py`) runs every comparison arm through the same `model_eval` evaluator: our base 4B, the SFT checkpoint with and without the inference text, the frontier model zero-shot and with our tools (replayed from the Kaggle answers), and another model served behind an OpenAI-compatible endpoint. It writes one report JSON per arm, builds `paper/assets/model_results.json` with the family/inference-text/tool axes, aggregates `reports/tool_usage.json` (tool calls, cost, reasoning), and redraws the trace figure.
+
+`paper/tools/collect_examples.py` selects deterministic examples from every stage (datagen, SFT, teacher-in-harness, GRPO rollouts, evaluation) into `paper/assets/examples.json` with `examples_schema.json` beside it. `paper/tools/figures_from_examples.py` turns them into `figures/svg|pdf/fig_trace_walkthrough.*`, a four-panel vector figure for the paper. No figure value is hand-written: every string and number is copied from a stage output.

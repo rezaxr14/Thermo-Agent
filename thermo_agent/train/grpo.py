@@ -17,6 +17,7 @@ from . import ddp
 from .checkpoint import latest
 from .config import BASE_MODEL, GrpoSettings
 from . import hf_sync
+from . import rollout_log
 from . import rewards as repair_rewards
 from ..design import rewards as design_rewards
 from ..audit import rewards as audit_rewards
@@ -58,6 +59,7 @@ def main():
     ap.add_argument("--num-workers", type=int, default=2)
     ap.add_argument("--hf-sync", choices=("auto", "on", "off"), default=os.environ.get("THERMO_HF_SYNC", "auto"))
     ap.add_argument("--hf-repo", default=None, help="must be <token owner>/thermo-agent-checkpoints")
+    ap.add_argument("--rollout-log", default=None, help="JSONL path for scored rollouts (audit and paper figures)")
     a = ap.parse_args(); g = GrpoSettings()
     if a.per_device_batch: g.per_device_batch = a.per_device_batch
     if a.grad_accum: g.grad_accum = a.grad_accum
@@ -109,7 +111,8 @@ def main():
     resume = latest(a.out)
     if resume:
         print(f"resuming GRPO from {resume}", flush=True)
-    GRPOTrainer(model=init_model, reward_funcs=TASKS[a.task][0], args=cfg, train_dataset=Dataset.from_list(rows),
+    funcs = rollout_log.wrap_rewards(TASKS[a.task][0], a.rollout_log, stage=stage)
+    GRPOTrainer(model=init_model, reward_funcs=funcs, args=cfg, train_dataset=Dataset.from_list(rows),
                 peft_config=lora, callbacks=([callback] if callback else [])).train(resume_from_checkpoint=resume)
 
 

@@ -66,12 +66,12 @@ def build(manifest: dict) -> dict:
     return {"arms": len(manifest), "rows": rows, "provenance": provenance}
 
 
-def main():
+def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("manifest")
     ap.add_argument("--out", required=True)
     ap.add_argument("--root", default=None, help="base dir for relative report paths (default: manifest's dir)")
-    a = ap.parse_args()
+    a = ap.parse_args(argv)
     manifest = load_manifest(a.manifest, a.root or pathlib.Path(a.manifest).resolve().parent)
     out = pathlib.Path(a.out); out.parent.mkdir(parents=True, exist_ok=True)
     result = build(manifest)

@@ -80,7 +80,8 @@ run_grpo() {
   preflight
   torchrun --standalone --nproc_per_node="$NGPU" --module thermo_agent.train.grpo \
     "$GRPO_DATA" "$OUT/grpo_$task" --task "$task" --init "$INIT" --dtype float16 \
-    --per-device-batch 4 --grad-accum 2 --grad-norm 1.0 --num-workers "$WORKERS" "${LIMITS[@]}"
+    --per-device-batch 4 --grad-accum 2 --grad-norm 1.0 --num-workers "$WORKERS" \
+    --rollout-log "$OUT/grpo_$task/rollouts.jsonl" "${LIMITS[@]}"
 }
 
 run_merge() {

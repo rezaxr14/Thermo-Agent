@@ -57,6 +57,7 @@ if __name__ == "__main__":
     import sys
     pairs = [(HERE / "teacher_benchmark.py", HERE / "teacher.ipynb"),
              (HERE / "train_runner.py", HERE / "train.ipynb"),
-             (HERE / "teacher_harness.py", HERE / "teacher_harness.ipynb")]
+             (HERE / "teacher_harness.py", HERE / "teacher_harness.ipynb"),
+             (HERE / "eval_runner.py", HERE / "eval.ipynb")]
     built = [build(*pair) for pair in pairs]
     print("\n".join(str(p) for p in built))

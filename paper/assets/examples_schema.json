@@ -1,0 +1,16 @@
+{
+ "examples": [
+  {
+   "source": "datagen|sft|frontier|harness|grpo|eval",
+   "id": "row id (or group id)",
+   "file": "source file",
+   "task": "repair|design|audit|ledger",
+   "split": "dataset split if known",
+   "fault": "fault type if known",
+   "topology": "diagram label",
+   "title": "short caption",
+   "fields": "verbatim excerpts: prompt, diagnosis, edits, completion, reasoning, tool_calls, rewards"
+  }
+ ],
+ "note": "All examples are measured outputs. No figure value is hand-written."
+}

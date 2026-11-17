@@ -22,3 +22,8 @@ Params: `P_el`: rated electrical output (W), required; `eta_el`: electrical effi
 - `P_el` off by a power of ten (W entered as MW or kW) fails V6 or breaks the electricity balance of the site.
 - Specifying `m_dot` on `air` or `fuel` raises E_OVER_SPECIFIED.
 - `eta_el` above 1, or `eta_el + f_loss` of 1 or more, is invalid.
+
+## State: constant versus changing
+- Constant: fuel composition and LHV, air composition, `air_excess`, `f_loss`, `P_el`, `P_exh`. Solved (never specified): fuel and air mass flows.
+- Changing: air and fuel enter at ambient T/P and leave as exhaust at higher T; chemical exergy becomes shaft work plus exhaust enthalpy plus jacket/radiation loss. Exhaust temperature is an output of the energy balance, not a set-point.
+- Only recoverable heat is the exhaust above ambient plus `T_stack_min`; jacket heat is lost. More air excess lowers exhaust temperature but does not create new energy.

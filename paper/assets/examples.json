@@ -1,0 +1,137 @@
+{
+ "examples": [
+  {
+   "fault": "efficiency_gt_1",
+   "fields": {
+    "diagnosis": "[{'role': 'assistant', 'content': '<diagnosis>ENG.eta_el = 43.8554 is a percentage entered where a fraction is required.</diagnosis>\\n<edits>\\nSET ENG.eta_el = 0.4385535708751113\\n</edits>'}]",
+    "prompt_tail": "PLANT\nPLANT dc_engine_electric_sampled T0=289.81583689783804 P0=101325.0 RH=0.6896411495184748\nC ENG gas_engine {\"P_el\":45417471.59047652,\"eta_el\":43.855357,\"f_loss\":0.11686372635949754,\"air_excess\":1.559763909543629,\"P_exh\":101325.0}\nC DC dc_load {\"P_it\":39872825.099120244,\"chilled_fraction\":0.8886 ..."
+   },
+   "file": "data\\processed\\repair_test_id.jsonl",
+   "graph": {
+    "components": [
+     "gas_engine",
+     "dc_load",
+     "heat_rejector",
+     "electric_chiller"
+    ],
+    "name": "dc_engine_electric_sampled",
+    "streams": 7
+   },
+   "id": "rep-0-00042",
+   "source": "datagen",
+   "split": "test_id",
+   "task": "repair",
+   "title": "Ground truth: efficiency_gt_1",
+   "topology": "dc_engine_electric"
+  },
+  {
+   "fault": "unit_slip",
+   "fields": {
+    "diagnosis": "[{'role': 'assistant', 'content': \"<diagnosis>@fuel.fixed.P = 1.2e+11 Pa is far from the loop's other pressures, a bar/Pa or kPa/Pa unit slip.</diagnosis>\\n<edits>\\nSET @fuel.fixed.P = 1200000.0\\n</edits>\"}]",
+    "prompt_tail": "PLANT\nPLANT cgam_orc_sampled T0=298.15 P0=101325.0 RH=0.6\nC AC compressor {\"PR\":10.421663424505795,\"eta_s\":0.8950650815162641}\nC AP recuperator {\"T_cold_out\":821.5442255908162,\"dp_cold\":0.05,\"dp_hot\":0.03}\nC CC combustor {\"T_out\":1518.2949778659827,\"dp\":0.05,\"q_loss\":0.02}\nC GT turbine {\"P_out\":1099 ..."
+   },
+   "file": "data\\processed\\repair_test_id.jsonl",
+   "graph": {
+    "components": [
+     "compressor",
+     "recuperator",
+     "combustor",
+     "turbine",
+     "hrsg",
+     "orc_evaporator",
+     "orc_turbine",
+     "condenser",
+     "pump"
+    ],
+    "name": "cgam_orc_sampled",
+    "streams": 17
+   },
+   "id": "rep-0-00075",
+   "source": "datagen",
+   "split": "test_id",
+   "task": "repair",
+   "title": "Ground truth: unit_slip",
+   "topology": "cgam_orc"
+  },
+  {
+   "fault": "wrong_fluid",
+   "fields": {
+    "diagnosis": "[{'role': 'assistant', 'content': '<diagnosis>Stream fuel is labelled Water, but it feeds CC.fuel_in, which expects a stream of the other fluid class; its neighbours in the same loop carry CH4.</diagnosis>\\n<edits>\\nFLUID @fuel = CH4\\n</edits>'}]",
+    "prompt_tail": "PLANT\nPLANT dc_electric_sampled T0=296.3611263046365 P0=101325.0 RH=0.7316625915541004\nC AC compressor {\"PR\":19.95302123622318,\"eta_s\":0.8509346404426589}\nC CC combustor {\"T_out\":1494.177841809613,\"dp\":0.04,\"q_loss\":0.01}\nC GT turbine {\"P_out\":101325.0,\"eta_s\":0.8432923041068288}\nC DC dc_load {\"P_it ..."
+   },
+   "file": "data\\processed\\repair_test_id.jsonl",
+   "graph": {
+    "components": [
+     "compressor",
+     "combustor",
+     "turbine",
+     "dc_load",
+     "electric_chiller"
+    ],
+    "name": "dc_electric_sampled",
+    "streams": 9
+   },
+   "id": "rep-0-00019",
+   "source": "datagen",
+   "split": "test_id",
+   "task": "repair",
+   "title": "Ground truth: wrong_fluid",
+   "topology": "dc_electric"
+  },
+  {
+   "fault": "unit_slip",
+   "fields": {
+    "completion": "<diagnosis>At DC.P_it the value 45.2319 W is written where a plant-scale power belongs; it is off by a power-of-ten factor, a W/kW/MW unit slip.</diagnosis>\n<edits>\nSET DC.P_it = 45231907.143496625\n</edits>",
+    "harness": "agents+skills",
+    "memory_notes": [
+     "repair-rep-0-00000-279e8be7",
+     "repair-rep-0-00020-a0ac6454",
+     "repair-rep-1-00020-08c1c7f9"
+    ]
+   },
+   "file": "data\\sft\\repair_train.jsonl",
+   "id": "rep-0-00005",
+   "source": "sft",
+   "split": "train",
+   "task": "repair",
+   "title": "SFT row with harness and memory: repair",
+   "topology": "dc_electric"
+  },
+  {
+   "fault": "unit_slip",
+   "fields": {
+    "completion": "<diagnosis>DC.P_it = 45.2319 W is not a credible electrical power; it is off by a power-of-ten factor, a W/kW/MW unit slip.</diagnosis>\n<edits>\nSET DC.P_it = 45231907.143496625\n</edits>",
+    "harness": "agents+skills",
+    "memory_notes": [
+     "repair-rep-0-00000-279e8be7",
+     "repair-rep-0-00020-a0ac6454",
+     "repair-rep-1-00020-08c1c7f9"
+    ]
+   },
+   "file": "data\\sft\\repair_train.jsonl",
+   "id": "rep-0-00005#v1",
+   "source": "sft",
+   "split": "train",
+   "task": "repair",
+   "title": "SFT row with harness and memory: repair",
+   "topology": "dc_electric"
+  }
+ ],
+ "n": 5,
+ "schema": {
+  "examples": [
+   {
+    "fault": "fault type if known",
+    "fields": "verbatim excerpts: prompt, diagnosis, edits, completion, reasoning, tool_calls, rewards",
+    "file": "source file",
+    "id": "row id (or group id)",
+    "source": "datagen|sft|frontier|harness|grpo|eval",
+    "split": "dataset split if known",
+    "task": "repair|design|audit|ledger",
+    "title": "short caption",
+    "topology": "diagram label"
+   }
+  ],
+  "note": "All examples are measured outputs. No figure value is hand-written."
+ }
+}

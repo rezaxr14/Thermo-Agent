@@ -157,3 +157,21 @@ def test_tools_notebook_is_generated_and_exposes_the_physics_tool():
         assert "harness_progress.jsonl" in code
     finally:
         out.unlink(missing_ok=True)
+
+
+def test_eval_notebook_runs_every_arm_and_writes_comparison():
+    """The eval notebook must actually invoke each arm, then build the comparison and tool-use assets."""
+    make_notebook = _load_make_notebook()
+    out = pathlib.Path(make_notebook.build(KAGGLE / "eval_runner.py", KAGGLE / "_eval_check.ipynb"))
+    try:
+        assert json.loads(out.read_text(encoding="utf-8")) == json.loads(
+            (KAGGLE / "eval.ipynb").read_text(encoding="utf-8")), (
+            "kaggle/eval.ipynb is stale: run `python kaggle/make_notebook.py`")
+        code = "".join("".join(c["source"]) for c in json.loads(out.read_text(encoding="utf-8"))["cells"]
+                       if c["cell_type"] == "code")
+        for arm in ("ours_base", "ours_harness", "frontier_zero", "frontier_tools", "other_model"):
+            assert arm in code
+        assert "thermo_agent.eval.model_eval" in code and "comparison.main" in code
+        assert "tool_usage.summarize" in code and "figures_from_examples.py" in code
+    finally:
+        out.unlink(missing_ok=True)

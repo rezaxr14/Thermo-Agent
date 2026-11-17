@@ -16,3 +16,10 @@ description: Use for Audit tasks: ranking exergy destruction, choosing a fuel-sa
 ## Predicting the effect
 - Fuel change is measured after resizing the prime mover so the net electricity is unchanged: a more efficient cycle needs less fuel for the same electricity, a parasitic increase needs more.
 - Express it in MW of fuel input, negative when fuel is saved. The score is the relative error against the actual effect (with a floor of 0.2 percent of fuel), so predicting no effect scores zero.
+
+## State bookkeeping (what is constant and what changes)
+- **Recuperator / preheater**: the two streams keep their fluid identity and mass flow through the exchanger; pressure is reduced only by `dp_cold`/`dp_hot`. What changes is temperature and enthalpy: the cold side warms toward the hot inlet but never above it, and the hot side cools. A temperature cross means the specified `T_cold_out` (or duty) is impossible. Exergy destruction grows with the hot-cold approach at each end.
+- **Combustor / engine**: fuel composition and LHV are fixed; mass flow grows by the fuel, pressure drops by `dp` or `P_exh`, and temperature rises to `T_out` (or follows from `P_el` and `eta_el`). The largest exergy destruction is the burning across that temperature gap.
+- **HRSG / ORC evaporator**: the water/working-fluid mass flow is fixed by `P_steam` or `flow_frac`; the exhaust flow is fixed by the prime mover. Pressures are nearly constant (only `dp_hot`); temperatures and phase change. A pinch below `pinch_K` or exhaust below `T_stack_min` is infeasible.
+- **Chillers and rejectors**: the refrigerant loop is closed (same fluid flows in and out), cooling-water flow is solved from the duty; only temperatures and duties change. Heat rejected near ambient carries little exergy even when its energy is large.
+- Across every component: mass of each species and total energy are conserved; exergy is *not* conserved (it is destroyed), so the exergy column must fall by exactly the destruction term.
