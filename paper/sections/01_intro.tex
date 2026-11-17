@@ -14,12 +14,12 @@ is consistent, and where its exergy is lost are questions that need a thermodyna
 Language models are a candidate assistant for these questions, and thermodynamics is a hard case
 for them. ThermoQA is a benchmark built to measure thermodynamic reasoning in language models
 \citep{duzkar2026thermoqa}, and in a study of gas-path analysis, smaller models struggled with tool
-use and with extracting parameters \citep{song2024gaspath}. We do not measure general-purpose models
-in this paper. Our concern is a failure that makes the problem worse: a plant model can solve, pass
+use and with extracting parameters \citep{song2024gaspath}. The failure that concerns us is more specific: a plant model can solve, pass
 range checks and still violate the second law, and nothing in the text of the model reveals it.
 To our knowledge from the literature we reviewed (\cref{sec:related}), no verifiable environment
 exists for the energy systems of data centers in which an answer is accepted only if it passes
-mass, energy and exergy balances.
+mass, energy and exergy balances. Measuring a language model on this environment therefore needs
+both a physics judge and an explicit account of the information the model was allowed to use.
 
 \paragraph{Idea.}
 A physics simulator and a set of second-law verifiers form an environment whose checks are an
@@ -36,6 +36,9 @@ shows the system.
 \label{fig:fig_overview}
 \end{figure}
 
+\paragraph{Research questions.}
+The evaluation is organised around eight preregistered questions (\cref{sec:protocol}), each with a fixed metric, a named comparison and a result slot: sample efficiency against verifier-guided search (RQ1), the value of the harness and of physics tools (RQ2), transfer to held-out diagrams (RQ3), the gain from GRPO over SFT (RQ4), the contribution of individual reward channels (RQ5), forgetting (RQ6), corpus breadth and hindsight memory (RQ7), and how close the trained 4B model comes to frontier and other models at an equal prompt and tool budget (RQ8). The protocol is fixed before the model runs, so these are tests rather than post-hoc selections.
+
 \paragraph{Contributions.}
 \begin{enumerate}[leftmargin=*,itemsep=2pt]
 \item A second-law-verified environment for data-center energy systems: \val{env.n_components}
@@ -48,9 +51,7 @@ whose checks are the reward (\cref{sec:method}).
 exergy destroyers, propose one allowed change, predict its fuel effect) and Ledger repair
 (\val{env.n_ledger_faults} equation-level fault types in an exergy ledger, which range checks cannot
 see).
-\item An evaluation that counts solver calls: non-model baselines, an anytime protocol for sample
-efficiency, paired statistics, a comparison with frontier and other models, and ablations of the corpus, the agent harness (an \texttt{AGENTS.md}
-file plus generated skills), the failure memory and a held-out component.
+\item A frozen evaluation protocol with four task families and structural out-of-distribution splits, solver-call and design-evaluation budgets, Wilson intervals and paired tests; comparisons against non-model baselines, the base and trained 4B model, zero-shot frontier models, frontier models with our inference text and with our physics tools, and other models; ablations of the corpus, the harness, the tools and the failure memory, with the cost of each arm recorded from the model provider where available (\cref{sec:protocol,sec:modelresults}).
 \item Simulator findings that do not depend on a model: feasibility limits of the catalog, first-law
 against second-law blame, the symptom coverage of equation faults, and trace and modular-fleet bounds
 (\cref{sec:experiments,sec:trace}).
@@ -60,9 +61,7 @@ against second-law blame, the symptom coverage of equation faults, and trace and
 We do not claim that a trained model beats numerical optimization on the final optimum for a fixed
 superstructure, and we do not claim that the teacher's answers are good because a model wrote them: they are in the corpus only if the physics tool suite accepts them. We do not claim any validation against a real plant, and there is no measured
 on-site-generation data center in this work: measured load and coolant traces from published data
-set the operating points of a physics model, and all training data is synthetic. No model has been
-trained, so we make no claim about trained-model results; for the trained model we intend to claim
-only sample efficiency and breadth, and only once the pending runs exist.
+set the operating points of a physics model, and all training data is synthetic. Model results are still pending at the time of writing; the model-independent findings below are measured, and \cref{sec:status} states exactly which runs the remaining claims depend on.
 
 \paragraph{Paper map.}
 \Cref{sec:related} places the work among related studies. \Cref{sec:method} describes the

@@ -136,7 +136,7 @@ def test_train_notebook_is_generated_and_has_no_token():
                        if c["cell_type"] == "code")
         assert "torchrun" in code and "--hf-sync" in code and "hf:merged/sft" in code
         assert "hf_sync.ensure_private_repo" in code
-        assert "get_secret(\"HF_TOKEN\")" in code, "the token must come from Kaggle Secrets"
+        assert "kaggle_notebook import" in code and "token()" in code, "the token must come from the shared Kaggle Secret helper"
         assert not re.search(r"hf_[A-Za-z0-9]{20,}", code), "no token literal in the notebook"
     finally:
         out.unlink(missing_ok=True)
@@ -175,3 +175,13 @@ def test_eval_notebook_runs_every_arm_and_writes_comparison():
         assert "tool_usage.summarize" in code and "figures_from_examples.py" in code
     finally:
         out.unlink(missing_ok=True)
+
+
+def test_shared_notebook_setup_has_no_token_literal():
+    """The three code-bearing notebooks share one setup module; it reads the secret, never embeds a token."""
+    code = (ROOT / "thermo_agent" / "kaggle_notebook.py").read_text(encoding="utf-8")
+    assert "UserSecretsClient().get_secret(\"HF_TOKEN\")" in code
+    assert not re.search(r"hf_[A-Za-z0-9]{20,}", code)
+    for name in ("train_runner.py", "teacher_harness.py", "eval_runner.py"):
+        src = (KAGGLE / name).read_text(encoding="utf-8")
+        assert "from thermo_agent.kaggle_notebook import" in src, f"{name} must use the shared setup"

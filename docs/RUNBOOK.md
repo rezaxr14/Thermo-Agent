@@ -192,7 +192,7 @@ truncate) oversized rows: 11500 characters, and 4000 tokens measured with the re
 re-measures the written files and fails if any row would be cut; `python -m thermo_agent.synth.verify data/sft`
 compares the files with the report.
 
-Current SFT corpus: 129,684 rows, 116,809 in train (repair 106,420, ledger 5,602, audit 3,019, design 1,768).
+Current SFT corpus: 122,655 rows, 109,151 in train (repair 99,560, ledger 5,247, audit 2,576, design 1,768).
 
 ```bash
 # smoke, then the full run (one adapter for all four tasks)

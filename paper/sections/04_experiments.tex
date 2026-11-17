@@ -24,16 +24,22 @@ Binary outcomes carry Wilson 95\% intervals \citep{wilson1927interval}. Two runs
 metrics \citep{mcnemar1947}, and with a paired bootstrap interval plus a sign-flip permutation test for other metrics; all comparisons reported together are
 Holm-corrected \citep{holm1979}. Per-example results are saved with each report. ThermoQA accuracy before and after training checks for forgetting.
 
+\paragraph{Cost accounting and provenance.}
+Three costs are reported separately and never merged into one score. Physics cost is solver calls (Repair) or design evaluations (Design); it is measured for every arm by the same evaluator. Model cost is the token count and the price that Kaggle Benchmarks reports for a frontier call (in nanodollars, summed per model in \texttt{reports/frontier\_ingest.json}), plus GPU-hours for our own training and inference. Data cost is the number of ground-truth plants, paraphrases, teacher attempts and accepted rows. Because frontier answers are static replays, their cost is charged once and reused across arms; the report states this instead of implying a fresh call per evaluation. Every result file carries the model id, harness mode, tool-access flag, seed, limit and sample size in its \texttt{meta} block, and the paper tables are generated from those files rather than transcribed.
+
+\paragraph{Qualitative evidence.}
+Figures are not hand-drawn illustrations. \Cref{fig:tracewalk} is regenerated from a deterministic selection of real traces -- a fault from the ground-truth corpus, a frontier interaction with recorded tool calls and reasoning, a scored GRPO group, and the comparison arms -- with the field schema and source files stored beside the examples. The selection rule is part of the generator, so the same inputs reproduce the same figure; no example is chosen from a model result by hand.
+
 \paragraph{Research questions.}
 We fix eight research questions before the runs and state no expected answer to any of them.
 \textbf{RQ1:} does a trained model match the success of verifier-guided search on held-out faults with fewer solver calls?
-\textbf{RQ2:} does the harness help on a held-out component, the gas engine?
-\textbf{RQ3:} does GRPO add over SFT on tasks where SFT is below about 90\% per-sample accuracy?
+\textbf{RQ2:} how much do the inference text and the physics tools help a frontier model, and how much of our model's behaviour depends on that text?
+\textbf{RQ3:} does GRPO add over SFT on tasks where SFT is below about 90\% per-sample accuracy, and on held-out diagrams?
 \textbf{RQ4:} do the individual reward channels matter?
 \textbf{RQ5:} is there forgetting on ThermoQA?
 \textbf{RQ6:} does the varied corpus (paraphrases, the diagram catalog and verified teacher answers) improve success on held-out diagrams over ground-truth traces alone?
 \textbf{RQ7:} does retrieving failure notes improve success or the first-attempt acceptance rate, and does it help more than random notes?
-\textbf{RQ8:} how close does the trained 4B model come to the teacher and to other models at equal prompts and an equal tool budget?
+\textbf{RQ8:} how close does the trained 4B model come to zero-shot frontier models, frontier models with our harness and tools, and other models, at equal prompts and an equal answer budget?
 
 \subsection{Non-model baselines}\label{sec:baselines}
 
@@ -188,7 +194,7 @@ the runs exist we report all rows for the held-out splits, with the intervals an
 
 \subsection{Ablations}\label{sec:ablations}
 
-\Cref{tab:ablation} lists the planned ablations: the inference text on the held-out gas-engine diagrams (RQ2), the training corpus and the number of paraphrase variants per row (RQ6), the memory retrieval against random notes (RQ7), the reward channels (RQ4), SFT against GRPO from the base model (RQ3), an optional encoder-decoder variant \citep{zhang2025t5gemma}, and ThermoQA accuracy before and after training (RQ5). All results are pending.
+\Cref{tab:ablation} lists the planned ablations: the inference text and the tool access on the held-out gas-engine diagrams (RQ2), the training corpus and the number of paraphrase variants per row (RQ7), the memory retrieval against no notes and random notes (RQ7), the reward channels and SFT against GRPO (RQ4), held-out diagram transfer (RQ3), an optional encoder-decoder variant, and ThermoQA accuracy before and after training (RQ6). All results are pending.
 
 \begin{table}[tbp]
 \centering
@@ -211,3 +217,6 @@ at 10\% it is \val{rd.repair.zv_e10_pct}, \val{rd.design.zv_e10_pct}, \val{rd.au
 \caption{Reward signal before any GPU time: share of GRPO groups whose completions all receive the same reward, against the per-sample error rate of a simulated policy, for each task, at the training group size of \val{rd.G} (solid) and at 8 (dashed), with the cost of one reward evaluation (simulated policies on synthetic data, no model; \val{rd.repair.groups} groups per task and level, seed 0). Data: \texttt{assets/reward\_signal.json}.}
 \label{fig:fig_reward_signal}
 \end{figure}
+
+\subsection{What the remaining claims depend on}\label{sec:status}
+The model-independent numbers in this paper are measured and reproducible from the checked-in generators and seeds: the verifier coverage, the baseline search costs, the feasibility and first-law findings, the reward diagnostics, and the data and corpus reports. The trained-model columns of \cref{tab:results,tab:comparison,tab:ablation} are pending, and the following runs are the only evidence that can fill them: the frontier teacher pass on Kaggle, local ingest and grading, the two-stage SFT/GRPO run on two T4 GPUs with resumable checkpoints, and the multi-arm evaluation of \cref{sec:protocol}. Until those runs exist we make no claim about the relative performance of the 4B model, the frontier arms or the other models, and \texttt{paper/assets/model\_results.json} contains the empty schema rather than numbers. The same rule applies to the cost columns: token prices are recorded when a Kaggle call happens, not estimated here.

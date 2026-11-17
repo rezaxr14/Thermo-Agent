@@ -19,56 +19,24 @@ and resumable: reports are never overwritten unless `FORCE=1`.
 import json
 import os
 import pathlib
-import shutil
 import subprocess
 import sys
-import zipfile
+from thermo_agent.kaggle_notebook import WORK, find_input, run, setup, token
 
-WORK = pathlib.Path("/kaggle/working")
-ROOT = WORK / "thermo-agent"
+ROOT = setup()
 REPORTS = ROOT / "reports"
 REPORTS.mkdir(parents=True, exist_ok=True)
 LIMIT = int(os.environ.get("LIMIT", "40"))
 FORCE = os.environ.get("FORCE", "0") == "1"
 SPLITS = os.environ.get("SPLITS", "").split(",") if os.environ.get("SPLITS") else None
 ARMS = os.environ.get("ARMS", "ours_base,ours_harness,frontier_zero,frontier_tools,other_model").split(",")
-
-# %%
-def _input_dir(name):
-    hits = sorted(p for p in pathlib.Path("/kaggle/input").glob(f"**/{name}") if p.is_dir())
-    if not hits:
-        raise SystemExit(f"attach the Kaggle dataset {name!r}")
-    return hits[0]
-
-
-code = _input_dir("thermo-agent-code")
-bundle = next(code.rglob("kaggle_bundle.zip"), None)
-if bundle:
-    shutil.rmtree(ROOT, ignore_errors=True)
-    with zipfile.ZipFile(bundle) as zf:
-        zf.extractall(WORK)
-sys.path.insert(0, str(ROOT))
-os.environ["PYTHONPATH"] = str(ROOT) + os.pathsep + os.environ.get("PYTHONPATH", "")
-os.chdir(ROOT)
-subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-r", "requirements-lock.txt"], check=True)
-corpora = _input_dir("thermo-agent-corpus")
-for name in ("sft", "grpo"):
-    src = next(corpora.rglob(name), None)
-    if src and not (ROOT / "data" / name).exists():
-        shutil.copytree(src, ROOT / "data" / name)
-prompts = _input_dir("thermo-teacher-prompts")
-print("code, corpus and prompts ready")
+find_input("thermo-teacher-prompts")     # fail early if the prompt dataset is missing
 
 # %%
 from thermo_agent.train import hf_sync
 from thermo_agent.eval import comparison, tool_usage
 
-try:
-    from kaggle_secrets import UserSecretsClient
-    os.environ["HF_TOKEN"] = UserSecretsClient().get_secret("HF_TOKEN")
-except Exception as exc:
-    print("no HF_TOKEN secret; trained-model arms need local weights:", exc)
-
+token()
 # Pull the newest SFT adapter and merged model from the same private repo the trainer used.
 REPO = hf_sync.PROJECT_REPO_ID
 sft_root = ROOT / "runs"

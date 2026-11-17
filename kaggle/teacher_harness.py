@@ -20,13 +20,11 @@ trace. The fourth arm is our trained 4B model; zero-shot and prompt-only frontie
 import json
 import os
 import pathlib
-import shutil
-import subprocess
 import sys
 import time
-import zipfile
+from thermo_agent.kaggle_notebook import WORK, find_input, setup, token
 
-OUT = pathlib.Path("/kaggle/working/harness_completions.jsonl")
+OUT = WORK / "harness_completions.jsonl"
 REPO = "Reza-Nadimi/thermo-agent-checkpoints"
 PROGRESS_PREFIX = "teacher/harness_progress.jsonl"
 MODEL = "anthropic/claude-sonnet-5-5@default"
@@ -34,32 +32,14 @@ LIMIT = 0
 TOOL_ROUNDS = 3
 
 # %%
-def _input_dir(name):
-    hits = sorted(p for p in pathlib.Path("/kaggle/input").glob(f"**/{name}") if p.is_dir())
-    if not hits:
-        raise SystemExit(f"attach the Kaggle dataset {name!r}")
-    return hits[0]
-
-
-WORK = pathlib.Path("/kaggle/working")
-ROOT = WORK / "thermo-agent"
-code = _input_dir("thermo-agent-code")
-zip_path = next(code.rglob("kaggle_bundle.zip"), None)
-if zip_path:
-    shutil.rmtree(ROOT, ignore_errors=True)
-    with zipfile.ZipFile(zip_path) as zf:
-        zf.extractall(WORK)
-sys.path.insert(0, str(ROOT))
-os.environ["PYTHONPATH"] = str(ROOT) + os.pathsep + os.environ.get("PYTHONPATH", "")
-os.chdir(ROOT)
-subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-r", "requirements-lock.txt"], check=True)
+ROOT = setup(corpora=())          # this arm needs the code and prompt datasets, not the training corpora
 
 from thermo_agent.teacher import progress, validate
 from thermo_agent.train import hf_sync
 from thermo_agent.teacher.transfer import load_exports
 
 # %%
-exports = load_exports(_input_dir("thermo-teacher-prompts"))
+exports = load_exports(find_input("thermo-teacher-prompts"))
 rows = list(exports.values())
 if LIMIT:
     rows = rows[:LIMIT]
@@ -84,11 +64,7 @@ print("exposed tools:", [f.__name__ for f in TOOLS])
 # %%
 import kaggle_benchmarks as kbench
 
-try:
-    from kaggle_secrets import UserSecretsClient
-    os.environ["HF_TOKEN"] = UserSecretsClient().get_secret("HF_TOKEN")
-except Exception as exc:
-    print("no HF_TOKEN secret; local-only:", exc)
+token()
 SYNC = bool(os.environ.get("HF_TOKEN"))
 if SYNC:
     hf_sync.resolve_repo(REPO)

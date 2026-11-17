@@ -15,6 +15,8 @@ step below runs in this checkout.
 | Tokenizer | `Qwen/Qwen3.5-4B` `tokenizer.json` cached in `~\.cache\thermo\qwen3.5-4b\` (248,070 tokens) |
 | Training target | Kaggle `GPU T4 x2` via `scripts/train_dual_t4.sh` |
 | Frontier teacher | Kaggle Benchmarks (`kaggle_benchmarks`) via `kaggle/teacher_benchmark.py` |
+| Generated notebooks | `kaggle/teacher.ipynb`, `train.ipynb`, `teacher_harness.ipynb`, `eval.ipynb` (all from `kaggle/make_notebook.py`) |
+| Paper readiness | `paper/Q1_CHECKLIST.md` separates measured evidence from pending model runs |
 
 No WSL and no tmux: long jobs are detached Windows processes (`Win32_Process.Create`), so they survive an SSH
 disconnect. `Start-Process` children do not. A machine sleep still kills them.
@@ -38,7 +40,7 @@ The corpus has four sources, all deterministic or verifier-grounded (no free-for
 1. **Ground-truth paraphrases** (`thermo_agent/synth/paraphrase.py`): every ground-truth repair row is re-emitted
    with `--variants 20` truthful phrasings built from the fault facts. A row picks its variants by a hash of its id,
    so the corpus as a whole covers the phrasing space, not one fixed wording: the current train split has
-   **106,420 repair rows** (5,321 base plants × 20). The pool is 20 to 80 renderings per fault class
+   **99,560 repair rows** (4,978 base plants x 20 after the token gate). The pool is 20 to 80 renderings per fault class
    (`unit_slip` 20, `efficiency_gt_1` 25, `wrong_fluid` 80), so 20 is always available and exhausts the sparsest
    class. Paraphrases are a train-split device only; the eval splits keep one row per plant so a model evaluation
    never counts the same plant twice.
@@ -81,11 +83,10 @@ character pre-filter.
 
 | corpus | rows | train rows | max row | rows over 4096 |
 |---|---|---|---|---|
-| `data/sft` | 129,684 | 116,809 | 4,000 tokens | 0 |
-| `data/grpo` | 28,585 | 15,710 | 4,000 tokens | 0 |
+| `data/sft` | 122,655 | 109,151 | 4,000 tokens | 0 |
+| `data/grpo` | 28,073 | 14,569 | 4,000 tokens | 0 |
 
-Train split by task (SFT): repair 106,420 (18,920 harness, memory on every repair row, 49 architectures), ledger
-5,602 (1,523 harness), audit 3,019 (892 harness), design 1,768 (635 harness). `sft_report.json` reports
+Train split by task (SFT): repair 99,560 (16,700 harness, memory on every repair row, 49 architectures), ledger 5,247 (1,417 harness), audit 2,576 (525 skills), design 1,768 (635 harness). `sft_report.json` reports
 `problems: []` for both corpora, and `reports/token_audit_{sft,grpo}.json` report `fits: true`. After the swap,
 `python -m thermo_agent.synth.verify data/sft` re-reads every written file, compares the row counts with the report,
 and rejects a duplicate id or a file the report does not know about; `build_corpus.ps1` runs it on the staged and
@@ -181,7 +182,7 @@ Trainings have not been run yet: the 4050 cannot hold a 4B model for training, a
 
 ## Tests
 
-- Full CPU suite: **325 passed** in 6.4 minutes. `paper/methods_draft.md` exists, so its constant checks run instead
+- Full CPU suite: **357 passed** in 4.7 minutes. `paper/methods_draft.md` exists, so its constant checks run instead
   of skipping at module level.
 - New this round: `tests/test_run_eval.py` (the Repair per-fault breakdown must score the rows it names) and three
   cases in `tests/test_splits.py` (the MIX generators must put ideal-rejection engines in `test_ood_topology`);
