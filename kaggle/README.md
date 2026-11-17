@@ -74,3 +74,13 @@ Add a Kaggle Secret `HF_TOKEN` (the same value as `.env` locally). The setup cel
 a cell can be re-run in another 12 h session without losing progress. Set `STEPS`/`ROWS` for a smoke run, and
 `TASK=ledger` (or repair/design/audit) for the GRPO cell. The notebook never contains a token literal and never
 writes to any Hugging Face repo other than that one.
+
+## Frontier-in-the-harness notebook (tool-use comparison arm)
+
+`kaggle/teacher_harness.ipynb` (source `teacher_harness.py`, rebuilt by `python kaggle/make_notebook.py`) is the third
+frontier arm: the same prompts, but our physics tool suite is exposed to the model through
+`kbench.llm.prompt(..., tools=[check_answer])`. It records the answer, tool calls, reasoning trace and Kaggle's
+token/cost usage per row in `harness_completions.jsonl`, and mirrors progress to
+`teacher/harness_progress.jsonl` in the same private repo. Attach `thermo-agent-code`, `thermo-teacher-prompts` and
+the `HF_TOKEN` secret. Together with the zero-shot and prompt-only frontier arms and the trained 4B, this lets the
+paper measure how much our harness and tools help a frontier model.

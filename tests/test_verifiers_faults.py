@@ -57,8 +57,10 @@ def test_grounding():
     assert check_numbers(good, p, r)["fraction"] == 1.0
     g = check_numbers(bad, p, r); assert g["ungrounded"] == ["55.0 MW"]
 
-def test_grounding_rejects_a_number_free_trace():
-    """An empty reasoning tag must not earn the grounding reward (it used to score 1.0)."""
+def test_grounding_rejects_an_empty_trace_but_accepts_substantive_words():
+    """An empty reasoning tag must not earn the grounding reward; a real worded diagnosis still can."""
     p = cgam_orc(); r = solve(p)
     assert check_numbers("", p, r)["fraction"] == 0.0
     assert check_numbers("<diagnosis></diagnosis>", p, r)["n_numbers"] == 0
+    assert check_numbers("<diagnosis>The turbine inlet temperature sign is reversed in the loop.</diagnosis>",
+                         p, r)["fraction"] == 1.0

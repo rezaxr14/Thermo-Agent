@@ -46,7 +46,8 @@ def check_numbers(text: str, plant: Plant, res: SolveResult, rel: float = 0.005)
             ok = any(abs(v - x) <= rel * max(abs(x), 1e-9) + 0.05 for x in pool)
         (grounded if ok else ungrounded).append(f"{val} {unit}")
     n = len(grounded) + len(ungrounded)
-    # A number-free trace is not grounded. Without this, an empty <diagnosis> or <analysis> tag scores 1.0 and the
-    # grounding channel rewards saying nothing (a reward-gaming path found in the GRPO audit).
+    # No numbers to check: a substantive diagnosis is still grounded (e.g. a sign flip described in words).
+    # An empty or trivial tag is not: without this guard, "<diagnosis></diagnosis>" earned the full reward.
+    words = len(re.findall(r"[A-Za-z]{3,}", text))
     return {"n_numbers": n, "grounded": grounded, "ungrounded": ungrounded,
-            "fraction": (len(grounded) / n) if n else 0.0}
+            "fraction": (len(grounded) / n) if n else (1.0 if words >= 5 else 0.0)}
