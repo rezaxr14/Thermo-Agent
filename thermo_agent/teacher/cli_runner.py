@@ -128,10 +128,10 @@ def chat(model: str, messages: list[dict], max_tokens=800, env=None, timeout=300
     return {"error": last or "all parameter variants failed", "model": model}
 
 
-def load_rows(export_dir="data/frontier_export", tasks=("repair", "ledger", "audit", "design")) -> list[dict]:
+def load_rows(export_dir="data/frontier_export", tasks=("repair", "ledger", "audit", "design"), split="train") -> list[dict]:
     rows = []
     for task in tasks:
-        path = pathlib.Path(export_dir) / f"{task}_train.jsonl"
+        path = pathlib.Path(export_dir) / f"{task}_{split}.jsonl"
         if not path.exists():
             continue
         for line in path.open(encoding="utf-8"):
@@ -188,7 +188,7 @@ def probe(models):
 
 def run(args):
     env = proxy_env()
-    rows = load_rows(args.export_dir, tuple(args.tasks))
+    rows = load_rows(args.export_dir, tuple(args.tasks), args.split)
     done = {r["id"] for r in journal(args.out) if r.get("completion") and not r.get("error")}
     pending = [r for r in rows if r["id"] not in done]
     if args.limit:
@@ -232,6 +232,7 @@ def main():
     ap.add_argument("--model", default="google/gemini-3.1-flash-lite-preview")
     ap.add_argument("--out", default="data/teacher_runs/completions.jsonl")
     ap.add_argument("--export-dir", default="data/frontier_export")
+    ap.add_argument("--split", default="train", help="export split: train, test_id, test_ood_fault, ...")
     ap.add_argument("--tasks", nargs="+", default=["repair", "ledger", "audit", "design"])
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--batch", type=int, default=16)

@@ -77,3 +77,19 @@ The choice is the lower cost per *accepted* row, not the lower token price: Gemi
 pays for its slightly higher token price. The full campaign therefore runs Gemini over all 1,600 prompts and GPT nano
 over the same prompts as a second frontier arm. The primary run is resumable from
 `data/teacher_runs/completions.jsonl` and from `teacher/progress.jsonl` in the private HF repo.
+
+## Full-run result (2026-11-18)
+
+Both passes completed all 1,600 prompts through the Kaggle CLI proxy with no quota pause. The local ingest graded
+every answer; the figures below are from `reports/frontier_ingest.json` and the two journals in `data/teacher_runs/`.
+
+| Model | Attempts | Accepted | Acceptance | Spend | Spend / accepted row | Main rejection reason |
+|---|---|---|---|---|---|---|
+| `google/gemini-3.1-flash-lite-preview` | 1,600 | 513 | 32.1 % | $1.091 | $0.00213 | `format` (771), then `grounding` (152) |
+| `openai/gpt-5.4-nano-2026-03-17` | 1,600 | 122 | 7.6 % | $0.658 | $0.00539 | `format` (686), then `exact` (153) |
+
+The primary model is 2.5x cheaper per accepted training row despite costing more per token, which confirms the
+probe-based choice. Accepted rows from both models are appended to `data/frontier/` with their model tag; rejected
+attempts feed `data/memory/frontier_notes.jsonl` and the frequency summary in `failure_reasons.json`. A second,
+held-out export (`data/frontier_eval_export`) is being answered with the same models so the frontier arms can be
+replayed through the evaluator on test rows rather than on the rows used to build the corpus.
