@@ -1,0 +1,4 @@
+{
+ "_comment": "One entry per comparison arm. Paths are relative to this directory and point at `model_eval --out` reports. `python -m thermo_agent.eval.comparison paper/assets/model_results_manifest.json --out paper/assets/model_results.json` produces the table input; generate_paper_assets derives the LaTeX from it. Add arms as the runs finish; never edit generated tables by hand.",
+ "arms": {}
+}

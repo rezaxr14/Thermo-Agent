@@ -30,6 +30,9 @@ import shutil
 import time
 
 DEFAULT_REPO_NAME = "thermo-agent-checkpoints"
+# A second Kaggle account has a different token owner but must be able to resume the same teacher pass. The project
+# repo is fixed here; no other repo id is ever accepted from an env var or a notebook cell.
+PROJECT_REPO_ID = "Reza-Nadimi/thermo-agent-checkpoints"
 CHECKPOINT_RE = re.compile(r"^checkpoint-(\d+)$")
 
 # The complete state of a resumable Trainer run. Nothing outside this list is uploaded: no data, no .env, no logs.
@@ -81,9 +84,9 @@ def default_repo(token: str | None = None, api=None) -> str:
 def resolve_repo(repo_id: str | None = None, token: str | None = None, api=None) -> str:
     """Accept only this project's private repo, never an arbitrary id from an env var or a notebook cell."""
     repo = repo_id or os.environ.get("HF_REPO_ID") or default_repo(token, api)
-    expected = default_repo(token, api)
-    if repo != expected:
-        raise ValueError(f"refusing HF repo {repo!r}: this project may only use {expected!r}")
+    allowed = {PROJECT_REPO_ID}
+    if repo not in allowed:
+        raise ValueError(f"refusing HF repo {repo!r}: the only project repo is {PROJECT_REPO_ID!r}")
     return repo
 
 
@@ -165,9 +168,9 @@ def push_checkpoint(checkpoint_dir, repo_id: str, stage: str, token: str | None 
     return prefix
 
 
-def push_root_state(root, repo_id: str, stage: str, token: str | None = None, api=None) -> list[str]:
-    """Upload small run metadata (settings, git commit, last step) for a stage."""
-    src = pathlib.Path(root) / stage / "run.json"
+def push_root_state(output_dir, repo_id: str, stage: str, token: str | None = None, api=None) -> list[str]:
+    """Upload small run metadata (last step, timestamp) written at the Trainer's output root for a stage."""
+    src = pathlib.Path(output_dir) / "run.json"
     if not src.exists():
         return []
     api = api or _api(token)
@@ -289,6 +292,11 @@ def prepare(repo_id: str | None, stage: str, root, mode: str = "auto", token: st
 
     if mode == "off":
         return None, None
+    # Callers pass the stage output dir (`runs/sft`); the root that holds `<stage>/checkpoint-N` is its parent.
+    # Normalising here makes the resume path correct even if a caller passes the parent already.
+    root = pathlib.Path(root)
+    if root.name == stage:
+        root = root.parent
     try:
         token = token or read_token()
     except SystemExit:
@@ -331,7 +339,7 @@ def main():
             raise SystemExit(f"no local checkpoints under {a.dir}/{a.stage}")
         for step in steps:
             push_checkpoint(pathlib.Path(a.dir) / a.stage / f"checkpoint-{step}", repo, a.stage, token)
-        push_root_state(a.dir, repo, a.stage, token)
+        push_root_state(pathlib.Path(a.dir) / a.stage, repo, a.stage, token)
         print(f"pushed {a.dir}/{a.stage} steps {steps} to {repo}")
     elif a.action == "pull":
         print(pull_checkpoint(a.dir, repo, a.stage, token) or "nothing to pull")

@@ -97,6 +97,35 @@ class OpenAIGenerator:
         raise RuntimeError(f"chat completion failed after {self.retries} attempts: {last}")
 
 
+class ReplayGenerator:
+    """Replay stored Kaggle completions, keyed by row id, through the same evaluator as local models.
+
+    Frontier answers produced by `kaggle/teacher.ipynb` are static: one answer per prompt, no solver feedback inside
+    the stored text. Replaying them measures the zero-shot (or harness-augmented) arm; for Repair/Design the loop may
+    call the generator again with solver feedback, and this returns the same stored answer each turn. That limitation
+    is recorded in the report meta so the comparison is honest.
+    """
+
+    def __init__(self, path, reasoning_key="reasoning"):
+        self.answers, self.reasoning, self.current_id = {}, {}, None
+        for line in pathlib.Path(path).open(encoding="utf-8"):
+            if not line.strip():
+                continue
+            r = json.loads(line)
+            if r.get("completion") and not r.get("error"):
+                self.answers[r["id"]] = r["completion"]
+                if r.get(reasoning_key):
+                    self.reasoning[r["id"]] = r[reasoning_key]
+
+    def set_current_id(self, rid):
+        self.current_id = rid
+
+    def __call__(self, messages):
+        if self.current_id not in self.answers:
+            raise KeyError(f"no stored completion for row {self.current_id}; re-export the matching split")
+        return _THINK.sub("", self.answers[self.current_id]).strip()
+
+
 def wilson(k: int, n: int, z: float = 1.96):
     """95 % Wilson score interval for a proportion k/n."""
     if n == 0: return None
@@ -111,7 +140,10 @@ def _mean(xs):
 
 def _wrap(generate, mode, task, plant, log, rid):
     def g(messages):
-        text = generate(H.augment(messages, mode, task, plant)); log.append({"id": rid, "task": task, "completion": text}); return text
+        if hasattr(generate, "set_current_id"):
+            generate.set_current_id(rid)
+        text = generate(H.augment(messages, mode, task, plant))
+        log.append({"id": rid, "task": task, "completion": text}); return text
     return g
 
 
@@ -220,7 +252,12 @@ def main():
     ap.add_argument("--refine-turns", type=int, default=0, help="Design: anytime protocol, the model sees the fuel of each valid design and may improve it (records an anytime curve)")
     ap.add_argument("--dtype", default="bfloat16"); ap.add_argument("--load-4bit", action="store_true"); ap.add_argument("--out", required=True)
     ap.add_argument("--max-new-tokens", type=int, default=400)
-    ap.add_argument("--backend", default="hf", choices=["hf", "openai"], help="hf loads weights with transformers; openai calls a served model (LM Studio, vLLM, Ollama)")
+    ap.add_argument("--backend", default="hf", choices=["hf", "openai", "replay"], help="hf loads weights with transformers; openai calls a served model (LM Studio, vLLM, Ollama); replay scores stored completions")
+    ap.add_argument("--replay", default=None, help="replay backend: completions.jsonl from a Kaggle teacher notebook")
+    ap.add_argument("--model-family", default=None, help="ours | frontier | domain-model | baseline: recorded on the report for paper comparisons")
+    ap.add_argument("--tool-access", default="none", choices=["none", "tools"])
+    ap.add_argument("--display-name", default=None, help="label used in paper tables")
+    ap.add_argument("--zero-shot", action="store_true", help="no weight updates (frontier baselines)")
     ap.add_argument("--base-url", default="http://127.0.0.1:1234/v1", help="openai backend: endpoint root")
     ap.add_argument("--api-model", default=None, help="openai backend: served model id (default: first model listed)")
     ap.add_argument("--api-key", default="lm-studio")
@@ -228,7 +265,12 @@ def main():
     ap.add_argument("--seed", type=int, default=None)
     ap.add_argument("--thinking", action="store_true", help="openai backend: leave the model's reasoning mode enabled")
     a = ap.parse_args()
-    if a.backend == "openai":
+    if a.backend == "replay":
+        if not a.replay:
+            raise SystemExit("--backend replay needs --replay completions.jsonl")
+        gen = ReplayGenerator(a.replay)
+        model_label = a.display_name or f"replay:{pathlib.Path(a.replay).name}"
+    elif a.backend == "openai":
         gen = OpenAIGenerator(a.base_url, a.api_model, a.api_key, a.max_new_tokens, a.temperature, a.seed,
                               enable_thinking=(None if a.thinking else False))
         model_label = a.api_model or f"(auto) {a.base_url}"
@@ -237,7 +279,10 @@ def main():
         model_label = a.model
     report, log = run(gen, a.data, a.tasks, a.splits, a.limit, a.harness, a.max_turns, a.polish_evals, a.refine_turns)
     import importlib.metadata as md
-    meta = {"model": model_label, "adapter": a.adapter, "backend": a.backend, "data": a.data, "base_url": (a.base_url if a.backend == "openai" else None),
+    meta = {"model": model_label, "adapter": a.adapter, "backend": a.backend,
+            "display_name": a.display_name or model_label, "model_family": a.model_family,
+            "tool_access": a.tool_access, "zero_shot": bool(a.zero_shot), "replay_file": a.replay,
+            "data": a.data, "base_url": (a.base_url if a.backend == "openai" else None),
             "harness": a.harness, "limit": a.limit, "max_turns": a.max_turns, "polish_evals": a.polish_evals, "refine_turns": a.refine_turns,
             "temperature": (a.temperature if a.backend == "openai" else 0.0), "max_new_tokens": a.max_new_tokens,
             "python": platform.python_version(), **{p: (md.version(p) if _has(p) else None) for p in ("torch", "transformers", "peft", "trl", "CoolProp")}}

@@ -147,15 +147,24 @@ def ingest(export_dir, completions_path, out_dir, memory_dir=None, tasks=TASKS, 
         with path.open("a", encoding="utf-8") as fh:
             for row in rows:
                 fh.write(json.dumps(row) + "\n")
+    # The summary records how often each failure reason appeared; deduped notes teach the class of mistake and
+    # frequency notes make the common ones more likely to be retrieved into a prompt.
+    summary = memory.summarize(notes)
+    frequent = memory.frequency_notes(notes)
     notes = memory.dedupe_lessons(notes)
-    if memory_dir and notes:
+    if memory_dir:
         path = pathlib.Path(memory_dir) / "frontier_notes.jsonl"
         path.parent.mkdir(parents=True, exist_ok=True)
-        merged = memory.dedupe(memory.load(path) + notes) if path.exists() else notes
+        merged = memory.dedupe(memory.load(path) + notes + frequent) if path.exists() else memory.dedupe(notes + frequent)
         memory.save(merged, path)
-        stats["memory_notes"] = len(notes)
+        (pathlib.Path(memory_dir) / "failure_reasons.json").write_text(
+            json.dumps(summary, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+        stats["memory_notes"] = len(notes) + len(frequent)
+        stats["frequent_lessons"] = len(frequent)
+    from .progress import usage_totals
     report = {"model": model, "attempts": stats["attempts"], "accepted": sum(v for k, v in stats.items() if k.startswith("accepted:")),
-              "rejected": sum(v for k, v in stats.items() if k.startswith("rejected:")), "stats": dict(stats)}
+              "rejected": sum(v for k, v in stats.items() if k.startswith("rejected:")), "stats": dict(stats),
+              "failure_reasons": summary, "usage": usage_totals(_read(pathlib.Path(completions_path)))}
     return report
 
 

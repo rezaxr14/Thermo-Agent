@@ -181,3 +181,37 @@ def test_prepare_auto_skips_without_a_token_but_on_requires_one(tmp_path, monkey
     with pytest.raises(SystemExit):
         hf_sync.prepare(None, "sft", tmp_path, "on")
     assert hf_sync.prepare(None, "sft", tmp_path, "off") == (None, None)
+
+def test_prepare_normalises_a_stage_output_dir_to_its_parent(tmp_path, monkeypatch):
+    """Regression: sft/grpo pass `runs/sft` as root, but checkpoints live at `runs/sft/checkpoint-N`."""
+    from thermo_agent.train import ddp
+
+    seen = {}
+    api = FakeApi()
+    monkeypatch.setattr(ddp, "local_rank_from_env", lambda env=None: 0)
+    monkeypatch.setattr(ddp, "is_distributed", lambda env=None: False)
+    monkeypatch.setattr(hf_sync, "ensure_private_repo", lambda *a, **k: "Reza-Nadimi/thermo-agent-checkpoints")
+    monkeypatch.setattr(hf_sync, "pull_checkpoint", lambda root, *a, **k: seen.setdefault("root", str(root)))
+    monkeypatch.setattr(hf_sync, "read_token", lambda *a, **k: TOKEN)
+    stage_out = tmp_path / "sft"
+    hf_sync.prepare(None, "sft", stage_out, "on", api=api)
+    assert seen["root"] == str(tmp_path), "the pull root must be the parent of the stage output dir"
+
+
+def test_push_root_state_reads_the_trainers_run_json(tmp_path):
+    api = FakeApi()
+    out = tmp_path / "runs" / "sft"; out.mkdir(parents=True)
+    (out / "run.json").write_text('{"global_step": 7}', encoding="utf-8")
+    pushed = hf_sync.push_root_state(out, "r", "sft", TOKEN, api)
+    assert pushed == ["sft/run.json"]
+    assert api.uploads[0][1]["path_or_fileobj"] == str(out / "run.json")
+
+
+def test_a_second_account_can_use_the_fixed_project_repo_but_no_other():
+    class OtherOwner(FakeApi):
+        def whoami(self):
+            return {"name": "fresh-quota-account"}
+    api = OtherOwner()
+    assert hf_sync.resolve_repo(hf_sync.PROJECT_REPO_ID, TOKEN, api) == hf_sync.PROJECT_REPO_ID
+    with pytest.raises(ValueError, match="refusing HF repo"):
+        hf_sync.resolve_repo("fresh-quota-account/thermo-agent-checkpoints", TOKEN, api)

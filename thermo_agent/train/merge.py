@@ -13,7 +13,7 @@ from .config import BASE_MODEL
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("adapter"); ap.add_argument("out")
-    ap.add_argument("--model", default=BASE_MODEL); ap.add_argument("--dtype", default="bfloat16")
+    ap.add_argument("--model", default=BASE_MODEL); ap.add_argument("--dtype", default="float16")
     ap.add_argument("--hf-sync", choices=("auto", "on", "off"), default=os.environ.get("THERMO_HF_SYNC", "auto"))
     ap.add_argument("--hf-prefix", default="merged/sft")
     ap.add_argument("--hf-repo", default=None)

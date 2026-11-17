@@ -1,5 +1,5 @@
 """Training settings. Values come from: Schulman et al. 2025 (LoRA on all linear layers, LR ~10x full fine-tuning,
-low rank is enough for RL), Luo et al. 2026 (SFT then GRPO with a group of 8), and TRL's GRPOConfig defaults.
+low rank is enough for RL), Luo et al. 2026 (SFT then GRPO with a group of 4), and TRL's GRPOConfig defaults.
 
 Dual-T4 target (see docs/DUAL_T4.md): full fp16 LoRA, two DDP ranks, no 4-bit quantisation. The T4 is Turing,
 so fp16 is the only half-precision format it has fast kernels for; bf16 must not be selected there.
@@ -42,6 +42,7 @@ class GrpoSettings:
     grad_accum: int = 2                # 4 x 2 x 2 ranks = 16 prompts per optimizer step
     max_steps: int = 300
     save_steps: int = 50
+    scale_rewards: str = "group"           # normalise advantages inside each group, not across prompts
     loss_type: str = "dapo"            # TRL default; 'grpo' reproduces the original length normalisation
     beta: float = 0.0                  # no KL term -> no reference model in memory
     mask_truncated: bool = True

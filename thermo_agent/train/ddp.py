@@ -71,6 +71,9 @@ def grpo_batches_divisible(per_device: int, grad_accum: int, world_size: int, nu
     """
     if num_generations < 1 or per_device < 1 or grad_accum < 1 or world_size < 1:
         return False
+    # TRL checks the per-device prompt batch as well as the effective batch; both must hold whole groups.
+    if per_device % num_generations:
+        return False
     return effective_batch(per_device, grad_accum, world_size) % num_generations == 0
 
 
@@ -79,8 +82,8 @@ def assert_grpo_batches(per_device: int, grad_accum: int, world_size: int, num_g
     if not grpo_batches_divisible(per_device, grad_accum, world_size, num_generations):
         raise ValueError(
             f"effective batch {per_device}x{grad_accum}x{world_size}={eff} is not divisible by "
-            f"num_generations={num_generations}; the dual-T4 setting is "
-            "--per-device-batch 8 --grad-accum 2"
+            f"num_generations={num_generations} (per-device batch {per_device} must also be a multiple); the "
+            "dual-T4 setting is --per-device-batch 4 --grad-accum 2"
         )
 
 
@@ -90,6 +93,16 @@ def barrier() -> None:
 
     if dist.is_available() and dist.is_initialized():
         dist.barrier()
+
+
+def model_init_kwargs(dtype: str) -> dict:
+    """TRL passes this to `from_pretrained`; transformers renamed `torch_dtype` to `dtype` in v5."""
+    import inspect
+    import torch
+    from transformers import AutoModelForCausalLM
+
+    params = inspect.signature(AutoModelForCausalLM.from_pretrained).parameters
+    return {"dtype": dtype} if "dtype" in params else {"torch_dtype": getattr(torch, dtype)}
 
 
 def describe_runtime() -> dict:

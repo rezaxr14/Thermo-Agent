@@ -55,3 +55,13 @@ def test_save_load_and_dedupe(tmp_path):
     assert len(back) == 3
     assert len(memory.dedupe(back)) == 2
     assert memory.load(tmp_path / "missing.jsonl") == []
+
+
+def test_failure_reason_summary_and_frequency_notes():
+    notes = [note(0, record="r1"), note(1, record="r2"), note(2, lesson="a rare mistake")]
+    summary = memory.summarize(notes)
+    assert summary["n"] == 3
+    assert summary["top_lessons"][0]["count"] == 2
+    assert summary["by_task"]["repair"] == 3
+    frequent = memory.frequency_notes(notes)
+    assert len(frequent) == 1 and "Seen 2 times" in frequent[0].lesson

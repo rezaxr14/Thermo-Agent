@@ -140,3 +140,20 @@ def test_train_notebook_is_generated_and_has_no_token():
         assert not re.search(r"hf_[A-Za-z0-9]{20,}", code), "no token literal in the notebook"
     finally:
         out.unlink(missing_ok=True)
+
+
+def test_tools_notebook_is_generated_and_exposes_the_physics_tool():
+    """The third comparison arm must actually give the frontier model our verifier and keep its reasoning."""
+    make_notebook = _load_make_notebook()
+    out = pathlib.Path(make_notebook.build(KAGGLE / "teacher_harness.py", KAGGLE / "_harness_check.ipynb"))
+    try:
+        assert json.loads(out.read_text(encoding="utf-8")) == json.loads(
+            (KAGGLE / "teacher_harness.ipynb").read_text(encoding="utf-8")), (
+            "kaggle/teacher_harness.ipynb is stale: run `python kaggle/make_notebook.py`")
+        code = "".join("".join(c["source"]) for c in json.loads(out.read_text(encoding="utf-8"))["cells"]
+                       if c["cell_type"] == "code")
+        assert "def check_answer" in code and "tools=TOOLS" in code
+        assert "reasoning" in code and "harness_completions.jsonl" in code
+        assert "harness_progress.jsonl" in code
+    finally:
+        out.unlink(missing_ok=True)

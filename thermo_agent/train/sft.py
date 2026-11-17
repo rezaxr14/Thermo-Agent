@@ -50,7 +50,7 @@ def _report_topology(dtype: str) -> None:
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("data"); ap.add_argument("out")
     ap.add_argument("--tasks", nargs="+", default=["repair"], choices=["repair", "design", "audit", "ledger"])
-    ap.add_argument("--model", default=BASE_MODEL); ap.add_argument("--dtype", default="bfloat16", choices=list(ddp.DTYPES))
+    ap.add_argument("--model", default=BASE_MODEL); ap.add_argument("--dtype", default="float16", choices=list(ddp.DTYPES))
     ap.add_argument("--qlora", action="store_true", help="4-bit base weights; only for cards under 10 GB, not the T4 path")
     ap.add_argument("--max-steps", type=int, default=-1); ap.add_argument("--limit-rows", type=int); ap.add_argument("--print-sample", action="store_true")
     ap.add_argument("--per-device-batch", type=int); ap.add_argument("--grad-accum", type=int); ap.add_argument("--grad-norm", type=float)
@@ -84,7 +84,7 @@ def main():
     tr, va = read_rows(a.data, a.tasks, "train", limit=a.limit_rows), read_rows(a.data, a.tasks, "val", limit=a.limit_rows)
     if not tr: raise SystemExit(f"no training rows for {a.tasks} in {a.data}")
     train = Dataset.from_list([render_pair(tok, r) for r in tr]); val = Dataset.from_list([render_pair(tok, r) for r in va]) if va else None
-    init = {"dtype": a.dtype}
+    init = ddp.model_init_kwargs(a.dtype)
     if a.qlora:
         import torch
         from transformers import BitsAndBytesConfig

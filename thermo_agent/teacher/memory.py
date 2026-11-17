@@ -10,11 +10,13 @@ task, and any note mined from the same record id is excluded.
 """
 from __future__ import annotations
 
+import collections
+import hashlib
 import json
 import math
 import pathlib
 import re
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, replace
 
 TOKEN = re.compile(r"[A-Za-z0-9_]+(?:\.[A-Za-z0-9_]+)*")
 _QUERY_WEIGHT = 0.5
@@ -142,4 +144,38 @@ def dedupe_lessons(notes: list[Note]) -> list[Note]:
             continue
         seen.add(key)
         out.append(n)
+    return out
+
+
+def summarize(notes: list[Note], top: int = 12) -> dict:
+    """Count the common failure reasons across graded rejections, by task and lesson.
+
+    Written next to the notes so the retrieval layer and the paper can quote how often each mistake occurred,
+    instead of only seeing one deduplicated example of it.
+    """
+    by_task: dict[str, int] = collections.Counter()
+    by_lesson: dict[str, int] = collections.Counter()
+    by_fault: dict[str, int] = collections.Counter()
+    for n in notes:
+        by_task[n.task] += 1
+        by_lesson[n.lesson] += 1
+        by_fault[n.fault_type] += 1
+    ranked = sorted(by_lesson.items(), key=lambda kv: (-kv[1], kv[0]))
+    return {"n": len(notes), "by_task": dict(by_task), "by_fault_type": dict(by_fault),
+            "top_lessons": [{"count": c, "lesson": lesson} for lesson, c in ranked[:top]]}
+
+
+def frequency_notes(notes: list[Note], top: int = 8) -> list[Note]:
+    """A small set of notes whose lesson states how often that failure occurred.
+
+    These are retrieved alongside the concrete examples, so a common mistake is more likely to be shown.
+    """
+    counts = collections.Counter((n.task, n.lesson) for n in notes)
+    out = []
+    for (task, lesson), count in sorted(counts.items(), key=lambda kv: (-kv[1], kv[0][0], kv[0][1]))[:top]:
+        if count < 2:
+            continue
+        sample = next(n for n in notes if n.task == task and n.lesson == lesson)
+        out.append(replace(sample, id=f"freq-{task}-{hashlib.md5(lesson.encode()).hexdigest()[:8]}",
+                           lesson=f"Seen {count} times: {lesson}", record_id=""))
     return out

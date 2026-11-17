@@ -56,3 +56,9 @@ def test_grounding():
     bad = good + " The HRSG delivers 55.0 MW."
     assert check_numbers(good, p, r)["fraction"] == 1.0
     g = check_numbers(bad, p, r); assert g["ungrounded"] == ["55.0 MW"]
+
+def test_grounding_rejects_a_number_free_trace():
+    """An empty reasoning tag must not earn the grounding reward (it used to score 1.0)."""
+    p = cgam_orc(); r = solve(p)
+    assert check_numbers("", p, r)["fraction"] == 0.0
+    assert check_numbers("<diagnosis></diagnosis>", p, r)["n_numbers"] == 0

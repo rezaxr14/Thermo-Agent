@@ -46,4 +46,7 @@ def check_numbers(text: str, plant: Plant, res: SolveResult, rel: float = 0.005)
             ok = any(abs(v - x) <= rel * max(abs(x), 1e-9) + 0.05 for x in pool)
         (grounded if ok else ungrounded).append(f"{val} {unit}")
     n = len(grounded) + len(ungrounded)
-    return {"n_numbers": n, "grounded": grounded, "ungrounded": ungrounded, "fraction": 1.0 if n == 0 else len(grounded) / n}
+    # A number-free trace is not grounded. Without this, an empty <diagnosis> or <analysis> tag scores 1.0 and the
+    # grounding channel rewards saying nothing (a reward-gaming path found in the GRPO audit).
+    return {"n_numbers": n, "grounded": grounded, "ungrounded": ungrounded,
+            "fraction": (len(grounded) / n) if n else 0.0}

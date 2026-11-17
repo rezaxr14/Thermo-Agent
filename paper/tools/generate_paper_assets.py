@@ -801,6 +801,43 @@ def table_results_skeleton():
             + "\n".join(rows) + "\n\\bottomrule\n\\end{tabular}\\endgroup\n")
 
 
+def table_results_data(MR):
+    """Model results from comparison rows; fall back to the skeleton until the first report exists."""
+    rows = (MR or {}).get("rows") or []
+    if not rows:
+        return table_results_skeleton()
+    keys = {"repair": ["success", "first_turn_success", "exact_on_deducible", "mean_solves"],
+            "design": ["valid", "within_1pct", "mean_gap_pct", "mean_evals"],
+            "audit": ["rank", "valid", "gain", "pred"], "ledger": ["exact", "closure", "all_correct"]}
+    labels = {"repair": "Repair", "design": "Design", "audit": "Audit", "ledger": "Ledger repair"}
+    out = []
+    for row in rows:
+        m = row["metrics"]
+        cells = [("--" if m.get(k) is None else f"{m[k]:.2f}") for k in keys[row["task"]]]
+        arm = f"{row['display_name']} ({row['model_family']}, {row['harness']}, tools {row['tool_access']})"
+        out.append(f"{labels[row['task']]} & {tex(arm)} & {row['split'].replace('_', ' ')} & {row['n']} & "
+                   + " & ".join(cells) + r" \\")
+    return ("\\begingroup\\scriptsize\\setlength{\\tabcolsep}{3pt}\n\\begin{tabular}{@{}p{1.5cm}p{5.2cm}p{1.6cm}rp{1.5cm}p{1.5cm}p{1.5cm}p{1.5cm}@{}}\n\\toprule\n"
+            "Task & Model (family, inference text, tools) & Split & $n$ & \\multicolumn{4}{c}{Metrics (per task; see text)} \\\\\n\\midrule\n"
+            + "\n".join(out) + "\n\\bottomrule\n\\end{tabular}\\endgroup\n")
+
+
+def table_comparison(MR):
+    """One row per arm/task/split with the comparison axes explicit, for the model-comparison paragraph."""
+    rows = (MR or {}).get("rows") or []
+    if not rows:
+        return ("\\begingroup\\small\n\\begin{tabular}{@{}lllll}\n\\toprule\nArm & Family & Inference text & Tools & Result \\\\\n\\midrule\n"
+                "Model reports are pending; see \\texttt{paper/assets/model\\_results\\_manifest.json}. \\\\\n\\bottomrule\n\\end{tabular}\\endgroup\n")
+    body = []
+    for r in rows:
+        metric = ", ".join(f"{k} {v:.2f}" for k, v in r["metrics"].items() if v is not None)
+        body.append(f"{tex(r['display_name'])} & {r['model_family']} & {r['harness']} & {r['tool_access']} & "
+                    f"{tex(metric)} \\\\")
+    return ("\\begingroup\\scriptsize\n\\begin{tabular}{@{}p{3.4cm}p{1.8cm}p{2.2cm}p{1.4cm}p{6.2cm}@{}}\n\\toprule\n"
+            "Model & Family & Inference text & Tools & Metrics by task/split \\\\\n\\midrule\n"
+            + "\n".join(body) + "\n\\bottomrule\n\\end{tabular}\\endgroup\n")
+
+
 def table_ablation_skeleton():
     rows = [("Inference text on the held-out gas-engine diagrams", "none / \\texttt{AGENTS.md} / skills / both / both plus memory (base and trained)", "success"),
             ("Training corpus", "ground truth only / plus architecture corpus / plus teacher traces / plus harness and memory text", "success on held-out diagrams"),
@@ -891,9 +928,11 @@ def derive():
                 ch = ast.literal_eval(ch)
             ex[t]["channels_parsed"] = ch
     M = jload("mechanisms.json")
+    MR = jload("model_results.json") if have("model_results.json") else {"rows": []}
     tabs = {"table_components.tex": table_components(E), "table_params.tex": table_params(E), "table_verifiers.tex": table_verifiers(), "table_tasks.tex": table_tasks(S, ex),
             "table_faults.tex": table_faults(E, L, S), "table_baselines.tex": table_baselines(RP, AB, D), "table_constants.tex": table_constants(E), "table_training.tex": table_training(E),
-            "table_results.tex": table_results_skeleton(), "table_ablation.tex": table_ablation_skeleton(), "table_corpus_status.tex": table_corpus_skeleton(), "table_datasets.tex": table_datasets(S, L),
+            "table_results.tex": table_results_data(MR), "table_comparison.tex": table_comparison(MR),
+            "table_ablation.tex": table_ablation_skeleton(), "table_corpus_status.tex": table_corpus_skeleton(), "table_datasets.tex": table_datasets(S, L),
             "table_ledger_faults.tex": table_ledger_faults(L), "table_mech.tex": table_mech(M)}
     hm, sk = table_harness(H); tabs["table_harness_modes.tex"] = hm; tabs["table_skills.tex"] = sk; tabs["table_agents.tex"] = table_agents(H)
     GEN.mkdir(exist_ok=True)

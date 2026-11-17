@@ -4,7 +4,7 @@
         [--per-device-batch 2] [--grad-accum 8] [--grad-norm 1.0] [--num-workers 2]
 Dual T4 (see docs/DUAL_T4.md):
     torchrun --standalone --nproc_per_node=2 --module thermo_agent.train.grpo DATA_DIR runs/grpo_ledger \
-        --task ledger --init runs/sft_merged --dtype float16 --per-device-batch 2 --grad-accum 8
+        --task ledger --init runs/sft_merged --dtype float16 --per-device-batch 4 --grad-accum 2
 Each rank draws its own prompts, so data parallelism splits the rollout work instead of duplicating it. The
 effective prompt batch (per-device x accum x ranks) must be a multiple of the group size G. --vllm is
 single-process colocate mode and is refused under DDP.
@@ -50,7 +50,7 @@ def _report_topology(dtype: str, num_generations: int, s: GrpoSettings) -> None:
 
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("data"); ap.add_argument("out")
-    ap.add_argument("--task", choices=list(TASKS), default="repair"); ap.add_argument("--init", default=BASE_MODEL); ap.add_argument("--dtype", default="bfloat16", choices=list(ddp.DTYPES))
+    ap.add_argument("--task", choices=list(TASKS), default="repair"); ap.add_argument("--init", default=BASE_MODEL); ap.add_argument("--dtype", default="float16", choices=list(ddp.DTYPES))
     ap.add_argument("--vllm", action="store_true", help="colocate vLLM for generation (single process, needs a >=24 GB GPU)")
     ap.add_argument("--qlora", action="store_true"); ap.add_argument("--max-steps", type=int); ap.add_argument("--limit-rows", type=int)
     ap.add_argument("--per-device-batch", type=int); ap.add_argument("--grad-accum", type=int); ap.add_argument("--grad-norm", type=float)
@@ -73,7 +73,7 @@ def main():
     from datasets import Dataset
     from peft import LoraConfig
     from trl import GRPOConfig, GRPOTrainer
-    init = {"dtype": a.dtype}
+    init = ddp.model_init_kwargs(a.dtype)
     if a.qlora:
         import torch
         from transformers import BitsAndBytesConfig
@@ -95,7 +95,7 @@ def main():
     cfg = GRPOConfig(output_dir=a.out, learning_rate=g.lr, num_generations=g.num_generations,
                      max_completion_length=g.max_completion_length, temperature=g.temperature,
                      per_device_train_batch_size=g.per_device_batch, gradient_accumulation_steps=g.grad_accum,
-                     max_steps=a.max_steps or g.max_steps, loss_type=g.loss_type, beta=g.beta, scale_rewards="group",
+                     max_steps=a.max_steps or g.max_steps, loss_type=g.loss_type, beta=g.beta, scale_rewards=g.scale_rewards,
                      mask_truncated_completions=g.mask_truncated, reward_weights=TASKS[a.task][1],
                      remove_unused_columns=False, use_vllm=a.vllm, vllm_mode="colocate", log_completions=True,
                      chat_template_kwargs={"enable_thinking": False}, gradient_checkpointing=True,

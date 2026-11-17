@@ -48,9 +48,11 @@ def test_effective_batch_multiplies_ranks():
             raise AssertionError(f"{bad} should be refused")
 
 
-def test_grpo_groups_divide_the_effective_batch():
-    assert ddp.grpo_batches_divisible(2, 8, 2, 8)
-    assert ddp.grpo_batches_divisible(1, 8, 1, 8)
+def test_grpo_groups_divide_both_the_per_device_and_effective_batch():
+    # TRL checks the per-device prompt batch too: 2 prompts cannot hold groups of 8 even if 2x8x2=32 can.
+    assert ddp.grpo_batches_divisible(8, 8, 2, 8)
+    assert not ddp.grpo_batches_divisible(2, 8, 2, 8)
+    assert not ddp.grpo_batches_divisible(1, 8, 1, 8)
     assert not ddp.grpo_batches_divisible(1, 1, 2, 8)
     assert not ddp.grpo_batches_divisible(2, 8, 2, 3)
     try:
