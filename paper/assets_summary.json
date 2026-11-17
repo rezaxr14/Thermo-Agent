@@ -1,6 +1,6 @@
 {
  "description": "every measured number quoted in the paper: value, TeX form, source asset, command, seed and sample size",
- "n_keys": 482,
+ "n_keys": 483,
  "values": {
   "env.n_components": {
    "value": 15,
@@ -59,8 +59,8 @@
    "n": null
   },
   "env.n_tests": {
-   "value": 320,
-   "tex": "320",
+   "value": 321,
+   "tex": "321",
    "source": "assets/environment.json",
    "command": "python -m pytest -q",
    "seed": null,
@@ -165,6 +165,14 @@
   "corp.n_heat": {
    "value": 41,
    "tex": "41",
+   "source": "assets/corpus.json",
+   "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+   "seed": null,
+   "n": null
+  },
+  "corp.n_held": {
+   "value": 9,
+   "tex": "9",
    "source": "assets/corpus.json",
    "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": null,
@@ -1402,134 +1410,6 @@
    "seed": 0,
    "n": 600
   },
-  "aud.n_id": {
-   "value": 17,
-   "tex": "17",
-   "source": "assets/audit_first_vs_second_law.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
-   "seed": 0,
-   "n": 17
-  },
-  "aud.fl_hits_id": {
-   "value": 0,
-   "tex": "0",
-   "source": "assets/audit_first_vs_second_law.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
-   "seed": 0,
-   "n": 17
-  },
-  "aud.fl_top1_id_pct": {
-   "value": 0.0,
-   "tex": "0",
-   "source": "assets/audit_first_vs_second_law.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
-   "seed": 0,
-   "n": 17
-  },
-  "aud.fl_ci_lo_id_pct": {
-   "value": 0.0,
-   "tex": "0",
-   "source": "assets/audit_first_vs_second_law.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
-   "seed": 0,
-   "n": 17
-  },
-  "aud.fl_ci_hi_id_pct": {
-   "value": 18.0,
-   "tex": "18",
-   "source": "assets/audit_first_vs_second_law.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
-   "seed": 0,
-   "n": 17
-  },
-  "aud.rnd_top1_id_pct": {
-   "value": 25.0,
-   "tex": "25",
-   "source": "assets/audit_first_vs_second_law.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
-   "seed": 0,
-   "n": 17
-  },
-  "aud.ndcg_rnd_id": {
-   "value": 0.7,
-   "tex": "0.70",
-   "source": "assets/audit_first_vs_second_law.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
-   "seed": 0,
-   "n": 17
-  },
-  "aud.ndcg_fl_id": {
-   "value": 0.59,
-   "tex": "0.59",
-   "source": "assets/audit_first_vs_second_law.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
-   "seed": 0,
-   "n": 17
-  },
-  "aud.n_ood": {
-   "value": 58,
-   "tex": "58",
-   "source": "assets/audit_first_vs_second_law.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
-   "seed": 0,
-   "n": 58
-  },
-  "aud.fl_hits_ood": {
-   "value": 7,
-   "tex": "7",
-   "source": "assets/audit_first_vs_second_law.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
-   "seed": 0,
-   "n": 58
-  },
-  "aud.fl_top1_ood_pct": {
-   "value": 12.0,
-   "tex": "12",
-   "source": "assets/audit_first_vs_second_law.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
-   "seed": 0,
-   "n": 58
-  },
-  "aud.fl_ci_lo_ood_pct": {
-   "value": 6.0,
-   "tex": "6",
-   "source": "assets/audit_first_vs_second_law.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
-   "seed": 0,
-   "n": 58
-  },
-  "aud.fl_ci_hi_ood_pct": {
-   "value": 23.0,
-   "tex": "23",
-   "source": "assets/audit_first_vs_second_law.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
-   "seed": 0,
-   "n": 58
-  },
-  "aud.rnd_top1_ood_pct": {
-   "value": 32.0,
-   "tex": "32",
-   "source": "assets/audit_first_vs_second_law.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
-   "seed": 0,
-   "n": 58
-  },
-  "aud.ndcg_rnd_ood": {
-   "value": 0.67,
-   "tex": "0.67",
-   "source": "assets/audit_first_vs_second_law.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
-   "seed": 0,
-   "n": 58
-  },
-  "aud.ndcg_fl_ood": {
-   "value": 0.69,
-   "tex": "0.69",
-   "source": "assets/audit_first_vs_second_law.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
-   "seed": 0,
-   "n": 58
-  },
   "aud.ex_rej_id": {
    "value": "REJ",
    "tex": "\\texttt{REJ}",
@@ -1602,213 +1482,341 @@
    "seed": 0,
    "n": 1
   },
-  "audb.n_id": {
-   "value": 17,
-   "tex": "17",
+  "aud.n_id": {
+   "value": 100,
+   "tex": "100",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 17
+   "n": 100
   },
-  "audb.fl_top1_id_pct": {
+  "aud.fl_hits_id": {
+   "value": 1,
+   "tex": "1",
+   "source": "assets/audit_baselines.json",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
+   "seed": 0,
+   "n": 100
+  },
+  "aud.fl_top1_id_pct": {
+   "value": 1.0,
+   "tex": "1",
+   "source": "assets/audit_baselines.json",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
+   "seed": 0,
+   "n": 100
+  },
+  "aud.fl_ci_lo_id_pct": {
    "value": 0.0,
    "tex": "0",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 17
+   "n": 100
   },
-  "audb.rnd_top1_id_pct": {
-   "value": 25.0,
-   "tex": "25",
+  "aud.fl_ci_hi_id_pct": {
+   "value": 5.0,
+   "tex": "5",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 17
+   "n": 100
   },
-  "audb.rule_gain_id_pct": {
-   "value": 100.0,
+  "aud.rnd_top1_id_pct": {
+   "value": 24.0,
+   "tex": "24",
+   "source": "assets/audit_baselines.json",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
+   "seed": 0,
+   "n": 100
+  },
+  "aud.ndcg_rnd_id": {
+   "value": 0.695,
+   "tex": "0.695",
+   "source": "assets/audit_baselines.json",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
+   "seed": 0,
+   "n": 100
+  },
+  "aud.ndcg_fl_id": {
+   "value": 0.63,
+   "tex": "0.630",
+   "source": "assets/audit_baselines.json",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
+   "seed": 0,
+   "n": 100
+  },
+  "audb.n_id": {
+   "value": 100,
    "tex": "100",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 17
+   "n": 100
+  },
+  "audb.fl_top1_id_pct": {
+   "value": 1.0,
+   "tex": "1",
+   "source": "assets/audit_baselines.json",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
+   "seed": 0,
+   "n": 100
+  },
+  "audb.rnd_top1_id_pct": {
+   "value": 24.0,
+   "tex": "24",
+   "source": "assets/audit_baselines.json",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
+   "seed": 0,
+   "n": 100
+  },
+  "audb.rule_gain_id_pct": {
+   "value": 64.0,
+   "tex": "64",
+   "source": "assets/audit_baselines.json",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
+   "seed": 0,
+   "n": 100
   },
   "audb.rule_valid_id": {
-   "value": "7",
-   "tex": "7",
+   "value": "54",
+   "tex": "54",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 17
+   "n": 100
   },
   "audb.pred_zero_id": {
-   "value": 0.0,
-   "tex": "0.00",
+   "value": 0.04,
+   "tex": "0.04",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 17
+   "n": 100
   },
   "audb.pred_mean_id": {
-   "value": 0.65,
-   "tex": "0.65",
+   "value": 0.46,
+   "tex": "0.46",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 17
+   "n": 100
   },
   "audb.search_evals_id": {
    "value": 12.0,
    "tex": "12",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 17
+   "n": 100
+  },
+  "aud.n_ood": {
+   "value": 100,
+   "tex": "100",
+   "source": "assets/audit_baselines.json",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
+   "seed": 0,
+   "n": 100
+  },
+  "aud.fl_hits_ood": {
+   "value": 63,
+   "tex": "63",
+   "source": "assets/audit_baselines.json",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
+   "seed": 0,
+   "n": 100
+  },
+  "aud.fl_top1_ood_pct": {
+   "value": 63.0,
+   "tex": "63",
+   "source": "assets/audit_baselines.json",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
+   "seed": 0,
+   "n": 100
+  },
+  "aud.fl_ci_lo_ood_pct": {
+   "value": 53.0,
+   "tex": "53",
+   "source": "assets/audit_baselines.json",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
+   "seed": 0,
+   "n": 100
+  },
+  "aud.fl_ci_hi_ood_pct": {
+   "value": 72.0,
+   "tex": "72",
+   "source": "assets/audit_baselines.json",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
+   "seed": 0,
+   "n": 100
+  },
+  "aud.rnd_top1_ood_pct": {
+   "value": 40.0,
+   "tex": "40",
+   "source": "assets/audit_baselines.json",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
+   "seed": 0,
+   "n": 100
+  },
+  "aud.ndcg_rnd_ood": {
+   "value": 0.65,
+   "tex": "0.650",
+   "source": "assets/audit_baselines.json",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
+   "seed": 0,
+   "n": 100
+  },
+  "aud.ndcg_fl_ood": {
+   "value": 0.864,
+   "tex": "0.864",
+   "source": "assets/audit_baselines.json",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
+   "seed": 0,
+   "n": 100
   },
   "audb.n_ood": {
-   "value": 58,
-   "tex": "58",
+   "value": 100,
+   "tex": "100",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 58
+   "n": 100
   },
   "audb.fl_top1_ood_pct": {
-   "value": 12.0,
-   "tex": "12",
+   "value": 63.0,
+   "tex": "63",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 58
+   "n": 100
   },
   "audb.rnd_top1_ood_pct": {
-   "value": 32.0,
-   "tex": "32",
+   "value": 40.0,
+   "tex": "40",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 58
+   "n": 100
   },
   "audb.rule_gain_ood_pct": {
-   "value": 12.0,
-   "tex": "12",
+   "value": 47.0,
+   "tex": "47",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 58
+   "n": 100
   },
   "audb.rule_valid_ood": {
-   "value": "43",
-   "tex": "43",
+   "value": "87",
+   "tex": "87",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 58
+   "n": 100
   },
   "audb.pred_zero_ood": {
-   "value": 0.18,
-   "tex": "0.18",
+   "value": 0.11,
+   "tex": "0.11",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 58
+   "n": 100
   },
   "audb.pred_mean_ood": {
-   "value": 0.26,
-   "tex": "0.26",
+   "value": 0.36,
+   "tex": "0.36",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 58
+   "n": 100
   },
   "audb.search_evals_ood": {
    "value": 12.0,
    "tex": "12",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 58
+   "n": 100
   },
   "audb.saving_median_id_pct": {
-   "value": 1.8,
-   "tex": "1.8",
+   "value": 1.7,
+   "tex": "1.7",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 17
+   "n": 100
   },
   "audb.saving_min_id_pct": {
-   "value": 0.66,
-   "tex": "0.66",
+   "value": 0.07,
+   "tex": "0.07",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 17
+   "n": 100
   },
   "audb.saving_max_id_pct": {
-   "value": 5.3,
-   "tex": "5.3",
+   "value": 5.8,
+   "tex": "5.8",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 17
+   "n": 100
   },
   "audb.saving_median_ood_pct": {
-   "value": 0.2,
-   "tex": "0.2",
+   "value": 0.3,
+   "tex": "0.3",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 58
+   "n": 100
   },
   "audb.saving_min_ood_pct": {
-   "value": 0.05,
-   "tex": "0.05",
+   "value": 0.06,
+   "tex": "0.06",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 58
+   "n": 100
   },
   "audb.saving_max_ood_pct": {
    "value": 1.5,
    "tex": "1.5",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 58
+   "n": 100
   },
   "audb.saving_median_all_pct": {
-   "value": 0.3,
-   "tex": "0.3",
+   "value": 0.5,
+   "tex": "0.5",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 75
+   "n": 200
   },
   "audb.saving_min_all_pct": {
-   "value": 0.05,
-   "tex": "0.05",
+   "value": 0.06,
+   "tex": "0.06",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 75
+   "n": 200
   },
   "audb.saving_max_all_pct": {
-   "value": 5.3,
-   "tex": "5.3",
+   "value": 5.8,
+   "tex": "5.8",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 75
+   "n": 200
   },
   "audb.n_total": {
-   "value": 75,
-   "tex": "75",
+   "value": 200,
+   "tex": "200",
    "source": "assets/audit_baselines.json",
-   "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+   "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
    "seed": 0,
-   "n": 75
+   "n": 200
   },
   "des.n_sites": {
    "value": 24,
@@ -3235,626 +3243,626 @@
    "n": 40
   },
   "split.repair.test_id": {
-   "value": 12,
-   "tex": "12",
+   "value": 784,
+   "tex": "784",
    "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 12
+   "n": 784
   },
   "split.repair.test_ood_fault": {
-   "value": 108,
-   "tex": "108",
+   "value": 5295,
+   "tex": "5{,}295",
    "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 108
-  },
-  "split.repair.test_ood_topology": {
-   "value": 128,
-   "tex": "128",
-   "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
-   "seed": 0,
-   "n": 128
+   "n": 5295
   },
   "split.repair.train": {
-   "value": 125,
-   "tex": "125",
+   "value": 6688,
+   "tex": "6{,}688",
    "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 125
+   "n": 6688
   },
   "split.repair.val": {
-   "value": 15,
-   "tex": "15",
+   "value": 827,
+   "tex": "827",
    "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 15
+   "n": 827
+  },
+  "split.repair.test_ood_topology": {
+   "value": 279,
+   "tex": "279",
+   "source": "assets/splits.json",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
+   "seed": 0,
+   "n": 279
   },
   "split.repair.total": {
-   "value": 388,
-   "tex": "388",
+   "value": 13873,
+   "tex": "13{,}873",
    "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 388
+   "n": 13873
   },
   "split.design.test_id": {
-   "value": 8,
-   "tex": "8",
+   "value": 204,
+   "tex": "204",
    "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 8
+   "n": 204
   },
   "split.design.test_ood_climate": {
-   "value": 19,
-   "tex": "19",
+   "value": 615,
+   "tex": "615",
    "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 19
+   "n": 615
   },
   "split.design.test_ood_load": {
-   "value": 10,
-   "tex": "10",
+   "value": 411,
+   "tex": "411",
    "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 10
+   "n": 411
   },
   "split.design.test_ood_scale": {
-   "value": 4,
-   "tex": "4",
+   "value": 460,
+   "tex": "460",
    "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 4
+   "n": 460
   },
   "split.design.train": {
-   "value": 41,
-   "tex": "41",
+   "value": 1768,
+   "tex": "1{,}768",
    "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 41
+   "n": 1768
   },
   "split.design.val": {
-   "value": 3,
-   "tex": "3",
+   "value": 235,
+   "tex": "235",
    "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 3
+   "n": 235
   },
   "split.design.total": {
-   "value": 85,
-   "tex": "85",
+   "value": 3693,
+   "tex": "3{,}693",
    "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 85
+   "n": 3693
   },
   "split.audit.test_id": {
-   "value": 17,
-   "tex": "17",
+   "value": 425,
+   "tex": "425",
    "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 17
-  },
-  "split.audit.test_ood_topology": {
-   "value": 58,
-   "tex": "58",
-   "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
-   "seed": 0,
-   "n": 58
+   "n": 425
   },
   "split.audit.train": {
-   "value": 103,
-   "tex": "103",
+   "value": 3299,
+   "tex": "3{,}299",
    "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 103
+   "n": 3299
   },
   "split.audit.val": {
-   "value": 14,
-   "tex": "14",
+   "value": 417,
+   "tex": "417",
    "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 14
+   "n": 417
+  },
+  "split.audit.test_ood_topology": {
+   "value": 141,
+   "tex": "141",
+   "source": "assets/splits.json",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
+   "seed": 0,
+   "n": 141
   },
   "split.audit.total": {
-   "value": 192,
-   "tex": "192",
+   "value": 4282,
+   "tex": "4{,}282",
    "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 192
+   "n": 4282
   },
   "split.ledger.test_id": {
-   "value": 33,
-   "tex": "33",
+   "value": 806,
+   "tex": "806",
    "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 33
+   "n": 806
   },
   "split.ledger.test_ood_fault": {
-   "value": 109,
-   "tex": "109",
+   "value": 2875,
+   "tex": "2{,}875",
    "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 109
-  },
-  "split.ledger.test_ood_topology": {
-   "value": 198,
-   "tex": "198",
-   "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
-   "seed": 0,
-   "n": 198
+   "n": 2875
   },
   "split.ledger.train": {
-   "value": 227,
-   "tex": "227",
+   "value": 6313,
+   "tex": "6{,}313",
    "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 227
+   "n": 6313
   },
   "split.ledger.val": {
-   "value": 33,
-   "tex": "33",
+   "value": 828,
+   "tex": "828",
    "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 33
+   "n": 828
+  },
+  "split.ledger.test_ood_topology": {
+   "value": 292,
+   "tex": "292",
+   "source": "assets/splits.json",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
+   "seed": 0,
+   "n": 292
   },
   "split.ledger.total": {
-   "value": 600,
-   "tex": "600",
+   "value": 11114,
+   "tex": "11{,}114",
    "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 600
+   "n": 11114
   },
   "split.total": {
-   "value": 1265,
-   "tex": "1{,}265",
+   "value": 32962,
+   "tex": "32{,}962",
    "source": "assets/splits.json",
-   "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+   "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
    "seed": 0,
-   "n": 1265
+   "n": 32962
   },
   "rep.test_id.n": {
-   "value": 12,
-   "tex": "12",
+   "value": 200,
+   "tex": "200",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 12
+   "n": 200
   },
   "rep.test_id.rows": {
-   "value": 12,
-   "tex": "12",
+   "value": 784,
+   "tex": "784",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 12
+   "n": 784
   },
   "rep.test_id.noop_pct": {
    "value": 0.0,
    "tex": "0",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 12
+   "n": 200
   },
   "rep.test_id.search_pct": {
-   "value": 92.0,
-   "tex": "92",
+   "value": 96.0,
+   "tex": "96",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 12
+   "n": 200
   },
   "rep.test_id.search_lo_pct": {
+   "value": 93.0,
+   "tex": "93",
+   "source": "assets/repair_baselines.json",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
+   "seed": 0,
+   "n": 200
+  },
+  "rep.test_id.search_hi_pct": {
+   "value": 98.0,
+   "tex": "98",
+   "source": "assets/repair_baselines.json",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
+   "seed": 0,
+   "n": 200
+  },
+  "rep.test_id.exact_pct": {
    "value": 65.0,
    "tex": "65",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 12
-  },
-  "rep.test_id.search_hi_pct": {
-   "value": 99.0,
-   "tex": "99",
-   "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
-   "seed": 0,
-   "n": 12
-  },
-  "rep.test_id.exact_pct": {
-   "value": 58.0,
-   "tex": "58",
-   "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
-   "seed": 0,
-   "n": 12
+   "n": 200
   },
   "rep.test_id.calls": {
-   "value": 174.0,
-   "tex": "174",
+   "value": 130.0,
+   "tex": "130",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 12
+   "n": 200
   },
   "rep.test_id.expert_pct": {
    "value": 100.0,
    "tex": "100",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 12
+   "n": 200
   },
   "rep.test_id.efficiency_gt_1.n": {
-   "value": 4,
-   "tex": "4",
+   "value": 65,
+   "tex": "65",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 4
+   "n": 65
   },
   "rep.test_id.unit_slip.n": {
-   "value": 1,
-   "tex": "1",
+   "value": 58,
+   "tex": "58",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 1
+   "n": 58
   },
   "rep.test_id.wrong_fluid.n": {
-   "value": 7,
-   "tex": "7",
+   "value": 77,
+   "tex": "77",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 7
+   "n": 77
   },
   "rep.test_ood_fault.n": {
-   "value": 108,
-   "tex": "108",
+   "value": 200,
+   "tex": "200",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 108
+   "n": 200
   },
   "rep.test_ood_fault.rows": {
-   "value": 108,
-   "tex": "108",
+   "value": 5295,
+   "tex": "5{,}295",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 108
+   "n": 5295
   },
   "rep.test_ood_fault.noop_pct": {
    "value": 0.0,
    "tex": "0",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 108
+   "n": 200
   },
   "rep.test_ood_fault.search_pct": {
    "value": 100.0,
    "tex": "100",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 108
+   "n": 200
   },
   "rep.test_ood_fault.search_lo_pct": {
-   "value": 97.0,
-   "tex": "97",
+   "value": 98.0,
+   "tex": "98",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 108
+   "n": 200
   },
   "rep.test_ood_fault.search_hi_pct": {
    "value": 100.0,
    "tex": "100",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 108
+   "n": 200
   },
   "rep.test_ood_fault.exact_pct": {
    "value": 100.0,
    "tex": "100",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 108
+   "n": 200
   },
   "rep.test_ood_fault.calls": {
-   "value": 128.0,
-   "tex": "128",
+   "value": 117.0,
+   "tex": "117",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 108
+   "n": 200
   },
   "rep.test_ood_fault.expert_pct": {
    "value": 100.0,
    "tex": "100",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 108
+   "n": 200
   },
   "rep.test_ood_fault.sign_flip.n": {
-   "value": 54,
-   "tex": "54",
+   "value": 106,
+   "tex": "106",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 54
+   "n": 106
   },
   "rep.test_ood_fault.swapped_ports.n": {
-   "value": 54,
-   "tex": "54",
+   "value": 94,
+   "tex": "94",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 54
+   "n": 94
   },
   "rep.test_ood_topology.n": {
-   "value": 128,
-   "tex": "128",
+   "value": 200,
+   "tex": "200",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 128
+   "n": 200
   },
   "rep.test_ood_topology.rows": {
-   "value": 128,
-   "tex": "128",
+   "value": 279,
+   "tex": "279",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 128
+   "n": 279
   },
   "rep.test_ood_topology.noop_pct": {
    "value": 0.0,
    "tex": "0",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 128
+   "n": 200
   },
   "rep.test_ood_topology.search_pct": {
-   "value": 99.0,
-   "tex": "99",
-   "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
-   "seed": 0,
-   "n": 128
-  },
-  "rep.test_ood_topology.search_lo_pct": {
    "value": 96.0,
    "tex": "96",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 128
+   "n": 200
+  },
+  "rep.test_ood_topology.search_lo_pct": {
+   "value": 93.0,
+   "tex": "93",
+   "source": "assets/repair_baselines.json",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
+   "seed": 0,
+   "n": 200
   },
   "rep.test_ood_topology.search_hi_pct": {
-   "value": 100.0,
-   "tex": "100",
+   "value": 98.0,
+   "tex": "98",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 128
+   "n": 200
   },
   "rep.test_ood_topology.exact_pct": {
-   "value": 77.0,
-   "tex": "77",
+   "value": 76.0,
+   "tex": "76",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 128
+   "n": 200
   },
   "rep.test_ood_topology.calls": {
-   "value": 122.0,
-   "tex": "122",
+   "value": 105.0,
+   "tex": "105",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 128
+   "n": 200
   },
   "rep.test_ood_topology.expert_pct": {
    "value": 100.0,
    "tex": "100",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 128
+   "n": 200
   },
   "rep.test_ood_topology.efficiency_gt_1.n": {
-   "value": 26,
-   "tex": "26",
+   "value": 41,
+   "tex": "41",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 26
+   "n": 41
   },
   "rep.test_ood_topology.sign_flip.n": {
-   "value": 26,
-   "tex": "26",
+   "value": 48,
+   "tex": "48",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 26
+   "n": 48
   },
   "rep.test_ood_topology.swapped_ports.n": {
-   "value": 17,
-   "tex": "17",
+   "value": 38,
+   "tex": "38",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 17
+   "n": 38
   },
   "rep.test_ood_topology.unit_slip.n": {
-   "value": 26,
-   "tex": "26",
+   "value": 43,
+   "tex": "43",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 26
+   "n": 43
   },
   "rep.test_ood_topology.wrong_fluid.n": {
-   "value": 33,
-   "tex": "33",
-   "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
-   "seed": 0,
-   "n": 33
-  },
-  "rep.f.efficiency_gt_1.n": {
    "value": 30,
    "tex": "30",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
    "n": 30
+  },
+  "rep.f.efficiency_gt_1.n": {
+   "value": 106,
+   "tex": "106",
+   "source": "assets/repair_baselines.json",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
+   "seed": 0,
+   "n": 106
   },
   "rep.f.efficiency_gt_1.search_pct": {
-   "value": 93.0,
-   "tex": "93",
+   "value": 92.0,
+   "tex": "92",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 30
+   "n": 106
   },
   "rep.f.efficiency_gt_1.calls": {
-   "value": 26.0,
-   "tex": "26",
+   "value": 16.0,
+   "tex": "16",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 30
+   "n": 106
   },
   "rep.f.unit_slip.n": {
-   "value": 27,
-   "tex": "27",
+   "value": 101,
+   "tex": "101",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 27
+   "n": 101
   },
   "rep.f.unit_slip.search_pct": {
    "value": 100.0,
    "tex": "100",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 27
+   "n": 101
   },
   "rep.f.unit_slip.calls": {
-   "value": 48.0,
-   "tex": "48",
+   "value": 52.0,
+   "tex": "52",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 27
+   "n": 101
   },
   "rep.f.wrong_fluid.n": {
-   "value": 40,
-   "tex": "40",
+   "value": 107,
+   "tex": "107",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 40
+   "n": 107
   },
   "rep.f.wrong_fluid.search_pct": {
-   "value": 100.0,
-   "tex": "100",
+   "value": 95.0,
+   "tex": "95",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 40
+   "n": 107
   },
   "rep.f.wrong_fluid.calls": {
-   "value": 268.0,
-   "tex": "268",
+   "value": 278.0,
+   "tex": "278",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 40
+   "n": 107
   },
   "rep.f.sign_flip.n": {
-   "value": 80,
-   "tex": "80",
+   "value": 154,
+   "tex": "154",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 80
+   "n": 154
   },
   "rep.f.sign_flip.search_pct": {
    "value": 100.0,
    "tex": "100",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 80
+   "n": 154
   },
   "rep.f.sign_flip.calls": {
-   "value": 8.0,
-   "tex": "8",
+   "value": 9.0,
+   "tex": "9",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 80
+   "n": 154
   },
   "rep.f.swapped_ports.n": {
-   "value": 71,
-   "tex": "71",
+   "value": 132,
+   "tex": "132",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 71
+   "n": 132
   },
   "rep.f.swapped_ports.search_pct": {
    "value": 100.0,
    "tex": "100",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 71
+   "n": 132
   },
   "rep.f.swapped_ports.calls": {
-   "value": 232.0,
-   "tex": "232",
+   "value": 251.0,
+   "tex": "251",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
-   "n": 71
+   "n": 132
   },
   "rep.total_n": {
-   "value": 248,
-   "tex": "248",
+   "value": 600,
+   "tex": "600",
    "source": "assets/repair_baselines.json",
-   "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)",
+   "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)",
    "seed": 0,
    "n": null
   }

@@ -10,8 +10,9 @@ generated/values.tex (one \\val{key} macro per number) and generated/table_*.tex
     crosscheck    generic engine against the independent reference plant
     example       one solved plant with absorption and with electric cooling
     mechanisms    feasibility mechanisms of the Design catalog (small sweeps)
-    repair        non-model Repair baseline on generated rows (seed 0)
-    audit         non-model Audit baselines on generated rows (seed 0)
+    repair        non-model Repair baseline on the ground-truth datasets (seed 0)
+    audit         non-model Audit baselines on the ground-truth datasets (seed 0)
+    splits        row counts per split of the ground-truth datasets (baselines, split figure)
     derive        assets_summary.json, values.tex, tables
 
 Files in assets/ that carry the key `kind` and `command` and no `study` entry were produced by the figure build
@@ -240,6 +241,58 @@ def study_corpus(project, scratch):
         "memory": {"min_score": _src_default(t / "memory.py", r"min_score: float = ([\d.]+)"), "fault_boost": _src_default(t / "memory.py", r"base \+= ([\d.]+)\n    if note.architecture")}})
 
 
+def _count_splits(d, task):
+    return {p.stem[len(task) + 1:]: sum(1 for l in open(p, encoding="utf-8") if l.strip())
+            for p in sorted(pathlib.Path(d).glob(f"{task}_*.jsonl"))}
+
+
+def _ground_truth(project):
+    project = pathlib.Path(project) if project else pathlib.Path(__file__).resolve().parents[2]
+    dirs = [project / "data" / d for d in ("processed", "processed_arch")]
+    missing = [str(d) for d in dirs if not d.exists()]
+    if missing:
+        raise SystemExit(f"generate the ground-truth datasets first (scripts/gen_data.ps1); missing: {missing}")
+    return dirs
+
+
+def study_splits(project, scratch):
+    """Row counts per split of the ground-truth datasets that the baselines and evaluations read.
+
+    The counts merge `data/processed` (five plant templates) with `data/processed_arch` (the diagram catalog),
+    exactly as `eval.rows.load_split` does, so the table describes the data the experiments sample from. The
+    held-out definitions come from the generators (`synth.splits`, `ledger.faults`, `design.data.assign_split`).
+    """
+    from thermo_agent.ledger import faults as LF
+    from thermo_agent.synth.architectures import ARCHITECTURES
+    from thermo_agent.synth.splits import is_ood_topology
+    project = pathlib.Path(project) if project else pathlib.Path(__file__).resolve().parents[2]
+    dirs = _ground_truth(project)
+    counts = {}
+    for task in ("repair", "design", "audit", "ledger"):
+        counts[task] = {}
+        for d in dirs:
+            for sp, n in _count_splits(d, task).items():
+                counts[task][sp] = counts[task].get(sp, 0) + n
+    held = [a for a in ARCHITECTURES if is_ood_topology(a["name"])]
+    n_engine = sum(1 for a in held if a["prime"] == "engine")
+    held_txt = (f"{len(held)} of {len(ARCHITECTURES)} diagrams: the steam plant and the {n_engine} gas-engine "
+                f"plants with ideal rejection")
+    definitions = {
+        "repair": {"test_ood_fault": "sign flip, swapped ports",
+                   "test_ood_topology": held_txt},
+        "design": {"test_ood_scale": "IT load of 45 MW or more", "test_ood_climate": "ambient 305 K or more",
+                   "test_ood_load": "chilled fraction 0.85 or more"},
+        "audit": {"test_ood_topology": held_txt},
+        "ledger": {"test_ood_fault": ", ".join(sorted(LF.HELD_OUT)), "test_ood_topology": held_txt},
+    }
+    jdump("splits.json", {
+        "command": "row counts read from data/processed and data/processed_arch (scripts/gen_data.ps1, seed 0); "
+                   "held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
+        "seed": SEED, "n": sum(sum(v.values()) for v in counts.values()), "kind": "synthetic",
+        "counts": counts, "definitions": definitions,
+        "in_distribution": "train, val and test_id are separated by a hash of the example id"})
+
+
 def _ensure_data(project, scratch, task, n, extra=()):
     d = scratch / task; d.mkdir(parents=True, exist_ok=True)
     first = {"repair": "repair_test_id.jsonl", "audit": "audit_test_id.jsonl"}[task]
@@ -251,25 +304,28 @@ def _ensure_data(project, scratch, task, n, extra=()):
 
 def study_repair(project, scratch, limits):
     from thermo_agent.eval.run_eval import run
-    d = _ensure_data(project, scratch, "repair", 400, ("--workers", "1"))
+    dirs = _ground_truth(project)
     res = {}
     for sp, lim in limits.items():
-        t = time.time(); res[sp] = {"all": run(d / f"repair_{sp}.jsonl", lim), "by_fault": run(d / f"repair_{sp}.jsonl", lim, by_fault=True), "limit": lim, "seconds": round(time.time() - t, 1)}
-    counts = {sp: sum(1 for _ in open(d / f"repair_{sp}.jsonl")) for sp in ("train", "val", "test_id", "test_ood_fault", "test_ood_topology")}
-    jdump("repair_baselines.json", {"study": "repair", "command": "synth.build_repair_data OUT -n 400 --seed 0; eval.run_eval.run(path, limit, by_fault)", "seed": SEED,
+        t = time.time(); res[sp] = {"all": run(dirs, sp, lim), "by_fault": run(dirs, sp, lim, by_fault=True), "limit": lim, "seconds": round(time.time() - t, 1)}
+    counts = {}
+    for d in dirs:
+        for sp, n in _count_splits(d, "repair").items(): counts[sp] = counts.get(sp, 0) + n
+    jdump("repair_baselines.json", {"study": "repair", "command": "eval.run_eval.run([data/processed, data/processed_arch], split, limit, by_fault)", "seed": SEED,
                                     "n": sum(r["all"]["n"] for r in res.values()), "split_rows": counts, "splits": res})
 
 
 def study_audit(project, scratch):
-    from thermo_agent.audit.run_eval import run
-    d = _ensure_data(project, scratch, "audit", 200, ("--workers", "1"))
-    res = {sp: run(d / f"audit_{sp}.jsonl", None, seed=SEED) for sp in ("test_id", "test_ood_topology")}
-    # best allowed change: saving as share of fuel, per split
-    shares = {}
+    from thermo_agent.audit.run_eval import score
+    from thermo_agent.eval.rows import load_split
+    dirs = _ground_truth(project)
+    res, shares = {}, {}
     for sp in ("test_id", "test_ood_topology"):
-        shares[sp] = [json.loads(l)["best_gain_w"] / json.loads(l)["fuel_w"] for l in open(d / f"audit_{sp}.jsonl")]
+        rows = load_split(dirs, "audit", sp)[:100]
+        res[sp] = score(rows, seed=SEED)
+        shares[sp] = [r["best_gain_w"] / r["fuel_w"] for r in rows]
     summ = lambda v: {"median": st.median(v), "min": min(v), "max": max(v), "n": len(v)}
-    jdump("audit_baselines.json", {"study": "audit", "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology", "seed": SEED,
+    jdump("audit_baselines.json", {"study": "audit", "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)", "seed": SEED,
                                    "n": sum(len(v) for v in shares.values()), "splits": res,
                                    "best_change_saving_share": {**{k: summ(v) for k, v in shares.items()}, "all": summ(shares["test_id"] + shares["test_ood_topology"])}})
 
@@ -331,6 +387,7 @@ def derive_values():
     s = "assets/corpus.json"; c = CO["command"]; sd = CO["seed"]
     for k in ("n_architectures", "n_dc", "n_turbine", "n_engine", "n_orc", "n_heat"):
         put("corp." + k.replace("n_architectures", "n_arch"), CO[k], src=s, cmd=c)
+    put("corp.n_held", sum(1 for a in CO["architectures"] if a["held_out"]), src=s, cmd=c)
     for k, v in CO["combine"].items():
         put("corp." + k, v if k != "harness_fraction" else int(round(v * 100)), src=s, cmd=c)
     for k, v in CO["sampler"].items():
@@ -466,17 +523,8 @@ def derive_values():
     cd = L["closure_demo"]
     putf("led.demo_drop_work_mw", abs(cd["drop_work_term"]["closure"]), 1, s, c, sd, 1)
     put("led.held_out_n", sum(sf[k]["n"] for k in L["held_out_fault_types"]), src=s, cmd=c, seed=sd, n=L["n"])
-    # ---- audit (figure asset)
+    # ---- audit, one plant (figure asset)
     s = "assets/audit_first_vs_second_law.json"; c = A["command"]; sd = A["seed"]
-    hr = A["hit_rates"]
-    for sp, k in (("test_id", "id"), ("test_ood_topology", "ood")):
-        n_ = hr[sp]["n"]; kk = hr[sp]["first_law_hits"]; lo, hi = wilson(kk, n_)
-        put(f"aud.n_{k}", n_, src=s, cmd=c, seed=sd, n=n_); put(f"aud.fl_hits_{k}", kk, src=s, cmd=c, seed=sd, n=n_)
-        putf(f"aud.fl_top1_{k}_pct", kk / n_ * 100, 0 if k == "id" else 0, s, c, sd, n_)
-        putf(f"aud.fl_ci_lo_{k}_pct", lo * 100, 0, s, c, sd, n_); putf(f"aud.fl_ci_hi_{k}_pct", hi * 100, 0, s, c, sd, n_)
-        putf(f"aud.rnd_top1_{k}_pct", hr[sp]["random_top1"] * 100, 0, s, c, sd, n_)
-        putf(f"aud.ndcg_rnd_{k}", hr[sp]["ndcg3"]["random"], 2, s, c, sd, n_); putf(f"aud.ndcg_fl_{k}", hr[sp]["ndcg3"]["first_law"], 2, s, c, sd, n_)
-    comps = {x["id"]: x for x in A["components"]}
     rej = max(A["components"], key=lambda x: x["energy_dissipated_mw"]); cc = max(A["components"], key=lambda x: x["exergy_destroyed_mw"])
     non_pm = [x for x in A["components"] if x["id"] != A["prime_mover"]]
     ex_top = max(non_pm, key=lambda x: x["exergy_destroyed_mw"])
@@ -484,14 +532,22 @@ def derive_values():
     put("aud.ex_pm_id", cc["id"], tt(cc["id"]), s, c, sd, 1); putf("aud.ex_pm_ed_mw", cc["exergy_destroyed_mw"], 1, s, c, sd, 1); putf("aud.ex_pm_energy_mw", cc["energy_dissipated_mw"], 1, s, c, sd, 1)
     put("aud.ex_top_id", ex_top["id"], tt(ex_top["id"]), s, c, sd, 1); putf("aud.ex_top_ed_mw", ex_top["exergy_destroyed_mw"], 1, s, c, sd, 1)
     putf("aud.ex_fuel_mw", A["fuel_mw"], 0, s, c, sd, 1)
-    # ---- audit baselines (own run)
+    # ---- audit baselines (own run): the ranking macros of the Audit figure and text come from the same rows as the
+    # baseline table, so that both describe one measurement; only the example plant above comes from the figure asset.
     s = "assets/audit_baselines.json"; c = AB["command"]
     for sp, k in (("test_id", "id"), ("test_ood_topology", "ood")):
         r = AB["splits"][sp]; n_ = r["n"]
         rule = r["rule_change (raise turbine inlet T 10%, else cut engine loss 10%)"]
+        nd = r["ranking_ndcg3_excluding_prime_mover"]; t1 = r["ranking_top1_excluding_prime_mover"]
+        kk = int(round(t1["first_law"] * n_)); lo, hi = wilson(kk, n_)
+        put(f"aud.n_{k}", n_, src=s, cmd=c, seed=SEED, n=n_); put(f"aud.fl_hits_{k}", kk, src=s, cmd=c, seed=SEED, n=n_)
+        putf(f"aud.fl_top1_{k}_pct", kk / n_ * 100, 0, s, c, SEED, n_)
+        putf(f"aud.fl_ci_lo_{k}_pct", lo * 100, 0, s, c, SEED, n_); putf(f"aud.fl_ci_hi_{k}_pct", hi * 100, 0, s, c, SEED, n_)
+        putf(f"aud.rnd_top1_{k}_pct", t1["random"] * 100, 0, s, c, SEED, n_)
+        putf(f"aud.ndcg_rnd_{k}", nd["random"], 3, s, c, SEED, n_); putf(f"aud.ndcg_fl_{k}", nd["first_law"], 3, s, c, SEED, n_)
         put(f"audb.n_{k}", n_, src=s, cmd=c, seed=SEED, n=n_)
-        putf(f"audb.fl_top1_{k}_pct", r["ranking_top1_excluding_prime_mover"]["first_law"] * 100, 0, s, c, SEED, n_)
-        putf(f"audb.rnd_top1_{k}_pct", r["ranking_top1_excluding_prime_mover"]["random"] * 100, 0, s, c, SEED, n_)
+        putf(f"audb.fl_top1_{k}_pct", t1["first_law"] * 100, 0, s, c, SEED, n_)
+        putf(f"audb.rnd_top1_{k}_pct", t1["random"] * 100, 0, s, c, SEED, n_)
         putf(f"audb.rule_gain_{k}_pct", (rule["mean_gain_vs_best"] or 0) * 100, 0, s, c, SEED, n_)
         put(f"audb.rule_valid_{k}", rule["valid"].split("/")[0], src=s, cmd=c, seed=SEED, n=n_)
         pb = r["prediction_baselines_for_the_best_change (a_pred score)"]
@@ -854,9 +910,9 @@ def main():
     ap.add_argument("--stage", nargs="*", default=["all"])
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--tests-log", default=None, help="output of `python -m pytest -q`, used for the test count")
-    ap.add_argument("--repair-limits", default="test_id=12,test_ood_fault=40,test_ood_topology=40")
+    ap.add_argument("--repair-limits", default="test_id=200,test_ood_fault=200,test_ood_topology=200")
     a = ap.parse_args()
-    stages = a.stage if a.stage != ["all"] else ["environment", "crosscheck", "example", "mechanisms", "corpus", "repair", "audit", "derive"]
+    stages = a.stage if a.stage != ["all"] else ["environment", "crosscheck", "example", "mechanisms", "corpus", "repair", "audit", "splits", "derive"]
     project = pathlib.Path(a.project).resolve() if a.project else None
     if project:
         sys.path.insert(0, str(project))
@@ -864,7 +920,8 @@ def main():
     scratch = pathlib.Path(a.scratch).resolve(); scratch.mkdir(parents=True, exist_ok=True)
     limits = {k: int(v) for k, v in (x.split("=") for x in a.repair_limits.split(","))}
     todo = {"environment": ("environment.json", lambda: study_environment(project, a.tests_log)), "crosscheck": ("crosscheck.json", study_crosscheck), "example": ("example_plant.json", study_example),
-            "mechanisms": ("mechanisms.json", study_mechanisms), "corpus": ("corpus.json", lambda: study_corpus(project, scratch)), "repair": ("repair_baselines.json", lambda: study_repair(project, scratch, limits)), "audit": ("audit_baselines.json", lambda: study_audit(project, scratch))}
+            "mechanisms": ("mechanisms.json", study_mechanisms), "corpus": ("corpus.json", lambda: study_corpus(project, scratch)), "repair": ("repair_baselines.json", lambda: study_repair(project, scratch, limits)), "audit": ("audit_baselines.json", lambda: study_audit(project, scratch)),
+            "splits": ("splits.json", lambda: study_splits(project, scratch))}
     for s in stages:
         if s == "derive":
             derive(); continue

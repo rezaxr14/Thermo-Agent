@@ -1,70 +1,70 @@
 {
  "study": "audit",
- "command": "audit.data OUT -n 200 --seed 0; audit.run_eval.run(path, None, seed=0) on test_id and test_ood_topology",
+ "command": "eval.rows.load_split([data/processed, data/processed_arch], 'audit', split)[:100]; audit.run_eval.score(rows, seed=0)",
  "seed": 0,
- "n": 75,
+ "n": 200,
  "splits": {
   "test_id": {
-   "n": 17,
+   "n": 100,
    "ranking_ndcg3_excluding_prime_mover": {
-    "random": 0.699,
-    "first_law": 0.587
+    "random": 0.695,
+    "first_law": 0.63
    },
    "ranking_top1_excluding_prime_mover": {
-    "random": 0.253,
-    "first_law": 0
+    "random": 0.243,
+    "first_law": 0.01
    },
    "rule_change (raise turbine inlet T 10%, else cut engine loss 10%)": {
-    "mean_gain_vs_best": 1.0,
-    "valid": "7/17"
+    "mean_gain_vs_best": 0.635,
+    "valid": "54/100"
    },
    "prediction_baselines_for_the_best_change (a_pred score)": {
-    "predict_zero": 0.0,
-    "predict_mean_relative_change": 0.645
+    "predict_zero": 0.042,
+    "predict_mean_relative_change": 0.461
    },
-   "change_search_evaluations": 11.9,
+   "change_search_evaluations": 12.3,
    "model_evaluations": 1
   },
   "test_ood_topology": {
-   "n": 58,
+   "n": 100,
    "ranking_ndcg3_excluding_prime_mover": {
-    "random": 0.665,
-    "first_law": 0.69
+    "random": 0.65,
+    "first_law": 0.864
    },
    "ranking_top1_excluding_prime_mover": {
-    "random": 0.322,
-    "first_law": 0.121
+    "random": 0.401,
+    "first_law": 0.63
    },
    "rule_change (raise turbine inlet T 10%, else cut engine loss 10%)": {
-    "mean_gain_vs_best": 0.121,
-    "valid": "43/58"
+    "mean_gain_vs_best": 0.471,
+    "valid": "87/100"
    },
    "prediction_baselines_for_the_best_change (a_pred score)": {
-    "predict_zero": 0.177,
-    "predict_mean_relative_change": 0.257
+    "predict_zero": 0.114,
+    "predict_mean_relative_change": 0.359
    },
-   "change_search_evaluations": 11.8,
+   "change_search_evaluations": 11.6,
    "model_evaluations": 1
   }
  },
  "best_change_saving_share": {
   "test_id": {
-   "median": 0.018449895081400332,
-   "min": 0.006645862183935025,
-   "max": 0.053173551625775056,
-   "n": 17
+   "median": 0.01666402044818875,
+   "min": 0.0007351612855858404,
+   "max": 0.05835100826966219,
+   "n": 100
   },
   "test_ood_topology": {
-   "median": 0.0020409790329950395,
-   "min": 0.00045142191962474086,
-   "max": 0.015249213336976934,
-   "n": 58
+   "median": 0.002711361705931536,
+   "min": 0.0006490276196476023,
+   "max": 0.015259535248349389,
+   "n": 100
   },
   "all": {
-   "median": 0.00300991438743494,
-   "min": 0.00045142191962474086,
-   "max": 0.053173551625775056,
-   "n": 75
+   "median": 0.005418712958592385,
+   "min": 0.0006490276196476023,
+   "max": 0.05835100826966219,
+   "n": 200
   }
  }
 }

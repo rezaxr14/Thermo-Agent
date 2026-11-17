@@ -1,6 +1,6 @@
 test_ood_topology
-  efficiency_gt_1 {'n': 41, 'noop': 0, 'search_success': 40, 'search_exact': 34, 'expert_success': 41, 'search_mean_solves_when_solved': 109.7}
-  sign_flip {'n': 48, 'noop': 0, 'search_success': 47, 'search_exact': 37, 'expert_success': 48, 'search_mean_solves_when_solved': 100.4}
-  swapped_ports {'n': 38, 'noop': 0, 'search_success': 37, 'search_exact': 31, 'expert_success': 38, 'search_mean_solves_when_solved': 110.8}
-  unit_slip {'n': 43, 'noop': 0, 'search_success': 42, 'search_exact': 35, 'expert_success': 43, 'search_mean_solves_when_solved': 104.9}
-  wrong_fluid {'n': 30, 'noop': 0, 'search_success': 29, 'search_exact': 25, 'expert_success': 30, 'search_mean_solves_when_solved': 122.3}
+  efficiency_gt_1 {'n': 41, 'noop': 0, 'search_success': 39, 'search_exact': 2, 'expert_success': 41, 'search_mean_solves_when_solved': 7.9}
+  sign_flip {'n': 48, 'noop': 0, 'search_success': 48, 'search_exact': 48, 'expert_success': 48, 'search_mean_solves_when_solved': 9.4}
+  swapped_ports {'n': 38, 'noop': 0, 'search_success': 38, 'search_exact': 38, 'expert_success': 38, 'search_mean_solves_when_solved': 262.6}
+  unit_slip {'n': 43, 'noop': 0, 'search_success': 43, 'search_exact': 39, 'expert_success': 43, 'search_mean_solves_when_solved': 56.9}
+  wrong_fluid {'n': 30, 'noop': 0, 'search_success': 25, 'search_exact': 25, 'expert_success': 30, 'search_mean_solves_when_solved': 283.4}

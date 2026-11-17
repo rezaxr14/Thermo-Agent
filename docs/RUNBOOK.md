@@ -127,15 +127,16 @@ copy); run it before a training session if anything touched `data/`.
 pwsh scripts/baselines.ps1
 ```
 
-Reference values measured on small samples: Repair, verifier-guided search repairs 97 to 100 percent of the
-numeric faults and all of the held-out sign and port faults, but at 114 to 124 solver calls per row (the 60-evaluation
-budget leaves 1 to 3 unsolved rows in each of several classes); exact restoration of the original plant is rarer
-(35 to 49 of 58 to 77 in-distribution rows). Design, enumerating the defaults takes 38 to 44 evaluations and lands
-3.1 to 3.4 percent from the best known design, the polish reaches 0 at 126 to 148 evaluations, and random search with
-12 evaluations is 8.8 to 12.7 percent worse. Ledger, at least one second-law symptom appears in 90 to 100 percent of
-rows by fault type, closure alone is broken in 32 to 100 percent. Audit, first-law ranking has nDCG@3 0.864 against
-0.65 for random and top-1 0.63 against 0.401 (prime mover excluded); the fixed rule "raise turbine inlet temperature
-10 percent" is valid in 87 of 100 plants and captures 47 percent of the best saving on average.
+Reference values measured on the ground-truth datasets: Repair, verifier-guided search repairs 83 to 100 percent of
+the rows by fault class (58 of 65 efficiency-above-1 rows, all unit slips, wrong fluids, sign and port faults) at 8
+to 283 solver calls per row depending on the class; exact restoration of the original plant is rarer, 4 of 65
+efficiency-above-1 and 25 of 30 wrong-fluid rows on held-out diagrams. Design, enumerating the defaults takes 38 to
+44 evaluations and lands 3.1 to 3.4 percent from the best known design, the polish reaches 0 at 126 to 148 evaluations,
+and random search with 12 evaluations is 8.8 to 12.7 percent worse. Ledger, at least one second-law symptom appears in
+90 to 100 percent of rows by fault type, closure alone is broken in 32 to 100 percent. Audit, first-law ranking has
+nDCG@3 0.864 against 0.65 for random and top-1 0.63 against 0.401 (prime mover excluded); the fixed rule "raise
+turbine inlet temperature 10 percent" is valid in 87 of 100 plants and captures 47 percent of the best saving on
+average.
 
 ## 3b. Will GRPO get a learning signal? (CPU, before any GPU time)
 

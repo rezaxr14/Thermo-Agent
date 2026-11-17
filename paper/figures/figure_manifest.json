@@ -139,12 +139,12 @@
    "svg": "figures/svg/fig_training.svg",
    "pdf": "figures/pdf/fig_training.pdf",
    "viewBox": "0 0 1000 884",
-   "caption_stub": "Training pipeline. Tagged sources are combined (harness text on 35 % of rows, failure notes added, prompts above 14000 characters dropped and counted), then SFT on two DDP ranks in fp16 with LoRA r 16, merge, and GRPO per task with G = 4 and 16 prompts per step; reward diagnostics run on the CPU first, and evaluation compares against frontier and other models. Lower panel: rows per split in the small seed-0 run and the architecture corpus; the final corpus sizes and all evaluation results are pending.",
+   "caption_stub": "Training pipeline. Tagged sources are combined (harness text on 35 % of rows, failure notes added, prompts above 11500 characters or 4000 tokens dropped and counted), then SFT on two DDP ranks in fp16 with LoRA r 16, merge, and GRPO per task with G = 4 and 16 prompts per step; reward diagnostics run on the CPU first, and evaluation compares against frontier and other models. Lower panel: rows per split of the ground-truth datasets and the architecture corpus; the corpus has 129,684 rows (116,809 training) and trained-model evaluation results are pending.",
    "alt_text": "Six numbered panels: tagged sources, the combine step with a harness-share bar, note tokens and a prompt-length limit, SFT with token strip and two GPU chips, a reward-diagnostics line chart, a GRPO rollout illustration with reward and advantage bars, and an evaluation panel with a dashed trained-model pill; below, stacked split bars for five datasets.",
    "data_sources": [
     {
      "asset": "assets/splits.json",
-     "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+     "command": "row counts read from data/processed and data/processed_arch; held-out definitions from synth.splits, ledger.faults and design.data.assign_split",
      "seed": 0,
      "n": 1265,
      "kind": "synthetic"
@@ -206,13 +206,15 @@
    "data_sources": [
     {
      "asset": "assets/audit_first_vs_second_law.json",
-     "command": "audit.data OUT -n 200 --seed 0; audit.truth.ranking / first_law_ranking on one plant; audit.run_eval.run(path, None, seed=0)",
+     "command": "eval.rows.load_split([data/processed, data/processed_arch], audit, split)[:100]; audit.run_eval.score(rows, seed=0); one plant: audit.truth.first_law_ranking",
      "seed": 0,
-     "n": 75,
+     "n": 200,
      "kind": "simulation"
     }
    ],
-   "pending": []
+   "pending": [
+    "right-hand bars and sample labels redrawn from the 100+100 row baseline sample"
+   ]
   },
   {
    "figure": "fig_design_baselines",
@@ -324,12 +326,12 @@
    "svg": "figures/svg/fig_corpus.svg",
    "pdf": "figures/pdf/fig_corpus.pdf",
    "viewBox": "0 0 1000 948",
-   "caption_stub": "Corpus composition. (a) The diagram catalog: prime mover and cooling against rejection and ORC, with the district-heat options as dots; engine plants and the steam plant are held out, and added families are pending. (b) True renderings per fault class in the paraphrase module (min to max), with the held-out fault classes hatched. (c) The acceptance funnel from attempts through the physics tool suite to corpus rows, new diagrams and failure-memory notes, drawn as an empty skeleton: every count is pending.",
+   "caption_stub": "Corpus composition. (a) The diagram catalog: prime mover and cooling against rejection and ORC, with the district-heat options as dots; the 9 held-out diagrams are the steam plant and the gas engines with the ideal-rejection boundary. (b) True renderings per fault class in the paraphrase module (min to max), with the held-out fault classes hatched. (c) The acceptance funnel from attempts through the physics tool suite to corpus rows, new diagrams and failure-memory notes, drawn as an empty skeleton: the teacher paths have not been run at scale.",
    "alt_text": "Three panels: a matrix of 64 data-centre diagrams and the steam plant with coloured dots for training and held-out diagrams, horizontal bars of renderings per fault class, and a dashed funnel skeleton with four acceptance-gate cards.",
    "data_sources": [
     {
      "asset": "assets/corpus.json",
-     "command": "synth.architectures.ARCHITECTURES; synth.architectures OUT -n 400 --seed 0; synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
+     "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
      "seed": 0,
      "n": 65,
      "kind": null

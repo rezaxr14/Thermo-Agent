@@ -3,9 +3,9 @@
 \toprule
 Task & Input & Output & Reward channels (weight) & Held-out splits \\
 \midrule
-Repair & plant text, site, solver error or failed checks & \texttt{<diagnosis>}, at most 6 edits & format~0.5, valid~2, site~1, exact~1, minimal~0.5, grounded~0.5 & test ood topology: steam-ORC plant and gas-engine plants; test ood fault: sign flip, swapped ports \\
+Repair & plant text, site, solver error or failed checks & \texttt{<diagnosis>}, at most 6 edits & format~0.5, valid~2, site~1, exact~1, minimal~0.5, grounded~0.5 & test ood fault: sign flip, swapped ports; test ood topology: 9 of 65 diagrams: the steam plant and the 8 gas-engine plants with ideal rejection \\
 Design & site: IT load, chilled load, ambient $T$ and RH, coolant temperatures, optional heat demand and water limit & \texttt{<rationale>}, \texttt{<design>} block & format~0.5, valid~2, quality~2, grounded~0.5 & test ood scale: IT load of 45 MW or more; test ood climate: ambient 305 K or more; test ood load: chilled fraction 0.85 or more \\
-Audit & solved plant with an energy-level summary & \texttt{<analysis>}, \texttt{<ranking>}, one \texttt{<change>}, \texttt{<prediction>} & format~0.5, rank~1.5, valid~1, gain~2, pred~1, grounded~0.5 & test ood topology: steam-ORC plant and gas-engine plants \\
-Ledger repair & exergy ledger of a solved plant (arithmetic lines) & \texttt{<diagnosis>}, \texttt{FIX} lines & format~0.5, closure~1, nonneg~0.5, exact~2.5, minimal~0.5, grounded~0.5 & test ood topology: steam-ORC plant and gas-engine plants; test ood fault: wrong\_stream, dropped\_work, wrong\_ref \\
+Audit & solved plant with an energy-level summary & \texttt{<analysis>}, \texttt{<ranking>}, one \texttt{<change>}, \texttt{<prediction>} & format~0.5, rank~1.5, valid~1, gain~2, pred~1, grounded~0.5 & test ood topology: 9 of 65 diagrams: the steam plant and the 8 gas-engine plants with ideal rejection \\
+Ledger repair & exergy ledger of a solved plant (arithmetic lines) & \texttt{<diagnosis>}, \texttt{FIX} lines & format~0.5, closure~1, nonneg~0.5, exact~2.5, minimal~0.5, grounded~0.5 & test ood fault: dropped\_work, wrong\_ref, wrong\_stream; test ood topology: 9 of 65 diagrams: the steam plant and the 8 gas-engine plants with ideal rejection \\
 \bottomrule
 \end{tabular}\endgroup

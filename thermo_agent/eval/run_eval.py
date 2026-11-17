@@ -1,6 +1,6 @@
-"""python -m thermo_agent.eval.run_eval DATA_DIR [--split test_ood_fault] [--limit 50] : non-LLM baselines on a split."""
+"""python -m thermo_agent.eval.run_eval DATA_DIR... [--split test_ood_fault] [--limit 50] : non-LLM Repair baselines."""
 from __future__ import annotations
-import argparse, json, pathlib, statistics as st
+import argparse, statistics as st
 from ..core.schema import Plant, Site
 from ..synth.faults import apply_patch, _dump
 from ..train.rewards import evaluate
@@ -9,18 +9,7 @@ from .repair import score_patch
 from ..train.prompts import describe_failure
 
 
-def run(data_dirs, split, limit=None, by_fault=False) -> dict:
-    from ..eval.rows import load_split
-    rows = load_split(data_dirs, "repair", split)[:limit]
-    if by_fault:
-        out = {}
-        for ft in sorted({r["fault_type"] for r in rows}):
-            sub = [r for r in rows if r["fault_type"] == ft]
-            import tempfile, os
-            with tempfile.NamedTemporaryFile("w", suffix=".jsonl", delete=False) as f:
-                f.write("\n".join(json.dumps(r) for r in sub))
-            out[ft] = run(data_dirs, split, len(sub), False); os.unlink(f.name)
-        return out
+def _score_rows(rows) -> dict:
     out = {"n": len(rows), "noop": 0, "search_success": 0, "search_exact": 0, "search_solves": [], "expert_success": 0}
     for r in rows:
         broken = Plant.model_validate_json(r["plant_broken"]); orig = Plant.model_validate_json(r["plant_original"])
@@ -33,6 +22,17 @@ def run(data_dirs, split, limit=None, by_fault=False) -> dict:
         out["expert_success"] += int(ev["physics_ok"] and ev["site_ok"] is not False)
     s = out.pop("search_solves"); out["search_mean_solves_when_solved"] = round(st.mean(s), 1) if s else None
     return out
+
+
+def run(data_dirs, split, limit=None, by_fault=False) -> dict:
+    from ..eval.rows import load_split
+    rows = load_split(data_dirs, "repair", split)[:limit]
+    if by_fault:
+        # Group the *sampled* rows. Re-reading the split per fault (the old behaviour) scored the first len(sub)
+        # rows of the whole split instead of that fault's rows, so every per-fault number was mislabelled.
+        return {ft: _score_rows([r for r in rows if r["fault_type"] == ft])
+                for ft in sorted({r["fault_type"] for r in rows})}
+    return _score_rows(rows)
 
 
 if __name__ == "__main__":
