@@ -102,7 +102,7 @@ def model_init_kwargs(dtype: str) -> dict:
     from transformers import AutoModelForCausalLM
 
     params = inspect.signature(AutoModelForCausalLM.from_pretrained).parameters
-    return {"dtype": dtype} if "dtype" in params else {"torch_dtype": getattr(torch, dtype)}
+    return {"dtype": getattr(torch, dtype)} if "dtype" in params else {"torch_dtype": getattr(torch, dtype)}
 
 
 def describe_runtime() -> dict:
