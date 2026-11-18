@@ -6,14 +6,14 @@ $py = if (Test-Path '.venv/Scripts/python.exe') { '.venv/Scripts/python.exe' } e
 New-Item -ItemType Directory -Force -Path 'reports' | Out-Null
 
 $merged = 'data/teacher_runs/eval_all.jsonl'
-Get-ChildItem 'data/teacher_runs' -Filter 'eval_*.jsonl' | Where-Object Name -ne 'eval_all.jsonl' |
+Get-ChildItem 'data/teacher_runs' -Filter 'eval_test_*.jsonl' | Where-Object Name -notlike 'eval_gptnano_*' |
     ForEach-Object { Get-Content $_.FullName } | Set-Content $merged -Encoding utf8
 "merged frontier eval journal: $merged"
 
 $arms = @(
     @{ name='frontier_zero'; replay='data/teacher_runs/eval_all.jsonl'; harness='none'; family='frontier'; tools='none' },
-    @{ name='frontier_tools'; replay='data/teacher_runs/harness_completions.jsonl'; harness='tools'; family='frontier'; tools='tools' },
-    @{ name='other_model'; replay='data/teacher_runs/completions_gptnano.jsonl'; harness='none'; family='domain-model'; tools='none' }
+    @{ name='frontier_tools'; replay='data/teacher_runs/harness_eval_completions.jsonl'; harness='tools'; family='frontier'; tools='tools' },
+    @{ name='other_model'; replay='data/teacher_runs/eval_gptnano_all.jsonl'; harness='none'; family='domain-model'; tools='none' }
 )
 foreach ($a in $arms) {
     if (-not (Test-Path $a.replay)) { "skip $($a.name): missing $($a.replay)"; continue }

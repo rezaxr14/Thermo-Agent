@@ -59,6 +59,8 @@ def trace_of(chat):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--export-dir", default="data/frontier_export")
+    ap.add_argument("--split", default="train")
     ap.add_argument("--limit", type=int, default=200)
     ap.add_argument("--model", default="google/gemini-3.1-flash-lite-preview")
     ap.add_argument("--reserve", type=float, default=0.5)
@@ -73,7 +75,7 @@ def main():
     from kaggle_benchmarks.tools.base import ToolInvocationLimitExhausted
     from kaggle_benchmarks.tools.native import native_tool_agent
 
-    exports = load_exports("data/frontier_export")
+    exports = load_exports(a.export_dir, split=a.split)
     rows = list(exports.values())
     done = {r["id"] for r in cli_runner.journal(OUT) if r.get("completion") and not r.get("error")}
     pending = [r for r in rows if r["id"] not in done][:a.limit]
