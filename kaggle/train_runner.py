@@ -66,7 +66,8 @@ else:
 
 # %%
 print(ddp.topology_line())
-assert ddp.world_size_from_env() == 2, "start this notebook with Accelerator: GPU T4 x2"
+import torch
+assert torch.cuda.device_count() == 2, "start this notebook with Accelerator: GPU T4 x2 (two T4s visible)"
 assert ddp.dtype_for_capability(7, 5) == "float16", "T4 must run fp16"
 
 # %%

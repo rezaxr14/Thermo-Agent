@@ -706,44 +706,44 @@
  "corpus": {
   "source": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
   "splits": {
-   "test_id": 1773,
+   "test_id": 1744,
    "test_ood_climate": 615,
-   "test_ood_fault": 6399,
+   "test_ood_fault": 6326,
    "test_ood_load": 411,
    "test_ood_scale": 460,
-   "test_ood_topology": 1960,
-   "train": 109151,
-   "val": 1886
+   "test_ood_topology": 1956,
+   "train": 109659,
+   "val": 1853
   },
   "tasks": {
    "audit": {
-    "test_id": 322,
+    "test_id": 321,
     "test_ood_fault": 0,
     "test_ood_topology": 238,
-    "train": 2576,
-    "val": 339
+    "train": 2564,
+    "val": 338
    },
    "design": {
     "test_id": 204,
     "test_ood_climate": 615,
     "test_ood_load": 411,
     "test_ood_scale": 460,
-    "train": 1768,
+    "train": 1894,
     "val": 235
    },
    "ledger": {
-    "test_id": 687,
-    "test_ood_fault": 2433,
-    "test_ood_topology": 858,
-    "train": 5247,
-    "val": 699
+    "test_id": 656,
+    "test_ood_fault": 2360,
+    "test_ood_topology": 854,
+    "train": 5165,
+    "val": 666
    },
    "repair": {
-    "test_id": 560,
+    "test_id": 563,
     "test_ood_fault": 3966,
     "test_ood_topology": 864,
-    "train": 99560,
-    "val": 613
+    "train": 100036,
+    "val": 614
    }
   }
  },
