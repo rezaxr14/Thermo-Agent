@@ -28,11 +28,11 @@ OUT = pathlib.Path("data/teacher_runs/harness_completions.jsonl")
 PREFIX = "teacher/harness_progress.jsonl"
 
 
-    def system_prompt(row):
-        original = "\n\n".join(m["content"] for m in row["prompt"] if m["role"] == "system")
-        return (original + "\n\nYou may call check_answer(answer) at most TWICE to test a candidate against our "
-                "physics verifiers. After at most two calls, STOP using tools and return the final answer in the "
-                "task's XML tags exactly as specified above. Never invent numbers.")
+def system_prompt(row):
+    original = "\n\n".join(m["content"] for m in row["prompt"] if m["role"] == "system")
+    return (original + "\n\nYou may call check_answer(answer) at most TWICE to test a candidate against our "
+            "physics verifiers. After at most two calls, STOP using tools and return the final answer in the "
+            "task's XML tags exactly as specified above. Never invent numbers.")
 
 
 def usage_of(chat):
