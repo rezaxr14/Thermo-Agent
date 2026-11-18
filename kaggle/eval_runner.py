@@ -16,12 +16,28 @@ and resumable: reports are never overwritten unless `FORCE=1`.
 # tools (replayed from Kaggle answers), and any other model served behind an OpenAI-compatible endpoint.
 
 # %%
+# Bootstrap with the standard library only: unpack the code bundle before importing thermo_agent.
 import json
 import os
 import pathlib
+import shutil
 import subprocess
 import sys
-from thermo_agent.kaggle_notebook import WORK, find_input, run, setup, token
+import zipfile
+
+WORK = pathlib.Path("/kaggle/working")
+ROOT = WORK / "thermo-agent"
+bundles = sorted(pathlib.Path("/kaggle/input").rglob("kaggle_bundle.zip"))
+if not bundles:
+    raise SystemExit("attach the Kaggle dataset thermo-agent-code")
+shutil.rmtree(ROOT, ignore_errors=True)
+with zipfile.ZipFile(bundles[0]) as zf:
+    zf.extractall(WORK)
+sys.path.insert(0, str(ROOT))
+os.chdir(ROOT)
+
+# %%
+from thermo_agent.kaggle_notebook import find_input, run, setup, token
 
 ROOT = setup()
 REPORTS = ROOT / "reports"

@@ -1,0 +1,59 @@
+{
+ "n": 120,
+ "by_task": {
+  "repair": {
+   "n": 30,
+   "answered": 30,
+   "with_tools": 30,
+   "calls": 45,
+   "errors": 0,
+   "reasoning": 0,
+   "calls_per_answer": 1.5,
+   "answer_rate": 1.0
+  },
+  "ledger": {
+   "n": 30,
+   "answered": 30,
+   "with_tools": 26,
+   "calls": 63,
+   "errors": 0,
+   "reasoning": 0,
+   "calls_per_answer": 2.1,
+   "answer_rate": 1.0
+  },
+  "audit": {
+   "n": 30,
+   "answered": 30,
+   "with_tools": 18,
+   "calls": 52,
+   "errors": 0,
+   "reasoning": 0,
+   "calls_per_answer": 1.73,
+   "answer_rate": 1.0
+  },
+  "design": {
+   "n": 30,
+   "answered": 30,
+   "with_tools": 30,
+   "calls": 82,
+   "errors": 0,
+   "reasoning": 0,
+   "calls_per_answer": 2.73,
+   "answer_rate": 1.0
+  }
+ },
+ "tools": {
+  "check_answer": 242
+ },
+ "usage": {
+  "attempts": 120,
+  "input_tokens": 532239,
+  "output_tokens": 46425,
+  "cost_nanodollars": 202697250,
+  "latency_ms": 326210,
+  "models": {
+   "google/gemini-3.1-flash-lite-preview": 120
+  },
+  "cost_usd": 0.202697
+ }
+}

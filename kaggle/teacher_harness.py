@@ -17,12 +17,25 @@ trace. The fourth arm is our trained 4B model; zero-shot and prompt-only frontie
 # with fresh quota can resume.
 
 # %%
+# Bootstrap with the standard library only: unpack the code bundle before importing thermo_agent.
 import json
 import os
 import pathlib
+import shutil
 import sys
 import time
-from thermo_agent.kaggle_notebook import WORK, find_input, setup, token
+import zipfile
+
+WORK = pathlib.Path("/kaggle/working")
+ROOT = WORK / "thermo-agent"
+bundles = sorted(pathlib.Path("/kaggle/input").rglob("kaggle_bundle.zip"))
+if not bundles:
+    raise SystemExit("attach the Kaggle dataset thermo-agent-code")
+shutil.rmtree(ROOT, ignore_errors=True)
+with zipfile.ZipFile(bundles[0]) as zf:
+    zf.extractall(WORK)
+sys.path.insert(0, str(ROOT))
+os.chdir(ROOT)
 
 OUT = WORK / "harness_completions.jsonl"
 REPO = "Reza-Nadimi/thermo-agent-checkpoints"
@@ -32,6 +45,8 @@ LIMIT = 0
 TOOL_ROUNDS = 3
 
 # %%
+from thermo_agent.kaggle_notebook import find_input, setup, token
+
 ROOT = setup(corpora=())          # this arm needs the code and prompt datasets, not the training corpora
 
 from thermo_agent.teacher import progress, validate

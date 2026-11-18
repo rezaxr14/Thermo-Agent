@@ -1,0 +1,742 @@
+{
+ "arms": 3,
+ "provenance": {
+  "frontier_tools": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_frontier_tools.json",
+  "frontier_zero": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_frontier_zero.json",
+  "other_model": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_other_model.json"
+ },
+ "rows": [
+  {
+   "adapter": null,
+   "arm": "frontier_zero",
+   "ci95": {
+    "success": [
+     0.455,
+     0.781
+    ]
+   },
+   "display_name": "frontier_zero",
+   "harness": "none",
+   "metrics": {
+    "exact_on_deducible": 0.3704,
+    "first_turn_success": 0.6333,
+    "mean_solves": 1.3333,
+    "success": 0.6333
+   },
+   "model": "frontier_zero",
+   "model_family": "frontier",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_frontier_zero.json",
+   "split": "test_id",
+   "task": "repair",
+   "tool_access": "none",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "frontier_zero",
+   "ci95": {
+    "success": [
+     0.302,
+     0.639
+    ]
+   },
+   "display_name": "frontier_zero",
+   "harness": "none",
+   "metrics": {
+    "exact_on_deducible": 0.3333,
+    "first_turn_success": 0.4667,
+    "mean_solves": 0.7667,
+    "success": 0.4667
+   },
+   "model": "frontier_zero",
+   "model_family": "frontier",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_frontier_zero.json",
+   "split": "test_ood_fault",
+   "task": "repair",
+   "tool_access": "none",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "frontier_zero",
+   "ci95": {
+    "success": [
+     0.274,
+     0.608
+    ]
+   },
+   "display_name": "frontier_zero",
+   "harness": "none",
+   "metrics": {
+    "exact_on_deducible": 0.1034,
+    "first_turn_success": 0.4333,
+    "mean_solves": 1.1333,
+    "success": 0.4333
+   },
+   "model": "frontier_zero",
+   "model_family": "frontier",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_frontier_zero.json",
+   "split": "test_ood_topology",
+   "task": "repair",
+   "tool_access": "none",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "frontier_zero",
+   "ci95": {
+    "valid": [
+     0.073,
+     0.336
+    ],
+    "within_1pct": [
+     0.0,
+     0.114
+    ]
+   },
+   "display_name": "frontier_zero",
+   "harness": "none",
+   "metrics": {
+    "mean_evals": 0.1667,
+    "mean_gap_pct": 13.0899,
+    "valid": 0.1667,
+    "within_1pct": 0
+   },
+   "model": "frontier_zero",
+   "model_family": "frontier",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_frontier_zero.json",
+   "split": "test_id",
+   "task": "design",
+   "tool_access": "none",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "frontier_zero",
+   "ci95": {
+    "valid": [
+     0.095,
+     0.373
+    ],
+    "within_1pct": [
+     0.0,
+     0.114
+    ]
+   },
+   "display_name": "frontier_zero",
+   "harness": "none",
+   "metrics": {
+    "mean_evals": 0.3,
+    "mean_gap_pct": 24.0433,
+    "valid": 0.2,
+    "within_1pct": 0
+   },
+   "model": "frontier_zero",
+   "model_family": "frontier",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_frontier_zero.json",
+   "split": "test_ood_climate",
+   "task": "design",
+   "tool_access": "none",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "frontier_zero",
+   "ci95": {
+    "valid": [
+     0.018,
+     0.213
+    ],
+    "within_1pct": [
+     0.0,
+     0.114
+    ]
+   },
+   "display_name": "frontier_zero",
+   "harness": "none",
+   "metrics": {
+    "mean_evals": 0.0667,
+    "mean_gap_pct": 15.2555,
+    "valid": 0.0667,
+    "within_1pct": 0
+   },
+   "model": "frontier_zero",
+   "model_family": "frontier",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_frontier_zero.json",
+   "split": "test_ood_scale",
+   "task": "design",
+   "tool_access": "none",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "frontier_zero",
+   "ci95": {
+    "valid": [
+     0.035,
+     0.256
+    ],
+    "within_1pct": [
+     0.0,
+     0.114
+    ]
+   },
+   "display_name": "frontier_zero",
+   "harness": "none",
+   "metrics": {
+    "mean_evals": 0.1,
+    "mean_gap_pct": 8.1031,
+    "valid": 0.1,
+    "within_1pct": 0
+   },
+   "model": "frontier_zero",
+   "model_family": "frontier",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_frontier_zero.json",
+   "split": "test_ood_load",
+   "task": "design",
+   "tool_access": "none",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "frontier_zero",
+   "ci95": {},
+   "display_name": "frontier_zero",
+   "harness": "none",
+   "metrics": {
+    "gain": 0.0,
+    "pred": 0.0,
+    "rank": 0.0856,
+    "valid": 0.1
+   },
+   "model": "frontier_zero",
+   "model_family": "frontier",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_frontier_zero.json",
+   "split": "test_id",
+   "task": "audit",
+   "tool_access": "none",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "frontier_zero",
+   "ci95": {},
+   "display_name": "frontier_zero",
+   "harness": "none",
+   "metrics": {
+    "gain": 0.0,
+    "pred": 0.0,
+    "rank": 0.0333,
+    "valid": 0.0067
+   },
+   "model": "frontier_zero",
+   "model_family": "frontier",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_frontier_zero.json",
+   "split": "test_ood_topology",
+   "task": "audit",
+   "tool_access": "none",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "frontier_zero",
+   "ci95": {
+    "all_correct": [
+     0.0,
+     0.114
+    ]
+   },
+   "display_name": "frontier_zero",
+   "harness": "none",
+   "metrics": {
+    "all_correct": 0.0,
+    "closure": 0.0275,
+    "exact": 0.0
+   },
+   "model": "frontier_zero",
+   "model_family": "frontier",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_frontier_zero.json",
+   "split": "test_id",
+   "task": "ledger",
+   "tool_access": "none",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "frontier_zero",
+   "ci95": {
+    "all_correct": [
+     0.0,
+     0.114
+    ]
+   },
+   "display_name": "frontier_zero",
+   "harness": "none",
+   "metrics": {
+    "all_correct": 0.0,
+    "closure": 0.0,
+    "exact": 0.0167
+   },
+   "model": "frontier_zero",
+   "model_family": "frontier",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_frontier_zero.json",
+   "split": "test_ood_fault",
+   "task": "ledger",
+   "tool_access": "none",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "frontier_zero",
+   "ci95": {
+    "all_correct": [
+     0.018,
+     0.213
+    ]
+   },
+   "display_name": "frontier_zero",
+   "harness": "none",
+   "metrics": {
+    "all_correct": 0.0667,
+    "closure": 0.0667,
+    "exact": 0.0667
+   },
+   "model": "frontier_zero",
+   "model_family": "frontier",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_frontier_zero.json",
+   "split": "test_ood_topology",
+   "task": "ledger",
+   "tool_access": "none",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "frontier_tools",
+   "ci95": {
+    "success": [
+     0.488,
+     0.808
+    ]
+   },
+   "display_name": "frontier_tools",
+   "harness": "none",
+   "metrics": {
+    "exact_on_deducible": 0.3704,
+    "first_turn_success": 0.6667,
+    "mean_solves": 1.0667,
+    "success": 0.6667
+   },
+   "model": "frontier_tools",
+   "model_family": "frontier",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_frontier_tools.json",
+   "split": "test_id",
+   "task": "repair",
+   "tool_access": "tools",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "frontier_tools",
+   "ci95": {
+    "valid": [
+     0.274,
+     0.608
+    ],
+    "within_1pct": [
+     0.0,
+     0.114
+    ]
+   },
+   "display_name": "frontier_tools",
+   "harness": "none",
+   "metrics": {
+    "mean_evals": 0.7333,
+    "mean_gap_pct": 16.3699,
+    "valid": 0.4333,
+    "within_1pct": 0
+   },
+   "model": "frontier_tools",
+   "model_family": "frontier",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_frontier_tools.json",
+   "split": "test_id",
+   "task": "design",
+   "tool_access": "tools",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "frontier_tools",
+   "ci95": {},
+   "display_name": "frontier_tools",
+   "harness": "none",
+   "metrics": {
+    "gain": 0.0,
+    "pred": 0.0154,
+    "rank": 0.1287,
+    "valid": 0.1
+   },
+   "model": "frontier_tools",
+   "model_family": "frontier",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_frontier_tools.json",
+   "split": "test_id",
+   "task": "audit",
+   "tool_access": "tools",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "frontier_tools",
+   "ci95": {
+    "all_correct": [
+     0.591,
+     0.882
+    ]
+   },
+   "display_name": "frontier_tools",
+   "harness": "none",
+   "metrics": {
+    "all_correct": 0.7667,
+    "closure": 0.917,
+    "exact": 0.7667
+   },
+   "model": "frontier_tools",
+   "model_family": "frontier",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_frontier_tools.json",
+   "split": "test_id",
+   "task": "ledger",
+   "tool_access": "tools",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "other_model",
+   "ci95": {
+    "success": [
+     0.142,
+     0.444
+    ]
+   },
+   "display_name": "other_model",
+   "harness": "none",
+   "metrics": {
+    "exact_on_deducible": 0.2222,
+    "first_turn_success": 0.2667,
+    "mean_solves": 0.6667,
+    "success": 0.2667
+   },
+   "model": "other_model",
+   "model_family": "domain-model",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_other_model.json",
+   "split": "test_id",
+   "task": "repair",
+   "tool_access": "none",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "other_model",
+   "ci95": {
+    "success": [
+     0.332,
+     0.668
+    ]
+   },
+   "display_name": "other_model",
+   "harness": "none",
+   "metrics": {
+    "exact_on_deducible": 0.5,
+    "first_turn_success": 0.5,
+    "mean_solves": 1,
+    "success": 0.5
+   },
+   "model": "other_model",
+   "model_family": "domain-model",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_other_model.json",
+   "split": "test_ood_fault",
+   "task": "repair",
+   "tool_access": "none",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "other_model",
+   "ci95": {
+    "success": [
+     0.192,
+     0.512
+    ]
+   },
+   "display_name": "other_model",
+   "harness": "none",
+   "metrics": {
+    "exact_on_deducible": 0.1724,
+    "first_turn_success": 0.3333,
+    "mean_solves": 0.7333,
+    "success": 0.3333
+   },
+   "model": "other_model",
+   "model_family": "domain-model",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_other_model.json",
+   "split": "test_ood_topology",
+   "task": "repair",
+   "tool_access": "none",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "other_model",
+   "ci95": {
+    "valid": [
+     0.073,
+     0.336
+    ],
+    "within_1pct": [
+     0.0,
+     0.114
+    ]
+   },
+   "display_name": "other_model",
+   "harness": "none",
+   "metrics": {
+    "mean_evals": 0.1667,
+    "mean_gap_pct": 18.7144,
+    "valid": 0.1667,
+    "within_1pct": 0
+   },
+   "model": "other_model",
+   "model_family": "domain-model",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_other_model.json",
+   "split": "test_id",
+   "task": "design",
+   "tool_access": "none",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "other_model",
+   "ci95": {
+    "valid": [
+     0.167,
+     0.479
+    ],
+    "within_1pct": [
+     0.0,
+     0.114
+    ]
+   },
+   "display_name": "other_model",
+   "harness": "none",
+   "metrics": {
+    "mean_evals": 0.3,
+    "mean_gap_pct": 18.8897,
+    "valid": 0.3,
+    "within_1pct": 0
+   },
+   "model": "other_model",
+   "model_family": "domain-model",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_other_model.json",
+   "split": "test_ood_climate",
+   "task": "design",
+   "tool_access": "none",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "other_model",
+   "ci95": {
+    "valid": [
+     0.073,
+     0.336
+    ],
+    "within_1pct": [
+     0.0,
+     0.114
+    ]
+   },
+   "display_name": "other_model",
+   "harness": "none",
+   "metrics": {
+    "mean_evals": 0.1667,
+    "mean_gap_pct": 13.553,
+    "valid": 0.1667,
+    "within_1pct": 0
+   },
+   "model": "other_model",
+   "model_family": "domain-model",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_other_model.json",
+   "split": "test_ood_scale",
+   "task": "design",
+   "tool_access": "none",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "other_model",
+   "ci95": {
+    "valid": [
+     0.118,
+     0.409
+    ],
+    "within_1pct": [
+     0.0,
+     0.114
+    ]
+   },
+   "display_name": "other_model",
+   "harness": "none",
+   "metrics": {
+    "mean_evals": 0.2333,
+    "mean_gap_pct": 11.5849,
+    "valid": 0.2333,
+    "within_1pct": 0
+   },
+   "model": "other_model",
+   "model_family": "domain-model",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_other_model.json",
+   "split": "test_ood_load",
+   "task": "design",
+   "tool_access": "none",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "other_model",
+   "ci95": {},
+   "display_name": "other_model",
+   "harness": "none",
+   "metrics": {
+    "gain": 0.0,
+    "pred": 0.0,
+    "rank": 0.0,
+    "valid": 0.0
+   },
+   "model": "other_model",
+   "model_family": "domain-model",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_other_model.json",
+   "split": "test_id",
+   "task": "audit",
+   "tool_access": "none",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "other_model",
+   "ci95": {},
+   "display_name": "other_model",
+   "harness": "none",
+   "metrics": {
+    "gain": 0.0,
+    "pred": 0.0,
+    "rank": 0.0,
+    "valid": 0.0
+   },
+   "model": "other_model",
+   "model_family": "domain-model",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_other_model.json",
+   "split": "test_ood_topology",
+   "task": "audit",
+   "tool_access": "none",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "other_model",
+   "ci95": {
+    "all_correct": [
+     0.118,
+     0.409
+    ]
+   },
+   "display_name": "other_model",
+   "harness": "none",
+   "metrics": {
+    "all_correct": 0.2333,
+    "closure": 0.5271,
+    "exact": 0.25
+   },
+   "model": "other_model",
+   "model_family": "domain-model",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_other_model.json",
+   "split": "test_id",
+   "task": "ledger",
+   "tool_access": "none",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "other_model",
+   "ci95": {
+    "all_correct": [
+     0.053,
+     0.297
+    ]
+   },
+   "display_name": "other_model",
+   "harness": "none",
+   "metrics": {
+    "all_correct": 0.1333,
+    "closure": 0.1666,
+    "exact": 0.1667
+   },
+   "model": "other_model",
+   "model_family": "domain-model",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_other_model.json",
+   "split": "test_ood_fault",
+   "task": "ledger",
+   "tool_access": "none",
+   "zero_shot": true
+  },
+  {
+   "adapter": null,
+   "arm": "other_model",
+   "ci95": {
+    "all_correct": [
+     0.118,
+     0.409
+    ]
+   },
+   "display_name": "other_model",
+   "harness": "none",
+   "metrics": {
+    "all_correct": 0.2333,
+    "closure": 0.3544,
+    "exact": 0.2833
+   },
+   "model": "other_model",
+   "model_family": "domain-model",
+   "n": 30,
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_other_model.json",
+   "split": "test_ood_topology",
+   "task": "ledger",
+   "tool_access": "none",
+   "zero_shot": true
+  }
+ ]
+}

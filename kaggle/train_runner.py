@@ -19,12 +19,29 @@ Kaggle datasets; the HF token comes from Kaggle Secrets, never from the notebook
 # last checkpoint in `Reza-Nadimi/thermo-agent-checkpoints`.
 
 # %%
+# Bootstrap with the standard library only: the code bundle is not on sys.path until it is unpacked.
 import os
 import pathlib
+import shutil
 import sys
+import zipfile
+
+WORK = pathlib.Path("/kaggle/working")
+ROOT = WORK / "thermo-agent"
+bundles = sorted(pathlib.Path("/kaggle/input").rglob("kaggle_bundle.zip"))
+if not bundles:
+    raise SystemExit("attach the Kaggle dataset thermo-agent-code")
+shutil.rmtree(ROOT, ignore_errors=True)
+with zipfile.ZipFile(bundles[0]) as zf:
+    zf.extractall(WORK)
+sys.path.insert(0, str(ROOT))
+os.chdir(ROOT)
+print("code unpacked at", ROOT)
+
+# %%
 from thermo_agent.kaggle_notebook import WORK, find_input, run, setup, token
 
-ROOT = setup()
+ROOT = setup()   # install dependencies and copy the corpora
 print("code and corpora ready at", ROOT)
 
 # %%
