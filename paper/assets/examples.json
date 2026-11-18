@@ -548,8 +548,8 @@
     "harness": "agents+skills",
     "memory_notes": [
      "repair-rep-0-00000-279e8be7",
-     "repair-rep-0-00020-a0ac6454",
-     "repair-rep-1-00020-08c1c7f9"
+     "repair-rep-109-00010#v4-742c7dc4",
+     "repair-rep-130-00000#v5-8e8aa4ef"
     ]
    },
    "file": "data\\sft\\repair_train.jsonl",
@@ -567,8 +567,8 @@
     "harness": "agents+skills",
     "memory_notes": [
      "repair-rep-0-00000-279e8be7",
-     "repair-rep-0-00020-a0ac6454",
-     "repair-rep-1-00020-08c1c7f9"
+     "repair-rep-109-00010#v4-742c7dc4",
+     "repair-rep-130-00000#v5-8e8aa4ef"
     ]
    },
    "file": "data\\sft\\repair_train.jsonl",
@@ -578,9 +578,269 @@
    "task": "repair",
    "title": "SFT row with harness and memory: repair",
    "topology": "dc_electric"
+  },
+  {
+   "fault": null,
+   "fields": {
+    "completion": "<diagnosis>E[fuel] lacks the flow factor m[fuel] that the other stream lines have; it evaluates to 52.32 MW. the term for stream s5 is missing from ED[HX]; ED[HX] evaluates to -6.587 MW, but destruction is inlet exergy minus outlet exergy minus work.</diagnosis>\n<fix>\nFIX E[fuel] = m[fuel]*(h[fuel] - T0*s[fuel] - g0[fuel] + ech[fuel])/1e6\nFIX ED[HX] = E[s5] + E[hw_ret] - E[s6] - E[hw_hot]\n</fix>",
+    "harness": "agents+skills",
+    "memory_notes": [
+     "ledger-led-0-04685-3f94f051",
+     "ledger-led-0-00287-938be370",
+     "ledger-led-0-00951-25099b23"
+    ]
+   },
+   "file": "data\\sft\\ledger_train.jsonl",
+   "id": "led-0-00000",
+   "source": "sft",
+   "split": "train",
+   "task": "ledger",
+   "title": "SFT row with harness and memory: ledger",
+   "topology": "dc_absorption"
+  },
+  {
+   "fault": null,
+   "fields": {
+    "completion": "<diagnosis>the term for AC in ED[AC] is multiplied by 0.001, which no balance has; ED[AC] evaluates to -46.26 MW, but destruction is inlet exergy minus outlet exergy minus work. E[chw_sup] adds T0*s[chw_sup] where the other stream lines subtract it; it evaluates to 103.2 MW.</diagnosis>\n<fix>\nFIX ED[AC] = E[air] - E[s2] - W[AC]\nFIX E[chw_sup] = m[chw_sup]*(h[chw_sup] - T0*s[chw_sup] - g0[chw_sup] + ech[chw_sup])/1e6\n</fix>",
+    "harness": "agents+skills",
+    "memory_notes": [
+     "ledger-led-0-00362-25099b23",
+     "freq-ledger-f62c78a3",
+     "ledger-led-0-07324-679345b5"
+    ]
+   },
+   "file": "data\\sft\\ledger_train.jsonl",
+   "id": "led-0-00003",
+   "source": "sft",
+   "split": "train",
+   "task": "ledger",
+   "title": "SFT row with harness and memory: ledger",
+   "topology": "dc_electric"
+  },
+  {
+   "fields": {
+    "completion": "<rationale>\nTo meet the 32.2 MW IT load and 16.6 MW cooling load without grid import, a gas turbine prime mover is selected for its high-grade exhaust heat, which is essential for driving the absorption chillers. A turbine PR of 18 and T4 of 1450 K provide sufficient exhaust temperature to satisfy the absorption chiller generator requirements (T_hw = 365 K). A wet cooling rejection system is chosen to maintain high chiller efficiency given the ambient temperature of 303.95 K. The plant configuration ensures mass and energy balance closure while keeping the fuel consumption minimal by leveraging the high-temperature exhaust for cooling.\n</rationale>\n\n<design>\nprime_mover = turbine\ncooling = a ...",
+    "validation": {
+     "reasons": [
+      "design accepted"
+     ],
+     "reward": 1.0
+    }
+   },
+   "file": "data\\frontier\\frontier_design_train.jsonl",
+   "id": "des-0-01146-t-google-gemini-3-1-flash-lite-preview",
+   "source": "frontier",
+   "split": "train",
+   "task": "design",
+   "title": "Frontier answer accepted by the tool suite",
+   "topology": null
+  },
+  {
+   "fields": {
+    "completion": "<rationale>\nTo meet the 9.56 MW IT load and 3.79 MW cooling load without grid import, a gas turbine prime mover is selected for its high power density and high-grade exhaust heat. The exhaust is utilized for both the 2.30 MW heat demand and an absorption chiller to minimize electric cooling load. A dry rejection system is chosen to respect water constraints. The turbine parameters (T4=1550 K, PR=22) ensure sufficient power generation and exhaust temperature for the absorption cycle. The absorption chiller operates at 373 K to maintain efficient heat transfer, and the ORC bottoming cycle is omitted to prioritize direct heat utilization for the site's thermal demand.\n</rationale>\n\n<design>\npri ...",
+    "validation": {
+     "reasons": [
+      "design accepted"
+     ],
+     "reward": 1.0
+    }
+   },
+   "file": "data\\frontier\\frontier_design_train.jsonl",
+   "id": "des-0-02780-t-google-gemini-3-1-flash-lite-preview",
+   "source": "frontier",
+   "split": "train",
+   "task": "design",
+   "title": "Frontier answer accepted by the tool suite",
+   "topology": null
+  },
+  {
+   "fields": {
+    "completion": "<diagnosis>\nThe ledger contains an incorrect factor in the exergy destruction calculation for the DC component (ED[DC] uses 1000*E[chw_sup] instead of E[chw_sup]) and an incorrect ambient temperature T0 (273.15 instead of 289.71547708467085).\n</diagnosis>\n\n<fix>\nFIX T0 = 289.71547708467085\nFIX ED[DC] = E[chw_sup] - E[chw_ret] - W[DC]\n</fix>",
+    "validation": {
+     "reasons": [
+      "ledger repaired"
+     ],
+     "reward": 1.0
+    }
+   },
+   "file": "data\\frontier\\frontier_ledger_train.jsonl",
+   "id": "led-0-04143-t-google-gemini-3-1-flash-lite-preview",
+   "source": "frontier",
+   "split": "train",
+   "task": "ledger",
+   "title": "Frontier answer accepted by the tool suite",
+   "topology": "dc_electric"
+  },
+  {
+   "fields": {
+    "completion": "<diagnosis>\nThe ledger for ED[ENG] fails to account for the outlet stream E[s5], leading to a closure residual of 37.38 MW.\n</diagnosis>\n\n<fix>\nFIX ED[ENG] = E[air] + E[fuel] - E[s5] - W[ENG]\n</fix>",
+    "validation": {
+     "reasons": [
+      "ledger repaired"
+     ],
+     "reward": 1.0
+    }
+   },
+   "file": "data\\frontier\\frontier_ledger_train.jsonl",
+   "id": "led-0-06893-t-google-gemini-3-1-flash-lite-preview",
+   "source": "frontier",
+   "split": "train",
+   "task": "ledger",
+   "title": "Frontier answer accepted by the tool suite",
+   "topology": "dc_engine_electric"
+  },
+  {
+   "fields": {
+    "completion": "<diagnosis>\nThe solver error E_FLUE_MISMATCH occurs because stream s5, connected to the turbine outlet (GT.out), is incorrectly defined as Water. It must be a gas stream (FLUE) to match the turbine exhaust.\n</diagnosis>\n\n<edits>\nFLUID @s5 = FLUE\n</edits>",
+    "validation": {
+     "reasons": [
+      "restored a valid plant exactly"
+     ],
+     "reward": 1.0
+    }
+   },
+   "file": "data\\frontier\\frontier_repair_train.jsonl",
+   "id": "rep-70-00009-t-google-gemini-3-1-flash-lite-preview",
+   "source": "frontier",
+   "split": "train",
+   "task": "repair",
+   "title": "Frontier answer accepted by the tool suite",
+   "topology": "dc_electric"
+  },
+  {
+   "fields": {
+    "completion": "<diagnosis>\nThe compressor efficiency `AC.eta_s` is provided as a percentage (84.812339) instead of a fraction, causing a V6_unit_and_range failure. Additionally, the negative exergy destruction in the compressor indicates an inconsistent state likely resulting from the efficiency error.\n</diagnosis>\n\n<edits>\nSET AC.eta_s = 0.84812339\n</edits>",
+    "validation": {
+     "reasons": [
+      "restored a valid plant exactly"
+     ],
+     "reward": 1.0
+    }
+   },
+   "file": "data\\frontier\\frontier_repair_train.jsonl",
+   "id": "rep-19-00067-t-google-gemini-3-1-flash-lite-preview",
+   "source": "frontier",
+   "split": "train",
+   "task": "repair",
+   "title": "Frontier answer accepted by the tool suite",
+   "topology": "dc_absorption"
+  },
+  {
+   "fields": {
+    "completion": "<analysis>\nThe plant generates 41.81 MW net power while consuming 118.32 MW of fuel. The system consumes 66.68 MW for compression, produces 111.33 MW at the turbine, and the data centre (DC) consumes 40.59 MW with a cooling demand of 33.23 MW. The chiller (CH) consumes 2.84 MW. Exergy destruction is dominated by the DC load (7.36 MW) due to the temperature lift requirement, followed by the compressor (AC) and chiller (CH).\n</analysis>\n<ranking>\nDC > AC > CH\n</ranking>\n<change>\nSET DC.T_return = 305.0\n</change>\n<prediction>\nfuel_change_mw = -1.25\n</prediction>",
+    "reasoning": "",
+    "tool_calls": [
+     {
+      "arguments": {
+       "answer": "<analysis>\nThe plant generates 41.81 MW net, consuming 118.32 MW fuel. The load is 40.59 MW electrical + 33.23 MW cooling. The compressor uses 66.68 MW (work), turbine produces 111.33 MW, and the chiller uses 2.84 MW. Exergy destruction in the DC load is 7.36 MW and the combustor is 1.18 MW (thermal/mixing loss).\n</analysis>\n<ranking>\nDC > AC > CH\n</ranking>\n<change>\nSET DC.T_return = 305.0\n</change>\n<prediction>\nfuel_change_mw = -1.25\n</prediction>"
+      },
+      "name": "check_answer"
+     },
+     {
+      "arguments": {
+       "answer": "<analysis>\nThe plant generates 41.81 MW net, consuming 118.32 MW fuel. The load is 40.59 MW electrical + 33.23 MW cooling. The compressor uses 66.68 MW (work), turbine produces 111.33 MW, and the chiller uses 2.84 MW. Exergy destruction in the dc_load is 7.36 MW and the combustor is 1.18 MW (thermal/mixing loss).\n</analysis>\n<ranking>\ndc_load > AC > CH\n</ranking>\n<change>\nSET dc_load.T_return = 305.0\n</change>\n<prediction>\nfuel_change_mw = -1.25\n</prediction>"
+      },
+      "name": "check_answer"
+     },
+     {
+      "arguments": {
+       "answer": "<analysis>\nThe plant generates 41.81 MW net, consuming 118.32 MW fuel. The load is 40.59 MW electrical + 33.23 MW cooling. The compressor uses 66.68 MW (work), turbine produces 111.33 MW, and the chiller uses 2.84 MW. Exergy destruction in the DC is 7.36 MW and the combustor is 1.18 MW (thermal/mixing loss).\n</analysis>\n<ranking>\nDC > AC > CH\n</ranking>\n<change>\nSET DC.T_return = 305.0\n</change>\n<prediction>\nfuel_change_mw = -1.25\n</prediction>"
+      },
+      "name": "check_answer"
+     }
+    ],
+    "usage": {
+     "input_tokens": 6750,
+     "output_tokens": 762,
+     "total_backend_latency_ms": 3623,
+     "total_cost_nanodollars": 2830500
+    }
+   },
+   "file": "data/teacher_runs/harness_eval_completions2.jsonl",
+   "id": "aud-0-00005",
+   "source": "harness",
+   "task": "audit",
+   "title": "Frontier in the harness (3 tool calls)",
+   "topology": "dc_electric"
+  },
+  {
+   "fields": {
+    "completion": "<analysis>\nThe system shows significant exergy destruction in the heat rejector (16.57 MW) and the data centre (10.52 MW). The recuperator HX has a cold-side output temperature of 368.6 K, which supplies the absorption chiller generator. The exhaust stack temperature is 654 K, representing significant thermal loss.\n</analysis>\n<ranking>\nREJ > HX > CH > AC\n</ranking>\n<change>\nSET HX.dp_hot = 0.024\n</change>\n<prediction>\nfuel_change_mw = -0.42\n</prediction>",
+    "reasoning": "",
+    "tool_calls": [
+     {
+      "arguments": {
+       "answer": "<analysis>\nThe system shows a significant cooling-side exergy destruction in the heat rejector (16.57 MW) and the DC load (10.52 MW). The recuperator HX has T_cold_out = 368.6 K, which supplies the generator. The exhaust stack temperature is 654 K, indicating substantial potential for recovery.\n</analysis>\n<ranking>\nREJ > DC > HX > CH > AC\n</ranking>\n<change>\nSET HX.dp_hot = 0.024\n</change>\n<prediction>\nfuel_change_mw = -0.42\n</prediction>"
+      },
+      "name": "check_answer"
+     },
+     {
+      "arguments": {
+       "answer": "<analysis>\nThe system shows significant exergy destruction in the heat rejector (16.57 MW) and the data centre load (10.52 MW). The recuperator HX has T_cold_out = 368.6 K, which supplies the generator. The exhaust stack temperature is 654 K, indicating substantial potential for heat recovery.\n</analysis>\n<ranking>\nREJ > DC_load > HX > CH > AC\n</ranking>\n<change>\nSET HX.dp_hot = 0.024\n</change>\n<prediction>\nfuel_change_mw = -0.42\n</prediction>"
+      },
+      "name": "check_answer"
+     },
+     {
+      "arguments": {
+       "answer": "<analysis>\nThe system shows significant exergy destruction in the heat rejector (16.57 MW) and the data centre (10.52 MW). The recuperator HX has T_cold_out = 368.6 K, which supplies the generator. The exhaust stack temperature is 654 K, indicating substantial potential for heat recovery.\n</analysis>\n<ranking>\nREJ > DC > HX > CH > AC\n</ranking>\n<change>\nSET HX.dp_hot = 0.024\n</change>\n<prediction>\nfuel_change_mw = -0.42\n</prediction>"
+      },
+      "name": "check_answer"
+     }
+    ],
+    "usage": {
+     "input_tokens": 7710,
+     "output_tokens": 622,
+     "total_backend_latency_ms": 3444,
+     "total_cost_nanodollars": 2860500
+    }
+   },
+   "file": "data/teacher_runs/harness_eval_completions2.jsonl",
+   "id": "aud-0-00022",
+   "source": "harness",
+   "task": "audit",
+   "title": "Frontier in the harness (3 tool calls)",
+   "topology": "dc_absorption"
+  },
+  {
+   "fields": {
+    "completion": "<analysis>\nThe system consumes 169.72 MW of fuel for 56.39 MW net electricity and 28.06 MW cooling. The stack temperature is high at 649 K. Exergy destruction is primarily driven by the heat rejection system (64.08 MW) and the recuperator/chiller loop (totaling ~26-30 MW). By reducing the pressure drop in the recuperator (HX.dp_hot), the turbine expansion ratio and efficiency improve, requiring less fuel for the same net electrical power output.\n</analysis>\n<ranking>\nREJ > HX > CH\n</ranking>\n<change>\nSET HX.dp_hot = 0.024\n</change>\n<prediction>\nfuel_change_mw = -0.34\n</prediction>",
+    "reasoning": "",
+    "tool_calls": [
+     {
+      "arguments": {
+       "answer": "<analysis>\nThe system requires 169.72 MW fuel to produce 56.39 MW net electricity and 28.06 MW cooling. The stack temperature is 649 K, which represents a significant loss. The largest exergy destruction components (excluding the combustor) are the heat rejector (64.08 MW), the DC load (26.69 MW), and the absorption chiller and recuperator are part of the thermal chain. Since the stack temperature is quite high, reducing fuel input while maintaining the same services can be achieved by improving recuperation.\n</analysis>\n<ranking>\nREJ > DC > HX > CH\n</ranking>\n<change>\nSET HX.dp_hot = 0.024\n</change>\n<prediction>\nfuel_change_mw = -1.25\n</prediction>"
+      },
+      "name": "check_answer"
+     },
+     {
+      "arguments": {
+       "answer": "<analysis>\nThe system requires 169.72 MW fuel to produce 56.39 MW net electricity and 28.06 MW cooling. The stack temperature is 649 K, which represents a significant thermal loss. The largest exergy destruction components (excluding the combustor) are the heat rejector (64.08 MW), the DC load (26.69 MW), and the thermal recovery chain. By reducing the recuperator pressure drop or increasing its heat transfer effectiveness, we can improve overall plant efficiency and reduce fuel consumption.\n</analysis>\n<ranking>\nREJ > DC > HX > CH\n</ranking>\n<change>\nSET HX.dp_hot = 0.024\n</change>\n<prediction>\nfuel_change_mw = -1.25\n</prediction>"
+      },
+      "name": "check_answer"
+     },
+     {
+      "arguments": {
+       "answer": "<analysis>\nThe system requires 169.72 MW fuel to produce 56.39 MW net electricity and 28.06 MW cooling. The stack temperature is 649 K. The major components destroying exergy are REJ (64.08 MW) and the cooling/thermal load components. Reducing fuel input for the same service can be achieved by decreasing the recuperator pressure loss (HX.dp_hot), which improves the turbine inlet pressure or reduces compressor work requirement.\n</analysis>\n<ranking>\nREJ > HX > CH\n</ranking>\n<change>\nSET HX.dp_hot = 0.024\n</change>\n<prediction>\nfuel_change_mw = -1.25\n</prediction>"
+      },
+      "name": "check_answer"
+     }
+    ],
+    "usage": {
+     "input_tokens": 7998,
+     "output_tokens": 771,
+     "total_backend_latency_ms": 3936,
+     "total_cost_nanodollars": 3156000
+    }
+   },
+   "file": "data/teacher_runs/harness_eval_completions2.jsonl",
+   "id": "aud-0-00036",
+   "source": "harness",
+   "task": "audit",
+   "title": "Frontier in the harness (3 tool calls)",
+   "topology": "dc_absorption"
   }
  ],
- "n": 22,
+ "n": 33,
  "schema": {
   "examples": [
    {

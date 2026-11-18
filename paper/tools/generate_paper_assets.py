@@ -830,10 +830,10 @@ def table_comparison(MR):
                 "Reports pending & --- & --- & --- & manifest (JSON) \\\\\n\\bottomrule\n\\end{tabular}\\endgroup\n")
     body = []
     for r in rows:
-        metric = ", ".join(f"{k} {v:.2f}" for k, v in r["metrics"].items() if v is not None)
+        metric = ", ".join(f"{k} {v:.2f}" for k, v in list(r["metrics"].items())[:3] if v is not None)
         body.append(f"{tex(r['display_name'])} & {r['model_family']} & {r['harness']} & {r['tool_access']} & "
                     f"{tex(metric)} \\\\")
-    return ("\\begingroup\\scriptsize\n\\begin{tabular}{@{}p{3.4cm}p{1.8cm}p{2.2cm}p{1.4cm}p{6.2cm}@{}}\n\\toprule\n"
+    return ("\\begingroup\\scriptsize\\setlength{\\tabcolsep}{2pt}\n\\begin{tabular}{@{}p{3.4cm}p{1.8cm}p{2.2cm}p{1.4cm}p{6.2cm}@{}}\n\\toprule\n"
             "Model & Family & Inference text & Tools & Metrics by task/split \\\\\n\\midrule\n"
             + "\n".join(body) + "\n\\bottomrule\n\\end{tabular}\\endgroup\n")
 

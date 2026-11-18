@@ -59,16 +59,16 @@
    "n": null
   },
   "env.n_tests": {
-   "value": 357,
-   "tex": "357",
+   "value": 363,
+   "tex": "363",
    "source": "assets/environment.json",
    "command": "python -m pytest -q",
    "seed": null,
    "n": null
   },
   "env.tests_minutes": {
-   "value": 5.0,
-   "tex": "5",
+   "value": 6.0,
+   "tex": "6",
    "source": "assets/environment.json",
    "command": "python -m pytest -q",
    "seed": null,
@@ -435,24 +435,24 @@
    "n": 110
   },
   "corp.rows": {
-   "value": 122655,
-   "tex": "122{,}655",
+   "value": 123024,
+   "tex": "123{,}024",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
    "n": null
   },
   "corp.rows_train": {
-   "value": 109151,
-   "tex": "109{,}151",
+   "value": 109659,
+   "tex": "109{,}659",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
    "n": null
   },
   "corp.rows.audit.test_id": {
-   "value": 322,
-   "tex": "322",
+   "value": 321,
+   "tex": "321",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
@@ -475,16 +475,16 @@
    "n": null
   },
   "corp.rows.audit.train": {
-   "value": 2576,
-   "tex": "2{,}576",
+   "value": 2564,
+   "tex": "2{,}564",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
    "n": null
   },
   "corp.rows.audit.val": {
-   "value": 339,
-   "tex": "339",
+   "value": 338,
+   "tex": "338",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
@@ -523,8 +523,8 @@
    "n": null
   },
   "corp.rows.design.train": {
-   "value": 1768,
-   "tex": "1{,}768",
+   "value": 1894,
+   "tex": "1{,}894",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
@@ -539,48 +539,48 @@
    "n": null
   },
   "corp.rows.ledger.test_id": {
-   "value": 687,
-   "tex": "687",
+   "value": 656,
+   "tex": "656",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
    "n": null
   },
   "corp.rows.ledger.test_ood_fault": {
-   "value": 2433,
-   "tex": "2{,}433",
+   "value": 2360,
+   "tex": "2{,}360",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
    "n": null
   },
   "corp.rows.ledger.test_ood_topology": {
-   "value": 858,
-   "tex": "858",
+   "value": 854,
+   "tex": "854",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
    "n": null
   },
   "corp.rows.ledger.train": {
-   "value": 5247,
-   "tex": "5{,}247",
+   "value": 5165,
+   "tex": "5{,}165",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
    "n": null
   },
   "corp.rows.ledger.val": {
-   "value": 699,
-   "tex": "699",
+   "value": 666,
+   "tex": "666",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
    "n": null
   },
   "corp.rows.repair.test_id": {
-   "value": 560,
-   "tex": "560",
+   "value": 563,
+   "tex": "563",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
@@ -603,16 +603,16 @@
    "n": null
   },
   "corp.rows.repair.train": {
-   "value": 99560,
-   "tex": "99{,}560",
+   "value": 100036,
+   "tex": "100{,}036",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,
    "n": null
   },
   "corp.rows.repair.val": {
-   "value": 613,
-   "tex": "613",
+   "value": 614,
+   "tex": "614",
    "source": "assets/corpus.json",
    "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
    "seed": null,

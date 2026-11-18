@@ -1,34 +1,35 @@
 \begingroup\scriptsize\setlength{\tabcolsep}{3pt}
-\begin{tabular}{@{}p{1.3cm}p{4.4cm}p{1.9cm}p{1.9cm}p{1.9cm}p{1.9cm}@{}}
+\begin{tabular}{@{}p{1.5cm}p{5.2cm}p{1.6cm}rp{1.5cm}p{1.5cm}p{1.5cm}p{1.5cm}@{}}
 \toprule
-Task & Model (full inference text) & \multicolumn{4}{c}{Metrics (per task; see text)} \\
+Task & Model (family, inference text, tools) & Split & $n$ & \multicolumn{4}{c}{Metrics (per task; see text)} \\
 \midrule
-Repair & Qwen3.5-4B base & \todo{pending} & \todo{pending} & \todo{pending} & \todo{pending} \\
- & SFT, ground truth only & \todo{pending} & \todo{pending} & \todo{pending} & \todo{pending} \\
- & SFT, full corpus & \todo{pending} & \todo{pending} & \todo{pending} & \todo{pending} \\
- & SFT + GRPO & \todo{pending} & \todo{pending} & \todo{pending} & \todo{pending} \\
- & Teacher model \todo{name} & \todo{pending} & \todo{pending} & \todo{pending} & \todo{pending} \\
- & Other open model \todo{name} & \todo{pending} & \todo{pending} & \todo{pending} & \todo{pending} \\
-\midrule
-Design & Qwen3.5-4B base & \todo{pending} & \todo{pending} & \todo{pending} & \todo{pending} \\
- & SFT, ground truth only & \todo{pending} & \todo{pending} & \todo{pending} & \todo{pending} \\
- & SFT, full corpus & \todo{pending} & \todo{pending} & \todo{pending} & \todo{pending} \\
- & SFT + GRPO & \todo{pending} & \todo{pending} & \todo{pending} & \todo{pending} \\
- & Teacher model \todo{name} & \todo{pending} & \todo{pending} & \todo{pending} & \todo{pending} \\
- & Other open model \todo{name} & \todo{pending} & \todo{pending} & \todo{pending} & \todo{pending} \\
-\midrule
-Audit & Qwen3.5-4B base & \todo{pending} & \todo{pending} & \todo{pending} & \todo{pending} \\
- & SFT, ground truth only & \todo{pending} & \todo{pending} & \todo{pending} & \todo{pending} \\
- & SFT, full corpus & \todo{pending} & \todo{pending} & \todo{pending} & \todo{pending} \\
- & SFT + GRPO & \todo{pending} & \todo{pending} & \todo{pending} & \todo{pending} \\
- & Teacher model \todo{name} & \todo{pending} & \todo{pending} & \todo{pending} & \todo{pending} \\
- & Other open model \todo{name} & \todo{pending} & \todo{pending} & \todo{pending} & \todo{pending} \\
-\midrule
-Ledger repair & Qwen3.5-4B base & \todo{pending} & \todo{pending} & \todo{pending} & -- \\
- & SFT, ground truth only & \todo{pending} & \todo{pending} & \todo{pending} & -- \\
- & SFT, full corpus & \todo{pending} & \todo{pending} & \todo{pending} & -- \\
- & SFT + GRPO & \todo{pending} & \todo{pending} & \todo{pending} & -- \\
- & Teacher model \todo{name} & \todo{pending} & \todo{pending} & \todo{pending} & -- \\
- & Other open model \todo{name} & \todo{pending} & \todo{pending} & \todo{pending} & -- \\
+Repair & frontier\_zero (frontier, none, tools none) & test id & 30 & 0.63 & 0.63 & 0.37 & 1.33 \\
+Repair & frontier\_zero (frontier, none, tools none) & test ood fault & 30 & 0.47 & 0.47 & 0.33 & 0.77 \\
+Repair & frontier\_zero (frontier, none, tools none) & test ood topology & 30 & 0.43 & 0.43 & 0.10 & 1.13 \\
+Design & frontier\_zero (frontier, none, tools none) & test id & 30 & 0.17 & 0.00 & 13.09 & 0.17 \\
+Design & frontier\_zero (frontier, none, tools none) & test ood climate & 30 & 0.20 & 0.00 & 24.04 & 0.30 \\
+Design & frontier\_zero (frontier, none, tools none) & test ood scale & 30 & 0.07 & 0.00 & 15.26 & 0.07 \\
+Design & frontier\_zero (frontier, none, tools none) & test ood load & 30 & 0.10 & 0.00 & 8.10 & 0.10 \\
+Audit & frontier\_zero (frontier, none, tools none) & test id & 30 & 0.09 & 0.10 & 0.00 & 0.00 \\
+Audit & frontier\_zero (frontier, none, tools none) & test ood topology & 30 & 0.03 & 0.01 & 0.00 & 0.00 \\
+Ledger repair & frontier\_zero (frontier, none, tools none) & test id & 30 & 0.00 & 0.03 & 0.00 \\
+Ledger repair & frontier\_zero (frontier, none, tools none) & test ood fault & 30 & 0.02 & 0.00 & 0.00 \\
+Ledger repair & frontier\_zero (frontier, none, tools none) & test ood topology & 30 & 0.07 & 0.07 & 0.07 \\
+Repair & frontier\_tools (frontier, none, tools tools) & test id & 30 & 0.67 & 0.67 & 0.37 & 1.07 \\
+Design & frontier\_tools (frontier, none, tools tools) & test id & 30 & 0.43 & 0.00 & 16.37 & 0.73 \\
+Audit & frontier\_tools (frontier, none, tools tools) & test id & 30 & 0.13 & 0.10 & 0.00 & 0.02 \\
+Ledger repair & frontier\_tools (frontier, none, tools tools) & test id & 30 & 0.77 & 0.92 & 0.77 \\
+Repair & other\_model (domain-model, none, tools none) & test id & 30 & 0.27 & 0.27 & 0.22 & 0.67 \\
+Repair & other\_model (domain-model, none, tools none) & test ood fault & 30 & 0.50 & 0.50 & 0.50 & 1.00 \\
+Repair & other\_model (domain-model, none, tools none) & test ood topology & 30 & 0.33 & 0.33 & 0.17 & 0.73 \\
+Design & other\_model (domain-model, none, tools none) & test id & 30 & 0.17 & 0.00 & 18.71 & 0.17 \\
+Design & other\_model (domain-model, none, tools none) & test ood climate & 30 & 0.30 & 0.00 & 18.89 & 0.30 \\
+Design & other\_model (domain-model, none, tools none) & test ood scale & 30 & 0.17 & 0.00 & 13.55 & 0.17 \\
+Design & other\_model (domain-model, none, tools none) & test ood load & 30 & 0.23 & 0.00 & 11.58 & 0.23 \\
+Audit & other\_model (domain-model, none, tools none) & test id & 30 & 0.00 & 0.00 & 0.00 & 0.00 \\
+Audit & other\_model (domain-model, none, tools none) & test ood topology & 30 & 0.00 & 0.00 & 0.00 & 0.00 \\
+Ledger repair & other\_model (domain-model, none, tools none) & test id & 30 & 0.25 & 0.53 & 0.23 \\
+Ledger repair & other\_model (domain-model, none, tools none) & test ood fault & 30 & 0.17 & 0.17 & 0.13 \\
+Ledger repair & other\_model (domain-model, none, tools none) & test ood topology & 30 & 0.28 & 0.35 & 0.23 \\
 \bottomrule
 \end{tabular}\endgroup

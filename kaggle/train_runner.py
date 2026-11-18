@@ -80,7 +80,7 @@ PY = sys.executable
 
 # %%
 # Stage 1: SFT. Every save pushes the adapter, optimizer, scheduler, scaler and RNG to the private repo.
-run([PY, "-m", "torchrun", "--standalone", "--nproc_per_node=2", "--module", "thermo_agent.train.sft",
+run([PY, "-m", "torch.distributed.run", "--standalone", "--nproc_per_node=2", "--module", "thermo_agent.train.sft",
      ROOT / "data" / "sft", ROOT / "runs" / "sft", "--dtype", "float16",
      "--tasks", "repair", "design", "audit", "ledger",
      "--per-device-batch", "2", "--grad-accum", "8", "--num-workers", "2",
@@ -100,7 +100,7 @@ run([PY, "-m", "thermo_agent.train.merge", adapter, merged,
 # Stage 2: GRPO. `--init hf:merged/sft` reuses the merged model from the repo, so no SFT is redone here.
 # Each task has its own checkpoint prefix (`grpo_repair`, ...), and can be run in a separate session.
 TASK = os.environ.get("TASK", "ledger")
-run([PY, "-m", "torchrun", "--standalone", "--nproc_per_node=2", "--module", "thermo_agent.train.grpo",
+run([PY, "-m", "torch.distributed.run", "--standalone", "--nproc_per_node=2", "--module", "thermo_agent.train.grpo",
      ROOT / "data" / "grpo", ROOT / "runs" / f"grpo_{TASK}", "--task", TASK,
      "--init", "hf:merged/sft", "--dtype", "float16",
      "--per-device-batch", "4", "--grad-accum", "2", "--num-workers", "2",

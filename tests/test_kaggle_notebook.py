@@ -134,7 +134,7 @@ def test_train_notebook_is_generated_and_has_no_token():
             "kaggle/train.ipynb is stale: run `python kaggle/make_notebook.py`")
         code = "".join("".join(c["source"]) for c in json.loads(out.read_text(encoding="utf-8"))["cells"]
                        if c["cell_type"] == "code")
-        assert "torchrun" in code and "--hf-sync" in code and "hf:merged/sft" in code
+        assert "torch.distributed.run" in code and "--hf-sync" in code and "hf:merged/sft" in code
         assert "hf_sync.ensure_private_repo" in code
         assert "kaggle_notebook import" in code and "token()" in code, "the token must come from the shared Kaggle Secret helper"
         assert not re.search(r"hf_[A-Za-z0-9]{20,}", code), "no token literal in the notebook"
