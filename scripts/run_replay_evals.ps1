@@ -13,7 +13,7 @@ Get-ChildItem 'data/teacher_runs' -Filter 'eval_test_*.jsonl' | Where-Object Nam
 $arms = @(
     @{ name='frontier_zero'; replay='data/teacher_runs/eval_all.jsonl'; harness='none'; family='frontier'; tools='none' },
     @{ name='frontier_tools'; replay='data/teacher_runs/harness_eval_completions.jsonl'; harness='tools'; family='frontier'; tools='tools' },
-    @{ name='other_model'; replay='data/teacher_runs/eval_gptnano_all.jsonl'; harness='none'; family='domain-model'; tools='none' }
+    @{ name='other_model'; replay='data/teacher_runs/eval_gptnano_replay.jsonl'; harness='none'; family='domain-model'; tools='none' }
 )
 foreach ($a in $arms) {
     if (-not (Test-Path $a.replay)) { "skip $($a.name): missing $($a.replay)"; continue }

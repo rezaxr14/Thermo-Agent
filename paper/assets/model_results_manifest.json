@@ -1,4 +1,28 @@
 {
- "_comment": "One entry per comparison arm. Paths are relative to this directory and point at `model_eval --out` reports. `python -m thermo_agent.eval.comparison paper/assets/model_results_manifest.json --out paper/assets/model_results.json` produces the table input; generate_paper_assets derives the LaTeX from it. Add arms as the runs finish; never edit generated tables by hand.",
- "arms": {}
+ "arms": {
+  "frontier_zero": {
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_frontier_zero.json",
+   "family": "frontier",
+   "harness": "none",
+   "tool_access": "none",
+   "zero_shot": true,
+   "display_name": "frontier_zero"
+  },
+  "frontier_tools": {
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_frontier_tools.json",
+   "family": "frontier",
+   "harness": "none",
+   "tool_access": "tools",
+   "zero_shot": true,
+   "display_name": "frontier_tools"
+  },
+  "other_model": {
+   "report": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\reports\\eval_other_model.json",
+   "family": "domain-model",
+   "harness": "none",
+   "tool_access": "none",
+   "zero_shot": true,
+   "display_name": "other_model"
+  }
+ }
 }
