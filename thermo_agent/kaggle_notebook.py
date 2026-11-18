@@ -172,32 +172,13 @@ def restore_checkpoints(root, stages=("sft", "grpo_repair", "grpo_design", "grpo
     return restored
 
 
-def patch_numpy_scipy_compat() -> None:
-    """Make Kaggle's numpy/scipy importable without a worker rebuild (no architecture change).
-
-    Kaggle's preinstalled numpy 2.4.4 ships pure-Python files that call
-    `numpy._core._multiarray_umath._blas_supports_fpe`, but its compiled extension lacks that
-    symbol. Any scipy import (transformers loss, fla) then dies at import time. Force-installing
-    the wheel from Kaggle's mirror returns the same broken build, so we add a tiny pure-Python
-    shim BEFORE anything imports scipy: the symbol is a boolean capability probe, and returning
-    False only disables an FPE fast-path that this project never uses. The real solver and fused
-    kernels are untouched; this is an import-compatibility fix, not a training change.
-    """
-    try:
-        import numpy as _np
-        import numpy._core._multiarray_umath as _mu
-        if not hasattr(_mu, "_blas_supports_fpe"):
-            _mu._blas_supports_fpe = lambda *args, **kwargs: False
-            print("[compat] added _blas_supports_fpe shim for Kaggle numpy", flush=True)
-    except Exception as exc:  # pragma: no cover - informational only
-        print(f"[compat] numpy shim skipped: {exc}", flush=True)
-
-
 def setup(root=None, corpora=("sft", "grpo"), install=True):
     """Unpack the code bundle, expose it on sys.path, copy the corpora and set the safe training env."""
     root = pathlib.Path(root or WORK / "thermo-agent")
     import os
-    patch_numpy_scipy_compat()   # must run before torch/transformers/scipy are imported in the worker
+    # Do NOT import numpy/torch here: Kaggle's numpy is replaced on disk below, and importing it
+    # first would leave the corrupt module cached in this process. install_cached_kernels imports
+    # torch/fla only after the verified reinstall.
     code = find_input("thermo-agent-code")
     code_root, bundle = None, None
     for walk_root, dirs, files in os.walk(code, followlinks=True):
@@ -255,14 +236,23 @@ def setup(root=None, corpora=("sft", "grpo"), install=True):
         subprocess.run([sys.executable, "-m", "pip", "install", "-q",
                         "transformers==5.23.0", "trl==1.18.1", "peft==0.21.3",
                         "accelerate==1.16.0", "datasets==5.2.0", "einops==0.8.2"], check=True)
-        # Kaggle's preinstalled numpy 2.4.4 is a mismatched build: its pure-Python testing
-        # module calls numpy._core._multiarray_umath._blas_supports_fpe, but that C symbol is
-        # absent from the image's compiled extension. Any scipy import (fla imports
-        # scipy.optimize) then fails, so the fused kernels cannot be imported. pip sees
-        # "already satisfied" for the image build, so force the consistent PyPI wheel.
-        # These are pure Python/C wheels -- no CUDA kernel is compiled in the worker.
-        subprocess.run([sys.executable, "-m", "pip", "install", "-q", "--force-reinstall",
-                        "--no-deps", "numpy==2.4.4"], check=True)
+        # Kaggle's preinstalled numpy 2.4.4 is CORRUPT: its compiled extension misses
+        # _blas_supports_fpe AND its numpy/_core/umath.py is a stub missing _slice, so any
+        # scipy/transformers/fla import fails. pip's mirror keeps serving the same broken wheel
+        # and "already satisfied". Force a consistent numpy+scipy pair from PyPI proper (pure
+        # C wheels, no CUDA recompile) and verify in a clean subprocess before continuing.
+        subprocess.run([sys.executable, "-m", "pip", "install", "-q", "--force-reinstall", "--no-deps",
+                        "--index-url", "https://pypi.org/simple",
+                        "numpy==2.4.4", "scipy==1.17.1"], check=True)
+        verify = subprocess.run(
+            [sys.executable, "-c",
+             "import numpy, scipy.linalg; from scipy.optimize import linear_sum_assignment; "
+             "import numpy._core._multiarray_umath as m; assert hasattr(m, '_blas_supports_fpe'); "
+             "print('[compat] numpy', numpy.__version__, 'scipy', scipy.__version__, 'import OK')"],
+            capture_output=True, text=True)
+        print(verify.stdout.strip(), flush=True)
+        if verify.returncode != 0:
+            raise SystemExit("[compat] numpy/scipy still broken after PyPI reinstall: " + verify.stderr.strip()[-500:])
         # Kaggle's preinstalled torchao 0.10 makes PEFT 0.21 raise on import; this project does not use it.
         subprocess.run([sys.executable, "-m", "pip", "uninstall", "-y", "torchao"], check=False)
         install_cached_kernels()
