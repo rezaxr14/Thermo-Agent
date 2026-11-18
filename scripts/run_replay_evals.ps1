@@ -17,8 +17,9 @@ $arms = @(
 )
 foreach ($a in $arms) {
     if (-not (Test-Path $a.replay)) { "skip $($a.name): missing $($a.replay)"; continue }
+    $splitArgs = if ($a.name -eq 'frontier_tools') { @('--splits','test_id') } else { @() }
     & $py -m thermo_agent.eval.model_eval data/processed data/processed_arch `
-        --backend replay --replay $a.replay --tasks repair design audit ledger `
+        --backend replay --replay $a.replay --tasks repair design audit ledger @splitArgs `
         --limit 30 --harness $a.harness --model-family $a.family --tool-access $a.tools `
         --zero-shot --display-name $a.name --out "reports/eval_$($a.name).json"
     if ($LASTEXITCODE -ne 0) { throw "eval failed: $($a.name)" }
