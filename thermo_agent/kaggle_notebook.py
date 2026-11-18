@@ -80,6 +80,8 @@ def setup(root=None, corpora=("sft", "grpo"), install=True):
         subprocess.run([sys.executable, "-m", "pip", "install", "-q", "--upgrade",
                         "transformers>=5.23,<6", "peft>=0.21", "trl>=1.18",
                         "accelerate>=1.16", "datasets>=5.2"], check=True)
+        # Kaggle's preinstalled torchao 0.10 makes PEFT 0.21 raise on import; this project does not use it.
+        subprocess.run([sys.executable, "-m", "pip", "uninstall", "-y", "torchao"], check=False)
     return root
 
 
