@@ -47,7 +47,9 @@ def setup(root=None, corpora=("sft", "grpo"), install=True):
     os.chdir(root)
     sys.path.insert(0, str(root))
     os.environ["PYTHONPATH"] = str(root) + os.pathsep + os.environ.get("PYTHONPATH", "")
-    os.environ.update({"TOKENIZERS_PARALLELISM": "false", "NCCL_IB_DISABLE": "1", "HF_HUB_DISABLE_XET": "1"})
+    os.environ.update({"TOKENIZERS_PARALLELISM": "false", "NCCL_IB_DISABLE": "1", "HF_HUB_DISABLE_XET": "1",
+                       # The 4B fp16 model leaves little headroom on a T4; avoid fragmentation OOMs at the limit.
+                       "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True"})
     corpus_input = find_input("thermo-agent-corpus")
     for name in corpora:
         dst = root / "data" / name
@@ -76,12 +78,20 @@ def setup(root=None, corpora=("sft", "grpo"), install=True):
             raise SystemExit(f"corpus {name} missing under {corpus_input}")
     if install:
         subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-r", "requirements-lock.txt"], check=True)
-        # The lock file is CPU/test-only. Training needs these on the Kaggle worker; versions tested locally.
-        subprocess.run([sys.executable, "-m", "pip", "install", "-q", "--upgrade",
-                        "transformers>=5.23,<6", "peft>=0.21", "trl>=1.18",
-                        "accelerate>=1.16", "datasets>=5.2"], check=True)
+        # Exact versions the chunked-loss path was tested with locally. Kaggle's preinstalled TRL builds the
+        # full (tokens x vocabulary) logits, which does not fit a T4 next to the 4B fp16 weights.
+        subprocess.run([sys.executable, "-m", "pip", "install", "-q",
+                        "transformers==5.23.0", "trl==1.18.1", "peft==0.21.3",
+                        "accelerate==1.16.0", "datasets==5.2.0"], check=True)
         # Kaggle's preinstalled torchao 0.10 makes PEFT 0.21 raise on import; this project does not use it.
         subprocess.run([sys.executable, "-m", "pip", "uninstall", "-y", "torchao"], check=False)
+        import importlib.metadata as md
+        versions = {p: md.version(p) for p in ("torch", "transformers", "trl", "peft", "accelerate", "datasets")}
+        print("[env]", versions, flush=True)
+        import torch
+        if not torch.cuda.is_available():
+            raise SystemExit("[env] the dependency install replaced the CUDA torch with a CPU build")
+        print(f"[env] CUDA {torch.version.cuda}, {torch.cuda.device_count()} visible device(s)", flush=True)
     return root
 
 

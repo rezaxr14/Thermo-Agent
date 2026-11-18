@@ -1,0 +1,8 @@
+{
+ "source_dirs": [
+  "data/processed",
+  "data/processed_arch"
+ ],
+ "limit": 30,
+ "rows": 360
+}

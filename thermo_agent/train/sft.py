@@ -54,7 +54,12 @@ def main():
     ap.add_argument("--qlora", action="store_true", help="4-bit base weights; only for cards under 10 GB, not the T4 path")
     ap.add_argument("--max-steps", type=int, default=-1); ap.add_argument("--limit-rows", type=int); ap.add_argument("--print-sample", action="store_true")
     ap.add_argument("--per-device-batch", type=int); ap.add_argument("--grad-accum", type=int); ap.add_argument("--grad-norm", type=float)
+    ap.add_argument("--max-length", type=int, help="override the 4096-token window (smoke runs on a small card)")
     ap.add_argument("--save-steps", type=int, help="checkpoint interval; a rerun of the same command resumes automatically")
+    ap.add_argument("--loss-token-chunk", type=int, default=int(os.environ.get("LOSS_TOKENS", "512")),
+                    help="tokens scored per cross-entropy tile; the full (tokens x 248k vocab) logits never exist")
+    ap.add_argument("--loss-vocab-chunk", type=int, default=int(os.environ.get("LOSS_VOCAB", "8192")),
+                    help="vocabulary entries per cross-entropy tile (with --loss-token-chunk, bounds peak memory)")
     ap.add_argument("--num-workers", type=int, default=2)
     ap.add_argument("--hf-sync", choices=("auto", "on", "off"), default=os.environ.get("THERMO_HF_SYNC", "auto"),
                     help="push full resume state to the private HF repo after each save (auto: only when a token exists)")
@@ -64,6 +69,7 @@ def main():
     if a.grad_accum: s.grad_accum = a.grad_accum
     if a.grad_norm is not None: s.max_grad_norm = a.grad_norm
     if a.save_steps: s.save_steps = s.eval_steps = a.save_steps
+    if a.max_length: s.max_length = a.max_length
     world = ddp.world_size_from_env()
     if a.qlora and world > 1:
         raise SystemExit("QLoRA + DDP is not supported here: use full fp16 LoRA (drop --qlora), as in docs/DUAL_T4.md")
@@ -79,7 +85,8 @@ def main():
     from datasets import Dataset
     from peft import LoraConfig
     from transformers import AutoTokenizer
-    from trl import SFTConfig, SFTTrainer
+    from trl import SFTConfig
+    from .trainers import build_sft_trainer
     tok = AutoTokenizer.from_pretrained(a.model)
     tr, va = read_rows(a.data, a.tasks, "train", limit=a.limit_rows), read_rows(a.data, a.tasks, "val", limit=a.limit_rows)
     if not tr: raise SystemExit(f"no training rows for {a.tasks} in {a.data}")
@@ -104,14 +111,20 @@ def main():
     base_model = AutoModelForCausalLM.from_pretrained(
         a.model, dtype=getattr(torch, a.dtype),
         **{k: v for k, v in init.items() if k not in ("dtype", "torch_dtype")})
+    params = sum(p.numel() for p in base_model.parameters())
+    if torch.cuda.is_available():
+        print(f"[memory] {params / 1e9:.2f}B params, weight dtype {next(base_model.parameters()).dtype}, "
+              f"{torch.cuda.memory_allocated() / 2**30:.2f} GiB on {torch.cuda.get_device_name(0)}", flush=True)
     lora = LoraConfig(r=s.lora.r, lora_alpha=s.lora.alpha, lora_dropout=s.lora.dropout, target_modules=s.lora.target_modules, task_type="CAUSAL_LM")
     repo, callback = hf_sync.prepare(a.hf_repo, "sft", a.out, a.hf_sync)
     resume = latest(a.out)
     if resume:
         print(f"resuming SFT from {resume}", flush=True)
     hooks = [callback] if callback else []
-    SFTTrainer(model=base_model, args=cfg, train_dataset=train, eval_dataset=val, peft_config=lora,
-               callbacks=hooks).train(resume_from_checkpoint=resume)
+    build_sft_trainer(model=base_model, args=cfg, train_dataset=train, eval_dataset=val, peft_config=lora,
+                      processing_class=tok, callbacks=hooks,
+                      loss_token_chunk=a.loss_token_chunk, loss_vocab_chunk=a.loss_vocab_chunk
+                      ).train(resume_from_checkpoint=resume)
 
 
 if __name__ == "__main__":

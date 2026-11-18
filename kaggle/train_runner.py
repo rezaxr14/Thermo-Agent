@@ -78,13 +78,21 @@ SYNC = os.environ.get("THERMO_HF_SYNC", "auto")
 LIMITS = (["--max-steps", str(STEPS)] if STEPS else []) + (["--limit-rows", str(ROWS)] if ROWS else [])
 PY = sys.executable
 NGPU = int(os.environ.get("NGPU", "2"))
+SFT_BATCH = os.environ.get("SFT_BATCH", "2")
+SFT_ACCUM = os.environ.get("SFT_ACCUM", "8")
+MAXLEN = os.environ.get("MAXLEN", "")
+LOSS_TOKENS = os.environ.get("LOSS_TOKENS", "512")
+LOSS_VOCAB = os.environ.get("LOSS_VOCAB", "8192")
+print("[loss] tiles", LOSS_TOKENS, "tokens x", LOSS_VOCAB, "vocabulary entries", flush=True)
 
 # %%
 # Stage 1: SFT. Every save pushes the adapter, optimizer, scheduler, scaler and RNG to the private repo.
 run([PY, "-m", "torch.distributed.run", "--standalone", "--nproc_per_node", str(NGPU), "--module", "thermo_agent.train.sft",
      ROOT / "data" / "sft", ROOT / "runs" / "sft", "--dtype", "float16",
      "--tasks", "repair", "design", "audit", "ledger",
-     "--per-device-batch", "2", "--grad-accum", "8", "--num-workers", "2",
+     "--per-device-batch", SFT_BATCH, "--grad-accum", SFT_ACCUM, "--num-workers", "2",
+     "--loss-token-chunk", LOSS_TOKENS, "--loss-vocab-chunk", LOSS_VOCAB,
+     *(["--max-length", MAXLEN] if MAXLEN else []),
      "--hf-sync", SYNC, *LIMITS])
 
 # %%

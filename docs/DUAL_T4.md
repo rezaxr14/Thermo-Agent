@@ -44,11 +44,32 @@ If `trainer_state.json` shows a large share of skipped steps, lower the learning
 |---|---|---|
 | base weights, fp16 | 8.0 GB | 8.0 GB |
 | LoRA params + fp32 optimizer state | ~0.4 GB | ~0.2 GB |
-| activations (checkpointing on) | ~2.6 GB at batch 2 × 4096 tokens | ~1 GB at 16 sequences × 320 tokens |
+| activations (checkpointing on) | ~1.4 GB at batch 2 × 4096 tokens | ~1 GB at 16 sequences × 320 tokens |
+| cross-entropy tile (chunked, fp32) | 0.02 GB (512 × 8192) | — |
 | KV cache | — | ~2 GB at 4 prompts × 4 completions × ~900 tokens |
-| **total** | **~11.5 GB of 15 GB** | **~11 GB of 15 GB** |
+| **total** | **~10 GB of 15 GB** | **~11 GB of 15 GB** |
 
 Both fit with headroom. A 4-bit base is unnecessary and is not used (`--qlora` is refused under DDP).
+
+## Chunked cross-entropy (the T4 fix)
+
+Qwen3.5-4B has a **248,320-token** vocabulary, not 152k. Asking the model for `labels=` builds the whole
+`(batch × sequence, 248320)` logits tensor: at batch 2 × 4096 that is **4.0 GiB in fp16**, and the fp32
+`CrossEntropyLoss` upcast doubles it to **8.1 GiB**. Add 8 GiB of fp16 weights and the first attempt died with
+13.61 GiB allocated and 126 MiB short.
+
+`thermo_agent/train/chunked_loss.py` computes the same negative log-likelihood on `token_chunk × vocab_chunk`
+tiles (512 × 8192 by default), folds each tile into an fp32 online log-sum-exp, and recomputes the tile in the
+backward pass instead of storing it. Peak cross-entropy memory becomes one 16 MiB tile regardless of the
+vocabulary size. No architecture, weight, label or objective changes: the tests compare the chunked loss and its
+gradients against `F.cross_entropy` on the full logits.
+
+```bash
+--loss-token-chunk 512 --loss-vocab-chunk 8192   # defaults; smaller tiles use less memory, more loops
+```
+
+The `[loss]` line in the log states the tile size actually used. `[memory]` states the loaded weight dtype and
+the GiB already allocated, so a silent fp32 load is visible before the first step.
 
 ## Batch arithmetic
 
