@@ -71,3 +71,4 @@ reports/verify_*.json
 reports/frontier_ingest.json
 data/kaggle_proxy.env
 data/teacher_runs/
+data/kaggle_datasets/
