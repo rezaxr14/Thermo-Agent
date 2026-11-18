@@ -58,6 +58,7 @@ def trace_of(chat):
 
 
 def main():
+    global OUT
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--out", default=str(OUT))
     ap.add_argument("--export-dir", default="data/frontier_export")
@@ -67,7 +68,6 @@ def main():
     ap.add_argument("--reserve", type=float, default=0.5)
     ap.add_argument("--max-seconds", type=float, default=4 * 3600)
     a = ap.parse_args()
-    global OUT
     OUT = pathlib.Path(a.out)
 
     for k, v in cli_runner.dotenv(cli_runner.PROXY_ENV).items():
