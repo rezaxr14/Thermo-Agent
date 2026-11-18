@@ -1,5 +1,6 @@
 $ErrorActionPreference = 'Stop'
-Set-Location (Split-Path $MyInvocation.MyCommand.Path -Parent)
+$root = Split-Path (Split-Path $MyInvocation.MyCommand.Path -Parent) -Parent
+Set-Location $root
 $dir = (Resolve-Path 'data/kaggle_datasets/thermo-agent-corpus' -ErrorAction SilentlyContinue)
 if (-not $dir) { $dir = New-Item -ItemType Directory -Force -Path 'data/kaggle_datasets/thermo-agent-corpus' }
 $dir = $dir.FullName
