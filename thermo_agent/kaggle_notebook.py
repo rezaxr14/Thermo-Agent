@@ -76,6 +76,10 @@ def setup(root=None, corpora=("sft", "grpo"), install=True):
             raise SystemExit(f"corpus {name} missing under {corpus_input}")
     if install:
         subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-r", "requirements-lock.txt"], check=True)
+        # The lock file is CPU/test-only. Training needs these on the Kaggle worker; versions tested locally.
+        subprocess.run([sys.executable, "-m", "pip", "install", "-q", "--upgrade",
+                        "transformers>=5.23,<6", "peft>=0.21", "trl>=1.18",
+                        "accelerate>=1.16", "datasets>=5.2"], check=True)
     return root
 
 
