@@ -28,10 +28,11 @@ OUT = pathlib.Path("data/teacher_runs/harness_completions.jsonl")
 PREFIX = "teacher/harness_progress.jsonl"
 
 
-def system_prompt():
-    return ("You are an expert thermodynamic agent. You may call check_answer(answer) at most TWICE to test a "
-            "candidate answer against our physics verifiers. After at most two calls, STOP using tools and finish "
-            "with your final answer in the task's XML tags. Never invent numbers.")
+    def system_prompt(row):
+        original = "\n\n".join(m["content"] for m in row["prompt"] if m["role"] == "system")
+        return (original + "\n\nYou may call check_answer(answer) at most TWICE to test a candidate against our "
+                "physics verifiers. After at most two calls, STOP using tools and return the final answer in the "
+                "task's XML tags exactly as specified above. Never invent numbers.")
 
 
 def usage_of(chat):
@@ -112,7 +113,7 @@ def main():
             if pathlib.Path(cli_runner.PROXY_ENV).stat().st_mtime < time.time() - 3000:
                 for k, v in cli_runner.proxy_env(refresh=True).items():
                     os.environ[k] = v
-            sysmsg = system_prompt() + f" The row id is {rid}. The tool checks this row only: call it with just your answer."
+            sysmsg = system_prompt(row) + f" The row id is {rid}; the tool checks this row only."
             with kbench.chats.new(f"harness_{i}", system_instructions=sysmsg) as chat:
                 actors.user.send(user)                      # native_tool_agent needs a user turn in the chat
                 try:
