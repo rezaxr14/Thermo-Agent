@@ -23,9 +23,15 @@ instead of a name in a notebook cell.
 The default `MODEL = anthropic/claude-sonnet-5-5@default` is a starting point; the probe may replace it. After the
 first ingest, fill this table from `reports/frontier_ingest.json` and `data/memory/failure_reasons.json`:
 
-| Model | Chosen for | Cost / 1k input tokens | Cost / 1k output tokens | Accepted / attempts | Main rejection reason | Source |
+| Model | Chosen for | Total cost (full pass) | Cost / accepted row | Accepted / attempts | Main rejection reason | Source |
 |---|---|---|---|---|---|---|
-| \todo{model id} | \todo{reason} | \todo{nanodollars} | \todo{nanodollars} | \todo{n/m} | \todo{reason} | `reports/frontier_ingest.json` |
+| `google/gemini-3.1-flash-lite-preview` | primary teacher; highest acceptance per dollar | $1.090957 (1,090,957,000 nanodollars) | $0.002127 | 513 / 1,600 (32.1 %) | output format (ranking ids, design keys, `<fix>` block) dominates the 965 graded rejections | `data/teacher_runs/completions.jsonl`, `data/frontier/`, `data/memory/failure_reasons.json` |
+| `openai/gpt-5.4-nano-2026-03-17` | second arm / domain-model stand-in | $0.658021 (658,021,050 nanodollars) | $0.005393 | 122 / 1,600 (7.6 %) | same verifier gates; lower rate makes it 2.5x dearer per accepted row | `data/teacher_runs/completions_gptnano.jsonl`, `data/frontier/`, `data/memory/failure_reasons.json` |
+
+Total full-pass spend: **$1.748978**. Both journals carry a model id and usage fields on every line; accepted
+rows are identified by id suffix in `data/frontier/*_train.jsonl` (audit rows: none accepted by either model).
+Of the 635 accepted rows, **460** survived the token/char gate and are the AI-frontier rows actually present
+in `data/sft` and `data/grpo`.
 
 ## Quota limits and changing account
 

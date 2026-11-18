@@ -11,9 +11,12 @@
   "dataset_sources": [
     "rezanadimi/thermo-agent-code",
     "rezanadimi/thermo-agent-corpus",
-    "rezanadimi/thermo-teacher-prompts"
+    "rezanadimi/thermo-teacher-prompts",
+    "rezanadimi/thermo-agent-resume"
   ],
   "competition_sources": [],
-  "kernel_sources": [],
+  "kernel_sources": [
+    "rezanadimi/thermo-kernel-wheels"
+  ],
   "model_sources": []
 }

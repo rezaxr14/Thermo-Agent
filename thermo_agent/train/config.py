@@ -21,7 +21,7 @@ class LoraSettings:
 class SftSettings:
     lr: float = 2e-4
     epochs: int = 1                    # one pass over the 20-variant corpus is ~30 h on two T4s; more would not fit quota
-    max_length: int = 4096             # prompt + completion, both gated at 4000 tokens by synth.combine
+    max_length: int = 8192             # prompt + completion, both gated at 8000 tokens by synth.combine
     per_device_batch: int = 2
     grad_accum: int = 8
     max_grad_norm: float = 1.0         # fp16 needs clipping before the optimizer step

@@ -4,7 +4,7 @@
 written files with the same tokenizer and fails (exit 1) if any row would be cut. It is also the source of the
 corpus size statistics quoted in the paper.
 
-    python -m thermo_agent.train.token_audit data/sft --max-length 4096 --out reports/token_audit.json
+    python -m thermo_agent.train.token_audit data/sft --max-length 8192 --out reports/token_audit.json
 
 The tokenizer is `$THERMO_TOKENIZER` or the cached `Qwen/Qwen3.5-4B` `tokenizer.json`; `--reserve` covers the chat
 markers that `apply_chat_template` adds and that are not part of the message contents measured here.
@@ -23,7 +23,7 @@ def _q(xs: list[int], f: float) -> int:
     return xs[min(len(xs) - 1, int(f * len(xs)))] if xs else 0
 
 
-def audit(data_dir, max_length: int = 4096, reserve: int = TOKEN_RESERVE, tasks=("repair", "ledger", "audit", "design")) -> dict:
+def audit(data_dir, max_length: int = 8192, reserve: int = TOKEN_RESERVE, tasks=("repair", "ledger", "audit", "design")) -> dict:
     tok = tokenizer()
     if tok is None:
         raise SystemExit("no tokenizer: set THERMO_TOKENIZER or cache the Qwen3.5 tokenizer.json")
@@ -61,7 +61,7 @@ def audit(data_dir, max_length: int = 4096, reserve: int = TOKEN_RESERVE, tasks=
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("data")
-    ap.add_argument("--max-length", type=int, default=4096)
+    ap.add_argument("--max-length", type=int, default=8192)
     ap.add_argument("--reserve", type=int, default=TOKEN_RESERVE)
     ap.add_argument("--out", default=None)
     a = ap.parse_args()

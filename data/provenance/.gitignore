@@ -1,0 +1,4 @@
+# The per-trace ledger is a large derived artifact (~56 MB) rebuilt by
+# scripts/build_provenance_ledger.py from the (also gitignored) source corpora.
+# stats.json and docs/PROVENANCE.md are committed so the exact numbers are reviewable.
+trace_ledger.jsonl

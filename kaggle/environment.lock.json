@@ -1,0 +1,37 @@
+{
+  "name": "thermo-agent Kaggle training environment",
+  "policy": "Never compile CUDA kernels in a worker and never download/upload the wheels locally. They are built ONCE by Kaggle kernel rezanadimi/thermo-kernel-wheels; its notebook output is attached directly as kernel_sources to the train, smoke and eval kernels. Workers install the wheels from /kaggle/input with pip --no-deps and verify the torch/CUDA build before import.",
+  "observed_on": "2026-11-18",
+  "worker": {
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "cuda": "13.0",
+    "gpu": "NvidiaTeslaT4 x2 (sm_75)",
+    "nvcc": "/usr/local/cuda/bin/nvcc"
+  },
+  "python_packages": {
+    "transformers": "5.23.0",
+    "trl": "1.18.1",
+    "peft": "0.21.3",
+    "accelerate": "1.16.0",
+    "datasets": "5.2.0",
+    "einops": "0.8.2",
+    "fla-core": "0.6.0",
+    "flash-linear-attention": "0.6.0",
+    "causal-conv1d": "1.7.0"
+  },
+  "wheels": {
+    "attached_from": "kernel_sources: rezanadimi/thermo-kernel-wheels (kernel output, not a dataset)",
+    "files": [
+      "causal_conv1d-1.7.0-cp313-cp313-linux_x86_64.whl",
+      "fla_core-0.6.0-py3-none-any.whl",
+      "flash_linear_attention-0.6.0-py3-none-any.whl"
+    ],
+    "sha256": {
+      "causal_conv1d-1.7.0-cp313-cp313-linux_x86_64.whl": "d5db24f50dfe1ee8771b998d1552cb0b5aded071a186f2e6ca986301fd919012"
+    }
+  },
+  "renderer": "transformers 5.23.0 Qwen3_5ForCausalLM; fused kernels selected by import name (fla, causal_conv1d); USE_HUB_KERNELS=NO",
+  "memory": "PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True",
+  "rebuild_rule": "Re-run ONLY the Kaggle build kernel if Kaggle's torch/CUDA/Python image changes. Its output is attached automatically to the other kernels via kernel_sources. Do not add a source-install fallback to any worker: the reference linear-attention kernels OOM a T4 at 4096 tokens."
+}

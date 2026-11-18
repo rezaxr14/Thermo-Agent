@@ -1,7 +1,7 @@
 {
- "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+ "command": "design sample: first 30 rows of each design test split (test_id, test_ood_climate, test_ood_load, test_ood_scale) in data/processed, n=120 (matches python -m thermo_agent.design.run_eval data/processed data/processed_arch --split X --limit 30); design.curves.baseline_curves(one site, seed=crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
  "seed": 0,
- "n": 24,
+ "n": 120,
  "kind": "simulation",
  "tolerance": 0.02,
  "budgets": [
@@ -21,98 +21,98 @@
   128
  ],
  "split_counts": {
-  "test_id": 5,
-  "test_ood_climate": 11,
-  "test_ood_load": 4,
-  "val": 2,
-  "test_ood_scale": 2
+  "test_id": 30,
+  "test_ood_climate": 30,
+  "test_ood_load": 30,
+  "val": 0,
+  "test_ood_scale": 30
  },
- "sites_with_heat_demand": 9,
+ "sites_with_heat_demand": 35,
  "curves": {
   "enumerate_defaults": [
    {
     "budget": 1,
-    "valid": 0.875,
+    "valid": 0.892,
     "within_tol": 0.0,
-    "mean_gap_pct": 19.48
+    "mean_gap_pct": 19.11
    },
    {
     "budget": 2,
-    "valid": 0.875,
+    "valid": 0.892,
     "within_tol": 0.0,
-    "mean_gap_pct": 19.21
+    "mean_gap_pct": 18.99
    },
    {
     "budget": 3,
-    "valid": 0.875,
+    "valid": 0.892,
     "within_tol": 0.0,
-    "mean_gap_pct": 17.4
+    "mean_gap_pct": 16.63
    },
    {
     "budget": 4,
-    "valid": 0.875,
+    "valid": 0.892,
     "within_tol": 0.0,
-    "mean_gap_pct": 14.35
+    "mean_gap_pct": 14.62
    },
    {
     "budget": 6,
-    "valid": 0.875,
+    "valid": 0.933,
     "within_tol": 0.0,
-    "mean_gap_pct": 13.36
+    "mean_gap_pct": 13.92
    },
    {
     "budget": 8,
-    "valid": 0.875,
+    "valid": 0.933,
     "within_tol": 0.0,
-    "mean_gap_pct": 12.62
+    "mean_gap_pct": 11.62
    },
    {
     "budget": 12,
-    "valid": 0.958,
+    "valid": 1.0,
     "within_tol": 0.0,
-    "mean_gap_pct": 13.07
+    "mean_gap_pct": 11.91
    },
    {
     "budget": 16,
-    "valid": 0.958,
+    "valid": 1.0,
     "within_tol": 0.0,
-    "mean_gap_pct": 12.37
+    "mean_gap_pct": 11.01
    },
    {
     "budget": 24,
     "valid": 1.0,
-    "within_tol": 0.25,
-    "mean_gap_pct": 8.15
+    "within_tol": 0.233,
+    "mean_gap_pct": 6.32
    },
    {
     "budget": 32,
     "valid": 1.0,
-    "within_tol": 0.333,
-    "mean_gap_pct": 5.97
+    "within_tol": 0.308,
+    "mean_gap_pct": 4.88
    },
    {
     "budget": 48,
     "valid": 1.0,
-    "within_tol": 0.458,
-    "mean_gap_pct": 4.3
+    "within_tol": 0.442,
+    "mean_gap_pct": 3.69
    },
    {
     "budget": 64,
     "valid": 1.0,
-    "within_tol": 0.708,
-    "mean_gap_pct": 2.37
+    "within_tol": 0.575,
+    "mean_gap_pct": 2.95
    },
    {
     "budget": 96,
     "valid": 1.0,
-    "within_tol": 0.708,
-    "mean_gap_pct": 2.37
+    "within_tol": 0.575,
+    "mean_gap_pct": 2.95
    },
    {
     "budget": 128,
     "valid": 1.0,
-    "within_tol": 0.708,
-    "mean_gap_pct": 2.37
+    "within_tol": 0.575,
+    "mean_gap_pct": 2.95
    }
   ],
   "enumerate_defaults_lengths": {
@@ -122,87 +122,87 @@
   "random": [
    {
     "budget": 1,
-    "valid": 0.25,
+    "valid": 0.2,
     "within_tol": 0.042,
-    "mean_gap_pct": 19.03
+    "mean_gap_pct": 13.38
    },
    {
     "budget": 2,
-    "valid": 0.375,
-    "within_tol": 0.125,
-    "mean_gap_pct": 16.13
+    "valid": 0.392,
+    "within_tol": 0.05,
+    "mean_gap_pct": 15.68
    },
    {
     "budget": 3,
-    "valid": 0.625,
-    "within_tol": 0.167,
-    "mean_gap_pct": 13.56
+    "valid": 0.475,
+    "within_tol": 0.067,
+    "mean_gap_pct": 15.04
    },
    {
     "budget": 4,
-    "valid": 0.75,
-    "within_tol": 0.167,
-    "mean_gap_pct": 15.52
+    "valid": 0.567,
+    "within_tol": 0.075,
+    "mean_gap_pct": 14.44
    },
    {
     "budget": 6,
-    "valid": 0.75,
-    "within_tol": 0.208,
-    "mean_gap_pct": 12.84
+    "valid": 0.642,
+    "within_tol": 0.092,
+    "mean_gap_pct": 13.19
    },
    {
     "budget": 8,
-    "valid": 0.833,
-    "within_tol": 0.333,
-    "mean_gap_pct": 9.56
+    "valid": 0.75,
+    "within_tol": 0.1,
+    "mean_gap_pct": 12.44
    },
    {
     "budget": 12,
-    "valid": 0.958,
-    "within_tol": 0.333,
-    "mean_gap_pct": 8.65
+    "valid": 0.883,
+    "within_tol": 0.15,
+    "mean_gap_pct": 10.64
    },
    {
     "budget": 16,
-    "valid": 0.958,
-    "within_tol": 0.333,
-    "mean_gap_pct": 6.58
+    "valid": 0.917,
+    "within_tol": 0.2,
+    "mean_gap_pct": 9.04
    },
    {
     "budget": 24,
-    "valid": 1.0,
-    "within_tol": 0.417,
-    "mean_gap_pct": 5.02
+    "valid": 0.967,
+    "within_tol": 0.275,
+    "mean_gap_pct": 7.37
    },
    {
     "budget": 32,
-    "valid": 1.0,
-    "within_tol": 0.458,
-    "mean_gap_pct": 3.57
+    "valid": 0.992,
+    "within_tol": 0.375,
+    "mean_gap_pct": 4.43
    },
    {
     "budget": 48,
     "valid": 1.0,
-    "within_tol": 0.542,
-    "mean_gap_pct": 2.93
+    "within_tol": 0.458,
+    "mean_gap_pct": 3.24
    },
    {
     "budget": 64,
     "valid": 1.0,
-    "within_tol": 0.667,
-    "mean_gap_pct": 1.58
+    "within_tol": 0.517,
+    "mean_gap_pct": 2.43
    },
    {
     "budget": 96,
     "valid": 1.0,
-    "within_tol": 0.708,
-    "mean_gap_pct": 0.95
+    "within_tol": 0.583,
+    "mean_gap_pct": 1.93
    },
    {
     "budget": 128,
     "valid": 1.0,
-    "within_tol": 0.75,
-    "mean_gap_pct": 0.56
+    "within_tol": 0.667,
+    "mean_gap_pct": 1.55
    }
   ],
   "random_lengths": {
@@ -212,87 +212,87 @@
   "enumerate_then_polish": [
    {
     "budget": 1,
-    "valid": 0.875,
+    "valid": 0.892,
     "within_tol": 0.0,
-    "mean_gap_pct": 19.48
+    "mean_gap_pct": 19.11
    },
    {
     "budget": 2,
-    "valid": 0.875,
+    "valid": 0.892,
     "within_tol": 0.0,
-    "mean_gap_pct": 19.21
+    "mean_gap_pct": 18.99
    },
    {
     "budget": 3,
-    "valid": 0.875,
+    "valid": 0.892,
     "within_tol": 0.0,
-    "mean_gap_pct": 17.4
+    "mean_gap_pct": 16.63
    },
    {
     "budget": 4,
-    "valid": 0.875,
+    "valid": 0.892,
     "within_tol": 0.0,
-    "mean_gap_pct": 14.35
+    "mean_gap_pct": 14.62
    },
    {
     "budget": 6,
-    "valid": 0.875,
+    "valid": 0.933,
     "within_tol": 0.0,
-    "mean_gap_pct": 13.36
+    "mean_gap_pct": 13.92
    },
    {
     "budget": 8,
-    "valid": 0.875,
+    "valid": 0.933,
     "within_tol": 0.0,
-    "mean_gap_pct": 12.62
+    "mean_gap_pct": 11.62
    },
    {
     "budget": 12,
-    "valid": 0.958,
+    "valid": 1.0,
     "within_tol": 0.0,
-    "mean_gap_pct": 13.07
+    "mean_gap_pct": 11.91
    },
    {
     "budget": 16,
-    "valid": 0.958,
+    "valid": 1.0,
     "within_tol": 0.0,
-    "mean_gap_pct": 12.37
+    "mean_gap_pct": 11.01
    },
    {
     "budget": 24,
     "valid": 1.0,
-    "within_tol": 0.25,
-    "mean_gap_pct": 8.15
+    "within_tol": 0.233,
+    "mean_gap_pct": 6.32
    },
    {
     "budget": 32,
     "valid": 1.0,
-    "within_tol": 0.333,
-    "mean_gap_pct": 5.97
+    "within_tol": 0.308,
+    "mean_gap_pct": 4.88
    },
    {
     "budget": 48,
     "valid": 1.0,
-    "within_tol": 0.5,
-    "mean_gap_pct": 3.67
+    "within_tol": 0.508,
+    "mean_gap_pct": 2.88
    },
    {
     "budget": 64,
     "valid": 1.0,
-    "within_tol": 0.792,
-    "mean_gap_pct": 1.45
+    "within_tol": 0.708,
+    "mean_gap_pct": 1.77
    },
    {
     "budget": 96,
     "valid": 1.0,
-    "within_tol": 0.917,
-    "mean_gap_pct": 0.31
+    "within_tol": 0.925,
+    "mean_gap_pct": 0.42
    },
    {
     "budget": 128,
     "valid": 1.0,
-    "within_tol": 1.0,
-    "mean_gap_pct": 0.13
+    "within_tol": 0.992,
+    "mean_gap_pct": 0.18
    }
   ],
   "enumerate_then_polish_lengths": {

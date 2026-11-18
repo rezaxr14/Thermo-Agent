@@ -57,7 +57,7 @@ Sizes of the final corpus: \val{corp.rows} rows, \val{corp.rows_train} in the tr
 \begin{table}[tbp]
 \centering
 \input{generated/table_datasets.tex}
-\caption{Rows per split of the ground-truth datasets the baselines and evaluations read (seed 0: \texttt{data/processed} and the diagram catalog \texttt{data/processed\_arch}); the baselines sample at most 200 Repair, 100 Audit and 400 Ledger rows per split and 30 Design sites per held-out split, while the anytime design curves of \cref{fig:fig_design_baselines} use a separate 24-site sample. The training corpus has \val{corp.rows} rows. Splits for the in-distribution sets are separated by a hash of the example identifier. Data: \texttt{assets/splits.json}.}
+\caption{Rows per split of the ground-truth datasets the baselines and evaluations read (seed 0: \texttt{data/processed} and the diagram catalog \texttt{data/processed\_arch}); the baselines sample at most 200 Repair, 100 Audit and 400 Ledger rows per split and 30 Design sites per held-out split, and the anytime design curves of \cref{fig:fig_design_baselines} use the first 30 sites of each of the four Design test splits (120 held-out sites, no validation sites). The training corpus has \val{corp.rows} rows. Splits for the in-distribution sets are separated by a hash of the example identifier. Data: \texttt{assets/splits.json}.}
 \label{tab:datasets}
 \end{table}
 

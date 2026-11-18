@@ -51,8 +51,9 @@ The corpus has four sources, all deterministic or verifier-grounded (no free-for
    their answers, answered on Kaggle Benchmarks, then every answer is re-run through the tool suite here. Only
    accepted answers become rows; rejections become hindsight memory.
 4. **Hindsight failure memory** (`thermo_agent/teacher/memory.py`): lessons mined from rejected attempts are
-   retrieved per prompt (k=3) and injected as "known failure modes". Only repair has notes today (24 from the
-   adversarial miner), so only repair rows carry a memory block.
+   retrieved per prompt (k=3) and injected as "known failure modes". There are **342** stored notes
+   (318 from rejected frontier answers across all four tasks + 24 from the adversarial repair miner); the
+   graded rejection summary counts 965 attempts before deduplication. See `docs/API_USAGE_AND_PROGRESS.md`.
 
 `scripts/build_corpus.ps1` stages, audits, verifies and swaps two corpora:
 
@@ -63,7 +64,7 @@ The corpus has four sources, all deterministic or verifier-grounded (no free-for
 
 Every candidate row is measured with the real Qwen3.5 tokenizer before it is written; rows that do not fit are
 dropped and counted, never truncated. Two gates: 11,500 characters (cheap pre-filter) and 4,000 tokens
-(prompt + completion + a 96-token reserve for the chat markers) under `max_length` 4096.
+(prompt + completion + a 192-token reserve for the chat markers) under `max_length` 8192.
 
 Measured harness cost per task (200 train rows, tokens, p50 / max):
 
@@ -81,7 +82,7 @@ character pre-filter.
 
 ### Current corpus (variants 20, harness 0.35, memory 3)
 
-| corpus | rows | train rows | max row | rows over 4096 |
+| corpus | rows | train rows | max row | rows over 8192 |
 |---|---|---|---|---|
 | `data/sft` | 123,024 | 109,659 | 4,000 tokens | 0 |
 | `data/grpo` | 28,214 | 14,849 | 4,000 tokens | 0 |
@@ -172,18 +173,40 @@ so `data/frontier_export` stays valid for the teacher.
 - **Resume**: both trainers save every 200 steps (`save_strategy="steps", save_steps=200`, GRPO every 50) and
   auto-resume from `latest(out_dir)` via `transformers.trainer_utils.get_last_checkpoint`. One SFT epoch ≈ 3,650
   steps ≈ 30 h.
-- SFT `max_length` 4096; rows are gated at 4,000 tokens when the corpus is built, so nothing is truncated.
+- SFT `max_length` 8192; rows are gated at 8,000 tokens when the corpus is built, so nothing is truncated.
 - The chat template was checked against the real tokenizer: `prefix_matches: true`, and the prompt ends at
   `<|im_start|>assistant<think></think>`, so SFT, GRPO and evaluation render the same generation prompt.
 - GRPO uses the **same prompts** as SFT (with harness/memory); its loader keeps only the prompt and the reward
   columns.
 
-Trainings have not been run yet: the 4050 cannot hold a 4B model for training, and the Kaggle run is the next step.
+Trainings have not been run yet locally: the 4050 cannot hold a 4B model for training.
+
+### Measured Kaggle smoke (dual-T4 path)
+
+- Smoke kernel v17 (`rezanadimi/thermo-train-smoke`, 20 steps, 64 rows, 1 rank, batch 1, 512x8192 loss tiles)
+  **trained successfully**: `[memory] 4.21B params, weight dtype torch.float16`/0.00 GiB before placement,
+  `[loss] chunked cross-entropy` active, loss 1.59 -> 0.61 over 20 steps, ~50 s/step. No OOM in training.
+- It failed in the **step-20 evaluation forward**: `torch.OutOfMemoryError`, 488 MiB requested for
+  `torch.linalg.solve_triangular` in Qwen3.5's linear attention with 246 MiB free. The 4096-token
+  allocation is in the **reference PyTorch implementation of Qwen3.5's linear attention**
+  (`torch_chunk_gated_delta_rule` -> `solve_triangular`), not in the LM-head logits; the worker warned that
+  `flash-linear-attention` and `causal-conv1d` are absent, so the slow fallback kernels are in use.
+- Fix under test (eval path only, no weights/truncation/training settings changed):
+  `ChunkedSFTTrainerMixin.prediction_step` frees cached CUDA blocks before the forward, forces fused SDPA
+  backends for the full-attention layers, and runs under `torch.inference_mode()` with a narrow fallback.
+  If the eval still OOMs, the remaining cause is the linear-attention fallback kernel and the next step is to
+  install the project's fused `flash-linear-attention` kernels in the worker, not to shorten the window.
+  Local CUDA check: train loss 6.953, eval loss 6.948 (reference full-logits fp16 loss 6.948).
+- Smoke v18 with this fix was pushed; its result is the current gate for the full run.
+- Kaggle's Secrets service was unreachable inside the worker (`Connection error trying to communicate with
+  service`), so v17 had no `HF_TOKEN`: checkpoints stayed local to that session. Cross-session HF resume
+  requires the secret to be reachable in the worker; no token was copied into code or datasets.
 
 ## Tests
 
-- Full CPU suite: **363 passed** in 6.4 minutes. `paper/methods_draft.md` exists, so its constant checks run instead
-  of skipping at module level.
+- Full CPU suite: **370 passed** (latest run 304.55 s, `logs/pytest_round2.log`) plus 3 new resume-relay tests
+  (11 passed for `test_kaggle_notebook.py` + `test_resume_relay.py`). `paper/methods_draft.md` exists, so its
+  constant checks run instead of skipping at module level.
 - New this round: `tests/test_run_eval.py` (the Repair per-fault breakdown must score the rows it names) and three
   cases in `tests/test_splits.py` (the MIX generators must put ideal-rejection engines in `test_ood_topology`);
   the round before added `tests/test_verify.py` (the corpus verifier must notice a missing file, a row-count mismatch,
@@ -193,19 +216,37 @@ Trainings have not been run yet: the 4050 cannot hold a 4B model for training, a
 - Run `pytest -q` before any commit that touches `thermo_agent/`; `paper/tools/verify_paper.py` checks that every
   `\val{...}` used in the sections exists in the generated assets (the LaTeX build itself needs a TeX installation).
 
-## Kaggle (teacher pass)
+## Kaggle (teacher pass) — completed
 
-`kaggle/README.md` has the three-step hand-off: export the prompts and zip them here, upload the zip as a private
-dataset and import `kaggle/teacher.ipynb` (built by `kaggle/make_notebook.py` from `kaggle/teacher_benchmark.py`),
-then ingest and validate here. The Kaggle half needs only a browser, so the local CLI's 403 (account verification
-pending) does not block it. Nothing in the notebook decides what is true: `teacher.validate` does, and rejections
-land in `data/memory/frontier_notes.jsonl`.
+The teacher pass was executed with the Kaggle CLI (not the browser notebook): 1,600 prompts per model,
+Gemini 513 accepted / $1.090957 and GPT-5.4-nano 122 accepted / $0.658021; 3,668 raw training answers,
+635 verifier-accepted rows, 460 used in both corpora. Held-out answers: 360 per model. Full accounting and
+provenance are in `docs/API_USAGE_AND_PROGRESS.md`; `docs/TEACHER_MODEL_CHOICES.md` carries the model decision.
+
+## Expert-scale cycles and per-trace provenance (new)
+
+- `thermo_agent/synth/big_topologies.py::big_cchp_steam2p_reheat_hp` adds a 19-component / 34-stream
+  two-pressure steam cycle with reheat, separate LP loop, chilled water, district heat and a wet tower.
+  It solves and passes all hard verifiers; sampled draws reach 60–120 MW IT load and ~150–230 MW fuel.
+  It is registered in `BIG_ARCHITECTURES` and is **additive** to the 65 small diagrams (`catalog()` unchanged).
+- New ground truth lives in `data/processed_big` (seeds 100/101) and is merged with the old corpora via
+  `combine --extra-processed data/processed_big` into `data/sft_all` / `data/grpo_all`; nothing in
+  `data/processed`, `data/sft` or `data/grpo` is deleted.
+- The token gate is now 8,000 prompt tokens under `max_length` 8,192 (was 4,000 / 4,096), so long
+  expert-cycle traces are not dropped; `data/grpo_all` audited at max row 6,405 tokens with zero drops.
+- `scripts/build_provenance_ledger.py` emits one record per unique trace in
+  `data/provenance/trace_ledger.jsonl` (37,746 traces) plus `stats.json` and `docs/PROVENANCE.md`, with
+  origin, journal line, cost, acceptance and downstream artifact links. It is auto-discovering: dropping a
+  new big-model journal into `data/teacher_runs/` adds traces without a code change.
 
 ## Next
 
-1. Run the Kaggle teacher pass: `data/frontier_export.zip` (1,600 prompts, 1.8 MB) is exported from the current
-   corpus. Upload it as a private dataset, import `kaggle/teacher.ipynb`, download `completions.jsonl`, ingest.
-   This is the only step that needs the user (a browser and a Kaggle session).
-2. Smoke-test SFT/GRPO on Kaggle (`STEPS=20 ROWS=64 bash scripts/train_dual_t4.sh sft`, then `grpo ledger`).
-3. The method section now carries the corpus sizes, the 20-variant policy and the held-out combinations; what is
-   still missing is the teacher acceptance table, the model results and the trace/fleet section.
+1. Publish the prebuilt fused-kernel wheels (`pwsh scripts/publish_wheel_dataset.ps1`), re-upload the code bundle,
+   and push the smoke kernel with the wheel and resume datasets attached. Verify that the fused kernels remove the
+   reference-kernel fallback warnings and that the step-20 evaluation no longer OOMs.
+2. Launch the full SFT run (`kaggle/train_kernel`, 2x T4), relay each session's newest checkpoint with
+   `pwsh scripts/resume_kaggle_checkpoint.ps1`, then merge and run GRPO per task.
+3. Run the eval kernel arms (`ours_base`, `ours_sft`, `ours_harness`, `ours_grpo`) and fold the new rows into the
+   comparison manifest, tables and the regenerable trace figure. Static SVG figures stay untouched.
+4. Fill the remaining Q1 items in `paper/Q1_CHECKLIST.md` (ablation, significance, GPU-hour totals, memory ablation)
+   and redraw the three externally-drawn figures that still show pilot samples.

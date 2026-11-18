@@ -88,7 +88,7 @@ def tokenizer():
 class Budget:
     """Characters and tokens for one prompt, measured the same way for every row."""
 
-    def __init__(self, max_chars: int = 11500, max_tokens: int = 4000):
+    def __init__(self, max_chars: int = 22000, max_tokens: int = 8000):
         self.max_chars, self.max_tokens = max_chars, max_tokens
         self.tok = tokenizer()
         self.max_kept = 0
@@ -206,7 +206,7 @@ def _check(task: str, rows: list[dict], limit: int, problems: list[str]) -> dict
 
 def build(processed, frontier, memory_dir, out_dir, tasks=TASKS, variants: int = 20,
           harness_fraction: float = 0.35, k_memory: int = 3, max_chars: int = 11500,
-          splits=None, check_limit: int = 0, extra_processed=(), max_tokens: int = 4000) -> dict:
+          splits=None, check_limit: int = 0, extra_processed=(), max_tokens: int = 8000) -> dict:
     proc_dirs = [pathlib.Path(processed)] + [pathlib.Path(p) for p in extra_processed]
     front, mem = pathlib.Path(frontier), pathlib.Path(memory_dir)
     out = pathlib.Path(out_dir)
@@ -294,8 +294,8 @@ def main():
     ap.add_argument("--harness-fraction", type=float, default=0.35)
     ap.add_argument("--k-memory", type=int, default=3)
     ap.add_argument("--max-prompt-chars", type=int, default=11500)
-    ap.add_argument("--max-prompt-tokens", type=int, default=4000,
-                    help="prompt + completion + chat-marker reserve; 4000 leaves 96 tokens under SFT max_length 4096")
+    ap.add_argument("--max-prompt-tokens", type=int, default=8000,
+                    help="prompt + completion + chat-marker reserve; 8000 leaves 192 tokens under SFT max_length 8192")
     ap.add_argument("--check-limit", type=int, default=0)
     ap.add_argument("--splits", nargs="*", default=None, help="override the per-task split lists")
     ap.add_argument("--extra-processed", nargs="*", default=[], help="more processed dirs, e.g. the architecture corpus")

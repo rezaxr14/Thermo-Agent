@@ -12,6 +12,7 @@ checkpointing and DDP wrapping are the ones TRL already builds.
 from __future__ import annotations
 
 import torch
+from contextlib import nullcontext as _nullcontext
 from peft import PeftModel
 
 from .chunked_loss import add_chunked_lm_head
@@ -61,11 +62,42 @@ class ChunkedSFTTrainerMixin:
             return loss, outputs
         return loss
 
+    def evaluate(self, *args, **kwargs):
+        """Release one cached allocator pool at the start of evaluation, not on every batch."""
+        if torch.cuda.is_available():
+            import gc
+            gc.collect()
+            torch.cuda.empty_cache()
+        return super().evaluate(*args, **kwargs)
+
     def prediction_step(self, model, inputs, prediction_loss_only, ignore_keys=None):
-        """Evaluation only needs the loss; skip the full-logits pass TRL would add."""
+        """Evaluation only needs the loss; skip the full-logits pass TRL would add.
+
+        Evaluation runs on the same 4096-token rows and the same weights as training.
+        Restrict the full-attention layers to fused SDPA backends (the math backend would
+        materialise a ~0.5 GiB attention matrix) and run without autograd. The dominant
+        memory is Qwen3.5's linear-attention kernels, fixed by the prebuilt fused kernels
+        in the `thermo-kernel-wheels` dataset; this method only keeps the small pieces
+        bounded. No weights, sequence length or training setting changes here.
+        """
         inputs = self._prepare_inputs(inputs)
-        with self.compute_loss_context_manager(), torch.no_grad():
-            loss = self.compute_loss(model, inputs)
+        if torch.cuda.is_available():
+            from torch.nn.attention import SDPBackend, sdpa_kernel
+
+            backends = [SDPBackend.FLASH_ATTENTION, SDPBackend.EFFICIENT_ATTENTION]
+            context = sdpa_kernel(backends)
+        else:
+            context = _nullcontext()
+        try:
+            with context, self.compute_loss_context_manager(), torch.inference_mode():
+                loss = self.compute_loss(model, inputs)
+        except RuntimeError as exc:
+            # Tiny heads/sequences have no fused kernel; only fall back for that specific
+            # dispatch error, never for an OOM or a real model failure.
+            if "No available kernel" not in str(exc):
+                raise
+            with self.compute_loss_context_manager(), torch.inference_mode():
+                loss = self.compute_loss(model, inputs)
         return (loss.detach() if isinstance(loss, torch.Tensor) else loss), None, None
 
 

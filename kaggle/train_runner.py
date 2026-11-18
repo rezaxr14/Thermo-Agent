@@ -48,10 +48,23 @@ os.chdir(ROOT)
 print("code unpacked at", ROOT)
 
 # %%
-from thermo_agent.kaggle_notebook import WORK, find_input, run, setup, token
+from thermo_agent.kaggle_notebook import (
+    WORK, assert_pinned_environment, find_input, restore_checkpoints, run, setup, status, token,
+)
 
 ROOT = setup()   # install dependencies and copy the corpora
+
+# Pin check in the notebook itself: every version comes from kaggle/environment.lock.json and
+# the fused wheels come from kernel_sources. A drift fails here, it is never repaired by compiling.
+assert_pinned_environment(ROOT / "kaggle" / "environment.lock.json")
+status(stage="setup", state="done", root=str(ROOT))
 print("code and corpora ready at", ROOT)
+
+# %%
+# Cross-session resume: with no Kaggle Secret, HF sync cannot relay checkpoints. The local CLI
+# relays the newest checkpoint into the private thermo-agent-resume dataset between sessions.
+restored = restore_checkpoints(ROOT)
+status(stage="resume", state="done", restored=restored)
 
 # %%
 # The token is a Kaggle Secret, not a literal in the notebook. `hf_sync` refuses any repo other than
@@ -67,8 +80,10 @@ else:
 # %%
 print(ddp.topology_line())
 import torch
+status(stage="preflight", state="running", torch=torch.__version__, cuda=torch.version.cuda)
 assert torch.cuda.device_count() == 2, "start this notebook with Accelerator: GPU T4 x2 (two T4s visible)"
 assert ddp.dtype_for_capability(7, 5) == "float16", "T4 must run fp16"
+status(stage="preflight", state="done", gpus=torch.cuda.device_count())
 
 # %%
 # Optional smoke limits: set STEPS=20 and ROWS=64 to validate the whole path before the long run.
@@ -78,6 +93,9 @@ SYNC = os.environ.get("THERMO_HF_SYNC", "auto")
 LIMITS = (["--max-steps", str(STEPS)] if STEPS else []) + (["--limit-rows", str(ROWS)] if ROWS else [])
 PY = sys.executable
 NGPU = int(os.environ.get("NGPU", "2"))
+# The merged corpora include the expert-scale cycle rows; the original corpora remain untouched.
+SFT_DATA = os.environ.get("SFT_DATA", "sft_all")
+GRPO_DATA = os.environ.get("GRPO_DATA", "grpo_all")
 SFT_BATCH = os.environ.get("SFT_BATCH", "2")
 SFT_ACCUM = os.environ.get("SFT_ACCUM", "8")
 MAXLEN = os.environ.get("MAXLEN", "")
@@ -87,13 +105,16 @@ print("[loss] tiles", LOSS_TOKENS, "tokens x", LOSS_VOCAB, "vocabulary entries",
 
 # %%
 # Stage 1: SFT. Every save pushes the adapter, optimizer, scheduler, scaler and RNG to the private repo.
+status(stage="sft", state="running", steps=STEPS, rows=ROWS, batch=SFT_BATCH, accum=SFT_ACCUM,
+       loss_tokens=LOSS_TOKENS, loss_vocab=LOSS_VOCAB)
 run([PY, "-m", "torch.distributed.run", "--standalone", "--nproc_per_node", str(NGPU), "--module", "thermo_agent.train.sft",
-     ROOT / "data" / "sft", ROOT / "runs" / "sft", "--dtype", "float16",
+     ROOT / "data" / SFT_DATA, ROOT / "runs" / "sft", "--dtype", "float16",
      "--tasks", "repair", "design", "audit", "ledger",
      "--per-device-batch", SFT_BATCH, "--grad-accum", SFT_ACCUM, "--num-workers", "2",
      "--loss-token-chunk", LOSS_TOKENS, "--loss-vocab-chunk", LOSS_VOCAB,
      *(["--max-length", MAXLEN] if MAXLEN else []),
      "--hf-sync", SYNC, *LIMITS])
+status(stage="sft", state="done", local_steps=hf_sync.local_steps(ROOT / "runs", "sft"))
 
 # %%
 # Merge the newest SFT checkpoint; the merged weights also go to the repo so the next session can start GRPO.
@@ -102,22 +123,32 @@ if not latest:
     raise SystemExit("no SFT checkpoint to merge")
 adapter = ROOT / "runs" / "sft" / f"checkpoint-{max(latest)}"
 merged = ROOT / "runs" / "sft_merged"
+status(stage="merge", state="running", adapter=str(adapter))
 run([PY, "-m", "thermo_agent.train.merge", adapter, merged,
      "--dtype", "float16", "--hf-sync", SYNC])
+status(stage="merge", state="done")
 
 # %%
 # Stage 2: GRPO. `--init hf:merged/sft` reuses the merged model from the repo, so no SFT is redone here.
 # Each task has its own checkpoint prefix (`grpo_repair`, ...), and can be run in a separate session.
 TASK = os.environ.get("TASK", "ledger")
+status(stage=f"grpo_{TASK}", state="running")
+# With a token, load the merged weights from HF. Without one, use the merge cell's local output;
+# this changes only where the same weights come from, not the model or any training setting.
+INIT = "hf:merged/sft" if os.environ.get("HF_TOKEN") else str(merged)
 run([PY, "-m", "torch.distributed.run", "--standalone", "--nproc_per_node", str(NGPU), "--module", "thermo_agent.train.grpo",
-     ROOT / "data" / "grpo", ROOT / "runs" / f"grpo_{TASK}", "--task", TASK,
-     "--init", "hf:merged/sft", "--dtype", "float16",
+     ROOT / "data" / GRPO_DATA, ROOT / "runs" / f"grpo_{TASK}", "--task", TASK,
+     "--init", INIT, "--dtype", "float16",
      "--per-device-batch", "4", "--grad-accum", "2", "--num-workers", "2",
      "--rollout-log", ROOT / "runs" / f"grpo_{TASK}" / "rollouts.jsonl",
      "--hf-sync", SYNC, *LIMITS])
+status(stage=f"grpo_{TASK}", state="done", local_steps=hf_sync.local_steps(ROOT / "runs", f"grpo_{TASK}"))
 
 # %%
 # Status: the remote steps are what the next session will resume from.
-for stage in ["sft", f"grpo_{TASK}"]:
-    print(stage, "local:", hf_sync.local_steps(ROOT / "runs", stage),
-          "remote:", hf_sync.remote_steps(hf_sync.repo_files(hf_sync.resolve_repo()), stage))
+if os.environ.get("HF_TOKEN"):
+    for stage in ["sft", f"grpo_{TASK}"]:
+        print(stage, "local:", hf_sync.local_steps(ROOT / "runs", stage),
+              "remote:", hf_sync.remote_steps(hf_sync.repo_files(hf_sync.resolve_repo()), stage))
+else:
+    print("remote steps: n/a (no HF token in this worker)")

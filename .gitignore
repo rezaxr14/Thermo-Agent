@@ -54,8 +54,11 @@ desktop.ini
 logs/
 reports/*.completions.jsonl
 data/processed_arch/
+data/processed_big/
 data/memory/
 data/sft/
+data/sft_all/
+data/grpo_all/
 data/*.debug/
 data/frontier/
 data/scratch_arch/

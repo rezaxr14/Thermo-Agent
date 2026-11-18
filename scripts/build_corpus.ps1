@@ -13,7 +13,7 @@
 param(
     [int]$Variants = 20,
     [int]$GrpoVariants = 1,
-    [int]$MaxLength = 4096,
+    [int]$MaxLength = 8192,
     [string]$Sft = 'data/sft',
     [string]$Grpo = 'data/grpo'
 )
@@ -47,10 +47,10 @@ if ($LASTEXITCODE -ne 0) { throw "SFT corpus does not fit max_length=$MaxLength;
 if ($LASTEXITCODE -ne 0) { throw "GRPO corpus does not fit max_length=$MaxLength; left in $grpoStage" }
 
 Step 'verify the staged corpora against their reports'
-& $py -m thermo_agent.synth.verify $sftStage --max-tokens 4000 |
+& $py -m thermo_agent.synth.verify $sftStage --max-tokens 8000 |
     Tee-Object -FilePath reports/verify_sft.json | Out-Null
 if ($LASTEXITCODE -ne 0) { throw "staged SFT corpus failed verification; left in $sftStage" }
-& $py -m thermo_agent.synth.verify $grpoStage --max-tokens 4000 --allow-missing-completion |
+& $py -m thermo_agent.synth.verify $grpoStage --max-tokens 8000 --allow-missing-completion |
     Tee-Object -FilePath reports/verify_grpo.json | Out-Null
 if ($LASTEXITCODE -ne 0) { throw "staged GRPO corpus failed verification; left in $grpoStage" }
 
@@ -75,8 +75,9 @@ Swap-In $sftStage $Sft
 Swap-In $grpoStage $Grpo
 
 Step 'verify the swapped corpora in place'
-& $py -m thermo_agent.synth.verify $Sft --max-tokens 4000 | Out-Null
+& $py -m thermo_agent.synth.verify $Sft --max-tokens 8000 | Out-Null
 if ($LASTEXITCODE -ne 0) { throw "swapped SFT corpus failed verification: $Sft" }
-& $py -m thermo_agent.synth.verify $Grpo --max-tokens 4000 --allow-missing-completion | Out-Null
+& $py -m thermo_agent.synth.verify $Grpo --max-tokens 8000 --allow-missing-completion | Out-Null
 if ($LASTEXITCODE -ne 0) { throw "swapped GRPO corpus failed verification: $Grpo" }
+& $py scripts/build_provenance_ledger.py; if ($LASTEXITCODE -ne 0) { throw 'provenance ledger build failed' }
 Step 'done'

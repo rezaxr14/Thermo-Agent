@@ -44,7 +44,7 @@ If `trainer_state.json` shows a large share of skipped steps, lower the learning
 |---|---|---|
 | base weights, fp16 | 8.0 GB | 8.0 GB |
 | LoRA params + fp32 optimizer state | ~0.4 GB | ~0.2 GB |
-| activations (checkpointing on) | ~1.4 GB at batch 2 × 4096 tokens | ~1 GB at 16 sequences × 320 tokens |
+| activations (checkpointing on) | ~2.8 GB at batch 2 × 8192 tokens | ~1 GB at 16 sequences × 320 tokens |
 | cross-entropy tile (chunked, fp32) | 0.02 GB (512 × 8192) | — |
 | KV cache | — | ~2 GB at 4 prompts × 4 completions × ~900 tokens |
 | **total** | **~10 GB of 15 GB** | **~11 GB of 15 GB** |

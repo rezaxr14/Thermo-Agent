@@ -1,0 +1,23 @@
+{
+  "id": "rezanadimi/thermo-eval-run",
+  "title": "thermo-eval-run",
+  "code_file": "eval.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "dataset_sources": [
+    "rezanadimi/thermo-agent-code",
+    "rezanadimi/thermo-agent-corpus",
+    "rezanadimi/thermo-teacher-prompts",
+    "rezanadimi/thermo-agent-resume",
+    "rezanadimi/thermo-agent-eval-replays"
+  ],
+  "competition_sources": [],
+  "kernel_sources": [
+    "rezanadimi/thermo-kernel-wheels"
+  ],
+  "model_sources": []
+}

@@ -66,7 +66,7 @@ claim sample efficiency (RQ1). The search finds a valid plant, which need not be
 
 \paragraph{Design.}
 \Cref{fig:fig_design_baselines} shows the share of sites whose best design is within \val{des.tolerance_pct}\% of the reference against the number of design evaluations, on \val{des.n_sites} sites (\val{des.split.test_id} in-distribution,
-\val{des.split.test_ood_climate} hot-climate, \val{des.split.test_ood_load} high-chilled-fraction, \val{des.split.test_ood_scale} large-scale and \val{des.split.val} validation). Enumerating the defaults takes
+\val{des.split.test_ood_climate} hot-climate, \val{des.split.test_ood_load} high-chilled-fraction and \val{des.split.test_ood_scale} large-scale). Enumerating the defaults takes
 \val{des.enum_len_min} evaluations without a heat demand and \val{des.enum_len_max} with one; after \val{des.enum_len_max} evaluations \val{des.enum.b64.within_pct}\% of sites are within the tolerance, at a mean gap of
 \val{des.enum.b64.gap_pct}\%. Random search with 128 evaluations (its curve runs to \val{des.random_len}) reaches \val{des.rand.b128.within_pct}\% at a gap of \val{des.rand.b128.gap_pct}\%, and with 12 evaluations it is \val{des.rand.b12.gap_pct}\% from the reference and
 valid at \val{des.rand.b12.valid_pct}\% of sites. Enumerate-then-polish is the procedure that defines the reference (\val{des.polish_len_min} to \val{des.polish_len_max} evaluations), so its curve measures the speed of reaching the
@@ -75,7 +75,7 @@ reference, not independent quality; it reaches \val{des.pol.b128.within_pct}\% o
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=\linewidth]{figures/pdf/fig_design_baselines.pdf}
-\caption{Anytime curves of three non-model baselines on \val{des.n_sites} held-out and validation sites (simulation): share of sites whose best design is within
+\caption{Anytime curves of three non-model baselines on \val{des.n_sites} held-out sites (simulation): share of sites whose best design is within
 \val{des.tolerance_pct}\% of the reference against the number of design evaluations (logarithmic scale). The reference is the enumerate-then-polish result. The trained-model curve is pending and
 shown only as an empty box. Data: \texttt{assets/design\_baselines.json}.}
 \label{fig:fig_design_baselines}

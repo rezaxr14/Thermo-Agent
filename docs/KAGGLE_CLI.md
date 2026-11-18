@@ -5,6 +5,14 @@ account and the mistakes hit along the way. Credentials come from `KAGGLE_API_TO
 
 ## Credentials and quota
 
+All Kaggle CLI/API traffic from this machine must go through the local SOCKS proxy:
+
+```powershell
+$env:HTTP_PROXY = 'socks5h://localhost:10808'
+$env:HTTPS_PROXY = 'socks5h://localhost:10808'
+# PySocks is installed in .venv; without it, requests raises "Missing dependencies for SOCKS support"
+```
+
 ```powershell
 $env:KAGGLE_API_TOKEN = (& .venv/Scripts/python.exe -c "from pathlib import Path; print([l.split('=',1)[1].strip() for l in Path('.env').read_text().splitlines() if l.startswith('KAGGLE_API_TOKEN=')][0])")
 .venv/Scripts/kaggle.exe benchmarks quota --format json
@@ -35,6 +43,9 @@ pwsh scripts/upload_corpus_dataset.ps1
 pwsh -File scripts/make_kaggle_bundle.ps1
 # dataset slugs used by the kernel:
 #   rezanadimi/thermo-agent-code, rezanadimi/thermo-agent-corpus, rezanadimi/thermo-teacher-prompts
+#   rezanadimi/thermo-kernel-wheels (prebuilt fused kernels),
+#   rezanadimi/thermo-agent-resume (LoRA resume state),
+#   rezanadimi/thermo-agent-eval-replays (saved teacher answers)
 $kdir = (Resolve-Path 'kaggle/train_kernel_smoke').Path
 .venv/Scripts/kaggle.exe kernels push -p "$kdir" --accelerator NvidiaTeslaT4
 .venv/Scripts/kaggle.exe kernels status rezanadimi/thermo-train-smoke
@@ -51,3 +62,35 @@ Gotchas that cost time:
 - Kernel title determines the slug; keep it identical to the id's last component.
 - `PYTHONIOENCODING=utf-8` is required locally when the `kaggle_benchmarks` SDK prints emoji.
 - Kaggle Secrets are unavailable in hosted benchmark tasks; use the shared HF repo for credentials and progress.
+
+## Fused kernels: build once, never recompile
+
+Qwen3.5-4B's linear attention uses the slow PyTorch reference kernels unless `fla` and `causal-conv1d` are
+installed. Without them a T4 eval forward OOMs at 4096 tokens and a training step takes ~50 s. The exact pinned
+environment is `kaggle/environment.lock.json`.
+
+- Build the wheels **once** by pushing `kaggle/wheel_kernel/` (`rezanadimi/thermo-kernel-wheels`, source
+  `kaggle/wheel_runner.py`) on a T4. It compiles `causal-conv1d` against Kaggle's own torch and verifies that
+  CUDA torch survives.
+- **Kaggle itself transfers the wheels**: the build kernel's output is attached to the train, smoke and eval
+  kernels through `kernel_sources: ["rezanadimi/thermo-kernel-wheels"]` in their `kernel-metadata.json`. No local
+  download or dataset upload is involved.
+- `kaggle_notebook.setup()` locates `/kaggle/input/thermo-kernel-wheels/wheels/*.whl`, checks its `manifest.json`
+  against the worker's torch/CUDA version, installs with `pip --no-deps`, and imports the kernels. A mismatch or
+  missing wheel **fails loudly** — there is no source-build fallback in any worker. The only rebuild trigger is a
+  change to Kaggle's torch/CUDA/Python image.
+
+## Cross-session resume without the HF token
+
+Kaggle's Secrets service was unreachable in the training worker, so the token cannot be relied on. Between
+sessions, relay the newest checkpoint from the kernel output into a private dataset (no credentials in it):
+
+```powershell
+pwsh scripts/resume_kaggle_checkpoint.ps1 -Stage sft -Kernel rezanadimi/thermo-train-run
+# ... then start the next session with `kernels push` on kaggle/train_kernel/
+```
+
+`restore_checkpoints()` in `thermo_agent/kaggle_notebook.py` copies the newest *complete* checkpoint into
+`runs/<stage>/` at the start of a session; the trainer's existing `latest()` then resumes normally. GRPO uses
+the locally merged SFT weights when no token is present. No HF token is copied into any notebook, bundle or
+dataset.

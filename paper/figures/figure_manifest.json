@@ -227,9 +227,9 @@
    "data_sources": [
     {
      "asset": "assets/design_baselines.json",
-     "command": "design.data OUT -n 6 --seed 1..16 --max-evals 60 (16 chunks); design.curves.baseline_curves(one site, seed=0+crc32(id)%1000, random_budget=130); design.curves.summarize(curves, budgets, tol=0.02)",
+     "command": "first 30 rows of each design test split in data/processed; design.curves.baseline_curves per site with seed crc32(id)%1000, random_budget=130; summarize at 14 budgets with tol=0.02",
      "seed": 0,
-     "n": 24,
+     "n": 120,
      "kind": "simulation"
     }
    ],

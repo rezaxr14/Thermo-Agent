@@ -65,8 +65,23 @@ def catalog() -> list[dict]:
 
 ARCHITECTURES = catalog()
 
+# Expert-scale cycles, ADDITIVE to the 65 small diagrams above. They are deliberately not
+# part of `catalog()` so regenerating the old corpora never silently changes them.
+BIG_ARCHITECTURES = [
+    {"name": "big_cchp_steam2p_reheat_hp", "kind": "big", "family": "steam2p_reheat_hp"},
+]
+
+
+def all_architectures() -> list[dict]:
+    """Small + big diagrams, for builds that explicitly opt into the expert-scale cycles."""
+    return ARCHITECTURES + BIG_ARCHITECTURES
+
 
 def by_name(name: str) -> dict:
+    for a in all_architectures():
+        if a["name"] == name:
+            return a
+    raise KeyError(f"unknown architecture {name!r}")
     for a in ARCHITECTURES:
         if a["name"] == name:
             return a
@@ -97,6 +112,30 @@ def _build_dc(arch: dict, rng: random.Random, p_scale: float = 1.0):
     return size_generation(dc_chp, name=arch["name"], **kw)
 
 
+def _build_big(arch: dict, rng: random.Random):
+    """Expert-scale cycle, sized to the sampled IT load; steam flows scale with air flow."""
+    from .big_topologies import BIG_BUILDERS, STEAM_PER_AIR_HP, STEAM_PER_AIR_LP
+    from .topologies import size_generation
+
+    builder = BIG_BUILDERS.get(arch.get("family")) or BIG_BUILDERS.get(arch["name"])
+    if builder is None:
+        raise KeyError(f"no big builder for {arch['family']}")
+    hp_ratio, lp_ratio = STEAM_PER_AIR_HP, STEAM_PER_AIR_LP
+    P_it = rng.uniform(60e6, 120e6)
+    common = dict(
+        P_it=P_it, chilled_fraction=rng.uniform(0.35, 0.75),
+        T_reheat=rng.uniform(460, 530), P_hp=rng.uniform(30e5, 55e5),
+        P_lp=rng.uniform(6e5, 12e5), T_cond=rng.uniform(308, 318),
+        T_amb=rng.uniform(288, 305),
+        name=arch["name"],
+    )
+
+    def sized(n_air: float, **kw):
+        return builder(n_air=n_air, m_hp=n_air * hp_ratio, m_lp=n_air * lp_ratio, **kw)
+
+    return size_generation(sized, **common)
+
+
 def _build_cgam(arch: dict, rng: random.Random):
     return cgam_orc(n_air=rng.uniform(1500, 4500), PR=rng.uniform(8, 16), eta_c=rng.uniform(0.82, 0.90),
                     eta_t=rng.uniform(0.82, 0.90), T3=rng.uniform(750, 900), T4=rng.uniform(1400, 1600),
@@ -116,7 +155,10 @@ def sample_plant(arch: dict, rng: random.Random, tries: int = 6):
     p_scale = 1.0
     for _ in range(tries):
         try:
-            p = _build_cgam(arch, rng) if arch["kind"] == "cgam" else _build_dc(arch, rng, p_scale)
+            if arch["kind"] == "big":
+                p = _build_big(arch, rng)
+            else:
+                p = _build_cgam(arch, rng) if arch["kind"] == "cgam" else _build_dc(arch, rng, p_scale)
         except (RuntimeError, ValueError) as exc:
             last = exc
             p_scale *= 0.75

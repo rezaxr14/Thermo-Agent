@@ -6,11 +6,11 @@ Baseline (no language model) & $n$ & Main result (95\% Wilson) & Cost or referen
 Repair: blind search, in-distribution & 200 & 96\% (93--98) & 135 solver calls & seed 0 \\
 Repair: blind search, held-out faults & 200 & 100\% (98--100) & 115 solver calls & seed 0 \\
 Repair: blind search, held-out topologies & 200 & 100\% (98--100) & 96 solver calls & seed 0 \\
-Design: enumerate defaults, 64 evaluations & 24 & 71\% within 2\% & gap 2.4\% & seed 0 \\
-Design: random search, 12 evaluations & 24 & 33\% within 2\% & gap 8.7\% & seed 0 \\
-Design: random search, 128 evaluations & 24 & 75\% within 2\% & gap 0.6\% & seed 0 \\
-Design: enumerate, then polish, 64 evaluations & 24 & 79\% within 2\% & gap 1.4\% & seed 0 \\
-Design: enumerate, then polish, 128 evaluations & 24 & 100\% within 2\% & gap 0.1\% & seed 0 \\
+Design: enumerate defaults, 64 evaluations & 120 & 57\% within 2\% & gap 3.0\% & seed 0 \\
+Design: random search, 12 evaluations & 120 & 15\% within 2\% & gap 10.6\% & seed 0 \\
+Design: random search, 128 evaluations & 120 & 67\% within 2\% & gap 1.6\% & seed 0 \\
+Design: enumerate, then polish, 64 evaluations & 120 & 71\% within 2\% & gap 1.8\% & seed 0 \\
+Design: enumerate, then polish, 128 evaluations & 120 & 99\% within 2\% & gap 0.2\% & seed 0 \\
 Audit: first-law ranking top-1, in-distribution & 100 & 0\% (0--4) & random 23\% & seed 0 \\
 Audit: fixed rule change, in-distribution & 100 & 65\% of best gain & valid 53/100 & seed 0 \\
 Audit: first-law ranking top-1, held-out topologies & 100 & 100\% (96--100) & random 81\% & seed 0 \\

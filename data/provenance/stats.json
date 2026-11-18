@@ -1,0 +1,828 @@
+{
+  "acceptance": {
+    "acceptance_rate_of_known_pct": 65.1951,
+    "accepted_share_of_all_pct": 1.6735,
+    "counts": {
+      "accepted": 635,
+      "rejected": 339,
+      "unknown": 36971
+    },
+    "known_traces": 974
+  },
+  "by_first_seen_file": {
+    "data/frontier/frontier_design_train.jsonl": 43,
+    "data/frontier/frontier_ledger_train.jsonl": 93,
+    "data/frontier/frontier_repair_train.jsonl": 65,
+    "data/memory/adversarial_repair.jsonl": 24,
+    "data/memory/frontier_notes.jsonl": 315,
+    "data/processed/audit_test_id.jsonl": 299,
+    "data/processed/audit_test_ood_topology.jsonl": 135,
+    "data/processed/audit_train.jsonl": 2192,
+    "data/processed/audit_val.jsonl": 290,
+    "data/processed/design_test_id.jsonl": 204,
+    "data/processed/design_test_ood_climate.jsonl": 615,
+    "data/processed/design_test_ood_load.jsonl": 411,
+    "data/processed/design_test_ood_scale.jsonl": 460,
+    "data/processed/design_train.jsonl": 1768,
+    "data/processed/design_val.jsonl": 235,
+    "data/processed/ledger_test_id.jsonl": 612,
+    "data/processed/ledger_test_ood_fault.jsonl": 2229,
+    "data/processed/ledger_test_ood_topology.jsonl": 640,
+    "data/processed/ledger_train.jsonl": 4846,
+    "data/processed/ledger_val.jsonl": 672,
+    "data/processed/repair_test_id.jsonl": 649,
+    "data/processed/repair_test_ood_fault.jsonl": 4203,
+    "data/processed/repair_test_ood_topology.jsonl": 837,
+    "data/processed/repair_train.jsonl": 5458,
+    "data/processed/repair_val.jsonl": 663,
+    "data/processed_arch/audit_test_id.jsonl": 116,
+    "data/processed_arch/audit_test_ood_topology.jsonl": 141,
+    "data/processed_arch/audit_train.jsonl": 996,
+    "data/processed_arch/audit_val.jsonl": 113,
+    "data/processed_arch/ledger_test_id.jsonl": 152,
+    "data/processed_arch/ledger_test_ood_fault.jsonl": 464,
+    "data/processed_arch/ledger_test_ood_topology.jsonl": 292,
+    "data/processed_arch/ledger_train.jsonl": 1097,
+    "data/processed_arch/ledger_val.jsonl": 110,
+    "data/processed_arch/repair_test_id.jsonl": 95,
+    "data/processed_arch/repair_test_ood_fault.jsonl": 761,
+    "data/processed_arch/repair_test_ood_topology.jsonl": 279,
+    "data/processed_arch/repair_train.jsonl": 818,
+    "data/processed_arch/repair_val.jsonl": 110,
+    "data/processed_big/audit_test_id.jsonl": 3,
+    "data/processed_big/audit_test_ood_topology.jsonl": 1,
+    "data/processed_big/audit_train.jsonl": 66,
+    "data/processed_big/audit_val.jsonl": 6,
+    "data/processed_big/repair_test_id.jsonl": 5,
+    "data/processed_big/repair_test_ood_fault.jsonl": 50,
+    "data/processed_big/repair_train.jsonl": 57,
+    "data/processed_big/repair_val.jsonl": 6,
+    "data/teacher_runs/completions.jsonl": 1600,
+    "data/teacher_runs/completions_big_claude-sonnet-5-5-default.jsonl": 5,
+    "data/teacher_runs/completions_gptnano.jsonl": 1600,
+    "data/teacher_runs/eval_all.jsonl": 360,
+    "data/teacher_runs/eval_gptnano_all.jsonl": 360,
+    "data/teacher_runs/harness_completions.jsonl": 204,
+    "data/teacher_runs/harness_eval_completions.jsonl": 120
+  },
+  "by_model": {
+    "(adversarial/memory)": {
+      "acceptance_rate_of_known_pct": 0.0,
+      "accepted": 0,
+      "accepted_share_of_all_pct": 0.0,
+      "cost_nanodollars": 0,
+      "cost_per_accepted_nanodollars": null,
+      "cost_per_accepted_usd": null,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "rejected": 339,
+      "traces": 339,
+      "unknown": 0
+    },
+    "(synthetic)": {
+      "acceptance_rate_of_known_pct": 0.0,
+      "accepted": 0,
+      "accepted_share_of_all_pct": 0.0,
+      "cost_nanodollars": 0,
+      "cost_per_accepted_nanodollars": null,
+      "cost_per_accepted_usd": null,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "rejected": 0,
+      "traces": 33156,
+      "unknown": 33156
+    },
+    "anthropic/claude-sonnet-5-5@default": {
+      "acceptance_rate_of_known_pct": 0.0,
+      "accepted": 0,
+      "accepted_share_of_all_pct": 0.0,
+      "cost_nanodollars": 0,
+      "cost_per_accepted_nanodollars": null,
+      "cost_per_accepted_usd": null,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "rejected": 0,
+      "traces": 5,
+      "unknown": 5
+    },
+    "google/gemini-3.1-flash-lite-preview": {
+      "acceptance_rate_of_known_pct": 100.0,
+      "accepted": 513,
+      "accepted_share_of_all_pct": 20.8537,
+      "cost_nanodollars": 1751449500,
+      "cost_per_accepted_nanodollars": 3414131.58,
+      "cost_per_accepted_usd": 0.003414132,
+      "input_tokens": 4501674,
+      "output_tokens": 417354,
+      "rejected": 0,
+      "traces": 2460,
+      "unknown": 1947
+    },
+    "openai/gpt-5.4-nano-2026-03-17": {
+      "acceptance_rate_of_known_pct": 100.0,
+      "accepted": 122,
+      "accepted_share_of_all_pct": 6.1461,
+      "cost_nanodollars": 789102050,
+      "cost_per_accepted_nanodollars": 6468049.59,
+      "cost_per_accepted_usd": 0.00646805,
+      "input_tokens": 2586850,
+      "output_tokens": 299961,
+      "rejected": 0,
+      "traces": 1985,
+      "unknown": 1863
+    }
+  },
+  "by_split": {
+    "(none)": 3434,
+    "test_id": 2375,
+    "test_ood_climate": 675,
+    "test_ood_fault": 7827,
+    "test_ood_load": 471,
+    "test_ood_scale": 520,
+    "test_ood_topology": 2505,
+    "train": 17933,
+    "val": 2205
+  },
+  "by_task": {
+    "audit": {
+      "accepted": 0,
+      "cost_nanodollars": 561961110,
+      "rejected": 43,
+      "traces": 5356
+    },
+    "design": {
+      "accepted": 140,
+      "cost_nanodollars": 509263030,
+      "rejected": 177,
+      "traces": 4983
+    },
+    "ledger": {
+      "accepted": 160,
+      "cost_nanodollars": 740150190,
+      "rejected": 51,
+      "traces": 12268
+    },
+    "repair": {
+      "accepted": 335,
+      "cost_nanodollars": 729177220,
+      "rejected": 68,
+      "traces": 15338
+    }
+  },
+  "cost": {
+    "accepted_traces": 635,
+    "by_model": {
+      "(adversarial/memory)": {
+        "accepted_traces": 0,
+        "cost_nanodollars": 0,
+        "cost_per_accepted_nanodollars": null,
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "(synthetic)": {
+        "accepted_traces": 0,
+        "cost_nanodollars": 0,
+        "cost_per_accepted_nanodollars": null,
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "anthropic/claude-sonnet-5-5@default": {
+        "accepted_traces": 0,
+        "cost_nanodollars": 0,
+        "cost_per_accepted_nanodollars": null,
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
+      "google/gemini-3.1-flash-lite-preview": {
+        "accepted_traces": 513,
+        "cost_nanodollars": 1751449500,
+        "cost_per_accepted_nanodollars": 3414131.58,
+        "input_tokens": 4501674,
+        "output_tokens": 417354
+      },
+      "openai/gpt-5.4-nano-2026-03-17": {
+        "accepted_traces": 122,
+        "cost_nanodollars": 789102050,
+        "cost_per_accepted_nanodollars": 6468049.59,
+        "input_tokens": 2586850,
+        "output_tokens": 299961
+      }
+    },
+    "nanodollars_per_accepted_trace": 4000868.58,
+    "total_nanodollars": 2540551550,
+    "total_usd": 2.540552
+  },
+  "coverage": {
+    "by_kind": {
+      "adversarial": {
+        "coverage_pct": 0.0,
+        "traces": 339,
+        "with_downstream": 0
+      },
+      "frontier": {
+        "coverage_pct": 40.4313,
+        "traces": 3339,
+        "with_downstream": 1350
+      },
+      "harness": {
+        "coverage_pct": 10.8011,
+        "traces": 1111,
+        "with_downstream": 120
+      },
+      "synthetic": {
+        "coverage_pct": 83.7465,
+        "traces": 33156,
+        "with_downstream": 27767
+      }
+    },
+    "by_source": {
+      "frontier": {
+        "coverage_pct": 55.7214,
+        "traces": 201,
+        "with_downstream": 112
+      },
+      "memory": {
+        "coverage_pct": 0.0,
+        "traces": 339,
+        "with_downstream": 0
+      },
+      "processed": {
+        "coverage_pct": 85.856,
+        "traces": 27418,
+        "with_downstream": 23540
+      },
+      "processed_arch": {
+        "coverage_pct": 76.2446,
+        "traces": 5544,
+        "with_downstream": 4227
+      },
+      "processed_big": {
+        "coverage_pct": 0.0,
+        "traces": 194,
+        "with_downstream": 0
+      },
+      "teacher_runs": {
+        "coverage_pct": 31.9605,
+        "traces": 4249,
+        "with_downstream": 1358
+      }
+    },
+    "coverage_pct": 77.051,
+    "traces_total": 37945,
+    "traces_with_downstream": 29237
+  },
+  "downstream": {
+    "artifacts": [
+      {
+        "artifact": "data/grpo/audit_test_id.jsonl",
+        "kind": "grpo_row",
+        "rows": 321,
+        "unique_traces": 321
+      },
+      {
+        "artifact": "data/grpo/audit_test_ood_topology.jsonl",
+        "kind": "grpo_row",
+        "rows": 238,
+        "unique_traces": 238
+      },
+      {
+        "artifact": "data/grpo/audit_train.jsonl",
+        "kind": "grpo_row",
+        "rows": 2564,
+        "unique_traces": 2564
+      },
+      {
+        "artifact": "data/grpo/audit_val.jsonl",
+        "kind": "grpo_row",
+        "rows": 338,
+        "unique_traces": 338
+      },
+      {
+        "artifact": "data/grpo/design_test_id.jsonl",
+        "kind": "grpo_row",
+        "rows": 204,
+        "unique_traces": 204
+      },
+      {
+        "artifact": "data/grpo/design_test_ood_climate.jsonl",
+        "kind": "grpo_row",
+        "rows": 615,
+        "unique_traces": 615
+      },
+      {
+        "artifact": "data/grpo/design_test_ood_load.jsonl",
+        "kind": "grpo_row",
+        "rows": 411,
+        "unique_traces": 411
+      },
+      {
+        "artifact": "data/grpo/design_test_ood_scale.jsonl",
+        "kind": "grpo_row",
+        "rows": 460,
+        "unique_traces": 460
+      },
+      {
+        "artifact": "data/grpo/design_train.jsonl",
+        "kind": "grpo_row",
+        "rows": 1894,
+        "unique_traces": 1894
+      },
+      {
+        "artifact": "data/grpo/design_val.jsonl",
+        "kind": "grpo_row",
+        "rows": 235,
+        "unique_traces": 235
+      },
+      {
+        "artifact": "data/grpo/ledger_test_id.jsonl",
+        "kind": "grpo_row",
+        "rows": 656,
+        "unique_traces": 656
+      },
+      {
+        "artifact": "data/grpo/ledger_test_ood_fault.jsonl",
+        "kind": "grpo_row",
+        "rows": 2360,
+        "unique_traces": 2360
+      },
+      {
+        "artifact": "data/grpo/ledger_test_ood_topology.jsonl",
+        "kind": "grpo_row",
+        "rows": 854,
+        "unique_traces": 854
+      },
+      {
+        "artifact": "data/grpo/ledger_train.jsonl",
+        "kind": "grpo_row",
+        "rows": 5165,
+        "unique_traces": 5165
+      },
+      {
+        "artifact": "data/grpo/ledger_val.jsonl",
+        "kind": "grpo_row",
+        "rows": 666,
+        "unique_traces": 666
+      },
+      {
+        "artifact": "data/grpo/repair_test_id.jsonl",
+        "kind": "grpo_row",
+        "rows": 563,
+        "unique_traces": 563
+      },
+      {
+        "artifact": "data/grpo/repair_test_ood_fault.jsonl",
+        "kind": "grpo_row",
+        "rows": 3966,
+        "unique_traces": 3966
+      },
+      {
+        "artifact": "data/grpo/repair_test_ood_topology.jsonl",
+        "kind": "grpo_row",
+        "rows": 864,
+        "unique_traces": 864
+      },
+      {
+        "artifact": "data/grpo/repair_train.jsonl",
+        "kind": "grpo_row",
+        "rows": 5226,
+        "unique_traces": 5226
+      },
+      {
+        "artifact": "data/grpo/repair_val.jsonl",
+        "kind": "grpo_row",
+        "rows": 614,
+        "unique_traces": 614
+      },
+      {
+        "artifact": "data/memory/adversarial_repair.jsonl",
+        "kind": "memory_note",
+        "rows": 24,
+        "unique_traces": 19
+      },
+      {
+        "artifact": "data/memory/frontier_notes.jsonl",
+        "kind": "memory_note",
+        "rows": 169,
+        "unique_traces": 169
+      },
+      {
+        "artifact": "data/sft/audit_test_id.jsonl",
+        "kind": "sft_row",
+        "rows": 321,
+        "unique_traces": 321
+      },
+      {
+        "artifact": "data/sft/audit_test_ood_topology.jsonl",
+        "kind": "sft_row",
+        "rows": 238,
+        "unique_traces": 238
+      },
+      {
+        "artifact": "data/sft/audit_train.jsonl",
+        "kind": "sft_row",
+        "rows": 2564,
+        "unique_traces": 2564
+      },
+      {
+        "artifact": "data/sft/audit_val.jsonl",
+        "kind": "sft_row",
+        "rows": 338,
+        "unique_traces": 338
+      },
+      {
+        "artifact": "data/sft/design_test_id.jsonl",
+        "kind": "sft_row",
+        "rows": 204,
+        "unique_traces": 204
+      },
+      {
+        "artifact": "data/sft/design_test_ood_climate.jsonl",
+        "kind": "sft_row",
+        "rows": 615,
+        "unique_traces": 615
+      },
+      {
+        "artifact": "data/sft/design_test_ood_load.jsonl",
+        "kind": "sft_row",
+        "rows": 411,
+        "unique_traces": 411
+      },
+      {
+        "artifact": "data/sft/design_test_ood_scale.jsonl",
+        "kind": "sft_row",
+        "rows": 460,
+        "unique_traces": 460
+      },
+      {
+        "artifact": "data/sft/design_train.jsonl",
+        "kind": "sft_row",
+        "rows": 1894,
+        "unique_traces": 1894
+      },
+      {
+        "artifact": "data/sft/design_val.jsonl",
+        "kind": "sft_row",
+        "rows": 235,
+        "unique_traces": 235
+      },
+      {
+        "artifact": "data/sft/ledger_test_id.jsonl",
+        "kind": "sft_row",
+        "rows": 656,
+        "unique_traces": 656
+      },
+      {
+        "artifact": "data/sft/ledger_test_ood_fault.jsonl",
+        "kind": "sft_row",
+        "rows": 2360,
+        "unique_traces": 2360
+      },
+      {
+        "artifact": "data/sft/ledger_test_ood_topology.jsonl",
+        "kind": "sft_row",
+        "rows": 854,
+        "unique_traces": 854
+      },
+      {
+        "artifact": "data/sft/ledger_train.jsonl",
+        "kind": "sft_row",
+        "rows": 5165,
+        "unique_traces": 5165
+      },
+      {
+        "artifact": "data/sft/ledger_val.jsonl",
+        "kind": "sft_row",
+        "rows": 666,
+        "unique_traces": 666
+      },
+      {
+        "artifact": "data/sft/repair_test_id.jsonl",
+        "kind": "sft_row",
+        "rows": 563,
+        "unique_traces": 563
+      },
+      {
+        "artifact": "data/sft/repair_test_ood_fault.jsonl",
+        "kind": "sft_row",
+        "rows": 3966,
+        "unique_traces": 3966
+      },
+      {
+        "artifact": "data/sft/repair_test_ood_topology.jsonl",
+        "kind": "sft_row",
+        "rows": 864,
+        "unique_traces": 864
+      },
+      {
+        "artifact": "data/sft/repair_train.jsonl",
+        "kind": "sft_row",
+        "rows": 100036,
+        "unique_traces": 5226
+      },
+      {
+        "artifact": "data/sft/repair_val.jsonl",
+        "kind": "sft_row",
+        "rows": 614,
+        "unique_traces": 614
+      },
+      {
+        "artifact": "paper/assets/examples.json",
+        "kind": "paper_example",
+        "rows": 33,
+        "unique_traces": 32
+      },
+      {
+        "artifact": "reports/eval_frontier_tools.json",
+        "kind": "eval_arm",
+        "rows": 120,
+        "unique_traces": 120
+      },
+      {
+        "artifact": "reports/eval_frontier_zero.json",
+        "kind": "eval_arm",
+        "rows": 360,
+        "unique_traces": 360
+      },
+      {
+        "artifact": "reports/eval_other_model.json",
+        "kind": "eval_arm",
+        "rows": 360,
+        "unique_traces": 360
+      }
+    ],
+    "entries_by_kind": {
+      "eval_arm": 840,
+      "grpo_row": 28214,
+      "memory_note": 188,
+      "paper_example": 32,
+      "sft_row": 28214
+    },
+    "rows_by_kind": {
+      "eval_arm": 840,
+      "grpo_row": 28214,
+      "memory_note": 193,
+      "paper_example": 33,
+      "sft_row": 123024
+    }
+  },
+  "generator": "scripts/build_provenance_ledger.py",
+  "harness_modes": {
+    "agents+skills": {
+      "share_pct": 1.7183,
+      "traces": 652
+    },
+    "none": {
+      "share_pct": 97.0721,
+      "traces": 36834
+    },
+    "skills": {
+      "share_pct": 0.3558,
+      "traces": 135
+    },
+    "tools": {
+      "share_pct": 0.8539,
+      "traces": 324
+    }
+  },
+  "ledger": {
+    "bytes": 60253023,
+    "path": "data/provenance/trace_ledger.jsonl",
+    "records": 37945,
+    "sha256": "23b644365ecb7152b96a86c0ef631949b2aa4daf6517bacd21ae57a081b5f761"
+  },
+  "memory_failure_reasons": {
+    "by_fault_type": {},
+    "by_task": {},
+    "n": 0,
+    "top_lessons": []
+  },
+  "notes": [
+    "One ledger record per canonical trace id; paraphrase #vN markers are variants, not traces.",
+    "Canonical id = <base id> + @m=<model> + @h=<harness> for non-default harness modes.",
+    "Costs and tokens come from the first journal occurrence; duplicate journal exports are listed under journal_occurrences and never double-counted.",
+    "Old Gemini and GPT-nano traces remain in the ledger; future big-model journals are appended additively by re-running the script (no code edit)."
+  ],
+  "paraphrase_expansion": {
+    "by_task": {
+      "repair": 117276
+    },
+    "downstream_rows_with_variant": 117276,
+    "mean_variants_per_trace": 11.5234,
+    "traces_with_variants": 11644,
+    "variant_tokens_total": 134178
+  },
+  "reproducible": true,
+  "schema_version": "1.0",
+  "source_latest_timestamp": "2026-11-18T16:37:57Z",
+  "sources_discovered": {
+    "frontier": [
+      "data/frontier/frontier_design_train.jsonl",
+      "data/frontier/frontier_ledger_train.jsonl",
+      "data/frontier/frontier_repair_train.jsonl"
+    ],
+    "grpo": [
+      "data/grpo/audit_test_id.jsonl",
+      "data/grpo/audit_test_ood_fault.jsonl",
+      "data/grpo/audit_test_ood_topology.jsonl",
+      "data/grpo/audit_train.jsonl",
+      "data/grpo/audit_val.jsonl",
+      "data/grpo/design_test_id.jsonl",
+      "data/grpo/design_test_ood_climate.jsonl",
+      "data/grpo/design_test_ood_load.jsonl",
+      "data/grpo/design_test_ood_scale.jsonl",
+      "data/grpo/design_train.jsonl",
+      "data/grpo/design_val.jsonl",
+      "data/grpo/ledger_test_id.jsonl",
+      "data/grpo/ledger_test_ood_fault.jsonl",
+      "data/grpo/ledger_test_ood_topology.jsonl",
+      "data/grpo/ledger_train.jsonl",
+      "data/grpo/ledger_val.jsonl",
+      "data/grpo/repair_test_id.jsonl",
+      "data/grpo/repair_test_ood_fault.jsonl",
+      "data/grpo/repair_test_ood_topology.jsonl",
+      "data/grpo/repair_train.jsonl",
+      "data/grpo/repair_val.jsonl"
+    ],
+    "grpo_all": [
+      "data/grpo_all/audit_test_id.jsonl",
+      "data/grpo_all/audit_test_ood_fault.jsonl",
+      "data/grpo_all/audit_test_ood_topology.jsonl",
+      "data/grpo_all/audit_train.jsonl",
+      "data/grpo_all/audit_val.jsonl",
+      "data/grpo_all/design_test_id.jsonl",
+      "data/grpo_all/design_test_ood_climate.jsonl",
+      "data/grpo_all/design_test_ood_load.jsonl",
+      "data/grpo_all/design_test_ood_scale.jsonl",
+      "data/grpo_all/design_train.jsonl",
+      "data/grpo_all/design_val.jsonl",
+      "data/grpo_all/ledger_test_id.jsonl",
+      "data/grpo_all/ledger_test_ood_fault.jsonl",
+      "data/grpo_all/ledger_test_ood_topology.jsonl",
+      "data/grpo_all/ledger_train.jsonl",
+      "data/grpo_all/ledger_val.jsonl",
+      "data/grpo_all/repair_test_id.jsonl",
+      "data/grpo_all/repair_test_ood_fault.jsonl",
+      "data/grpo_all/repair_test_ood_topology.jsonl",
+      "data/grpo_all/repair_train.jsonl",
+      "data/grpo_all/repair_val.jsonl"
+    ],
+    "journals": [
+      "data/teacher_runs/completions.jsonl",
+      "data/teacher_runs/completions_big_claude-sonnet-5-5-default.jsonl",
+      "data/teacher_runs/completions_gptnano.jsonl",
+      "data/teacher_runs/eval_all.jsonl",
+      "data/teacher_runs/eval_gptnano_all.jsonl",
+      "data/teacher_runs/eval_gptnano_replay.jsonl",
+      "data/teacher_runs/eval_gptnano_test_id.jsonl",
+      "data/teacher_runs/eval_gptnano_test_ood_climate.jsonl",
+      "data/teacher_runs/eval_gptnano_test_ood_fault.jsonl",
+      "data/teacher_runs/eval_gptnano_test_ood_load.jsonl",
+      "data/teacher_runs/eval_gptnano_test_ood_scale.jsonl",
+      "data/teacher_runs/eval_gptnano_test_ood_topology.jsonl",
+      "data/teacher_runs/eval_test_id.jsonl",
+      "data/teacher_runs/eval_test_ood_climate.jsonl",
+      "data/teacher_runs/eval_test_ood_fault.jsonl",
+      "data/teacher_runs/eval_test_ood_load.jsonl",
+      "data/teacher_runs/eval_test_ood_scale.jsonl",
+      "data/teacher_runs/eval_test_ood_topology.jsonl",
+      "data/teacher_runs/harness_completions.jsonl",
+      "data/teacher_runs/harness_eval_completions.jsonl",
+      "data/teacher_runs/harness_eval_completions2.jsonl",
+      "data/teacher_runs/probe_gemini.jsonl",
+      "data/teacher_runs/probe_gptnano.jsonl"
+    ],
+    "memory": [
+      "data/memory/adversarial_repair.jsonl",
+      "data/memory/frontier_notes.jsonl"
+    ],
+    "metas": [
+      "data/processed/meta_audit.json",
+      "data/processed/meta_design.json",
+      "data/processed/meta_ledger.json",
+      "data/processed/meta_repair.json",
+      "data/processed_arch/meta_audit_arch.json",
+      "data/processed_arch/meta_ledger_arch.json",
+      "data/processed_arch/meta_repair_arch.json",
+      "data/processed_big/meta_audit.json",
+      "data/processed_big/meta_repair_arch.json"
+    ],
+    "processed": [
+      "data/processed/audit_test_id.jsonl",
+      "data/processed/audit_test_ood_topology.jsonl",
+      "data/processed/audit_train.jsonl",
+      "data/processed/audit_val.jsonl",
+      "data/processed/design_test_id.jsonl",
+      "data/processed/design_test_ood_climate.jsonl",
+      "data/processed/design_test_ood_load.jsonl",
+      "data/processed/design_test_ood_scale.jsonl",
+      "data/processed/design_train.jsonl",
+      "data/processed/design_val.jsonl",
+      "data/processed/ledger_test_id.jsonl",
+      "data/processed/ledger_test_ood_fault.jsonl",
+      "data/processed/ledger_test_ood_topology.jsonl",
+      "data/processed/ledger_train.jsonl",
+      "data/processed/ledger_val.jsonl",
+      "data/processed/repair_test_id.jsonl",
+      "data/processed/repair_test_ood_fault.jsonl",
+      "data/processed/repair_test_ood_topology.jsonl",
+      "data/processed/repair_train.jsonl",
+      "data/processed/repair_val.jsonl"
+    ],
+    "processed_arch": [
+      "data/processed_arch/audit_test_id.jsonl",
+      "data/processed_arch/audit_test_ood_topology.jsonl",
+      "data/processed_arch/audit_train.jsonl",
+      "data/processed_arch/audit_val.jsonl",
+      "data/processed_arch/ledger_test_id.jsonl",
+      "data/processed_arch/ledger_test_ood_fault.jsonl",
+      "data/processed_arch/ledger_test_ood_topology.jsonl",
+      "data/processed_arch/ledger_train.jsonl",
+      "data/processed_arch/ledger_val.jsonl",
+      "data/processed_arch/repair_test_id.jsonl",
+      "data/processed_arch/repair_test_ood_fault.jsonl",
+      "data/processed_arch/repair_test_ood_topology.jsonl",
+      "data/processed_arch/repair_train.jsonl",
+      "data/processed_arch/repair_val.jsonl"
+    ],
+    "processed_big": [
+      "data/processed_big/audit_test_id.jsonl",
+      "data/processed_big/audit_test_ood_topology.jsonl",
+      "data/processed_big/audit_train.jsonl",
+      "data/processed_big/audit_val.jsonl",
+      "data/processed_big/repair_test_id.jsonl",
+      "data/processed_big/repair_test_ood_fault.jsonl",
+      "data/processed_big/repair_train.jsonl",
+      "data/processed_big/repair_val.jsonl"
+    ],
+    "reports": [
+      "reports/eval_frontier_tools.json",
+      "reports/eval_frontier_zero.json",
+      "reports/eval_other_model.json"
+    ],
+    "sft": [
+      "data/sft/audit_test_id.jsonl",
+      "data/sft/audit_test_ood_fault.jsonl",
+      "data/sft/audit_test_ood_topology.jsonl",
+      "data/sft/audit_train.jsonl",
+      "data/sft/audit_val.jsonl",
+      "data/sft/design_test_id.jsonl",
+      "data/sft/design_test_ood_climate.jsonl",
+      "data/sft/design_test_ood_load.jsonl",
+      "data/sft/design_test_ood_scale.jsonl",
+      "data/sft/design_train.jsonl",
+      "data/sft/design_val.jsonl",
+      "data/sft/ledger_test_id.jsonl",
+      "data/sft/ledger_test_ood_fault.jsonl",
+      "data/sft/ledger_test_ood_topology.jsonl",
+      "data/sft/ledger_train.jsonl",
+      "data/sft/ledger_val.jsonl",
+      "data/sft/repair_test_id.jsonl",
+      "data/sft/repair_test_ood_fault.jsonl",
+      "data/sft/repair_test_ood_topology.jsonl",
+      "data/sft/repair_train.jsonl",
+      "data/sft/repair_val.jsonl"
+    ],
+    "sft_all": [
+      "data/sft_all/audit_test_id.jsonl",
+      "data/sft_all/audit_test_ood_fault.jsonl",
+      "data/sft_all/audit_test_ood_topology.jsonl",
+      "data/sft_all/audit_train.jsonl",
+      "data/sft_all/audit_val.jsonl",
+      "data/sft_all/design_test_id.jsonl",
+      "data/sft_all/design_test_ood_climate.jsonl",
+      "data/sft_all/design_test_ood_load.jsonl",
+      "data/sft_all/design_test_ood_scale.jsonl",
+      "data/sft_all/design_train.jsonl",
+      "data/sft_all/design_val.jsonl",
+      "data/sft_all/ledger_test_id.jsonl",
+      "data/sft_all/ledger_test_ood_fault.jsonl",
+      "data/sft_all/ledger_test_ood_topology.jsonl",
+      "data/sft_all/ledger_train.jsonl",
+      "data/sft_all/ledger_val.jsonl",
+      "data/sft_all/repair_test_id.jsonl",
+      "data/sft_all/repair_test_ood_fault.jsonl",
+      "data/sft_all/repair_test_ood_topology.jsonl",
+      "data/sft_all/repair_train.jsonl",
+      "data/sft_all/repair_val.jsonl"
+    ]
+  },
+  "totals": {
+    "by_first_seen_source": {
+      "frontier": 201,
+      "memory": 339,
+      "processed": 27418,
+      "processed_arch": 5544,
+      "processed_big": 194,
+      "teacher_runs": 4249
+    },
+    "by_kind": {
+      "adversarial": 339,
+      "frontier": 3339,
+      "harness": 1111,
+      "synthetic": 33156
+    },
+    "downstream_entries": 57488,
+    "journal_occurrences": 5473,
+    "traces": 37945
+  }
+}
