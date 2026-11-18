@@ -28,12 +28,21 @@ import zipfile
 
 WORK = pathlib.Path("/kaggle/working")
 ROOT = WORK / "thermo-agent"
-bundles = sorted(pathlib.Path("/kaggle/input").rglob("kaggle_bundle.zip"))
-if not bundles:
+code_root = None
+bundles = []
+for _root, _dirs, _files in os.walk("/kaggle/input", followlinks=True):
+    if "thermo_agent" in _dirs and (pathlib.Path(_root) / "thermo_agent" / "train" / "sft.py").exists():
+        code_root = pathlib.Path(_root)
+        break
+    if "kaggle_bundle.zip" in _files:
+        bundles.append(pathlib.Path(_root) / "kaggle_bundle.zip")
+if code_root:
+    shutil.copytree(code_root, ROOT, dirs_exist_ok=True)
+elif bundles:
+    with zipfile.ZipFile(bundles[0]) as zf:
+        zf.extractall(WORK)
+else:
     raise SystemExit("attach the Kaggle dataset thermo-agent-code")
-shutil.rmtree(ROOT, ignore_errors=True)
-with zipfile.ZipFile(bundles[0]) as zf:
-    zf.extractall(WORK)
 sys.path.insert(0, str(ROOT))
 os.chdir(ROOT)
 print("code unpacked at", ROOT)

@@ -28,7 +28,10 @@ import zipfile
 
 WORK = pathlib.Path("/kaggle/working")
 ROOT = WORK / "thermo-agent"
-bundles = sorted(pathlib.Path("/kaggle/input").rglob("kaggle_bundle.zip"))
+bundles = []
+for _root, _dirs, _files in os.walk("/kaggle/input", followlinks=True):
+    if "kaggle_bundle.zip" in _files:
+        bundles.append(pathlib.Path(_root) / "kaggle_bundle.zip")
 if not bundles:
     raise SystemExit("attach the Kaggle dataset thermo-agent-code")
 shutil.rmtree(ROOT, ignore_errors=True)

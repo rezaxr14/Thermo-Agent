@@ -17,23 +17,33 @@ WORK = pathlib.Path("/kaggle/working")
 
 
 def find_input(name: str) -> pathlib.Path:
-    hits = sorted(p for p in pathlib.Path("/kaggle/input").glob(f"**/{name}") if p.is_dir())
-    if not hits:
-        raise SystemExit(f"attach the Kaggle dataset {name!r}")
-    return hits[0]
+    import os
+    for root, dirs, files in os.walk("/kaggle/input", followlinks=True):
+        if pathlib.Path(root).name == name:
+            return pathlib.Path(root)
+    raise SystemExit(f"attach the Kaggle dataset {name!r}")
 
 
 def setup(root=None, corpora=("sft", "grpo"), install=True):
     """Unpack the code bundle, expose it on sys.path, copy the corpora and set the safe training env."""
     root = pathlib.Path(root or WORK / "thermo-agent")
+    import os
     code = find_input("thermo-agent-code")
-    bundle = next(code.rglob("kaggle_bundle.zip"), None)
-    if bundle:
-        shutil.rmtree(root, ignore_errors=True)
-        with zipfile.ZipFile(bundle) as zf:
-            zf.extractall(root.parent)
+    code_root, bundle = None, None
+    for walk_root, dirs, files in os.walk(code, followlinks=True):
+        if "thermo_agent" in dirs and (pathlib.Path(walk_root) / "thermo_agent" / "train" / "sft.py").exists():
+            code_root = pathlib.Path(walk_root)
+            break
+        if "kaggle_bundle.zip" in files:
+            bundle = pathlib.Path(walk_root) / "kaggle_bundle.zip"
     if not (root / "thermo_agent" / "train").exists():
-        raise SystemExit(f"no code at {root}: attach the kaggle_bundle.zip dataset")
+        if code_root:
+            shutil.copytree(code_root, root, dirs_exist_ok=True)
+        elif bundle:
+            with zipfile.ZipFile(bundle) as zf:
+                zf.extractall(root.parent)
+        else:
+            raise SystemExit(f"no code at {root}: attach the kaggle_bundle.zip dataset")
     os.chdir(root)
     sys.path.insert(0, str(root))
     os.environ["PYTHONPATH"] = str(root) + os.pathsep + os.environ.get("PYTHONPATH", "")
@@ -43,12 +53,21 @@ def setup(root=None, corpora=("sft", "grpo"), install=True):
         dst = root / "data" / name
         if dst.exists():
             continue
-        src = next(corpus_input.rglob(name), None)
+        import os
+        src = None
+        for walk_root, _dirs, _files in os.walk(corpus_input, followlinks=True):
+            if pathlib.Path(walk_root).name == name:
+                src = pathlib.Path(walk_root)
+                break
         if src and src.is_dir():
             dst.parent.mkdir(parents=True, exist_ok=True)
             shutil.copytree(src, dst)
             continue
-        archive = next(corpus_input.rglob(f"{name}.zip"), None)
+        archive = None
+        for walk_root, _dirs, walk_files in os.walk(corpus_input, followlinks=True):
+            if f"{name}.zip" in walk_files:
+                archive = pathlib.Path(walk_root) / f"{name}.zip"
+                break
         if archive:
             dst.parent.mkdir(parents=True, exist_ok=True)
             with zipfile.ZipFile(archive) as zf:
