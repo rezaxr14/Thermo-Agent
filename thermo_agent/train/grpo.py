@@ -56,6 +56,9 @@ def main():
     ap.add_argument("--qlora", action="store_true"); ap.add_argument("--max-steps", type=int); ap.add_argument("--limit-rows", type=int)
     ap.add_argument("--per-device-batch", type=int); ap.add_argument("--grad-accum", type=int); ap.add_argument("--grad-norm", type=float)
     ap.add_argument("--save-steps", type=int, help="checkpoint interval; a rerun of the same command resumes automatically")
+    ap.add_argument("--num-generations", type=int, default=None,
+                    help="GRPO group size G (k rollouts per prompt). Overrides config default 4; use distinct "
+                         "out dirs per k (runs/grpo_k4, grpo_k8, grpo_k16) so checkpoints never overwrite.")
     ap.add_argument("--num-workers", type=int, default=2)
     ap.add_argument("--hf-sync", choices=("auto", "on", "off"), default=os.environ.get("THERMO_HF_SYNC", "auto"))
     ap.add_argument("--hf-repo", default=None, help="must be <token owner>/thermo-agent-checkpoints")
@@ -65,6 +68,7 @@ def main():
     if a.grad_accum: g.grad_accum = a.grad_accum
     if a.grad_norm is not None: g.max_grad_norm = a.grad_norm
     if a.save_steps: g.save_steps = a.save_steps
+    if a.num_generations is not None: g.num_generations = a.num_generations
     world = ddp.world_size_from_env()
     if a.vllm and world > 1:
         raise SystemExit("--vllm colocate mode is single-process; under DDP let each rank use HF generate")

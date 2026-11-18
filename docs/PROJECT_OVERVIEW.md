@@ -22,7 +22,7 @@ separate LP loop, electric chilling, district heat and wet cooling — solves an
 **Teacher / frontier traces.** Two hosted models were called through Kaggle quota:
 Gemini 3.1 Flash Lite (1,600 prompts, 513 accepted, 32.1%, $1.090957) and GPT-5.4-nano (1,600 prompts,
 122 accepted, 7.6%, $0.658021). 3,668 raw training answers, 3,339 frontier ledger traces, 1,111 harness/tool
-traces, 635 verifier-accepted rows, 460 used in training, 965 graded rejections deduplicated into 342 memory
+traces, 635 verifier-accepted rows, 635 used in training in both merged corpora, 965 graded rejections deduplicated into 342 memory
 notes. Total recorded API spend across all independent batches: **$2.752407**.
 
 **Per-trace provenance.** `data/provenance/trace_ledger.jsonl` holds **37,945 unique trace records** with exact
@@ -33,7 +33,27 @@ automatically. Any new journal dropped into `data/teacher_runs/` is discovered a
 **Training corpora.** Original: `data/sft` 123,024 rows / 109,659 train; `data/grpo` 28,214 / 14,849.
 Merged with expert cycles (originals preserved): `data/sft_all` **119,807 train rows including 1,140 big-cycle
 rows**; `data/grpo_all` **15,022 train rows including 57 big rows**. Token gate raised from 4,000 to **8,000**
-under `max_length` **8,192**; audit reports max row **6,405** tokens and **zero drops**.
+under `max_length` **8,192**; audit reports max row **6,405** tokens and **zero drops**. All **635** accepted
+frontier rows are present in both merged corpora (the legacy 4k-gated `data/sft` / `data/grpo` held only 460).
+
+### Tool-using CoT data generation (new objective)
+
+The zero-shot frontier rows above are kept as legacy training data, but the current objective is to teach the 4B
+student **tool use**. Frontier models run inside a **LangGraph harness**
+(`thermo_agent/teacher/agent_graph.py`: `build_context -> propose -> {call_tools -> reflect -> propose}* ->
+finalize -> END`) with **real physics tools** from `thermo_agent/teacher/toolkit.py`: `first_law_check`,
+`second_law_check`, `validity_check`, `solve_plant` and `check_answer`. The tools build the plant from the model's
+own candidate and run the actual sequential-modular solver, returning numbers with units. `build_context` injects
+**AGENTS.md + component/task SKILL.md** (the same skills the student trains on) and **fresh failure memory** reloaded
+from `data/memory/*.jsonl` on every row. The model may call tools over multiple rounds, read numeric feedback and
+revise before finalizing.
+
+When the verifiers accept a tool-using trace, the **entire trajectory** — reasoning, tool calls, numeric tool results
+and revisions — is saved as the SFT completion (`source=frontier_tools`), so the student imitates the tool-using
+behaviour, not merely the final answer. Generation uses `claude-haiku-5-5`, `gemini-3.5-flash-lite` and
+`gpt-6-luna` with reasoning ON; **REMINDER: revisit `claude-sonnet-5-5` later** (deferred as too expensive). Every
+arm is scored on the held-out `data/heldout` set (fresh seed 987654, excluded from all corpora), with each checkpoint
+in its own path (`runs/sft`, `runs/grpo_k4`, `runs/grpo_k8`, `runs/grpo_k16`).
 
 ## 3. Verified measurements
 
@@ -44,7 +64,7 @@ under `max_length` **8,192**; audit reports max row **6,405** tokens and **zero 
 - Domain-model arm (GPT-nano stand-in) is weaker across the board.
 - Design baselines on 120 held-out sites: enumeration 57% within 2% at 128 evals; random 67%;
   enumerate-then-polish 99%. Reports reproduced exactly on the same rows.
-- Paper: 45 pages, `verify_paper.py --no-build` clean, no overfull boxes, 243 `\val` keys with sources.
+- Paper: 45 pages, `verify_paper.py --no-build` clean, no overfull boxes, 242 `\val` keys with sources.
 
 ## 4. Training infrastructure (Kaggle)
 
@@ -70,8 +90,9 @@ under `max_length` **8,192**; audit reports max row **6,405** tokens and **zero 
 
 - No full SFT or GRPO weights exist; v19 smoke has not started, so fused-kernel eval is unverified.
 - `ours_base`, `ours_sft`, `ours_harness`, `ours_grpo` eval arms have not run; the manifest has only 3 replay arms.
-- Big hosted-model journals (Claude Sonnet 5.5 / Gemini 4 Argon / GPT-6 Sol) are pending; the first hosted run
-  failed on an unsupported return annotation, fixed and re-pushed as task version 2.
+- Big hosted-model journals for the chosen cheap models (`claude-haiku-5-5`, `gemini-3.5-flash-lite`,
+  `gpt-6-luna`, reasoning ON) are pending; the hosted task is at version 3. **REMINDER:** revisit
+  `claude-sonnet-5-5` later — it was deferred as too expensive.
 - Q1 ablations, significance tests, GPU-hour totals, memory ablation, cost-quality frontier remain pending
   (`paper/Q1_CHECKLIST.md`). Three externally drawn figures still show pilot samples.
 - No dedicated thermo LLM id was supplied; `other_model` is a GPT-nano stand-in.

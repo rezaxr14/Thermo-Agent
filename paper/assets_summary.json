@@ -211,8 +211,8 @@
    "n": null
   },
   "corp.max_prompt_tokens": {
-   "value": 4000,
-   "tex": "4{,}000",
+   "value": 8000,
+   "tex": "8{,}000",
    "source": "assets/corpus.json",
    "command": "synth.architectures.ARCHITECTURES; row counts from data/processed_arch (gen_data.ps1, seed 0); synth.paraphrase.variant_count on the seed-0 Repair training rows; defaults read from teacher/*.py and synth/combine.py",
    "seed": null,
@@ -438,7 +438,7 @@
    "value": 123024,
    "tex": "123{,}024",
    "source": "assets/corpus.json",
-   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35 nominal, memory 3; legacy 4,000-token gate; the current merged corpora data/sft_all / data/grpo_all use an 8,000-token prompt gate under max_length 8,192)",
    "seed": null,
    "n": null
   },
@@ -446,7 +446,7 @@
    "value": 109659,
    "tex": "109{,}659",
    "source": "assets/corpus.json",
-   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35 nominal, memory 3; legacy 4,000-token gate; the current merged corpora data/sft_all / data/grpo_all use an 8,000-token prompt gate under max_length 8,192)",
    "seed": null,
    "n": null
   },
@@ -454,7 +454,7 @@
    "value": 321,
    "tex": "321",
    "source": "assets/corpus.json",
-   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35 nominal, memory 3; legacy 4,000-token gate; the current merged corpora data/sft_all / data/grpo_all use an 8,000-token prompt gate under max_length 8,192)",
    "seed": null,
    "n": null
   },
@@ -462,7 +462,7 @@
    "value": 0,
    "tex": "0",
    "source": "assets/corpus.json",
-   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35 nominal, memory 3; legacy 4,000-token gate; the current merged corpora data/sft_all / data/grpo_all use an 8,000-token prompt gate under max_length 8,192)",
    "seed": null,
    "n": null
   },
@@ -470,7 +470,7 @@
    "value": 238,
    "tex": "238",
    "source": "assets/corpus.json",
-   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35 nominal, memory 3; legacy 4,000-token gate; the current merged corpora data/sft_all / data/grpo_all use an 8,000-token prompt gate under max_length 8,192)",
    "seed": null,
    "n": null
   },
@@ -478,7 +478,7 @@
    "value": 2564,
    "tex": "2{,}564",
    "source": "assets/corpus.json",
-   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35 nominal, memory 3; legacy 4,000-token gate; the current merged corpora data/sft_all / data/grpo_all use an 8,000-token prompt gate under max_length 8,192)",
    "seed": null,
    "n": null
   },
@@ -486,7 +486,7 @@
    "value": 338,
    "tex": "338",
    "source": "assets/corpus.json",
-   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35 nominal, memory 3; legacy 4,000-token gate; the current merged corpora data/sft_all / data/grpo_all use an 8,000-token prompt gate under max_length 8,192)",
    "seed": null,
    "n": null
   },
@@ -494,7 +494,7 @@
    "value": 204,
    "tex": "204",
    "source": "assets/corpus.json",
-   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35 nominal, memory 3; legacy 4,000-token gate; the current merged corpora data/sft_all / data/grpo_all use an 8,000-token prompt gate under max_length 8,192)",
    "seed": null,
    "n": null
   },
@@ -502,7 +502,7 @@
    "value": 615,
    "tex": "615",
    "source": "assets/corpus.json",
-   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35 nominal, memory 3; legacy 4,000-token gate; the current merged corpora data/sft_all / data/grpo_all use an 8,000-token prompt gate under max_length 8,192)",
    "seed": null,
    "n": null
   },
@@ -510,7 +510,7 @@
    "value": 411,
    "tex": "411",
    "source": "assets/corpus.json",
-   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35 nominal, memory 3; legacy 4,000-token gate; the current merged corpora data/sft_all / data/grpo_all use an 8,000-token prompt gate under max_length 8,192)",
    "seed": null,
    "n": null
   },
@@ -518,7 +518,7 @@
    "value": 460,
    "tex": "460",
    "source": "assets/corpus.json",
-   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35 nominal, memory 3; legacy 4,000-token gate; the current merged corpora data/sft_all / data/grpo_all use an 8,000-token prompt gate under max_length 8,192)",
    "seed": null,
    "n": null
   },
@@ -526,7 +526,7 @@
    "value": 1894,
    "tex": "1{,}894",
    "source": "assets/corpus.json",
-   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35 nominal, memory 3; legacy 4,000-token gate; the current merged corpora data/sft_all / data/grpo_all use an 8,000-token prompt gate under max_length 8,192)",
    "seed": null,
    "n": null
   },
@@ -534,7 +534,7 @@
    "value": 235,
    "tex": "235",
    "source": "assets/corpus.json",
-   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35 nominal, memory 3; legacy 4,000-token gate; the current merged corpora data/sft_all / data/grpo_all use an 8,000-token prompt gate under max_length 8,192)",
    "seed": null,
    "n": null
   },
@@ -542,7 +542,7 @@
    "value": 656,
    "tex": "656",
    "source": "assets/corpus.json",
-   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35 nominal, memory 3; legacy 4,000-token gate; the current merged corpora data/sft_all / data/grpo_all use an 8,000-token prompt gate under max_length 8,192)",
    "seed": null,
    "n": null
   },
@@ -550,7 +550,7 @@
    "value": 2360,
    "tex": "2{,}360",
    "source": "assets/corpus.json",
-   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35 nominal, memory 3; legacy 4,000-token gate; the current merged corpora data/sft_all / data/grpo_all use an 8,000-token prompt gate under max_length 8,192)",
    "seed": null,
    "n": null
   },
@@ -558,7 +558,7 @@
    "value": 854,
    "tex": "854",
    "source": "assets/corpus.json",
-   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35 nominal, memory 3; legacy 4,000-token gate; the current merged corpora data/sft_all / data/grpo_all use an 8,000-token prompt gate under max_length 8,192)",
    "seed": null,
    "n": null
   },
@@ -566,7 +566,7 @@
    "value": 5165,
    "tex": "5{,}165",
    "source": "assets/corpus.json",
-   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35 nominal, memory 3; legacy 4,000-token gate; the current merged corpora data/sft_all / data/grpo_all use an 8,000-token prompt gate under max_length 8,192)",
    "seed": null,
    "n": null
   },
@@ -574,7 +574,7 @@
    "value": 666,
    "tex": "666",
    "source": "assets/corpus.json",
-   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35 nominal, memory 3; legacy 4,000-token gate; the current merged corpora data/sft_all / data/grpo_all use an 8,000-token prompt gate under max_length 8,192)",
    "seed": null,
    "n": null
   },
@@ -582,7 +582,7 @@
    "value": 563,
    "tex": "563",
    "source": "assets/corpus.json",
-   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35 nominal, memory 3; legacy 4,000-token gate; the current merged corpora data/sft_all / data/grpo_all use an 8,000-token prompt gate under max_length 8,192)",
    "seed": null,
    "n": null
   },
@@ -590,7 +590,7 @@
    "value": 3966,
    "tex": "3{,}966",
    "source": "assets/corpus.json",
-   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35 nominal, memory 3; legacy 4,000-token gate; the current merged corpora data/sft_all / data/grpo_all use an 8,000-token prompt gate under max_length 8,192)",
    "seed": null,
    "n": null
   },
@@ -598,7 +598,7 @@
    "value": 864,
    "tex": "864",
    "source": "assets/corpus.json",
-   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35 nominal, memory 3; legacy 4,000-token gate; the current merged corpora data/sft_all / data/grpo_all use an 8,000-token prompt gate under max_length 8,192)",
    "seed": null,
    "n": null
   },
@@ -606,7 +606,7 @@
    "value": 100036,
    "tex": "100{,}036",
    "source": "assets/corpus.json",
-   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35 nominal, memory 3; legacy 4,000-token gate; the current merged corpora data/sft_all / data/grpo_all use an 8,000-token prompt gate under max_length 8,192)",
    "seed": null,
    "n": null
   },
@@ -614,7 +614,7 @@
    "value": 614,
    "tex": "614",
    "source": "assets/corpus.json",
-   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+   "command": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35 nominal, memory 3; legacy 4,000-token gate; the current merged corpora data/sft_all / data/grpo_all use an 8,000-token prompt gate under max_length 8,192)",
    "seed": null,
    "n": null
   },
@@ -635,8 +635,8 @@
    "n": null
   },
   "tr.sft_len": {
-   "value": 4096,
-   "tex": "4{,}096",
+   "value": 8192,
+   "tex": "8{,}192",
    "source": "assets/environment.json",
    "command": "thermo_agent.core.components (REQUIRED_PORTS, PORT_CLASS, PARAMS); inspect.signature(synth.topologies.dc_chp); train.config; design.spec",
    "seed": null,

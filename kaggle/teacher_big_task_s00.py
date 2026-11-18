@@ -17,8 +17,11 @@ SPEC = {
     "dataset": "rezanadimi/thermo-teacher-prompts-big",
     "shard": "prompts_s00.jsonl",
     "limit": 200,
-    "max_output_tokens": 768,
-    "reasoning": "none",
+    # Reasoning ON: the user wants reasoning traces where the provider exposes them; where
+    # they cannot be captured, leaving reasoning enabled is acceptable. Reasoning also avoids
+    # the Anthropic `thinking:{type:disabled}` 400 that reasoning="none" triggered on Claude.
+    "max_output_tokens": 1536,   # headroom for a reasoning block plus the answer
+    "reasoning": "low",
     "deadline_seconds": 7200,
     "max_cost_usd": 1.6,
 }

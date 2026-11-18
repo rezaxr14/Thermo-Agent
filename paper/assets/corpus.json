@@ -704,7 +704,7 @@
   }
  },
  "corpus": {
-  "source": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35, memory 3)",
+  "source": "data/sft/sft_report.json (scripts/build_corpus.ps1, harness 0.35 nominal, memory 3; legacy 4,000-token gate; the current merged corpora data/sft_all / data/grpo_all use an 8,000-token prompt gate under max_length 8,192)",
   "splits": {
    "test_id": 1744,
    "test_ood_climate": 615,
@@ -752,7 +752,7 @@
   "harness_fraction": 0.35,
   "k_memory": 3,
   "max_prompt_chars": 11500,
-  "max_prompt_tokens": 4000
+  "max_prompt_tokens": 8000
  },
  "sampler": {
   "temperature": 0.8,

@@ -1,0 +1,20 @@
+{
+ "task": "ledger",
+ "params": {
+  "n": 120,
+  "seed": 987654,
+  "workers": 4,
+  "architectures": 9,
+  "counts": {
+   "train": 60,
+   "test_ood_fault": 32,
+   "test_id": 11,
+   "val": 10,
+   "test_ood_topology": 7
+  }
+ },
+ "schema_version": "0.1.0",
+ "python": "3.12.3",
+ "coolprop": "8.0.0",
+ "created_utc": "2026-11-18T18:05:22+00:00"
+}

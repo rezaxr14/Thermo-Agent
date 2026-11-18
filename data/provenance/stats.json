@@ -1,20 +1,21 @@
 {
   "acceptance": {
-    "acceptance_rate_of_known_pct": 65.1951,
-    "accepted_share_of_all_pct": 1.6735,
+    "acceptance_rate_of_known_pct": 60.1326,
+    "accepted_share_of_all_pct": 1.6622,
     "counts": {
       "accepted": 635,
-      "rejected": 339,
-      "unknown": 36971
+      "rejected": 421,
+      "unknown": 37146
     },
-    "known_traces": 974
+    "known_traces": 1056
   },
   "by_first_seen_file": {
+    "data/frontier/frontier_audit_train.jsonl": 8,
     "data/frontier/frontier_design_train.jsonl": 43,
     "data/frontier/frontier_ledger_train.jsonl": 93,
     "data/frontier/frontier_repair_train.jsonl": 65,
     "data/memory/adversarial_repair.jsonl": 24,
-    "data/memory/frontier_notes.jsonl": 315,
+    "data/memory/frontier_notes.jsonl": 364,
     "data/processed/audit_test_id.jsonl": 299,
     "data/processed/audit_test_ood_topology.jsonl": 135,
     "data/processed/audit_train.jsonl": 2192,
@@ -59,6 +60,7 @@
     "data/processed_big/repair_val.jsonl": 6,
     "data/teacher_runs/completions.jsonl": 1600,
     "data/teacher_runs/completions_big_claude-sonnet-5-5-default.jsonl": 5,
+    "data/teacher_runs/completions_big_gemini-3.8-flash.jsonl": 200,
     "data/teacher_runs/completions_gptnano.jsonl": 1600,
     "data/teacher_runs/eval_all.jsonl": 360,
     "data/teacher_runs/eval_gptnano_all.jsonl": 360,
@@ -75,8 +77,8 @@
       "cost_per_accepted_usd": null,
       "input_tokens": 0,
       "output_tokens": 0,
-      "rejected": 339,
-      "traces": 339,
+      "rejected": 388,
+      "traces": 388,
       "unknown": 0
     },
     "(synthetic)": {
@@ -118,6 +120,19 @@
       "traces": 2460,
       "unknown": 1947
     },
+    "google/gemini-3.8-flash": {
+      "acceptance_rate_of_known_pct": 0.0,
+      "accepted": 0,
+      "accepted_share_of_all_pct": 0.0,
+      "cost_nanodollars": 612315750,
+      "cost_per_accepted_nanodollars": null,
+      "cost_per_accepted_usd": null,
+      "input_tokens": 371051,
+      "output_tokens": 89074,
+      "rejected": 33,
+      "traces": 208,
+      "unknown": 175
+    },
     "openai/gpt-5.4-nano-2026-03-17": {
       "acceptance_rate_of_known_pct": 100.0,
       "accepted": 122,
@@ -133,22 +148,22 @@
     }
   },
   "by_split": {
-    "(none)": 3434,
+    "(none)": 3658,
     "test_id": 2375,
     "test_ood_climate": 675,
     "test_ood_fault": 7827,
     "test_ood_load": 471,
     "test_ood_scale": 520,
     "test_ood_topology": 2505,
-    "train": 17933,
+    "train": 17966,
     "val": 2205
   },
   "by_task": {
     "audit": {
       "accepted": 0,
-      "cost_nanodollars": 561961110,
-      "rejected": 43,
-      "traces": 5356
+      "cost_nanodollars": 1174276860,
+      "rejected": 125,
+      "traces": 5613
     },
     "design": {
       "accepted": 140,
@@ -200,6 +215,13 @@
         "input_tokens": 4501674,
         "output_tokens": 417354
       },
+      "google/gemini-3.8-flash": {
+        "accepted_traces": 0,
+        "cost_nanodollars": 612315750,
+        "cost_per_accepted_nanodollars": null,
+        "input_tokens": 371051,
+        "output_tokens": 89074
+      },
       "openai/gpt-5.4-nano-2026-03-17": {
         "accepted_traces": 122,
         "cost_nanodollars": 789102050,
@@ -208,25 +230,25 @@
         "output_tokens": 299961
       }
     },
-    "nanodollars_per_accepted_trace": 4000868.58,
-    "total_nanodollars": 2540551550,
-    "total_usd": 2.540552
+    "nanodollars_per_accepted_trace": 4965145.35,
+    "total_nanodollars": 3152867300,
+    "total_usd": 3.152867
   },
   "coverage": {
     "by_kind": {
       "adversarial": {
         "coverage_pct": 0.0,
-        "traces": 339,
+        "traces": 388,
         "with_downstream": 0
       },
       "frontier": {
-        "coverage_pct": 40.4313,
-        "traces": 3339,
-        "with_downstream": 1350
+        "coverage_pct": 39.18,
+        "traces": 3512,
+        "with_downstream": 1376
       },
       "harness": {
-        "coverage_pct": 10.8011,
-        "traces": 1111,
+        "coverage_pct": 10.4712,
+        "traces": 1146,
         "with_downstream": 120
       },
       "synthetic": {
@@ -237,13 +259,13 @@
     },
     "by_source": {
       "frontier": {
-        "coverage_pct": 55.7214,
-        "traces": 201,
+        "coverage_pct": 53.5885,
+        "traces": 209,
         "with_downstream": 112
       },
       "memory": {
         "coverage_pct": 0.0,
-        "traces": 339,
+        "traces": 388,
         "with_downstream": 0
       },
       "processed": {
@@ -262,14 +284,14 @@
         "with_downstream": 0
       },
       "teacher_runs": {
-        "coverage_pct": 31.9605,
-        "traces": 4249,
-        "with_downstream": 1358
+        "coverage_pct": 31.1081,
+        "traces": 4449,
+        "with_downstream": 1384
       }
     },
-    "coverage_pct": 77.051,
-    "traces_total": 37945,
-    "traces_with_downstream": 29237
+    "coverage_pct": 76.6007,
+    "traces_total": 38202,
+    "traces_with_downstream": 29263
   },
   "downstream": {
     "artifacts": [
@@ -402,8 +424,8 @@
       {
         "artifact": "data/memory/frontier_notes.jsonl",
         "kind": "memory_note",
-        "rows": 169,
-        "unique_traces": 169
+        "rows": 195,
+        "unique_traces": 195
       },
       {
         "artifact": "data/sft/audit_test_id.jsonl",
@@ -553,14 +575,14 @@
     "entries_by_kind": {
       "eval_arm": 840,
       "grpo_row": 28214,
-      "memory_note": 188,
+      "memory_note": 214,
       "paper_example": 32,
       "sft_row": 28214
     },
     "rows_by_kind": {
       "eval_arm": 840,
       "grpo_row": 28214,
-      "memory_note": 193,
+      "memory_note": 219,
       "paper_example": 33,
       "sft_row": 123024
     }
@@ -568,33 +590,86 @@
   "generator": "scripts/build_provenance_ledger.py",
   "harness_modes": {
     "agents+skills": {
-      "share_pct": 1.7183,
+      "share_pct": 1.7067,
       "traces": 652
     },
     "none": {
-      "share_pct": 97.0721,
-      "traces": 36834
+      "share_pct": 97.0002,
+      "traces": 37056
     },
     "skills": {
-      "share_pct": 0.3558,
-      "traces": 135
+      "share_pct": 0.445,
+      "traces": 170
     },
     "tools": {
-      "share_pct": 0.8539,
+      "share_pct": 0.8481,
       "traces": 324
     }
   },
   "ledger": {
-    "bytes": 60253023,
+    "bytes": 60671599,
     "path": "data/provenance/trace_ledger.jsonl",
-    "records": 37945,
-    "sha256": "23b644365ecb7152b96a86c0ef631949b2aa4daf6517bacd21ae57a081b5f761"
+    "records": 38202,
+    "sha256": "2628f481ddd07a2dfde5005d4148395fb76a26f2ff802c1916ba3b74c019ddc2"
   },
   "memory_failure_reasons": {
-    "by_fault_type": {},
-    "by_task": {},
-    "n": 0,
-    "top_lessons": []
+    "by_fault_type": {
+      "": 167
+    },
+    "by_task": {
+      "audit": 167
+    },
+    "n": 167,
+    "top_lessons": [
+      {
+        "count": 57,
+        "lesson": "Attempt rejected (format: unknown component ids ['DC'])."
+      },
+      {
+        "count": 42,
+        "lesson": "Attempt rejected (format: need <ranking>, <change> and <prediction> blocks)."
+      },
+      {
+        "count": 13,
+        "lesson": "Attempt rejected (change: change not allowed; prediction: no usable prediction)."
+      },
+      {
+        "count": 4,
+        "lesson": "Attempt rejected (grounding: only 77% of the numbers in <analysis> are in the plant)."
+      },
+      {
+        "count": 3,
+        "lesson": "Attempt rejected (grounding: only 62% of the numbers in <analysis> are in the plant)."
+      },
+      {
+        "count": 3,
+        "lesson": "Attempt rejected (grounding: only 71% of the numbers in <analysis> are in the plant)."
+      },
+      {
+        "count": 2,
+        "lesson": "Attempt rejected (grounding: only 50% of the numbers in <analysis> are in the plant)."
+      },
+      {
+        "count": 2,
+        "lesson": "Attempt rejected (grounding: only 55% of the numbers in <analysis> are in the plant)."
+      },
+      {
+        "count": 2,
+        "lesson": "Attempt rejected (grounding: only 69% of the numbers in <analysis> are in the plant)."
+      },
+      {
+        "count": 2,
+        "lesson": "Attempt rejected (grounding: only 73% of the numbers in <analysis> are in the plant)."
+      },
+      {
+        "count": 2,
+        "lesson": "Attempt rejected (grounding: only 76% of the numbers in <analysis> are in the plant)."
+      },
+      {
+        "count": 2,
+        "lesson": "Attempt rejected (prediction: relative error 0.74 is above 0.5)."
+      }
+    ]
   },
   "notes": [
     "One ledger record per canonical trace id; paraphrase #vN markers are variants, not traces.",
@@ -616,6 +691,7 @@
   "source_latest_timestamp": "2026-11-18T16:37:57Z",
   "sources_discovered": {
     "frontier": [
+      "data/frontier/frontier_audit_train.jsonl",
       "data/frontier/frontier_design_train.jsonl",
       "data/frontier/frontier_ledger_train.jsonl",
       "data/frontier/frontier_repair_train.jsonl"
@@ -669,6 +745,7 @@
     "journals": [
       "data/teacher_runs/completions.jsonl",
       "data/teacher_runs/completions_big_claude-sonnet-5-5-default.jsonl",
+      "data/teacher_runs/completions_big_gemini-3.8-flash.jsonl",
       "data/teacher_runs/completions_gptnano.jsonl",
       "data/teacher_runs/eval_all.jsonl",
       "data/teacher_runs/eval_gptnano_all.jsonl",
@@ -808,21 +885,21 @@
   },
   "totals": {
     "by_first_seen_source": {
-      "frontier": 201,
-      "memory": 339,
+      "frontier": 209,
+      "memory": 388,
       "processed": 27418,
       "processed_arch": 5544,
       "processed_big": 194,
-      "teacher_runs": 4249
+      "teacher_runs": 4449
     },
     "by_kind": {
-      "adversarial": 339,
-      "frontier": 3339,
-      "harness": 1111,
+      "adversarial": 388,
+      "frontier": 3512,
+      "harness": 1146,
       "synthetic": 33156
     },
-    "downstream_entries": 57488,
-    "journal_occurrences": 5473,
-    "traces": 37945
+    "downstream_entries": 57514,
+    "journal_occurrences": 5673,
+    "traces": 38202
   }
 }

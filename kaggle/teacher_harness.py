@@ -1,23 +1,20 @@
-"""Kaggle notebook source: the frontier model inside our harness, with physics tools exposed.
+"""Kaggle notebook: frontier model in the LangGraph harness with REAL physics tools + skills + memory.
 
-Build with `python kaggle/make_notebook.py`. This is the third comparison arm in the paper: the same prompts and
-ground-truth rows as the teacher pass, but the model may call our verifiers while it works and we keep its reasoning
-trace. The fourth arm is our trained 4B model; zero-shot and prompt-only frontier arms come from teacher.ipynb.
+Built from this source with `python kaggle/make_notebook.py`. This is the tool-using CoT generator:
+the frontier model proposes an answer, calls first/second-law, validity and solve tools, reads the
+numeric results, self-corrects, and finalizes. The full trajectory is kept for SFT so our 4B learns
+to use tools/skills/memory. Old zero-shot teacher rows are kept; these rows are additive.
 """
 
 # %% [markdown]
-# # thermo-agent: frontier model with our physics tools
+# # thermo-agent: frontier model with physics tools, skills and memory
 #
-# Attach `thermo-agent-code` (the zip from `scripts/make_kaggle_bundle.ps1`) and `thermo-teacher-prompts`.
-# Add the `HF_TOKEN` Kaggle Secret. Choose **GPU T4 x2** only if you also want to train; this notebook itself needs
-# no GPU — the tools run on the CPU and the model runs on Kaggle's side.
-#
-# Output: `/kaggle/working/harness_completions.jsonl` with answer, tool calls, reasoning trace, token usage and
-# cost per row. Progress is mirrored to `teacher/harness_progress.jsonl` in the same private repo, so an account
-# with fresh quota can resume.
+# Attach `thermo-agent-code` (zip from `scripts/make_kaggle_bundle.ps1`) and `thermo-teacher-prompts`.
+# The model runs on Kaggle's side; the physics tools (solver + verifiers) run on CPU. No GPU needed.
+# Output: `harness_completions.jsonl` with the answer, the full tool-using trajectory, reasoning,
+# token usage and cost per row. Ingest accepted rows with `transfer.ingest` (trajectory preserved).
 
 # %%
-# Bootstrap with the standard library only: unpack the code bundle before importing thermo_agent.
 import json
 import os
 import pathlib
@@ -41,19 +38,18 @@ sys.path.insert(0, str(ROOT))
 os.chdir(ROOT)
 
 OUT = WORK / "harness_completions.jsonl"
-REPO = "Reza-Nadimi/thermo-agent-checkpoints"
-PROGRESS_PREFIX = "teacher/harness_progress.jsonl"
-MODEL = "anthropic/claude-sonnet-5-5@default"
-LIMIT = 0
-TOOL_ROUNDS = 3
+MODEL = os.environ.get("HARNESS_MODEL", "gemini-3.5-flash-lite")
+LIMIT = int(os.environ.get("LIMIT", "0"))
+ROUNDS = int(os.environ.get("ROUNDS", "3"))
 
 # %%
 from thermo_agent.kaggle_notebook import find_input, setup, token
+ROOT = setup(corpora=())   # code + prompt datasets only, no training corpora
 
-ROOT = setup(corpora=())          # this arm needs the code and prompt datasets, not the training corpora
-
-from thermo_agent.teacher import progress, validate
-from thermo_agent.train import hf_sync
+from thermo_agent.teacher import memory as mem
+from thermo_agent.teacher.agent_graph import run as run_graph, build_context
+from thermo_agent.teacher.kbench_adapter import make_respond, usage_of
+from thermo_agent.teacher.toolkit import tool_names
 from thermo_agent.teacher.transfer import load_exports
 
 # %%
@@ -61,108 +57,53 @@ exports = load_exports(find_input("thermo-teacher-prompts"))
 rows = list(exports.values())
 if LIMIT:
     rows = rows[:LIMIT]
-print(f"{len(rows)} prompts loaded")
+print(f"{len(rows)} prompts loaded", flush=True)
 
-
-# %%
-# Our tools. kbench builds the JSON schema from the type annotations, so keep them plain strings.
-def check_answer(task: str, answer: str, row_id: str) -> str:
-    """Run the project's physics tool suite on a candidate answer and report what failed."""
-    row = exports.get(row_id)
-    if row is None:
-        return "Unknown row id."
-    verdict = validate.validate(task, answer, row)
-    return json.dumps({"accepted": verdict["accepted"], "reward": verdict["reward"],
-                       "reasons": verdict["reasons"]})
-
-
-TOOLS = [check_answer]
-print("exposed tools:", [f.__name__ for f in TOOLS])
+# Fresh failure memory (reloaded each row so it is always current).
+MEM = pathlib.Path("data/memory")
+def fresh_notes():
+    notes = []
+    for p in MEM.glob("*.jsonl"):
+        for line in p.open(encoding="utf-8"):
+            try:
+                notes.append(mem.Note(**json.loads(line)))
+            except Exception:
+                pass
+    return mem.dedupe(notes)
 
 # %%
 import kaggle_benchmarks as kbench
+from kaggle_benchmarks import actors
 
 token()
-SYNC = bool(os.environ.get("HF_TOKEN"))
-if SYNC:
-    hf_sync.resolve_repo(REPO)
-    merged = progress.sync(OUT, REPO, os.environ["HF_TOKEN"], PROGRESS_PREFIX)
-    done = progress.answered_ids(merged)
-else:
-    done = {json.loads(l)["id"] for l in OUT.open(encoding="utf-8")} if OUT.exists() else set()
 llm = kbench.llms.get(MODEL, kbench.llm)
-print(f"model={MODEL}; {len(done)} rows already answered")
-
-
-def _usage(chat):
-    try:
-        u = chat.usage
-        return {"input_tokens": getattr(u, "input_tokens", None), "output_tokens": getattr(u, "output_tokens", None),
-                "total_cost_nanodollars": getattr(u, "total_cost_nanodollars", None),
-                "total_backend_latency_ms": getattr(u, "total_backend_latency_ms", None)}
-    except Exception:
-        return {}
-
-
-def _trace(chat):
-    try:
-        return "\n".join(str(m.reasoning_traces) for m in chat.messages if getattr(m, "reasoning_traces", None))
-    except Exception:
-        return ""
-
-
-def _tool_calls(chat):
-    calls = []
-    try:
-        for m in chat.messages:
-            for c in getattr(m, "tool_calls", None) or []:
-                calls.append({"name": getattr(c, "name", str(c)), "arguments": getattr(c, "arguments", "")})
-    except Exception:
-        pass
-    return calls
+print(f"model={MODEL}; tools={tool_names()}", flush=True)
 
 # %%
-SYSTEM = (
-    "You are an expert thermodynamic agent. You may call check_answer(task, answer, row_id) as often as you need "
-    "(at most {} times) to test a candidate answer against our physics verifiers; use the feedback to improve it. "
-    "Finish with the final answer in the task's XML tags, as in the training corpus. Do not reveal private data."
-).format(TOOL_ROUNDS)
-
-started = time.time()
-written = 0
+started, written = time.time(), 0
 with OUT.open("a", encoding="utf-8") as fh:
     for i, row in enumerate(rows):
-        rid = str(row["id"])
-        if rid in done:
-            continue
-        task = row.get("task", "repair")
-        user = "\n\n".join(m["content"] for m in row["prompt"] if m["role"] != "system")
-        record = {"id": rid, "task": task, "model": MODEL, "harness": "tools", "tools": [f.__name__ for f in TOOLS],
-                  "topology": row.get("topology"), "ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+        rid, task = str(row["id"]), row.get("task", "repair")
+        rec = {"id": rid, "task": task, "model": MODEL, "harness": "tools",
+               "tools": tool_names(), "topology": row.get("topology"),
+               "ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
         try:
-            with kbench.chats.new(f"harness_{i}", system_instructions=SYSTEM) as chat:
-                record["completion"] = str(llm.prompt(user, tools=TOOLS))
-                record["usage"] = _usage(chat)
-                record["reasoning"] = _trace(chat)
-                record["tool_calls"] = _tool_calls(chat)
+            ctx = build_context({"row": row, "task": task, "notes": fresh_notes(),
+                                 "k_memory": 3, "mode": "agents+skills"})
+            usage_holder = {}
+            respond = make_respond(llm, kbench, actors, system_prompt=ctx["system_prompt"],
+                                   max_tool_rounds=ROUNDS, usage_holder=usage_holder)
+            state = run_graph(row, task, respond, notes=fresh_notes(), max_rounds=ROUNDS)
+            rec["completion"] = state["final"]
+            rec["verdict"] = {k: v for k, v in state["verdict"].items() if k != "failed"}
+            rec["trajectory"] = {"turns": state["turns"], "notes_used": state["notes_used"],
+                                 "tools_available": tool_names()}
+            rec["sft_completion"] = state["sft_completion"]
+            rec["usage"] = usage_of(usage_holder["chat"]) if "chat" in usage_holder else {}
         except Exception as exc:
-            record["error"] = f"{type(exc).__name__}: {exc}"
-        fh.write(json.dumps(record) + "\n")
-        fh.flush()
-        written += 1
+            rec["error"] = f"{type(exc).__name__}: {exc}"
+        fh.write(json.dumps(rec) + "\n"); fh.flush(); written += 1
         if written % 25 == 0:
-            if SYNC:
-                try:
-                    remote = progress.pull(REPO, os.environ["HF_TOKEN"], PROGRESS_PREFIX)
-                    progress.push(progress.dedupe(remote + progress.load(OUT)), REPO,
-                                  os.environ["HF_TOKEN"], PROGRESS_PREFIX)
-                except Exception as exc:
-                    print("progress push failed (will retry):", exc, flush=True)
-            rate = written / max(time.time() - started, 1e-9)
-            print(f"{i + 1}/{len(rows)}  {written} new  {rate:.2f}/s", flush=True)
+            print(f"{i+1}/{len(rows)}  {written} new", flush=True)
 
-print(f"wrote {written} rows to {OUT}")
-if SYNC:
-    final = progress.sync(OUT, REPO, os.environ["HF_TOKEN"], PROGRESS_PREFIX)
-    print("recorded cost:", json.dumps(progress.usage_totals(final)))
-print("download harness_completions.jsonl and ingest it with --harness tools")
+print(f"wrote {written} rows to {OUT}; ingest with transfer.ingest --harness tools")

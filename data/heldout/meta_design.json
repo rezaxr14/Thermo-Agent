@@ -1,0 +1,21 @@
+{
+ "task": "design",
+ "params": {
+  "n": 120,
+  "seed": 987654,
+  "workers": 4,
+  "max_evals": 60,
+  "counts": {
+   "train": 54,
+   "test_ood_climate": 20,
+   "test_ood_load": 13,
+   "test_ood_scale": 14,
+   "val": 4,
+   "test_id": 4
+  }
+ },
+ "schema_version": "0.1.0",
+ "python": "3.12.3",
+ "coolprop": "8.0.0",
+ "created_utc": "2026-11-18T18:11:58+00:00"
+}

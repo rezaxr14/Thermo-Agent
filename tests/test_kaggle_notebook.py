@@ -103,7 +103,8 @@ def test_notebook_writes_one_line_per_attempt_and_records_errors(tmp_path, monke
     assert [r["id"] for r in written] == ["row-a", "row-b"], "one line per attempt, ids preserved"
     assert written[0]["completion"] == "stub answer"
     assert "quota exhausted" in written[1]["error"], "a failed call is recorded, not fatal"
-    assert all(r["model"] == "anthropic/claude-sonnet-5-5@default" for r in written)
+    # The zero-shot baseline notebook default is now the user-selected cheap model (D7).
+    assert all(r["model"] == "claude-haiku-5-5" for r in written)
 
     # second run: everything already answered, nothing duplicated
     ns2 = {"__name__": "__notebook__"}
@@ -143,7 +144,7 @@ def test_train_notebook_is_generated_and_has_no_token():
 
 
 def test_tools_notebook_is_generated_and_exposes_the_physics_tool():
-    """The third comparison arm must actually give the frontier model our verifier and keep its reasoning."""
+    """The tool-using CoT arm must run the LangGraph harness with real tools, skills, memory and keep the trajectory."""
     make_notebook = _load_make_notebook()
     out = pathlib.Path(make_notebook.build(KAGGLE / "teacher_harness.py", KAGGLE / "_harness_check.ipynb"))
     try:
@@ -152,9 +153,11 @@ def test_tools_notebook_is_generated_and_exposes_the_physics_tool():
             "kaggle/teacher_harness.ipynb is stale: run `python kaggle/make_notebook.py`")
         code = "".join("".join(c["source"]) for c in json.loads(out.read_text(encoding="utf-8"))["cells"]
                        if c["cell_type"] == "code")
-        assert "def check_answer" in code and "tools=TOOLS" in code
-        assert "reasoning" in code and "harness_completions.jsonl" in code
-        assert "harness_progress.jsonl" in code
+        assert "run_graph" in code and "agent_graph" in code, "must use the LangGraph harness"
+        assert "tool_names" in code and "fresh_notes" in code, "must expose real tools and fresh memory"
+        assert "trajectory" in code and "sft_completion" in code, "must persist the tool-using trajectory for SFT"
+        assert "kbench_adapter" in code and "make_respond" in code, "must deliver the full prompt via the shared adapter"
+        assert "harness_completions.jsonl" in code
     finally:
         out.unlink(missing_ok=True)
 

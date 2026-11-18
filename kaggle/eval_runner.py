@@ -50,7 +50,14 @@ REPORTS.mkdir(parents=True, exist_ok=True)
 LIMIT = int(os.environ.get("LIMIT", "30"))
 FORCE = os.environ.get("FORCE", "0") == "1"
 SPLITS = os.environ.get("SPLITS", "").split(",") if os.environ.get("SPLITS") else None
-ARMS = os.environ.get("ARMS", "ours_base,ours_sft,ours_harness,ours_grpo,frontier_zero,frontier_tools,other_model").split(",")
+# DATA_DIRS: which ground truth to score on. The held-out set (data/heldout, fresh seed) is what
+# every arm is finally compared on; it is excluded from every training corpus and teacher shard.
+DATA_DIRS = [ROOT / "data" / d for d in os.environ.get(
+    "DATA_DIRS", "processed,processed_arch").split(",")]
+ARMS = os.environ.get(
+    "ARMS",
+    "ours_base,ours_sft,ours_harness,ours_sft_grpo_k4,ours_sft_grpo_k8,ours_sft_grpo_k16,"
+    "frontier_zero,frontier_tools,frontier_harness,other_model").split(",")
 find_input("thermo-teacher-prompts")     # fail early if the prompt dataset is missing
 
 # %%
@@ -92,6 +99,15 @@ ADAPTER = pulled or os.environ.get("ADAPTER", "")
 # With no Kaggle Secret, the trained arms take the adapter from a local checkpoint in the
 # attached dataset/code tree via ADAPTER (and GRPO_ADAPTER for the RL stage). No token is stored.
 GRPO_ADAPTER = os.environ.get("GRPO_ADAPTER", merged or ADAPTER)
+# Pull each distinct k checkpoint into its own dir so k=4/8/16 never share weights.
+GRPO_K_ADAPTERS = {}
+for _k in (4, 8, 16):
+    _stage = f"grpo_{os.environ.get('TASK', 'ledger')}_k{_k}"
+    if os.environ.get("HF_TOKEN"):
+        GRPO_K_ADAPTERS[_k] = hf_sync.pull_checkpoint(ROOT / "runs", REPO, _stage, os.environ["HF_TOKEN"])
+        print(f"grpo k={_k} adapter:", GRPO_K_ADAPTERS[_k], flush=True)
+    else:
+        GRPO_K_ADAPTERS[_k] = ROOT / "runs" / _stage
 
 # %%
 # One spec per arm. `replay` scores saved Kaggle answers with the same verifiers and prompt rows; the frontier
@@ -105,10 +121,24 @@ SPECS = {
                      "harness": "agents+skills", "tool_access": "none", "zero_shot": False},
     "ours_grpo": {"backend": "hf", "model": "Qwen/Qwen3.5-4B", "adapter": GRPO_ADAPTER, "family": "ours",
                   "harness": "agents+skills", "tool_access": "none", "zero_shot": False},
+    # SFT + GRPO at group sizes k=4,8,16. Each pulls its OWN distinct checkpoint dir (written by
+    # the train notebook as runs/grpo_<task>_k<k>) so the three scores never use the same weights.
+    "ours_sft_grpo_k4": {"backend": "hf", "model": "Qwen/Qwen3.5-4B", "family": "ours",
+                          "harness": "agents+skills", "tool_access": "none", "zero_shot": False,
+                          "grpo_k": 4},
+    "ours_sft_grpo_k8": {"backend": "hf", "model": "Qwen/Qwen3.5-4B", "family": "ours",
+                          "harness": "agents+skills", "tool_access": "none", "zero_shot": False,
+                          "grpo_k": 8},
+    "ours_sft_grpo_k16": {"backend": "hf", "model": "Qwen/Qwen3.5-4B", "family": "ours",
+                           "harness": "agents+skills", "tool_access": "none", "zero_shot": False,
+                           "grpo_k": 16},
     "frontier_zero": {"backend": "replay", "replay": str(WORK / "eval_all.jsonl"), "family": "frontier",
                       "harness": "none", "tool_access": "none", "zero_shot": True},
-    "frontier_tools": {"backend": "replay", "replay": str(WORK / "harness_eval_completions.jsonl"),
+    "frontier_tools": {"backend": "replay", "replay": str(WORK / "harness_eval_completions2.jsonl"),
                        "family": "frontier", "harness": "tools", "tool_access": "tools", "zero_shot": True},
+    # Frontier model inside our LangGraph harness with tools + skills + memory (tool-using CoT).
+    "frontier_harness": {"backend": "replay", "replay": str(WORK / "harness_completions.jsonl"),
+                         "family": "frontier", "harness": "tools", "tool_access": "tools", "zero_shot": True},
     # The measured domain-model arm is the saved GPT-nano answers, not a live localhost endpoint.
     "other_model": {"backend": "replay", "replay": str(WORK / "eval_gptnano_replay.jsonl"),
                     "family": "domain-model", "harness": "none", "tool_access": "none", "zero_shot": True},
@@ -125,7 +155,7 @@ def run_arm(name):
         print(f"{name}: report exists ({out}); pass FORCE=1 to rerun")
         return out
     cmd = [sys.executable, "-m", "thermo_agent.eval.model_eval",
-           str(ROOT / "data" / "processed"), str(ROOT / "data" / "processed_arch"),
+           *[str(d) for d in DATA_DIRS],
            "--backend", spec["backend"], "--harness", spec["harness"],
            "--limit", str(LIMIT), "--out", str(out), "--model-family", spec["family"],
            "--tool-access", spec["tool_access"], "--display-name", name]
@@ -134,8 +164,11 @@ def run_arm(name):
     arm_splits = SPLITS or (["test_id"] if name == "frontier_tools" else None)
     if arm_splits:
         cmd += ["--splits", *arm_splits]
-    if spec["backend"] == "hf" and spec.get("adapter"):
-        cmd += ["--adapter", spec["adapter"], "--dtype", "float16"]
+    adapter = spec.get("adapter")
+    if spec.get("grpo_k") is not None:
+        adapter = GRPO_K_ADAPTERS[spec["grpo_k"]]
+    if spec["backend"] == "hf" and adapter:
+        cmd += ["--adapter", str(adapter), "--dtype", "float16"]
     if spec["backend"] == "replay":
         cmd += ["--replay", spec["replay"]]
     if spec["backend"] == "openai":

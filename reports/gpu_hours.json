@@ -1,0 +1,12 @@
+{
+ "measured": {
+  "frontier_tool_eval_seconds": 326.2,
+  "frontier_tool_eval_usd": 0.202697,
+  "api_spend_total_usd": 2.540552
+ },
+ "pending": [
+  "full SFT GPU-hours (dual T4) \u2014 fill from thermo-train-run kernel log",
+  "GRPO GPU-hours per task \u2014 fill from grpo_* kernel logs",
+  "ours_* eval GPU-hours \u2014 fill from thermo-eval-run logs"
+ ]
+}

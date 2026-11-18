@@ -132,22 +132,26 @@ status(stage="merge", state="done")
 # Stage 2: GRPO. `--init hf:merged/sft` reuses the merged model from the repo, so no SFT is redone here.
 # Each task has its own checkpoint prefix (`grpo_repair`, ...), and can be run in a separate session.
 TASK = os.environ.get("TASK", "ledger")
-status(stage=f"grpo_{TASK}", state="running")
+# GRPO group size k (rollouts per prompt). Each k gets its OWN output dir so checkpoints never
+# overwrite: k=4 -> runs/grpo_{TASK}_k4, k=8 -> ..._k8, k=16 -> ..._k16. SFT alone is runs/sft.
+GRPO_K = int(os.environ.get("GRPO_K", "4"))
+GRPO_STAGE = f"grpo_{TASK}_k{GRPO_K}"
+status(stage=GRPO_STAGE, state="running", k=GRPO_K)
 # With a token, load the merged weights from HF. Without one, use the merge cell's local output;
 # this changes only where the same weights come from, not the model or any training setting.
 INIT = "hf:merged/sft" if os.environ.get("HF_TOKEN") else str(merged)
 run([PY, "-m", "torch.distributed.run", "--standalone", "--nproc_per_node", str(NGPU), "--module", "thermo_agent.train.grpo",
-     ROOT / "data" / GRPO_DATA, ROOT / "runs" / f"grpo_{TASK}", "--task", TASK,
-     "--init", INIT, "--dtype", "float16",
+     ROOT / "data" / GRPO_DATA, ROOT / "runs" / GRPO_STAGE, "--task", TASK,
+     "--init", INIT, "--dtype", "float16", "--num-generations", str(GRPO_K),
      "--per-device-batch", "4", "--grad-accum", "2", "--num-workers", "2",
-     "--rollout-log", ROOT / "runs" / f"grpo_{TASK}" / "rollouts.jsonl",
+     "--rollout-log", ROOT / "runs" / GRPO_STAGE / "rollouts.jsonl",
      "--hf-sync", SYNC, *LIMITS])
-status(stage=f"grpo_{TASK}", state="done", local_steps=hf_sync.local_steps(ROOT / "runs", f"grpo_{TASK}"))
+status(stage=GRPO_STAGE, state="done", k=GRPO_K, local_steps=hf_sync.local_steps(ROOT / "runs", GRPO_STAGE))
 
 # %%
 # Status: the remote steps are what the next session will resume from.
 if os.environ.get("HF_TOKEN"):
-    for stage in ["sft", f"grpo_{TASK}"]:
+    for stage in ["sft", f"grpo_{TASK}_k{GRPO_K}"]:
         print(stage, "local:", hf_sync.local_steps(ROOT / "runs", stage),
               "remote:", hf_sync.remote_steps(hf_sync.repo_files(hf_sync.resolve_repo()), stage))
 else:

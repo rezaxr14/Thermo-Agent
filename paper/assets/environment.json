@@ -556,7 +556,7 @@
   "sft": {
    "lr": 0.0002,
    "epochs": 1,
-   "max_length": 4096,
+   "max_length": 8192,
    "per_device_batch": 2,
    "grad_accum": 8,
    "max_grad_norm": 1.0

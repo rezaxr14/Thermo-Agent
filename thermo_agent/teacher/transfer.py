@@ -133,8 +133,19 @@ def ingest(export_dir, completions_path, out_dir, memory_dir=None, tasks=TASKS, 
         seen_answers.add(digest)
         verdict = validate.validate(task, text, row)
         if verdict["accepted"] and verdict["reward"] >= min_reward:
-            accepted[task].append(validate.teacher_row(task, text, row, verdict, tag=_slug(model)))
+            # A tool-using trace carries its full trajectory (reasoning + tool calls + numeric
+            # results + revisions). Persist it as the SFT completion so the student learns to
+            # use tools/skills/memory and self-correct, not just to emit the final answer.
+            trajectory = None
+            traj_raw = record.get("trajectory")
+            if traj_raw and record.get("sft_completion"):
+                trajectory = dict(traj_raw)
+                trajectory["sft_completion"] = record["sft_completion"]
+            accepted[task].append(validate.teacher_row(task, text, row, verdict, tag=_slug(model),
+                                                       trajectory=trajectory))
             stats[f"accepted:{task}"] += 1
+            if trajectory is not None:
+                stats["accepted_tool_using"] += 1
         else:
             if verdict["accepted"]:
                 verdict = dict(verdict, accepted=False, reasons=verdict["reasons"] + [f"reward {verdict['reward']:.2f} below {min_reward}"])

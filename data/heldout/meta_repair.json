@@ -1,0 +1,20 @@
+{
+ "task": "repair",
+ "params": {
+  "n": 200,
+  "seed": 987654,
+  "workers": 4,
+  "chunk": 90,
+  "counts": {
+   "train": 94,
+   "test_ood_fault": 70,
+   "val": 13,
+   "test_id": 6,
+   "test_ood_topology": 15
+  }
+ },
+ "schema_version": "0.1.0",
+ "python": "3.12.3",
+ "coolprop": "8.0.0",
+ "created_utc": "2026-11-18T18:04:43+00:00"
+}

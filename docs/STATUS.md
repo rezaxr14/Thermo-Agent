@@ -63,8 +63,9 @@ The corpus has four sources, all deterministic or verifier-grounded (no free-for
 ### Token budget (the gate that matches the trainer)
 
 Every candidate row is measured with the real Qwen3.5 tokenizer before it is written; rows that do not fit are
-dropped and counted, never truncated. Two gates: 11,500 characters (cheap pre-filter) and 4,000 tokens
-(prompt + completion + a 192-token reserve for the chat markers) under `max_length` 8192.
+dropped and counted, never truncated. The legacy 4,000-token gate described here (11,500-character cheap pre-filter;
+prompt + completion + a 192-token reserve for the chat markers) has been superseded in the merged corpora
+`data/sft_all` / `data/grpo_all` by an **8,000-token prompt gate under `max_length` 8,192**.
 
 Measured harness cost per task (200 train rows, tokens, p50 / max):
 
@@ -84,9 +85,12 @@ character pre-filter.
 
 | corpus | rows | train rows | max row | rows over 8192 |
 |---|---|---|---|---|
-| `data/sft` | 123,024 | 109,659 | 4,000 tokens | 0 |
-| `data/grpo` | 28,214 | 14,849 | 4,000 tokens | 0 |
+| `data/sft` (legacy 4k gate) | 123,024 | 109,659 | 4,000 tokens | 0 |
+| `data/grpo` (legacy 4k gate) | 28,214 | 14,849 | 4,000 tokens | 0 |
 
+The current corpora are `data/sft_all` (119,807 train rows) and `data/grpo_all` (15,022 train rows), both gated at
+8,000 prompt tokens under `max_length` 8,192 (max row 6,405 tokens, zero drops) and both containing all 635 accepted
+frontier rows.
 Train split by task (SFT): repair 100,036 (16,862 harness, memory on every repair row, 49 architectures), ledger 5,165 (1,417 harness), audit 2,564 (525 skills), design 1,894 (635 harness). `sft_report.json` reports
 `problems: []` for both corpora, and `reports/token_audit_{sft,grpo}.json` report `fits: true`. After the swap,
 `python -m thermo_agent.synth.verify data/sft` re-reads every written file, compares the row counts with the report,
@@ -220,7 +224,8 @@ Trainings have not been run yet locally: the 4050 cannot hold a 4B model for tra
 
 The teacher pass was executed with the Kaggle CLI (not the browser notebook): 1,600 prompts per model,
 Gemini 513 accepted / $1.090957 and GPT-5.4-nano 122 accepted / $0.658021; 3,668 raw training answers,
-635 verifier-accepted rows, 460 used in both corpora. Held-out answers: 360 per model. Full accounting and
+635 verifier-accepted rows, 635 used in both merged corpora (`data/sft_all` / `data/grpo_all`; the legacy 460 was
+the 4k-gated `data/sft` / `data/grpo` subset). Held-out answers: 360 per model. Full accounting and
 provenance are in `docs/API_USAGE_AND_PROGRESS.md`; `docs/TEACHER_MODEL_CHOICES.md` carries the model decision.
 
 ## Expert-scale cycles and per-trace provenance (new)
@@ -238,6 +243,16 @@ provenance are in `docs/API_USAGE_AND_PROGRESS.md`; `docs/TEACHER_MODEL_CHOICES.
   `data/provenance/trace_ledger.jsonl` (37,746 traces) plus `stats.json` and `docs/PROVENANCE.md`, with
   origin, journal line, cost, acceptance and downstream artifact links. It is auto-discovering: dropping a
   new big-model journal into `data/teacher_runs/` adds traces without a code change.
+
+## Model campaign round 2 (user decision, 2026-11-18)
+
+- Hosted task `thermo-teacher-big-s00` is now at **version 3** with reasoning **ON** (`reasoning="low"`,
+  1,536 output tokens) to capture reasoning traces where possible. Reasoning also fixes the Claude 400.
+- User-selected cheap models for this round: `claude-haiku-5-5`, `gemini-3.5-flash-lite`, `gpt-6-luna`.
+  Driver `scripts/run_big_teacher_v2.ps1` runs them sequentially and ingests additively.
+- **REMINDER: revisit `claude-sonnet-5-5` later** — the user deferred it as too expensive and wants to decide
+  after seeing how many accepted reasoning traces the cheap models produce.
+- `gemini-3.8-flash` already ingested 33 accepted / 200 attempted; the ledger is at **38,202 traces**.
 
 ## Next
 

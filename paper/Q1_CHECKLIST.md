@@ -23,6 +23,28 @@ what can only be written after the Kaggle teacher pass and the GPU runs.
 5. Failure-memory ablation (none / retrieved / random) with repeated-failure counts from `data/memory/failure_reasons.json`.
 6. GPU-hour and dollar totals for training and inference, filled from the Kaggle run logs.
 
+## New objective: runs to add before camera-ready
+
+All of these are scored on the single frozen held-out set `data/heldout` (fresh ground-truth seed **987654**,
+excluded from every training and prompt corpus), so each score is directly comparable with the others.
+
+1. **Frontier zero-shot baseline on `data/heldout`.** The legacy zero-shot arm (`kaggle/teacher_benchmark.py`,
+   reasoning on, no tools) scored on all four tasks and every split; this is the baseline every other arm is
+   compared against.
+2. **Frontier + harness + tools + skills + memory on `data/heldout`.** Trace-level results for the LangGraph arm
+   with real physics tools, AGENTS.md/skills and fresh failure memory. Report the **accepted tool-CoT trace yield**
+   (accepted tool-using trajectories / attempts, by model and task) and tool-usage statistics (calls per answer,
+   calls vs success, revision rate) from `reports/tool_usage.json` and the trace ledger. Accepted trajectories
+   become SFT completions (`source=frontier_tools`).
+3. **SFT vs SFT+GRPO k=4 / 8 / 16 comparison.** Score our SFT checkpoint and three separately saved GRPO checkpoints
+   (group size k = 4, 8, 16) on the same held-out set, with per-task metrics, Wilson intervals and Holm-corrected
+   paired tests. Each checkpoint must live at a distinct path (`runs/sft`, `runs/grpo_k4`, `runs/grpo_k8`,
+   `runs/grpo_k16`) so runs never overwrite one another.
+4. **Other thermodynamics LLMs** on the same held-out set (domain-model arm), recorded once a real thermo-model id is
+   supplied rather than the current GPT-nano stand-in.
+5. **Model-choice note.** The chosen cheap generators are `claude-haiku-5-5`, `gemini-3.5-flash-lite` and
+   `gpt-6-luna` (reasoning on); `claude-sonnet-5-5` is deferred to a later round as too expensive.
+
 ## Highest-value additions if time permits
 
 - **A pairwise "same plant, three policies" figure** (frontier zero-shot, frontier with tools, our trained 4B) on one held-out engine/steam-ORC case, with the verifier verdict beside each answer. The schema in `paper/assets/examples_schema.json` already accommodates it; it needs the three answers from the eval notebook.

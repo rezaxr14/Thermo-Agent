@@ -129,14 +129,28 @@ def validate(task: str, completion: str, row: dict) -> dict:
     return VALIDATORS[task](completion, row)
 
 
-def teacher_row(task: str, completion: str, row: dict, verdict: dict, tag: str = "") -> dict:
-    """SFT-shaped row from a validated teacher answer; task columns are kept for the GRPO reward functions."""
+def teacher_row(task: str, completion: str, row: dict, verdict: dict, tag: str = "",
+                trajectory: dict | None = None) -> dict:
+    """SFT-shaped row from a validated teacher answer; task columns are kept for the GRPO reward functions.
+
+    When `trajectory` is supplied (a self-correcting tool-using CoT), its full reasoning +
+    tool calls + numeric results + revisions become the SFT completion, so the student learns
+    to use tools/skills/memory and improve its answer, not just to emit a zero-shot answer.
+    The final verifier-accepted answer is always the last block of the completion.
+    """
     if not verdict["accepted"]:
         raise ValueError("refusing to build a training row from a rejected answer")
-    suffix = tag or hashlib.md5(completion.encode()).hexdigest()[:8]
+    if trajectory is not None and trajectory.get("final"):
+        sft_text = trajectory["sft_completion"]
+    else:
+        sft_text = completion
+    suffix = tag or hashlib.md5(sft_text.encode()).hexdigest()[:8]
     out = {"id": f"{row['id']}-t-{suffix}", "record_id": row["id"], "split": row["split"], "task": task, "source": "frontier",
-           "prompt": row["prompt"], "completion": [{"role": "assistant", "content": completion}],
+           "prompt": row["prompt"], "completion": [{"role": "assistant", "content": sft_text}],
            "validation": {"reward": verdict["reward"], "reasons": verdict["reasons"]}}
+    if trajectory is not None:
+        out["trajectory"] = {k: v for k, v in trajectory.items() if k != "sft_completion"}
+        out["source"] = "frontier_tools"
     for k in KEEP[task]:
         if k in row:
             out[k] = row[k]

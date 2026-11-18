@@ -1,0 +1,107 @@
+{
+ "note": "Quality is the verifier success rate on the same 30-per-split reported rows; cost is the provider-reported nanodollar total for exactly those replayed answers.",
+ "arms": {
+  "frontier_zero": {
+   "model_family": "frontier",
+   "tool_access": "none",
+   "per_task": {
+    "repair": {
+     "n": 90,
+     "quality_metric": "success",
+     "quality": 0.5111,
+     "cost_usd": 0.034502,
+     "usd_per_solved_row": 0.0008
+    },
+    "design": {
+     "n": 120,
+     "quality_metric": "valid",
+     "quality": 0.1333,
+     "cost_usd": 0.05495,
+     "usd_per_solved_row": 0.0034
+    },
+    "audit": {
+     "n": 60,
+     "quality_metric": "format",
+     "quality": 0.3467,
+     "cost_usd": 0.035049,
+     "usd_per_solved_row": 0.0017
+    },
+    "ledger": {
+     "n": 90,
+     "quality_metric": "all_correct",
+     "quality": 0.0222,
+     "cost_usd": 0.059795,
+     "usd_per_solved_row": 0.0299
+    }
+   }
+  },
+  "frontier_tools": {
+   "model_family": "frontier",
+   "tool_access": "tools",
+   "per_task": {
+    "repair": {
+     "n": 30,
+     "quality_metric": "success",
+     "quality": 0.6667,
+     "cost_usd": 0.030113,
+     "usd_per_solved_row": 0.0015
+    },
+    "design": {
+     "n": 30,
+     "quality_metric": "valid",
+     "quality": 0.4333,
+     "cost_usd": 0.05014,
+     "usd_per_solved_row": 0.0039
+    },
+    "audit": {
+     "n": 30,
+     "quality_metric": "format",
+     "quality": 0.44,
+     "cost_usd": 0.05687,
+     "usd_per_solved_row": 0.0043
+    },
+    "ledger": {
+     "n": 30,
+     "quality_metric": "all_correct",
+     "quality": 0.7667,
+     "cost_usd": 0.065574,
+     "usd_per_solved_row": 0.0029
+    }
+   }
+  },
+  "other_model": {
+   "model_family": "domain-model",
+   "tool_access": "none",
+   "per_task": {
+    "repair": {
+     "n": 90,
+     "quality_metric": "success",
+     "quality": 0.3667,
+     "cost_usd": 0.023923,
+     "usd_per_solved_row": 0.0007
+    },
+    "design": {
+     "n": 120,
+     "quality_metric": "valid",
+     "quality": 0.2167,
+     "cost_usd": 0.036292,
+     "usd_per_solved_row": 0.0014
+    },
+    "audit": {
+     "n": 60,
+     "quality_metric": "format",
+     "quality": 0.295,
+     "cost_usd": 0.021959,
+     "usd_per_solved_row": 0.0012
+    },
+    "ledger": {
+     "n": 90,
+     "quality_metric": "all_correct",
+     "quality": 0.2,
+     "cost_usd": 0.048907,
+     "usd_per_solved_row": 0.0027
+    }
+   }
+  }
+ }
+}

@@ -1,10 +1,14 @@
-"""Run the frontier model with our physics tool exposed, through the Kaggle CLI proxy (no notebook needed).
+"""Frontier CoT data generation: LangGraph harness with REAL tools + skills + fresh memory.
 
     PYTHONIOENCODING=utf-8 python scripts/kaggle_harness_cli.py --limit 200
 
-The answers, tool calls, reasoning traces and Kaggle usage are journaled to `data/teacher_runs/harness_completions.jsonl`
-and mirrored to `teacher/harness_progress.jsonl` in the private HF repo. This is the third comparison arm: frontier
-model with our harness/tools, scored locally by the same verifiers as every other arm.
+For each row the model sees AGENTS.md + component skills + freshly retrieved failure memory,
+proposes an answer, calls the real thermodynamics tools (first/second law, validity, solve),
+reads the numeric feedback, self-corrects, and finalizes. The full trajectory (reasoning,
+tool calls, numeric results, revisions) is journaled; on verifier acceptance it becomes the
+SFT completion so the student learns to use tools/skills/memory and self-correct.
+
+No ground truth is shown to the model. Quota is checked before every call.
 """
 from __future__ import annotations
 
@@ -17,45 +21,31 @@ import time
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 sys.stderr.reconfigure(encoding="utf-8", errors="replace")
-
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 
-from thermo_agent.teacher import cli_runner, progress, validate
-from thermo_agent.teacher.transfer import load_exports
+from thermo_agent.teacher import cli_runner, progress
 from thermo_agent.train import hf_sync
+from thermo_agent.teacher import memory as mem
+from thermo_agent.teacher.agent_graph import run as run_graph, build_context
+from thermo_agent.teacher.kbench_adapter import make_respond, usage_of
+from thermo_agent.teacher.toolkit import tool_names
+from thermo_agent.teacher.transfer import load_exports
 
 OUT = pathlib.Path("data/teacher_runs/harness_completions.jsonl")
 PREFIX = "teacher/harness_progress.jsonl"
+MEMORY_DIR = pathlib.Path("data/memory")
 
 
-def system_prompt(row):
-    original = "\n\n".join(m["content"] for m in row["prompt"] if m["role"] == "system")
-    return (original + "\n\nYou may call check_answer(answer) at most TWICE to test a candidate against our "
-            "physics verifiers. After at most two calls, STOP using tools and return the final answer in the "
-            "task's XML tags exactly as specified above. Never invent numbers.")
-
-
-def usage_of(chat):
-    try:
-        u = chat.usage
-        return {"input_tokens": u.input_tokens, "output_tokens": u.output_tokens,
-                "total_cost_nanodollars": u.total_cost_nanodollars,
-                "total_backend_latency_ms": u.total_backend_latency_ms}
-    except Exception:
-        return {}
-
-
-def trace_of(chat):
-    traces, calls = [], []
-    try:
-        for m in chat.messages:
-            if getattr(m, "reasoning_traces", None):
-                traces.append(str(m.reasoning_traces))
-            for c in getattr(m, "tool_calls", None) or []:
-                calls.append({"name": getattr(c, "name", "?"), "arguments": getattr(c, "arguments", {})})
-    except Exception:
-        pass
-    return "\n".join(traces), calls
+def fresh_notes():
+    """Load failure memory fresh from disk so it is always current."""
+    notes = []
+    for p in MEMORY_DIR.glob("*.jsonl"):
+        for line in p.open(encoding="utf-8"):
+            try:
+                notes.append(mem.Note(**json.loads(line)))
+            except Exception:
+                pass
+    return mem.dedupe(notes)
 
 
 def main():
@@ -65,82 +55,67 @@ def main():
     ap.add_argument("--export-dir", default="data/frontier_export")
     ap.add_argument("--split", default="train")
     ap.add_argument("--limit", type=int, default=200)
-    ap.add_argument("--model", default="google/gemini-3.1-flash-lite-preview")
+    ap.add_argument("--model", default="gemini-3.5-flash-lite")
     ap.add_argument("--reserve", type=float, default=0.5)
     ap.add_argument("--max-seconds", type=float, default=4 * 3600)
+    ap.add_argument("--rounds", type=int, default=3)
+    ap.add_argument("--k-memory", type=int, default=3)
     a = ap.parse_args()
     OUT = pathlib.Path(a.out)
 
     for k, v in cli_runner.dotenv(cli_runner.PROXY_ENV).items():
         os.environ[k] = v
     import kaggle_benchmarks as kbench
-
     from kaggle_benchmarks import actors
-    from kaggle_benchmarks.tools.base import ToolInvocationLimitExhausted
-    from kaggle_benchmarks.tools.native import native_tool_agent
 
     exports = load_exports(a.export_dir, split=a.split)
     rows = list(exports.values())
     done = {r["id"] for r in cli_runner.journal(OUT) if r.get("completion") and not r.get("error")}
     pending = [r for r in rows if r["id"] not in done][:a.limit]
-    print(f"pending={len(pending)} done={len(done)} model={a.model}", flush=True)
-
-    def make_tool(task, row):
-        def check_answer(answer: str) -> str:
-            """Check a candidate answer for THIS row against the physics verifiers; no id is needed."""
-            verdict = validate.validate(task, answer, row)
-            return json.dumps({"accepted": verdict["accepted"], "reward": verdict["reward"],
-                               "reasons": verdict["reasons"]})
-        return check_answer
 
     llm = kbench.llms.get(a.model, kbench.llm)
-    started = time.time()
-    written = 0
+    print(f"pending={len(pending)} done={len(done)} model={a.model} tools={tool_names()}", flush=True)
+    started, written = time.time(), 0
     for i, row in enumerate(pending):
         if time.time() - started > a.max_seconds:
-            print("[pause] time limit", flush=True)
-            break
+            print("[pause] time limit", flush=True); break
         q = cli_runner.quota()
         if q.get("daily", {}).get("remaining", 0) < a.reserve:
-            print("[pause] daily quota exhausted", flush=True)
-            break
-        rid = str(row["id"]); task = row.get("task", "repair")
-        user = "\n\n".join(m["content"] for m in row["prompt"] if m["role"] != "system")
+            print("[pause] daily quota exhausted", flush=True); break
+        rid, task = str(row["id"]), row.get("task", "repair")
         rec = {"id": rid, "task": task, "model": a.model, "harness": "tools",
-               "tools": ["check_answer"], "topology": row.get("topology"),
+               "tools": tool_names(), "topology": row.get("topology"),
                "ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
         try:
             if pathlib.Path(cli_runner.PROXY_ENV).stat().st_mtime < time.time() - 3000:
                 for k, v in cli_runner.proxy_env(refresh=True).items():
                     os.environ[k] = v
-            sysmsg = system_prompt(row) + f" The row id is {rid}; the tool checks this row only."
-            with kbench.chats.new(f"harness_{i}", system_instructions=sysmsg) as chat:
-                actors.user.send(user)                      # native_tool_agent needs a user turn in the chat
-                try:
-                    msg = native_tool_agent(llm, [make_tool(task, row)], max_tool_rounds=3)
-                except ToolInvocationLimitExhausted:
-                    # Some small models keep rechecking. Ask once, without tools, for the final answer.
-                    actors.user.send("Stop using tools. Return your final answer now in the required XML tags.")
-                    msg = llm.respond()
-                    rec["tool_limit_exhausted"] = True
-                rec["completion"] = str(msg.content)
-                rec["usage"] = usage_of(chat)
-                rec["reasoning"], rec["tool_calls"] = trace_of(chat)
+            # Build the full system prompt once so the adapter can deliver it to the LLM.
+            ctx = build_context({"row": row, "task": task, "notes": fresh_notes(),
+                                 "k_memory": a.k_memory, "mode": "agents+skills"})
+            usage_holder = {}
+            respond = make_respond(llm, kbench, actors, system_prompt=ctx["system_prompt"],
+                                   max_tool_rounds=a.rounds, usage_holder=usage_holder)
+            state = run_graph(row, task, respond, notes=fresh_notes(),
+                              max_rounds=a.rounds, k_memory=a.k_memory)
+            rec["completion"] = state["final"]
+            rec["verdict"] = {k: v for k, v in state["verdict"].items() if k != "failed"}
+            rec["trajectory"] = {"turns": state["turns"], "notes_used": state["notes_used"],
+                                 "tools_available": tool_names()}
+            rec["sft_completion"] = state["sft_completion"]
+            rec["usage"] = usage_of(usage_holder["chat"]) if "chat" in usage_holder else {}
         except Exception as exc:
             rec["error"] = f"{type(exc).__name__}: {exc}"
         cli_runner.append(OUT, [rec]); written += 1
         if written % 25 == 0:
             try:
                 token = hf_sync.read_token(cli_runner.ROOT / ".env")
-                repo = hf_sync.PROJECT_REPO_ID
-                merged = progress.dedupe(progress.pull(repo, token, PREFIX) + cli_runner.journal(OUT))
-                progress.push(merged, repo, token, PREFIX)
+                merged = progress.dedupe(progress.pull(hf_sync.PROJECT_REPO_ID, token, PREFIX) + cli_runner.journal(OUT))
+                progress.push(merged, hf_sync.PROJECT_REPO_ID, token, PREFIX)
                 print(f"[progress] {len(merged)} harness attempts mirrored", flush=True)
             except Exception as exc:
                 print("[progress] push failed:", exc, flush=True)
-            cost = sum((r.get("usage") or {}).get("total_cost_nanodollars") or 0 for r in cli_runner.journal(OUT)) / 1e9
-            print(f"[{i + 1}/{len(pending)}] written={written} cost=${cost:.4f}", flush=True)
-    print("done; journal:", OUT, flush=True)
+    print(f"wrote {written} rows to {OUT}")
 
 
 if __name__ == "__main__":

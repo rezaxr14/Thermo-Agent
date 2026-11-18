@@ -26,11 +26,12 @@ task×split, 12 non-empty files): Gemini `eval_all.jsonl` ($0.184296), GPT-nano 
 `eval_gptnano_replay.jsonl` ($0.131081). The tool arm is a further 120 Gemini answers with 242 `check_answer`
 calls ($0.202697, `harness_eval_completions2.jsonl`).
 
-**Models named but never called:** `anthropic/claude-sonnet-5-5@default` (stale notebook default),
-`google/gemini-3.8-flash` (probe shortlist), `deepseek-r1-0528`, `qwen3-next-80b`, `gpt-oss-120b`,
-`granite-4.0-h-small` (probe failures/no usable output), and the remaining Kaggle roster entries. No dedicated
-thermodynamics LLM was ever called: the "other model" arm is GPT-5.4-nano's saved answers used as a stand-in,
-because no thermo-model id/endpoint was supplied.
+**Models named but never successfully used for training data:** `anthropic/claude-sonnet-5-5@default` (the old
+notebook default; 5 calls 400'd, now retired and deferred to a later round), `deepseek-r1-0528`, `qwen3-next-80b`,
+`gpt-oss-120b`, `granite-4.0-h-small` (probe failures/no usable output), and the remaining Kaggle roster entries.
+`google/gemini-3.8-flash` *was* called in the big-model campaign: 200 attempted, 33 accepted and ingested (see
+`docs/TEACHER_MODEL_CHOICES.md`), so it is not in this list. No dedicated thermodynamics LLM was ever called: the
+"other model" arm is GPT-5.4-nano's saved answers used as a stand-in, because no thermo-model id/endpoint was supplied.
 
 ## 2. Where each model's output went
 
@@ -42,23 +43,48 @@ because no thermo-model id/endpoint was supplied.
        2,436 harness=none, 654 agents+skills, 444 tools, 134 skills
   -> verifier gate: 965 rejections -> 342 deduplicated failure-memory notes
                     635 accepts (data/frontier/*, reward=1.0)
-  -> token/char budget gate: 460 accepts used in BOTH data/sft and data/grpo
+  -> 8,000-token prompt gate (max_length 8,192): 635 accepts used in BOTH data/sft_all and data/grpo_all
+      (legacy 4,000-token gate kept 460 accepts in the old data/sft and data/grpo)
 ```
 
 | Artifact (training-prompt answers only) | Gemini | GPT-nano | Path |
 |---|---:|---:|---|
 | Raw answers | 2,056 | 1,612 | `data/teacher_runs/completions*.jsonl`, `harness_*.jsonl`, `eval_*.jsonl`, `probe_*.jsonl` |
 | Accepted by verifier | 513 | 122 | `data/frontier/{repair,ledger,design,audit}_train.jsonl` (audit 0) |
-| Actually in SFT/GRPO | 371 | 89 | `data/sft/*_train.jsonl`, `data/grpo/*_train.jsonl` (`source=frontier`) |
+| Actually in the legacy 4k-gated SFT/GRPO | 371 | 89 | `data/sft/*_train.jsonl`, `data/grpo/*_train.jsonl` (`source=frontier`) — all 635 are in the merged 8k-gated `data/sft_all` / `data/grpo_all` |
 | Failure memory | 177 notes | 141 notes | `data/memory/frontier_notes.jsonl`, `data/memory/failure_reasons.json` |
 | Frontier zero-shot eval arm | held-out answers | — | `reports/eval_frontier_zero.json`, `paper/assets/model_results.json` |
 | Frontier + our tools arm | 120 tool answers | — | `reports/eval_frontier_tools.json`, `reports/tool_usage.json` |
 | Domain-model arm | — | held-out answers | `reports/eval_other_model.json` |
 | Paper examples / trace figure | 6 frontier + 3 harness examples | none promoted | `paper/assets/examples.json`, `paper/figures/svg/fig_trace_walkthrough.svg` |
 
-The 175 accepted rows that did not survive the token/char gate remain in `data/frontier` and are **not** in
-training. The 3,668 journal rows are raw captured answers, not training rows; the headline count of AI traces
-actually used for training is **460**.
+All 635 accepted rows survive the 8,000-token prompt gate (max length 8,192) and are in training in the merged
+corpora; none are dropped. (Under the superseded 4,000-token gate, 175 were dropped and the headline count of AI
+traces used in the legacy `data/sft` / `data/grpo` corpora was **460**.) The 3,668 journal rows are raw captured
+answers, not training rows; the headline count of AI traces actually used for training in the merged corpora is
+**635**.
+
+### 2.1 Tool-using CoT data generation (current objective)
+
+The zero-shot journals above are **legacy training data**. The current objective is to teach the 4B student *tool
+use*, not just final answers. Frontier models run inside a **LangGraph harness** (`thermo_agent/teacher/agent_graph.py`,
+`build_context -> propose -> {call_tools -> reflect -> propose}* -> finalize -> END`) with **real physics tools**
+from `thermo_agent/teacher/toolkit.py`: `first_law_check`, `second_law_check`, `validity_check`, `solve_plant` and
+`check_answer`. These build the plant from the model's own candidate, run the sequential-modular solver and return
+numbers with units, so the feedback the model sees is solver output, not keyword matching. The context node injects
+**AGENTS.md + component/task SKILL.md** — the same skills the student trains on — and reloads **fresh failure memory**
+from `data/memory/*.jsonl` on every row. The model can call tools over several rounds, read numeric feedback and
+revise before finalizing.
+
+When the verifiers accept a tool-using trace, the **full trajectory** (reasoning, tool calls, numeric tool results,
+revisions) is persisted as the SFT completion with `source=frontier_tools`, so the student imitates the whole
+tool-using behaviour. Ingest is additive and provenance is recorded per trace in
+`data/provenance/trace_ledger.jsonl`.
+
+Current model choice for generating these traces: `claude-haiku-5-5`, `gemini-3.5-flash-lite`, `gpt-6-luna`,
+reasoning ON (`reasoning="low"`); **REMINDER: revisit `claude-sonnet-5-5` later** (deferred as too expensive). All
+arms are scored on the held-out `data/heldout` set (fresh seed 987654, excluded from every corpus), with each
+checkpoint in its own path (`runs/sft`, `runs/grpo_k4`, `runs/grpo_k8`, `runs/grpo_k16`).
 
 ## 3. Chain-of-thought and harness counts
 
@@ -108,11 +134,12 @@ the nominal 35 % applied per base row.
 
 ### Done
 - Synthetic ground truth: 32,962 unique verifier-graded traces across four tasks and structural OOD splits;
-  architecture catalog; 20 paraphrases per repair base row under a 4,000-token gate.
+  architecture catalog; 20 paraphrases per repair base row under an 8,000-token gate (`max_length` 8,192) in the
+  merged corpora (the legacy 4,000-token gate applied only to `data/sft` / `data/grpo`).
 - Verifier-gated teacher pass: 1,600 prompts × 2 models, 3,668 raw answers, 635 accepted, 342 memory notes,
-  460 accepted traces in training corpora, all provenance preserved.
+  635 accepted traces in both merged training corpora (`data/sft_all` / `data/grpo_all`), all provenance preserved.
 - Corpora: SFT **123,024** rows / 109,659 train; GRPO **28,214** rows / 14,849 train.
-- Paper: 45-page draft, no overfull boxes, `verify_paper.py --no-build` clean, 243 `\val` keys, provenance
+- Paper: 45-page draft, no overfull boxes, `verify_paper.py --no-build` clean, 242 `\val` keys, provenance
   for every generated number, static SVG figures preserved.
 - Measured comparison arms: frontier zero-shot, frontier+tools, and domain-model stand-in (28 rows in the
   manifest); tool-usage accounting; deterministic paper examples and regenerable trace figure.
@@ -162,9 +189,10 @@ the nominal 35 % applied per base row.
 - Kaggle datasets now attached to the train/smoke/eval kernels: `thermo-agent-code`, `thermo-agent-corpus`
   (with `sft_all.zip` / `grpo_all.zip`), `thermo-teacher-prompts`, `thermo-agent-resume`,
   `thermo-agent-eval-replays`; fused wheels come from kernel `thermo-kernel-wheels` via `kernel_sources`.
-- Hosted-task campaign for big models is in progress (`thermo-teacher-big-s00`, prompt dataset
-  `thermo-teacher-prompts-big`): Claude Sonnet 5.5, Gemini 4 Argon and GPT-6 Sol on 974 previously-unaccepted
-  prompts, additive to the old journals. No accepted rows from those models yet.
+- Hosted-task campaign round 2 (`thermo-teacher-big-s00` v3, prompt dataset `thermo-teacher-prompts-big`):
+  **`claude-haiku-5-5`, `gemini-3.5-flash-lite`, `gpt-6-luna`**, reasoning ON (`reasoning="low"`, 1,536 output
+  tokens) on 974 previously-unaccepted prompts, additive to the old journals. **REMINDER:** revisit
+  `claude-sonnet-5-5` later — the user deferred it as too expensive. No accepted rows from those models yet.
 
 ## 8. Reproduction commands
 

@@ -1,0 +1,19 @@
+{
+ "task": "audit",
+ "params": {
+  "n": 120,
+  "seed": 987654,
+  "workers": 4,
+  "architectures": 9,
+  "counts": {
+   "train": 84,
+   "test_id": 16,
+   "val": 9,
+   "test_ood_topology": 6
+  }
+ },
+ "schema_version": "0.1.0",
+ "python": "3.12.3",
+ "coolprop": "8.0.0",
+ "created_utc": "2026-11-18T18:05:08+00:00"
+}

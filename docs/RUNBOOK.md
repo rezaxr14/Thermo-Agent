@@ -85,8 +85,12 @@ Compress-Archive -Path data/frontier_export -DestinationPath data/frontier_expor
 python kaggle/make_notebook.py                                                              # kaggle/teacher.ipynb
 # upload the zip as a private Kaggle dataset, import kaggle/teacher.ipynb, Run all, download completions.jsonl
 python -m thermo_agent.teacher.transfer ingest data/frontier_export completions.jsonl data/frontier `
-    --memory-dir data/memory --model anthropic/claude-sonnet-5-5@default
+    --memory-dir data/memory --model claude-haiku-5-5
 ```
+
+This is the legacy zero-shot baseline arm (kept for the held-out baseline). The current tool-CoT generation runs in
+the LangGraph harness (`kaggle/teacher_harness.py`) with `claude-haiku-5-5` / `gemini-3.5-flash-lite` / `gpt-6-luna`.
+**REMINDER:** revisit `claude-sonnet-5-5` later — it was deferred as too expensive.
 
 The Kaggle half needs only a browser: the local CLI returns 403 until the account's phone/identity verification is
 done, and nothing about the hand-off depends on it. `kaggle/teacher.ipynb` is generated from
@@ -183,16 +187,18 @@ the check fails loudly here rather than silently at GRPO time.
 
 ## 6. SFT (dual T4)
 
-`data/sft/` is the combined corpus: ground-truth paraphrases (20 variants per repair row), validated teacher traces,
-the architecture corpus and retrieved hindsight notes, with the harness injected on 35 percent of rows. Files are
-`{task}_{split}.jsonl` (exactly what the trainers read) plus `sft_report.json`. `data/grpo/` has the same prompts,
-one per plant; the GRPO loader drops everything but the prompt and the reward columns. Two gates drop (never
-truncate) oversized rows: 11500 characters, and 4000 tokens measured with the real tokenizer (prompt + completion + a
-96-token reserve for the chat markers) under `max_length` 4096. `python -m thermo_agent.train.token_audit data/sft`
-re-measures the written files and fails if any row would be cut; `python -m thermo_agent.synth.verify data/sft`
-compares the files with the report.
+`data/sft_all/` is the current combined corpus: ground-truth paraphrases (20 variants per repair row), validated
+teacher traces (including the new tool-using CoT traces), the architecture corpus and retrieved hindsight notes,
+with the harness injected on 35 percent of base rows. Files are `{task}_{split}.jsonl` (exactly what the trainers
+read) plus `sft_report.json`. `data/grpo_all/` has the same prompts, one per plant; the GRPO loader drops everything
+but the prompt and the reward columns. Two gates drop (never truncate) oversized rows: a character pre-filter and
+**8,000 prompt tokens** measured with the real tokenizer (prompt + completion + a 96-token reserve for the chat
+markers) under `max_length` **8,192**. The legacy `data/sft` / `data/grpo` corpora were built with the superseded
+4,000-token gate. `python -m thermo_agent.train.token_audit data/sft_all` re-measures the written files and fails if
+any row would be cut; `python -m thermo_agent.synth.verify data/sft_all` compares the files with the report.
 
-Current SFT corpus: 123,024 rows, 109,659 in train (repair 100,036, ledger 5,165, audit 2,564, design 1,894), including teacher-gated rows.
+Current merged SFT corpus: 119,807 train rows (including 1,140 big-cycle rows), with all 635 accepted frontier rows
+present; the legacy 4k-gated `data/sft` had 123,024 rows / 109,659 train.
 
 ```bash
 # smoke, then the full run (one adapter for all four tasks)

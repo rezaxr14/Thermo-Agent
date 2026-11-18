@@ -10,7 +10,7 @@ LoRA rank / alpha / dropout & 16 / 32 / 0.05 & 8 / 16 / 0.05 \\
 Target modules & all-linear & all-linear \\
 Learning rate & 0.0002 & 5e-05 \\
 Epochs or steps & 1 epoch & 300 steps (maximum) \\
-Maximum length (tokens) & 4096 & completion 320 \\
+Maximum length (tokens) & 8192 & completion 320 \\
 Batch per device / accumulation / ranks & 2 / 8 / 2 & 4 / 2 / 2 \\
 Effective batch & 32 sequences & 16 prompts, 4 completions each \\
 Group size / temperature & -- & 4 / 1 \\

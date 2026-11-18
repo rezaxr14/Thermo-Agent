@@ -4,18 +4,22 @@ Set-Location $root
 $dir = (Resolve-Path 'data/kaggle_datasets/thermo-agent-corpus' -ErrorAction SilentlyContinue)
 if (-not $dir) { $dir = New-Item -ItemType Directory -Force -Path 'data/kaggle_datasets/thermo-agent-corpus' }
 $dir = [string]$dir
-foreach ($name in @('sft','grpo','sft_all','grpo_all')) {
+foreach ($name in @('sft','grpo','sft_all','grpo_all','heldout')) {
     $zip = Join-Path $dir "$name.zip"
-    if (-not (Test-Path $zip)) {
-        Compress-Archive -Path "data/$name/*" -DestinationPath $zip -CompressionLevel Optimal
+    # Always rebuild heldout.zip so a regenerated fresh-seed test set is never stale.
+    if (-not (Test-Path $zip) -or $name -eq 'heldout') {
+        if (Test-Path "data/$name") {
+            Remove-Item -Force $zip -ErrorAction SilentlyContinue
+            Compress-Archive -Path "data/$name/*" -DestinationPath $zip -CompressionLevel Optimal
+        }
     }
-    Get-Item $zip | Select-Object Name, Length
+    Get-Item $zip -ErrorAction SilentlyContinue | Select-Object Name, Length
 }
 Set-Content (Join-Path $dir 'dataset-metadata.json') -Encoding utf8 -Value '{
  "title": "thermo-agent training corpora",
  "id": "rezanadimi/thermo-agent-corpus",
  "licenses": [{"name": "MIT"}],
- "files": [{"name": "sft.zip", "description": "original SFT corpus"}, {"name": "grpo.zip", "description": "original GRPO prompts"}, {"name": "sft_all.zip", "description": "SFT corpus plus expert-scale cycle rows"}, {"name": "grpo_all.zip", "description": "GRPO prompts plus expert-scale cycle rows"}]
+ "files": [{"name": "sft.zip", "description": "original SFT corpus"}, {"name": "grpo.zip", "description": "original GRPO prompts"}, {"name": "sft_all.zip", "description": "SFT corpus plus expert-scale cycle rows"}, {"name": "grpo_all.zip", "description": "GRPO prompts plus expert-scale cycle rows"}, {"name": "heldout.zip", "description": "fresh-seed (987654) held-out test set no cohort has seen; all arms scored here"}]
 }'
 $env:PYTHONIOENCODING = 'utf-8'
 $env:HTTP_PROXY = 'socks5h://localhost:10808'

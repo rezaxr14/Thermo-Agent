@@ -20,8 +20,13 @@ instead of a name in a notebook cell.
 4. **Keep the decision with the data.** The chosen `model` id is written on every completion line, on every accepted
    corpus row, and on every failure-memory note. A change of model never silently mixes provenance.
 
-The default `MODEL = anthropic/claude-sonnet-5-5@default` is a starting point; the probe may replace it. After the
-first ingest, fill this table from `reports/frontier_ingest.json` and `data/memory/failure_reasons.json`:
+The cheap models chosen for this round are **`claude-haiku-5-5`, `gemini-3.5-flash-lite` and `gpt-6-luna`**, with
+reasoning **ON** (`reasoning="low"`, 1,536 output tokens) so reasoning traces are captured where the provider exposes
+them; the probe shortlist is those three and may pick among them. The old `MODEL = anthropic/claude-sonnet-5-5@default`
+default is retired (Sonnet was too expensive and produced 0 usable rows in the earlier pass). **REMINDER: revisit
+`claude-sonnet-5-5` later** — the user explicitly deferred it; decide after the cheap models report how many
+accepted reasoning traces they yield. After the first ingest, fill this table from `reports/frontier_ingest.json` and
+`data/memory/failure_reasons.json`:
 
 | Model | Chosen for | Total cost (full pass) | Cost / accepted row | Accepted / attempts | Main rejection reason | Source |
 |---|---|---|---|---|---|---|
@@ -30,8 +35,30 @@ first ingest, fill this table from `reports/frontier_ingest.json` and `data/memo
 
 Total full-pass spend: **$1.748978**. Both journals carry a model id and usage fields on every line; accepted
 rows are identified by id suffix in `data/frontier/*_train.jsonl` (audit rows: none accepted by either model).
-Of the 635 accepted rows, **460** survived the token/char gate and are the AI-frontier rows actually present
-in `data/sft` and `data/grpo`.
+Of the 635 accepted rows, all **635** survive the 8,000-token prompt gate (`max_length` 8,192) and are the AI-frontier
+rows present in the merged corpora `data/sft_all` and `data/grpo_all`. The old **460** count is legacy: it was the
+subset that survived the superseded 4,000-token gate and was present only in `data/sft` / `data/grpo`.
+
+## Big-model hosted campaign (user-selected, additive)
+
+The hosted task `thermo-teacher-big-s00` reuses the 974 base ids not already accepted, so its journals are
+additive (ingest dedupes on base id). Reasoning is **ON** (`reasoning="low"`, 1,536 output tokens): the user wants
+reasoning traces where the provider exposes them, and leaving reasoning on is acceptable where traces cannot be
+captured. Reasoning also avoids the `thinking:{type:disabled}` 400 that `reasoning="none"` triggered on Claude.
+
+| Model | Status | Verifier result | Source |
+|---|---|---|---|
+| `google/gemini-3.8-flash` | run complete, ingested | 200 attempted, 33 accepted, 167 rejected | `data/teacher_runs/completions_big_gemini-3.8-flash.jsonl` |
+| `anthropic/claude-sonnet-5-5@default` | attempted, produced 0 usable rows | all 5 calls 400'd on the thinking parameter | `data/teacher_runs/completions_big_claude-sonnet-5-5-default.jsonl` |
+| `claude-haiku-5-5` | round 2 (cheap Claude chosen by user) | pending | hosted task v3 |
+| `gemini-3.5-flash-lite` | round 2 (cheap + good, chosen by user) | pending | hosted task v3 |
+| `gpt-6-luna` | round 2 (cheap GPT, chosen by user) | pending | hosted task v3 |
+
+**REMINDER (from the user):** revisit `claude-sonnet-5-5` in a later round after the cheap models report how many
+verifier-accepted reasoning traces they yield; the user deferred Sonnet as too expensive for now.
+
+Round-2 driver: `scripts/run_big_teacher_v2.ps1`; logs `logs/big_teacher_v2.log`. Decide on further models only after
+the accepted-CoT yield of these three is known.
 
 ## Quota limits and changing account
 
