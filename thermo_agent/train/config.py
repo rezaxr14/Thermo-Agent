@@ -4,7 +4,7 @@ low rank is enough for RL), Luo et al. 2026 (SFT then GRPO with a group of 4), a
 Dual-T4 target (see docs/DUAL_T4.md): full fp16 LoRA, two DDP ranks, no 4-bit quantisation. The T4 is Turing,
 so fp16 is the only half-precision format it has fast kernels for; bf16 must not be selected there.
 """
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields
 
 BASE_MODEL = "Qwen/Qwen3.5-4B"
 
@@ -48,3 +48,18 @@ class GrpoSettings:
     mask_truncated: bool = True
     max_grad_norm: float = 1.0
     lora: LoraSettings = field(default_factory=lambda: LoraSettings(r=8, alpha=16))
+
+
+def supported(cls, **kwargs) -> dict:
+    """Keep only the arguments this installed Trainer/GRPO config actually accepts.
+
+    Kaggle's TRL version lags the authoring environment; passing an unknown keyword kills a multi-hour run in the
+    first second. Dropping an unsupported optimisation flag is safe, dropping a training setting is not, so the
+    dropped keys are printed for the run log.
+    """
+    allowed = {f.name for f in fields(cls)} if hasattr(cls, "__dataclass_fields__") else set()
+    kept = {k: v for k, v in kwargs.items() if not allowed or k in allowed}
+    dropped = sorted(set(kwargs) - set(kept))
+    if dropped:
+        print(f"[train-config] {cls.__name__} ignores unsupported keys: {dropped}", flush=True)
+    return kept

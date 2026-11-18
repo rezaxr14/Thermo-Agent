@@ -15,7 +15,7 @@ import argparse, json, os, pathlib
 
 from . import ddp
 from .checkpoint import latest
-from .config import BASE_MODEL, GrpoSettings
+from .config import BASE_MODEL, GrpoSettings, supported
 from . import hf_sync
 from . import rollout_log
 from . import rewards as repair_rewards
@@ -94,7 +94,7 @@ def main():
             raise SystemExit(f"no merged model at {repo}/{prefix}; run merge with --hf-sync on first")
         init_model = pulled
         print(f"[hf_sync] GRPO starts from {init_model}", flush=True)
-    cfg = GRPOConfig(output_dir=a.out, learning_rate=g.lr, num_generations=g.num_generations,
+    cfg = GRPOConfig(**supported(GRPOConfig, output_dir=a.out, learning_rate=g.lr, num_generations=g.num_generations,
                      max_completion_length=g.max_completion_length, temperature=g.temperature,
                      per_device_train_batch_size=g.per_device_batch, gradient_accumulation_steps=g.grad_accum,
                      max_steps=a.max_steps or g.max_steps, loss_type=g.loss_type, beta=g.beta, scale_rewards=g.scale_rewards,
@@ -105,7 +105,7 @@ def main():
                      gradient_as_bucket_view=True, ddp_find_unused_parameters=False, ddp_bucket_cap_mb=64,
                      optim="adamw_torch", save_total_limit=2, seed=0,
                      logging_steps=5, save_steps=g.save_steps, model_init_kwargs=init, report_to="none",
-                     fp16=(a.dtype == "float16"), bf16=(a.dtype == "bfloat16"))
+                     fp16=(a.dtype == "float16"), bf16=(a.dtype == "bfloat16")))
     lora = LoraConfig(r=g.lora.r, lora_alpha=g.lora.alpha, lora_dropout=g.lora.dropout,
                       target_modules=g.lora.target_modules, task_type="CAUSAL_LM")
     resume = latest(a.out)

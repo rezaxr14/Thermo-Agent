@@ -17,7 +17,7 @@ import argparse, json, os, pathlib, random
 
 from . import ddp
 from .checkpoint import latest
-from .config import BASE_MODEL, SftSettings
+from .config import BASE_MODEL, SftSettings, supported
 from . import hf_sync
 from .render import render_pair, prefix_report
 
@@ -89,7 +89,7 @@ def main():
         import torch
         from transformers import BitsAndBytesConfig
         init["quantization_config"] = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4", bnb_4bit_compute_dtype=getattr(torch, a.dtype))
-    cfg = SFTConfig(output_dir=a.out, learning_rate=s.lr, num_train_epochs=s.epochs, max_steps=a.max_steps, max_length=s.max_length,
+    cfg = SFTConfig(**supported(SFTConfig, output_dir=a.out, learning_rate=s.lr, num_train_epochs=s.epochs, max_steps=a.max_steps, max_length=s.max_length,
                     per_device_train_batch_size=s.per_device_batch, gradient_accumulation_steps=s.grad_accum, max_grad_norm=s.max_grad_norm,
                     gradient_checkpointing=True, dataloader_num_workers=a.num_workers,
                     logging_steps=5, eval_strategy="steps" if val else "no", eval_steps=s.eval_steps,
@@ -97,7 +97,7 @@ def main():
                     completion_only_loss=True, model_init_kwargs=init, report_to="none", seed=0,
                     fp16=(a.dtype == "float16"), bf16=(a.dtype == "bfloat16"),
                     gradient_as_bucket_view=True, ddp_find_unused_parameters=False, ddp_bucket_cap_mb=64,
-                    optim="adamw_torch")
+                    optim="adamw_torch"))
     lora = LoraConfig(r=s.lora.r, lora_alpha=s.lora.alpha, lora_dropout=s.lora.dropout, target_modules=s.lora.target_modules, task_type="CAUSAL_LM")
     repo, callback = hf_sync.prepare(a.hf_repo, "sft", a.out, a.hf_sync)
     resume = latest(a.out)
