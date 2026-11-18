@@ -40,11 +40,21 @@ def setup(root=None, corpora=("sft", "grpo"), install=True):
     os.environ.update({"TOKENIZERS_PARALLELISM": "false", "NCCL_IB_DISABLE": "1", "HF_HUB_DISABLE_XET": "1"})
     corpus_input = find_input("thermo-agent-corpus")
     for name in corpora:
-        src = next(corpus_input.rglob(name), None)
         dst = root / "data" / name
-        if src and src.is_dir() and not dst.exists():
+        if dst.exists():
+            continue
+        src = next(corpus_input.rglob(name), None)
+        if src and src.is_dir():
             dst.parent.mkdir(parents=True, exist_ok=True)
             shutil.copytree(src, dst)
+            continue
+        archive = next(corpus_input.rglob(f"{name}.zip"), None)
+        if archive:
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            with zipfile.ZipFile(archive) as zf:
+                zf.extractall(dst)
+        else:
+            raise SystemExit(f"corpus {name} missing under {corpus_input}")
     if install:
         subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-r", "requirements-lock.txt"], check=True)
     return root
