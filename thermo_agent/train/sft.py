@@ -98,13 +98,19 @@ def main():
                     fp16=(a.dtype == "float16"), bf16=(a.dtype == "bfloat16"),
                     gradient_as_bucket_view=True, ddp_find_unused_parameters=False, ddp_bucket_cap_mb=64,
                     optim="adamw_torch"))
+    import torch
+    from transformers import AutoModelForCausalLM
+    # Load explicitly in fp16: TRL's string model loader can silently fall back to fp32, which does not fit a T4.
+    base_model = AutoModelForCausalLM.from_pretrained(
+        a.model, dtype=getattr(torch, a.dtype),
+        **{k: v for k, v in init.items() if k not in ("dtype", "torch_dtype")})
     lora = LoraConfig(r=s.lora.r, lora_alpha=s.lora.alpha, lora_dropout=s.lora.dropout, target_modules=s.lora.target_modules, task_type="CAUSAL_LM")
     repo, callback = hf_sync.prepare(a.hf_repo, "sft", a.out, a.hf_sync)
     resume = latest(a.out)
     if resume:
         print(f"resuming SFT from {resume}", flush=True)
     hooks = [callback] if callback else []
-    SFTTrainer(model=a.model, args=cfg, train_dataset=train, eval_dataset=val, peft_config=lora,
+    SFTTrainer(model=base_model, args=cfg, train_dataset=train, eval_dataset=val, peft_config=lora,
                callbacks=hooks).train(resume_from_checkpoint=resume)
 
 
