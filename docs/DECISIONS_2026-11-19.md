@@ -214,3 +214,7 @@ frontier harness-CoT datagen we intend to make:
    Reza's explicit permission first.
 10. **Hosted AI models — budget only:** use ONLY `gpt-6-luna` and `claude-haiku-5-5` for hosted frontier runs.
    Never run `gemini-3.8-flash`, `gemini-3.5-flash-lite`, or any premium/mid model without Reza's explicit go.
+11. **One reusable Kaggle notebook (Reza, 2026-11-20):** `notebooks/kaggle_model_runner.py` / `.ipynb` is the
+   single generic Kaggle task for every workflow (tracegen, eval, zero-shot, cohorts, with/without tools and
+   harness). It is configured by `harness_config.json` in the HF-fed dataset or `HARNESS_*` env vars, hard-blocks
+   gemini 3.8/3.5, and skips non-allowed models before any model call. Do not create per-task variants again.

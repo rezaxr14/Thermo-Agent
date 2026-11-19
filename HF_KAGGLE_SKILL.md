@@ -89,6 +89,10 @@ Kaggle dataset. Local → HF → Kaggle, always.
 data in ONE dataset (`thermo-agent-corpus`); attach the code/prompt datasets read-only, and reuse an existing
 shard with a row limit instead of creating new proof shards, tasks or datasets.
 
+**One reusable runner.** Use `notebooks/kaggle_model_runner.py`/`.ipynb` for every hosted model workflow.
+Configure it with `harness_config.json` in the HF-fed dataset or `HARNESS_*` env vars; it hard-blocks gemini
+3.8/3.5 and skips non-allowed models before any model call. Never create per-task variants.
+
 **No account littering.** Never create another dataset, hosted task, or kernel, and never delete or modify
 anything else on Kaggle (especially the user's conv1d kernel) without explicit permission. Never upload
 local data to Kaggle; HF is the only bridge. Hosted AI runs use ONLY `gpt-6-luna` and `claude-haiku-5-5` —

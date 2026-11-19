@@ -1,0 +1,16 @@
+{
+  "mode": "harness",
+  "shard": "prompts_proof.jsonl",
+  "limit": 5,
+  "rounds": 6,
+  "k_memory": 3,
+  "deadline_seconds": 0,
+  "max_cost_usd": 0.0,
+  "journal": "completions.jsonl",
+  "manifest": "manifest.json",
+  "memory_dir": "",
+  "export_dir": "",
+  "allowed_models": ["gpt-6-luna", "claude-haiku-5-5"],
+  "code_dataset": "rezanadimi/thermo-agent-data",
+  "data_dataset": "rezanadimi/thermo-agent-data"
+}
