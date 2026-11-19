@@ -36,14 +36,15 @@ def test_foreign_or_local_repo_id_is_refused_before_any_call(workspace, monkeypa
 
 def test_path_outside_allow_list_is_refused(workspace):
     (workspace / "data" / "teacher_runs").mkdir(parents=True)
-    (workspace / "data" / "sft_tools").mkdir(parents=True)  # legacy dir, no longer allow-listed
+    (workspace / "data" / "sft_tools").mkdir(parents=True)  # legacy data dir: kept for later use
     (workspace / ".env").mkdir()  # a dir named .env must still be refused, not silently included
-    for bad in ("data/teacher_runs", ".env", str(workspace / "data" / "teacher_runs"),
-                "data/../.env", "data/sft_tools"):
+    for bad in (".env", str(workspace / "data" / "teacher_runs"), "data/../.env"):
         with pytest.raises(SystemExit, match="refusing to upload"):
             sync.check_dirs([bad])
-    # An allow-listed dir is accepted.
+    # Every real data/ dir is allowed now (legacy corpora and journals included).
     assert sync.check_dirs(["data/sft_tools_v2"]) == [sync.Path("data/sft_tools_v2")]
+    assert sync.check_dirs(["data/sft_tools"]) == [sync.Path("data/sft_tools")]
+    assert sync.check_dirs(["data/teacher_runs"]) == [sync.Path("data/teacher_runs")]
 
 
 def test_heldout_answers_reports_and_verdicts_are_filtered(workspace):

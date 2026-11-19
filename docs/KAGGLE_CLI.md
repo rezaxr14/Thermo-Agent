@@ -16,7 +16,7 @@ $env:HTTPS_PROXY = 'socks5h://localhost:10808'
 ```powershell
 $env:KAGGLE_API_TOKEN = (& .venv/Scripts/python.exe -c "from pathlib import Path; print([l.split('=',1)[1].strip() for l in Path('.env').read_text().splitlines() if l.startswith('KAGGLE_API_TOKEN=')][0])")
 .venv/Scripts/kaggle.exe benchmarks quota --format json
-.venv/Scripts/kaggle.exe benchmarks init -y --env-file data/kaggle_proxy.env
+.venv/Scripts/kaggle.exe benchmarks init -y --env-file .env
 ```
 
 The proxy key lasts about an hour; `thermo_agent.teacher.cli_runner` refreshes it automatically.

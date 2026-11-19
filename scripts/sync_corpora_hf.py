@@ -38,23 +38,18 @@ PROJECT_REPO = "Reza-Nadimi/thermo-agent-corpora"
 
 # The current corpora that matter (H1-H3): the v2 tool/mix corpora, the compact-harness variants, the
 # A slice, the frontier teacher sets, served memory, and the frozen held-out prompts.
-DEFAULT_DIRS = (
-    "data/sft_tools_v2",
-    "data/grpo_tools_v2",
-    "data/sft_tools_v2_h",
-    "data/grpo_tools_v2_h",
-    "data/sft_mix_v2",
-    "data/grpo_mix_v2",
-    "data/a_slice",
-    "data/frontier_tools_clean_v2",
-    "data/frontier_tools_pilot",
-    "data/frontier_tools_cohort",
-    "data/memory",
-    "data/heldout_v2",
-)
-# Hard allow-list: a typo, an absolute path or a path outside data/ is refused. Prefix form keeps
-# legitimate sub-directories inside an allowed corpus while refusing sibling directories.
-ALLOWED_PREFIXES = DEFAULT_DIRS
+# Reza (2026-11-20): keep EVERY data directory on the hub, not just the current training
+# corpora — the legacy corpora, teacher journals and Kaggle bundles are needed later. The
+# allow-list is therefore the whole `data/` tree; paths outside it are still refused.
+def _all_data_dirs() -> tuple[str, ...]:
+    root = Path("data")
+    if not root.is_dir():
+        return ()
+    return tuple(f"data/{p.name}" for p in sorted(root.iterdir()) if p.is_dir())
+
+
+DEFAULT_DIRS = _all_data_dirs()
+ALLOWED_PREFIXES = ("data",)
 HELDOUT_DIRS = ("data/heldout_v2",)
 
 # Prompts-only projection for held-out data. Only these fields may leave the machine; anything not
@@ -71,6 +66,12 @@ FORBIDDEN_FIELDS = frozenset({
     "rationale", "edits", "diagnosis", "feedback", "memory_notes", "notes",
 })
 SKIP_PARTS = frozenset({".git", "__pycache__", ".ipynb_checkpoints"})
+
+
+def _is_secret_file(path: Path) -> bool:
+    """Never upload credentials, even when they live inside a data directory."""
+    name = path.name.lower()
+    return name.startswith(".env") or name == "env" or name.endswith(".env")
 
 
 # --------------------------------------------------------------------------------------------- credentials
@@ -121,6 +122,8 @@ def check_dirs(dirs: list[str]) -> list[Path]:
     out = []
     for d in dirs:
         p = Path(d)
+        if p.is_absolute() or ".." in p.parts:
+            raise SystemExit(f"refusing to upload {d!r}: use a repo-relative data/ path")
         if not p.is_dir():
             print(f"[skip] {p} is not a directory", flush=True)
             continue
@@ -172,7 +175,8 @@ def plan_files(root: Path) -> list[dict]:
     """Return the upload plan for one directory, with sha256/size of the bytes actually uploaded."""
     records = []
     for f in sorted(root.rglob("*")):
-        if not f.is_file() or any(part in SKIP_PARTS for part in f.parts):
+        if (not f.is_file() or any(part in SKIP_PARTS for part in f.parts)
+                or _is_secret_file(f)):
             continue
         raw = f.read_bytes()
         data = transform_bytes(f, raw)

@@ -24,7 +24,7 @@ import urllib.request
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 ENV_FILE = ROOT / ".env"
-PROXY_ENV = ROOT / "data" / "kaggle_proxy.env"
+PROXY_ENV = ROOT / ".env"   # single credential store at repo root
 KAGGLE = ROOT / ".venv" / "Scripts" / "kaggle.exe"
 
 
