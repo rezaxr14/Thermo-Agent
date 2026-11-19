@@ -9,6 +9,33 @@ Standing rules: fp16 LoRA only (B6); additive-only (no corpus/model/journal dele
 through the SOCKS proxy; free subagents only; no assistant-chosen caps or hyper-parameters; every gate ends with a `docs/DECISIONS.md`
 entry, an updated `docs/STATUS.md`, regenerated dataset stats and one commit.
 
+## Binding order and current datagen status (Reza directive, 2026-11-19)
+
+Reza's directive (DECISIONS §4, which supersedes any conflicting line above) is binding:
+
+1. **All datagen complete first** — deterministic tool corpora at the decided size
+   (600 plants/task × 2 variants × 4 tasks = 4,800), all authorised frontier tool-CoT
+   traces, the plain A-slice, and `heldout_v2`. Nothing trains until every one is built,
+   audited and committed. No SFT, no GRPO, no training-based smoke shortcut, and no
+   Kaggle run under this plan.
+2. **Tiers are equal thirds per task** (`easy`/`medium`/`hard`) in *both* training and
+   test data, derived from `thermo_agent/synth/tiers.py` (DECISIONS §4.2).
+3. **Order after datagen:** SFT → GRPO (k = 4/8/16) → evaluation of every arm on
+   `heldout_v2`. Zero-shot and harness baselines are reported *alongside*, never
+   substituted for trained scores.
+4. **The training path is audited and fixed before the first training run** (data loading
+   with task + tier, prompt rendering, label masking, collator, checkpoint/resume,
+   eval/save cadence, red smoke kernel), each fix with a test.
+
+**Current reality (2026-11-19):** datagen is *not* complete, so no training has started
+and no SFT/GRPO/eval result exists. `data/processed` deterministic ground truth is intact
+(27,418 rows, nothing deleted/overwritten). The A-slice exists as a copy of 1,600 plain rows
+(400/task = round(4,800 × 0.3333)). Deterministic tool corpora are at **960 rows**
+(240/task; `--limit 120` = 120 plants × 2 variants × 4 tasks) — **a known under-build
+defect to fix**, not grounds for training on a partial corpus. Only **32** frontier tool
+traces exist, all `google-gemini-3-8-flash`; the other planned models have none. `heldout_v2`
+is not yet generated. Test = `data/heldout_v2`; `data/heldout` (214 ids) is dev.
+
 ## Phase 0 — make the inputs correct (local, CPU, no Kaggle)
 
 0.1 **Compact harness (J2/J3).** Cut the harness block to <= 2,500 tokens (real Qwen3.5 tokenizer), one text for every arm.
@@ -19,12 +46,21 @@ entry, an updated `docs/STATUS.md`, regenerated dataset stats and one commit.
     dropped). Rule from DECISIONS section 1: audit losing > 10% -> cap tool outputs, never raise `max_length`.
 0.4 **Deterministic traces to 600 plants/task** x 2 variants (direct, recover) = 4,800 tool rows (E1), tiers equal thirds for
     repair/audit, 50/50 easy/medium for ledger/design; 100% verifier-accepted; real tool results verbatim.
+    *Status:* currently **960 rows** (240/task; `--limit 120` = 120 plants × 2 variants × 4 tasks). This is a
+    **known under-build defect to fix before training**, not a reason to train on a partial corpus. Reza's directive
+    (§4.2) extends equal-thirds tiers to **all four** tasks in training and test, not just repair/audit.
 0.5 **A-slice builder (E2).** One paraphrase per ground-truth plant from `sft_all`, task-balanced, size R_tool/3; plain prompt;
     marked `prompt_variant=plain`. Mixing script writes `data/sft_mix_h` and `data/grpo_tools_h`; `mix_tool_corpora.py --stats` must
     show `with tool turns > 0` for the tool part.
+    *Status:* `data/a_slice` exists — a **copy** of 1,600 rows (400/task) = round(4,800 × 0.3333), one paraphrase per plant,
+    seeded, plain prompt with no tool markers. It contains no AI-generated rows.
 0.6 **`heldout_v2` (F1).** Generate on CPU with a new seed; >= 85 rows per reported (task, split) cell where a generator can reach it;
-    document merged cells; difficulty tiers easy/medium/hard (hard = 19-component cycle where generators support it). Freeze manifest + hash,
-    write `docs/EVAL_PROTOCOL.md`, scan every training dir for content overlap (hash of plant/site/spec), rename current `data/heldout` role to dev.
+    document merged cells; difficulty tiers easy/medium/hard (hard = 19-component cycle where generators support it), equal thirds per task
+    (Reza directive §4.2). Freeze manifest + hash, write the eval protocol, scan every training dir for content overlap (hash of
+    plant/site/spec), rename current `data/heldout` role to dev.
+    *Status:* **not yet generated.** Test = `data/heldout_v2`; `data/heldout` (214 ids) is **dev**, not test. Note that
+    `docs/EVAL_PROTOCOL_HELD_OUT_DEV.md` was frozen while `data/heldout` was still the eval set; its test-set role is
+    superseded by F1 (its cell counts still describe the dev set). Phase 5 scores on `heldout_v2`, never `data/heldout`.
 0.7 **Tests that make the decisions stick:** `tests/test_decisions_applied.py` (values), contamination test on content hashes, tool-trace round trip
     (record -> ingest -> row has tool turns and ends with the verified answer), `finalize` appends the final turn, ledger tool no crash on malformed
     candidate, audit tool depends on the candidate, GRPO stage names distinct per k, eval raises on a missing adapter.

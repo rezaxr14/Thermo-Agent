@@ -5,6 +5,53 @@ ledger is **per reasoning trace, not per corpus row**: a synthetic ground-truth
 record, a hosted-model answer, and a tool-harness answer each get their own
 record, and every downstream use is attached to that record.
 
+## Per-row provenance (2026-11-19) — hand-maintained section
+
+> This section is **maintained by hand** and is not part of the generated tables
+> below (those are rewritten wholesale by `scripts/build_provenance_ledger.py`).
+> It records the provenance carried *inside each corpus row*.
+
+Every datagen/training row states in the row itself whether it is deterministic
+or AI-generated and, if AI, which model produced it. The fields are:
+
+- `source` — `ground_truth` (deterministic ground truth), `deterministic_tools`
+  (deterministic tool trace), or a frontier value. Stored frontier clean rows
+  carry `source: "frontier:<model>"` together with
+  `source_detail: "frontier_tools"`.
+- `provenance` — for deterministic rows a dict
+  `{generator, variant, source_row_id, source_dir}`, e.g. generator
+  `deterministic_tools`, variant `direct` / `recover`, `source_row_id` = the
+  ground-truth id, `source_dir = "data/processed"`. **Frontier rows do not carry
+  this dict**; they carry `model` (plus `provider`, `run_id`, `source_detail`).
+- `model` — present on AI-generated rows only; the exact hosted model id. This
+  is the authoritative "which AI model" field.
+- `paraphrase` — A-slice rows carry `{variant, n}` and `prompt_variant: plain`.
+  The A-slice is a **copy** of deterministic ground-truth rows, so it is not AI.
+- Multi-turn tool traces are not single-turn answers: in `data/sft_tools` the
+  whole `tool_call` / `tool_result` round sequence is stored in one SFT
+  `completion` (a JSON list of assistant turns); in `data/grpo_tools` the same
+  rounds are in `trajectory.turns` (with `trajectory.sft_completion`).
+
+### Source-family table (counts where known)
+
+| Source family | Producer | Model (AI rows) | Where stored | Rows |
+| --- | --- | --- | --- | ---: |
+| Deterministic ground truth | synth generators + simulator/verifiers | none (deterministic) | `data/processed` (plus `processed_arch`, `processed_big`) | **27,418** across all splits; train split: repair 5,458 / ledger 4,846 / audit 2,192 / design 1,768 |
+| Plain A-slice (COPY of ground truth) | `build_a_slice.py`, seeded, 1 paraphrase per plant | none (deterministic copy) | `data/a_slice` | **1,600** (400/task) = round(4,800 × 0.3333) |
+| Deterministic tool traces | `synth.tool_traces`, `--limit 120`: 120 plants × 2 variants (direct, recover) × 4 tasks | none (deterministic) | `data/sft_tools`, `data/grpo_tools` | **960** (240/task) — under the decided 4,800; known defect to fix |
+| Frontier tool traces (AI) | hosted Kaggle task `thermo-teacher-tools-s00` v6, run `7179338`, verifier-accepted | `google-gemini-3-8-flash` | `data/frontier_tools` (as received), `data/frontier_tools_clean_v2` (sanitized) | **32** (repair 9, ledger 10, audit 6, design 7); 40 attempts, 5× HTTP 429, $0.842202 total |
+
+**Unknown / not yet generated — frontier models with NO tool traces collected:**
+`gpt-6-luna`, `claude-haiku-5-5`, `gemini-3.5-flash-lite`, `gpt-6.2-sol`,
+`claude-opus-5-5-default` (`claude-opus`), `claude-sonnet-5-5`,
+`gemini-4-argon` (`gemini-4`). These are **planned** per DECISIONS D / J4; never
+imply their traces exist. The only frontier model with accepted tool traces is
+`google-gemini-3-8-flash` (32 rows).
+
+Nothing in `data/processed` was deleted or overwritten; the A-slice is an
+additional copy, and the sanitized frontier rows are a new directory, leaving
+`data/frontier_tools` as received.
+
 ## Regenerate
 
 ```bash
@@ -25,6 +72,12 @@ corpora have been verified. All three outputs are fully derived and can be
 deleted and regenerated at any time; no source data is modified. The large
 `trace_ledger.jsonl` is gitignored (like its source corpora); `stats.json` and
 this document are committed so the exact numbers remain reviewable.
+
+> **Regeneration caveat:** `render_docs()` currently rewrites this whole file
+> from its template, so re-running the builder drops the hand-maintained
+> "Per-row provenance" section above. That section is mirrored in
+> `docs/dataset_cards.md`; restore it after any regeneration until the builder
+> template is updated.
 
 ## Canonical id and correlation
 

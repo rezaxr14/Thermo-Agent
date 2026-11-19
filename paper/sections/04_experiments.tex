@@ -1,19 +1,17 @@
 \section{Experiments}\label{sec:experiments}
 
 Everything in this section that is a number was measured on the CPU with the project code and fixed seeds, on small samples, and
-every sample size is stated. All results are simulation-driven. No language model has been trained or evaluated; the model results
-(\cref{sec:modelresults,sec:ablations}) are skeletons whose cells are pending.
+every sample size is stated. All measured results are simulation-driven. No language model has been trained or evaluated: no SFT or GRPO checkpoint exists and no model arm has been scored. The frontier zero-shot and harness arms are replays of saved answers from \texttt{data/kaggle\_datasets/thermo-agent-eval-replays/}, scored through the same verifiers. The model results and ablations (\cref{sec:modelresults,sec:ablations}) are skeletons whose cells are pending, and every protocol value below is pre-registered rather than measured. Datagen is not complete (\cref{sec:datagenstatus}), so by Reza's directive of 2026-11-19 training has not started. The frozen test set is \texttt{data/heldout\_v2}; the 214-id \texttt{data/heldout} is the dev set used for tuning only.
 
-\subsection{Frozen protocol}\label{sec:protocol}
+\subsection{Pre-registered protocol}\label{sec:protocol}
 
 \paragraph{Models and harness.}
-We evaluate five kinds of arm. (i) The base Qwen3.5-4B, its SFT checkpoints (ground truth only, full corpus) and SFT+GRPO, i.e.\ our trained model. (ii) The same model with no added inference text and with the full inference text (\texttt{AGENTS.md}, skills and memory notes). (iii) Frontier models zero-shot, with that inference text, and with our verifiers exposed as tools. (iv) A second open model and, where a checkpoint is available, a thermo-domain model. (v) The non-model baselines of \cref{sec:baselines}. Every arm sees the same rows of the ground-truth datasets and the same answer budget. Frontier models are reached through Kaggle's model access (not a local API); their saved answers are replayed through the same evaluator, and Kaggle reports the token cost of each call. The inference-text and tool-access axes are recorded as columns in \cref{tab:comparison}, so the harness effect is measured as a paired comparison rather than inferred from different setups.
+We evaluate the arms of decision F4. (i) Base Qwen3.5-4B and Qwen3.5-9B; (ii) our SFT checkpoint; (iii) our GRPO checkpoints at $k=4,8,16$, each from the merged SFT policy. Each of these appears in two modes: Z (plain prompt, no tools) and H (compact harness, tools and memory). (iv) Frontier zero-shot (Z) and frontier harness (H) arms, which are replays of saved answers from \texttt{data/kaggle\_datasets/thermo-agent-eval-replays/} through the same verifiers and prompt rows; a replay is evidence for that saved answer set only. (v) Other-LLM stand-in arms, plus the non-model baselines of \cref{sec:baselines}. The old \texttt{sft none} guard is replaced by this table; the two modes of a given model are scored on identical rows, so the harness effect is a paired comparison. Every arm sees the same rows of the frozen \texttt{heldout\_v2} test set and the same answer budget. Frontier models are reached through Kaggle's model access (not a local API); their saved answers are replayed, and Kaggle reports the token cost of each call. The mode and tool-access axes are recorded as columns in \cref{tab:comparison}. No arm has been scored yet; the SFT-tools-only versus SFT-mix comparison of decision F5 is deferred until the main table exists.
 
 \paragraph{Decoding, attempts and budgets.}
-Decoding is greedy. Repair and Design allow three attempts with solver feedback; Audit and Ledger repair are single-turn. Cost is counted in
-solver calls (Repair) or design evaluations (Design). Design also has an anytime protocol: the model is told the fuel of each valid design and may
+Decoding is pre-registered as follows (all local arms identical). The primary condition is greedy decoding (\texttt{do\_sample=False}, repetition penalty 1.0, no presence penalty). A secondary pass@8 uses temperature 0.6, top-p 0.95, top-k 20, min-p 0 and seeds 0--7, again without repetition or presence penalties; these are Qwen's published thinking-mode precise-task settings (the general-chat presence penalty of 1.5 is rejected because structured output legitimately repeats unit tokens, ids and tool arguments). Frontier hosted models use provider defaults, which are recorded per run. The harness runs up to six tool rounds with at most eight tool calls; per-turn generation is capped at 4,096 new tokens, with a sequence gate of 8,192 tokens and over-gate rows dropped rather than truncated. Cost is counted in solver calls (Repair) or design evaluations (Design). Design also has an anytime protocol: the model is told the fuel of each valid design and may
 refine, and we record the best gap to the reference after $b$ design evaluations, to compare with enumeration, random search and
-enumerate-then-polish at equal budgets.
+enumerate-then-polish at equal budgets. None of these conditions has been run.
 
 \paragraph{Metrics.}
 Repair: success (the repaired plant is valid and serves the site), first-turn success, exact restoration on deducible faults, and mean solver calls. Design: valid share, share within 1\% of the reference, mean fuel gap, mean
@@ -24,11 +22,14 @@ Binary outcomes carry Wilson 95\% intervals \citep{wilson1927interval}. Two runs
 metrics \citep{mcnemar1947}, and with a paired bootstrap interval plus a sign-flip permutation test for other metrics; all comparisons reported together are
 Holm-corrected \citep{holm1979}. Per-example results are saved with each report. ThermoQA accuracy before and after training checks for forgetting.
 
+\paragraph{Test set, dev set and tiers.}
+The held-out test set is \texttt{data/heldout\_v2}, frozen before any model is scored; \texttt{data/heldout} (214 test ids) is the dev set and is used for tuning only, never reported as a test result. Within each task, rows are split into \texttt{easy}, \texttt{medium} and \texttt{hard} in equal thirds in both the training corpora and \texttt{heldout\_v2}; the tier is a real column derived from a documented per-task size measure (\texttt{thermo\_agent/synth/tiers.py}), never random and never a threshold tuned by the assistant. When a task's rows cannot be cut into exact thirds, the remainder goes to the higher tier and the manifest records the exact counts per task. The target is at least 85 rows per reported cell where a generator can reach it, with any merged cells documented explicitly. All of this is a pre-registered design: no cell has been scored.
+
 \paragraph{Cost accounting and provenance.}
 Three costs are reported separately and never merged into one score. Physics cost is solver calls (Repair) or design evaluations (Design); it is measured for every arm by the same evaluator. Model cost is the token count and the price that Kaggle Benchmarks reports for a frontier call (in nanodollars, summed per model in \texttt{reports/frontier\_ingest.json}), plus GPU-hours for our own training and inference. Data cost is the number of ground-truth plants, paraphrases, teacher attempts and accepted rows. Because frontier answers are static replays, their cost is charged once and reused across arms; the report states this instead of implying a fresh call per evaluation. Every result file carries the model id, harness mode, tool-access flag, seed, limit and sample size in its \texttt{meta} block, and the paper tables are generated from those files rather than transcribed.
 
 \paragraph{Qualitative evidence.}
-Figures are not hand-drawn illustrations. \Cref{fig:fig_trace_walkthrough} is regenerated from a deterministic selection of real traces -- a fault from the ground-truth corpus, a frontier interaction with recorded tool calls and reasoning, a scored GRPO group, and the comparison arms -- with the field schema and source files stored beside the examples. The selection rule is part of the generator, so the same inputs reproduce the same figure; no example is chosen from a model result by hand.
+Figures are not hand-drawn illustrations. \Cref{fig:fig_trace_walkthrough} is regenerated from a deterministic selection of real traces -- a fault from the ground-truth corpus, a frontier interaction with recorded tool calls and reasoning (from the 32 accepted traces, replayed), a GRPO group (planned; none has been generated), and the comparison arms (planned) -- with the field schema and source files stored beside the examples. The selection rule is part of the generator, so the same inputs reproduce the same figure; no example is chosen from a model result by hand.
 
 \paragraph{Research questions.}
 We fix eight research questions before the runs and state no expected answer to any of them.
@@ -162,14 +163,16 @@ Stream-line and constant faults never break closure, and two constant faults sho
 \label{fig:fig_ledger_symptoms}
 \end{figure}
 
+\subsection{Current status: datagen and training}\label{sec:datagenstatus}
+
+Datagen is incomplete, and Reza's directive of 2026-11-19 forbids starting SFT, GRPO or any training-based smoke test until every datagen item is built, audited and committed. The deterministic tool corpora currently hold 960 rows, built with \texttt{--limit 120} (240 per task), against a decided size of 4,800 rows (600 plants $\times$ 2 variants $\times$ 4 tasks). The plain A-slice is complete at 1,600 rows ($=\mathrm{round}(4{,}800\times0.3333)$, 400 per task). Only 32 verifier-accepted frontier tool traces exist, all from \texttt{google-gemini-3-8-flash} (40 attempts, five 429 errors, 32 accepted, \$0.842202 total); after sanitizing the provider \texttt{call\_id} wrapper the clean corpus has at most 7,268 tokens per row, all under the 8,192 gate. Luna, haiku, sol, opus, sonnet and gemini-4 traces are planned, not collected. Tiers are equal thirds per task in both training and test data, derived from \texttt{thermo\_agent/synth/tiers.py}, with the remainder to the higher tier. The test set \texttt{heldout\_v2} is frozen before scoring. Consequently there are no results for any SFT, GRPO or evaluation arm: the tables below are skeletons, and every value in \cref{sec:protocol} is planned, not measured.
+
 \subsection{Model results}\label{sec:modelresults}
 
 \Cref{tab:results,tab:comparison} are generated from the result JSON files listed in
-\texttt{model\_results\_manifest.json} in the paper assets: one entry per arm, with its model family, inference text,
-tool access and zero-shot flag. The table fills itself when the corresponding \texttt{model\_eval} reports exist;
-the comparison makes the harness and tool axes explicit. No trained-model results have been measured yet, and the
-teacher acceptance statistics are pending (\cref{tab:corpusstatus}), so both tables are currently skeletons. When
-the runs exist we report all rows for the held-out splits, with the intervals and tests of \cref{sec:protocol}.
+\texttt{model\_results\_manifest.json} in the paper assets: one entry per arm, with its model family, mode (Z or H),
+tool access and zero-shot flag. The protocol is pre-registered, but no arm has been scored: no trained checkpoint exists and the frontier arms are replays from \texttt{data/kaggle\_datasets/thermo-agent-eval-replays/}. Consequently both tables are skeletons (``pending'') and carry no measured model values, and the teacher acceptance statistics are pending (\cref{tab:corpusstatus}). When
+the runs exist we will report all rows for the \texttt{heldout\_v2} test cells, with the intervals and tests of \cref{sec:protocol}; the 214-id \texttt{heldout} remains dev. No planned value is presented as a result.
 
 \begin{table}[tbp]
 \centering
@@ -188,7 +191,7 @@ the runs exist we report all rows for the held-out splits, with the intervals an
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=\linewidth]{figures/pdf/fig_trace_walkthrough.pdf}
-\caption{Measured interactions: a deterministic fault and its diagnosis, a frontier model using our physics tools with recorded reasoning and cost, a scored GRPO rollout, and the comparison arms. Every element is copied from a stage output; the schema and selected examples are in \texttt{assets/examples.json} and \texttt{examples\_schema.json}. Regenerated by \texttt{figures\_from\_examples.py}. The last two panels fill after the Kaggle runs.}
+\caption{Interactions so far: a deterministic fault and its diagnosis, and a frontier model using our physics tools with recorded reasoning and cost (32 accepted traces from one model, replayed). The GRPO rollout and comparison panels are planned, not measured: they fill only after training runs, none of which has occurred. Every available element is copied from a stage output; the schema and selected examples are in \texttt{assets/examples.json} and \texttt{examples\_schema.json}. Regenerated by \texttt{figures\_from\_examples.py}.}
 \label{fig:fig_trace_walkthrough}
 \end{figure}
 
@@ -219,4 +222,4 @@ at 10\% it is \val{rd.repair.zv_e10_pct}, \val{rd.design.zv_e10_pct}, \val{rd.au
 \end{figure}
 
 \subsection{What the remaining claims depend on}\label{sec:status}
-The model-independent numbers in this paper are measured and reproducible from the checked-in generators and seeds: the verifier coverage, the baseline search costs, the feasibility and first-law findings, the reward diagnostics, and the data and corpus reports. The trained-model columns of \cref{tab:results,tab:comparison,tab:ablation} are pending, and the following runs are the only evidence that can fill them: the frontier teacher pass on Kaggle, local ingest and grading, the two-stage SFT/GRPO run on two T4 GPUs with resumable checkpoints, and the multi-arm evaluation of \cref{sec:protocol}. Until those runs exist we make no claim about the relative performance of the 4B model, the frontier arms or the other models, and \texttt{paper/assets/model\_results.json} contains the empty schema rather than numbers. The same rule applies to the cost columns: token prices are recorded when a Kaggle call happens, not estimated here.
+The model-independent numbers in this paper are measured and reproducible from the checked-in generators and seeds: the verifier coverage, the baseline search costs, the feasibility and first-law findings, the reward diagnostics, and the data and corpus reports. The trained-model columns of \cref{tab:results,tab:comparison,tab:ablation} are pending, and the following runs are the only evidence that can fill them: the frontier teacher pass on Kaggle, local ingest and grading, the two-stage SFT/GRPO run on two T4 GPUs with resumable checkpoints, and the multi-arm evaluation of \cref{sec:protocol}. None of these runs has been executed. Until those runs exist we make no claim about the relative performance of the 4B model, the frontier arms or the other models, and \texttt{paper/assets/model\_results.json} contains the empty schema rather than numbers. The same rule applies to the cost columns: token prices are recorded when a Kaggle call happens, not estimated here.

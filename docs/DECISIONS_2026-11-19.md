@@ -116,7 +116,35 @@ Per-turn `max_new_tokens` **4,096**; `max_tool_calls` **8**; `max_turns` **6**; 
 `grpo.py` (sampling fields, scheduler, derived `grad_accum`, 4,096 / 6 defaults), `model_eval.py` (8 / 4,096 / 4,096),
 `agent_graph.py` (`DEFAULT_MAX_ROUNDS = 6`), `tests/test_decisions_applied.py` (fails if any value drifts).
 
-## 4. Left for the agent (each needs a test; see `IMPLEMENTATION_PLAN.md`)
+## 4. Reza's directive, 2026-11-19 (supersedes any conflicting line above)
+
+Verbatim:
+
+> "we will start traning when we get all of the datagen done not some of it , after we made all of the ai frontier
+> Cot traces that we want after that we will start the sft adn grpo and other evals stuff, and after that we will take
+> zero shots and baseline with harness and traned model with harnes and stuff like which i have already told you in
+> previous instructions, fix everything in the traning path, we will include tiers equal thirds dont fuck around make
+> the traning data and test data properly"
+
+Binding consequences:
+
+1. **No training of any kind starts while any datagen item is incomplete** - not SFT, not GRPO, not a training-based
+   smoke shortcut. Datagen = deterministic tool corpora at the decided size (600 plants/task x 2 variants x 4 tasks =
+   4,800), the frontier tool CoT traces the campaign is authorised to make, the plain A-slice, and `heldout_v2`.
+   Training starts only when every one of them is built, audited and committed.
+2. **Tiers are equal thirds for every task**, not just repair/audit: `easy`, `medium`, `hard`, one third each within
+   each task, in the training corpora and in `heldout_v2`. This answers J6: the tier is a real column, derived from a
+   documented per-task size measure (`thermo_agent/synth/tiers.py`), never random and never a threshold tuned by the
+   assistant. If a task's rows cannot be cut into exact thirds, the remainder goes to the higher tier and the manifest
+   records the exact counts per task.
+3. **Order after datagen:** SFT -> GRPO (k=4/8/16) -> evaluation of every arm (frontier Z/H, base 4B/9B Z/H, SFT Z/H,
+   GRPO k4/k8/k16 Z/H, other-LLM placeholders) on `heldout_v2`. No trained-arm score is replaced by a zero-shot or
+   baseline score; the zero-shot and harness baselines are reported alongside, as instructed earlier.
+4. **The training path is audited and fixed before the first training run:** data loading (task + tier columns),
+   prompt rendering (one compact harness), label masking, collator, checkpoint/resume, eval/save cadence, and the red
+   smoke kernel. Each fix carries a test.
+
+## 5. Left for the agent (each needs a test; see `IMPLEMENTATION_PLAN.md`)
 
 Compact harness text; `build_trace` re-measure; deterministic trace expansion to 600 plants/task; A-slice builder; joint-task GRPO reward dispatch;
 sampled pass@8 mode in `HFGenerator` (temperature/top_p/top_k/seed); `heldout_v2` generation; eval arm table in `eval_runner.py`.

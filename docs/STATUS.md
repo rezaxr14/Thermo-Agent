@@ -3,7 +3,51 @@
 Working copy: `C:\Users\rezax\Home\Code\thermo_agent\Repo` on REZA_PC (git, branch `main`). No SSH, no WSL: every
 step below runs in this checkout.
 
-## Truth snapshot (2026-11-19 evening; supersedes the snapshot below)
+## Truth snapshot — 2026-11-19 (LATEST; supersedes every section below)
+
+Authoritative decisions: `docs/DECISIONS_2026-11-19.md`. Plan: `docs/IMPLEMENTATION_PLAN.md`.
+Where any older section below calls a corpus, eval set, model order or smoke version "current", read this
+section instead.
+
+**Ordering (Reza directive, DECISIONS §4).** ALL datagen complete first — deterministic tool corpora at the
+decided 4,800 rows, all authorised frontier tool-CoT traces, the plain A-slice and `heldout_v2` — then
+**SFT → GRPO (k=4/8/16) → every eval arm**. Tiers are **equal thirds per task** (`easy`/`medium`/`hard`) in both
+training and test data. The training path is audited and fixed with tests before the first training run.
+**No model has been trained, no arm scored, and no Kaggle run under this plan has occurred.** The only hosted
+compute so far is the teacher datagen task that produced the 32 traces below; it is not a training run.
+
+**Data provenance (see the source-family table in `docs/PROVENANCE.md` and `docs/dataset_cards.md`).**
+Every row states deterministic-vs-AI and, if AI, its `model`. Fields: `source`
+(`ground_truth` / `deterministic_tools` / frontier value with `source_detail: frontier_tools`),
+`provenance` (`{generator, variant, source_row_id, source_dir}` on deterministic rows), `model` (AI rows only),
+`paraphrase` (A-slice rows). Frontier rows carry `model`/`provider`/`run_id` instead of a `provenance` dict.
+
+| Source family | Producer | Model (AI) | Where stored | Rows |
+| --- | --- | --- | --- | ---: |
+| Deterministic ground truth | synth + simulator/verifiers; **nothing deleted or overwritten** | none | `data/processed` | **27,418** all splits; train repair 5,458 / ledger 4,846 / audit 2,192 / design 1,768 |
+| Plain A-slice (COPY) | `build_a_slice.py`, seeded, 1 paraphrase/plant, plain prompt, no tool markers | none | `data/a_slice` | **1,600** (400/task) = round(4,800 × 0.3333) |
+| Deterministic tool traces | `synth.tool_traces`, `--limit 120` = 120 plants × 2 variants × 4 tasks | none | `data/sft_tools`, `data/grpo_tools` | **960** (240/task) — **under the decided 4,800; known defect to fix**, not a reason to train on a partial corpus |
+| Frontier tool traces (AI) | hosted task `thermo-teacher-tools-s00` v6, run `7179338`, verifier-accepted | `google-gemini-3-8-flash` | `data/frontier_tools` (as received), `data/frontier_tools_clean_v2` (sanitized) | **32** (repair 9, ledger 10, audit 6, design 7); 40 attempts, 5× 429, $0.842202 = $0.0263/accepted |
+
+- **Multi-turn traces exist and are multi-turn.** Deterministic `data/sft_tools` rows store the whole
+  `tool_call`/`tool_result` round sequence in one SFT `completion`; `data/grpo_tools` rows store the same rounds in
+  `trajectory.turns`. Frontier clean rows carry a 5-turn `trajectory` and a `model` field.
+- **Only 32 frontier tool traces exist, all `google-gemini-3-8-flash`.** Sanitized copies are in
+  `data/frontier_tools_clean_v2` (0/32 over the 8,192 gate after removing the provider `call_id` wrapper);
+  `data/frontier_tools` is unchanged. This is a pilot yield, not a corpus.
+- **Frontier models with NO traces — unknown / not yet generated (planned only):** `gpt-6-luna`,
+  `claude-haiku-5-5`, `gemini-3.5-flash-lite`, `gpt-6.2-sol`, `claude-opus-5-5-default` (`claude-opus`),
+  `claude-sonnet-5-5`, `gemini-4-argon` (`gemini-4`). Per DECISIONS D / J4 these are planned; do not imply
+  traces, cost or scores exist for them.
+- **Test / dev split (F1):** test = `data/heldout_v2` (not yet generated); `data/heldout` (214 ids) is **dev**.
+  The older "Done — held-out set", "final comparison scored with `DATA_DIRS=heldout`" and "Next" item 5
+  (score on `data/heldout`) below are superseded. `docs/EVAL_PROTOCOL_HELD_OUT_DEV.md` was frozen while
+  `data/heldout` was still the eval set; its test role is superseded by F1, its 214-id table still describes dev.
+- **Open items:** compact harness + gate re-measure (0.1–0.2), deterministic corpus expansion 960 → 4,800 (0.4),
+  frontier campaign for the remaining models (Phase 2), `sft_mix_h`, `heldout_v2`, and the audited/fixed training
+  path. Status detail: the "Truth snapshot (evening)" section below is now historical.
+
+## Truth snapshot (2026-11-19 evening; historical — superseded by the section above)
 
 Authoritative values: `docs/DECISIONS_2026-11-19.md`. Plan: `docs/IMPLEMENTATION_PLAN.md` (traces first, then train,
 then score). Hard rule still standing: no `kaggle` command without Reza's "go".
@@ -19,11 +63,15 @@ then score). Hard rule still standing: no `kaggle` command without Reza's "go".
 - **Open - trace text is not yet gate-clean.** 11 of 32 rows exceed the 8,192 gate because of the provider's
   `call_id='call_...__mpthought__<base64>'` wrapper. Removing only that wrapper gives 0/32 over, max 7,280 tokens
   (real Qwen3.5 tokenizer). Sanitizer targets `data/frontier_tools_clean`; `data/frontier_tools` stays as received.
+  *Superseded:* the sanitizer has since run to `data/frontier_tools_clean_v2` (32 rows, 0/32 over gate); see the
+  latest snapshot above.
 - **Open - compact harness (0.1) and gate re-measure (0.2).** The harness prompt is still the 17.2k-char version and
   `build_tool_corpus.py` still measures the plain prompt, so the 157 over-gate rows in `data/sft_tools_h` are still
   there and no `*_h` rebuild has happened.
 - **Open - corpus composition (0.4-0.6).** No A-slice, no `sft_mix_h`, no `heldout_v2` yet; 32 traces is a pilot
   yield, not the E1 corpus (deterministic target ~4,800 tool rows).
+  *Superseded:* `data/a_slice` now exists (1,600 plain rows, 400/task); `sft_mix_h` and `heldout_v2` still open.
+  See the latest snapshot above.
 - **Not done - no trained weights, no scores.** `runs/` has only smoke directories; no SFT adapter, no GRPO stage, no
   held-out report. Training stays closed until the smoke kernel is green (G1).
 - **Model order (J4).** `gemini-3.5-flash-lite` -> `claude-haiku-5-5` -> `gpt-6-luna` (tools, reasoning off,
