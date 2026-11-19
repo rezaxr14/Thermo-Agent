@@ -38,18 +38,24 @@ PROJECT_REPO = "Reza-Nadimi/thermo-agent-corpora"
 
 # The current corpora that matter (H1-H3): the v2 tool/mix corpora, the compact-harness variants, the
 # A slice, the frontier teacher sets, served memory, and the frozen held-out prompts.
-# Reza (2026-11-20): keep EVERY data directory on the hub, not just the current training
-# corpora — the legacy corpora, teacher journals and Kaggle bundles are needed later. The
-# allow-list is therefore the whole `data/` tree; paths outside it are still refused.
-def _all_data_dirs() -> tuple[str, ...]:
-    root = Path("data")
-    if not root.is_dir():
-        return ()
-    return tuple(f"data/{p.name}" for p in sorted(root.iterdir()) if p.is_dir())
-
-
-DEFAULT_DIRS = _all_data_dirs()
-ALLOWED_PREFIXES = ("data",)
+# Reza (2026-11-20): only the data we will actually use again — the ground-truth
+# generators, hosted journals, Kaggle bundles, provenance, all frontier trace dirs,
+# the current v2 training corpora, memory and the frozen held-out prompts. Legacy
+# corpora (sft, grpo, sft_all, grpo_all, _pre_leakfix, old tool corpora) are NOT synced.
+NEEDED = (
+    "data/processed", "data/processed_arch", "data/processed_big",
+    "data/teacher_runs", "data/kaggle_datasets", "data/provenance",
+    "data/frontier", "data/frontier_eval_export", "data/frontier_export",
+    "data/frontier_prov", "data/frontier_tools", "data/frontier_tools_clean",
+    "data/frontier_tools_clean_v2", "data/frontier_tools_cohort",
+    "data/frontier_tools_cohort_prompts", "data/frontier_tools_pilot",
+    "data/sft_tools_v2", "data/grpo_tools_v2",
+    "data/sft_tools_v2_h", "data/grpo_tools_v2_h",
+    "data/sft_mix_v2", "data/grpo_mix_v2",
+    "data/a_slice", "data/memory", "data/heldout_v2",
+)
+DEFAULT_DIRS = tuple(d for d in NEEDED if Path(d).is_dir())
+ALLOWED_PREFIXES = NEEDED
 HELDOUT_DIRS = ("data/heldout_v2",)
 
 # Prompts-only projection for held-out data. Only these fields may leave the machine; anything not

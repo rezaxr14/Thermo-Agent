@@ -38,12 +38,12 @@ def test_path_outside_allow_list_is_refused(workspace):
     (workspace / "data" / "teacher_runs").mkdir(parents=True)
     (workspace / "data" / "sft_tools").mkdir(parents=True)  # legacy data dir: kept for later use
     (workspace / ".env").mkdir()  # a dir named .env must still be refused, not silently included
-    for bad in (".env", str(workspace / "data" / "teacher_runs"), "data/../.env"):
+    for bad in (".env", str(workspace / "data" / "teacher_runs"), "data/../.env",
+                "data/sft_tools"):
         with pytest.raises(SystemExit, match="refusing to upload"):
             sync.check_dirs([bad])
-    # Every real data/ dir is allowed now (legacy corpora and journals included).
+    # Only the needed dirs are allowed.
     assert sync.check_dirs(["data/sft_tools_v2"]) == [sync.Path("data/sft_tools_v2")]
-    assert sync.check_dirs(["data/sft_tools"]) == [sync.Path("data/sft_tools")]
     assert sync.check_dirs(["data/teacher_runs"]) == [sync.Path("data/teacher_runs")]
 
 
