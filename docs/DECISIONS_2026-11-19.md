@@ -148,3 +148,22 @@ Binding consequences:
 
 Compact harness text; `build_trace` re-measure; deterministic trace expansion to 600 plants/task; A-slice builder; joint-task GRPO reward dispatch;
 sampled pass@8 mode in `HFGenerator` (temperature/top_p/top_k/seed); `heldout_v2` generation; eval arm table in `eval_runner.py`.
+
+## 6. Datagen gate stays RED until the WHOLE frontier cohort exists (Reza, 2026-11-19)
+
+Reza's correction: the luna/haiku payload proof and pilots do NOT make the gate green. Green requires **all** the
+frontier harness-CoT datagen we intend to make:
+
+1. Budget tier **and then** premium tier, in this order: `gpt-6-luna`, `claude-haiku-5-5`, then
+   `gpt-6.2-sol`, `claude-sonnet-5-5`, `claude-opus-5-5-default`, `gemini-4-argon`. `gemini-3.5-flash-lite`
+   stays excluded by Reza's earlier directive.
+2. For **every model**: verifier-accepted tool traces (at least one `<tool_call>` and `<tool_result>` turn, final
+   answer accepted) in **all four cohort tasks** (repair, design, audit, ledger) and in **all three tiers**
+   (easy, medium, hard), tiered by the same documented per-task size measure as the deterministic rows
+   (`thermo_agent/synth/tiers.py`). This is a coverage floor, not a cap: D1/D2/D6/D7/D9 still forbid caps on
+   traces, per-model counts, cost and rows.
+3. Deterministic 4,800-row corpora, A-slice, frozen `heldout_v2`, and zero-overlap/provenance audits must also
+   pass. `scripts/check_datagen_complete.py` is the machine-checkable gate; it exits non-zero while any item is
+   missing. Training starts only when it exits zero.
+4. Provenance per row: deterministic vs AI-generated, and for AI rows the exact model id, in every training and
+   test row. Pilots are logged in `docs/TEACHER_CAMPAIGN_LOG.md` with successes and failures (short recaps).

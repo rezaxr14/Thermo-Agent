@@ -4,6 +4,13 @@ Draft paper (LaTeX, 11 pt article, natbib author-year). System name macro: `\sys
 
 ## Build and check
 
+To (re)generate `main.pdf` in place with MiKTeX (runs `pdflatex` -> `bibtex` -> `pdflatex` -> `pdflatex`
+from this directory, writing `main.pdf` directly to the paper root):
+
+    powershell -ExecutionPolicy Bypass -File paper\build_paper.ps1
+
+The full verification suite (build plus all checks) is:
+
     python tools/verify_paper.py          # latexmk build, then all checks; prints the inventory below
     python tools/generate_paper_assets.py --project PATH/TO/thermo-agent --scratch DIR --tests-log PYTEST_LOG [--stage ...] [--force]
 
