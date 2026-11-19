@@ -199,3 +199,8 @@ frontier harness-CoT datagen we intend to make:
 6. **Hard boundary:** only the ids above may be written to. No other HF dataset/model repo and no other Kaggle
    dataset or kernel is created, modified or deleted. Tokens stay in `.env`/environment, never in notebooks,
    manifests, logs or datasets. The operational field guide is `HF_KAGGLE_SKILL.md`.
+7. **Single credential source (Reza, 2026-11-20):** every credential used by this project — `HF_TOKEN`,
+   `KAGGLE_API_TOKEN`, `MODEL_PROXY_*`, `LLM_*` — comes ONLY from the repository-root `.env`. No credential is
+   allowed in `data/`, notebooks, task files, datasets, logs, manifests, or any second env file. Helpers read
+   the value from `.env` at call time and never print it. If a token is absent, stop and ask Reza; never invent,
+   reuse, or switch to another account's credentials.
