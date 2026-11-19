@@ -68,8 +68,18 @@ Kaggle dataset slugs (`scripts/sync_kaggle_datasets.py`, all under owner `rezana
 
 `HF_TOKEN` / `KAGGLE_API_TOKEN` come from the environment or `.env`; the helpers pass them only to the
 HF/Kaggle clients and **never print or upload them**. No tokens in notebooks, committed files, dataset
-metadata or logs. The Kaggle proxy (`socks5h://localhost:10808`) is set only in the kaggle subprocess
-environment — non-Kaggle calls are never proxied. In a Kaggle notebook, read the token from a Kaggle
+metadata or logs. The Kaggle proxy (`socks5h://127.0.0.1:10808`) is set only in the kaggle subprocess
+environment - non-Kaggle calls are never proxied.
+
+**One Kaggle account only.** `.env` must contain exactly one `KAGGLE_API_TOKEN`: the project account that
+owns the `rezanadimi` datasets and the AI quota we have already spent. A second token (a different
+account) was removed; never add it back and never mix dataset access with AI billing accounts. Run every
+Kaggle CLI command through `powershell -NoProfile -File scripts/kaggle_project.ps1 <kaggle args>` — it
+reads the single token from `.env`, scopes the proxy to that one command, and never prints the value.
+Verify access with `... datasets status rezanadimi/thermo-teacher-prompts-big` (`ready`); if the SOCKS
+proxy aborts the first attempt, retry the same read-only command rather than switching accounts.
+
+In a Kaggle notebook, read the token from a Kaggle
 Secret or an attached private `env` dataset; do not paste it into a cell.
 
 ## 5. Refresh cadence
