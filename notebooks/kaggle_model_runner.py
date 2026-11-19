@@ -373,9 +373,9 @@ if IS_KAGGLE:
         return mem.dedupe(notes) if notes else []
 
     # %%
-    @kbench.task(name="thermo_kaggle_model_runner",
+    @kbench.task(name="thermo-teacher-cotproof-s00",
                  description="Generic thermo-agent model runner (budget models only by default)")
-    def thermo_kaggle_model_runner(llm):
+    def thermo_teacher_cotproof_s00(llm):
         global MODEL_SLUG, ACTIVE_SHARD, ERROR, ROWS_SOURCE, ROWS_DETAIL, ROWS_TOTAL
         global MEMORY_NOTES_LOADED, REASONING_LEVEL
 
@@ -497,4 +497,4 @@ if IS_KAGGLE:
         _manifest("completed" if ERROR is None else "partial", "done")
 
     # %%
-    thermo_kaggle_model_runner.run(kbench.llm)
+    thermo_teacher_cotproof_s00.run(kbench.llm)
