@@ -71,6 +71,11 @@ HF/Kaggle clients and **never print or upload them**. No tokens in notebooks, co
 metadata or logs. The Kaggle proxy (`socks5h://127.0.0.1:10808`) is set only in the kaggle subprocess
 environment - non-Kaggle calls are never proxied.
 
+**One repo per purpose.** DATA goes only to `Reza-Nadimi/thermo-agent-corpora`; MODELS/adapters only to
+`Reza-Nadimi/thermo-agent-checkpoints`. No third repo, no project mirror, no mixing. On Kaggle keep project
+data in ONE dataset (`thermo-agent-corpus`); attach the code/prompt datasets read-only, and reuse an existing
+shard with a row limit instead of creating new proof shards, tasks or datasets.
+
 **One Kaggle account only.** `.env` must contain exactly one `KAGGLE_API_TOKEN`: the project account that
 owns the `rezanadimi` datasets and the AI quota we have already spent. A second token (a different
 account) was removed; never add it back and never mix dataset access with AI billing accounts. Run every

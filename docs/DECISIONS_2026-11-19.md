@@ -190,6 +190,12 @@ frontier harness-CoT datagen we intend to make:
    Kaggle datasets (`thermo-agent-code`, `thermo-agent-corpus`, `thermo-agent-resume`, `thermo-teacher-prompts`,
    `thermo-teacher-prompts-big`, `thermo-agent-eval-replays`) before each Kaggle run and download results after it.
    Kaggle commands use `socks5h://localhost:10808` scoped to that command only; non-Kaggle traffic never uses it.
-5. **Hard boundary:** only the ids above may be written to. No other HF dataset/model repo and no other Kaggle
+5. **One repo per purpose (Reza, 2026-11-20):** `Reza-Nadimi/thermo-agent-corpora` is the ONLY Hugging Face
+   repo for DATA (corpora, memory, heldout prompts, manifests). `Reza-Nadimi/thermo-agent-checkpoints` is the
+   ONLY Hugging Face repo for MODELS/adapters/optimizer state. Never create a third "project mirror" repo, never
+   mix data into the model repo or model files into the data repo. On Kaggle, keep all project data in ONE
+   dataset (`thermo-agent-corpus`) and attach the existing code/prompt datasets read-only; do not create extra
+   proof shards, tasks or datasets for a test — reuse an existing attached shard with a row limit.
+6. **Hard boundary:** only the ids above may be written to. No other HF dataset/model repo and no other Kaggle
    dataset or kernel is created, modified or deleted. Tokens stay in `.env`/environment, never in notebooks,
    manifests, logs or datasets. The operational field guide is `HF_KAGGLE_SKILL.md`.
