@@ -97,6 +97,9 @@ def test_notebook_writes_one_line_per_attempt_and_records_errors(tmp_path, monke
     stub.chats = _Chats()
     monkeypatch.setitem(sys.modules, "kaggle_benchmarks", stub)
     monkeypatch.chdir(tmp_path)
+    # Isolate the notebook's shared-progress input: a real HF_TOKEN in the environment flips SYNC on,
+    # so progress.sync() pulls the live corpus (4149 rep-70-… rows) and writes it into OUT.
+    monkeypatch.delenv("HF_TOKEN", raising=False)
 
     exec(compile(srcs[0][0], "<notebook>", "exec"), ns)          # noqa: S102
     ns["OUT"] = out                                             # the only line the notebook hard-codes
