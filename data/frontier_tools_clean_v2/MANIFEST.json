@@ -1,0 +1,179 @@
+{
+  "after": {
+    "chars": {
+      "max": 14657,
+      "n": 32,
+      "p50": 7388,
+      "p95": 13090
+    },
+    "tokens": {
+      "max": 7268,
+      "n": 32,
+      "p50": 3285,
+      "p95": 6395
+    }
+  },
+  "before": {
+    "chars": {
+      "max": 28850,
+      "n": 32,
+      "p50": 13293,
+      "p95": 26942
+    },
+    "tokens": {
+      "max": 17212,
+      "n": 32,
+      "p50": 7191,
+      "p95": 16014
+    }
+  },
+  "dry_run": false,
+  "files": 4,
+  "generated_at": "2026-11-19T17:30:44.660952+00:00",
+  "generator": "scripts/clean_frontier_traces.py",
+  "input": "data/frontier_tools",
+  "leftover_call_ids": 0,
+  "output": "data/frontier_tools_clean_v2",
+  "per_file": {
+    "frontier_audit_train.jsonl": {
+      "after": {
+        "chars": {
+          "max": 13090,
+          "n": 6,
+          "p50": 9311,
+          "p95": 13090
+        },
+        "tokens": {
+          "max": 6199,
+          "n": 6,
+          "p50": 3980,
+          "p95": 6199
+        }
+      },
+      "before": {
+        "chars": {
+          "max": 28850,
+          "n": 6,
+          "p50": 20108,
+          "p95": 28850
+        },
+        "tokens": {
+          "max": 17212,
+          "n": 6,
+          "p50": 11557,
+          "p95": 17212
+        }
+      },
+      "leftover_call_ids": 0,
+      "rewritten_blocks": 48,
+      "rows": 6,
+      "rows_changed": 6
+    },
+    "frontier_design_train.jsonl": {
+      "after": {
+        "chars": {
+          "max": 5807,
+          "n": 7,
+          "p50": 5123,
+          "p95": 5807
+        },
+        "tokens": {
+          "max": 2149,
+          "n": 7,
+          "p50": 1846,
+          "p95": 2149
+        }
+      },
+      "before": {
+        "chars": {
+          "max": 13293,
+          "n": 7,
+          "p50": 11865,
+          "p95": 13293
+        },
+        "tokens": {
+          "max": 7825,
+          "n": 7,
+          "p50": 6265,
+          "p95": 7825
+        }
+      },
+      "leftover_call_ids": 0,
+      "rewritten_blocks": 56,
+      "rows": 7,
+      "rows_changed": 7
+    },
+    "frontier_ledger_train.jsonl": {
+      "after": {
+        "chars": {
+          "max": 14657,
+          "n": 10,
+          "p50": 11071,
+          "p95": 14657
+        },
+        "tokens": {
+          "max": 7268,
+          "n": 10,
+          "p50": 5161,
+          "p95": 7268
+        }
+      },
+      "before": {
+        "chars": {
+          "max": 19416,
+          "n": 10,
+          "p50": 14724,
+          "p95": 19416
+        },
+        "tokens": {
+          "max": 10276,
+          "n": 10,
+          "p50": 7476,
+          "p95": 10276
+        }
+      },
+      "leftover_call_ids": 0,
+      "rewritten_blocks": 80,
+      "rows": 10,
+      "rows_changed": 10
+    },
+    "frontier_repair_train.jsonl": {
+      "after": {
+        "chars": {
+          "max": 7388,
+          "n": 9,
+          "p50": 5859,
+          "p95": 7388
+        },
+        "tokens": {
+          "max": 3009,
+          "n": 9,
+          "p50": 2505,
+          "p95": 3009
+        }
+      },
+      "before": {
+        "chars": {
+          "max": 13905,
+          "n": 9,
+          "p50": 10441,
+          "p95": 13905
+        },
+        "tokens": {
+          "max": 7922,
+          "n": 9,
+          "p50": 5635,
+          "p95": 7922
+        }
+      },
+      "leftover_call_ids": 0,
+      "rewritten_blocks": 72,
+      "rows": 9,
+      "rows_changed": 9
+    }
+  },
+  "rewritten_blocks": 256,
+  "rows": 32,
+  "rows_changed": 32,
+  "tokenizer": "measured"
+}
