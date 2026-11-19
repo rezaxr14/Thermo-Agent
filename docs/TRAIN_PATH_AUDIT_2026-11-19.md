@@ -161,9 +161,12 @@ All CPU-only. Per-file counts from the final run:
 | **Combined run of the 16 train-related files above** | **104 passed** |
 | **All 23 test files importing `thermo_agent.train`** | **174 passed** |
 
-A full-repository `pytest -q` was also launched; any failure there must be attributed against the
-concurrent, uncommitted datagen work (other agents are editing `scripts/build_tool_corpus.py`,
-`thermo_agent/synth/tiers.py`, `data/heldout_v2`, etc.) before it is blamed on this audit.
+Full-repository `pytest -q`: **15 failed, 845 passed, 9 skipped in 1468 s**. All 15 failures are in
+files owned by the concurrent datagen work (not this audit): `test_check_datagen_complete.py` (1),
+`test_heldout_v2_freeze.py` (3), `test_heldout_v2_overlap.py` (2), `test_heldout_v2_tiers.py` (8),
+and `test_kaggle_notebook.py::test_notebook_writes_one_line_per_attempt_and_records_errors` (1,
+which picked up the real 4,149-attempt shared-progress corpus instead of the two fixture rows).
+No failure is in any train-path file changed here.
 
 ## Files changed
 
