@@ -1,0 +1,38 @@
+{
+ "algorithm": "sha256",
+ "files": {
+  "frontier_audit_train.jsonl": {
+   "rows": 33,
+   "sha256": "230ac19009bc7a5cf673275f449538c229367d8ce60a855668d8c5adbbcf7fd9",
+   "sha256_after": "230ac19009bc7a5cf673275f449538c229367d8ce60a855668d8c5adbbcf7fd9",
+   "sha256_before": "230ac19009bc7a5cf673275f449538c229367d8ce60a855668d8c5adbbcf7fd9"
+  },
+  "frontier_design_train.jsonl": {
+   "rows": 140,
+   "sha256": "85d900fde7a0a124cdf65f6c4a9edded4b1591d6f6d610c529d08d9844620a6b",
+   "sha256_after": "85d900fde7a0a124cdf65f6c4a9edded4b1591d6f6d610c529d08d9844620a6b",
+   "sha256_before": "85d900fde7a0a124cdf65f6c4a9edded4b1591d6f6d610c529d08d9844620a6b"
+  },
+  "frontier_ledger_train.jsonl": {
+   "rows": 160,
+   "sha256": "8913093883f811478121f7f0e59614ec601643ee6fe8ea0b4cd30342ea322f05",
+   "sha256_after": "8913093883f811478121f7f0e59614ec601643ee6fe8ea0b4cd30342ea322f05",
+   "sha256_before": "8913093883f811478121f7f0e59614ec601643ee6fe8ea0b4cd30342ea322f05"
+  },
+  "frontier_repair_train.jsonl": {
+   "rows": 335,
+   "sha256": "27fc5c2f75c2c498bff871a6f225a1b28571b0e7db6083ea52e57d39a10de9fc",
+   "sha256_after": "27fc5c2f75c2c498bff871a6f225a1b28571b0e7db6083ea52e57d39a10de9fc",
+   "sha256_before": "27fc5c2f75c2c498bff871a6f225a1b28571b0e7db6083ea52e57d39a10de9fc"
+  }
+ },
+ "generated_by": "scripts/backfill_frontier_provenance.py",
+ "model_histogram": {
+  "google-gemini-3-1-flash-lite-preview": 513,
+  "google-gemini-3-8-flash": 33,
+  "openai-gpt-5-4-nano-2026-03-17": 122
+ },
+ "output_dir": "data/frontier_prov",
+ "source_dir": "data/frontier",
+ "total_rows": 668
+}

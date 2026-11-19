@@ -1,0 +1,201 @@
+{
+ "char_length": {
+  "max": 8157,
+  "n": 960,
+  "p50": 5478,
+  "p95": 7679
+ },
+ "char_length_by_task": {
+  "audit": {
+   "max": 8157,
+   "n": 240,
+   "p50": 6595,
+   "p95": 7304
+  },
+  "design": {
+   "max": 8150,
+   "n": 240,
+   "p50": 7111,
+   "p95": 8081
+  },
+  "ledger": {
+   "max": 6460,
+   "n": 240,
+   "p50": 4748,
+   "p95": 5834
+  },
+  "repair": {
+   "max": 4933,
+   "n": 240,
+   "p50": 3900,
+   "p95": 4770
+  }
+ },
+ "config": {
+  "grpo_out": "data/grpo_tools",
+  "include_frontier": true,
+  "limit": 120,
+  "max_tokens": 8000,
+  "max_tool_result_chars": 4500,
+  "out": "data/sft_tools",
+  "prompt_variant": "harness_tools",
+  "split": "train",
+  "src": [
+   "data/processed"
+  ],
+  "tasks": [
+   "repair",
+   "design",
+   "audit",
+   "ledger"
+  ]
+ },
+ "contamination_guard": {
+  "heldout_files": [
+   "data\\heldout\\audit_test_id.jsonl",
+   "data\\heldout\\audit_test_ood_topology.jsonl",
+   "data\\heldout\\design_test_id.jsonl",
+   "data\\heldout\\design_test_ood_climate.jsonl",
+   "data\\heldout\\design_test_ood_load.jsonl",
+   "data\\heldout\\design_test_ood_scale.jsonl",
+   "data\\heldout\\ledger_test_id.jsonl",
+   "data\\heldout\\ledger_test_ood_fault.jsonl",
+   "data\\heldout\\ledger_test_ood_topology.jsonl",
+   "data\\heldout\\repair_test_id.jsonl",
+   "data\\heldout\\repair_test_ood_fault.jsonl",
+   "data\\heldout\\repair_test_ood_topology.jsonl"
+  ],
+  "leaks": [],
+  "overlap": 0,
+  "passed": true,
+  "rows_scanned": 960,
+  "signatures": 675
+ },
+ "counts": {
+  "audit": {
+   "deterministic_tools": 240,
+   "frontier_tools": 0
+  },
+  "design": {
+   "deterministic_tools": 240,
+   "frontier_tools": 0
+  },
+  "ledger": {
+   "deterministic_tools": 240,
+   "frontier_tools": 0
+  },
+  "repair": {
+   "deterministic_tools": 240,
+   "frontier_tools": 0
+  }
+ },
+ "dropped_invalid_or_no_tools": 0,
+ "dropped_large_tool_results": 0,
+ "dropped_over_8k": 0,
+ "frontier": {
+  "deduplicated": 0,
+  "kept": 0,
+  "over_budget": 0,
+  "rejected": 0,
+  "scanned": 1336,
+  "with_tool_turns": 0
+ },
+ "generated_at": "2026-11-19T11:35:15.890206+00:00",
+ "generator": "synth.tool_traces (deterministic) + accepted frontier tool traces",
+ "sources": [
+  {
+   "generator": "deterministic_tools",
+   "kept": 240,
+   "rows_read": 120,
+   "source_dir": "data/processed",
+   "task": "repair",
+   "variants": {
+    "direct": 120,
+    "recover": 120
+   }
+  },
+  {
+   "generator": "frontier_tools",
+   "kept": 0,
+   "rows_read": 0,
+   "source_dir": "data/frontier*",
+   "task": "repair",
+   "variants": {
+    "tool_cot": 0
+   }
+  },
+  {
+   "generator": "deterministic_tools",
+   "kept": 240,
+   "rows_read": 120,
+   "source_dir": "data/processed",
+   "task": "design",
+   "variants": {
+    "direct": 120,
+    "recover": 120
+   }
+  },
+  {
+   "generator": "frontier_tools",
+   "kept": 0,
+   "rows_read": 0,
+   "source_dir": "data/frontier*",
+   "task": "design",
+   "variants": {
+    "tool_cot": 0
+   }
+  },
+  {
+   "generator": "deterministic_tools",
+   "kept": 240,
+   "rows_read": 120,
+   "source_dir": "data/processed",
+   "task": "audit",
+   "variants": {
+    "direct": 120,
+    "recover": 120
+   }
+  },
+  {
+   "generator": "frontier_tools",
+   "kept": 0,
+   "rows_read": 0,
+   "source_dir": "data/frontier*",
+   "task": "audit",
+   "variants": {
+    "tool_cot": 0
+   }
+  },
+  {
+   "generator": "deterministic_tools",
+   "kept": 240,
+   "rows_read": 120,
+   "source_dir": "data/processed",
+   "task": "ledger",
+   "variants": {
+    "direct": 120,
+    "recover": 120
+   }
+  },
+  {
+   "generator": "frontier_tools",
+   "kept": 0,
+   "rows_read": 0,
+   "source_dir": "data/frontier*",
+   "task": "ledger",
+   "variants": {
+    "tool_cot": 0
+   }
+  }
+ ],
+ "token_length": {
+  "max": 5742,
+  "n": 960,
+  "p50": 3778,
+  "p95": 4620
+ },
+ "totals": {
+  "grpo": 960,
+  "sft": 960
+ }
+}
