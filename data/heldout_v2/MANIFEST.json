@@ -1,0 +1,663 @@
+{
+  "eval_set": "heldout_v2",
+  "role": "frozen test set for the paper (F1); data/heldout is the dev set",
+  "seed": 20261119,
+  "generated_utc": "2026-11-19T18:22:14+00:00",
+  "created_utc": "2026-11-19T18:26:51+00:00",
+  "python": "3.12.3",
+  "target_rows_per_cell": 85,
+  "workers": 12,
+  "max_evals": 60,
+  "tier_support": {
+    "easy": [
+      "repair",
+      "audit",
+      "ledger",
+      "design"
+    ],
+    "medium": [
+      "repair",
+      "audit",
+      "ledger",
+      "design"
+    ],
+    "hard": [
+      "repair",
+      "audit",
+      "ledger",
+      "design"
+    ],
+    "definition": "real rank tiers from thermo_agent/synth/tiers.py, equal thirds by row within EVERY task; hard = largest measured third (the 19-component big_cchp_steam2p_reheat_hp cycle for repair/audit where generated)",
+    "unsupported": "design and ledger generators have no big-cycle source, so their hard rows are the largest measured third — no rows were fabricated"
+  },
+  "cells_before_topup": {
+    "repair/test_id": 130,
+    "repair/test_ood_fault": 797,
+    "repair/test_ood_topology": 289,
+    "audit/test_id": 254,
+    "audit/test_ood_topology": 226,
+    "ledger/test_id": 150,
+    "ledger/test_ood_fault": 501,
+    "ledger/test_ood_topology": 303,
+    "design/test_id": 112,
+    "design/test_ood_climate": 316,
+    "design/test_ood_load": 202,
+    "design/test_ood_scale": 196
+  },
+  "cells_after_generation": {
+    "repair/test_id": 130,
+    "repair/test_ood_fault": 797,
+    "repair/test_ood_topology": 289,
+    "audit/test_id": 254,
+    "audit/test_ood_topology": 226,
+    "ledger/test_id": 150,
+    "ledger/test_ood_fault": 501,
+    "ledger/test_ood_topology": 303,
+    "design/test_id": 112,
+    "design/test_ood_climate": 316,
+    "design/test_ood_load": 202,
+    "design/test_ood_scale": 196
+  },
+  "cells": {
+    "audit/test_id": {
+      "rows": 254,
+      "tiers": {
+        "easy": 28,
+        "medium": 140,
+        "hard": 86
+      }
+    },
+    "audit/test_ood_topology": {
+      "rows": 226,
+      "tiers": {
+        "easy": 132,
+        "medium": 20,
+        "hard": 74
+      }
+    },
+    "design/test_id": {
+      "rows": 112,
+      "tiers": {
+        "easy": 19,
+        "medium": 71,
+        "hard": 22
+      }
+    },
+    "design/test_ood_climate": {
+      "rows": 316,
+      "tiers": {
+        "easy": 108,
+        "medium": 115,
+        "hard": 93
+      }
+    },
+    "design/test_ood_load": {
+      "rows": 202,
+      "tiers": {
+        "easy": 99,
+        "hard": 103
+      }
+    },
+    "design/test_ood_scale": {
+      "rows": 196,
+      "tiers": {
+        "easy": 49,
+        "medium": 89,
+        "hard": 58
+      }
+    },
+    "ledger/test_id": {
+      "rows": 150,
+      "tiers": {
+        "easy": 26,
+        "medium": 58,
+        "hard": 66
+      }
+    },
+    "ledger/test_ood_fault": {
+      "rows": 501,
+      "tiers": {
+        "easy": 84,
+        "medium": 247,
+        "hard": 170
+      }
+    },
+    "ledger/test_ood_topology": {
+      "rows": 303,
+      "tiers": {
+        "easy": 208,
+        "medium": 13,
+        "hard": 82
+      }
+    },
+    "repair/test_id": {
+      "rows": 130,
+      "tiers": {
+        "easy": 21,
+        "medium": 65,
+        "hard": 44
+      }
+    },
+    "repair/test_ood_fault": {
+      "rows": 797,
+      "tiers": {
+        "easy": 173,
+        "medium": 339,
+        "hard": 285
+      }
+    },
+    "repair/test_ood_topology": {
+      "rows": 289,
+      "tiers": {
+        "easy": 211,
+        "medium": 1,
+        "hard": 77
+      }
+    }
+  },
+  "meta": {
+    "audit": {
+      "task": "audit",
+      "seed": 20261119,
+      "splits": {
+        "test_id": 254,
+        "test_ood_topology": 226
+      }
+    },
+    "design": {
+      "task": "design",
+      "seed": 20261119,
+      "splits": {
+        "test_id": 112,
+        "test_ood_climate": 316,
+        "test_ood_load": 202,
+        "test_ood_scale": 196
+      }
+    },
+    "ledger": {
+      "task": "ledger",
+      "seed": 20261119,
+      "splits": {
+        "test_id": 150,
+        "test_ood_fault": 501,
+        "test_ood_topology": 303
+      }
+    },
+    "repair": {
+      "task": "repair",
+      "seed": 20261119,
+      "splits": {
+        "test_id": 130,
+        "test_ood_fault": 797,
+        "test_ood_topology": 289
+      }
+    }
+  },
+  "generator_runs": [
+    {
+      "source": "repair_easy",
+      "tier": "easy",
+      "task": "repair",
+      "command": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\.venv\\Scripts\\python.exe -m thermo_agent.synth.build_repair_data C:\\Users\\rezax\\AppData\\Local\\Temp\\heldout_v2_stage_v9hvq14b\\repair_easy_s20261119 -n 1300 --seed 20261119 --workers 12",
+      "seed": 20261119,
+      "n_requested": 1300,
+      "n_rows": 1275,
+      "per_file": {
+        "repair_test_id.jsonl": 81,
+        "repair_test_ood_fault.jsonl": 448,
+        "repair_test_ood_topology.jsonl": 90,
+        "repair_train.jsonl": 594,
+        "repair_val.jsonl": 62
+      },
+      "seconds": 29.09
+    },
+    {
+      "source": "repair_medium",
+      "tier": "medium",
+      "task": "repair",
+      "command": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\.venv\\Scripts\\python.exe -m thermo_agent.synth.architectures C:\\Users\\rezax\\AppData\\Local\\Temp\\heldout_v2_stage_v9hvq14b\\repair_medium_s20261120 -n 800 --seed 20261120 --workers 12",
+      "seed": 20261120,
+      "n_requested": 800,
+      "n_rows": 564,
+      "per_file": {
+        "repair_test_id.jsonl": 31,
+        "repair_test_ood_fault.jsonl": 209,
+        "repair_test_ood_topology.jsonl": 74,
+        "repair_train.jsonl": 229,
+        "repair_val.jsonl": 21
+      },
+      "seconds": 46.9
+    },
+    {
+      "source": "repair_medium_ood",
+      "tier": "medium",
+      "task": "repair",
+      "command": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\.venv\\Scripts\\python.exe -m thermo_agent.synth.architectures C:\\Users\\rezax\\AppData\\Local\\Temp\\heldout_v2_stage_v9hvq14b\\repair_medium_ood_s20261121 -n 180 --seed 20261121 --workers 12 --only engine-absorption-ext engine-absorption-ext-dh_exhaust engine-absorption-ext-orc engine-absorption-ext-orc-dh_exhaust engine-electric-ext engine-electric-ext-dh_exhaust engine-electric-ext-orc engine-electric-ext-orc-dh_exhaust cgam_steam_orc",
+      "seed": 20261121,
+      "n_requested": 180,
+      "n_rows": 125,
+      "per_file": {
+        "repair_test_ood_topology.jsonl": 125
+      },
+      "seconds": 24.41
+    },
+    {
+      "source": "repair_hard",
+      "tier": "hard",
+      "task": "repair",
+      "command": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\.venv\\Scripts\\python.exe -m thermo_agent.synth.architectures C:\\Users\\rezax\\AppData\\Local\\Temp\\heldout_v2_stage_v9hvq14b\\repair_hard_s20261122 -n 340 --seed 20261122 --workers 12 --only big_cchp_steam2p_reheat_hp",
+      "seed": 20261122,
+      "n_requested": 340,
+      "n_rows": 333,
+      "per_file": {
+        "repair_test_id.jsonl": 18,
+        "repair_test_ood_fault.jsonl": 140,
+        "repair_train.jsonl": 161,
+        "repair_val.jsonl": 14
+      },
+      "seconds": 27.85
+    },
+    {
+      "source": "audit_easy",
+      "tier": "easy",
+      "task": "audit",
+      "command": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\.venv\\Scripts\\python.exe -m thermo_agent.audit.data C:\\Users\\rezax\\AppData\\Local\\Temp\\heldout_v2_stage_v9hvq14b\\audit_easy_s20261123 -n 2200 --seed 20261123 --workers 12",
+      "seed": 20261123,
+      "n_requested": 2200,
+      "n_rows": 2118,
+      "per_file": {
+        "audit_test_id.jsonl": 186,
+        "audit_test_ood_topology.jsonl": 95,
+        "audit_train.jsonl": 1617,
+        "audit_val.jsonl": 220
+      },
+      "seconds": 166.52
+    },
+    {
+      "source": "audit_medium",
+      "tier": "medium",
+      "task": "audit",
+      "command": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\.venv\\Scripts\\python.exe -m thermo_agent.audit.data C:\\Users\\rezax\\AppData\\Local\\Temp\\heldout_v2_stage_v9hvq14b\\audit_medium_s20261124 -n 700 --seed 20261124 --workers 12 --architectures",
+      "seed": 20261124,
+      "n_requested": 700,
+      "n_rows": 473,
+      "per_file": {
+        "audit_test_id.jsonl": 45,
+        "audit_test_ood_topology.jsonl": 46,
+        "audit_train.jsonl": 331,
+        "audit_val.jsonl": 51
+      },
+      "seconds": 68.19
+    },
+    {
+      "source": "audit_medium_ood",
+      "tier": "medium",
+      "task": "audit",
+      "command": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\.venv\\Scripts\\python.exe -m thermo_agent.audit.data C:\\Users\\rezax\\AppData\\Local\\Temp\\heldout_v2_stage_v9hvq14b\\audit_medium_ood_s20261125 -n 180 --seed 20261125 --workers 12 --architectures --only engine-absorption-ext engine-absorption-ext-dh_exhaust engine-absorption-ext-orc engine-absorption-ext-orc-dh_exhaust engine-electric-ext engine-electric-ext-dh_exhaust engine-electric-ext-orc engine-electric-ext-orc-dh_exhaust cgam_steam_orc",
+      "seed": 20261125,
+      "n_requested": 180,
+      "n_rows": 85,
+      "per_file": {
+        "audit_test_ood_topology.jsonl": 85
+      },
+      "seconds": 19.5
+    },
+    {
+      "source": "audit_hard",
+      "tier": "hard",
+      "task": "audit",
+      "command": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\.venv\\Scripts\\python.exe -m thermo_agent.audit.data C:\\Users\\rezax\\AppData\\Local\\Temp\\heldout_v2_stage_v9hvq14b\\audit_hard_s20261126 -n 340 --seed 20261126 --workers 12 --architectures --only big_cchp_steam2p_reheat_hp",
+      "seed": 20261126,
+      "n_requested": 340,
+      "n_rows": 335,
+      "per_file": {
+        "audit_test_id.jsonl": 23,
+        "audit_train.jsonl": 279,
+        "audit_val.jsonl": 33
+      },
+      "seconds": 117.03
+    },
+    {
+      "source": "ledger_easy",
+      "tier": "easy",
+      "task": "ledger",
+      "command": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\.venv\\Scripts\\python.exe -m thermo_agent.ledger.data C:\\Users\\rezax\\AppData\\Local\\Temp\\heldout_v2_stage_v9hvq14b\\ledger_easy_s20261127 -n 1500 --seed 20261127 --workers 12",
+      "seed": 20261127,
+      "n_requested": 1500,
+      "n_rows": 1500,
+      "per_file": {
+        "ledger_test_id.jsonl": 108,
+        "ledger_test_ood_fault.jsonl": 374,
+        "ledger_test_ood_topology.jsonl": 107,
+        "ledger_train.jsonl": 801,
+        "ledger_val.jsonl": 110
+      },
+      "seconds": 45.32
+    },
+    {
+      "source": "ledger_medium",
+      "tier": "medium",
+      "task": "ledger",
+      "command": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\.venv\\Scripts\\python.exe -m thermo_agent.ledger.data C:\\Users\\rezax\\AppData\\Local\\Temp\\heldout_v2_stage_v9hvq14b\\ledger_medium_s20261128 -n 800 --seed 20261128 --workers 12 --architectures",
+      "seed": 20261128,
+      "n_requested": 800,
+      "n_rows": 559,
+      "per_file": {
+        "ledger_test_id.jsonl": 42,
+        "ledger_test_ood_fault.jsonl": 127,
+        "ledger_test_ood_topology.jsonl": 77,
+        "ledger_train.jsonl": 270,
+        "ledger_val.jsonl": 43
+      },
+      "seconds": 39.35
+    },
+    {
+      "source": "ledger_medium_ood",
+      "tier": "medium",
+      "task": "ledger",
+      "command": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\.venv\\Scripts\\python.exe -m thermo_agent.ledger.data C:\\Users\\rezax\\AppData\\Local\\Temp\\heldout_v2_stage_v9hvq14b\\ledger_medium_ood_s20261129 -n 180 --seed 20261129 --workers 12 --architectures --only engine-absorption-ext engine-absorption-ext-dh_exhaust engine-absorption-ext-orc engine-absorption-ext-orc-dh_exhaust engine-electric-ext engine-electric-ext-dh_exhaust engine-electric-ext-orc engine-electric-ext-orc-dh_exhaust cgam_steam_orc",
+      "seed": 20261129,
+      "n_requested": 180,
+      "n_rows": 119,
+      "per_file": {
+        "ledger_test_ood_topology.jsonl": 119
+      },
+      "seconds": 31.62
+    },
+    {
+      "source": "design_easy",
+      "tier": "easy",
+      "task": "design",
+      "command": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\.venv\\Scripts\\python.exe -m thermo_agent.design.data C:\\Users\\rezax\\AppData\\Local\\Temp\\heldout_v2_stage_v9hvq14b\\design_easy_s20261130 -n 1800 --seed 20261130 --workers 12 --max-evals 60",
+      "seed": 20261130,
+      "n_requested": 1800,
+      "n_rows": 1671,
+      "per_file": {
+        "design_test_id.jsonl": 112,
+        "design_test_ood_climate.jsonl": 316,
+        "design_test_ood_load.jsonl": 202,
+        "design_test_ood_scale.jsonl": 196,
+        "design_train.jsonl": 755,
+        "design_val.jsonl": 90
+      },
+      "seconds": 2836.15
+    }
+  ],
+  "scoring": {
+    "limit": 0,
+    "rule": "score every row of every test file; no truncation, no sampling"
+  },
+  "contamination": {
+    "passed": true,
+    "self_check_detects_planted_row": true,
+    "heldout_v2_rows_indexed": 3476,
+    "signatures": 10578,
+    "target_dirs": [
+      "data\\_pre_leakfix",
+      "data\\_pre_leakfix\\processed",
+      "data\\_pre_leakfix\\processed_arch",
+      "data\\a_slice",
+      "data\\frontier",
+      "data\\frontier_eval_export",
+      "data\\frontier_export",
+      "data\\frontier_prov",
+      "data\\frontier_tools",
+      "data\\frontier_tools_clean",
+      "data\\frontier_tools_clean_v2",
+      "data\\frontier_tools_pilot\\claude-haiku-5-5",
+      "data\\frontier_tools_pilot\\gpt-6-luna",
+      "data\\grpo",
+      "data\\grpo_all",
+      "data\\grpo_tools",
+      "data\\grpo_tools_h",
+      "data\\grpo_tools_v2",
+      "data\\grpo_tools_v2_h",
+      "data\\kaggle_datasets\\teacher_big_prompts",
+      "data\\kaggle_datasets\\thermo-agent-eval-replays",
+      "data\\memory",
+      "data\\processed",
+      "data\\processed_arch",
+      "data\\processed_big",
+      "data\\provenance",
+      "data\\sft",
+      "data\\sft_all",
+      "data\\sft_tools",
+      "data\\sft_tools_h",
+      "data\\sft_tools_v2",
+      "data\\sft_tools_v2_h",
+      "data\\teacher_runs",
+      "data\\teacher_runs\\kaggle_hosted\\budget_pilot\\claude-haiku-5-5\\thermo-teacher-budget-pilot-s00\\2\\claude-haiku-5-5\\7218726",
+      "data\\teacher_runs\\kaggle_hosted\\budget_pilot\\gpt-6-luna\\thermo-teacher-budget-pilot-s00\\2\\gpt-6-luna\\7218725",
+      "data\\teacher_runs\\kaggle_hosted\\budget_pilot\\proof\\claude-haiku-5-5\\thermo-teacher-budget-pilot-s00\\1\\claude-haiku-5-5\\7214497",
+      "data\\teacher_runs\\kaggle_hosted\\budget_pilot\\proof\\gpt-6-luna\\thermo-teacher-budget-pilot-s00\\1\\gpt-6-luna\\7214496",
+      "data\\teacher_runs\\kaggle_hosted\\gpt-6-luna\\thermo-teacher-tools-s00\\5\\gpt-6-luna\\7179244",
+      "data\\teacher_runs\\kaggle_hosted\\thermo-teacher-big-s00\\2\\claude-sonnet-5-5-default\\7086306",
+      "data\\teacher_runs\\kaggle_hosted\\thermo-teacher-big-s00\\2\\gemini-3.8-flash\\7085914",
+      "data\\teacher_runs\\kaggle_hosted\\thermo-teacher-tools-s00\\6\\gemini-3.8-flash\\7179338"
+    ],
+    "files_scanned": 298,
+    "lines_scanned": 454302,
+    "overlap": 0,
+    "leaks": [],
+    "seconds": 212.96
+  },
+  "rebuilt_from_existing": true,
+  "notes": [
+    "Test splits only: no train/val row is written into heldout_v2.",
+    "Rows were generated ONCE with seed 20261119; design rows were never regenerated.",
+    "The tier column was re-derived by ROW from thermo_agent/synth/tiers.py per task; all other row fields and row order are unchanged (verified before writing).",
+    "Every row carries its real tier and its gen_seed; ids embed the generator seed.",
+    "Hard = largest measured third per task; repair/audit include the 19-component big cycle."
+  ],
+  "files": {
+    "audit_test_id.jsonl": {
+      "sha256": "bb1cf8448a66ec9c82a7646006d97e98170e6b22e386935955538350aeff1435",
+      "bytes": 2067407
+    },
+    "audit_test_ood_topology.jsonl": {
+      "sha256": "e50440b2ff03069e4676fa5de76f31c424f8eb54bf293f386b85f4051abd7da7",
+      "bytes": 1572652
+    },
+    "design_test_id.jsonl": {
+      "sha256": "4265ec2365570e6ab9f0042d8515fdc093648bf4e41558a409cc11bea7662ad7",
+      "bytes": 354808
+    },
+    "design_test_ood_climate.jsonl": {
+      "sha256": "fe0bb095490ef2fdb22ad2f7c054d8f13f06ce418bd6def1b17096cc66fc452b",
+      "bytes": 1001358
+    },
+    "design_test_ood_load.jsonl": {
+      "sha256": "d7a0fb4fdffc31d052d0e7336dd8dff1493f8cbb07d7a348db09e3ba20b21881",
+      "bytes": 631955
+    },
+    "design_test_ood_scale.jsonl": {
+      "sha256": "4080eddf1b96c882fafffc8a28b13ab9d1dd2aa6bb29c6bac95b6f55e158b5f0",
+      "bytes": 622873
+    },
+    "ledger_test_id.jsonl": {
+      "sha256": "7f77d75d2be1e4d1bde54f5d388a2a7956d00ef6dac0f3201cc38c69fbe17606",
+      "bytes": 1643508
+    },
+    "ledger_test_ood_fault.jsonl": {
+      "sha256": "e824b249941675f6daee31b1f01dfd28585aff9ae1475ae069a75482d6eefe60",
+      "bytes": 5376474
+    },
+    "ledger_test_ood_topology.jsonl": {
+      "sha256": "418a978e9133985556fcb87ee99fedc96d99058f780c0bbf3702d019ec449333",
+      "bytes": 2912603
+    },
+    "repair_test_id.jsonl": {
+      "sha256": "8a28b2b6f9dc11d21ce0950181c3ce54eb3d5a52352a3f1471fe86dc813e1b2d",
+      "bytes": 1368780
+    },
+    "repair_test_ood_fault.jsonl": {
+      "sha256": "c69ee4e84efb1fee6a98f66dd5768d1ab93e9975a45cc29175d7ccec53938700",
+      "bytes": 8700332
+    },
+    "repair_test_ood_topology.jsonl": {
+      "sha256": "14e2bcefc5f5d0f3cd8d6039f7e718e5d05a56bcca6b0265bcafe1de01a0fd96",
+      "bytes": 2555512
+    }
+  },
+  "set_hash": "3cc51773128724b1dbb2e21a70a3b4d24da86f3231adaed312b797677211054a",
+  "set_hash_rule": "sha256 over sorted(file_name_bytes + file_bytes) for every file in data/heldout_v2 except MANIFEST.json",
+  "merged_cells": [],
+  "generation_seconds": 3637.5,
+  "generation_command": [
+    "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\.venv\\Scripts\\python.exe",
+    "scripts/build_heldout_v2.py",
+    "--seed",
+    "20261119",
+    "--out",
+    "data/heldout_v2",
+    "--workers",
+    "12",
+    "--max-evals",
+    "60",
+    "--target",
+    "85"
+  ],
+  "generation_command_str": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\.venv\\Scripts\\python.exe scripts/build_heldout_v2.py --seed 20261119 --out data/heldout_v2 --workers 12 --max-evals 60 --target 85",
+  "retier_command": [
+    "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\.venv\\Scripts\\python.exe",
+    "scripts/build_heldout_v2.py",
+    "--retier-existing"
+  ],
+  "retier_command_str": "C:\\Users\\rezax\\Home\\Code\\thermo_agent\\Repo\\.venv\\Scripts\\python.exe scripts/build_heldout_v2.py --retier-existing",
+  "tiers": {
+    "repair": {
+      "n": 1216,
+      "measure": "number of components in plant_broken",
+      "counts": {
+        "easy": 405,
+        "medium": 405,
+        "hard": 406
+      },
+      "ranges": {
+        "easy": {
+          "n": 405,
+          "min": 3,
+          "max": 5
+        },
+        "medium": {
+          "n": 405,
+          "min": 5,
+          "max": 7
+        },
+        "hard": {
+          "n": 406,
+          "min": 7,
+          "max": 19
+        },
+        "unscored": 0
+      }
+    },
+    "audit": {
+      "n": 480,
+      "measure": "number of components in plant",
+      "counts": {
+        "easy": 160,
+        "medium": 160,
+        "hard": 160
+      },
+      "ranges": {
+        "easy": {
+          "n": 160,
+          "min": 3,
+          "max": 5
+        },
+        "medium": {
+          "n": 160,
+          "min": 5,
+          "max": 8
+        },
+        "hard": {
+          "n": 160,
+          "min": 8,
+          "max": 19
+        },
+        "unscored": 0
+      }
+    },
+    "ledger": {
+      "n": 954,
+      "measure": "number of components in ledger.data.topo",
+      "counts": {
+        "easy": 318,
+        "medium": 318,
+        "hard": 318
+      },
+      "ranges": {
+        "easy": {
+          "n": 318,
+          "min": 3,
+          "max": 5
+        },
+        "medium": {
+          "n": 318,
+          "min": 5,
+          "max": 7
+        },
+        "hard": {
+          "n": 318,
+          "min": 7,
+          "max": 13
+        },
+        "unscored": 0
+      }
+    },
+    "design": {
+      "n": 826,
+      "measure": "number of components of the reference design built from site + ref_spec",
+      "counts": {
+        "easy": 275,
+        "medium": 275,
+        "hard": 276
+      },
+      "ranges": {
+        "easy": {
+          "n": 275,
+          "min": 4,
+          "max": 10
+        },
+        "medium": {
+          "n": 275,
+          "min": 10,
+          "max": 11
+        },
+        "hard": {
+          "n": 276,
+          "min": 11,
+          "max": 13
+        },
+        "unscored": 0
+      }
+    }
+  },
+  "tier_rule": "per task, by ROW: assign_tiers ranks by the documented size measure, breaks ties by sha256(id), cuts floor(n/3)/floor(n/3)/remainder (remainder to hard); never random, never an assistant-chosen threshold",
+  "retier": {
+    "utc": "2026-11-19T19:38:29+00:00",
+    "by": "row",
+    "function": "thermo_agent.synth.tiers.assign_tiers",
+    "rule": "per task, by ROW: assign_tiers ranks by the documented size measure, breaks ties by sha256(id), cuts floor(n/3)/floor(n/3)/remainder (remainder to hard); never random, never an assistant-chosen threshold",
+    "only_column_rewritten": "tier",
+    "content_preserved": true,
+    "note": "generator source labels in generator_runs are provenance only; the final tier column is the measured per-task rank tier"
+  },
+  "retiered_from_existing": true,
+  "jsonl_sha256": {
+    "audit_test_id.jsonl": "bb1cf8448a66ec9c82a7646006d97e98170e6b22e386935955538350aeff1435",
+    "audit_test_ood_topology.jsonl": "e50440b2ff03069e4676fa5de76f31c424f8eb54bf293f386b85f4051abd7da7",
+    "design_test_id.jsonl": "4265ec2365570e6ab9f0042d8515fdc093648bf4e41558a409cc11bea7662ad7",
+    "design_test_ood_climate.jsonl": "fe0bb095490ef2fdb22ad2f7c054d8f13f06ce418bd6def1b17096cc66fc452b",
+    "design_test_ood_load.jsonl": "d7a0fb4fdffc31d052d0e7336dd8dff1493f8cbb07d7a348db09e3ba20b21881",
+    "design_test_ood_scale.jsonl": "4080eddf1b96c882fafffc8a28b13ab9d1dd2aa6bb29c6bac95b6f55e158b5f0",
+    "ledger_test_id.jsonl": "7f77d75d2be1e4d1bde54f5d388a2a7956d00ef6dac0f3201cc38c69fbe17606",
+    "ledger_test_ood_fault.jsonl": "e824b249941675f6daee31b1f01dfd28585aff9ae1475ae069a75482d6eefe60",
+    "ledger_test_ood_topology.jsonl": "418a978e9133985556fcb87ee99fedc96d99058f780c0bbf3702d019ec449333",
+    "repair_test_id.jsonl": "8a28b2b6f9dc11d21ce0950181c3ce54eb3d5a52352a3f1471fe86dc813e1b2d",
+    "repair_test_ood_fault.jsonl": "c69ee4e84efb1fee6a98f66dd5768d1ab93e9975a45cc29175d7ccec53938700",
+    "repair_test_ood_topology.jsonl": "14e2bcefc5f5d0f3cd8d6039f7e718e5d05a56bcca6b0265bcafe1de01a0fd96"
+  },
+  "retier_seconds": 412.39
+}
