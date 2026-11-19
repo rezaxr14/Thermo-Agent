@@ -143,7 +143,7 @@ def test_observation_block_no_bookkeeping(row: dict):
 
     # required content
     assert "MULTI-TURN TOOL ENVIRONMENT" in block
-    assert "4 assistant turns" in block and "6 tool calls" in block
+    assert "6 assistant turns" in block and "8 tool calls" in block
     assert "inventory" in block.lower()
     for name in TOOL_NAMES:
         assert name in block

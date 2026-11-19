@@ -33,7 +33,7 @@ V1 mass balance, V2 energy balance, V3 exergy: closure and no negative exergy de
 
 ## Tools, limits and final answer
 Inventory the available skills and the five physics tools FIRST, then read the plant/cycle against the common failure causes above (unit mismatch MW/W and kJ/J, fraction vs percent, K vs C; sign flip; swapped ports; wrong fluid class; efficiency > 1; out-of-range parameter; unconverged tear) before proposing a candidate.
-- Limits: at most 4 assistant turns and 6 tool calls per episode. Call `inspect_plant` first (it needs no answer), then check candidates, read the numbers, revise and re-check. When residuals are ~0 and all checks pass, STOP calling tools and return the final answer.
+- Limits: at most 6 assistant turns and 8 tool calls per episode. Call `inspect_plant` first (it needs no answer), then check candidates, read the numbers, revise and re-check. When residuals are ~0 and all checks pass, STOP calling tools and return the final answer.
 - Tools (real solver results as JSON with `ok` and numbers; physics only, there is NO answer-oracle tool):
   - `inspect_plant(candidate="")` -> solver status, failed checks and key residuals for the plant/ledger AS GIVEN.
   - `first_law_check(candidate)` -> per-line/per-component mass (kg/s) and energy (W) residuals, heat/power/fuel balance, convergence, failed checks.

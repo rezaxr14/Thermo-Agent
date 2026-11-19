@@ -130,12 +130,12 @@ def test_max_turns_and_tool_calls_unchanged_for_both_rows():
     for row in (_plain_row(), _harness_row()):
         wrapper = grpo.GrpoThermoEnv()
         wrapper.reset(**row)
-        assert wrapper.max_turns == grpo.DEFAULT_MAX_TOOL_CALLING_ITERATIONS == 4
-        assert wrapper.max_tool_calls == grpo.MAX_TOOL_CALLS == 6
+        assert wrapper.max_turns == grpo.DEFAULT_MAX_TOOL_CALLING_ITERATIONS == 6
+        assert wrapper.max_tool_calls == grpo.MAX_TOOL_CALLS == 8
         assert wrapper._env.max_turns == wrapper.max_turns
         assert wrapper._env.max_tool_calls == wrapper.max_tool_calls
-        assert "4 assistant turns" in wrapper._env.observation_block()
-        assert "6 tool calls" in wrapper._env.observation_block()
+        assert "6 assistant turns" in wrapper._env.observation_block()
+        assert "8 tool calls" in wrapper._env.observation_block()
 
 
 def test_custom_limits_honoured_for_both_rows():

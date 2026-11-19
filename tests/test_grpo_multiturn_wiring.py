@@ -93,16 +93,15 @@ def test_raw_thermoenv_docstrings_are_not_schema_ready_in_transformers_5_23():
 def test_k_sweep_batch_divisibility_and_exact_error_message():
     grad_accum = GrpoSettings().grad_accum
     for k in (4, 8, 16):
-        # A single prompt per device cannot hold a group of k, even with the configured accum.
-        assert not ddp.grpo_batches_divisible(1, grad_accum, 1, k)
-        assert not ddp.grpo_batches_divisible(1, grad_accum, 2, k)
+        # One sequence per step on one rank cannot hold a group of k.
+        assert not ddp.grpo_batches_divisible(1, 1, 1, k)
         with pytest.raises(ValueError) as exc:
-            ddp.assert_grpo_batches(1, grad_accum, 1, k)
-        assert str(exc.value) == ddp.grpo_batch_error(1, grad_accum, 1, k)
+            ddp.assert_grpo_batches(1, 1, 1, k)
+        assert str(exc.value) == ddp.grpo_batch_error(1, 1, 1, k)
         assert "per_device_train_batch_size=1" in str(exc.value)
         assert "divisible" in str(exc.value) and f"k={k}" in str(exc.value)
-        # The documented fix is a per-device batch that is itself a multiple of k.
-        ddp.assert_grpo_batches(k, grad_accum, 2, k)
+        # The decided fix: per-device 2, accum = k on two ranks (4 prompts per optimizer step).
+        ddp.assert_grpo_batches(2, k, 2, k)
 
 
 def test_recipe_is_fp16_lora_ddp_no_qlora_fsdp_zeRo():

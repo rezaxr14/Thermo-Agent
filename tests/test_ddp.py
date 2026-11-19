@@ -48,11 +48,12 @@ def test_effective_batch_multiplies_ranks():
             raise AssertionError(f"{bad} should be refused")
 
 
-def test_grpo_groups_divide_both_the_per_device_and_effective_batch():
-    # TRL checks the per-device prompt batch too: 2 prompts cannot hold groups of 8 even if 2x8x2=32 can.
+def test_grpo_groups_divide_the_generation_batch():
+    # TRL 1.18.1: generation_batch_size = per_device x world x accum must be divisible by num_generations.
     assert ddp.grpo_batches_divisible(8, 8, 2, 8)
-    assert not ddp.grpo_batches_divisible(2, 8, 2, 8)
-    assert not ddp.grpo_batches_divisible(1, 8, 1, 8)
+    assert ddp.grpo_batches_divisible(2, 8, 2, 8)         # 2x8x2 = 32
+    assert ddp.grpo_batches_divisible(2, 16, 2, 16)       # 2x16x2 = 64
+    assert not ddp.grpo_batches_divisible(1, 4, 1, 8)     # 4 sequences cannot hold a group of 8
     assert not ddp.grpo_batches_divisible(1, 1, 2, 8)
     assert not ddp.grpo_batches_divisible(2, 8, 2, 3)
     try:
@@ -64,10 +65,12 @@ def test_grpo_groups_divide_both_the_per_device_and_effective_batch():
 
 
 def test_dual_t4_defaults_are_consistent():
-    """Two ranks, the shipped batch sizes: SFT 2x8x2, GRPO 4x2x2 divisible by G=4."""
+    """Two ranks, the shipped batch sizes: SFT 2x8x2; GRPO keeps 4 prompts per step, so accum = k and 2 x k x 2 = 4k."""
     s, g = SftSettings(), GrpoSettings()
     assert ddp.effective_batch(s.per_device_batch, s.grad_accum, 2) == 32
-    assert g.per_device_batch % g.num_generations == 0          # TRL also checks the per-device batch
-    assert ddp.effective_batch(g.per_device_batch, g.grad_accum, 2) % g.num_generations == 0
-    assert ddp.grpo_batches_divisible(g.per_device_batch, g.grad_accum, 2, g.num_generations)
+    # TRL 1.18.1 only requires generation_batch_size (= per_device x world x accum) % num_generations == 0
+    for k in (4, 8, 16):
+        accum = max(1, (g.prompts_per_step * k) // (g.per_device_batch * 2))
+        assert ddp.effective_batch(g.per_device_batch, accum, 2) == g.prompts_per_step * k
+        assert ddp.grpo_batches_divisible(g.per_device_batch, accum, 2, k)
     assert s.max_grad_norm == 1.0 and g.max_grad_norm == 1.0

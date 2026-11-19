@@ -38,9 +38,9 @@ try:  # keep the turn limit identical to the shared Gate 2 agent environment
 except Exception:  # langgraph is not needed for prompt-text (ablation) evals
     _DEFAULT_TOOL_TURNS = 4
 _DEFAULT_TEXT_TURNS = 3
-_DEFAULT_TOOL_CALLS = 6
-_TOOL_MAX_NEW_TOKENS = 2048
-_TEXT_MAX_NEW_TOKENS = 400
+_DEFAULT_TOOL_CALLS = 8      # I6
+_TOOL_MAX_NEW_TOKENS = 4096   # I7, per turn
+_TEXT_MAX_NEW_TOKENS = 4096   # I7: thinking is on, 400 truncates it
 _REVISE_NUDGE = ("Tool results are above inside <tool_result> blocks. Read the numbers, revise, "
                 "and either call another tool or STOP and emit ONLY the final answer XML tags.")
 _FINAL_NUDGE = ("Your last message was not a final answer. Emit ONLY the task's final XML tags "

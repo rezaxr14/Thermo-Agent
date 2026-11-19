@@ -177,11 +177,11 @@ TASK = os.environ.get("TASK", "ledger")
 # GRPO group size k (rollouts per prompt). Each k gets its OWN output dir so checkpoints never
 # overwrite: k=4 -> runs/grpo_{TASK}_k4, k=8 -> ..._k8, k=16 -> ..._k16. SFT alone is runs/sft.
 GRPO_K = int(os.environ.get("GRPO_K", "4"))
-# ddp.assert_grpo_batches requires per_device_batch % k == 0 (and the effective batch too).
-# Default to the smallest value that also keeps the >=4 throughput floor, so k=4/8/16 all start
-# without extra env vars; GRPO_BATCH/GRPO_ACCUM remain overridable for a custom topology.
-GRPO_BATCH = int(os.environ.get("GRPO_BATCH", str(max(4, GRPO_K))))
-GRPO_ACCUM = int(os.environ.get("GRPO_ACCUM", "2"))
+# Decided (docs/DECISIONS_2026-11-19.md C4/C4a): per-device batch 2 and grad-accum = k on two ranks, so every k sees
+# 4 prompts per optimizer step (2 x k x 2 = 4k sequences, divisible by k as TRL 1.18.1 requires).
+# GRPO_BATCH/GRPO_ACCUM remain overridable for a custom topology.
+GRPO_BATCH = int(os.environ.get("GRPO_BATCH", "2"))
+GRPO_ACCUM = int(os.environ.get("GRPO_ACCUM", str(GRPO_K)))
 GRPO_STAGE = f"grpo_{TASK}_k{GRPO_K}"
 print(f"[grpo] k={GRPO_K} per-device-batch={GRPO_BATCH} grad-accum={GRPO_ACCUM}", flush=True)
 status(stage=GRPO_STAGE, state="running", k=GRPO_K, batch=GRPO_BATCH, accum=GRPO_ACCUM)

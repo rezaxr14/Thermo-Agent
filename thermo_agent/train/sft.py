@@ -209,6 +209,8 @@ def main():
         init["quantization_config"] = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4", bnb_4bit_compute_dtype=getattr(torch, a.dtype))
     cfg = SFTConfig(**supported(SFTConfig, output_dir=a.out, learning_rate=s.lr, num_train_epochs=s.epochs, max_steps=a.max_steps, max_length=s.max_length,
                     per_device_train_batch_size=s.per_device_batch, gradient_accumulation_steps=s.grad_accum, max_grad_norm=s.max_grad_norm,
+                    lr_scheduler_type=s.lr_scheduler, warmup_ratio=s.warmup_ratio, weight_decay=s.weight_decay,
+                    load_best_model_at_end=bool(val), metric_for_best_model="eval_loss", greater_is_better=False,
                     gradient_checkpointing=True, gradient_checkpointing_kwargs={"use_reentrant": False}, dataloader_num_workers=a.num_workers,
                     logging_steps=5, eval_strategy="steps" if val else "no", eval_steps=s.eval_steps,
                     save_strategy="steps", save_steps=s.save_steps, save_total_limit=2,
@@ -235,6 +237,9 @@ def main():
     if resume:
         print(f"resuming SFT from {resume}", flush=True)
     hooks = [callback] if callback else []
+    if val and s.early_stopping_patience > 0:
+        from transformers import EarlyStoppingCallback
+        hooks.append(EarlyStoppingCallback(early_stopping_patience=s.early_stopping_patience))
     build_sft_trainer(model=base_model, args=cfg, train_dataset=train, eval_dataset=val, peft_config=lora,
                       processing_class=tok, callbacks=hooks,
                       loss_token_chunk=a.loss_token_chunk, loss_vocab_chunk=a.loss_vocab_chunk

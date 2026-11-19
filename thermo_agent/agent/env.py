@@ -67,7 +67,7 @@ class ThermoEnv:
         reward: The verifier reward from :meth:`step`, or ``None`` before it.
     """
 
-    def __init__(self, row: dict, task: str, max_turns: int = 4, max_tool_calls: int = 6) -> None:
+    def __init__(self, row: dict, task: str, max_turns: int = 6, max_tool_calls: int = 8) -> None:
         self.max_turns = max_turns
         self.max_tool_calls = max_tool_calls
         self._tools_by_name: dict[str, Callable[..., str]] = {}

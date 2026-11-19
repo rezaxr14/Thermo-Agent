@@ -164,7 +164,7 @@ def test_no_tool_access_is_single_turn_and_shows_no_tool_text(repair_row, tmp_pa
         assert token not in blob
     assert rep["repair"]["test_id"]["success"] == 1.0
     assert rep["harness_config"]["tool_access"] == "none"
-    assert rep["harness_config"]["max_new_tokens"] == 400
+    assert rep["harness_config"]["max_new_tokens"] == 4096
     assert rep["harness_config"]["max_turns"] == 3
 
 
@@ -246,14 +246,14 @@ def test_report_harness_config_matches_cli_values(repair_row, tmp_path, monkeypa
 def test_report_harness_config_tools_defaults(repair_row, tmp_path, monkeypatch, capsys):
     rep, made = _run_cli(monkeypatch, tmp_path, repair_row, ["--tool-access", "tools"])
     capsys.readouterr()
-    assert rep["harness_config"] == {"mode": "none", "tool_access": "tools", "max_turns": 4,
-                                     "max_tool_calls": 6, "max_new_tokens": 2048}
-    assert made[0].max_new_tokens == 2048
+    assert rep["harness_config"] == {"mode": "none", "tool_access": "tools", "max_turns": 6,
+                                     "max_tool_calls": 8, "max_new_tokens": 4096}
+    assert made[0].max_new_tokens == 4096
 
 
 def test_report_harness_config_prompt_text_defaults(repair_row, tmp_path, monkeypatch, capsys):
     rep, made = _run_cli(monkeypatch, tmp_path, repair_row, [])
     capsys.readouterr()
     assert rep["harness_config"] == {"mode": "none", "tool_access": "none", "max_turns": 3,
-                                     "max_tool_calls": 6, "max_new_tokens": 400}
-    assert made[0].max_new_tokens == 400
+                                     "max_tool_calls": 8, "max_new_tokens": 4096}
+    assert made[0].max_new_tokens == 4096

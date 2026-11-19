@@ -26,8 +26,8 @@ def test_reward_weights_in_text_match_code():
 
 def test_training_settings_in_text_match_code():
     s, g = C.SftSettings(), C.GrpoSettings()
-    assert f"r = {s.lora.r}, alpha = {s.lora.alpha}" in T and "learning rate 2e-4" in T and f"{s.epochs} epochs" in T
-    assert f"r = {g.lora.r}, alpha = {g.lora.alpha}" in T and "learning rate 5e-5" in T and f"group size {g.num_generations}" in T and f"{g.max_completion_length} completion tokens" in T
+    assert f"r = {s.lora.r}, alpha = {s.lora.alpha}" in T and "learning rate 1e-4" in T and f"{s.epochs} epochs" in T
+    assert f"r = {g.lora.r}, alpha = {g.lora.alpha}" in T and "learning rate 2e-5" in T and f"group size {g.num_generations}" in T and f"{g.max_completion_length} completion tokens" in T
 
 def test_component_constants_in_text_match_code():
     assert K.PARAMS["absorption_chiller"]["eps"][1] == 0.27 and K.PARAMS["absorption_chiller"]["COP_max"][1] == 0.8 and "eps = 0.27, COP_max = 0.8" in T

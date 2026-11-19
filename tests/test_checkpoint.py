@@ -33,9 +33,9 @@ def test_only_directories_named_like_checkpoints_count(tmp_path):
 
 
 def test_sft_saves_often_enough_for_a_twelve_hour_session():
-    """The checkpoint interval must be short in wall-clock terms: 200 optimizer steps at ~30 s is under two hours."""
+    """The checkpoint interval must be short in wall-clock terms: 50 optimizer steps is about an hour (est.)."""
     s = C.SftSettings()
-    assert s.epochs == 1, "one epoch over the 20-variant corpus already exceeds the quota"
+    assert s.epochs == 3 and s.early_stopping_patience == 3, "A1/A10: 3 epochs upper bound, early stopping decides"
     assert 0 < s.save_steps <= 500, "a 12 h session must contain several checkpoints, not one epoch boundary"
     assert s.eval_steps == s.save_steps
 

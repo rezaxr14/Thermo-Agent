@@ -71,9 +71,8 @@ def grpo_batches_divisible(per_device: int, grad_accum: int, world_size: int, nu
     """
     if num_generations < 1 or per_device < 1 or grad_accum < 1 or world_size < 1:
         return False
-    # TRL checks the per-device prompt batch as well as the effective batch; both must hold whole groups.
-    if per_device % num_generations:
-        return False
+    # TRL 1.18.1 (GRPOConfig.__post_init__): generation_batch_size = per_device x world x accum must be divisible by
+    # num_generations. The per-device batch itself need not be a multiple of k (that was the pre-0.18 rule).
     return effective_batch(per_device, grad_accum, world_size) % num_generations == 0
 
 
@@ -81,11 +80,9 @@ def grpo_batch_error(per_device: int, grad_accum: int, world_size: int, num_gene
     """Exact, actionable message for a batch that cannot hold whole GRPO groups."""
     eff = effective_batch(per_device, grad_accum, world_size)
     return (
-        f"GRPO batch is not group-aligned: per_device_train_batch_size={per_device} must be a multiple "
-        f"of num_generations (k={num_generations}), and the effective batch "
-        f"{per_device}x{grad_accum}x{world_size}={eff} must be divisible by k. For k={num_generations} "
-        f"use --per-device-batch {max(num_generations, 4)} --grad-accum {grad_accum} "
-        "(dual-T4 defaults: --per-device-batch 4 --grad-accum 2)."
+        f"GRPO batch is not group-aligned: per_device_train_batch_size={per_device} x grad_accum={grad_accum} x "
+        f"world={world_size} = {eff} must be divisible by num_generations (k={num_generations}). For k={num_generations} "
+        f"use --per-device-batch 2 --grad-accum {num_generations} on two ranks (4 prompts per optimizer step)."
     )
 
 

@@ -49,9 +49,9 @@ from ..ledger import rewards as ledger_rewards
 
 # Multi-turn defaults. max_completion_length bounds the WHOLE rollout (all turns plus tool results),
 # so the old single-turn 320 is far too small; it is CLI-configurable.
-DEFAULT_MAX_TOOL_CALLING_ITERATIONS = 4
-DEFAULT_MAX_COMPLETION_LENGTH = 2048
-MAX_TOOL_CALLS = 6
+DEFAULT_MAX_TOOL_CALLING_ITERATIONS = 6   # D4
+DEFAULT_MAX_COMPLETION_LENGTH = 4096   # C5
+MAX_TOOL_CALLS = 8   # I6: identical to eval
 
 TOOL_NAMES = ("inspect_plant", "first_law_check", "second_law_check", "validity_check", "solve_plant")
 
@@ -319,10 +319,12 @@ def main():
     ap.add_argument("--rollout-log", default=None, help="JSONL path for scored rollouts (audit and paper figures)")
     a = ap.parse_args(); g = GrpoSettings()
     if a.per_device_batch: g.per_device_batch = a.per_device_batch
-    if a.grad_accum: g.grad_accum = a.grad_accum
     if a.grad_norm is not None: g.max_grad_norm = a.grad_norm
     if a.save_steps: g.save_steps = a.save_steps
     if a.num_generations is not None: g.num_generations = a.num_generations
+    # C4a: keep prompts per optimizer step constant across k, so batch sequences = prompts_per_step * k.
+    _world = ddp.world_size_from_env()
+    g.grad_accum = a.grad_accum or max(1, (g.prompts_per_step * g.num_generations) // (g.per_device_batch * _world))
     tool_iterations = (a.max_tool_calling_iterations if a.max_tool_calling_iterations is not None
                        else DEFAULT_MAX_TOOL_CALLING_ITERATIONS)
     completion_length = (a.max_completion_length if a.max_completion_length is not None
@@ -357,7 +359,9 @@ def main():
                       target_modules=g.lora.target_modules, task_type="CAUSAL_LM")
     mt = multiturn_config(tool_iterations, completion_length)
     cfg = GRPOConfig(**supported(GRPOConfig, output_dir=a.out, learning_rate=g.lr, num_generations=g.num_generations,
-                     temperature=g.temperature,
+                     temperature=g.temperature, top_p=g.top_p, top_k=g.top_k, min_p=g.min_p,
+                     repetition_penalty=g.repetition_penalty,
+                     lr_scheduler_type=g.lr_scheduler, warmup_steps=g.warmup_steps,
                      per_device_train_batch_size=g.per_device_batch, gradient_accumulation_steps=g.grad_accum,
                      max_steps=a.max_steps or g.max_steps, loss_type=g.loss_type, beta=g.beta, scale_rewards=g.scale_rewards,
                      reward_weights=TASKS[a.task][1],

@@ -1,5 +1,7 @@
 # Thermo-Agent: implementation plan
 
+> **Status 2026-11-19:** parts of this long-form plan predate the agent's work (tool-result masking, multi-turn GRPO wiring and `sft_tools` already exist). `docs/IMPLEMENTATION_PLAN.md` is the operational plan and `docs/DECISIONS_2026-11-19.md` holds every training, decoding and corpus value. Where they differ, those two win.
+
 Written after reading the repo itself: `docs/STATUS.md`, `RUNBOOK.md`, `KAGGLE_CLI.md`, `DUAL_T4.md`, `API_USAGE_AND_PROGRESS.md`, `TEACHER_MODEL_CHOICES.md`, `TRAINING_DATA_PROTOCOL.md`, `dataset_cards.md`, `kaggle/` (kernels, lock, notebooks), `scripts/`, and `thermo_agent/` (teacher, agent, eval, train, synth). It also uses the source of the pinned TRL 1.18.1. Section 8 lists what could not be verified from the repo. Where a doc and the code disagree, the code was treated as the truth and the disagreement is listed in Gate 0.
 
 ## 1. Standing rules for the agent

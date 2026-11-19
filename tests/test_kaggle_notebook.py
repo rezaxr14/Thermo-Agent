@@ -369,8 +369,8 @@ def test_grpo_batch_math_for_k_4_8_16(tmp_path, monkeypatch):
         flag = lambda name: argv[argv.index(name) + 1]  # noqa: E731
         batch, accum = int(flag("--per-device-batch")), int(flag("--grad-accum"))
         assert flag("--num-generations") == str(k)
-        assert batch % k == 0, f"k={k}: per-device batch {batch} is not divisible by k"
-        assert accum == 2, "default grad-accum must stay 2"
+        assert batch == 2, f"k={k}: decided per-device batch is 2"
+        assert accum == k, "decided: grad-accum = k, so every k sees 4 prompts per optimizer step"
         assert grpo_batches_divisible(batch, accum, 2, k), "effective batch must be a whole group too"
 
     # Explicit env overrides win over the k-derived default.

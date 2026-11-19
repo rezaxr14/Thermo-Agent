@@ -32,7 +32,7 @@ from .toolkit import make_tools, tool_names
 
 # Single source of truth for the round limit. Imported by both drivers and used in the
 # system-prompt sentence, so the number the model reads always equals the number enforced.
-DEFAULT_MAX_ROUNDS = 4
+DEFAULT_MAX_ROUNDS = 6   # D4
 
 
 # --------------------------------------------------------------------------- #
