@@ -41,6 +41,17 @@ shuffle, so the chosen ids are reproducible from ``--seed``.
 Rows are passed through unchanged (no re-rendering, no truncation, no field
 drops).  Ids are deduplicated within each source; an id shared between sources
 in the same output stream is a hard error.
+
+Plain A-slice (decision E2)
+---------------------------
+``--a-slice <dir>`` adds the plain-prompt single-turn rows built by
+``scripts/build_a_slice.py`` to the SFT mix (``data/sft_mix_h`` = harness tool
+rows + plain A rows).  A rows keep ``prompt_variant="plain"`` / ``harness="none"``
+and are never re-prompted by ``--harness-prompt``, which applies only to
+frontier tool rows.  ``--a-slice-ratio R`` (when R > 0) caps A rows per task to
+``round(R * deterministic_rows_for_that_task)``; R = 0 (the default) takes every
+row in the slice dir, which is already task-balanced at build time.  Omitting
+``--a-slice`` leaves the deterministic/frontier mix byte-for-byte unchanged.
 """
 from __future__ import annotations
 
@@ -63,8 +74,9 @@ HARNESS_MARKER = "MULTI-TURN TOOL ENVIRONMENT"
 
 # Never write into any of these (additive-only contract; see build_tool_corpus.py).
 PROTECTED = (
-    "data/sft_tools", "data/grpo_tools", "data/sft_all", "data/grpo_all",
-    "data/sft", "data/grpo", "data/frontier", "data/frontier_prov",
+    "data/sft_tools", "data/grpo_tools", "data/sft_tools_h", "data/grpo_tools_h",
+    "data/sft_all", "data/grpo_all", "data/sft", "data/grpo",
+    "data/frontier", "data/frontier_prov", "data/a_slice", "data/heldout",
     "data/frontier_export", "data/frontier_eval_export",
 )
 
@@ -288,16 +300,23 @@ def build_mix(deterministic_sft: pathlib.Path | str,
               deterministic_grpo: pathlib.Path | str,
               frontier: pathlib.Path | str,
               tasks=TASKS, seed: int = 0, frontier_per_task: int = 0,
-              frontier_ratio: float = 0.0, harness_prompt: bool = False) -> dict:
+              frontier_ratio: float = 0.0, harness_prompt: bool = False,
+              a_slice=None, a_slice_ratio: float = 0.0) -> dict:
     """Read all inputs and return the planned mix without writing anything.
 
     ``harness_prompt=True`` builds the ``ours_harness`` mix: the deterministic inputs
     must already be the ``*_h`` (harness-prompt) corpora, and every selected frontier
     row is re-prompted with the shared harness system prompt so teacher and student
     see the same contract. Its completion (the real tool trajectory) is untouched.
+
+    ``a_slice`` adds plain rows to SFT only. They are never re-prompted, and keep
+    ``prompt_variant="plain"`` / ``harness="none"`` next to the ``harness_tools``
+    tool rows. ``a_slice_ratio > 0`` caps A rows per task to
+    ``round(ratio * deterministic_rows)``; 0 takes every row in the slice dir.
     """
     det_sft_dir, det_grpo_dir, frontier_dir = (
         _resolve(deterministic_sft), _resolve(deterministic_grpo), _resolve(frontier))
+    a_dir = _resolve(a_slice) if a_slice else None
     rng = random.Random(seed)
 
     sft_rows: list[dict] = []
@@ -305,8 +324,15 @@ def build_mix(deterministic_sft: pathlib.Path | str,
     sft_owner: dict[str, str] = {}
     grpo_owner: dict[str, str] = {}
     input_hashes: dict[str, str] = {}
-    per_source = {"deterministic_sft": {}, "deterministic_grpo": {}, "frontier": {}}
+    per_source = {"deterministic_sft": {}, "deterministic_grpo": {}, "frontier": {},
+                  "a_slice": {}}
     stream_counts = {"sft": {}, "grpo": {}}
+    a_stats = {
+        "enabled": a_dir is not None, "dir": _rel(a_dir) if a_dir else None,
+        "ratio": a_slice_ratio, "scanned": {}, "selected": {},
+        "skipped_over_cap": {}, "selected_ids": [], "deduplicated": 0,
+        "rejected_non_plain": 0,
+    }
     frontier_stats = {
         "scanned": 0, "accepted": 0, "with_tool_turns": 0, "eligible": 0,
         "selected_count": 0, "selected_ids": [], "skipped_over_cap": 0,
@@ -320,7 +346,8 @@ def build_mix(deterministic_sft: pathlib.Path | str,
 
     for name, directory in (("deterministic_sft", det_sft_dir),
                             ("deterministic_grpo", det_grpo_dir),
-                            ("frontier", frontier_dir)):
+                            ("frontier", frontier_dir)) + (
+                                (("a_slice", a_dir),) if a_dir is not None else ()):
         if not directory.is_dir():
             inputs_missing.append(_rel(directory))
 
@@ -405,11 +432,57 @@ def build_mix(deterministic_sft: pathlib.Path | str,
             1 for r in chosen if str(r.get("id") or "") in sft_owner
             and sft_owner[str(r.get("id") or "")] == "frontier"
         )
+
+        # ---- plain A-slice rows (SFT only, never re-prompted) -------------- #
+        a_rows: list[dict] = []
+        if a_dir is not None:
+            for path in _discover(a_dir, task):
+                input_hashes[_rel(path)] = _sha256_file(path)
+                a_rows.extend(_read_jsonl(path))
+            a_stats["scanned"][task] = len(a_rows)
+            a_dedupe = {"deduplicated_a_slice": 0}
+            a_rows = _dedupe(a_rows, "a_slice", a_dedupe)
+            a_stats["deduplicated"] += a_dedupe["deduplicated_a_slice"]
+            plain = [r for r in a_rows
+                     if (r.get("prompt_variant") in (None, "", "plain")
+                         and r.get("harness") in (None, "", "none")
+                         and not is_harness_prompt(r))]
+            a_stats["rejected_non_plain"] += len(a_rows) - len(plain)
+            if len(plain) != len(a_rows):
+                raise SystemExit(
+                    f"--a-slice must contain plain single-turn rows: {len(a_rows) - len(plain)} "
+                    f"{task} row(s) carry a harness/tool prompt (e.g. "
+                    f"{[str(r.get('id')) for r in a_rows if r not in plain][:3]})")
+            a_rows = plain
+            if a_slice_ratio > 0:
+                cap_a = round(a_slice_ratio * len(dsft))
+                if len(a_rows) > cap_a:
+                    shuffled_a = list(a_rows)
+                    rng.shuffle(shuffled_a)
+                    a_stats["skipped_over_cap"][task] = len(a_rows) - cap_a
+                    a_rows = shuffled_a[:cap_a]
+            for row in a_rows:
+                rid = str(row.get("id") or "")
+                if rid in sft_owner and sft_owner[rid] != "a_slice":
+                    collisions.append({"id": rid, "stream": "sft",
+                                       "sources": [sft_owner[rid], "a_slice"]})
+                if rid not in sft_owner:
+                    sft_owner[rid] = "a_slice"
+                    out = dict(row)
+                    out["prompt_variant"] = "plain"
+                    out["harness"] = "none"
+                    sft_rows.append(out)
+                    a_stats["selected_ids"].append(rid)
+            per_source["a_slice"][task] = len(a_rows)
+            a_stats["selected"][task] = len(a_rows)
+
         stream_counts["sft"][task] = {
             "deterministic": len(dsft),
             "frontier": per_source["frontier"][task],
-            "total": len(dsft) + per_source["frontier"][task],
+            "total": len(dsft) + per_source["frontier"][task] + len(a_rows),
         }
+        if a_dir is not None:
+            stream_counts["sft"][task]["plain_a"] = len(a_rows)
         stream_counts["grpo"][task] = {
             "deterministic": len(dgrpo),
             "frontier": per_source["frontier"][task],
@@ -427,13 +500,13 @@ def build_mix(deterministic_sft: pathlib.Path | str,
         "tasks": tuple(tasks), "seed": seed,
         "sft_rows": sft_rows, "grpo_rows": grpo_rows,
         "counts": stream_counts, "per_source": per_source,
-        "frontier": frontier_stats, "dedupe": dedupe_stats,
+        "frontier": frontier_stats, "dedupe": dedupe_stats, "a_slice": a_stats,
         "collisions": collisions, "input_hashes": input_hashes,
         "inputs_missing": inputs_missing,
         "frontier_per_task": frontier_per_task, "frontier_ratio": frontier_ratio,
-        "harness_prompt": harness_prompt,
+        "harness_prompt": harness_prompt, "a_slice_ratio": a_slice_ratio,
         "dirs": {"deterministic_sft": det_sft_dir, "deterministic_grpo": det_grpo_dir,
-                 "frontier": frontier_dir},
+                 "frontier": frontier_dir, "a_slice": a_dir},
     }
 
 
@@ -441,25 +514,38 @@ def build_mix(deterministic_sft: pathlib.Path | str,
 # stats / manifest / writing
 # --------------------------------------------------------------------------- #
 def print_stats(plan: dict, stream=None) -> None:
-    """Print the resulting per-task table (no writes)."""
+    """Print the per-task table (no writes). With --a-slice the three SFT
+    sources (tool-deterministic, tool-frontier, plain-A) are shown per task."""
     if stream is None:
         stream = sys.stdout
     tasks = plan["tasks"]
-    print(f"{'task':<10} {'det-sft':>8} {'det-grpo':>9} {'frontier':>9} "
-          f"{'sft-total':>10} {'grpo-total':>11}", file=stream)
+    a_on = plan.get("a_slice", {}).get("enabled", False)
+    header = (f"{'task':<10} {'det-sft':>8} {'det-grpo':>9} {'frontier':>9} "
+              + (f"{'plain-A':>9} " if a_on else "")
+              + f"{'sft-total':>10} {'grpo-total':>11}")
+    print(header, file=stream)
     for task in tasks:
         s = plan["counts"]["sft"][task]
         g = plan["counts"]["grpo"][task]
-        print(f"{task:<10} {s['deterministic']:>8} {g['deterministic']:>9} "
-              f"{s['frontier']:>9} {s['total']:>10} {g['total']:>11}", file=stream)
+        line = (f"{task:<10} {s['deterministic']:>8} {g['deterministic']:>9} "
+                f"{s['frontier']:>9}")
+        if a_on:
+            line += f"{s.get('plain_a', 0):>9} "
+        print(line + f"{s['total']:>10} {g['total']:>11}", file=stream)
     dsft = sum(plan["counts"]["sft"][t]["deterministic"] for t in tasks)
     dgrpo = sum(plan["counts"]["grpo"][t]["deterministic"] for t in tasks)
     fsel = sum(plan["counts"]["sft"][t]["frontier"] for t in tasks)
-    print(f"{'TOTAL':<10} {dsft:>8} {dgrpo:>9} {fsel:>9} "
-          f"{dsft + fsel:>10} {dgrpo + fsel:>11}", file=stream)
+    asel = sum(plan["counts"]["sft"][t].get("plain_a", 0) for t in tasks)
+    total_line = (f"{'TOTAL':<10} {dsft:>8} {dgrpo:>9} {fsel:>9}"
+                  + (f"{asel:>9} " if a_on else "")
+                  + f"{dsft + fsel + asel:>10} {dgrpo + fsel:>11}")
+    print(total_line, file=stream)
     print(f"seed={plan['seed']} frontier cap mode={plan['frontier']['cap_mode']} "
           f"(per-task={plan['frontier_per_task']}, ratio={plan['frontier_ratio']})",
           file=stream)
+    if a_on:
+        print(f"plain A-slice: {asel} row(s) from {plan['a_slice']['dir']} "
+              f"(ratio={plan['a_slice']['ratio']})", file=stream)
 
 
 def _loud_frontier_warning(plan: dict) -> None:
@@ -468,11 +554,13 @@ def _loud_frontier_warning(plan: dict) -> None:
         print(f"Selected {f['selected_count']} verifier-accepted frontier tool row(s): "
               f"{f['selected_ids']}", file=sys.stderr)
         return
+    suffix = ("The tool part of the output is deterministic-only."
+              if plan.get("a_slice", {}).get("enabled") else
+              "The output is a deterministic-only corpus.")
     print("WARNING: 0 verifier-accepted frontier rows containing BOTH <tool_call> "
           "and <tool_result> were selected "
           f"(scanned={f['scanned']}, accepted={f['accepted']}, "
-          f"with tool turns={f['with_tool_turns']}). "
-          "The output is a deterministic-only corpus.", file=sys.stderr)
+          f"with tool turns={f['with_tool_turns']}). " + suffix, file=sys.stderr)
 
 
 def _check_destinations(out_sft: pathlib.Path, out_grpo: pathlib.Path,
@@ -579,6 +667,8 @@ def write_mix(plan: dict, out_sft: pathlib.Path, out_grpo: pathlib.Path,
             "tasks": list(plan["tasks"]), "seed": plan["seed"],
             "frontier_per_task": plan["frontier_per_task"],
             "frontier_ratio": plan["frontier_ratio"],
+            "a_slice": plan["a_slice"]["dir"],
+            "a_slice_ratio": plan["a_slice_ratio"],
             "prompt_variant": "harness_tools" if plan["harness_prompt"] else "plain",
             "cap_precedence": "--frontier-per-task wins when > 0; otherwise "
                               "--frontier-ratio; 0/0 means no cap",
@@ -587,6 +677,7 @@ def write_mix(plan: dict, out_sft: pathlib.Path, out_grpo: pathlib.Path,
         "counts": plan["counts"],
         "per_source": plan["per_source"],
         "frontier": plan["frontier"],
+        "a_slice": plan["a_slice"],
         "frontier_reprompted": plan["frontier"]["reprompted"],
         "deduplicated": plan["dedupe"],
         "input_file_hashes": plan["input_hashes"],
@@ -636,6 +727,12 @@ def main(argv=None) -> int:
                     help="build the ours_harness mix: deterministic inputs must be the "
                          "*_h corpora and every selected frontier row is re-prompted with "
                          "the shared harness system prompt (completion untouched)")
+    ap.add_argument("--a-slice", default=None,
+                    help="dir of plain SFT rows from scripts/build_a_slice.py; those rows "
+                         "are added to SFT only, keeping prompt_variant=plain")
+    ap.add_argument("--a-slice-ratio", type=float, default=0.0,
+                    help="cap A rows per task to round(ratio * deterministic rows); "
+                         "0 (default) takes every row in --a-slice")
     args = ap.parse_args(argv)
 
     tasks = tuple(t.strip() for t in args.tasks if t.strip())
@@ -646,21 +743,26 @@ def main(argv=None) -> int:
         ap.error("--frontier-per-task must be >= 0")
     if args.frontier_ratio < 0:
         ap.error("--frontier-ratio must be >= 0")
+    if args.a_slice_ratio < 0:
+        ap.error("--a-slice-ratio must be >= 0")
 
     out_sft, out_grpo = _resolve(args.out_sft), _resolve(args.out_grpo)
     manifest_path = _resolve(args.manifest)
+    inputs = {"deterministic_sft": _resolve(args.deterministic_sft),
+              "deterministic_grpo": _resolve(args.deterministic_grpo),
+              "frontier": _resolve(args.frontier)}
+    if args.a_slice is not None:
+        inputs["a_slice"] = _resolve(args.a_slice)
 
     if not args.stats:
-        _check_destinations(out_sft, out_grpo,
-                            {"deterministic_sft": _resolve(args.deterministic_sft),
-                             "deterministic_grpo": _resolve(args.deterministic_grpo),
-                             "frontier": _resolve(args.frontier)}, manifest_path)
+        _check_destinations(out_sft, out_grpo, inputs, manifest_path)
 
     plan = build_mix(args.deterministic_sft, args.deterministic_grpo, args.frontier,
                      tasks=tasks, seed=args.seed,
                      frontier_per_task=args.frontier_per_task,
                      frontier_ratio=args.frontier_ratio,
-                     harness_prompt=args.harness_prompt)
+                     harness_prompt=args.harness_prompt,
+                     a_slice=args.a_slice, a_slice_ratio=args.a_slice_ratio)
 
     if plan["collisions"]:
         raise SystemExit(f"id collision between sources: {plan['collisions'][:5]}")
@@ -679,6 +781,7 @@ def main(argv=None) -> int:
         "totals": manifest["totals"], "counts": manifest["counts"],
         "frontier_selected": manifest["frontier"]["selected_count"],
         "frontier_selected_ids": manifest["frontier"]["selected_ids"],
+        "plain_a_selected": manifest["a_slice"]["selected"],
         "input_files_hashed": len(manifest["input_file_hashes"]),
         "manifest": _rel(manifest_path),
     }, indent=1))
