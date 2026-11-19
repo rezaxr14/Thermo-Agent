@@ -471,6 +471,16 @@ def build_mix(deterministic_sft: pathlib.Path | str,
                     out = dict(row)
                     out["prompt_variant"] = "plain"
                     out["harness"] = "none"
+                    # A few upstream A-slice rows are labelled `frontier` because
+                    # their *plant* came from a hosted run. In this mix they are
+                    # plain single-turn ground-truth paraphrases, not frontier tool
+                    # traces, so use the stream's source label and keep the original
+                    # in provenance rather than dropping the row.
+                    if out.get("source") == "frontier":
+                        out["source"] = "ground_truth"
+                        prov = dict(out.get("provenance") or {})
+                        prov["a_slice_source"] = "frontier"
+                        out["provenance"] = prov
                     sft_rows.append(out)
                     a_stats["selected_ids"].append(rid)
             per_source["a_slice"][task] = len(a_rows)
@@ -496,9 +506,68 @@ def build_mix(deterministic_sft: pathlib.Path | str,
     frontier_stats["selected_ids"] = sorted(
         rid for rid, owner in sft_owner.items() if owner == "frontier")
 
+    # Reza's directive (DECISIONS section 4): the FINAL training mix must carry a
+    # real `tier` column in EXACT equal thirds per task. The trainer consumes rows,
+    # not plant groups, so the final mix is tiered per emitted row (the deterministic
+    # corpora themselves keep their documented grouped tiering). Crucially SFT and
+    # GRPO are tiered as SEPARATE streams: each written file must independently have
+    # floor(n/3)/floor(n/3)/remainder-to-hard counts, which tiering their union
+    # together does not guarantee.
+    from thermo_agent.synth import tiers as tier_mod
+
+    def _tier_stream(task: str, stream_rows: list[dict]):
+        scoped = [r for r in stream_rows if r.get("task") == task]
+        # `assign_tiers` keys its result by record_id; several emitted rows share a
+        # plant's record_id (variants) and frontier/A ids carry a `#v...` suffix.
+        # Use unique, #v-free proxy ids so every row gets its own tier and
+        # `tier_ranges` can look it up again.
+        proxies = []
+        for i, row in enumerate(scoped):
+            proxy = dict(row)
+            proxy["record_id"] = f"row{i:06d}"
+            proxies.append(proxy)
+        mapping = tier_mod.assign_tiers(task, proxies)
+        for row, proxy in zip(scoped, proxies):
+            if proxy["record_id"] in mapping:
+                row["tier"] = mapping[proxy["record_id"]]
+        return tier_mod.tier_ranges(task, proxies, mapping)
+
+    tier_summary: dict[str, dict] = {}
+    for task in tasks:
+        sft_ranges = _tier_stream(task, sft_rows)
+        grpo_ranges = _tier_stream(task, grpo_rows)
+        tier_summary[task] = {
+            "counts": {t: sft_ranges[t]["n"] for t in tier_mod.TIERS},
+            "counts_sft": {t: sft_ranges[t]["n"] for t in tier_mod.TIERS},
+            "counts_grpo": {t: grpo_ranges[t]["n"] for t in tier_mod.TIERS},
+            "ranges": {t: sft_ranges[t] for t in tier_mod.TIERS},
+            "ranges_sft": {t: sft_ranges[t] for t in tier_mod.TIERS},
+            "ranges_grpo": {t: grpo_ranges[t] for t in tier_mod.TIERS},
+            "unscored": sft_ranges["unscored"] + grpo_ranges["unscored"],
+            "rule": "exact equal thirds per emitted row by documented per-task "
+                    "component-count measure, sha256(row id) tie-break, remainder "
+                    "to hard; SFT and GRPO tiered as separate streams; "
+                    "deterministic, frontier and plain-A rows tiered together",
+        }
+
+    def _provenance_counts(rows: list[dict]) -> dict:
+        out: dict[str, int] = {}
+        for row in rows:
+            family = (row.get("provenance") or {}).get("source_family") or (
+                "ai_generated" if row.get("source") == "frontier_tools" else "deterministic")
+            model = (row.get("provenance") or {}).get("model") or row.get("model") or "none"
+            out[f"{family}:{model}"] = out.get(f"{family}:{model}", 0) + 1
+        return dict(sorted(out.items()))
+
+    provenance_summary = {
+        "sft": _provenance_counts(sft_rows),
+        "grpo": _provenance_counts(grpo_rows),
+    }
+
     return {
         "tasks": tuple(tasks), "seed": seed,
         "sft_rows": sft_rows, "grpo_rows": grpo_rows,
+        "tiers": tier_summary, "provenance": provenance_summary,
         "counts": stream_counts, "per_source": per_source,
         "frontier": frontier_stats, "dedupe": dedupe_stats, "a_slice": a_stats,
         "collisions": collisions, "input_hashes": input_hashes,
@@ -543,6 +612,12 @@ def print_stats(plan: dict, stream=None) -> None:
     print(f"seed={plan['seed']} frontier cap mode={plan['frontier']['cap_mode']} "
           f"(per-task={plan['frontier_per_task']}, ratio={plan['frontier_ratio']})",
           file=stream)
+    if plan.get("tiers"):
+        for task in tasks:
+            for label, key in (("tiers-sft", "counts_sft"), ("tiers-grpo", "counts_grpo")):
+                counts = plan["tiers"][task].get(key, plan["tiers"][task]["counts"])
+                print(f"{label} {task:<8} easy={counts['easy']:>5} medium={counts['medium']:>5} "
+                      f"hard={counts['hard']:>5}", file=stream)
     if a_on:
         print(f"plain A-slice: {asel} row(s) from {plan['a_slice']['dir']} "
               f"(ratio={plan['a_slice']['ratio']})", file=stream)
@@ -676,6 +751,8 @@ def write_mix(plan: dict, out_sft: pathlib.Path, out_grpo: pathlib.Path,
         "totals": {"sft": len(plan["sft_rows"]), "grpo": len(plan["grpo_rows"])},
         "counts": plan["counts"],
         "per_source": plan["per_source"],
+        "tiers": plan["tiers"],
+        "provenance": plan["provenance"],
         "frontier": plan["frontier"],
         "a_slice": plan["a_slice"],
         "frontier_reprompted": plan["frontier"]["reprompted"],

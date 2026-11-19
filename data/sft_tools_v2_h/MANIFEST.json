@@ -1,0 +1,322 @@
+{
+ "char_length": {
+  "max": 10087,
+  "n": 4831,
+  "p50": 5466,
+  "p95": 7667
+ },
+ "char_length_by_task": {
+  "audit": {
+   "max": 10065,
+   "n": 1206,
+   "p50": 6591,
+   "p95": 7351
+  },
+  "design": {
+   "max": 8526,
+   "n": 1207,
+   "p50": 7081,
+   "p95": 8052
+  },
+  "ledger": {
+   "max": 10087,
+   "n": 1209,
+   "p50": 4707,
+   "p95": 5875
+  },
+  "repair": {
+   "max": 4962,
+   "n": 1209,
+   "p50": 3914,
+   "p95": 4776
+  }
+ },
+ "config": {
+  "grpo_out": "data/grpo_tools_v2",
+  "include_frontier": true,
+  "limit": 0,
+  "max_tokens": 8000,
+  "max_tool_result_chars": 4500,
+  "out": "data/sft_tools_v2",
+  "plant_seed": 0,
+  "plants_per_task": 600,
+  "prompt_variant": "harness_tools",
+  "split": "train",
+  "src": [
+   "data/processed"
+  ],
+  "tasks": [
+   "repair",
+   "design",
+   "audit",
+   "ledger"
+  ]
+ },
+ "contamination_guard": {
+  "heldout_files": [
+   "data\\heldout\\audit_test_id.jsonl",
+   "data\\heldout\\audit_test_ood_topology.jsonl",
+   "data\\heldout\\design_test_id.jsonl",
+   "data\\heldout\\design_test_ood_climate.jsonl",
+   "data\\heldout\\design_test_ood_load.jsonl",
+   "data\\heldout\\design_test_ood_scale.jsonl",
+   "data\\heldout\\ledger_test_id.jsonl",
+   "data\\heldout\\ledger_test_ood_fault.jsonl",
+   "data\\heldout\\ledger_test_ood_topology.jsonl",
+   "data\\heldout\\repair_test_id.jsonl",
+   "data\\heldout\\repair_test_ood_fault.jsonl",
+   "data\\heldout\\repair_test_ood_topology.jsonl"
+  ],
+  "leaks": [],
+  "overlap": 0,
+  "passed": true,
+  "rows_scanned": 4831,
+  "signatures": 675
+ },
+ "counts": {
+  "audit": {
+   "deterministic_tools": 1200,
+   "frontier_tools": 6
+  },
+  "design": {
+   "deterministic_tools": 1200,
+   "frontier_tools": 7
+  },
+  "ledger": {
+   "deterministic_tools": 1200,
+   "frontier_tools": 9
+  },
+  "repair": {
+   "deterministic_tools": 1200,
+   "frontier_tools": 9
+  }
+ },
+ "dropped_invalid_or_no_tools": 0,
+ "dropped_large_tool_results": 2,
+ "dropped_over_8k": 1,
+ "frontier": {
+  "deduplicated": 0,
+  "kept": 31,
+  "over_budget": 1,
+  "rejected": 0,
+  "scanned": 1368,
+  "with_tool_turns": 32
+ },
+ "generated_at": "2026-11-19T19:23:02.893143+00:00",
+ "generator": "synth.tool_traces (deterministic) + accepted frontier tool traces",
+ "plants_selected_by_task": {
+  "audit": 600,
+  "design": 600,
+  "ledger": 600,
+  "repair": 600
+ },
+ "sources": [
+  {
+   "generator": "deterministic_tools",
+   "kept": 1200,
+   "rows_read": 5458,
+   "rows_selected": 600,
+   "source_dir": "data/processed",
+   "task": "repair",
+   "variants": {
+    "direct": 600,
+    "recover": 600
+   }
+  },
+  {
+   "generator": "frontier_tools",
+   "kept": 9,
+   "rows_read": 9,
+   "source_dir": "data/frontier*",
+   "task": "repair",
+   "variants": {
+    "tool_cot": 9
+   }
+  },
+  {
+   "generator": "deterministic_tools",
+   "kept": 1200,
+   "rows_read": 1768,
+   "rows_selected": 600,
+   "source_dir": "data/processed",
+   "task": "design",
+   "variants": {
+    "direct": 600,
+    "recover": 600
+   }
+  },
+  {
+   "generator": "frontier_tools",
+   "kept": 7,
+   "rows_read": 7,
+   "source_dir": "data/frontier*",
+   "task": "design",
+   "variants": {
+    "tool_cot": 7
+   }
+  },
+  {
+   "generator": "deterministic_tools",
+   "kept": 1200,
+   "rows_read": 2192,
+   "rows_selected": 600,
+   "source_dir": "data/processed",
+   "task": "audit",
+   "variants": {
+    "direct": 600,
+    "recover": 600
+   }
+  },
+  {
+   "generator": "frontier_tools",
+   "kept": 6,
+   "rows_read": 6,
+   "source_dir": "data/frontier*",
+   "task": "audit",
+   "variants": {
+    "tool_cot": 6
+   }
+  },
+  {
+   "generator": "deterministic_tools",
+   "kept": 1200,
+   "rows_read": 4846,
+   "rows_selected": 600,
+   "source_dir": "data/processed",
+   "task": "ledger",
+   "variants": {
+    "direct": 600,
+    "recover": 600
+   }
+  },
+  {
+   "generator": "frontier_tools",
+   "kept": 9,
+   "rows_read": 10,
+   "source_dir": "data/frontier*",
+   "task": "ledger",
+   "variants": {
+    "tool_cot": 9
+   }
+  }
+ ],
+ "tiers": {
+  "audit": {
+   "counts": {
+    "easy": 400,
+    "hard": 404,
+    "medium": 402
+   },
+   "ranges": {
+    "easy": {
+     "max": 6,
+     "min": 4,
+     "n": 400
+    },
+    "hard": {
+     "max": 13,
+     "min": 7,
+     "n": 404
+    },
+    "medium": {
+     "max": 7,
+     "min": 6,
+     "n": 402
+    }
+   },
+   "rule": "rank by documented per-task component count, sha256(id) tie-break, floor(n/3)/floor(n/3)/remainder; a plant's two variants share the tier"
+  },
+  "design": {
+   "counts": {
+    "easy": 403,
+    "hard": 403,
+    "medium": 401
+   },
+   "ranges": {
+    "easy": {
+     "max": 10,
+     "min": 4,
+     "n": 403
+    },
+    "hard": {
+     "max": 13,
+     "min": 11,
+     "n": 403
+    },
+    "medium": {
+     "max": 11,
+     "min": 10,
+     "n": 401
+    }
+   },
+   "rule": "rank by documented per-task component count, sha256(id) tie-break, floor(n/3)/floor(n/3)/remainder; a plant's two variants share the tier"
+  },
+  "ledger": {
+   "counts": {
+    "easy": 402,
+    "hard": 404,
+    "medium": 403
+   },
+   "ranges": {
+    "easy": {
+     "max": 6,
+     "min": 4,
+     "n": 402
+    },
+    "hard": {
+     "max": 13,
+     "min": 7,
+     "n": 404
+    },
+    "medium": {
+     "max": 7,
+     "min": 6,
+     "n": 403
+    }
+   },
+   "rule": "rank by documented per-task component count, sha256(id) tie-break, floor(n/3)/floor(n/3)/remainder; a plant's two variants share the tier"
+  },
+  "repair": {
+   "counts": {
+    "easy": 400,
+    "hard": 405,
+    "medium": 404
+   },
+   "ranges": {
+    "easy": {
+     "max": 6,
+     "min": 4,
+     "n": 400
+    },
+    "hard": {
+     "max": 9,
+     "min": 7,
+     "n": 405
+    },
+    "medium": {
+     "max": 7,
+     "min": 6,
+     "n": 404
+    }
+   },
+   "rule": "rank by documented per-task component count, sha256(id) tie-break, floor(n/3)/floor(n/3)/remainder; a plant's two variants share the tier"
+  }
+ },
+ "token_length": {
+  "max": 7600,
+  "n": 4831,
+  "p50": 4938,
+  "p95": 5953
+ },
+ "token_length_plain": {
+  "max": 6396,
+  "n": 4831,
+  "p50": 3752,
+  "p95": 4730
+ },
+ "token_measure_note": "token_length = FINAL rendered prompt messages + completion + TOKEN_RESERVE (the gate); token_length_plain = plain prompt instead. Over-gate rows are dropped, never truncated.",
+ "totals": {
+  "grpo": 4831,
+  "sft": 4831
+ }
+}

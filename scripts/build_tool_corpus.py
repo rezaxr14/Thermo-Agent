@@ -25,6 +25,7 @@ import argparse
 import hashlib
 import json
 import pathlib
+import random
 import re
 import statistics
 import sys
@@ -36,11 +37,15 @@ if str(ROOT) not in sys.path:
 
 from thermo_agent.agent.tool_prompt import build_harness_tool_messages  # noqa: E402
 from thermo_agent.core.schema import Plant  # noqa: E402
+from thermo_agent.synth import tiers as tier_mod  # noqa: E402
 from thermo_agent.synth import tool_traces  # noqa: E402
 from thermo_agent.teacher import validate  # noqa: E402
 
 TASKS = ("repair", "design", "audit", "ledger")
-FRONTIER_DIRS = ("data/frontier", "data/frontier_prov")
+# `frontier_tools_clean_v2` is the canonical sanitised tool-trace export: the raw
+# `data/frontier_tools` and zero-shot `data/frontier*` rows carry no usable tool
+# turns, so the cleaned 32 traces would otherwise never reach the corpora.
+FRONTIER_DIRS = ("data/frontier", "data/frontier_prov", "data/frontier_tools_clean_v2")
 PROTECTED = ("data/sft_all", "data/grpo_all", "data/sft", "data/grpo",
              "data/frontier", "data/frontier_prov", "data/frontier_export")
 
@@ -182,6 +187,32 @@ def _source_hash(src: pathlib.Path) -> str:
     return hashlib.md5(str(src).replace("\\", "/").encode("utf-8")).hexdigest()[:4]
 
 
+def _plant_id(row: dict) -> str:
+    """Ground-truth plant of a row: paraphrases (`#vN`) share the same plant."""
+    return str(row.get("record_id") or row.get("id") or "").split("#v", 1)[0]
+
+
+def _select_plants(rows: list[dict], task: str, plants: int, seed: int) -> list[dict]:
+    """Deterministically pick the first `plants` distinct ground-truth plants.
+
+    A seeded shuffle (separate per task) makes the choice reproducible and
+    independent of the order in which the source file happens to be written.
+    Every paraphrase of a chosen plant is kept. This is a selection, never a
+    rewrite: source rows are emitted verbatim by the trace builder.
+    """
+    if plants <= 0:
+        return list(rows)
+    grouped: dict[str, list[dict]] = {}
+    for row in rows:
+        grouped.setdefault(_plant_id(row), []).append(row)
+    keys = list(grouped)
+    random.Random(seed + sum(ord(c) for c in task)).shuffle(keys)
+    chosen: list[dict] = []
+    for key in keys[:plants]:
+        chosen.extend(grouped[key])
+    return chosen
+
+
 def _keep(row: dict, task: str) -> dict:
     return {k: row[k] for k in validate.KEEP.get(task, ()) if k in row}
 
@@ -239,8 +270,14 @@ def _emit(task: str, row: dict, trace: dict, variant: str, generator: str,
     function never rewrites it, so emission and token gating share one source of truth.
     """
     gen_tag = "dt" if generator == "deterministic_tools" else "ft"
+    ai = generator == "frontier_tools"
+    # Provenance is per row: deterministic rows name their generator; AI rows name
+    # the exact model that produced the trace (never "frontier" as a model name).
+    source_model = str(row.get("model") or "") if ai else None
     provenance = {
         "generator": generator,
+        "source_family": "ai_generated" if ai else "deterministic",
+        "model": source_model,
         "variant": variant,
         "tool_calls": trace["tool_calls"],
         "source_row_id": str(row.get("id", "")),
@@ -252,6 +289,7 @@ def _emit(task: str, row: dict, trace: dict, variant: str, generator: str,
         "split": row.get("split", "train"),
         "task": task,
         "source": generator,
+        "source_model": source_model,
         "prompt": prompt,
         "completion": [{"role": "assistant", "content": trace["sft_completion"]}],
         "provenance": provenance,
@@ -270,6 +308,7 @@ def _emit(task: str, row: dict, trace: dict, variant: str, generator: str,
                                 tag=f"{gen_tag}-{variant}")
     grpo["id"] = f"{grpo['id']}-{_source_hash(src)}"
     grpo["source"] = generator
+    grpo["source_model"] = source_model
     grpo["record_id"] = str(row.get("id", ""))
     grpo["provenance"] = dict(provenance)
     if harness:
@@ -293,7 +332,8 @@ def build(src: list[str], out: str, grpo_out: str, tasks=TASKS, split: str = "tr
           max_tool_result_chars: int = tool_traces.DEFAULT_MAX_TOOL_RESULT_CHARS,
           max_tokens: int = tool_traces.DEFAULT_MAX_TOKENS,
           heldout_dir: str = "data/heldout", prompt_variant: str = "plain",
-          out_harness: str | None = None, grpo_out_harness: str | None = None) -> dict:
+          out_harness: str | None = None, grpo_out_harness: str | None = None,
+          plants_per_task: int = 0, plant_seed: int = 0) -> dict:
     if prompt_variant not in ("plain", "harness_tools"):
         raise SystemExit(f"prompt_variant must be plain or harness_tools, got {prompt_variant!r}")
     out_dir, grpo_dir = pathlib.Path(out), pathlib.Path(grpo_out)
@@ -342,25 +382,41 @@ def build(src: list[str], out: str, grpo_out: str, tasks=TASKS, split: str = "tr
             plain_token_lengths.append(trace["plain_tokens"])
         return True
 
+    plants_selected_by_task: dict[str, int] = {}
     for task in tasks:
+        raw: list[tuple[dict, pathlib.Path]] = []
         for src_dir in src_dirs:
-            rows = _read(src_dir / f"{task}_{split}.jsonl", limit)
-            entry = {"task": task, "source_dir": str(src_dir).replace("\\", "/"),
-                     "generator": "deterministic_tools", "rows_read": len(rows),
-                     "variants": {}}
-            for variant in ("direct", "recover"):
-                kept = 0
-                for row in rows:
-                    prompt, harness = final_prompt(row["prompt"], task, row, prompt_variant)
-                    trace = tool_traces.build_trace(
-                        row, task, variant=variant, strict=False,
-                        max_tool_result_chars=max_tool_result_chars, max_tokens=max_tokens,
-                        prompt_override=prompt)
-                    kept += bool(add(task, row, trace, variant, "deterministic_tools",
-                                     src_dir, prompt, harness))
-                entry["variants"][variant] = kept
-            entry["kept"] = sum(entry["variants"].values())
-            sources.append(entry)
+            for row in _read(src_dir / f"{task}_{split}.jsonl", limit):
+                raw.append((row, src_dir))
+        selected = raw
+        if plants_per_task > 0:
+            chosen_ids = {id(r) for r in _select_plants([r for r, _ in raw], task,
+                                                        plants_per_task, plant_seed)}
+            selected = [(r, d) for r, d in raw if id(r) in chosen_ids]
+        plants_selected_by_task[task] = len({_plant_id(r) for r, _ in selected})
+        kept_by_source: dict[str, dict[str, int]] = {
+            str(d).replace("\\", "/"): {} for _, d in raw}
+        for variant in ("direct", "recover"):
+            for row, src_dir in selected:
+                prompt, harness = final_prompt(row["prompt"], task, row, prompt_variant)
+                trace = tool_traces.build_trace(
+                    row, task, variant=variant, strict=False,
+                    max_tool_result_chars=max_tool_result_chars, max_tokens=max_tokens,
+                    prompt_override=prompt)
+                if add(task, row, trace, variant, "deterministic_tools",
+                       src_dir, prompt, harness):
+                    key = str(src_dir).replace("\\", "/")
+                    counts = kept_by_source.setdefault(key, {})
+                    counts[variant] = counts.get(variant, 0) + 1
+        for src_dir in src_dirs:
+            name = str(src_dir).replace("\\", "/")
+            variants = kept_by_source.get(name, {})
+            sources.append({"task": task, "source_dir": name,
+                            "generator": "deterministic_tools",
+                            "rows_read": sum(1 for _, d in raw if str(d).replace("\\", "/") == name),
+                            "rows_selected": sum(1 for _, d in selected
+                                                 if str(d).replace("\\", "/") == name),
+                            "variants": variants, "kept": sum(variants.values())})
 
         if include_frontier:
             seen: set[str] = set()
@@ -388,8 +444,12 @@ def build(src: list[str], out: str, grpo_out: str, tasks=TASKS, split: str = "tr
                         frontier_stats["rejected"] += 1
                         continue
                     n_calls = text.count("<tool_call")
+                    # The accepted frontier export already records the real tool turns
+                    # that produced this completion. Carry them into the GRPO trajectory
+                    # instead of emitting an empty `turns` list for a tool-using trace.
+                    turns = (row.get("trajectory") or {}).get("turns") or []
                     trace = {
-                        "sft_completion": text, "turns": [], "tool_calls": n_calls,
+                        "sft_completion": text, "turns": turns, "tool_calls": n_calls,
                         "accepted": True, "final_answer": answer, "verdict": verdict,
                         "char_length": len(text), "tokens": None, "plain_tokens": None,
                         "over_budget": False, "dropped_large_tools": [],
@@ -417,6 +477,33 @@ def build(src: list[str], out: str, grpo_out: str, tasks=TASKS, split: str = "tr
             fentry["rows_read"] = local_tool_rows
             fentry["kept"] = fentry["variants"]["tool_cot"]
             sources.append(fentry)
+
+    # Reza's directive (DECISIONS section 4): equal thirds per task, real tier
+    # column in both streams, both variants of a plant in the same tier.
+    tiers_summary: dict[str, dict] = {}
+    for task in tasks:
+        task_sft = [r for r in sft_rows if r["task"] == task]
+        mapping = tier_mod.assign_tiers_grouped(task, task_sft)
+        # The mapping is keyed by ground-truth plant (id with any `#vN...` paraphrase
+        # / frontier model suffix stripped), the same key tier_ranges and the mix
+        # builder use. Frontier ids carry such a suffix, so look them up split.
+        plant_key = lambda row: str(row.get("record_id") or row.get("id")).split("#v", 1)[0]
+        for row in task_sft:
+            row["tier"] = mapping.get(plant_key(row))
+        for row in grpo_rows:
+            if row["task"] == task:
+                row["tier"] = mapping.get(plant_key(row))
+        ranges = tier_mod.tier_ranges(task, task_sft, mapping)
+        if ranges["unscored"]:
+            raise SystemExit(f"{ranges['unscored']} {task} tool row(s) have no measurable "
+                             "artefact size: refusing to emit an invented tier")
+        tiers_summary[task] = {
+            "counts": {t: ranges[t]["n"] for t in tier_mod.TIERS},
+            "ranges": {t: ranges[t] for t in tier_mod.TIERS},
+            "rule": ("rank by documented per-task component count, sha256(id) "
+                     "tie-break, floor(n/3)/floor(n/3)/remainder; a plant's two "
+                     "variants share the tier"),
+        }
 
     # write split files (only inside the two directories we own)
     for task in tasks:
@@ -447,7 +534,11 @@ def build(src: list[str], out: str, grpo_out: str, tasks=TASKS, split: str = "tr
             "split": split, "limit": limit, "include_frontier": include_frontier,
             "max_tool_result_chars": max_tool_result_chars, "max_tokens": max_tokens,
             "prompt_variant": prompt_variant,
+            "plants_per_task": plants_per_task,
+            "plant_seed": plant_seed,
         },
+        "plants_selected_by_task": plants_selected_by_task,
+        "tiers": tiers_summary,
         "totals": {"sft": len(sft_rows), "grpo": len(grpo_rows)},
         "counts": {
             task: _aggregate_counts([s for s in sources if s["task"] == task])
@@ -489,13 +580,19 @@ def main():
                     help="harness_tools SFT dir (default: <out>_h); must be a new *_h dir")
     ap.add_argument("--grpo-out-harness", default=None,
                     help="harness_tools GRPO dir (default: <grpo-out>_h); must be a new *_h dir")
+    ap.add_argument("--plants-per-task", type=int, default=0,
+                    help="distinct ground-truth plants per task (0 = every row; "
+                         "DECISIONS E1 uses 600, i.e. 600 x 2 variants x 4 tasks = 4,800)")
+    ap.add_argument("--plant-seed", type=int, default=0,
+                    help="seed for the deterministic per-task plant selection")
     a = ap.parse_args()
     tasks = tuple(t.strip() for t in a.tasks.split(",") if t.strip())
     manifest = build(
         [s.strip() for s in a.src.split(",") if s.strip()],
         a.out, a.grpo_out, tasks, a.split, a.limit, a.include_frontier,
         a.max_tool_result_chars, a.max_tokens, a.heldout,
-        a.prompt_variant, a.out_harness, a.grpo_out_harness)
+        a.prompt_variant, a.out_harness, a.grpo_out_harness,
+        a.plants_per_task, a.plant_seed)
     print(json.dumps({
         "totals": manifest["totals"], "counts": manifest["counts"],
         "char_length": manifest["char_length"],
@@ -503,6 +600,8 @@ def main():
         "contamination_guard": {"overlap": manifest["contamination_guard"]["overlap"],
                                 "passed": manifest["contamination_guard"]["passed"]},
         "frontier": manifest["frontier"],
+        "plants_selected_by_task": manifest["plants_selected_by_task"],
+        "tiers": {t: v["counts"] for t, v in manifest["tiers"].items()},
     }, indent=1))
 
 

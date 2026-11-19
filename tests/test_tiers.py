@@ -102,5 +102,27 @@ def test_grouped_variants_of_one_plant_share_a_tier():
     assert all(tier in TIERS for tier in tiers.values())
 
 
+def test_grouped_rows_with_paraphrase_suffix_in_id_keep_their_tier():
+    """Frontier ids are `<plant>#vN-t-<model>`; grouping must still key on `<plant>`.
+
+    Regression: assign_tiers keyed representatives by their full record_id while
+    assign_tiers_grouped grouped by the id with `#v...` stripped, so any group whose
+    representative carried such a suffix silently lost its tier.
+    """
+    ids = [f"p{i:03d}" for i in range(60)]
+    rows = []
+    for i, pid in enumerate(ids):
+        plant = _repair_row(pid, 4 + i % 5)
+        for suffix in ("#v1-t-google-gemini-3-8-flash", "#v2-t-google-gemini-3-8-flash"):
+            row = dict(plant)
+            row["record_id"] = f"{pid}{suffix}"
+            row["id"] = f"{pid}{suffix}"
+            rows.append(row)
+    tiers = assign_tiers_grouped("repair", rows)
+    assert len(tiers) == 60  # one entry per ground-truth plant, none dropped
+    assert all(tier in TIERS for tier in tiers.values())
+    assert collections.Counter(tiers.values()) == {"easy": 20, "medium": 20, "hard": 20}
+
+
 def test_unknown_tier_constant_documented():
     assert UNKNOWN_TIER == "<missing>"

@@ -7,6 +7,7 @@ to prove the additive-only contract.  Run with::
 """
 from __future__ import annotations
 
+import collections
 import hashlib
 import json
 from pathlib import Path
@@ -376,3 +377,41 @@ def test_main_wires_harness_prompt_flag(tmp_path):
     assert len(selected) == 1
     assert mix.is_harness_prompt(selected[0])
     assert selected[0]["completion"] == fr["completion"]
+
+
+# --------------------------------------------------------------------------- #
+# exact row-level thirds in the FINAL mix
+# --------------------------------------------------------------------------- #
+def test_final_mix_tiers_are_exact_thirds_per_row_not_per_plant(tmp_path):
+    """All nine rows share one record_id, yet every row must get a real tier and
+    the per-task counts must be 3/3/3 (the trainer consumes rows, not plants)."""
+    dsft = tmp_path / "in_sft"
+    sft_rows = []
+    for i in range(9):
+        row = _sft_row("repair", f"repair-row-{i}")
+        row["record_id"] = "one-shared-plant"  # would collapse under grouped tiering
+        row["plant_broken"] = json.dumps({
+            "components": [{"id": f"c{j}"} for j in range(4 + i % 3)]})
+        sft_rows.append(row)
+    _write_jsonl(dsft / "repair_train.jsonl", sft_rows)
+    dgrpo = tmp_path / "in_grpo"
+    grpo_rows = []
+    for i in range(6):
+        row = _grpo_row("repair", f"repair-row-{i}")
+        row["record_id"] = "one-shared-plant"
+        row["plant_broken"] = json.dumps({
+            "components": [{"id": f"c{j}"} for j in range(4 + i % 3)]})
+        grpo_rows.append(row)
+    _write_jsonl(dgrpo / "repair_train.jsonl", grpo_rows)
+    front = tmp_path / "in_frontier"
+
+    plan = mix.build_mix(dsft, dgrpo, front, tasks=("repair",))
+
+    for key, rows, expected in (("sft", plan["sft_rows"], {"easy": 3, "medium": 3, "hard": 3}),
+                                ("grpo", plan["grpo_rows"], {"easy": 2, "medium": 2, "hard": 2})):
+        counts = collections.Counter(r.get("tier") for r in rows)
+        assert counts == expected, (key, counts)
+        assert all(r.get("tier") in ("easy", "medium", "hard") for r in rows)
+        assert plan["tiers"]["repair"][f"counts_{key}"] == expected
+    assert plan["tiers"]["repair"]["counts"] == {"easy": 3, "medium": 3, "hard": 3}
+    assert plan["tiers"]["repair"]["unscored"] == 0

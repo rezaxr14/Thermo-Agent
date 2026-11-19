@@ -147,10 +147,21 @@ def assign_tiers_grouped(task: str, rows: list[dict], key_field: str = "record_i
     groups: dict[str, list[dict]] = {}
     for row in rows:
         # A-slice ids are paraphrases (`<plant-id>#vN`) of a ground-truth plant;
-        # they must share the tier of that plant's tool rows.
+        # they must share the tier of that plant's tool rows. Accepted frontier
+        # traces are named the same way (`<plant-id>#vN-t-<model>`), so this split
+        # applies to them too.
         key = str(row.get(key_field) or row.get("id") or "").split("#v", 1)[0]
         groups.setdefault(key, []).append(row)
-    representatives = [group[0] for group in groups.values()]
+    # `assign_tiers` keys its result by the representative's `record_id`. When that
+    # id still carries a `#v...` suffix the key no longer matches the group key and
+    # the whole group silently loses its tier (observed on 4 repair frontier rows).
+    # Give each representative the group key so the two key spaces agree; copy the
+    # row rather than mutating the corpus.
+    representatives = []
+    for key, group in groups.items():
+        rep = dict(group[0])
+        rep["record_id"] = key
+        representatives.append(rep)
     per_key = assign_tiers(task, representatives)
     return {key: per_key[key] for key in groups if key in per_key}
 

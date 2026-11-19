@@ -122,6 +122,66 @@ def test_gate_measures_final_harness_prompt_not_plain(tmp_path: Path, word_token
 
 
 @pytest.mark.corpus
+def test_rows_with_frontier_style_id_suffix_still_get_a_tier(tmp_path: Path):
+    """A `#vN-t-<model>` suffix in the source id must not cost the row its tier.
+
+    Regression: the four accepted repair frontier traces carry ids like
+    `rep-129-00072#v3-t-google-gemini-3-8-flash`; tier lookup used the unsplit id
+    while the tier mapping is keyed by the ground-truth plant, so the whole build
+    aborted with "no measurable artefact size".
+    """
+    row = make_row("wrong_fluid", seed=0)
+    base_id = str(row["id"])
+    row["id"] = f"{base_id}#v3-t-google-gemini-3-8-flash"
+
+    src = tmp_path / "processed"
+    src.mkdir()
+    (src / "repair_train.jsonl").write_text(json.dumps(row) + "\n", encoding="utf-8")
+
+    out, grpo = tmp_path / "sft_tools", tmp_path / "grpo_tools"
+    manifest = btc.build([str(src)], str(out), str(grpo),
+                         tasks=("repair",), split="train", include_frontier=False,
+                         heldout_dir="data/heldout")
+
+    for directory in (out, grpo):
+        written = [json.loads(line) for line in
+                   (directory / "repair_train.jsonl").read_text(encoding="utf-8").splitlines()]
+        assert len(written) == 2  # direct + recover
+        assert all(r["tier"] in ("easy", "medium", "hard") for r in written)
+    assert sum(manifest["tiers"]["repair"]["counts"].values()) == 2
+
+
+@pytest.mark.corpus
+def test_frontier_grpo_row_carries_real_tool_turns(tmp_path: Path, monkeypatch):
+    """An accepted frontier trace must not emit an empty `trajectory.turns`.
+
+    The cleaned frontier export already contains the real tool turns; an earlier
+    build path hardcoded `turns: []` for every frontier row.
+    """
+    root = Path(__file__).resolve().parents[1]
+    source = root / "data/frontier_tools_clean_v2/frontier_repair_train.jsonl"
+    frontier_row = json.loads(source.read_text(encoding="utf-8").splitlines()[0])
+    fdir = tmp_path / "frontier"
+    fdir.mkdir()
+    (fdir / "frontier_repair_train.jsonl").write_text(
+        json.dumps(frontier_row) + "\n", encoding="utf-8")
+    monkeypatch.setattr(btc, "FRONTIER_DIRS", (str(fdir),))
+
+    src = tmp_path / "processed"
+    src.mkdir()
+    out, grpo = tmp_path / "sft_tools", tmp_path / "grpo_tools"
+    btc.build([str(src)], str(out), str(grpo), tasks=("repair",), split="train",
+              include_frontier=True, heldout_dir="data/heldout")
+
+    written = [json.loads(line) for line in
+               (grpo / "repair_train.jsonl").read_text(encoding="utf-8").splitlines()]
+    frontier_rows = [r for r in written if r.get("source") == "frontier_tools"]
+    assert len(frontier_rows) == 1
+    assert frontier_rows[0]["trajectory"]["turns"] == frontier_row["trajectory"]["turns"]
+    assert frontier_rows[0]["trajectory"]["turns"]
+
+
+@pytest.mark.corpus
 def test_build_trace_prompt_override_changes_tokens_and_over_budget(tmp_path: Path, word_tokenizer):
     row = _row("HARNESS_SMALL", seed=0)
     plain = tool_traces.build_trace(row, "repair", variant="direct", strict=False)
