@@ -62,6 +62,7 @@ DEFAULTS = {
     "allowed_models": list(DEFAULT_ALLOWED),
     "code_dataset": "rezanadimi/thermo-agent-data",
     "data_dataset": "rezanadimi/thermo-agent-data",
+    "model_shards": {},
     "config_file": "harness_config.json",
 }
 
@@ -103,7 +104,7 @@ class Config:
 
     def __init__(self, mode, shard, limit, rounds, k_memory, deadline_seconds,
                  max_cost_usd, journal, manifest, memory_dir, export_dir,
-                 allowed_models, code_dataset, data_dataset):
+                 allowed_models, code_dataset, data_dataset, model_shards=None):
         self.mode = mode
         self.shard = shard
         self.limit = limit
@@ -118,10 +119,19 @@ class Config:
         self.allowed_models = tuple(allowed_models)
         self.code_dataset = code_dataset
         self.data_dataset = data_dataset
+        self.model_shards = dict(model_shards or {})
 
     @property
     def uses_tools(self) -> bool:
         return self.mode in TOOL_MODES
+
+    def shard_for(self, model: str) -> str:
+        """Per-model shard keeps one diagram per model (no duplicate questions)."""
+        m = str(model or "").lower()
+        for key, value in self.model_shards.items():
+            if str(key).lower() in m:
+                return str(value)
+        return self.shard
 
     @staticmethod
     def from_dict(values: dict) -> "Config":
@@ -154,6 +164,7 @@ class Config:
             allowed_models=tuple(str(m) for m in allowed),
             code_dataset=str(values.get("code_dataset") or DEFAULTS["code_dataset"]),
             data_dataset=str(values.get("data_dataset") or DEFAULTS["data_dataset"]),
+            model_shards=values.get("model_shards") or {},
         )
 
 
@@ -180,6 +191,11 @@ def resolve_config() -> Config:
         env = os.environ.get("HARNESS_" + key.upper())
         if env not in (None, ""):
             values[key] = env
+    if isinstance(values.get("model_shards"), str):
+        try:
+            values["model_shards"] = json.loads(values["model_shards"])
+        except ValueError:
+            raise SystemExit("HARNESS_MODEL_SHARDS must be a JSON object")
     cfg = Config.from_dict(values)
     if cfg.rounds <= 0:
         cfg.rounds = 6 if cfg.uses_tools else 1
@@ -197,12 +213,14 @@ SPEC = {
     "rounds": CFG.rounds,
     "k_memory": CFG.k_memory,
     "allowed_models": list(CFG.allowed_models),
+    "model_shards": dict(CFG.model_shards),
 }
 SPEC_SHA = hashlib.sha256(json.dumps(SPEC, sort_keys=True).encode()).hexdigest()[:16]
 JOURNAL = OUT / CFG.journal
 MANIFEST = OUT / CFG.manifest
 COUNTS = {"attempted": 0, "answered": 0, "error": 0, "skipped": 0}
 MODEL_SLUG = "unknown"
+ACTIVE_SHARD = CFG.shard
 ERROR = None
 ROWS_SOURCE = ""
 ROWS_DETAIL = ""
@@ -215,7 +233,7 @@ def _manifest(status: str, stage: str, **kw) -> None:
     MANIFEST.write_text(json.dumps({
         "status": status, "stage": stage, "error": ERROR,
         "runner": SPEC["runner"], "mode": CFG.mode, "harness": "agents+skills" if CFG.uses_tools else "none",
-        "model": MODEL_SLUG, "shard": CFG.shard, "rows_source": ROWS_SOURCE,
+        "model": MODEL_SLUG, "shard": ACTIVE_SHARD, "rows_source": ROWS_SOURCE,
         "rows_detail": ROWS_DETAIL, "rows_total": ROWS_TOTAL,
         "memory_notes_loaded": MEMORY_NOTES_LOADED, "reasoning": REASONING_LEVEL or "backend-default",
         "limits": {"limit": CFG.limit, "rounds": CFG.rounds, "k_memory": CFG.k_memory,
@@ -291,15 +309,15 @@ if IS_KAGGLE:
     from thermo_agent.teacher.kbench_adapter import make_respond, reasoning_for_model, usage_of
     from thermo_agent.teacher.toolkit import tool_names
 
-    def _find_shard() -> pathlib.Path:
+    def _find_shard(name: str) -> pathlib.Path:
         candidates = []
         for base in (pathlib.Path("/kaggle/input"), BUNDLE_ROOT, pathlib.Path(".")):
             if base.exists():
-                candidates += [p.parent for p in base.rglob(CFG.shard)]
+                candidates += [p.parent for p in base.rglob(name)]
         for cand in candidates:
-            if (cand / CFG.shard).exists():
-                return cand / CFG.shard
-        raise SystemExit(f"shard {CFG.shard!r} not found in attached datasets")
+            if (cand / name).exists():
+                return cand / name
+        raise SystemExit(f"shard {name!r} not found in attached datasets")
 
     def _find_export_dir() -> pathlib.Path | None:
         if CFG.export_dir:
@@ -313,7 +331,7 @@ if IS_KAGGLE:
                     return marker.parent
         return None
 
-    def _load_rows() -> tuple[list[dict], str, str]:
+    def _load_rows(shard: str) -> tuple[list[dict], str, str]:
         export = _find_export_dir()
         if export is not None:
             rows = {}
@@ -327,7 +345,7 @@ if IS_KAGGLE:
                         rows[str(row["id"])] = row
             if rows:
                 return list(rows.values()), "export", str(export)
-        path = _find_shard()
+        path = _find_shard(shard)
         rows = [json.loads(line) for line in path.open(encoding="utf-8") if line.strip()]
         return rows, "shard", str(path)
 
@@ -358,7 +376,7 @@ if IS_KAGGLE:
     @kbench.task(name="thermo_kaggle_model_runner",
                  description="Generic thermo-agent model runner (budget models only by default)")
     def thermo_kaggle_model_runner(llm):
-        global MODEL_SLUG, ERROR, ROWS_SOURCE, ROWS_DETAIL, ROWS_TOTAL
+        global MODEL_SLUG, ACTIVE_SHARD, ERROR, ROWS_SOURCE, ROWS_DETAIL, ROWS_TOTAL
         global MEMORY_NOTES_LOADED, REASONING_LEVEL
 
         llm = llm or kbench.llm
@@ -366,12 +384,13 @@ if IS_KAGGLE:
         if not is_allowed(MODEL_SLUG, CFG.allowed_models):
             print(f"[skip] model {MODEL_SLUG!r} is not allowed by this task; no model call made", flush=True)
             return
+        ACTIVE_SHARD = CFG.shard_for(MODEL_SLUG)
         COUNTS.update(attempted=0, answered=0, error=0, skipped=0)
         ERROR = None
         OUT.mkdir(parents=True, exist_ok=True)
         _manifest("running", "start")
 
-        rows, ROWS_SOURCE, ROWS_DETAIL = _load_rows()
+        rows, ROWS_SOURCE, ROWS_DETAIL = _load_rows(ACTIVE_SHARD)
         if CFG.limit > 0:
             rows = rows[:CFG.limit]
         ROWS_TOTAL = len(rows)
@@ -409,7 +428,7 @@ if IS_KAGGLE:
                     "reasoning": "", "trajectory": {"turns": [], "notes_used": [], "final": ""},
                     "usage": {}, "error": None, "graded": False,
                     "ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-                    "shard": CFG.shard, "row_source": ROWS_SOURCE,
+                    "shard": ACTIVE_SHARD, "row_source": ROWS_SOURCE,
                     "spec_sha": SPEC_SHA,
                 }
                 try:

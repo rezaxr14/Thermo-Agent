@@ -48,6 +48,17 @@ def test_config_from_dict_coerces_strings():
     assert cfg.allowed_models == ("gpt-6-luna", "claude-haiku-5-5")
 
 
+def test_per_model_shard_mapping():
+    cfg = _load().Config.from_dict({
+        "shard": "default.jsonl",
+        "model_shards": {"gpt-6-luna": "luna_batch.jsonl",
+                         "claude-haiku-5-5": "haiku_batch.jsonl"},
+    })
+    assert cfg.shard_for("openai/gpt-6-luna") == "luna_batch.jsonl"
+    assert cfg.shard_for("claude-haiku-5-5") == "haiku_batch.jsonl"
+    assert cfg.shard_for("some-other-model") == "default.jsonl"
+
+
 def test_task_file_and_parse_models():
     m = _load()
     assert m.task_file("audit") == "audit_train.jsonl"

@@ -1,0 +1,23 @@
+{
+  "mode": "harness",
+  "shard": "prompts_proof.jsonl",
+  "limit": 100,
+  "rounds": 6,
+  "k_memory": 3,
+  "deadline_seconds": 0,
+  "max_cost_usd": 0.0,
+  "journal": "batch1_completions.jsonl",
+  "manifest": "batch1_manifest.json",
+  "memory_dir": "",
+  "export_dir": "",
+  "model_shards": {
+    "gpt-6-luna": "prompts_batch1_gpt-6-luna.jsonl",
+    "claude-haiku-5-5": "prompts_batch1_claude-haiku-5-5.jsonl"
+  },
+  "allowed_models": [
+    "gpt-6-luna",
+    "claude-haiku-5-5"
+  ],
+  "code_dataset": "rezanadimi/thermo-agent-data",
+  "data_dataset": "rezanadimi/thermo-agent-data"
+}
