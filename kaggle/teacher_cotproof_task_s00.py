@@ -413,7 +413,9 @@ def thermo_teacher_cotproof_s00(llm):
     # default model when a task is pushed, so fail fast before any model call.
     ALLOWED = ("gpt-6-luna", "claude-haiku-5-5")
     if not any(a in str(MODEL_SLUG).lower() for a in ALLOWED):
-        raise SystemExit("budget-only hosted task: refusing model %r" % MODEL_SLUG)
+        print("[skip] budget-only hosted task: model %r not luna/haiku; no model call made"
+              % MODEL_SLUG, flush=True)
+        return
 
     COUNTS.update(attempted=0, answered=0, error=0, skipped=0, graded=0, deferred=0)
     ERROR = None
