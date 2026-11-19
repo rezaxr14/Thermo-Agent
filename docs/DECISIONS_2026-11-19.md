@@ -204,3 +204,7 @@ frontier harness-CoT datagen we intend to make:
    allowed in `data/`, notebooks, task files, datasets, logs, manifests, or any second env file. Helpers read
    the value from `.env` at call time and never print it. If a token is absent, stop and ask Reza; never invent,
    reuse, or switch to another account's credentials.
+8. **HF is the only bridge to Kaggle (Reza, 2026-11-20):** EVERY file that touches Kaggle goes through the
+   private HF dataset repo `Reza-Nadimi/thermo-agent-corpora` first. No direct local upload of data to a Kaggle
+   dataset. The flow is: local → private HF corpus repo → Kaggle kernel pulls from HF → results are saved in
+   the Kaggle dataset there. Checkpoints/models use only `Reza-Nadimi/thermo-agent-checkpoints`.

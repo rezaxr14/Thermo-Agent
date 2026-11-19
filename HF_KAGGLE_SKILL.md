@@ -71,6 +71,10 @@ HF/Kaggle clients and **never print or upload them**. No tokens in notebooks, co
 metadata or logs. The Kaggle proxy (`socks5h://127.0.0.1:10808`) is set only in the kaggle subprocess
 environment - non-Kaggle calls are never proxied.
 
+**HF is the only bridge to Kaggle.** Never upload data directly from this machine to a Kaggle dataset.
+Push it to the private HF corpus repo first; Kaggle kernels pull from there and save results into their
+Kaggle dataset. Local → HF → Kaggle, always.
+
 **One repo per purpose.** DATA goes only to `Reza-Nadimi/thermo-agent-corpora`; MODELS/adapters only to
 `Reza-Nadimi/thermo-agent-checkpoints`. No third repo, no project mirror, no mixing. On Kaggle keep project
 data in ONE dataset (`thermo-agent-corpus`); attach the code/prompt datasets read-only, and reuse an existing
