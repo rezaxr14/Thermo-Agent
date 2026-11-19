@@ -13,13 +13,14 @@ Prompts are rendered with the tokenizer exactly as GRPO and inference will rende
 If the checkpoint loads only through an image-text class, load that class and pass the model object to
 SFTTrainer instead of the string."""
 from __future__ import annotations
-import argparse, json, os, pathlib, random, re
+import argparse, json, os, random, re
 
 from . import ddp
+from . import data as corpus_data
 from .checkpoint import latest
-from .config import BASE_MODEL, SftSettings, supported
+from .config import BASE_MODEL, SftSettings, activation_checkpointing_kwargs, supported
 from . import hf_sync
-from .render import CHAT_KW, render_pair, prefix_report  # CHAT_KW is the shared enable_thinking value; render_pair applies it to every row we tokenize
+from .render import (CHAT_KW, assert_compact_harness, render_pair, prefix_report)  # one compact harness, no metadata in prompts
 
 
 # Tool results are produced by the environment at inference time, so the student must never be
@@ -133,10 +134,17 @@ def preprocess_rows(tok, rows: list[dict]):
 
 
 def read_rows(data_dir, tasks, split, seed=0, limit=None):
+    """Load every shard of the requested tasks with ``task`` and ``tier`` attached.
+
+    ``frontier_<task>_<split>.jsonl`` is included alongside ``<task>_<split>.jsonl``:
+    DECISIONS E1 trains on accepted frontier tool traces first. The old loader saw
+    only the deterministic shard and silently dropped them.
+    """
     rows = []
-    for t in tasks:
-        p = pathlib.Path(data_dir) / f"{t}_{split}.jsonl"
-        if p.exists(): rows += [json.loads(l) for l in open(p, encoding="utf-8")]
+    for task in tasks:
+        loaded, info = corpus_data.load_shards(data_dir, task, split)
+        corpus_data.assert_tiers_resolved(task, info)
+        rows.extend(loaded)
     random.Random(seed).shuffle(rows)
     return rows[:limit] if limit else rows
 
@@ -199,6 +207,10 @@ def main():
     tok = AutoTokenizer.from_pretrained(a.model)
     tr, va = read_rows(a.data, a.tasks, "train", limit=a.limit_rows), read_rows(a.data, a.tasks, "val", limit=a.limit_rows)
     if not tr: raise SystemExit(f"no training rows for {a.tasks} in {a.data}")
+    # Prompt hygiene: harness rows must come from the one compact builder, and no row
+    # bookkeeping is allowed to reach the tokenizer (it stays in reward/env columns).
+    for row in tr + va:
+        assert_compact_harness(row)
     # Tokenize here so labels already mask the prompt AND every <tool_result> span. TRL sees
     # `input_ids` + `labels` and therefore skips its own tokenization/label building.
     train = preprocess_rows(tok, tr); val = preprocess_rows(tok, va) if va else None
@@ -211,7 +223,7 @@ def main():
                     per_device_train_batch_size=s.per_device_batch, gradient_accumulation_steps=s.grad_accum, max_grad_norm=s.max_grad_norm,
                     lr_scheduler_type=s.lr_scheduler, warmup_ratio=s.warmup_ratio, weight_decay=s.weight_decay,
                     load_best_model_at_end=bool(val), metric_for_best_model="eval_loss", greater_is_better=False,
-                    gradient_checkpointing=True, gradient_checkpointing_kwargs={"use_reentrant": False}, dataloader_num_workers=a.num_workers,
+                    gradient_checkpointing=True, gradient_checkpointing_kwargs=activation_checkpointing_kwargs(), dataloader_num_workers=a.num_workers,
                     logging_steps=5, eval_strategy="steps" if val else "no", eval_steps=s.eval_steps,
                     save_strategy="steps", save_steps=s.save_steps, save_total_limit=2,
                     completion_only_loss=True, model_init_kwargs=init, report_to="none", seed=0,
@@ -233,7 +245,9 @@ def main():
               f"checkpointing={bool(getattr(base_model, 'is_gradient_checkpointing', False))}", flush=True)
     lora = LoraConfig(r=s.lora.r, lora_alpha=s.lora.alpha, lora_dropout=s.lora.dropout, target_modules=s.lora.target_modules, task_type="CAUSAL_LM")
     repo, callback = hf_sync.prepare(a.hf_repo, "sft", a.out, a.hf_sync)
-    resume = latest(a.out)
+    # An interrupted save can leave a checkpoint dir without optimizer/RNG state. Never
+    # "resume" from one of those: the optimizer would silently restart from scratch.
+    resume = latest(a.out, complete=True)
     if resume:
         print(f"resuming SFT from {resume}", flush=True)
     hooks = [callback] if callback else []

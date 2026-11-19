@@ -61,6 +61,19 @@ class GrpoSettings:
     lora: LoraSettings = field(default_factory=lambda: LoraSettings(r=8, alpha=16))
 
 
+def activation_checkpointing_kwargs() -> dict:
+    """Memory settings that let an 8,192-token row backpropagate on a 14.56 GiB T4.
+
+    Smoke v28 (2026-11-19) died in ``accelerator.backward`` with 13.55 GiB in use
+    and a 1.10 GiB allocation failing at 1.01 GiB free. The saved activations for
+    ``layers x sequence x hidden`` dominate at that length; ``offload=True`` (new
+    name in transformers 5.23, reached through the deprecated alias we already
+    pass) keeps the tensors for recomputation in pinned host memory. The old
+    ``use_reentrant=False`` choice is unchanged. No weights, labels or gate change.
+    """
+    return {"use_reentrant": False, "offload": True}
+
+
 def supported(cls, **kwargs) -> dict:
     """Keep only the arguments this installed Trainer/GRPO config actually accepts.
 

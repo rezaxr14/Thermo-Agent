@@ -16,6 +16,7 @@ import json
 import pathlib
 
 from ..synth.combine import TOKEN_RESERVE, tokenizer, tokenizer_path
+from .data import row_tier
 from .sft import _tool_result_spans
 
 # Rows longer than this are dropped by `synth.combine` before they reach the trainer; this audit
@@ -57,6 +58,7 @@ def audit(data_dir, max_length: int = 8192, reserve: int = TOKEN_RESERVE, tasks=
             split = p.stem.split(f"{task}_", 1)[1]
             prompts, comps, totals, harness, memory = [], [], [], 0, 0
             tool_masked, tool_rows, dropped = 0, 0, 0
+            tiers: dict[str, int] = {}
             for line in p.open(encoding="utf-8"):
                 row = json.loads(line)
                 pr = len(tok.encode("".join(m.get("content", "") for m in row["prompt"]), add_special_tokens=False).ids)
@@ -67,6 +69,8 @@ def audit(data_dir, max_length: int = 8192, reserve: int = TOKEN_RESERVE, tasks=
                 tool_rows += bool(masked)
                 prompts.append(pr)
                 comps.append(co)
+                tier = row_tier(row)
+                tiers[tier] = tiers.get(tier, 0) + 1
                 total = pr + co + reserve
                 totals.append(total)
                 harness += row.get("harness", "none") != "none"
@@ -82,7 +86,7 @@ def audit(data_dir, max_length: int = 8192, reserve: int = TOKEN_RESERVE, tasks=
                 "total_p99": _q(totals, .99), "total_max": max(totals, default=0),
                 "over": sum(1 for t in totals if t > max_length), "harness_rows": harness, "memory_rows": memory,
                 "tool_result_tokens": tool_masked, "tool_result_rows": tool_rows,
-                "dropped_8000": dropped,
+                "dropped_8000": dropped, "tier_counts": tiers,
             }
     report["rows"] = sum(f["n"] for f in report["files"].values())
     report["tool_result_tokens"] = sum(f["tool_result_tokens"] for f in report["files"].values())

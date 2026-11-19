@@ -39,6 +39,16 @@ def test_audit_fails_a_corpus_over_the_sequence_length(corpus):
     assert r["over"][0]["tokens"] > 10 and r["over"][0]["task"] == "repair"
 
 
+def test_audit_reports_tier_counts(corpus):
+    r = token_audit.audit(corpus)
+    f = r["files"]["repair_train"]
+    assert f["tier_counts"] == {"<missing>": 1}  # no explicit field on this fixture row
+    row = json.loads((corpus / "repair_train.jsonl").read_text(encoding="utf-8").splitlines()[0])
+    row["tier"] = "hard"
+    write(corpus / "repair_train.jsonl", [row])
+    assert token_audit.audit(corpus)["files"]["repair_train"]["tier_counts"] == {"hard": 1}
+
+
 def test_audit_sees_frontier_named_files(corpus):
     """`frontier_<task>_<split>.jsonl` must be measured; it used to report rows 0 / fits true."""
     row = json.loads((corpus / "repair_train.jsonl").read_text(encoding="utf-8").splitlines()[0])

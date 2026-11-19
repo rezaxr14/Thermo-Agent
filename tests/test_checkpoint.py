@@ -6,7 +6,7 @@ directory, and a restarted one continues from the highest `checkpoint-<step>` th
 import pathlib
 
 from thermo_agent.train import config as C
-from thermo_agent.train.checkpoint import latest
+from thermo_agent.train.checkpoint import is_complete, latest
 
 
 def test_no_directory_is_a_fresh_run(tmp_path):
@@ -43,3 +43,38 @@ def test_sft_saves_often_enough_for_a_twelve_hour_session():
 def test_grpo_checkpoints_on_steps_too():
     g = C.GrpoSettings()
     assert 0 < g.save_steps <= 100
+
+
+def _complete_ckpt(path: pathlib.Path) -> pathlib.Path:
+    path.mkdir()
+    (path / "trainer_state.json").write_text("{}", encoding="utf-8")
+    (path / "optimizer.pt").write_bytes(b"state")
+    (path / "adapter_model.safetensors").write_bytes(b"weights")
+    return path
+
+
+def test_complete_checkpoint_needs_optimizer_rng_and_weights(tmp_path):
+    full = _complete_ckpt(tmp_path / "checkpoint-100")
+    assert is_complete(full)
+    for missing in ("trainer_state.json", "optimizer.pt", "adapter_model.safetensors"):
+        saved = (full / missing).read_bytes()
+        (full / missing).unlink()
+        assert not is_complete(full)
+        (full / missing).write_bytes(saved)
+
+
+def test_resume_skips_an_interrupted_higher_step_checkpoint(tmp_path):
+    _complete_ckpt(tmp_path / "checkpoint-50")
+    # A session killed mid-save leaves the newest dir without optimizer/RNG state.
+    partial = tmp_path / "checkpoint-100"
+    partial.mkdir()
+    (partial / "trainer_state.json").write_text("{}", encoding="utf-8")
+    assert latest(tmp_path) == str(partial)              # historical enumeration behaviour
+    assert pathlib.Path(latest(tmp_path, complete=True)).name == "checkpoint-50"
+
+
+def test_both_stages_resume_only_from_complete_checkpoints():
+    for name in ("sft.py", "grpo.py"):
+        src = (pathlib.Path(__file__).resolve().parents[1] / "thermo_agent" / "train" / name).read_text(encoding="utf-8")
+        assert "latest(a.out, complete=True)" in src, f"{name} may resume from a broken checkpoint"
+

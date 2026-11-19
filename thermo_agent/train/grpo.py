@@ -31,14 +31,15 @@ Multi-turn wiring (verified against the installed TRL 1.18.1 source):
     `<tool_result>...</tool_result>` spans: neither stage teaches the model to predict tool output.
 """
 from __future__ import annotations
-import argparse, functools, json, logging, math, os, pathlib, random, warnings
+import argparse, functools, logging, math, os, pathlib, random, warnings
 from collections import defaultdict
 
 from ..agent.env import ThermoEnv, row_has_harness_tools
 from . import ddp
+from . import data as corpus_data
 from .checkpoint import latest
-from .config import GrpoSettings, supported
-from .render import TRAIN_ON_REASONING  # single thinking decision, shared with SFT
+from .config import GrpoSettings, activation_checkpointing_kwargs, supported
+from .render import TRAIN_ON_REASONING, assert_compact_harness  # one thinking decision + one compact harness
 from . import hf_sync
 from . import rollout_log
 from . import rewards as repair_rewards
@@ -314,8 +315,9 @@ TASKS = {"repair": (repair_rewards.REWARD_FUNCS, repair_rewards.REWARD_WEIGHTS, 
 JOINT_TASK = "joint"
 JOINT_TASKS = tuple(TASKS)                 # C9: exactly the four decided tasks
 SUPPORTED_K = (4, 8, 16)                   # C1: the only decided group sizes
-TIER_FIELDS = ("tier", "difficulty", "level")
-UNKNOWN_TIER = "<missing>"
+# Kept as module aliases: data.py is the single implementation (task + tier on load).
+TIER_FIELDS = corpus_data.TIER_FIELDS
+UNKNOWN_TIER = corpus_data.UNKNOWN_TIER
 
 
 def validate_k(k: int) -> None:
@@ -357,8 +359,11 @@ def derive_grad_accum(k: int, *, prompts_per_step: int | None = None,
 
 
 def load_rows(data_dir, split="train", task="repair"):
-    cols = TASKS[task][2]
-    return [{k: json.loads(l)[k] for k in cols} for l in open(pathlib.Path(data_dir) / f"{task}_{split}.jsonl", encoding="utf-8")]
+    """Per-task (legacy) loader. Now reads task + tier like the joint loader does."""
+    cols = tuple(dict.fromkeys((*TASKS[task][2], "task", "tier", "id")))
+    rows, info = corpus_data.load_shards(data_dir, task, split)
+    corpus_data.assert_tiers_resolved(task, info)
+    return [{k: row.get(k, "") for k in cols} for row in rows]
 
 
 # --------------------------------------------------------------------------- #
@@ -370,12 +375,8 @@ _JOINT_COLUMN_DEFAULTS = {"deducible": False, "min_edits": 0, "ref_fuel_w": 0.0,
 
 
 def row_tier(row: dict) -> str:
-    """The sampling tier of a corpus row: explicit field, else a single '<missing>' bucket."""
-    for key in TIER_FIELDS:
-        value = row.get(key)
-        if isinstance(value, (str, int)) and str(value).strip():
-            return str(value).strip()
-    return UNKNOWN_TIER
+    """Tier of an already-loaded row; tiers are attached at load time by data.py."""
+    return corpus_data.row_tier(row)
 
 
 def joint_rows(data_dir, split: str = "train") -> list[dict]:
@@ -383,23 +384,26 @@ def joint_rows(data_dir, split: str = "train") -> list[dict]:
 
     Every reward column used by any task is present in every row (with a neutral default when the
     source corpus does not have it). The dispatcher below makes sure a reward function only sees
-    the rows of its own task, so the defaults are never actually scored.
+    the rows of its own task, so the defaults are never actually scored. Tiers are read from the
+    corpus when present and otherwise derived with ``synth.tiers`` (equal thirds per task), so
+    ``sample_joint`` really samples over task x tier instead of collapsing to one ``<missing>``
+    cell. Frontier shards are included (DECISIONS E1).
     """
     cols = tuple(dict.fromkeys(c for _, _, task_cols in TASKS.values() for c in task_cols))
     out: list[dict] = []
     for task in JOINT_TASKS:
-        path = pathlib.Path(data_dir) / f"{task}_{split}.jsonl"
-        with path.open(encoding="utf-8") as fh:
-            for line in fh:
-                raw = json.loads(line)
-                row = {c: raw.get(c, _JOINT_COLUMN_DEFAULTS.get(c, "")) for c in cols}
-                row["task"] = raw.get("task") or task
-                if row["task"] not in TASKS:
-                    raise ValueError(f"unknown task {row['task']!r} in {path}; expected one of {JOINT_TASKS}")
-                row["tier"] = row_tier(raw)
-                if "id" in raw:
-                    row["id"] = raw["id"]   # provenance for the rollout log; ignored by rewards
-                out.append(row)
+        loaded, info = corpus_data.load_shards(data_dir, task, split)
+        # Fail loudly: a partial/unscorable corpus must not quietly become a 5th sampling cell.
+        corpus_data.assert_tiers_resolved(task, info)
+        for raw in loaded:
+            row = {c: raw.get(c, _JOINT_COLUMN_DEFAULTS.get(c, "")) for c in cols}
+            row["task"] = raw["task"]
+            if row["task"] not in TASKS:
+                raise ValueError(f"unknown task {row['task']!r} in {data_dir}; expected one of {JOINT_TASKS}")
+            row["tier"] = raw["tier"]
+            if "id" in raw:
+                row["id"] = raw["id"]   # provenance for the rollout log; ignored by rewards
+            out.append(row)
     if not out:
         raise ValueError(f"no joint GRPO rows found under {data_dir} (split={split})")
     return out
@@ -608,6 +612,9 @@ def main():
         funcs, weights = TASKS[a.task][0], TASKS[a.task][1]
     if a.limit_rows is not None:
         rows = rows[: a.limit_rows]
+    # Prompt hygiene (item 2): harness rows must come from the one compact builder.
+    for row in rows:
+        assert_compact_harness(row)
     # One joint stage per k: grpo_k4 / grpo_k8 / grpo_k16, locally, remotely and in eval.
     stage = stage_name(a.task, g.num_generations)
     repo, callback = hf_sync.prepare(a.hf_repo, stage, a.out, a.hf_sync)
@@ -633,7 +640,7 @@ def main():
                      max_steps=a.max_steps or g.max_steps, loss_type=g.loss_type, beta=g.beta, scale_rewards=g.scale_rewards,
                      reward_weights=weights,
                      remove_unused_columns=False, use_vllm=a.vllm, vllm_mode="colocate", log_completions=True,
-                     gradient_checkpointing=True, gradient_checkpointing_kwargs={"use_reentrant": False},
+                     gradient_checkpointing=True, gradient_checkpointing_kwargs=activation_checkpointing_kwargs(),
                      max_grad_norm=g.max_grad_norm, dataloader_num_workers=a.num_workers,
                      gradient_as_bucket_view=True, ddp_find_unused_parameters=False, ddp_bucket_cap_mb=64,
                      optim="adamw_torch", save_total_limit=2, seed=0,
@@ -642,7 +649,9 @@ def main():
     # Refuse any accidental 4-bit/FSDP/ZeRO configuration: the supported recipe is fp16 LoRA DDP.
     ddp.assert_fp16_lora_ddp(a.dtype, init, lora,
                              deepspeed=getattr(cfg, "deepspeed", None), fsdp=getattr(cfg, "fsdp", None))
-    resume = latest(a.out)
+    # Only resume from a checkpoint that actually holds optimizer + RNG state; an interrupted
+    # save would otherwise restart with a fresh optimizer under a "resumed" label.
+    resume = latest(a.out, complete=True)
     if resume:
         print(f"resuming GRPO from {resume}", flush=True)
     funcs = rollout_log.wrap_rewards(funcs, a.rollout_log, stage=stage)
