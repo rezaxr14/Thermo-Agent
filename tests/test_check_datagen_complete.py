@@ -66,6 +66,14 @@ def test_cohort_item_is_red_for_pilots_only(tmp_path, monkeypatch):
     assert "gpt-6-luna/repair" in cohort["detail"] or "claude-haiku-5-5" in cohort["detail"]
 
 
+def test_ingest_style_positive_reward_counts_as_accepted(tmp_path, monkeypatch):
+    monkeypatch.setattr(gate, "ROOT", tmp_path)
+    row = _frontier_row("gpt-6-luna", "repair", 5, "luna-reward-only")
+    row["validation"] = {"reward": 3.5, "reasons": []}  # transfer.ingest shape
+    _jsonl(tmp_path / "data/frontier_tools_pilot/frontier_repair_train.jsonl", [row])
+    assert [r["id"] for r in gate._frontier_rows()] == ["luna-reward-only"]
+
+
 def test_gate_passes_when_all_artifacts_present(tmp_path, monkeypatch):
     monkeypatch.setattr(gate, "ROOT", tmp_path)
     good = {"id": "x", "task": "repair", "source": "deterministic_tools",
@@ -82,7 +90,17 @@ def test_gate_passes_when_all_artifacts_present(tmp_path, monkeypatch):
                     for i in range(3)]
             _jsonl(tmp_path / f"data/frontier_tools_pilot/frontier_{model}_{task}_train.jsonl", rows)
     heldout = tmp_path / "data/heldout_v2"
-    _jsonl(heldout / "repair_test_id.jsonl", [good] * (85 * 12))
+    cells = {"repair": ("test_id", "test_ood_fault", "test_ood_topology"),
+             "audit": ("test_id", "test_ood_topology"),
+             "ledger": ("test_id", "test_ood_fault", "test_ood_topology"),
+             "design": ("test_id", "test_ood_climate", "test_ood_load", "test_ood_scale")}
+    for task, splits in cells.items():
+        total = 85 * len(splits)
+        sizes = gate.tier_mod.tier_sizes(total)
+        tiers = [t for t, n in zip(gate.tier_mod.TIERS, sizes) for _ in range(n)]
+        all_rows = [dict(good, task=task, tier=tiers[i]) for i in range(total)]
+        for j, split in enumerate(splits):
+            _jsonl(heldout / f"{task}_{split}.jsonl", all_rows[j * 85:(j + 1) * 85])
     (heldout / "MANIFEST.json").write_text(json.dumps({"set_sha256": "abc"}), encoding="utf-8")
     report = gate.check()
     assert report["passed"] is True, [i for i in report["items"] if not i["ok"]]

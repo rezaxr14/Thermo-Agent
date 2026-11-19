@@ -18,6 +18,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.audit_dataset_provenance import audit_dirs  # noqa: E402
+from scripts.mix_tool_corpora import is_verifier_accepted  # noqa: E402
 from thermo_agent.synth import tiers as tier_mod  # noqa: E402
 
 TOOL_ROWS_EXPECTED = 4_800          # DECISIONS E1: 600 plants x 2 variants x 4 tasks
@@ -60,11 +61,10 @@ def _frontier_rows() -> list[dict]:
                 blob = json.dumps(row, ensure_ascii=False)
                 if "<tool_call" not in blob or "<tool_result" not in blob:
                     continue
-                verdict = row.get("verdict") or {}
-                validation = row.get("validation") or {}
-                accepted = (row.get("accepted") is True or verdict.get("accepted") is True
-                            or validation.get("accepted") is True)
-                if not accepted:
+                # Same acceptance convention as mix_tool_corpora: `transfer.ingest`
+                # records validation={reward, reasons} with no `accepted` key, so a
+                # positive reward with no rejection marker must count here too.
+                if not is_verifier_accepted(row):
                     continue
                 key = (model, task, str(row.get("record_id") or row.get("id") or ""))
                 if key in seen:
@@ -120,6 +120,27 @@ def check() -> dict:
             ok = False
             detail = "unreadable MANIFEST.json"
     item("heldout_v2 frozen", ok, detail)
+
+    # Reza's directive §4.2: equal thirds in the TEST set too, not just training.
+    tier_detail: dict[str, dict[str, int]] = {}
+    tier_bad: list[str] = []
+    for task in tier_mod.TASKS:
+        rows = []
+        for path in sorted(v2_dir.glob(f"{task}_*.jsonl")):
+            for line in path.open(encoding="utf-8"):
+                if line.strip():
+                    try:
+                        rows.append(json.loads(line))
+                    except ValueError:
+                        continue
+        counts_task = collections.Counter(r.get("tier") for r in rows)
+        tier_detail[task] = {t: counts_task[t] for t in tier_mod.TIERS}
+        sizes = tier_mod.tier_sizes(len(rows)) if rows else (0, 0, 0)
+        if not rows or any(tier_detail[task][t] != sizes[i]
+                           for i, t in enumerate(tier_mod.TIERS)):
+            tier_bad.append(task)
+    item("heldout_v2 tiers equal thirds", not tier_bad,
+         f"bad tasks: {tier_bad}; counts={tier_detail}")
 
     if all(counts.values()):
         prov = audit_dirs(list(MIX_DIRS), root=ROOT)
