@@ -133,6 +133,16 @@ Removed on 2026-11-19 because they were pure assistant caps with no safety justi
 `SPEC["limit"] = 40`, `max_cost_usd = 2.0`, `deadline_seconds = 7200` (now `0` = no stop for each), and the
 480 / 2,880 accepted-trace targets.
 
+## J. Decisions created by the assistant's own failures (reviewer decides)
+
+| ID | Question | Why it exists | ANSWER |
+|---|---|---|---|
+| J1 | Does the 133k zero-shot corpus join SFT, or train on tool traces only? | the assistant claimed both were in use; only the tool corpus is wired | |
+| J2 | 157 over-gate `_h` rows: raise `max_length`, shorten the harness block, or drop (audit loses 143/240)? | build gated tokens on the plain prompt, not the harness prompt | |
+| J3 | Is a 17.2k-char (~4.3k-token) harness prompt acceptable when the plain prompt is 2.4k? | same root cause as J2 | |
+| J4 | Which hosted model is attempted first, given luna has never completed a run? | 4 days, 0 tool traces | |
+| J5 | Is further Kaggle spend authorised ($92.73/$100 monthly, $8.77 daily remaining)? | every prior cap was invented by the assistant | |
+
 ---
 
 ## What stays frozen regardless of answers

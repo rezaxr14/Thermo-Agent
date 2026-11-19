@@ -157,6 +157,8 @@ Rows in `*_tools*` carry `tokens` from the plain-prompt measurement; do not trus
 - `docs/IMPLEMENTATION_PLAN.md` — phases 0-6, all numbers referenced by ID, no chosen values.
 - `docs/DIRECTIVE_COMPLIANCE_AUDIT_2026-11-19.md` — D1-D20 status matrix and self-reported deviations V1-V10.
 - `docs/USER_DIRECTIVES.md` — D1-D20 with the verbatim quotes.
+- `docs/ASSISTANT_RESPONSES_2026-11-19.md` — every assistant reply in this campaign, each with a verdict, a
+  claim-by-claim audit, the decisions delegated to the reviewer (J1-J5), and the four-day balance sheet.
 
 ---
 
