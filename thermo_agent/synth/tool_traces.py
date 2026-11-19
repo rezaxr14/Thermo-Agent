@@ -176,13 +176,20 @@ def _plan(task: str, variant: str, final: str, wrong_label: str, wrong: str) -> 
 
 def build_trace(row: dict, task: str, *, variant: str = "direct",
                 max_tool_result_chars: int = DEFAULT_MAX_TOOL_RESULT_CHARS,
-                max_tokens: int = DEFAULT_MAX_TOKENS, strict: bool = True) -> dict:
+                max_tokens: int = DEFAULT_MAX_TOKENS, strict: bool = True,
+                prompt_override: list[dict] | None = None) -> dict:
     """Build one deterministic tool trace and validate its final answer.
 
     Returns a dict with ``sft_completion``, ``turns``, ``tool_calls``, ``accepted``,
     ``source="deterministic_tools"``, ``final_answer``, ``verdict``, ``char_length``,
     ``tokens`` and bookkeeping for dropped (over-cap) tool results.  On a rejected final
     answer it returns ``accepted=False`` with an ``error`` (or raises when ``strict``).
+
+    ``prompt_override`` is the FINAL prompt messages that will actually be emitted
+    (e.g. after the harness block has been appended).  When given, ``tokens`` and
+    ``over_budget`` are measured from those messages, not from the row's plain
+    ``prompt``.  The plain-prompt measurement is still returned as ``plain_tokens``
+    so the manifest can show the difference.  With no override, behaviour is unchanged.
     """
     final = ground_truth(row)
     if task not in validate.TASKS:
@@ -229,11 +236,16 @@ def build_trace(row: dict, task: str, *, variant: str = "direct",
 
     verdict = validate.validate(task, final, row)
     n_calls = sum(len(t["tool_calls"]) for t in turns)
-    n_prompt = sum(_ntok(m.get("content", "")) for m in row.get("prompt", []))
+    prompt_messages = row.get("prompt", []) if prompt_override is None else prompt_override
+    n_prompt = sum(_ntok(m.get("content", "")) for m in prompt_messages)
+    n_prompt_plain = sum(_ntok(m.get("content", "")) for m in row.get("prompt", []))
     n_completion = _ntok(sft)
     tokens = None
+    plain_tokens = None
     if n_prompt is not None and n_completion is not None:
         tokens = n_prompt + n_completion + TOKEN_RESERVE
+    if n_prompt_plain is not None and n_completion is not None:
+        plain_tokens = n_prompt_plain + n_completion + TOKEN_RESERVE
 
     out = {
         "sft_completion": sft,
@@ -251,6 +263,8 @@ def build_trace(row: dict, task: str, *, variant: str = "direct",
         "completion_tokens": n_completion,
         "tokens": tokens,
         "over_budget": bool(tokens is not None and tokens > max_tokens),
+        "prompt_tokens_plain": n_prompt_plain,
+        "plain_tokens": plain_tokens,
         "dropped_large_tools": dropped,
         "record_id": str(row.get("id", "")),
     }

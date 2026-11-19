@@ -218,12 +218,26 @@ def _check_harness_destinations(out: pathlib.Path, grpo_out: pathlib.Path) -> No
             raise SystemExit(f"refusing to write into non-empty harness corpus: {dest}")
 
 
-def _emit(task: str, row: dict, trace: dict, variant: str, generator: str,
-          src: pathlib.Path, prompt: list, prompt_variant: str = "plain") -> tuple[dict, dict]:
-    """One SFT row (full tool trace) and one GRPO row (final answer + task columns)."""
+def final_prompt(prompt: list, task: str, row: dict, prompt_variant: str) -> tuple[list, bool]:
+    """The FINAL rendered prompt messages and the harness flag for one row.
+
+    This is the single place where the harness block is appended.  Callers must use
+    the returned messages BOTH for token measurement (the 8k gate) and for emission,
+    so the gate can never be measured on a different prompt from the one written out.
+    """
     harness = prompt_variant == "harness_tools"
     if harness:
         prompt = build_harness_tool_messages(prompt, task, _plant_from_row(row))
+    return prompt, harness
+
+
+def _emit(task: str, row: dict, trace: dict, variant: str, generator: str,
+          src: pathlib.Path, prompt: list, harness: bool) -> tuple[dict, dict]:
+    """One SFT row (full tool trace) and one GRPO row (final answer + task columns).
+
+    ``prompt`` is already the FINAL rendered prompt (see ``final_prompt``); this
+    function never rewrites it, so emission and token gating share one source of truth.
+    """
     gen_tag = "dt" if generator == "deterministic_tools" else "ft"
     provenance = {
         "generator": generator,
@@ -297,7 +311,8 @@ def build(src: list[str], out: str, grpo_out: str, tasks=TASKS, split: str = "tr
     sft_rows: list[dict] = []
     grpo_rows: list[dict] = []
     char_lengths: list[int] = []
-    token_lengths: list[int] = []
+    token_lengths: list[int] = []          # FINAL (rendered) prompt + completion + reserve
+    plain_token_lengths: list[int] = []    # plain prompt + completion + reserve (for comparison)
     sources: list[dict] = []
     dropped_over_8k = 0
     dropped_large_tools = 0
@@ -305,21 +320,26 @@ def build(src: list[str], out: str, grpo_out: str, tasks=TASKS, split: str = "tr
     frontier_stats = {"scanned": 0, "with_tool_turns": 0, "kept": 0,
                       "deduplicated": 0, "rejected": 0, "over_budget": 0}
 
-    def add(task: str, row: dict, trace: dict, variant: str, generator: str, src_dir: pathlib.Path):
+    def add(task: str, row: dict, trace: dict, variant: str, generator: str,
+            src_dir: pathlib.Path, prompt: list, harness: bool):
         nonlocal dropped_over_8k, dropped_large_tools, dropped_invalid
         if not trace["accepted"] or trace["tool_calls"] == 0:
             dropped_invalid += 1
             return False
+        # trace["tokens"]/["over_budget"] are measured on the FINAL prompt by whoever
+        # built the trace (build_trace with prompt_override, or the frontier path below).
         if trace["over_budget"]:
             dropped_over_8k += 1
             return False
         dropped_large_tools += len(trace["dropped_large_tools"])
-        sft, grpo = _emit(task, row, trace, variant, generator, src_dir, row["prompt"], prompt_variant)
+        sft, grpo = _emit(task, row, trace, variant, generator, src_dir, prompt, harness)
         sft_rows.append(sft)
         grpo_rows.append(grpo)
         char_lengths.append(trace["char_length"])
         if trace["tokens"] is not None:
             token_lengths.append(trace["tokens"])
+        if trace.get("plain_tokens") is not None:
+            plain_token_lengths.append(trace["plain_tokens"])
         return True
 
     for task in tasks:
@@ -331,10 +351,13 @@ def build(src: list[str], out: str, grpo_out: str, tasks=TASKS, split: str = "tr
             for variant in ("direct", "recover"):
                 kept = 0
                 for row in rows:
+                    prompt, harness = final_prompt(row["prompt"], task, row, prompt_variant)
                     trace = tool_traces.build_trace(
                         row, task, variant=variant, strict=False,
-                        max_tool_result_chars=max_tool_result_chars, max_tokens=max_tokens)
-                    kept += bool(add(task, row, trace, variant, "deterministic_tools", src_dir))
+                        max_tool_result_chars=max_tool_result_chars, max_tokens=max_tokens,
+                        prompt_override=prompt)
+                    kept += bool(add(task, row, trace, variant, "deterministic_tools",
+                                     src_dir, prompt, harness))
                 entry["variants"][variant] = kept
             entry["kept"] = sum(entry["variants"].values())
             sources.append(entry)
@@ -368,20 +391,27 @@ def build(src: list[str], out: str, grpo_out: str, tasks=TASKS, split: str = "tr
                     trace = {
                         "sft_completion": text, "turns": [], "tool_calls": n_calls,
                         "accepted": True, "final_answer": answer, "verdict": verdict,
-                        "char_length": len(text), "tokens": None, "over_budget": False,
-                        "dropped_large_tools": [],
+                        "char_length": len(text), "tokens": None, "plain_tokens": None,
+                        "over_budget": False, "dropped_large_tools": [],
                     }
+                    # Gate on the FINAL rendered prompt, exactly like the deterministic path.
+                    prompt, harness = final_prompt(row.get("prompt", []), task, row, prompt_variant)
                     tok = tool_traces.combine.tokenizer()
                     if tok is not None:
                         n_tok = len(tok.encode(text, add_special_tokens=False).ids)
-                        n_prompt_tok = sum(len(tok.encode(m.get("content", ""), add_special_tokens=False).ids)
-                                           for m in row.get("prompt", []))
-                        trace["tokens"] = n_prompt_tok + n_tok + tool_traces.TOKEN_RESERVE
+                        n_final = sum(len(tok.encode(m.get("content", ""), add_special_tokens=False).ids)
+                                      for m in prompt)
+                        n_plain = sum(len(tok.encode(m.get("content", ""), add_special_tokens=False).ids)
+                                      for m in row.get("prompt", []))
+                        trace["tokens"] = n_final + n_tok + tool_traces.TOKEN_RESERVE
+                        trace["plain_tokens"] = n_plain + n_tok + tool_traces.TOKEN_RESERVE
                         trace["over_budget"] = trace["tokens"] > max_tokens
                         if trace["over_budget"]:
                             frontier_stats["over_budget"] += 1
+                            dropped_over_8k += 1
                             continue
-                    if add(task, row, trace, "tool_cot", "frontier_tools", pathlib.Path("data/frontier")):
+                    if add(task, row, trace, "tool_cot", "frontier_tools",
+                           pathlib.Path("data/frontier"), prompt, harness):
                         fentry["variants"]["tool_cot"] += 1
                         frontier_stats["kept"] += 1
             fentry["rows_read"] = local_tool_rows
@@ -427,6 +457,10 @@ def build(src: list[str], out: str, grpo_out: str, tasks=TASKS, split: str = "tr
         "char_length": _length_stats(char_lengths),
         "char_length_by_task": by_task,
         "token_length": _length_stats(token_lengths),
+        "token_length_plain": _length_stats(plain_token_lengths),
+        "token_measure_note": ("token_length = FINAL rendered prompt messages + completion + "
+                               "TOKEN_RESERVE (the gate); token_length_plain = plain prompt "
+                               "instead. Over-gate rows are dropped, never truncated."),
         "dropped_over_8k": dropped_over_8k,
         "dropped_large_tool_results": dropped_large_tools,
         "dropped_invalid_or_no_tools": dropped_invalid,
