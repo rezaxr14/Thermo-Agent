@@ -208,3 +208,9 @@ frontier harness-CoT datagen we intend to make:
    private HF dataset repo `Reza-Nadimi/thermo-agent-corpora` first. No direct local upload of data to a Kaggle
    dataset. The flow is: local → private HF corpus repo → Kaggle kernel pulls from HF → results are saved in
    the Kaggle dataset there. Checkpoints/models use only `Reza-Nadimi/thermo-agent-checkpoints`.
+9. **No account littering (Reza, 2026-11-20):** do NOT create another dataset, hosted task, or kernel; do NOT
+   delete or modify anything else on Kaggle (especially Reza's conv1d kernel); do NOT upload local data to
+   Kaggle. All credentials stay in the repo-root `.env`; HF is the sole bridge. Any new Kaggle object requires
+   Reza's explicit permission first.
+10. **Hosted AI models — budget only:** use ONLY `gpt-6-luna` and `claude-haiku-5-5` for hosted frontier runs.
+   Never run `gemini-3.8-flash`, `gemini-3.5-flash-lite`, or any premium/mid model without Reza's explicit go.

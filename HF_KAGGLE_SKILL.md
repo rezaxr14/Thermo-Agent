@@ -89,6 +89,11 @@ Kaggle dataset. Local → HF → Kaggle, always.
 data in ONE dataset (`thermo-agent-corpus`); attach the code/prompt datasets read-only, and reuse an existing
 shard with a row limit instead of creating new proof shards, tasks or datasets.
 
+**No account littering.** Never create another dataset, hosted task, or kernel, and never delete or modify
+anything else on Kaggle (especially the user's conv1d kernel) without explicit permission. Never upload
+local data to Kaggle; HF is the only bridge. Hosted AI runs use ONLY `gpt-6-luna` and `claude-haiku-5-5` —
+never `gemini-3.8-flash`, `gemini-3.5-flash-lite`, or any premium/mid model without explicit go.
+
 **Single credential source.** Every credential (`HF_TOKEN`, `KAGGLE_API_TOKEN`, `MODEL_PROXY_*`, `LLM_*`)
 comes ONLY from the repository-root `.env`. No credential file under `data/`, no token in a notebook, task,
 dataset, manifest or log. Helpers read from `.env` at call time and never print the value.
