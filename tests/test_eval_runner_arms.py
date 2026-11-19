@@ -56,7 +56,8 @@ def _load(tmp_path, monkeypatch, *, data_dirs=None, name="eval_runner_under_test
     heldout.mkdir(parents=True, exist_ok=True)
     (heldout / "repair_test_id.jsonl").write_text('{"id": "held-1"}\n', encoding="utf-8")
 
-    # A CPU worker with no secrets and no local adapter env: GRPO falls back to runs/grpo_<task>_k<k>.
+    # A CPU worker with no secrets and no local adapter env: GRPO reads runs/grpo_k<k> first,
+    # falling back to the legacy runs/grpo_<task>_k<k> when only an old checkpoint exists.
     for key in ("HF_TOKEN", "ADAPTER", "GRPO_ADAPTER", "TASK", "FORCE", "SPLITS", "LIMIT"):
         monkeypatch.delenv(key, raising=False)
     if task:
@@ -69,9 +70,10 @@ def _load(tmp_path, monkeypatch, *, data_dirs=None, name="eval_runner_under_test
 
     if create_adapters:
         for k in (4, 8, 16):
-            ck = root / "runs" / f"grpo_{task}_k{k}" / "checkpoint-1"
-            ck.mkdir(parents=True, exist_ok=True)
-            (ck / "adapter_config.json").write_text("{}", encoding="utf-8")
+            for stage in (f"grpo_k{k}", f"grpo_{task}_k{k}"):
+                ck = root / "runs" / stage / "checkpoint-1"
+                ck.mkdir(parents=True, exist_ok=True)
+                (ck / "adapter_config.json").write_text("{}", encoding="utf-8")
         merged = root / "runs" / "sft_merged"
         merged.mkdir(parents=True, exist_ok=True)
         (merged / "config.json").write_text("{}", encoding="utf-8")
@@ -139,7 +141,7 @@ def test_c_grpo_k_arms_resolve_distinct_checkpoint_dirs(tmp_path, monkeypatch):
     module, _ = _load(tmp_path, monkeypatch, data_dirs="heldout", name="er_grpo")
     adapters = module.GRPO_K_ADAPTERS
     assert set(adapters) == {4, 8, 16}
-    expected = {n: module.ROOT / "runs" / f"grpo_ledger_k{n}" for n in (4, 8, 16)}
+    expected = {n: module.ROOT / "runs" / f"grpo_k{n}" for n in (4, 8, 16)}
     assert {n: adapters[n] for n in (4, 8, 16)} == expected
     assert len({str(adapters[n]) for n in (4, 8, 16)}) == 3, "k=4/8/16 must not share weights"
 

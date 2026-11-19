@@ -12,8 +12,9 @@ and resumable: reports are never overwritten unless `FORCE=1`.
 # `thermo-teacher-prompts`. Add the `HF_TOKEN` secret to pull our trained adapter. For the trained-model arms choose
 # **GPU T4** (one is enough for greedy generation); the replay and endpoint arms need no GPU.
 #
-# Arms: our base 4B, our SFT model with and without the inference text, the frontier model zero-shot and with our
-# tools (replayed from Kaggle answers), and any other model served behind an OpenAI-compatible endpoint.
+# Arms: DECISIONS §2F F4 -- base 4B / SFT / GRPO k4,k8,k16 each in Z (plain prompt) and H (compact
+# harness + tools), frontier Z/H replayed from the frozen Kaggle answer files, and other-model
+# placeholders. Legacy ids stay runnable so existing reports remain readable.
 
 # %%
 # Bootstrap with the standard library only: unpack the code bundle before importing thermo_agent.
@@ -81,17 +82,29 @@ SPLITS = os.environ.get("SPLITS", "").split(",") if os.environ.get("SPLITS") els
 DEFAULT_DATA_DIRS = "heldout"
 DATA_DIRS = [ROOT / "data" / d for d in os.environ.get(
     "DATA_DIRS", DEFAULT_DATA_DIRS).split(",")]
-ARMS = os.environ.get(
-    "ARMS",
-    "ours_base,ours_sft,ours_harness,ours_sft_grpo_k4,ours_sft_grpo_k8,ours_sft_grpo_k16,"
-    "frontier_zero,frontier_tools,frontier_harness,other_model").split(",")
+# F4 (DECISIONS §2F): every local family is scored in BOTH modes. The legacy ids are kept so old
+# reports stay readable; the *_z / *_h ids are the explicit Z (plain prompt, no harness, no tools)
+# and H (compact harness, tools, memory) arms of the F4 table.
+F4_LOCAL_FAMILIES = ("ours_base", "ours_sft", "ours_sft_grpo_k4",
+                     "ours_sft_grpo_k8", "ours_sft_grpo_k16")
+DEFAULT_ARMS_LIST = (
+    # legacy ids that existing reports/manifests already use
+    "ours_base,ours_sft,ours_harness,ours_sft_grpo_k4,ours_sft_grpo_k8,"
+    "ours_sft_grpo_k16,frontier_zero,frontier_tools,frontier_harness,other_model,"
+    # explicit F4 Z / H table for the local families
+    "ours_base_z,ours_base_h,ours_sft_z,ours_sft_h,"
+    "ours_sft_grpo_k4_z,ours_sft_grpo_k4_h,ours_sft_grpo_k8_z,ours_sft_grpo_k8_h,"
+    "ours_sft_grpo_k16_z,ours_sft_grpo_k16_h,"
+    # clear frontier Z/H names (same frozen replay files as the legacy frontier ids)
+    "frontier_z,frontier_h")
+ARMS = os.environ.get("ARMS", DEFAULT_ARMS_LIST).split(",")
 find_input("thermo-teacher-prompts")     # fail early if the prompt dataset is missing
 
 # %%
 # Stage the saved teacher answers used by the replay arms. They come from a small private
 # dataset; without it the frontier arms have nothing to score in the worker.
 REPLAY_FILES = ("eval_all.jsonl", "harness_eval_completions2.jsonl",
-                "eval_gptnano_replay.jsonl")
+                "harness_completions.jsonl", "eval_gptnano_replay.jsonl")
 try:
     replay_source = find_input("thermo-agent-eval-replays")
 except SystemExit:
@@ -108,7 +121,7 @@ if replay_source is not None:
             print("[replay] staged", name, flush=True)
 
 # %%
-from thermo_agent.train import hf_sync
+from thermo_agent.train import grpo as grpo_train, hf_sync
 from thermo_agent.eval import comparison, tool_usage
 
 token()
@@ -152,68 +165,109 @@ def require_adapter(path, stage):
     return path
 
 
-# Pull each distinct k checkpoint into its own dir so k=4/8/16 never share weights. The stage name
-# grpo_{task}_k{k} is simultaneously the HF prefix, the local runs/ dir and the eval pull key.
+# Pull each distinct k checkpoint into its own dir so k=4/8/16 never share weights. C9 writes the
+# joint stage grpo_k{k}; we still read the legacy grpo_{task}_k{k} dir for older checkpoints.
 GRPO_K_ADAPTERS = {}
 for _k in (4, 8, 16):
-    _stage = f"grpo_{TASK}_k{_k}"
-    _dir = ROOT / "runs" / _stage
-    if os.environ.get("HF_TOKEN"):
-        _pulled = hf_sync.pull_checkpoint(ROOT / "runs", REPO, _stage, os.environ["HF_TOKEN"])
-        print(f"grpo k={_k} adapter:", _pulled, flush=True)
-    else:
-        _pulled = None
-    GRPO_K_ADAPTERS[_k] = require_adapter(_pulled or _dir, _stage)
+    _aliases = grpo_train.stage_names_for_reading(TASK, _k)  # (joint, legacy)
+    _dir = None
+    for _stage in _aliases:
+        _candidate = ROOT / "runs" / _stage
+        if os.environ.get("HF_TOKEN"):
+            _pulled = hf_sync.pull_checkpoint(ROOT / "runs", REPO, _stage, os.environ["HF_TOKEN"])
+            if _pulled:
+                _candidate = pathlib.Path(_pulled)
+        if _has_adapter_weights(_candidate):
+            _dir = _candidate
+            break
+    if _dir is None:
+        _dir = ROOT / "runs" / _aliases[0]   # where a new joint run writes its checkpoints
+    GRPO_K_ADAPTERS[_k] = require_adapter(_dir, _aliases[0])
 
 # %%
 # One spec per arm. `replay` scores saved Kaggle answers with the same verifiers and prompt rows; the frontier
 # export already carries its harness text, so zero-shot here means "no extra inference text beyond the prompt".
+#
+# F4 modes (DECISIONS §2F): `mode` is the arm's evaluation mode, not a generation flag.
+#   Z: plain prompt -- harness "none", tool_access "none" (no inference text, no tools).
+#   H: compact harness -- harness "agents+skills", tool_access "tools" (tool loop + memory).
+# Legacy ids (ours_sft, ours_harness, ours_grpo, ours_sft_grpo_k*, frontier_*, other_model) are kept
+# exactly as reports already use them; the *_z / *_h ids are the explicit F4 counterparts. Every spec
+# carries zero_shot, harness and tool_access. GRPO arms keep tools in H only: their Z arm never sets
+# tool_access=tools, and unlike the legacy *_k* ids the table arms do NOT carry train_task (the
+# static guard that identifies the four legacy GRPO checkpoints stays valid).
 SPECS = {
-    "ours_base": {"backend": "hf", "model": "Qwen/Qwen3.5-4B", "family": "ours", "harness": "none",
+    # --- ours base 4B -------------------------------------------------------------------
+    "ours_base": {"backend": "hf", "mode": "Z", "model": "Qwen/Qwen3.5-4B", "family": "ours", "harness": "none",
                   "tool_access": "none", "zero_shot": True},
-    # ours_sft and every GRPO arm share the SAME harness mode (agents+skills) and the same held-out
-    # splits, so the only difference between arms is the weights.
-    "ours_sft": {"backend": "hf", "model": "Qwen/Qwen3.5-4B", "adapter": ADAPTER, "family": "ours",
-                 "harness": "agents+skills", "tool_access": "none", "zero_shot": False},
-    # The real Z-vs-H contrast: ours_sft is prompt-only (no tools), ours_harness is the tool-using
+    "ours_base_z": {"backend": "hf", "mode": "Z", "model": "Qwen/Qwen3.5-4B", "family": "ours", "harness": "none",
+                    "tool_access": "none", "zero_shot": True},
+    "ours_base_h": {"backend": "hf", "mode": "H", "model": "Qwen/Qwen3.5-4B", "family": "ours",
+                    "harness": "agents+skills", "tool_access": "tools", "zero_shot": True},
+    # --- ours SFT (legacy "SFT none" + explicit Z/H counterparts) ------------------------
+    "ours_sft": {"backend": "hf", "mode": "legacy", "model": "Qwen/Qwen3.5-4B", "adapter": ADAPTER,
+                 "family": "ours", "harness": "agents+skills", "tool_access": "none", "zero_shot": False},
+    "ours_sft_z": {"backend": "hf", "mode": "Z", "model": "Qwen/Qwen3.5-4B", "adapter": ADAPTER,
+                   "family": "ours", "harness": "none", "tool_access": "none", "zero_shot": False},
+    "ours_sft_h": {"backend": "hf", "mode": "H", "model": "Qwen/Qwen3.5-4B", "adapter": ADAPTER,
+                   "family": "ours", "harness": "agents+skills", "tool_access": "tools", "zero_shot": False},
+    # The real Z-vs-H contrast: *_z is prompt-only (no tools), *_h is the tool-using
     # H mode (--tool-access tools --harness agents+skills). Identical weights, different inference.
-    "ours_harness": {"backend": "hf", "model": "Qwen/Qwen3.5-4B", "adapter": ADAPTER, "family": "ours",
-                     "harness": "agents+skills", "tool_access": "tools", "zero_shot": False},
-    # GRPO is trained inside the multi-turn tool environment, so all three k arms are scored
-    # WITH tools: scoring them tool-free would measure a job they were never trained for.
-    "ours_grpo": {"backend": "hf", "model": SFT_MERGED, "adapter": GRPO_ADAPTER, "family": "ours",
-                  "harness": "agents+skills", "tool_access": "tools", "zero_shot": False,
+    "ours_harness": {"backend": "hf", "mode": "legacy", "model": "Qwen/Qwen3.5-4B", "adapter": ADAPTER,
+                     "family": "ours", "harness": "agents+skills", "tool_access": "tools", "zero_shot": False},
+    # --- ours GRPO (legacy H arms + explicit Z/H counterparts) ---------------------------
+    # GRPO is trained inside the multi-turn tool environment, so the legacy k arms are H (tools).
+    "ours_grpo": {"backend": "hf", "mode": "legacy", "model": SFT_MERGED, "adapter": GRPO_ADAPTER,
+                  "family": "ours", "harness": "agents+skills", "tool_access": "tools", "zero_shot": False,
                   "train_task": TASK},
     # SFT + GRPO at group sizes k=4,8,16. Each pulls its OWN distinct checkpoint dir (written by
-    # the train notebook as runs/grpo_<task>_k<k>) so the three scores never use the same weights.
-    # The base is the merged SFT policy (SFT_MERGED); train_task records which task each checkpoint
-    # was trained on, and is written into every report and the manifest.
-    "ours_sft_grpo_k4": {"backend": "hf", "model": SFT_MERGED, "family": "ours",
+    # the train notebook as runs/grpo_k<k>) so the three scores never use the same weights.
+    # The base is the merged SFT policy (SFT_MERGED); train_task records which task each legacy
+    # checkpoint was trained on, and is written into every report and the manifest.
+    "ours_sft_grpo_k4": {"backend": "hf", "mode": "legacy", "model": SFT_MERGED, "family": "ours",
                           "harness": "agents+skills", "tool_access": "tools", "zero_shot": False,
                           "grpo_k": 4, "train_task": TASK},
-    "ours_sft_grpo_k8": {"backend": "hf", "model": SFT_MERGED, "family": "ours",
+    "ours_sft_grpo_k8": {"backend": "hf", "mode": "legacy", "model": SFT_MERGED, "family": "ours",
                           "harness": "agents+skills", "tool_access": "tools", "zero_shot": False,
                           "grpo_k": 8, "train_task": TASK},
-    "ours_sft_grpo_k16": {"backend": "hf", "model": SFT_MERGED, "family": "ours",
+    "ours_sft_grpo_k16": {"backend": "hf", "mode": "legacy", "model": SFT_MERGED, "family": "ours",
                            "harness": "agents+skills", "tool_access": "tools", "zero_shot": False,
                            "grpo_k": 16, "train_task": TASK},
-    "frontier_zero": {"backend": "replay", "replay": str(WORK / "eval_all.jsonl"), "family": "frontier",
-                      "harness": "none", "tool_access": "none", "zero_shot": True},
-    # Replay arms: "tools" is the ORIGINAL (historical) arm label, NOT a valid H.MODES
-    # prompt mode. The replay generator ignores messages, so the scored prompt is the
-    # stored one in the replay file (already augmented by the teacher harness). model_eval
-    # normalizes this label to agents+skills for (message-ignoring) augmentation, keeps
-    # "tools" as harness_label in the report, and never passes "tools" to H.augment.
-    "frontier_tools": {"backend": "replay", "replay": str(WORK / "harness_eval_completions2.jsonl"),
+    # Explicit F4 Z/H GRPO arms: same checkpoints (grpo_k) and base, but tools ONLY in H.
+    "ours_sft_grpo_k4_z": {"backend": "hf", "mode": "Z", "model": SFT_MERGED, "family": "ours",
+                            "harness": "none", "tool_access": "none", "zero_shot": False, "grpo_k": 4},
+    "ours_sft_grpo_k4_h": {"backend": "hf", "mode": "H", "model": SFT_MERGED, "family": "ours",
+                            "harness": "agents+skills", "tool_access": "tools", "zero_shot": False, "grpo_k": 4},
+    "ours_sft_grpo_k8_z": {"backend": "hf", "mode": "Z", "model": SFT_MERGED, "family": "ours",
+                            "harness": "none", "tool_access": "none", "zero_shot": False, "grpo_k": 8},
+    "ours_sft_grpo_k8_h": {"backend": "hf", "mode": "H", "model": SFT_MERGED, "family": "ours",
+                            "harness": "agents+skills", "tool_access": "tools", "zero_shot": False, "grpo_k": 8},
+    "ours_sft_grpo_k16_z": {"backend": "hf", "mode": "Z", "model": SFT_MERGED, "family": "ours",
+                             "harness": "none", "tool_access": "none", "zero_shot": False, "grpo_k": 16},
+    "ours_sft_grpo_k16_h": {"backend": "hf", "mode": "H", "model": SFT_MERGED, "family": "ours",
+                             "harness": "agents+skills", "tool_access": "tools", "zero_shot": False, "grpo_k": 16},
+    # --- frontier (frozen replay files; no local weights) --------------------------------
+    "frontier_zero": {"backend": "replay", "mode": "Z", "replay": str(WORK / "eval_all.jsonl"),
+                      "family": "frontier", "harness": "none", "tool_access": "none", "zero_shot": True},
+    "frontier_z": {"backend": "replay", "mode": "Z", "replay": str(WORK / "eval_all.jsonl"),
+                   "family": "frontier", "harness": "none", "tool_access": "none", "zero_shot": True},
+    # "tools" is the ORIGINAL (historical) arm label, NOT a valid H.MODES prompt mode. The replay
+    # generator ignores messages, so the scored prompt is the stored one in the replay file
+    # (already augmented by the teacher harness). model_eval normalizes this label to
+    # agents+skills for augmentation, keeps "tools" as harness_label, and never passes it to H.augment.
+    "frontier_tools": {"backend": "replay", "mode": "legacy",
+                       "replay": str(WORK / "harness_eval_completions2.jsonl"),
                        "family": "frontier", "harness": "tools", "tool_access": "tools", "zero_shot": True},
-    # Frontier model inside our LangGraph harness with tools + skills + memory (tool-using CoT).
-    # Same as above: "tools" is the original label; the scored prompt is the stored one.
-    "frontier_harness": {"backend": "replay", "replay": str(WORK / "harness_completions.jsonl"),
+    # Frontier in the LangGraph tool harness (the v6 tools journal, harness_completions.jsonl).
+    "frontier_harness": {"backend": "replay", "mode": "legacy", "replay": str(WORK / "harness_completions.jsonl"),
                          "family": "frontier", "harness": "tools", "tool_access": "tools", "zero_shot": True},
+    "frontier_h": {"backend": "replay", "mode": "H", "replay": str(WORK / "harness_completions.jsonl"),
+                   "family": "frontier", "harness": "tools", "tool_access": "tools", "zero_shot": True},
+    # --- other models (placeholders) ----------------------------------------------------
     # The measured domain-model arm is the saved GPT-nano answers, not a live localhost endpoint.
-    "other_model": {"backend": "replay", "replay": str(WORK / "eval_gptnano_replay.jsonl"),
+    "other_model": {"backend": "replay", "mode": "legacy", "replay": str(WORK / "eval_gptnano_replay.jsonl"),
                     "family": "domain-model", "harness": "none", "tool_access": "none", "zero_shot": True},
-    "other_model_api": {"backend": "openai", "model": os.environ.get("API_MODEL", ""),
+    "other_model_api": {"backend": "openai", "mode": "placeholder", "model": os.environ.get("API_MODEL", ""),
                         "base_url": os.environ.get("API_BASE_URL", "http://127.0.0.1:1234/v1"),
                         "family": "domain-model", "harness": "agents+skills", "tool_access": "none", "zero_shot": True},
 }
@@ -270,7 +324,8 @@ print("reports:", {k: str(v) for k, v in written.items()})
 # the manifest, so a report can never be read as a different arm (or as base-model scoring).
 def arm_config(name):
     spec = SPECS[name]
-    return {"display_name": name, "family": spec["family"], "harness": spec["harness"],
+    return {"display_name": name, "family": spec["family"], "mode": spec.get("mode"),
+            "harness": spec["harness"],
             "tool_access": spec["tool_access"], "zero_shot": spec["zero_shot"],
             "backend": spec["backend"], "model": spec.get("model"),
             "train_task": spec.get("train_task"), "grpo_k": spec.get("grpo_k"),

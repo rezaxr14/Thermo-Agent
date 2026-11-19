@@ -85,20 +85,26 @@ def _data_dir(tmp_path, row):
 
 
 # ---------------------------------------------------------------------------
-# 1. every arm constructs; no invalid harness reaches H.augment
+# 1. every arm constructs; no invalid harness reaches the shared builder
 # ---------------------------------------------------------------------------
 def test_every_runner_arm_constructs_with_a_valid_harness(tmp_path, monkeypatch, corpus_fixture_rows):
     module = _load_runner(tmp_path, monkeypatch, name="arm_prompt_all")
     data = _data_dir(tmp_path / "all", corpus_fixture_rows["repair"][0])
 
     seen = []
-    real_augment = H.augment
+    real_build = ME.build_harness_tool_messages
+    real_compact = ME._build_compact_harness_messages
 
-    def recording_augment(messages, mode, task, plant=None):
+    def recording_build(messages, task, plant, mode="agents+skills", *args, **kwargs):
         seen.append(mode)
-        return real_augment(messages, mode, task, plant)
+        return real_build(messages, task, plant, mode=mode, *args, **kwargs)
 
-    monkeypatch.setattr(ME.H, "augment", recording_augment)
+    def recording_compact(messages, mode, task, plant, *args, **kwargs):
+        seen.append(mode)
+        return real_compact(messages, mode, task, plant, *args, **kwargs)
+
+    monkeypatch.setattr(ME, "build_harness_tool_messages", recording_build)
+    monkeypatch.setattr(ME, "_build_compact_harness_messages", recording_compact)
 
     for name, spec in module.SPECS.items():
         gen = _FakeGen("not an answer")
@@ -108,7 +114,7 @@ def test_every_runner_arm_constructs_with_a_valid_harness(tmp_path, monkeypatch,
 
     assert seen, "expected at least one augmentation call"
     invalid = set(seen) - set(H.MODES)
-    assert not invalid, f"invalid harness reached H.augment: {invalid}"
+    assert not invalid, f"invalid harness reached the shared builder: {invalid}"
 
 
 # ---------------------------------------------------------------------------
@@ -129,13 +135,13 @@ def test_cli_tools_alias_notes_label_and_records_both_labels(tmp_path, monkeypat
     replay.write_text(json.dumps({"id": row["id"], "completion": "stored answer"}) + "\n", encoding="utf-8")
 
     seen = []
-    real_augment = H.augment
+    real_build = ME.build_harness_tool_messages
 
-    def recording_augment(messages, mode, task, plant=None):
+    def recording_build(messages, task, plant, mode="agents+skills", *args, **kwargs):
         seen.append(mode)
-        return real_augment(messages, mode, task, plant)
+        return real_build(messages, task, plant, mode=mode, *args, **kwargs)
 
-    monkeypatch.setattr(ME.H, "augment", recording_augment)
+    monkeypatch.setattr(ME, "build_harness_tool_messages", recording_build)
     out = tmp_path / "cli" / "tools_alias.json"
     monkeypatch.setattr(sys, "argv", [
         "model_eval", str(data), "--backend", "replay", "--replay", str(replay),
@@ -147,9 +153,9 @@ def test_cli_tools_alias_notes_label_and_records_both_labels(tmp_path, monkeypat
 
     note = capsys.readouterr().out.splitlines()[0]
     assert "--harness tools" in note and "agents+skills" in note and "harness_label=tools" in note
-    # the tool episode augments with the normalized mode; the later grading replay uses "none".
+    # the tool episode uses the shared compact builder with the normalized mode.
     assert "agents+skills" in seen
-    assert set(seen) <= set(H.MODES), f"invalid harness reached H.augment: {set(seen) - set(H.MODES)}"
+    assert set(seen) <= set(H.MODES), f"invalid harness reached the shared builder: {set(seen) - set(H.MODES)}"
 
     rep = json.loads(out.read_text(encoding="utf-8"))
     assert rep["harness_config"]["mode"] == "agents+skills"
@@ -197,9 +203,10 @@ def test_ours_harness_uses_shared_tool_prompt_ours_sft_does_not(tmp_path, monkey
                mode=spec["harness"], tool_access=spec["tool_access"])
         prompts[name] = gen.prompts[0][0]["content"]
 
-    agents = H.agents_md()
     h_sys, s_sys = prompts["ours_harness"], prompts["ours_sft"]
-    assert agents in h_sys and agents in s_sys
+    # Both arms carry the same compact AGENTS block; only the tool arm gets the contract.
+    assert "# AGENTS.md: energy-plant tasks (compact)" in h_sys
+    assert "# AGENTS.md: energy-plant tasks (compact)" in s_sys
     assert "MULTI-TURN TOOL ENVIRONMENT" in h_sys
     assert "<tool_call" in h_sys and "inspect_plant" in h_sys
     assert "MULTI-TURN TOOL ENVIRONMENT" not in s_sys

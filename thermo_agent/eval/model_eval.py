@@ -11,6 +11,11 @@
     # a served model instead of local weights (LM Studio, vLLM, Ollama):
     python -m thermo_agent.eval.model_eval DATA_DIR --backend openai --api-model qwen3.5-4b --out reports/local.json
 
+    # F4 secondary decoding: k seeded sampled passes per row, pass@k in the report,
+    # N completions per row in <out>.samples.jsonl (defaults: T 0.6, top_p 0.95, top_k 20, min_p 0):
+    python -m thermo_agent.eval.model_eval DATA_DIR --pass-at-k 8 --out reports/sft_pass8.json
+
+Greedy (no sampling flags) is the default and generates with do_sample=False exactly as before.
 Nothing here depends on torch except HFGenerator; every evaluator takes any callable generate(messages) -> str."""
 from __future__ import annotations
 import argparse, hashlib, json, pathlib, platform, re, statistics as st, subprocess, time, urllib.request
@@ -18,7 +23,8 @@ from typing import Callable
 from ..agent import harness as H
 from ..agent import toolcall as TC
 from ..agent.tool_prompt import FINAL_TAGS as _FINAL_TAGS
-from ..agent.tool_prompt import build_harness_tool_messages, tool_contract as _tool_contract
+from ..agent.tool_prompt import (build_compact_harness_messages as _build_compact_harness_messages,
+                                 build_harness_tool_messages, tool_contract as _tool_contract)
 from ..agent.loop import repair_loop
 from ..core.schema import Plant
 from ..design.loop import design_loop, design_refine
@@ -29,6 +35,9 @@ DEFAULT_SPLITS = {"repair": ["test_id", "test_ood_fault", "test_ood_topology"],
                   "design": ["test_id", "test_ood_climate", "test_ood_scale", "test_ood_load"],
                   "audit": ["test_id", "test_ood_topology"], "ledger": ["test_id", "test_ood_fault", "test_ood_topology"]}
 _THINK = re.compile(r"<think>.*?</think>", re.S)
+
+# F4 secondary decoding (DECISIONS §2F): the only authorised sampling values.
+_PASS_AT_K_DECODE = {"temperature": 0.6, "top_p": 0.95, "top_k": 20, "min_p": 0}
 
 # --- Gate 7: tool-using multi-turn generator for the H arm -----------------
 # The prompt-text --harness modes keep their historical limits exactly; the H arm
@@ -178,9 +187,21 @@ def check_no_truncation(report: dict, data_dirs, tasks, splits, limit) -> None:
 
 
 class HFGenerator:
-    """Greedy chat generation with transformers (+ peft adapter). Untested in the authoring environment (no GPU)."""
+    """Greedy chat generation with transformers (+ peft adapter). Untested in the authoring environment (no GPU).
+
+    F4 secondary decoding (DECISIONS §2F) is opt-in: pass any of ``temperature/top_p/top_k/min_p``
+    or ``num_samples > 1`` to enable sampling. With the defaults, ``generate`` is called with exactly
+    ``max_new_tokens`` and ``do_sample=False`` as before -- greedy reports stay byte-identical.
+    ``repetition_penalty`` stays 1.0 and presence penalty is never set (structured answers repeat
+    unit tokens, ids and tool arguments legitimately).
+    """
+
+    # Qwen3.5 thinking-mode precise-task settings, the only sampling values F4 authorises.
+    PASS_AT_K_SAMPLING = _PASS_AT_K_DECODE
+
     def __init__(self, model_id, adapter=None, dtype="bfloat16", load_4bit=False, max_new_tokens=400,
-                 enable_thinking=True):
+                 enable_thinking=True, *, temperature=None, top_p=None, top_k=None, min_p=None,
+                 seed=None, num_samples=1):
         import torch
         from transformers import AutoTokenizer, AutoModelForCausalLM
         self.tok = AutoTokenizer.from_pretrained(model_id); self.max_new_tokens = max_new_tokens
@@ -189,6 +210,16 @@ class HFGenerator:
         self.enable_thinking = bool(enable_thinking)
         # Populated after each call so ToolLoop can record token use / truncation.
         self.last_prompt_tokens = 0; self.last_completion_tokens = 0; self.last_truncated = False
+        self.temperature, self.top_p, self.top_k, self.min_p = temperature, top_p, top_k, min_p
+        self.num_samples = int(num_samples)
+        self.seed = seed
+        # Sampling is OFF unless a sampling knob is explicitly supplied (or k samples requested).
+        self.do_sample = (self.num_samples > 1 or
+                          any(p is not None for p in (temperature, top_p, top_k, min_p)))
+        self.repetition_penalty = 1.0   # authoritative F4 value; never overridden
+        self.presence_penalty = None    # never passed to model.generate
+        if self.do_sample and seed is not None:
+            torch.manual_seed(seed)
         kw = {"device_map": "auto"}
         if load_4bit:
             from transformers import BitsAndBytesConfig
@@ -200,19 +231,67 @@ class HFGenerator:
             self.model = PeftModel.from_pretrained(self.model, adapter)
         self.model.eval()
 
-    def __call__(self, messages: list[dict]) -> str:
+    def set_seed(self, seed):
+        """Retarget the RNG for the next sampled pass (used by the pass@k CLI loop)."""
         import torch
+        self.seed = int(seed)
+        torch.manual_seed(self.seed)
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed_all(self.seed)
+        return self.seed
+
+    def _decode_kwargs(self, num_return_sequences=None) -> dict:
+        """Exact generate kwargs: greedy has only the historical two keys."""
+        kw = {"max_new_tokens": self.max_new_tokens, "do_sample": self.do_sample}
+        if self.do_sample:
+            for name in ("temperature", "top_p", "top_k", "min_p"):
+                value = getattr(self, name)
+                if value is not None:
+                    kw[name] = value
+            # Explicit 1.0 documents the decision; greedy never sees this key.
+            kw["repetition_penalty"] = self.repetition_penalty
+            n = self.num_samples if num_return_sequences is None else num_return_sequences
+            if n > 1:
+                kw["num_return_sequences"] = n
+        return kw
+
+    def _encode(self, messages):
         text = self.tok.apply_chat_template(messages, add_generation_prompt=True, tokenize=False,
                                             enable_thinking=self.enable_thinking)
         inputs = self.tok(text, return_tensors="pt", add_special_tokens=False).to(self.model.device)
+        return inputs, int(inputs["input_ids"].shape[1])
+
+    def _decode(self, gen):
+        return _THINK.sub("", self.tok.decode(gen, skip_special_tokens=True)).strip()
+
+    def sample(self, messages: list[dict], num_samples: int | None = None) -> list[str]:
+        """Return k sampled completions for one prompt (k defaults to ``num_samples``).
+
+        The pass@k CLI uses k seeded evaluation passes instead, so the tool loop and all graders
+        stay untouched; this method is the direct per-prompt form of the same sampling config.
+        """
+        import torch
+        k = self.num_samples if num_samples is None else int(num_samples)
+        inputs, n_in = self._encode(messages)
+        kw = self._decode_kwargs(num_return_sequences=max(k, 1))
+        kw["do_sample"] = True
         with torch.no_grad():
-            out = self.model.generate(**inputs, max_new_tokens=self.max_new_tokens, do_sample=False)
-        n_in = inputs["input_ids"].shape[1]
+            out = self.model.generate(**inputs, **kw)
+        self.last_prompt_tokens = n_in
+        self.last_completion_tokens = int(out.shape[-1] - n_in)
+        self.last_truncated = self.last_completion_tokens >= self.max_new_tokens
+        return [self._decode(out[i][n_in:]) for i in range(out.shape[0])]
+
+    def __call__(self, messages: list[dict]) -> str:
+        import torch
+        inputs, n_in = self._encode(messages)
+        with torch.no_grad():
+            out = self.model.generate(**inputs, **self._decode_kwargs())
         gen = out[0][n_in:]
-        self.last_prompt_tokens = int(n_in)
+        self.last_prompt_tokens = n_in
         self.last_completion_tokens = int(gen.shape[0])
         self.last_truncated = self.last_completion_tokens >= self.max_new_tokens
-        return _THINK.sub("", self.tok.decode(gen, skip_special_tokens=True)).strip()
+        return self._decode(gen)
 
 
 class OpenAIGenerator:
@@ -236,6 +315,11 @@ class OpenAIGenerator:
                                      headers={"Content-Type": "application/json", "Authorization": f"Bearer {self.api_key}"})
         with urllib.request.urlopen(req, timeout=self.timeout) as resp:
             return json.loads(resp.read().decode())
+
+    def set_seed(self, seed):
+        """Retarget the seed for the next sampled pass (mirrors HFGenerator for the pass@k loop)."""
+        self.seed = int(seed)
+        return self.seed
 
     def resolve_model(self):
         """Use --api-model if given, else the first model the server lists."""
@@ -312,7 +396,10 @@ def _wrap(generate, mode, task, plant, log, rid):
     def g(messages):
         if hasattr(generate, "set_current_id"):
             generate.set_current_id(rid)
-        text = generate(H.augment(messages, mode, task, plant))
+        # One compact harness text for every arm; the no-tools (Z) arm carries
+        # AGENTS + the selected skill but no tool contract.
+        text = generate(_build_compact_harness_messages(
+            messages, mode=mode, task=task, plant=plant, include_contract=False))
         log.append({"id": rid, "task": task, "completion": text}); return text
     return g
 
@@ -606,6 +693,77 @@ def run(generate, data_dirs, tasks, splits=None, limit=40, mode="none", max_turn
     return report, log
 
 
+# --- F4 secondary decoding: sampled pass@k -------------------------------------------------
+_TASK_SUCCESS_KEY = {"repair": "success", "design": "within_1pct", "ledger": "all_correct"}
+
+
+def _example_success(task, ex) -> bool:
+    """Was this row solved in one sampled pass (the bit pass@k aggregates over)?"""
+    if task in _TASK_SUCCESS_KEY:
+        return bool(ex.get(_TASK_SUCCESS_KEY[task]))
+    if task == "audit":
+        return all(bool(ex.get(f.__name__[2:])) for f in audit_rewards.REWARD_FUNCS)
+    return False
+
+
+def sampling_config(args) -> dict | None:
+    """Resolve the F4 secondary-decoding request. ``None`` means the greedy default.
+
+    ``--pass-at-k K`` and ``--samples N`` both request k>=2 sampled passes; Qwen's F4 values
+    are the defaults, individually overridable by --temperature/--top-p/--top-k/--min-p. Seeds
+    are ``seed .. seed + k - 1`` (default 0..k-1) so the k passes differ. Nothing is enabled by
+    any CLI default: with neither flag the generator is constructed with no sampling kwargs.
+    """
+    k = getattr(args, "pass_at_k", None) or getattr(args, "samples", 1) or 1
+    if int(k) <= 1:
+        return None
+    params = dict(_PASS_AT_K_DECODE)
+    for arg, key in (("temperature", "temperature"), ("top_p", "top_p"),
+                     ("top_k", "top_k"), ("min_p", "min_p")):
+        value = getattr(args, arg, None)
+        if value is not None:
+            params[key] = value
+    seed0 = 0 if getattr(args, "seed", None) is None else int(args.seed)
+    return {"k": int(k), "params": params, "seeds": [seed0 + i for i in range(int(k))]}
+
+
+def summarize_pass_at_k(reports, tasks, splits, sampling) -> dict:
+    """Aggregate k seeded evaluation passes into per-row / per-cell / overall pass@k.
+
+    pass@k = P(at least one of the k sampled passes solves the row). The k final answers per
+    row are also written to ``<out>.samples.jsonl`` by ``main``.
+    """
+    k = sampling["k"]
+    out = {"k": k, "enabled": True, "seeds": sampling["seeds"],
+           "sampling": sampling["params"], "completions_per_row": k,
+           "per_task_split": {}}
+    hits = rows = 0
+    for task in tasks:
+        for sp in (splits if splits is not None else DEFAULT_SPLITS[task]):
+            cells = [(rep.get(task) or {}).get(sp) for rep in reports]
+            base = cells[0]
+            key = f"{task}/{sp}"
+            if not isinstance(base, dict):
+                out["per_task_split"][key] = None
+                continue
+            ids = [ex.get("id") for ex in base.get("examples", [])]
+            per_id = {}
+            for rid in ids:
+                flags = []
+                for cell in cells:
+                    ex = next((e for e in (cell or {}).get("examples", [])
+                               if e.get("id") == rid), None)
+                    flags.append(_example_success(task, ex) if ex is not None else False)
+                per_id[rid] = {"successes": sum(flags), "pass": any(flags)}
+            cell_hits = sum(v["pass"] for v in per_id.values())
+            hits += cell_hits; rows += len(ids)
+            out["per_task_split"][key] = {"n": len(ids), "pass_at_k": round(cell_hits / max(len(ids), 1), 4),
+                                          "per_id": per_id}
+    out["n"] = rows
+    out["pass_at_k"] = round(hits / max(rows, 1), 4)
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("data", nargs="+", help="ground-truth data dirs, e.g. data/processed data/processed_arch"); ap.add_argument("--model", default="Qwen/Qwen3.5-4B"); ap.add_argument("--adapter")
     ap.add_argument("--tasks", nargs="+", default=["repair", "design", "audit", "ledger"]); ap.add_argument("--splits", nargs="*")
@@ -627,36 +785,73 @@ def main():
     ap.add_argument("--base-url", default="http://127.0.0.1:1234/v1", help="openai backend: endpoint root")
     ap.add_argument("--api-model", default=None, help="openai backend: served model id (default: first model listed)")
     ap.add_argument("--api-key", default="lm-studio")
-    ap.add_argument("--temperature", type=float, default=0.0)
-    ap.add_argument("--seed", type=int, default=None)
+    ap.add_argument("--temperature", type=float, default=None,
+                    help="sampling temperature (HF, F4 pass@k) / chat temperature (openai; default 0.0 greedy)")
+    ap.add_argument("--top-p", type=float, default=None)
+    ap.add_argument("--top-k", type=int, default=None)
+    ap.add_argument("--min-p", type=float, default=None)
+    ap.add_argument("--samples", type=int, default=1,
+                    help="sample N completions per row and report pass@N (F4 secondary decoding)")
+    ap.add_argument("--pass-at-k", type=int, default=None,
+                    help="shortcut: --samples K with the F4 Qwen values T=0.6/top_p=0.95/top_k=20/min_p=0 "
+                         "and seeds 0..K-1")
+    ap.add_argument("--seed", type=int, default=None,
+                    help="first seed of the pass@k seed range (default 0)")
     ap.add_argument("--thinking", action="store_true", help="openai backend: leave the model's reasoning mode enabled")
     ap.add_argument("--no-thinking", action="store_true",
                     help="hf backend: render the prompt with enable_thinking=False (default: True, "
                          "matching how the SFT/GRPO corpora were rendered)")
     a = ap.parse_args()
+    sampling = sampling_config(a)
+    if sampling and a.backend == "replay":
+        raise SystemExit("--samples/--pass-at-k cannot sample a frozen replay file: it has one stored answer per row")
     harness_label = a.harness                          # requested label (may be legacy "tools")
     harness_mode = normalize_harness(harness_label)    # effective mode for prompt augmentation
     if harness_label != harness_mode:
         print(f"[model_eval] note: --harness {harness_label} is a legacy label for {harness_mode}; "
               f"augmentation uses {harness_mode}, report keeps harness_label={harness_label}.")
     cfg = harness_config(harness_mode, a.tool_access, a.max_turns, a.max_tool_calls, a.max_new_tokens)
+    openai_temperature = 0.0 if a.temperature is None else a.temperature
     if a.backend == "replay":
         if not a.replay:
             raise SystemExit("--backend replay needs --replay completions.jsonl")
         gen = ReplayGenerator(a.replay)
         model_label = a.display_name or f"replay:{pathlib.Path(a.replay).name}"
     elif a.backend == "openai":
-        gen = OpenAIGenerator(a.base_url, a.api_model, a.api_key, cfg["max_new_tokens"], a.temperature, a.seed,
+        gen = OpenAIGenerator(a.base_url, a.api_model, a.api_key, cfg["max_new_tokens"],
+                              (sampling["params"]["temperature"] if sampling else openai_temperature),
+                              (sampling["seeds"][0] if sampling else a.seed),
                               enable_thinking=(None if a.thinking and not a.no_thinking else False))
         model_label = a.api_model or f"(auto) {a.base_url}"
     else:
+        # With no sampling request NO extra kwargs are passed: generate(..., do_sample=False) as before.
+        hf_sampling = dict(sampling["params"]) if sampling else {}
+        if sampling and sampling["seeds"]:
+            hf_sampling["seed"] = sampling["seeds"][0]
         gen = HFGenerator(a.model, a.adapter, a.dtype, a.load_4bit, cfg["max_new_tokens"],
-                          enable_thinking=not a.no_thinking)
+                          enable_thinking=not a.no_thinking, **hf_sampling)
         model_label = a.model
-    report, log = run(gen, a.data, a.tasks, a.splits, a.limit, harness_label, a.max_turns, a.polish_evals, a.refine_turns,
-                      a.tool_access, a.max_tool_calls, a.max_new_tokens)
-    # A truncated held-out cell is not evidence: raise before writing any number.
-    check_no_truncation(report, a.data, a.tasks, a.splits, a.limit)
+
+    def one_pass(seed=None):
+        if seed is not None and hasattr(gen, "set_seed"):
+            gen.set_seed(seed)
+        result, entries = run(gen, a.data, a.tasks, a.splits, a.limit, harness_label, a.max_turns,
+                              a.polish_evals, a.refine_turns, a.tool_access, a.max_tool_calls,
+                              a.max_new_tokens)
+        # A truncated held-out cell is not evidence: raise before writing any number.
+        check_no_truncation(result, a.data, a.tasks, a.splits, a.limit)
+        return result, entries
+
+    if sampling is None:
+        # Byte-identical greedy path: one pass, no seed call, no pass@k field.
+        report, log = one_pass()
+    else:
+        reports, logs = [], []
+        for seed in sampling["seeds"]:
+            rep_i, log_i = one_pass(seed)
+            reports.append(rep_i); logs.append((seed, log_i))
+        report, log = reports[0], logs[0][1]
+        report["pass_at_k"] = summarize_pass_at_k(reports, a.tasks, a.splits, sampling)
     version = eval_set_hash(a.data, a.tasks, a.splits)
     arm_cfg = {"display_name": a.display_name or model_label, "family": a.model_family,
                "harness": harness_mode, "harness_label": harness_label, "harness_mode": harness_mode,
@@ -673,7 +868,12 @@ def main():
             "harness": harness_mode, "harness_label": harness_label, "harness_mode": harness_mode,
             "limit": a.limit, "max_turns": cfg["max_turns"], "polish_evals": a.polish_evals, "refine_turns": a.refine_turns,
             "harness_config": cfg,
-            "temperature": (a.temperature if a.backend == "openai" else 0.0), "max_new_tokens": cfg["max_new_tokens"],
+            "temperature": (sampling["params"]["temperature"] if sampling else
+                            (openai_temperature if a.backend == "openai" else 0.0)),
+            "max_new_tokens": cfg["max_new_tokens"],
+            "sampling": ({**sampling, "enabled": True} if sampling else
+                         {"enabled": False, "k": 1, "seeds": []}),
+            "pass_at_k": (report.get("pass_at_k") if sampling else None),
             "python": platform.python_version(), **{p: (md.version(p) if _has(p) else None) for p in ("torch", "transformers", "peft", "trl", "CoolProp")}}
     # Frozen-protocol provenance: every report must trace back to the exact rows, config and commit.
     meta.update({"eval_set_version": version, "eval_set_hash": version,
@@ -684,6 +884,12 @@ def main():
     payload = {"meta": meta, "arm_config": arm_cfg, **report}
     out = pathlib.Path(a.out); out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(payload, indent=1)); out.with_suffix(".completions.jsonl").write_text("\n".join(json.dumps(x) for x in log))
+    if sampling:
+        # One record per sampled pass per generation call: N completions per row, with their seeds.
+        with out.with_suffix(".samples.jsonl").open("w", encoding="utf-8") as fh:
+            for i, (seed, entries) in enumerate(logs):
+                for entry in entries:
+                    fh.write(json.dumps({**entry, "sample": i, "seed": seed}) + "\n")
     print(json.dumps(payload, indent=1))
 
 
