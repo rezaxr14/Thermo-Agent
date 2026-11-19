@@ -615,3 +615,9 @@ audits must also pass. Training starts only when the gate exits zero. The gate w
 - Accepted corpora: `data/frontier_tools_pilot/gpt-6-luna/`, `data/frontier_tools_pilot/claude-haiku-5-5/`.
 - Pilot task source: `kaggle/teacher_budget_pilot_task_s00.py` (currently `SPEC["limit"]=40`); canonical task remains
   `kaggle/teacher_harness_task_s00.py` with `SPEC["limit"]=0`.
+
+## Proof task failure and fix (2026-11-20)
+- FAIL: cotproof task v2 auto-ran default gemini-3.8-flash and errored: NameError thermo_teacher_budget_pilot_s00 at final call.
+- FIX: renamed final call to thermo_teacher_cotproof_s00.run(kbench.llm); pushed task v6 with --no-run equivalent (push without --wait does not auto-run), then explicitly invoked only gpt-6-luna and claude-haiku-5-5.
+- RULE: never let the task auto-run a default model; always push without --wait and run luna/haiku explicitly.
+
