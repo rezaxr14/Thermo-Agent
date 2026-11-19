@@ -3,7 +3,34 @@
 Working copy: `C:\Users\rezax\Home\Code\thermo_agent\Repo` on REZA_PC (git, branch `main`). No SSH, no WSL: every
 step below runs in this checkout.
 
-## Current implementation state (verified 2026-11-19)
+## Truth snapshot (2026-11-19 evening; supersedes the snapshot below)
+
+Authoritative values: `docs/DECISIONS_2026-11-19.md`. Plan: `docs/IMPLEMENTATION_PLAN.md` (traces first, then train,
+then score). Hard rule still standing: no `kaggle` command without Reza's "go".
+
+- **Done - first real frontier tool traces.** `thermo-teacher-tools-s00` version 6 (`google/gemini-3.8-flash`, run
+  `7179338`) produced **32 verifier-accepted tool-using CoT traces** out of 40 attempts (repair 9, ledger 10, audit 6,
+  design 7), 5 turns each, 1 rejected for grounding, 5 rows lost to provider 429s. Cost $0.842202 = **$0.0263 per
+  accepted trace**. Rows in `data/frontier_tools/frontier_*_train.jsonl` (32 unique `record_id`s). Assessment:
+  `docs/HOSTED_V6_ASSESSMENT_2026-11-19.md`.
+- **Done - ingest id resolution.** `ingest --extra-export-dir` (repeatable) + `record_id` keying; without it 12 of the
+  32 traces were silently dropped because their ids live in `data/processed_arch` or `data/frontier_prov`, not in
+  `data/processed`. Tests in `tests/test_transfer.py` (6 pass).
+- **Open - trace text is not yet gate-clean.** 11 of 32 rows exceed the 8,192 gate because of the provider's
+  `call_id='call_...__mpthought__<base64>'` wrapper. Removing only that wrapper gives 0/32 over, max 7,280 tokens
+  (real Qwen3.5 tokenizer). Sanitizer targets `data/frontier_tools_clean`; `data/frontier_tools` stays as received.
+- **Open - compact harness (0.1) and gate re-measure (0.2).** The harness prompt is still the 17.2k-char version and
+  `build_tool_corpus.py` still measures the plain prompt, so the 157 over-gate rows in `data/sft_tools_h` are still
+  there and no `*_h` rebuild has happened.
+- **Open - corpus composition (0.4-0.6).** No A-slice, no `sft_mix_h`, no `heldout_v2` yet; 32 traces is a pilot
+  yield, not the E1 corpus (deterministic target ~4,800 tool rows).
+- **Not done - no trained weights, no scores.** `runs/` has only smoke directories; no SFT adapter, no GRPO stage, no
+  held-out report. Training stays closed until the smoke kernel is green (G1).
+- **Model order (J4).** `gemini-3.5-flash-lite` -> `claude-haiku-5-5` -> `gpt-6-luna` (tools, reasoning off,
+  documented) -> premium tier only after bulk shows non-zero tool yield and a 40-row pilot cost is recorded. The older
+  "budget first: luna" order in the snapshot below is superseded.
+
+## Previous snapshot (2026-11-19 morning; superseded by the section above)
 
 This is the truth snapshot for the current plan. The longer historical sections below are kept for provenance;
 where they call an older smoke version or an older teacher pass "current", read this section instead.

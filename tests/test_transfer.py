@@ -78,3 +78,28 @@ def test_ingest_is_resumable(tmp_path):
     report = transfer.ingest(tmp_path / "export", comps, out, None, tasks=("repair",))
     assert len(read(out / "frontier_repair_train.jsonl")) == 1, "a second ingest must not duplicate the row"
     assert report["stats"]["skipped_already_accepted"] == 1
+
+
+def test_load_exports_resolves_ids_from_extra_dirs_and_record_id(tmp_path):
+    """A trace shard is built from several corpora; an id absent from the primary dir is not "unknown"."""
+    primary, arch, prov = tmp_path / "processed", tmp_path / "processed_arch", tmp_path / "prov"
+    row = make_row("wrong_fluid")
+    write(primary / "repair_train.jsonl", [sft_row(row, "rep-1-00001")])
+    write(arch / "repair_train.jsonl", [dict(row, id="arch-9-00000", task="repair")])
+    # An already-ingested frontier row carries `<record>#v3-t-<model>` and its own record_id.
+    write(prov / "frontier_repair_train.jsonl",
+          [dict(row, id="rep-129-00072#v3-t-google-gemini", record_id="rep-129-00072#v3", task="repair")])
+
+    exports = transfer.load_exports(primary, tasks=("repair",), extra_dirs=(arch, prov))
+    assert set(exports) == {"rep-1-00001", "arch-9-00000", "rep-129-00072#v3"}
+    assert exports["rep-1-00001"]["task"] == "repair", "the file name tags the task"
+    assert exports["rep-129-00072#v3"]["id"].endswith("-t-google-gemini")
+
+
+def test_load_exports_primary_dir_wins_over_extra_dirs(tmp_path):
+    primary, other = tmp_path / "processed", tmp_path / "other"
+    row = make_row("wrong_fluid")
+    write(primary / "repair_train.jsonl", [dict(row, id="same", task="repair", topology="primary")])
+    write(other / "repair_train.jsonl", [dict(row, id="same", task="repair", topology="other")])
+    exports = transfer.load_exports(primary, tasks=("repair",), extra_dirs=(other,))
+    assert exports["same"]["topology"] == "primary"

@@ -96,11 +96,27 @@ def export(sft_dir, out_dir, tasks=TASKS, split: str = "train", per_task: int = 
     return manifest
 
 
-def load_exports(export_dir, tasks=TASKS, split: str = "train") -> dict[str, dict]:
-    rows = {}
-    for task in tasks:
-        for row in _read(pathlib.Path(export_dir) / f"{task}_{split}.jsonl"):
-            rows[str(row["id"])] = row
+def load_exports(export_dir, tasks=TASKS, split: str = "train", extra_dirs=()) -> dict[str, dict]:
+    """Export rows keyed by record id, each tagged with the task whose file it came from.
+
+    `data/processed/*_train.jsonl` rows do not carry a `task` column (the file name is the
+    only task signal), so without this tag `ingest` fell back to "repair" for every row and
+    crashed on the first design/audit row (KeyError: plant_broken).
+
+    `extra_dirs` are searched after the primary dir, without overriding it. A trace shard is
+    built from several corpora (`data/processed` plus `data/processed_arch`), and some ids only
+    exist in an already-ingested frontier dir. Without the fallback those valid traces are
+    counted as `skipped_unknown_or_empty`, i.e. silently lost. Keys prefer `record_id` so a
+    teacher row (`<id>-t-<model>`, carrying the same task columns) resolves the same record.
+    """
+    rows: dict[str, dict] = {}
+    for base in (export_dir, *extra_dirs):
+        for task in tasks:
+            for path in (pathlib.Path(base) / f"{task}_{split}.jsonl",
+                         pathlib.Path(base) / f"frontier_{task}_{split}.jsonl"):
+                for row in _read(path):
+                    row.setdefault("task", task)
+                    rows.setdefault(str(row.get("record_id") or row["id"]), row)
     return rows
 
 
@@ -151,8 +167,9 @@ def provenance_fields(model: str = "", run_id=None) -> dict:
 
 
 def ingest(export_dir, completions_path, out_dir, memory_dir=None, tasks=TASKS, split: str = "train",
-           min_reward: float = 0.0, model: str = "", run_id: str | None = None) -> dict:
-    exports = load_exports(export_dir, tasks, split)
+           min_reward: float = 0.0, model: str = "", run_id: str | None = None,
+           extra_export_dirs=()) -> dict:
+    exports = load_exports(export_dir, tasks, split, extra_export_dirs)
     out = pathlib.Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     existing: dict[str, set] = {}
@@ -271,13 +288,16 @@ def main():
     ing.add_argument("--tasks", nargs="+", default=list(TASKS), choices=list(TASKS))
     ing.add_argument("--split", default="train")
     ing.add_argument("--min-reward", type=float, default=0.0)
+    ing.add_argument("--extra-export-dir", action="append", default=[],
+                     help="additional corpus dir searched for task columns when an id is not in export_dir "
+                          "(e.g. data/processed_arch for arch ids); earlier dirs win")
 
     a = ap.parse_args()
     if a.cmd == "export":
         print(json.dumps(export(a.sft_dir, a.out_dir, a.tasks, a.split, a.per_task, a.seed), indent=1))
     else:
         print(json.dumps(ingest(a.export_dir, a.completions, a.out_dir, a.memory_dir, a.tasks, a.split,
-                                a.min_reward, a.model, a.run_id), indent=1))
+                                a.min_reward, a.model, a.run_id, a.extra_export_dir), indent=1))
 
 
 if __name__ == "__main__":
