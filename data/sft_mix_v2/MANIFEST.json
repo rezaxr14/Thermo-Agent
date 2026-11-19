@@ -1644,48 +1644,48 @@
  "counts": {
   "grpo": {
    "audit": {
-    "deterministic": 1206,
-    "frontier": 0,
+    "deterministic": 1200,
+    "frontier": 6,
     "total": 1206
    },
    "design": {
-    "deterministic": 1207,
-    "frontier": 0,
+    "deterministic": 1200,
+    "frontier": 7,
     "total": 1207
    },
    "ledger": {
-    "deterministic": 1209,
-    "frontier": 0,
+    "deterministic": 1200,
+    "frontier": 9,
     "total": 1209
    },
    "repair": {
-    "deterministic": 1209,
-    "frontier": 0,
+    "deterministic": 1200,
+    "frontier": 9,
     "total": 1209
    }
   },
   "sft": {
    "audit": {
-    "deterministic": 1206,
-    "frontier": 0,
+    "deterministic": 1200,
+    "frontier": 6,
     "plain_a": 400,
     "total": 1606
    },
    "design": {
-    "deterministic": 1207,
-    "frontier": 0,
+    "deterministic": 1200,
+    "frontier": 7,
     "plain_a": 400,
     "total": 1607
    },
    "ledger": {
-    "deterministic": 1209,
-    "frontier": 0,
+    "deterministic": 1200,
+    "frontier": 9,
     "plain_a": 400,
     "total": 1609
    },
    "repair": {
-    "deterministic": 1209,
-    "frontier": 0,
+    "deterministic": 1200,
+    "frontier": 9,
     "plain_a": 400,
     "total": 1609
    }
@@ -1710,7 +1710,7 @@
   "with_tool_turns": 0
  },
  "frontier_reprompted": 0,
- "generated_at": "2026-11-19T20:12:58.735798+00:00",
+ "generated_at": "2026-11-19T20:34:22.788589+00:00",
  "generator": "mix_tool_corpora.py",
  "input_file_hashes": {
   "data/a_slice/audit_train.jsonl": "7eec6b3580097c9a807da9a659a7f4de1e9f05c6a59761213dd2cda48545a973",

@@ -1,19 +1,13 @@
-# Run ONE Kaggle CLI command with the project's own API token from .env.
-# .env now holds exactly one KAGGLE_API_TOKEN: the project account that owns the
-# rezanadimi datasets and the AI quota we have spent. Never use a second token.
-# The token value is read from .env at call time and is never printed or saved.
+# Run ONE Kaggle CLI command as the project account (rezanadimi).
+# The API token comes ONLY from repository-root .env (KAGGLE_API_TOKEN); never printed.
+# The SOCKS proxy is scoped to this single command; non-Kaggle traffic is not proxied.
 param([Parameter(ValueFromRemainingArguments=$true)][string[]]$KaggleArgs)
-
-$tokens = @()
+$token = ''
 foreach ($line in Get-Content .env) {
-    if ($line -match '^KAGGLE_API_TOKEN=(.*)$') {
-        $tokens += $Matches[1].Trim().Trim('"').Trim("'")
-    }
+    if ($line -match '^KAGGLE_API_TOKEN=(.*)$') { $token = $Matches[1].Trim().Trim('"').Trim("'") }
 }
-if ($tokens.Count -ne 1) {
-    throw "expected exactly one KAGGLE_API_TOKEN in .env; found $($tokens.Count)"
-}
-$env:KAGGLE_API_TOKEN = $tokens[0]
+if (-not $token) { throw 'KAGGLE_API_TOKEN missing from .env; ask Reza, never switch accounts' }
+$env:KAGGLE_API_TOKEN = $token
 $env:HTTP_PROXY = 'socks5h://127.0.0.1:10808'
 $env:HTTPS_PROXY = 'socks5h://127.0.0.1:10808'
 & .venv/Scripts/kaggle.exe @KaggleArgs

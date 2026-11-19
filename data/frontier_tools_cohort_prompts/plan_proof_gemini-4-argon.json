@@ -1,0 +1,32 @@
+{
+ "phase": "proof",
+ "model": "gemini-4-argon",
+ "policy": "one diagram per model (key = row id with #vN removed); a diagram with only verifier-failed attempts stays eligible for a retry by another model; a verifier-accepted tool trace claims the diagram permanently",
+ "rows": [
+  {
+   "id": "arch-94-00014",
+   "base": "arch-94-00014",
+   "cell": "repair/easy"
+  },
+  {
+   "id": "des-0-01098",
+   "base": "des-0-01098",
+   "cell": "design/easy"
+  },
+  {
+   "id": "aud-0-00355",
+   "base": "aud-0-00355",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "led-0-01345",
+   "base": "led-0-01345",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "rep-111-00009",
+   "base": "rep-111-00009",
+   "cell": "repair/medium"
+  }
+ ]
+}

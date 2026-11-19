@@ -1,7 +1,8 @@
-"""P0-10: one grpo_{task}_k{k} stage name across trainer, HF sync and eval.
+"""P0-10 / C9: one joint grpo_k{k} stage name across trainer, HF sync and eval.
 
 Three group sizes must produce three distinct remote prefixes, the eval runner must pull those
-same names, and a missing adapter must raise instead of scoring the base model under a GRPO label.
+same names (while still reading legacy grpo_{task}_k{k} checkpoints), and a missing adapter must
+raise instead of scoring the base model under a GRPO label.
 """
 from __future__ import annotations
 
@@ -21,11 +22,13 @@ K_VALUES = (4, 8, 16)
 STAGES = [grpo_mod.stage_name("ledger", k) for k in K_VALUES]
 
 
-def test_stage_name_encodes_task_and_k():
-    assert STAGES == ["grpo_ledger_k4", "grpo_ledger_k8", "grpo_ledger_k16"]
+def test_stage_name_is_joint_and_encodes_only_k():
+    assert STAGES == ["grpo_k4", "grpo_k8", "grpo_k16"]
     assert len(set(STAGES)) == 3
-    assert grpo_mod.stage_name("repair", 4) == "grpo_repair_k4"
-    assert grpo_mod.stage_name("repair", 4) != grpo_mod.stage_name("audit", 4)
+    assert grpo_mod.stage_name("repair", 4) == "grpo_k4"
+    assert grpo_mod.stage_name("repair", 4) == grpo_mod.stage_name("audit", 4)
+    # Reading still accepts the old per-task names, but writing always uses the joint name.
+    assert grpo_mod.stage_names_for_reading("ledger", 4) == ("grpo_k4", "grpo_ledger_k4")
 
 
 def test_three_k_values_give_three_distinct_remote_stages():
@@ -48,7 +51,8 @@ def test_train_runner_passes_merged_sft_as_init_and_the_k_stage():
     assert "INIT = str(merged)" in src
     assert "hf:merged/sft" not in src
     assert '"--init", INIT' in src
-    assert 'GRPO_STAGE = f"grpo_{TASK}_k{GRPO_K}"' in src
+    assert 'GRPO_STAGE = f"grpo_k{GRPO_K}"' in src
+    assert '"--task", "joint"' in src
 
 
 def test_eval_pull_uses_the_same_stage_names(tmp_path, monkeypatch):

@@ -1,0 +1,447 @@
+{
+  "repo_id": "Reza-Nadimi/thermo-agent-corpora",
+  "timestamp_utc": "2026-11-19T21:12:18Z",
+  "message": "v2 datagen freeze: all corpora + memory + heldout prompts",
+  "tag": "2026-11-20",
+  "mode": "upload",
+  "additive_only": true,
+  "heldout_prompts_only": true,
+  "dirs": [
+    "data/sft_tools_v2",
+    "data/grpo_tools_v2",
+    "data/sft_tools_v2_h",
+    "data/grpo_tools_v2_h",
+    "data/sft_mix_v2",
+    "data/grpo_mix_v2",
+    "data/a_slice",
+    "data/frontier_tools_clean_v2",
+    "data/frontier_tools_pilot",
+    "data/frontier_tools_cohort",
+    "data/memory",
+    "data/heldout_v2"
+  ],
+  "file_count": 70,
+  "total_bytes": 609194457,
+  "files": [
+    {
+      "path": "data/sft_tools_v2/audit_train.jsonl",
+      "sha256": "ca8273706da816959c951120b32c4f63b9e27d5f8697859076d40c75ab89c635",
+      "size_bytes": 17059463,
+      "local_path": "data/sft_tools_v2/audit_train.jsonl"
+    },
+    {
+      "path": "data/sft_tools_v2/design_train.jsonl",
+      "sha256": "cc5ca66e2c4e3c40533942678a5bac29a6d61a777dd3b578d6b77ac4561aabe6",
+      "size_bytes": 12484759,
+      "local_path": "data/sft_tools_v2/design_train.jsonl"
+    },
+    {
+      "path": "data/sft_tools_v2/ledger_train.jsonl",
+      "sha256": "2ac415a53747572631b9ffb8b157481ff7b99242be886fd03ebf480ad40e41c9",
+      "size_bytes": 19163538,
+      "local_path": "data/sft_tools_v2/ledger_train.jsonl"
+    },
+    {
+      "path": "data/sft_tools_v2/MANIFEST.json",
+      "sha256": "71c79219e557f01b9856a0dbc44cfb899273b47c898f8b8182d7d5d0f9fc7bee",
+      "size_bytes": 6513,
+      "local_path": "data/sft_tools_v2/MANIFEST.json"
+    },
+    {
+      "path": "data/sft_tools_v2/repair_train.jsonl",
+      "sha256": "78c04911b2c9569842a184c2475ec4d149c8dc0d483b59b025f60056a420dd3d",
+      "size_bytes": 15613371,
+      "local_path": "data/sft_tools_v2/repair_train.jsonl"
+    },
+    {
+      "path": "data/grpo_tools_v2/audit_train.jsonl",
+      "sha256": "99533d1a06db8ae6ac0d715501f5d162199d8afc2a602aa88045c2a14176862f",
+      "size_bytes": 26471920,
+      "local_path": "data/grpo_tools_v2/audit_train.jsonl"
+    },
+    {
+      "path": "data/grpo_tools_v2/design_train.jsonl",
+      "sha256": "52e73806d98cb364f69d27e5bedabafd69ec525a43dad0d7aa9acae5e06a1f8d",
+      "size_bytes": 23722842,
+      "local_path": "data/grpo_tools_v2/design_train.jsonl"
+    },
+    {
+      "path": "data/grpo_tools_v2/ledger_train.jsonl",
+      "sha256": "e828622a2aeac879d62419749c7c8f7e9c38c6746a5f8a1993045b9ce15b148a",
+      "size_bytes": 26425470,
+      "local_path": "data/grpo_tools_v2/ledger_train.jsonl"
+    },
+    {
+      "path": "data/grpo_tools_v2/repair_train.jsonl",
+      "sha256": "54ef618d50684fce996aac0dada76f2e0c43e9cfe94bdec7d239321e82f4945a",
+      "size_bytes": 21469138,
+      "local_path": "data/grpo_tools_v2/repair_train.jsonl"
+    },
+    {
+      "path": "data/sft_tools_v2_h/audit_train.jsonl",
+      "sha256": "ae9f5523aa58f50384f9f5cf1ca9ee88b591ec090e155b2e3b8b95b76c3dd963",
+      "size_bytes": 24151949,
+      "local_path": "data/sft_tools_v2_h/audit_train.jsonl"
+    },
+    {
+      "path": "data/sft_tools_v2_h/design_train.jsonl",
+      "sha256": "a5f355c883044c9107df011af9de7effe34429e00f1fd1092409e2141625b9b2",
+      "size_bytes": 17767798,
+      "local_path": "data/sft_tools_v2_h/design_train.jsonl"
+    },
+    {
+      "path": "data/sft_tools_v2_h/ledger_train.jsonl",
+      "sha256": "acc33f3655caafe6e9d6a570974a10679a8964976b190c94f23bc2a5fdc9b02f",
+      "size_bytes": 24491447,
+      "local_path": "data/sft_tools_v2_h/ledger_train.jsonl"
+    },
+    {
+      "path": "data/sft_tools_v2_h/MANIFEST.json",
+      "sha256": "f3f8786b7284cc86360114ff27a0d011b437e24d70cbc77938abecb6e56174d3",
+      "size_bytes": 6518,
+      "local_path": "data/sft_tools_v2_h/MANIFEST.json"
+    },
+    {
+      "path": "data/sft_tools_v2_h/repair_train.jsonl",
+      "sha256": "a1f9ff9b3195d581a46a59e83781e9f4156efbac5f51ff74aa8a76996a876f8e",
+      "size_bytes": 18658842,
+      "local_path": "data/sft_tools_v2_h/repair_train.jsonl"
+    },
+    {
+      "path": "data/grpo_tools_v2_h/audit_train.jsonl",
+      "sha256": "edd25465e63d54934f5a7dda262f92493ad28fcb3b8332165e507e3d8f87bdfe",
+      "size_bytes": 33587320,
+      "local_path": "data/grpo_tools_v2_h/audit_train.jsonl"
+    },
+    {
+      "path": "data/grpo_tools_v2_h/design_train.jsonl",
+      "sha256": "0fafb575735c4671608b43d15f6e60357f52a010767b272e9f6292ddc787664f",
+      "size_bytes": 29028814,
+      "local_path": "data/grpo_tools_v2_h/design_train.jsonl"
+    },
+    {
+      "path": "data/grpo_tools_v2_h/ledger_train.jsonl",
+      "sha256": "85b0f3a69a0a744fb50c1cbdd24e033edb18fe10b4c13721ed9a4470d0664707",
+      "size_bytes": 31765159,
+      "local_path": "data/grpo_tools_v2_h/ledger_train.jsonl"
+    },
+    {
+      "path": "data/grpo_tools_v2_h/repair_train.jsonl",
+      "sha256": "db0cc7a4d13c9da42bfd676fd81f56e24b19f071145a145fdc58f5f19b808287",
+      "size_bytes": 24537580,
+      "local_path": "data/grpo_tools_v2_h/repair_train.jsonl"
+    },
+    {
+      "path": "data/sft_mix_v2/audit_train.jsonl",
+      "sha256": "df3426757e05e05cb4c89a4ea78dd00742afcf7bffc716208fe22d1641eec05c",
+      "size_bytes": 27295437,
+      "local_path": "data/sft_mix_v2/audit_train.jsonl"
+    },
+    {
+      "path": "data/sft_mix_v2/design_train.jsonl",
+      "sha256": "3bf5321036cbfea623b4e5e26ab62abef2f75a306cf9c70c18a7cb67a97d7154",
+      "size_bytes": 19140950,
+      "local_path": "data/sft_mix_v2/design_train.jsonl"
+    },
+    {
+      "path": "data/sft_mix_v2/ledger_train.jsonl",
+      "sha256": "84bf49e17173d316e8aa1b3ae96825a8359952305ef29b92a095b92ca4ccc122",
+      "size_bytes": 28895378,
+      "local_path": "data/sft_mix_v2/ledger_train.jsonl"
+    },
+    {
+      "path": "data/sft_mix_v2/MANIFEST.json",
+      "sha256": "7599dc0c713caae81fc074e4b39b2dcd42d3533be90a8a784cb80bc14b2e614c",
+      "size_bytes": 44192,
+      "local_path": "data/sft_mix_v2/MANIFEST.json"
+    },
+    {
+      "path": "data/sft_mix_v2/repair_train.jsonl",
+      "sha256": "1386238f196e1e10728db402330b423fc9c120fecb39c201cecafef39d4fbe4e",
+      "size_bytes": 22451920,
+      "local_path": "data/sft_mix_v2/repair_train.jsonl"
+    },
+    {
+      "path": "data/grpo_mix_v2/audit_train.jsonl",
+      "sha256": "4f4a529d20d91ea947dabbd0d49233be63664ee7e05f02f7c960d7f4b27cba75",
+      "size_bytes": 33587320,
+      "local_path": "data/grpo_mix_v2/audit_train.jsonl"
+    },
+    {
+      "path": "data/grpo_mix_v2/design_train.jsonl",
+      "sha256": "862bb6c5f51cd7f5034f255972255b010e573526ea69fb0eabcb9a96052ffe6d",
+      "size_bytes": 29028816,
+      "local_path": "data/grpo_mix_v2/design_train.jsonl"
+    },
+    {
+      "path": "data/grpo_mix_v2/ledger_train.jsonl",
+      "sha256": "64c5a66730cd1632e4eee1fb03c09f3be328ba9e74843a71e47c34f4f950f0eb",
+      "size_bytes": 31765159,
+      "local_path": "data/grpo_mix_v2/ledger_train.jsonl"
+    },
+    {
+      "path": "data/grpo_mix_v2/repair_train.jsonl",
+      "sha256": "cc00d37b04efd8462da7812536be4d0438281b31c7403c09ccc664d2c0a306ee",
+      "size_bytes": 24537578,
+      "local_path": "data/grpo_mix_v2/repair_train.jsonl"
+    },
+    {
+      "path": "data/a_slice/audit_train.jsonl",
+      "sha256": "7eec6b3580097c9a807da9a659a7f4de1e9f05c6a59761213dd2cda48545a973",
+      "size_bytes": 3136822,
+      "local_path": "data/a_slice/audit_train.jsonl"
+    },
+    {
+      "path": "data/a_slice/design_train.jsonl",
+      "sha256": "be01fc37efb06d85cf9ec3537ed875ae0de7ad05ce78196eea071801ef4c56bc",
+      "size_bytes": 1364784,
+      "local_path": "data/a_slice/design_train.jsonl"
+    },
+    {
+      "path": "data/a_slice/ledger_train.jsonl",
+      "sha256": "863f41d5ba3174343de01a86dd51f55df773c4865b3dd81bea814af34b662f52",
+      "size_bytes": 4396765,
+      "local_path": "data/a_slice/ledger_train.jsonl"
+    },
+    {
+      "path": "data/a_slice/MANIFEST.json",
+      "sha256": "d84d7346770eca601eb38c4d7f8b3193f73838445d82becc19a08aecf746e590",
+      "size_bytes": 37138,
+      "local_path": "data/a_slice/MANIFEST.json"
+    },
+    {
+      "path": "data/a_slice/repair_train.jsonl",
+      "sha256": "66991f8672ce64685fc3074b1bafa73f57499d96d76354bd0ec249b5254589e1",
+      "size_bytes": 3786364,
+      "local_path": "data/a_slice/repair_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_clean_v2/frontier_audit_train.jsonl",
+      "sha256": "ff43a9ae4f6e0850231cb9100a611a19bc1c3258cd94095528138ffdd002bfca",
+      "size_bytes": 147769,
+      "local_path": "data/frontier_tools_clean_v2/frontier_audit_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_clean_v2/frontier_design_train.jsonl",
+      "sha256": "3458e2d2447192e644946229fc9f54f38ba2755fd37017f18073a6c79dc82d68",
+      "size_bytes": 81823,
+      "local_path": "data/frontier_tools_clean_v2/frontier_design_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_clean_v2/frontier_ledger_train.jsonl",
+      "sha256": "173426e8ab1cf05a7b00e6ea30700a979e3f0a9577275c389e9365ce6cb94ad9",
+      "size_bytes": 293207,
+      "local_path": "data/frontier_tools_clean_v2/frontier_ledger_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_clean_v2/frontier_repair_train.jsonl",
+      "sha256": "d4a812bb9080629b38a3aa7e24a652adb0b5ceb792aa600f9a26395bc8db4c87",
+      "size_bytes": 154095,
+      "local_path": "data/frontier_tools_clean_v2/frontier_repair_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_clean_v2/MANIFEST.json",
+      "sha256": "98e5aae819d78303688b7023fdcfb9ca1d3f60cbedfcddcd129278dd6324c439",
+      "size_bytes": 3626,
+      "local_path": "data/frontier_tools_clean_v2/MANIFEST.json"
+    },
+    {
+      "path": "data/frontier_tools_pilot/claude-haiku-5-5/frontier_audit_train.jsonl",
+      "sha256": "566b4e65a88c270b343086e25300b8c7273ab846e5f010ecdf1ece226e9c01c2",
+      "size_bytes": 72052,
+      "local_path": "data/frontier_tools_pilot/claude-haiku-5-5/frontier_audit_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_pilot/claude-haiku-5-5/frontier_design_train.jsonl",
+      "sha256": "7a4e2688c81e6679e7ec52f30021f98cd9597eaf0ca023e37984e63ff7c057e4",
+      "size_bytes": 223115,
+      "local_path": "data/frontier_tools_pilot/claude-haiku-5-5/frontier_design_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_pilot/claude-haiku-5-5/frontier_ledger_train.jsonl",
+      "sha256": "a8799c9603c9866caf0a3fed2a7d4a5973877e49949dba7faf7697d69811fa42",
+      "size_bytes": 169935,
+      "local_path": "data/frontier_tools_pilot/claude-haiku-5-5/frontier_ledger_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_pilot/claude-haiku-5-5/frontier_repair_train.jsonl",
+      "sha256": "92a84cfc532033cb9433f623961d782c94f2700769feaeeb1a4c2f2eba7ed386",
+      "size_bytes": 440751,
+      "local_path": "data/frontier_tools_pilot/claude-haiku-5-5/frontier_repair_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_pilot/gpt-6-luna/frontier_design_train.jsonl",
+      "sha256": "ac29797dad1ff57b600b78439d0a3c8187c565a55f99d0eb665a39b702ae34c4",
+      "size_bytes": 216415,
+      "local_path": "data/frontier_tools_pilot/gpt-6-luna/frontier_design_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_pilot/gpt-6-luna/frontier_ledger_train.jsonl",
+      "sha256": "f31fb08708368e1b203541345ce51562ae480d90109fcd4c0ca2f2b49d2096e2",
+      "size_bytes": 221248,
+      "local_path": "data/frontier_tools_pilot/gpt-6-luna/frontier_ledger_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_pilot/gpt-6-luna/frontier_repair_train.jsonl",
+      "sha256": "2ebbe8292ea20e1d5663ebd40900c66822f0813b708c085bb9dba633cf5a0786",
+      "size_bytes": 199579,
+      "local_path": "data/frontier_tools_pilot/gpt-6-luna/frontier_repair_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort/claude-haiku-5-5/frontier_audit_train.jsonl",
+      "sha256": "70648f3a32b4562c2bd37b8c7556488fbe30c646912e9d82cabb9cffcd577db6",
+      "size_bytes": 40370,
+      "local_path": "data/frontier_tools_cohort/claude-haiku-5-5/frontier_audit_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort/claude-haiku-5-5/frontier_design_train.jsonl",
+      "sha256": "5735aee24044e0dbdd71f4ea416a5a109f9ec8783fc80fc80b89515ba577d6ad",
+      "size_bytes": 93193,
+      "local_path": "data/frontier_tools_cohort/claude-haiku-5-5/frontier_design_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort/claude-haiku-5-5/frontier_ledger_train.jsonl",
+      "sha256": "2a220ac2d054dc571c2337135234e2bd6f8d3af8f57376db8c28c79ead2c4702",
+      "size_bytes": 19394,
+      "local_path": "data/frontier_tools_cohort/claude-haiku-5-5/frontier_ledger_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort/claude-haiku-5-5/frontier_repair_train.jsonl",
+      "sha256": "9754e927c53e1224bfca3381a66fd23caff9bec8a0bf585e35df6aac4546ca86",
+      "size_bytes": 267397,
+      "local_path": "data/frontier_tools_cohort/claude-haiku-5-5/frontier_repair_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort/gpt-6-luna/frontier_design_train.jsonl",
+      "sha256": "4441380137000a65d3d779471a4d77c4833abb885be4225c28dde2b347ab103f",
+      "size_bytes": 197149,
+      "local_path": "data/frontier_tools_cohort/gpt-6-luna/frontier_design_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort/gpt-6-luna/frontier_ledger_train.jsonl",
+      "sha256": "3dcfd9e3fe579e0edd8494f7e9ea80b982c563f53f5ccc640068fe458e647306",
+      "size_bytes": 214712,
+      "local_path": "data/frontier_tools_cohort/gpt-6-luna/frontier_ledger_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort/gpt-6-luna/frontier_repair_train.jsonl",
+      "sha256": "fcca8f67b3c2ed5adaeaabf9939082b04f5b48754cb37e1818b49506b989ed36",
+      "size_bytes": 199995,
+      "local_path": "data/frontier_tools_cohort/gpt-6-luna/frontier_repair_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort/TOKENGATE_PILOT.json",
+      "sha256": "9616b2bfa6b45cab617ff183ad555981b0bdc765490d4ac5fe0e4b6b94967550",
+      "size_bytes": 1248,
+      "local_path": "data/frontier_tools_cohort/TOKENGATE_PILOT.json"
+    },
+    {
+      "path": "data/memory/adversarial_repair.jsonl",
+      "sha256": "647498a014a08ea33dd8c14e4aac86089429cfa66804708525f3a7284beb932a",
+      "size_bytes": 11479,
+      "local_path": "data/memory/adversarial_repair.jsonl"
+    },
+    {
+      "path": "data/memory/agent_patterns.jsonl",
+      "sha256": "6b676ce43c1b98002e1abb3208b7a061c1fc448b9c0fce0a6e0c5c63046426c6",
+      "size_bytes": 7176,
+      "local_path": "data/memory/agent_patterns.jsonl"
+    },
+    {
+      "path": "data/memory/agent_success_patterns.jsonl",
+      "sha256": "50dea0a680f8aeaa7f73075476a7beef713151fb2bbdb4c8bf92e36618c0e31d",
+      "size_bytes": 3335,
+      "local_path": "data/memory/agent_success_patterns.jsonl"
+    },
+    {
+      "path": "data/memory/failure_reasons.json",
+      "sha256": "c26ebe93b6ccc4768e37543a51b3f787de976d98984c5132cb24629a1e11b635",
+      "size_bytes": 238,
+      "local_path": "data/memory/failure_reasons.json"
+    },
+    {
+      "path": "data/memory/frontier_notes.jsonl",
+      "sha256": "af0bb4e9a8bb66da18a84fe766b4e878ab284ba46d24e3822e048965a4043391",
+      "size_bytes": 200310,
+      "local_path": "data/memory/frontier_notes.jsonl"
+    },
+    {
+      "path": "data/heldout_v2/audit_test_id.jsonl",
+      "sha256": "ec897ba80d386f7b1d23f5ce2f800de62a0f45e198dc430918d9f474894eaa15",
+      "size_bytes": 914513,
+      "local_path": "data/heldout_v2/audit_test_id.jsonl"
+    },
+    {
+      "path": "data/heldout_v2/audit_test_ood_topology.jsonl",
+      "sha256": "5237661e657313b17b8945f98c36d1b155c17a56c681fb6decdab51abfa04cf3",
+      "size_bytes": 708422,
+      "local_path": "data/heldout_v2/audit_test_ood_topology.jsonl"
+    },
+    {
+      "path": "data/heldout_v2/design_test_id.jsonl",
+      "sha256": "48506c22f5825b0738da2401e32df403b8ce3b8e72e99b678c6ba842db0bc5ab",
+      "size_bytes": 181235,
+      "local_path": "data/heldout_v2/design_test_id.jsonl"
+    },
+    {
+      "path": "data/heldout_v2/design_test_ood_climate.jsonl",
+      "sha256": "668d126e9ddacf96e5f9be345d4bf76c9a292105ca94772115ca2f503074b48d",
+      "size_bytes": 515022,
+      "local_path": "data/heldout_v2/design_test_ood_climate.jsonl"
+    },
+    {
+      "path": "data/heldout_v2/design_test_ood_load.jsonl",
+      "sha256": "4d8a9f89c27233aec37ac6438919694659dcea6016a4f1b7927dbd8d8b24394c",
+      "size_bytes": 327942,
+      "local_path": "data/heldout_v2/design_test_ood_load.jsonl"
+    },
+    {
+      "path": "data/heldout_v2/design_test_ood_scale.jsonl",
+      "sha256": "94931fa051c6872baa998c20ab9f0da8c96c7312ca46933e29f63eef0f528028",
+      "size_bytes": 318860,
+      "local_path": "data/heldout_v2/design_test_ood_scale.jsonl"
+    },
+    {
+      "path": "data/heldout_v2/ledger_test_id.jsonl",
+      "sha256": "f63e8bfad99a5971645a3decc5611d93ec2d0d769ca848f6f0b21e890b531af9",
+      "size_bytes": 565778,
+      "local_path": "data/heldout_v2/ledger_test_id.jsonl"
+    },
+    {
+      "path": "data/heldout_v2/ledger_test_ood_fault.jsonl",
+      "sha256": "b53e46300878535cfce470cbc0e147f4bad269c490cf94700906ba23c789e1fd",
+      "size_bytes": 1855862,
+      "local_path": "data/heldout_v2/ledger_test_ood_fault.jsonl"
+    },
+    {
+      "path": "data/heldout_v2/ledger_test_ood_topology.jsonl",
+      "sha256": "c479db626ffe9b26364285928c430aa9b26ed627f3a7f1f0db398bf158b91f3d",
+      "size_bytes": 1031768,
+      "local_path": "data/heldout_v2/ledger_test_ood_topology.jsonl"
+    },
+    {
+      "path": "data/heldout_v2/MANIFEST.json",
+      "sha256": "b23e3ef2693c8df75827d0824a1d75d016f1e220989301bf4ec3a2cdd4d35f13",
+      "size_bytes": 20087,
+      "local_path": "data/heldout_v2/MANIFEST.json"
+    },
+    {
+      "path": "data/heldout_v2/repair_test_id.jsonl",
+      "sha256": "5770837de9649bb521fcd26a0be711ce9f595d4d3d5027c23dda92da5fd8a70a",
+      "size_bytes": 368041,
+      "local_path": "data/heldout_v2/repair_test_id.jsonl"
+    },
+    {
+      "path": "data/heldout_v2/repair_test_ood_fault.jsonl",
+      "sha256": "464084ac482ca341f96db526cbe13a781a95c967d4afa5a54662b20f1b652c94",
+      "size_bytes": 2291545,
+      "local_path": "data/heldout_v2/repair_test_ood_fault.jsonl"
+    },
+    {
+      "path": "data/heldout_v2/repair_test_ood_topology.jsonl",
+      "sha256": "02fc716a236c386ae44edd90d68e5b4798977d89cd82ead8f4b304ef2f4fdffc",
+      "size_bytes": 734707,
+      "local_path": "data/heldout_v2/repair_test_ood_topology.jsonl"
+    }
+  ]
+}

@@ -56,6 +56,7 @@ row in the slice dir, which is already task-balanced at build time.  Omitting
 from __future__ import annotations
 
 import argparse
+import collections
 import hashlib
 import json
 import pathlib
@@ -486,17 +487,34 @@ def build_mix(deterministic_sft: pathlib.Path | str,
             per_source["a_slice"][task] = len(a_rows)
             a_stats["selected"][task] = len(a_rows)
 
+        # Count by the ACTUAL per-row `source`, not by input directory: the v2
+        # deterministic corpora already contain the frontier traces, so a mix that
+        # passes `--frontier data/frontier` (zero tool rows) still has frontier rows
+        # in its output. Counting by input dir used to report frontier=0 wrongly.
+        def _actual(rows: list[dict], owners: dict[str, str]) -> collections.Counter:
+            out: collections.Counter = collections.Counter()
+            for row in rows:
+                src = row.get("source")
+                if src not in ("deterministic_tools", "frontier_tools", "ground_truth"):
+                    src = {"frontier": "frontier_tools",
+                           "a_slice": "ground_truth"}.get(
+                               owners.get(str(row.get("id") or "")), "deterministic_tools")
+                out[src] += 1
+            return out
+
+        sft_actual = _actual([r for r in sft_rows if r.get("task") == task], sft_owner)
+        grpo_actual = _actual([r for r in grpo_rows if r.get("task") == task], grpo_owner)
         stream_counts["sft"][task] = {
-            "deterministic": len(dsft),
-            "frontier": per_source["frontier"][task],
-            "total": len(dsft) + per_source["frontier"][task] + len(a_rows),
+            "deterministic": sft_actual["deterministic_tools"],
+            "frontier": sft_actual["frontier_tools"],
+            "total": sum(sft_actual.values()),
         }
         if a_dir is not None:
-            stream_counts["sft"][task]["plain_a"] = len(a_rows)
+            stream_counts["sft"][task]["plain_a"] = sft_actual["ground_truth"]
         stream_counts["grpo"][task] = {
-            "deterministic": len(dgrpo),
-            "frontier": per_source["frontier"][task],
-            "total": len(dgrpo) + per_source["frontier"][task],
+            "deterministic": grpo_actual["deterministic_tools"],
+            "frontier": grpo_actual["frontier_tools"],
+            "total": sum(grpo_actual.values()),
         }
 
     # Sum the frontier rows actually appended (dedup across tasks would be a

@@ -1,36 +1,43 @@
 """Kaggle kernel: pull the private HF corpus repo into the single Kaggle dataset.
 
-No data is uploaded from the local machine. HF_TOKEN (and, if needed,
-KAGGLE_API_TOKEN) are read from Kaggle Secrets. The dataset
-``rezanadimi/thermo-agent-data`` receives a new version built from the HF bytes.
+No data is uploaded from the local machine. Credentials come from the private
+Kaggle dataset `rezanadimi/thermo-agent-env` (file `env`, generated from the
+repo-root .env). The dataset `rezanadimi/thermo-agent-data` receives a new
+version built from the HF bytes. Tokens are never printed.
 """
 # %% [markdown]
 # # thermo-agent: Hugging Face -> Kaggle dataset bridge
 #
-# Pulls `Reza-Nadimi/thermo-agent-corpora` (private) and publishes it as the single
-# Kaggle dataset `rezanadimi/thermo-agent-data`. Data never leaves HF except into
-# Kaggle. Tokens come from Kaggle Secrets, never from notebooks or datasets.
+# Downloads `Reza-Nadimi/thermo-agent-corpora` with the private `env` dataset and
+# publishes it as the single Kaggle dataset `rezanadimi/thermo-agent-data`.
+# No local data upload; no Kaggle Secrets are required.
 
 # %%
 import os
 import pathlib
 
-from kaggle_secrets import UserSecretsClient
+ENV_PATH = None
+for candidate in pathlib.Path("/kaggle/input").rglob("*"):
+    if candidate.is_file() and candidate.name in ("env", ".env"):
+        ENV_PATH = candidate
+        break
+if ENV_PATH is None:
+    raise SystemExit("attach the private dataset rezanadimi/thermo-agent-env (file 'env')")
 
-HF_REPO = "Reza-Nadimi/thermo-agent-corpora"
-KAGGLE_DATASET = "rezanadimi/thermo-agent-data"
-OUT = pathlib.Path("/kaggle/working/hf_corpora")
-
-secrets = UserSecretsClient()
-os.environ["HF_TOKEN"] = secrets.get_secret("HF_TOKEN")
-try:
-    os.environ["KAGGLE_API_TOKEN"] = secrets.get_secret("KAGGLE_API_TOKEN")
-except Exception as exc:  # kagglehub may already have kernel credentials
-    print("KAGGLE_API_TOKEN secret unavailable:", type(exc).__name__)
+for line in ENV_PATH.read_text(encoding="utf-8").splitlines():
+    if "=" in line and not line.strip().startswith("#"):
+        k, v = line.split("=", 1)
+        os.environ[k.strip()] = v.strip().strip('"').strip("'")
+for key in ("HF_TOKEN", "KAGGLE_API_TOKEN"):
+    if not os.environ.get(key):
+        raise SystemExit(f"{key} missing from attached env file")
+print(f"credentials loaded from {ENV_PATH.name}; values redacted", flush=True)
 
 # %%
 from huggingface_hub import snapshot_download
 
+HF_REPO = "Reza-Nadimi/thermo-agent-corpora"
+OUT = pathlib.Path("/kaggle/working/hf_corpora")
 OUT.mkdir(parents=True, exist_ok=True)
 snapshot_download(repo_id=HF_REPO, repo_type="dataset", token=os.environ["HF_TOKEN"],
                   local_dir=str(OUT))
@@ -40,5 +47,6 @@ print(f"downloaded {len(files)} files, {sum(p.stat().st_size for p in files)/1e6
 # %%
 import kagglehub
 
+KAGGLE_DATASET = "rezanadimi/thermo-agent-data"
 kagglehub.dataset_upload(KAGGLE_DATASET, str(OUT))
 print(f"published {KAGGLE_DATASET}: https://www.kaggle.com/datasets/{KAGGLE_DATASET}", flush=True)

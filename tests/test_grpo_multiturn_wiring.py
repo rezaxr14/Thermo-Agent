@@ -158,7 +158,7 @@ def test_completion_text_rejects_truncated_rollouts_with_a_clear_reason():
 # --------------------------------------------------------------------------- #
 def test_multiturn_config_values_are_set_on_grpo_config():
     values = grpo.multiturn_config()
-    assert values["max_tool_calling_iterations"] == 4
+    assert values["max_tool_calling_iterations"] == grpo.DEFAULT_MAX_TOOL_CALLING_ITERATIONS == 6
     assert values["max_completion_length"] >= 2048 and values["max_completion_length"] != 320
     assert values["mask_truncated_completions"] is True
 

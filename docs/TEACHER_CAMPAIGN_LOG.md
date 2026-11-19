@@ -536,3 +536,82 @@ Steward note: appended after the earlier records; `scripts/teacher_campaign_stat
 Eval and teacher tracegen already separate Z/H prompts; training rows still use only the plain 740-char
 `harness="none"` system prompt. `--prompt-variant {plain,harness_tools}` work (emitting `*_h` corpora aligned with
 the `ours_harness` eval arm) is in progress — gap recorded as **OPEN** until the code lands.
+
+## 2026-11-19 — budget-tier payload proof + 40-row pilots (Phase 1.3 / 2.1)
+
+### Binding rule (Reza, `docs/DECISIONS_2026-11-19.md` section 6)
+
+These pilots do **not** make the project ready for training. `scripts/check_datagen_complete.py` stays RED until the
+**full frontier cohort** exists: budget (`gpt-6-luna`, `claude-haiku-5-5`) **and then** premium (`gpt-6.2-sol`,
+`claude-sonnet-5-5`, `claude-opus-5-5-default`, `gemini-4-argon`). For **every** model the gate needs verifier-accepted
+harness-CoT tool traces (at least one `<tool_call>` and `<tool_result>` turn plus an accepted final answer) in **all
+four** cohort tasks (repair, design, audit, ledger) and **all three** tiers (easy, medium, hard, tiered by
+`thermo_agent/synth/tiers.py`). This is a coverage floor, never a cap (D1/D2/D6/D7/D9 still forbid caps on traces,
+counts, cost and rows). The deterministic 4,800-row corpora, A-slice, frozen `heldout_v2` and zero-overlap/provenance
+audits must also pass. Training starts only when the gate exits zero. The gate was **not** modified, premium runs were
+**not** started, training was **not** started, and `gemini-3.5-flash-lite` remains excluded.
+
+### Build and proof
+
+- Code bundle rebuilt with `scripts/make_kaggle_bundle.ps1` from current sources (192 files, 504,497 bytes,
+  SHA-256 `98DA29D3821ABC3B75C2A4345A580EBD2FA8C5299E70387E30AF0563A8EE8717`), uploaded as a new version of
+  `rezanadimi/thermo-agent-code` and verified to contain `reasoning_for_model` and `DEFAULT_MAX_ROUNDS = 6`.
+- Canonical builder `kaggle/teacher_harness_task_s00.py` kept at `SPEC["limit"]=0`, `k_memory=3`, round budget from
+  `DEFAULT_MAX_ROUNDS` (6), compact harness `agents+skills`/`harness="tools"`.
+- Proof task `thermo-teacher-budget-pilot-s00` v1 (`SPEC["limit"]=5`, otherwise identical harness) pushed; both
+  slugs run with `-m`. **Payload shape (structure only, no tokens):** one system message = task prompt +
+  `AGENTS.md` + k=3 compact failure memory + component skills + tool contract + answer format (7,464 chars in the
+  run record); one user message = task artefact (`PLANT`/`SITE`/`LEDGER`; 258 chars on the sampled row); 5 native
+  tools (`inspect_plant`, `first_law_check`, `second_law_check`, `validity_check`, `solve_plant`);
+  `max_tool_rounds=6`; reasoning `none` for `gpt-6-luna`, backend default for `claude-haiku-5-5`. No ground truth,
+  manifest or bookkeeping ids are sent to the model.
+- **Result: both models ACCEPT the exact payload.** 5/5 answered each, 0 API errors, tool turns and final answers on
+  every proof row. `gpt-6-luna` manifest: `model=openai/gpt-6-luna`, `reasoning=none`, `rounds=6`, `k_memory=3`,
+  `memory_notes_loaded=430`, cost $0.006645. `claude-haiku-5-5` manifest: `model=anthropic/claude-haiku-5-5`,
+  `reasoning=backend-default`, same limits/memory, cost $0.011566. All 5 proof rows were tool-bearing; ingest of the
+  luna proof journal into a throwaway dir accepted 4/5, confirming the verifier path.
+- Historical note: an older v5 luna run 400'd on `reasoning_effort` + tools. That used the pre-fix task definition.
+  The current harness sets `reasoning="none"` for gpt-6 and the proof shows it is accepted — no payload was altered
+  to rescue a rejection.
+
+### 40-row pilots (task v2; run ids 7218725 / 7218726)
+
+| Model | Attempts | 429 / 400 / other | Answered | Accepted rows | Accepted tool traces + final | Zero-shot accepted | Cost USD | Cost/accepted row | Cost/accepted tool trace |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| `gpt-6-luna` | 40 | 0 / 0 / 0 | 40 | 27 | 27 | 0 | 0.048182 | 0.001785 | 0.001785 |
+| `claude-haiku-5-5` | 40 | 0 / 0 / 0 | 40 | 28 | 18 | 10 | 0.111698 | 0.003989 | 0.006205 |
+
+- Both journals: 40 rows, `status=completed`, `harness=tools`, `rounds=6`, `k_memory=3`, `memory_notes_loaded=430`,
+  0 errors. Compact harness was actually used in both: the run record shows the 7,464-char system prompt with
+  `AGENTS.md`, skills, k=3 compact failure memory and the five-tool contract; every model turn went through the native
+  tool loop. `gpt-6-luna` produced tool traces on 40/40 rows; `claude-haiku-5-5` on 30/40 (the other 10 were direct
+  single-turn ledger answers with zero tool calls — kept as zero-shot rows, never padded into fake traces).
+- Task mix per pilot: repair 12, ledger 11, design 10, audit 7. Accepted-by-task: luna 8 repair / 11 ledger / 8
+  design / 0 audit; haiku 11 repair / 11 ledger / 4 design / 2 audit (of the 28 accepted, 18 tool-bearing:
+  11 repair / 1 ledger / 4 design / 2 audit).
+- **Failure taxonomy (verifier, after ingest):** luna 12 rejected — 8 `format` (7x "unknown component ids ['DC']",
+  1x empty `<edits>`), 2 `grounding`, 1 `verifier`, 1 `edit`; haiku 11 rejected — 5 `format` (all "unknown component
+  ids ['DC']"), 6 `grounding` (70–79% of rationale numbers present in the plant). No API/auth errors in either pilot.
+  One journal id per model (`rep-130-00000#v5`) is not resolvable in the export dirs; it stays in the journal only and
+  contributes no corpus row.
+- **Corpus / provenance:** accepted traces were ingested with the unmodified `transfer.ingest` into
+  `data/frontier_tools_pilot/<model>/` (per-model dirs so the shared 40 ids are not deduped across models). Every row
+  carries `model`, `provider` (`openai` / `anthropic`) and `run_id` (`budget-pilot-7218725` / `-7218726`). No
+  `--memory-dir` was passed, so no model names were written into retrieval memory; recaps live here only.
+- **Gate state:** `python scripts/check_datagen_complete.py` exits non-zero (`passed=false`); the
+  `frontier CoT cohort (models x tasks x tiers)` item is RED. Premium tier is **queued** pending Reza's go; no premium
+  model was run and no training was started.
+- **Gate/ingest contract (observed, not changed here):** earlier in this pass the gate's row filter did not recognise
+  ingest's `validation={reward, reasons}` rows, which would have hidden even full-cohort traces. Its owner has since
+  updated `check_datagen_complete._frontier_rows()` to use `scripts.mix_tool_corpora.is_verifier_accepted`. After
+  pilot ingest the gate counts **77** accepted tool traces (32 prior gemini + 27 luna + 18 haiku) and still exits
+  non-zero: the `frontier CoT cohort (models x tasks x tiers)` item remains RED because premium models are absent and
+  several task/tier cells are empty (e.g. luna/audit, haiku/ledger tiers). No gate code was changed by this pilot.
+
+### Evidence
+
+- Journals/manifests/ingest reports/summary: `data/teacher_runs/kaggle_hosted/budget_pilot/{proof,}/<model>/`
+  (run ids 7214496/7214497 for proof, 7218725/7218726 for pilots), `pilot_summary.json`, `pilot_driver.log`.
+- Accepted corpora: `data/frontier_tools_pilot/gpt-6-luna/`, `data/frontier_tools_pilot/claude-haiku-5-5/`.
+- Pilot task source: `kaggle/teacher_budget_pilot_task_s00.py` (currently `SPEC["limit"]=40`); canonical task remains
+  `kaggle/teacher_harness_task_s00.py` with `SPEC["limit"]=0`.

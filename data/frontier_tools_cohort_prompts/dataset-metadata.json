@@ -1,0 +1,68 @@
+{
+ "title": "thermo-agent frontier cohort tier shards",
+ "id": "rezanadimi/thermo-teacher-cohort-prompts",
+ "description": "Tier-targeted tool-ready task inputs only (no answers). Compact harness regenerated at run time by the shared builder.",
+ "licenses": [
+  {
+   "name": "MIT"
+  }
+ ],
+ "files": [
+  {
+   "name": "prompts_repair_easy.jsonl",
+   "description": "repair/easy inputs only"
+  },
+  {
+   "name": "prompts_repair_medium.jsonl",
+   "description": "repair/medium inputs only"
+  },
+  {
+   "name": "prompts_repair_hard.jsonl",
+   "description": "repair/hard inputs only"
+  },
+  {
+   "name": "prompts_design_easy.jsonl",
+   "description": "design/easy inputs only"
+  },
+  {
+   "name": "prompts_design_medium.jsonl",
+   "description": "design/medium inputs only"
+  },
+  {
+   "name": "prompts_design_hard.jsonl",
+   "description": "design/hard inputs only"
+  },
+  {
+   "name": "prompts_audit_easy.jsonl",
+   "description": "audit/easy inputs only"
+  },
+  {
+   "name": "prompts_audit_medium.jsonl",
+   "description": "audit/medium inputs only"
+  },
+  {
+   "name": "prompts_audit_hard.jsonl",
+   "description": "audit/hard inputs only"
+  },
+  {
+   "name": "prompts_ledger_easy.jsonl",
+   "description": "ledger/easy inputs only"
+  },
+  {
+   "name": "prompts_ledger_medium.jsonl",
+   "description": "ledger/medium inputs only"
+  },
+  {
+   "name": "prompts_ledger_hard.jsonl",
+   "description": "ledger/hard inputs only"
+  },
+  {
+   "name": "prompts_all.jsonl",
+   "description": "all tier-targeted rows"
+  },
+  {
+   "name": "prompts_proof.jsonl",
+   "description": "5-row payload-proof shard"
+  }
+ ]
+}

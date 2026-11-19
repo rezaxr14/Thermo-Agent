@@ -1,0 +1,65 @@
+{
+ "passed": false,
+ "items": [
+  {
+   "name": "data/sft_tools_v2 rows",
+   "ok": true,
+   "detail": "4832 rows; expected >= 4800"
+  },
+  {
+   "name": "data/grpo_tools_v2 rows",
+   "ok": true,
+   "detail": "4832 rows; expected >= 4800"
+  },
+  {
+   "name": "data/sft_tools_v2_h rows",
+   "ok": true,
+   "detail": "4831 rows; expected >= 4800"
+  },
+  {
+   "name": "data/grpo_tools_v2_h rows",
+   "ok": true,
+   "detail": "4831 rows; expected >= 4800"
+  },
+  {
+   "name": "A-slice",
+   "ok": true,
+   "detail": "1600 rows; expected 1600"
+  },
+  {
+   "name": "frontier cleaned traces",
+   "ok": true,
+   "detail": "32 rows; 32 gemini-3.8-flash traces exist today"
+  },
+  {
+   "name": "data/sft_mix_v2 rows",
+   "ok": true,
+   "detail": "6431 rows"
+  },
+  {
+   "name": "data/grpo_mix_v2 rows",
+   "ok": true,
+   "detail": "4831 rows"
+  },
+  {
+   "name": "heldout_v2 frozen",
+   "ok": true,
+   "detail": "frozen MANIFEST.json and >= 85 rows in each of 12 cells; hash=<none>"
+  },
+  {
+   "name": "heldout_v2 tiers equal thirds",
+   "ok": true,
+   "detail": "bad tasks: []; counts={'repair': {'easy': 405, 'medium': 405, 'hard': 406}, 'design': {'easy': 275, 'medium': 275, 'hard': 276}, 'audit': {'easy': 160, 'medium': 160, 'hard': 160}, 'ledger': {'easy': 318, 'medium': 318, 'hard': 318}}"
+  },
+  {
+   "name": "provenance/tier audit",
+   "ok": true,
+   "detail": "11262 rows, 0 problems"
+  },
+  {
+   "name": "frontier CoT cohort (models x tasks x tiers)",
+   "ok": false,
+   "detail": "74 accepted tool traces; missing cells: ['gpt-6-luna/audit/easy', 'gpt-6-luna/audit/medium', 'gpt-6-luna/audit/hard', 'claude-haiku-5-5/audit/easy', 'claude-haiku-5-5/audit/medium', 'claude-haiku-5-5/ledger/easy', 'claude-haiku-5-5/ledger/medium', 'gpt-6.2-sol/repair/easy', 'gpt-6.2-sol/repair/medium', 'gpt-6.2-sol/repair/hard', 'gpt-6.2-sol/design/easy', 'gpt-6.2-sol/design/medium'] ...; coverage={'gpt-6-luna/repair': {'easy': 2, 'medium': 2, 'hard': 4}, 'gpt-6-luna/design': {'easy': 2, 'medium': 2, 'hard': 3}, 'gpt-6-luna/audit': {'easy': 0, 'medium': 0, 'hard': 0}, 'gpt-6-luna/ledger': {'easy': 3, 'medium': 3, 'hard': 3}, 'claude-haiku-5-5/repair': {'easy': 3, 'medium': 3, 'hard': 5}, 'claude-haiku-5-5/design': {'easy': 1, 'medium': 1, 'hard': 2}, 'claude-haiku-5-5/audit': {'easy': 0, 'medium': 0, 'hard': 2}, 'claude-haiku-5-5/ledger': {'easy': 0, 'medium': 0, 'hard': 1}, 'gpt-6.2-sol/repair': {'easy': 0, 'medium': 0, 'hard': 0}, 'gpt-6.2-sol/design': {'easy': 0, 'medium': 0, 'hard': 0}, 'gpt-6.2-sol/audit': {'easy': 0, 'medium': 0, 'hard': 0}, 'gpt-6.2-sol/ledger': {'easy': 0, 'medium': 0, 'hard': 0}, 'claude-sonnet-5-5/repair': {'easy': 0, 'medium': 0, 'hard': 0}, 'claude-sonnet-5-5/design': {'easy': 0, 'medium': 0, 'hard': 0}, 'claude-sonnet-5-5/audit': {'easy': 0, 'medium': 0, 'hard': 0}, 'claude-sonnet-5-5/ledger': {'easy': 0, 'medium': 0, 'hard': 0}, 'claude-opus-5-5-default/repair': {'easy': 0, 'medium': 0, 'hard': 0}, 'claude-opus-5-5-default/design': {'easy': 0, 'medium': 0, 'hard': 0}, 'claude-opus-5-5-default/audit': {'easy': 0, 'medium': 0, 'hard': 0}, 'claude-opus-5-5-default/ledger': {'easy': 0, 'medium': 0, 'hard': 0}, 'gemini-4-argon/repair': {'easy': 0, 'medium': 0, 'hard': 0}, 'gemini-4-argon/design': {'easy': 0, 'medium': 0, 'hard': 0}, 'gemini-4-argon/audit': {'easy': 0, 'medium': 0, 'hard': 0}, 'gemini-4-argon/ledger': {'easy': 0, 'medium': 0, 'hard': 0}}"
+  }
+ ]
+}

@@ -1,0 +1,32 @@
+{
+ "phase": "proof",
+ "model": "claude-opus-5-5-default",
+ "policy": "one diagram per model (key = row id with #vN removed); a diagram with only verifier-failed attempts stays eligible for a retry by another model; a verifier-accepted tool trace claims the diagram permanently",
+ "rows": [
+  {
+   "id": "arch-78-00007",
+   "base": "arch-78-00007",
+   "cell": "repair/easy"
+  },
+  {
+   "id": "des-0-00721",
+   "base": "des-0-00721",
+   "cell": "design/easy"
+  },
+  {
+   "id": "aud-0-00136",
+   "base": "aud-0-00136",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "led-0-01285",
+   "base": "led-0-01285",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "rep-110-00059#v18",
+   "base": "rep-110-00059",
+   "cell": "repair/medium"
+  }
+ ]
+}

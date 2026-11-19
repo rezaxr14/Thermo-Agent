@@ -12,6 +12,7 @@ import pytest
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 TIERS = ("easy", "medium", "hard")
+TASKS = ("repair", "design", "audit", "ledger")
 SOURCES = {"deterministic_tools", "frontier_tools", "ground_truth"}
 
 
@@ -51,3 +52,10 @@ def test_final_mix_manifest_records_tiers_and_provenance():
         assert set(summary["counts"]) == set(TIERS)
         assert sum(summary["counts"].values()) > 0
     assert "sft" in manifest["provenance"] and "grpo" in manifest["provenance"]
+    # The v2 tool corpora already contain the frontier traces: counts must be
+    # derived from the emitted rows, not from the (empty) mix --frontier dir.
+    for stream in ("sft", "grpo"):
+        counted = sum(manifest["counts"][stream][t]["frontier"] for t in TASKS)
+        provenanced = sum(n for label, n in manifest["provenance"][stream].items()
+                          if label.startswith("ai_generated:"))
+        assert counted == provenanced > 0

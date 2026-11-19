@@ -1,0 +1,32 @@
+{
+ "phase": "proof",
+ "model": "gpt-6.2-sol",
+ "policy": "one diagram per model (key = row id with #vN removed); a diagram with only verifier-failed attempts stays eligible for a retry by another model; a verifier-accepted tool trace claims the diagram permanently",
+ "rows": [
+  {
+   "id": "arch-107-00019#v16",
+   "base": "arch-107-00019",
+   "cell": "repair/easy"
+  },
+  {
+   "id": "des-0-00124",
+   "base": "des-0-00124",
+   "cell": "design/easy"
+  },
+  {
+   "id": "aud-0-00057",
+   "base": "aud-0-00057",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "led-0-00995",
+   "base": "led-0-00995",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "rep-101-00005",
+   "base": "rep-101-00005",
+   "cell": "repair/medium"
+  }
+ ]
+}

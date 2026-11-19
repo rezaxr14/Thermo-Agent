@@ -3,13 +3,15 @@
   "is_private": true,
   "title": "thermo-agent HF to Kaggle dataset bridge",
   "language": "python",
-  "id": "rezanadimi/thermo-hf-to-kaggle",
+  "id": "rezanadimi/thermo-agent-hf-to-kaggle-dataset-bridge",
   "enable_internet": true,
   "code_file": "hf_to_kaggle_dataset.ipynb",
   "enable_tpu": false,
   "kernel_type": "notebook",
   "kernel_sources": [],
   "enable_gpu": false,
-  "dataset_sources": [],
+  "dataset_sources": [
+    "rezanadimi/thermo-agent-env"
+  ],
   "competition_sources": []
 }

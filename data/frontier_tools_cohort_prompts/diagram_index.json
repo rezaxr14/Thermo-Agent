@@ -1,0 +1,9362 @@
+{
+ "arch-10-00000": {
+  "cell": "repair/hard",
+  "id": "arch-10-00000#v10",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-10-00022": {
+  "cell": "repair/hard",
+  "id": "arch-10-00022",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-103-00002": {
+  "cell": "repair/hard",
+  "id": "arch-103-00002#v13",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-103-00007": {
+  "cell": "repair/hard",
+  "id": "arch-103-00007#v3",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-103-00009": {
+  "cell": "repair/hard",
+  "id": "arch-103-00009",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-105-00022": {
+  "cell": "repair/hard",
+  "id": "arch-105-00022#v3",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-107-00012": {
+  "cell": "repair/hard",
+  "id": "arch-107-00012",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-107-00019": {
+  "cell": "repair/easy",
+  "id": "arch-107-00019#v16",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "arch-109-00022": {
+  "cell": "repair/medium",
+  "id": "arch-109-00022#v4",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "arch-11-00002": {
+  "cell": "repair/hard",
+  "id": "arch-11-00002",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-113-00022": {
+  "cell": "repair/hard",
+  "id": "arch-113-00022",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-114-00000": {
+  "cell": "repair/hard",
+  "id": "arch-114-00000",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-118-00000": {
+  "cell": "repair/medium",
+  "id": "arch-118-00000#v16",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "arch-120-00007": {
+  "cell": "repair/hard",
+  "id": "arch-120-00007",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-121-00002": {
+  "cell": "repair/hard",
+  "id": "arch-121-00002",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-13-00017": {
+  "cell": "repair/hard",
+  "id": "arch-13-00017#v9",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-20-00015": {
+  "cell": "repair/hard",
+  "id": "arch-20-00015#v5",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-22-00004": {
+  "cell": "repair/hard",
+  "id": "arch-22-00004#v18",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-23-00014": {
+  "cell": "repair/hard",
+  "id": "arch-23-00014",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-25-00002": {
+  "cell": "repair/medium",
+  "id": "arch-25-00002",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "arch-25-00007": {
+  "cell": "repair/hard",
+  "id": "arch-25-00007",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-28-00004": {
+  "cell": "repair/medium",
+  "id": "arch-28-00004#v17",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "arch-31-00009": {
+  "cell": "repair/medium",
+  "id": "arch-31-00009#v4",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "arch-34-00022": {
+  "cell": "repair/easy",
+  "id": "arch-34-00022",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "arch-40-00002": {
+  "cell": "repair/easy",
+  "id": "arch-40-00002",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "arch-40-00004": {
+  "cell": "repair/easy",
+  "id": "arch-40-00004#v4",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "arch-40-00017": {
+  "cell": "repair/hard",
+  "id": "arch-40-00017#v9",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-41-00007": {
+  "cell": "repair/easy",
+  "id": "arch-41-00007",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "arch-42-00012": {
+  "cell": "repair/hard",
+  "id": "arch-42-00012",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-43-00012": {
+  "cell": "repair/hard",
+  "id": "arch-43-00012#v9",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-49-00005": {
+  "cell": "repair/hard",
+  "id": "arch-49-00005#v3",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-54-00019": {
+  "cell": "repair/hard",
+  "id": "arch-54-00019",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-54-00020": {
+  "cell": "repair/easy",
+  "id": "arch-54-00020",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "arch-65-00014": {
+  "cell": "repair/hard",
+  "id": "arch-65-00014#v18",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-67-00004": {
+  "cell": "repair/easy",
+  "id": "arch-67-00004",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "arch-67-00005": {
+  "cell": "repair/easy",
+  "id": "arch-67-00005#v10",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "arch-67-00022": {
+  "cell": "repair/hard",
+  "id": "arch-67-00022",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-76-00007": {
+  "cell": "repair/hard",
+  "id": "arch-76-00007",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-78-00007": {
+  "cell": "repair/easy",
+  "id": "arch-78-00007",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "arch-81-00020": {
+  "cell": "repair/hard",
+  "id": "arch-81-00020#v12",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-84-00007": {
+  "cell": "repair/hard",
+  "id": "arch-84-00007#v3",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-87-00012": {
+  "cell": "repair/medium",
+  "id": "arch-87-00012",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "arch-9-00000": {
+  "cell": "repair/hard",
+  "id": "arch-9-00000",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-90-00007": {
+  "cell": "repair/hard",
+  "id": "arch-90-00007#v14",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-92-00017": {
+  "cell": "repair/hard",
+  "id": "arch-92-00017#v8",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-93-00017": {
+  "cell": "repair/hard",
+  "id": "arch-93-00017",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "arch-94-00012": {
+  "cell": "repair/easy",
+  "id": "arch-94-00012#v1",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "arch-94-00014": {
+  "cell": "repair/easy",
+  "id": "arch-94-00014",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "arch-98-00004": {
+  "cell": "repair/easy",
+  "id": "arch-98-00004",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "aud-0-00029": {
+  "cell": "audit/hard",
+  "id": "aud-0-00029",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00046": {
+  "cell": "audit/easy",
+  "id": "aud-0-00046",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00057": {
+  "cell": "audit/easy",
+  "id": "aud-0-00057",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00059": {
+  "cell": "audit/easy",
+  "id": "aud-0-00059",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00078": {
+  "cell": "audit/hard",
+  "id": "aud-0-00078",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00082": {
+  "cell": "audit/medium",
+  "id": "aud-0-00082",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00093": {
+  "cell": "audit/medium",
+  "id": "aud-0-00093",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00094": {
+  "cell": "audit/hard",
+  "id": "aud-0-00094",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00098": {
+  "cell": "audit/easy",
+  "id": "aud-0-00098",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00100": {
+  "cell": "audit/medium",
+  "id": "aud-0-00100",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00101": {
+  "cell": "audit/medium",
+  "id": "aud-0-00101",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00136": {
+  "cell": "audit/easy",
+  "id": "aud-0-00136",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00142": {
+  "cell": "audit/easy",
+  "id": "aud-0-00142",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00149": {
+  "cell": "audit/medium",
+  "id": "aud-0-00149",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00180": {
+  "cell": "audit/easy",
+  "id": "aud-0-00180",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00193": {
+  "cell": "audit/hard",
+  "id": "aud-0-00193",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00195": {
+  "cell": "audit/hard",
+  "id": "aud-0-00195",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00215": {
+  "cell": "audit/easy",
+  "id": "aud-0-00215",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00224": {
+  "cell": "audit/easy",
+  "id": "aud-0-00224",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00237": {
+  "cell": "audit/medium",
+  "id": "aud-0-00237",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00247": {
+  "cell": "audit/hard",
+  "id": "aud-0-00247",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00270": {
+  "cell": "audit/medium",
+  "id": "aud-0-00270",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00273": {
+  "cell": "audit/medium",
+  "id": "aud-0-00273",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00274": {
+  "cell": "audit/hard",
+  "id": "aud-0-00274",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00317": {
+  "cell": "audit/hard",
+  "id": "aud-0-00317",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00343": {
+  "cell": "audit/medium",
+  "id": "aud-0-00343",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00347": {
+  "cell": "audit/easy",
+  "id": "aud-0-00347",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00355": {
+  "cell": "audit/easy",
+  "id": "aud-0-00355",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00364": {
+  "cell": "audit/medium",
+  "id": "aud-0-00364",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00389": {
+  "cell": "audit/hard",
+  "id": "aud-0-00389",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00392": {
+  "cell": "audit/easy",
+  "id": "aud-0-00392",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00393": {
+  "cell": "audit/hard",
+  "id": "aud-0-00393",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00399": {
+  "cell": "audit/medium",
+  "id": "aud-0-00399",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00415": {
+  "cell": "audit/easy",
+  "id": "aud-0-00415",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00434": {
+  "cell": "audit/hard",
+  "id": "aud-0-00434",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00448": {
+  "cell": "audit/easy",
+  "id": "aud-0-00448",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00451": {
+  "cell": "audit/hard",
+  "id": "aud-0-00451",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00507": {
+  "cell": "audit/easy",
+  "id": "aud-0-00507",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00512": {
+  "cell": "audit/easy",
+  "id": "aud-0-00512",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00518": {
+  "cell": "audit/medium",
+  "id": "aud-0-00518",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00522": {
+  "cell": "audit/easy",
+  "id": "aud-0-00522",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00524": {
+  "cell": "audit/hard",
+  "id": "aud-0-00524",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00528": {
+  "cell": "audit/hard",
+  "id": "aud-0-00528",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00533": {
+  "cell": "audit/hard",
+  "id": "aud-0-00533",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00540": {
+  "cell": "audit/hard",
+  "id": "aud-0-00540",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00565": {
+  "cell": "audit/easy",
+  "id": "aud-0-00565",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00573": {
+  "cell": "audit/hard",
+  "id": "aud-0-00573",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00582": {
+  "cell": "audit/hard",
+  "id": "aud-0-00582",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00595": {
+  "cell": "audit/easy",
+  "id": "aud-0-00595",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00631": {
+  "cell": "audit/easy",
+  "id": "aud-0-00631",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00640": {
+  "cell": "audit/hard",
+  "id": "aud-0-00640",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00642": {
+  "cell": "audit/medium",
+  "id": "aud-0-00642",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00656": {
+  "cell": "audit/easy",
+  "id": "aud-0-00656",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00661": {
+  "cell": "audit/easy",
+  "id": "aud-0-00661",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00663": {
+  "cell": "audit/hard",
+  "id": "aud-0-00663",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00705": {
+  "cell": "audit/easy",
+  "id": "aud-0-00705",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00707": {
+  "cell": "audit/hard",
+  "id": "aud-0-00707",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00723": {
+  "cell": "audit/medium",
+  "id": "aud-0-00723",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00725": {
+  "cell": "audit/medium",
+  "id": "aud-0-00725",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00734": {
+  "cell": "audit/medium",
+  "id": "aud-0-00734",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00740": {
+  "cell": "audit/hard",
+  "id": "aud-0-00740",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00749": {
+  "cell": "audit/medium",
+  "id": "aud-0-00749",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00753": {
+  "cell": "audit/hard",
+  "id": "aud-0-00753",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00795": {
+  "cell": "audit/easy",
+  "id": "aud-0-00795",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00801": {
+  "cell": "audit/medium",
+  "id": "aud-0-00801",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00817": {
+  "cell": "audit/medium",
+  "id": "aud-0-00817",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00822": {
+  "cell": "audit/easy",
+  "id": "aud-0-00822",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00825": {
+  "cell": "audit/hard",
+  "id": "aud-0-00825",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00842": {
+  "cell": "audit/hard",
+  "id": "aud-0-00842",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00844": {
+  "cell": "audit/hard",
+  "id": "aud-0-00844",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00846": {
+  "cell": "audit/hard",
+  "id": "aud-0-00846",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00848": {
+  "cell": "audit/hard",
+  "id": "aud-0-00848",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00850": {
+  "cell": "audit/hard",
+  "id": "aud-0-00850",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00865": {
+  "cell": "audit/medium",
+  "id": "aud-0-00865",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00873": {
+  "cell": "audit/easy",
+  "id": "aud-0-00873",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-00885": {
+  "cell": "audit/hard",
+  "id": "aud-0-00885",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00906": {
+  "cell": "audit/hard",
+  "id": "aud-0-00906",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00913": {
+  "cell": "audit/hard",
+  "id": "aud-0-00913",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00918": {
+  "cell": "audit/medium",
+  "id": "aud-0-00918",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00921": {
+  "cell": "audit/medium",
+  "id": "aud-0-00921",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00950": {
+  "cell": "audit/medium",
+  "id": "aud-0-00950",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00954": {
+  "cell": "audit/hard",
+  "id": "aud-0-00954",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-00972": {
+  "cell": "audit/medium",
+  "id": "aud-0-00972",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00974": {
+  "cell": "audit/medium",
+  "id": "aud-0-00974",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00981": {
+  "cell": "audit/medium",
+  "id": "aud-0-00981",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-00985": {
+  "cell": "audit/medium",
+  "id": "aud-0-00985",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01018": {
+  "cell": "audit/medium",
+  "id": "aud-0-01018",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01025": {
+  "cell": "audit/easy",
+  "id": "aud-0-01025",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01054": {
+  "cell": "audit/medium",
+  "id": "aud-0-01054",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01068": {
+  "cell": "audit/hard",
+  "id": "aud-0-01068",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-01082": {
+  "cell": "audit/medium",
+  "id": "aud-0-01082",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01086": {
+  "cell": "audit/hard",
+  "id": "aud-0-01086",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-01093": {
+  "cell": "audit/medium",
+  "id": "aud-0-01093",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01094": {
+  "cell": "audit/medium",
+  "id": "aud-0-01094",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01104": {
+  "cell": "audit/hard",
+  "id": "aud-0-01104",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-01105": {
+  "cell": "audit/medium",
+  "id": "aud-0-01105",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01109": {
+  "cell": "audit/medium",
+  "id": "aud-0-01109",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01121": {
+  "cell": "audit/easy",
+  "id": "aud-0-01121",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01134": {
+  "cell": "audit/medium",
+  "id": "aud-0-01134",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01138": {
+  "cell": "audit/hard",
+  "id": "aud-0-01138",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-01162": {
+  "cell": "audit/hard",
+  "id": "aud-0-01162",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-01164": {
+  "cell": "audit/medium",
+  "id": "aud-0-01164",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01180": {
+  "cell": "audit/medium",
+  "id": "aud-0-01180",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01199": {
+  "cell": "audit/easy",
+  "id": "aud-0-01199",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01209": {
+  "cell": "audit/medium",
+  "id": "aud-0-01209",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01224": {
+  "cell": "audit/easy",
+  "id": "aud-0-01224",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01253": {
+  "cell": "audit/medium",
+  "id": "aud-0-01253",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01256": {
+  "cell": "audit/hard",
+  "id": "aud-0-01256",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-01269": {
+  "cell": "audit/hard",
+  "id": "aud-0-01269",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-01270": {
+  "cell": "audit/easy",
+  "id": "aud-0-01270",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01284": {
+  "cell": "audit/hard",
+  "id": "aud-0-01284",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-01285": {
+  "cell": "audit/easy",
+  "id": "aud-0-01285",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01306": {
+  "cell": "audit/easy",
+  "id": "aud-0-01306",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01321": {
+  "cell": "audit/easy",
+  "id": "aud-0-01321",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01324": {
+  "cell": "audit/hard",
+  "id": "aud-0-01324",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-01328": {
+  "cell": "audit/easy",
+  "id": "aud-0-01328",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01333": {
+  "cell": "audit/medium",
+  "id": "aud-0-01333",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01335": {
+  "cell": "audit/medium",
+  "id": "aud-0-01335",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01346": {
+  "cell": "audit/easy",
+  "id": "aud-0-01346",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01354": {
+  "cell": "audit/medium",
+  "id": "aud-0-01354",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01366": {
+  "cell": "audit/hard",
+  "id": "aud-0-01366",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-01371": {
+  "cell": "audit/easy",
+  "id": "aud-0-01371",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01376": {
+  "cell": "audit/easy",
+  "id": "aud-0-01376",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01417": {
+  "cell": "audit/hard",
+  "id": "aud-0-01417",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-01425": {
+  "cell": "audit/easy",
+  "id": "aud-0-01425",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01441": {
+  "cell": "audit/easy",
+  "id": "aud-0-01441",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01469": {
+  "cell": "audit/medium",
+  "id": "aud-0-01469",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01472": {
+  "cell": "audit/easy",
+  "id": "aud-0-01472",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01481": {
+  "cell": "audit/medium",
+  "id": "aud-0-01481",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01482": {
+  "cell": "audit/hard",
+  "id": "aud-0-01482",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-01498": {
+  "cell": "audit/medium",
+  "id": "aud-0-01498",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01523": {
+  "cell": "audit/easy",
+  "id": "aud-0-01523",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01556": {
+  "cell": "audit/easy",
+  "id": "aud-0-01556",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01557": {
+  "cell": "audit/hard",
+  "id": "aud-0-01557",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-01558": {
+  "cell": "audit/easy",
+  "id": "aud-0-01558",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01569": {
+  "cell": "audit/easy",
+  "id": "aud-0-01569",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01591": {
+  "cell": "audit/hard",
+  "id": "aud-0-01591",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-01605": {
+  "cell": "audit/medium",
+  "id": "aud-0-01605",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01625": {
+  "cell": "audit/easy",
+  "id": "aud-0-01625",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01633": {
+  "cell": "audit/hard",
+  "id": "aud-0-01633",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-01638": {
+  "cell": "audit/hard",
+  "id": "aud-0-01638",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-01648": {
+  "cell": "audit/hard",
+  "id": "aud-0-01648",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-01667": {
+  "cell": "audit/medium",
+  "id": "aud-0-01667",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01678": {
+  "cell": "audit/easy",
+  "id": "aud-0-01678",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01681": {
+  "cell": "audit/easy",
+  "id": "aud-0-01681",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01708": {
+  "cell": "audit/easy",
+  "id": "aud-0-01708",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01715": {
+  "cell": "audit/easy",
+  "id": "aud-0-01715",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01742": {
+  "cell": "audit/medium",
+  "id": "aud-0-01742",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01750": {
+  "cell": "audit/hard",
+  "id": "aud-0-01750",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-01777": {
+  "cell": "audit/medium",
+  "id": "aud-0-01777",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01780": {
+  "cell": "audit/hard",
+  "id": "aud-0-01780",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-01791": {
+  "cell": "audit/medium",
+  "id": "aud-0-01791",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01823": {
+  "cell": "audit/medium",
+  "id": "aud-0-01823",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01838": {
+  "cell": "audit/medium",
+  "id": "aud-0-01838",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01844": {
+  "cell": "audit/easy",
+  "id": "aud-0-01844",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01846": {
+  "cell": "audit/medium",
+  "id": "aud-0-01846",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01849": {
+  "cell": "audit/hard",
+  "id": "aud-0-01849",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-01854": {
+  "cell": "audit/medium",
+  "id": "aud-0-01854",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01855": {
+  "cell": "audit/easy",
+  "id": "aud-0-01855",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01869": {
+  "cell": "audit/hard",
+  "id": "aud-0-01869",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-01884": {
+  "cell": "audit/medium",
+  "id": "aud-0-01884",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01911": {
+  "cell": "audit/easy",
+  "id": "aud-0-01911",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01927": {
+  "cell": "audit/easy",
+  "id": "aud-0-01927",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01934": {
+  "cell": "audit/easy",
+  "id": "aud-0-01934",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-01948": {
+  "cell": "audit/hard",
+  "id": "aud-0-01948",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-01981": {
+  "cell": "audit/hard",
+  "id": "aud-0-01981",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-01994": {
+  "cell": "audit/medium",
+  "id": "aud-0-01994",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-01996": {
+  "cell": "audit/easy",
+  "id": "aud-0-01996",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02005": {
+  "cell": "audit/hard",
+  "id": "aud-0-02005",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02008": {
+  "cell": "audit/easy",
+  "id": "aud-0-02008",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02012": {
+  "cell": "audit/medium",
+  "id": "aud-0-02012",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02022": {
+  "cell": "audit/hard",
+  "id": "aud-0-02022",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02042": {
+  "cell": "audit/easy",
+  "id": "aud-0-02042",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02051": {
+  "cell": "audit/easy",
+  "id": "aud-0-02051",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02066": {
+  "cell": "audit/medium",
+  "id": "aud-0-02066",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02072": {
+  "cell": "audit/hard",
+  "id": "aud-0-02072",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02099": {
+  "cell": "audit/hard",
+  "id": "aud-0-02099",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02100": {
+  "cell": "audit/medium",
+  "id": "aud-0-02100",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02103": {
+  "cell": "audit/hard",
+  "id": "aud-0-02103",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02111": {
+  "cell": "audit/easy",
+  "id": "aud-0-02111",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02117": {
+  "cell": "audit/medium",
+  "id": "aud-0-02117",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02126": {
+  "cell": "audit/hard",
+  "id": "aud-0-02126",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02131": {
+  "cell": "audit/easy",
+  "id": "aud-0-02131",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02134": {
+  "cell": "audit/medium",
+  "id": "aud-0-02134",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02139": {
+  "cell": "audit/hard",
+  "id": "aud-0-02139",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02146": {
+  "cell": "audit/easy",
+  "id": "aud-0-02146",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02154": {
+  "cell": "audit/easy",
+  "id": "aud-0-02154",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02172": {
+  "cell": "audit/medium",
+  "id": "aud-0-02172",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02176": {
+  "cell": "audit/easy",
+  "id": "aud-0-02176",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02181": {
+  "cell": "audit/easy",
+  "id": "aud-0-02181",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02190": {
+  "cell": "audit/easy",
+  "id": "aud-0-02190",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02214": {
+  "cell": "audit/medium",
+  "id": "aud-0-02214",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02243": {
+  "cell": "audit/hard",
+  "id": "aud-0-02243",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02253": {
+  "cell": "audit/easy",
+  "id": "aud-0-02253",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02258": {
+  "cell": "audit/easy",
+  "id": "aud-0-02258",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02262": {
+  "cell": "audit/medium",
+  "id": "aud-0-02262",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02263": {
+  "cell": "audit/medium",
+  "id": "aud-0-02263",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02265": {
+  "cell": "audit/hard",
+  "id": "aud-0-02265",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02277": {
+  "cell": "audit/easy",
+  "id": "aud-0-02277",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02280": {
+  "cell": "audit/medium",
+  "id": "aud-0-02280",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02298": {
+  "cell": "audit/medium",
+  "id": "aud-0-02298",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02307": {
+  "cell": "audit/easy",
+  "id": "aud-0-02307",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02328": {
+  "cell": "audit/hard",
+  "id": "aud-0-02328",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02332": {
+  "cell": "audit/medium",
+  "id": "aud-0-02332",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02357": {
+  "cell": "audit/easy",
+  "id": "aud-0-02357",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02371": {
+  "cell": "audit/hard",
+  "id": "aud-0-02371",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02382": {
+  "cell": "audit/hard",
+  "id": "aud-0-02382",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02388": {
+  "cell": "audit/hard",
+  "id": "aud-0-02388",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02399": {
+  "cell": "audit/medium",
+  "id": "aud-0-02399",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02406": {
+  "cell": "audit/easy",
+  "id": "aud-0-02406",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02407": {
+  "cell": "audit/hard",
+  "id": "aud-0-02407",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02408": {
+  "cell": "audit/easy",
+  "id": "aud-0-02408",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02419": {
+  "cell": "audit/easy",
+  "id": "aud-0-02419",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02424": {
+  "cell": "audit/easy",
+  "id": "aud-0-02424",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02436": {
+  "cell": "audit/hard",
+  "id": "aud-0-02436",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02444": {
+  "cell": "audit/easy",
+  "id": "aud-0-02444",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02478": {
+  "cell": "audit/easy",
+  "id": "aud-0-02478",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02480": {
+  "cell": "audit/medium",
+  "id": "aud-0-02480",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02502": {
+  "cell": "audit/medium",
+  "id": "aud-0-02502",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02503": {
+  "cell": "audit/easy",
+  "id": "aud-0-02503",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02511": {
+  "cell": "audit/medium",
+  "id": "aud-0-02511",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02515": {
+  "cell": "audit/medium",
+  "id": "aud-0-02515",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02518": {
+  "cell": "audit/hard",
+  "id": "aud-0-02518",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02527": {
+  "cell": "audit/hard",
+  "id": "aud-0-02527",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02529": {
+  "cell": "audit/hard",
+  "id": "aud-0-02529",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02531": {
+  "cell": "audit/easy",
+  "id": "aud-0-02531",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02547": {
+  "cell": "audit/medium",
+  "id": "aud-0-02547",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02550": {
+  "cell": "audit/medium",
+  "id": "aud-0-02550",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02551": {
+  "cell": "audit/medium",
+  "id": "aud-0-02551",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02552": {
+  "cell": "audit/medium",
+  "id": "aud-0-02552",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02575": {
+  "cell": "audit/medium",
+  "id": "aud-0-02575",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02596": {
+  "cell": "audit/hard",
+  "id": "aud-0-02596",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02628": {
+  "cell": "audit/medium",
+  "id": "aud-0-02628",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02641": {
+  "cell": "audit/easy",
+  "id": "aud-0-02641",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02675": {
+  "cell": "audit/hard",
+  "id": "aud-0-02675",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02694": {
+  "cell": "audit/easy",
+  "id": "aud-0-02694",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02728": {
+  "cell": "audit/easy",
+  "id": "aud-0-02728",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02769": {
+  "cell": "audit/hard",
+  "id": "aud-0-02769",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02781": {
+  "cell": "audit/hard",
+  "id": "aud-0-02781",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02800": {
+  "cell": "audit/easy",
+  "id": "aud-0-02800",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02805": {
+  "cell": "audit/hard",
+  "id": "aud-0-02805",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02812": {
+  "cell": "audit/medium",
+  "id": "aud-0-02812",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02827": {
+  "cell": "audit/medium",
+  "id": "aud-0-02827",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02837": {
+  "cell": "audit/easy",
+  "id": "aud-0-02837",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02840": {
+  "cell": "audit/easy",
+  "id": "aud-0-02840",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02843": {
+  "cell": "audit/easy",
+  "id": "aud-0-02843",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02862": {
+  "cell": "audit/medium",
+  "id": "aud-0-02862",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02873": {
+  "cell": "audit/easy",
+  "id": "aud-0-02873",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02883": {
+  "cell": "audit/medium",
+  "id": "aud-0-02883",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02895": {
+  "cell": "audit/hard",
+  "id": "aud-0-02895",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02898": {
+  "cell": "audit/medium",
+  "id": "aud-0-02898",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02904": {
+  "cell": "audit/hard",
+  "id": "aud-0-02904",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02914": {
+  "cell": "audit/easy",
+  "id": "aud-0-02914",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02916": {
+  "cell": "audit/hard",
+  "id": "aud-0-02916",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02929": {
+  "cell": "audit/medium",
+  "id": "aud-0-02929",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02939": {
+  "cell": "audit/medium",
+  "id": "aud-0-02939",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02943": {
+  "cell": "audit/hard",
+  "id": "aud-0-02943",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02944": {
+  "cell": "audit/medium",
+  "id": "aud-0-02944",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02957": {
+  "cell": "audit/easy",
+  "id": "aud-0-02957",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02962": {
+  "cell": "audit/medium",
+  "id": "aud-0-02962",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-0-02963": {
+  "cell": "audit/hard",
+  "id": "aud-0-02963",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02965": {
+  "cell": "audit/hard",
+  "id": "aud-0-02965",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-0-02969": {
+  "cell": "audit/easy",
+  "id": "aud-0-02969",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02993": {
+  "cell": "audit/easy",
+  "id": "aud-0-02993",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-0-02994": {
+  "cell": "audit/hard",
+  "id": "aud-0-02994",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-00002": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-00002",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-00091": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-00091",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-00112": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-00112",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-00117": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-00117",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-00151": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-00151",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-00173": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-00173",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-00182": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-00182",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-00221": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-00221",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-00232": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-00232",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-00239": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-00239",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-00249": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-00249",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-00253": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-00253",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-00260": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-00260",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-00277": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-00277",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-00282": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-00282",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-00300": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-00300",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-00313": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-00313",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-00319": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-00319",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-00320": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-00320",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-00335": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-00335",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-00342": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-00342",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-00390": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-00390",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-00399": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-00399",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-00405": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-00405",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-00417": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-00417",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-00471": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-00471",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-00493": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-00493",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-00520": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-00520",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-00522": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-00522",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-00526": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-00526",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-00530": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-00530",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-00561": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-00561",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-00566": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-00566",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-00574": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-00574",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-00579": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-00579",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-00591": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-00591",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-00627": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-00627",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-00628": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-00628",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-00653": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-00653",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-00659": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-00659",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-00666": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-00666",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-00677": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-00677",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-00691": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-00691",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-00702": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-00702",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-00743": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-00743",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-00759": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-00759",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-00767": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-00767",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-00769": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-00769",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-00775": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-00775",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-00785": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-00785",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-00847": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-00847",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-00853": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-00853",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-00872": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-00872",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-00897": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-00897",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-00905": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-00905",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-00923": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-00923",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-00932": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-00932",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-00937": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-00937",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-00975": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-00975",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-00981": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-00981",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-00995": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-00995",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-01001": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01001",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-01003": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01003",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-01040": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-01040",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-01061": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-01061",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-01077": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01077",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-01081": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-01081",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-01082": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-01082",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-01106": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01106",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-01115": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01115",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-01127": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01127",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-01145": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-01145",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-01150": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-01150",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-01157": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-01157",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-01191": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-01191",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-01198": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01198",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-01215": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-01215",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-01255": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01255",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-01289": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-01289",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-01309": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-01309",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-01316": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-01316",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-01322": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01322",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-01338": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01338",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-01352": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-01352",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-01368": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-01368",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-01373": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-01373",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-01387": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01387",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-01405": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-01405",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-01424": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-01424",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-01432": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-01432",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-01438": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-01438",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-01450": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01450",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-01451": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01451",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-01467": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-01467",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-01484": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-01484",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-01503": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-01503",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-01505": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01505",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-01509": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-01509",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-01512": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01512",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-01515": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01515",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-01521": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01521",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-01538": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-01538",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-01603": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01603",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-01630": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-01630",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-01653": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01653",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-01670": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-01670",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-01683": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-01683",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-01710": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-01710",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-01736": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-01736",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-01771": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-01771",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-01772": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-01772",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-01825": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-01825",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-01830": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01830",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-01841": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-01841",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-01895": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01895",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-01896": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-01896",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-01902": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01902",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-01925": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-01925",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-01927": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-01927",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-01950": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01950",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-01952": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-01952",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-01966": {
+  "cell": "audit/easy",
+  "id": "aud-arch-0-01966",
+  "task": "audit",
+  "tier": "easy"
+ },
+ "aud-arch-0-01970": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01970",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "aud-arch-0-01991": {
+  "cell": "audit/hard",
+  "id": "aud-arch-0-01991",
+  "task": "audit",
+  "tier": "hard"
+ },
+ "aud-arch-0-01993": {
+  "cell": "audit/medium",
+  "id": "aud-arch-0-01993",
+  "task": "audit",
+  "tier": "medium"
+ },
+ "des-0-00003": {
+  "cell": "design/medium",
+  "id": "des-0-00003",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00008": {
+  "cell": "design/hard",
+  "id": "des-0-00008",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00033": {
+  "cell": "design/hard",
+  "id": "des-0-00033",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00037": {
+  "cell": "design/easy",
+  "id": "des-0-00037",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00043": {
+  "cell": "design/hard",
+  "id": "des-0-00043",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00047": {
+  "cell": "design/hard",
+  "id": "des-0-00047",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00048": {
+  "cell": "design/medium",
+  "id": "des-0-00048",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00055": {
+  "cell": "design/medium",
+  "id": "des-0-00055",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00064": {
+  "cell": "design/hard",
+  "id": "des-0-00064",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00065": {
+  "cell": "design/medium",
+  "id": "des-0-00065",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00068": {
+  "cell": "design/hard",
+  "id": "des-0-00068",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00089": {
+  "cell": "design/easy",
+  "id": "des-0-00089",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00091": {
+  "cell": "design/easy",
+  "id": "des-0-00091",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00124": {
+  "cell": "design/easy",
+  "id": "des-0-00124",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00152": {
+  "cell": "design/hard",
+  "id": "des-0-00152",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00185": {
+  "cell": "design/medium",
+  "id": "des-0-00185",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00189": {
+  "cell": "design/easy",
+  "id": "des-0-00189",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00201": {
+  "cell": "design/hard",
+  "id": "des-0-00201",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00226": {
+  "cell": "design/easy",
+  "id": "des-0-00226",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00252": {
+  "cell": "design/hard",
+  "id": "des-0-00252",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00259": {
+  "cell": "design/hard",
+  "id": "des-0-00259",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00280": {
+  "cell": "design/medium",
+  "id": "des-0-00280",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00300": {
+  "cell": "design/medium",
+  "id": "des-0-00300",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00305": {
+  "cell": "design/hard",
+  "id": "des-0-00305",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00315": {
+  "cell": "design/hard",
+  "id": "des-0-00315",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00320": {
+  "cell": "design/hard",
+  "id": "des-0-00320",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00336": {
+  "cell": "design/easy",
+  "id": "des-0-00336",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00337": {
+  "cell": "design/easy",
+  "id": "des-0-00337",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00342": {
+  "cell": "design/easy",
+  "id": "des-0-00342",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00359": {
+  "cell": "design/medium",
+  "id": "des-0-00359",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00412": {
+  "cell": "design/hard",
+  "id": "des-0-00412",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00418": {
+  "cell": "design/medium",
+  "id": "des-0-00418",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00420": {
+  "cell": "design/easy",
+  "id": "des-0-00420",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00432": {
+  "cell": "design/medium",
+  "id": "des-0-00432",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00461": {
+  "cell": "design/medium",
+  "id": "des-0-00461",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00482": {
+  "cell": "design/hard",
+  "id": "des-0-00482",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00506": {
+  "cell": "design/medium",
+  "id": "des-0-00506",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00507": {
+  "cell": "design/hard",
+  "id": "des-0-00507",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00519": {
+  "cell": "design/easy",
+  "id": "des-0-00519",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00528": {
+  "cell": "design/hard",
+  "id": "des-0-00528",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00536": {
+  "cell": "design/hard",
+  "id": "des-0-00536",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00544": {
+  "cell": "design/easy",
+  "id": "des-0-00544",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00553": {
+  "cell": "design/medium",
+  "id": "des-0-00553",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00557": {
+  "cell": "design/easy",
+  "id": "des-0-00557",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00570": {
+  "cell": "design/hard",
+  "id": "des-0-00570",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00571": {
+  "cell": "design/medium",
+  "id": "des-0-00571",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00572": {
+  "cell": "design/medium",
+  "id": "des-0-00572",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00585": {
+  "cell": "design/medium",
+  "id": "des-0-00585",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00589": {
+  "cell": "design/medium",
+  "id": "des-0-00589",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00603": {
+  "cell": "design/medium",
+  "id": "des-0-00603",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00625": {
+  "cell": "design/hard",
+  "id": "des-0-00625",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00639": {
+  "cell": "design/hard",
+  "id": "des-0-00639",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00646": {
+  "cell": "design/medium",
+  "id": "des-0-00646",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00663": {
+  "cell": "design/easy",
+  "id": "des-0-00663",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00666": {
+  "cell": "design/easy",
+  "id": "des-0-00666",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00669": {
+  "cell": "design/hard",
+  "id": "des-0-00669",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00671": {
+  "cell": "design/hard",
+  "id": "des-0-00671",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00672": {
+  "cell": "design/medium",
+  "id": "des-0-00672",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00688": {
+  "cell": "design/easy",
+  "id": "des-0-00688",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00704": {
+  "cell": "design/easy",
+  "id": "des-0-00704",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00706": {
+  "cell": "design/hard",
+  "id": "des-0-00706",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00713": {
+  "cell": "design/medium",
+  "id": "des-0-00713",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00721": {
+  "cell": "design/easy",
+  "id": "des-0-00721",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00726": {
+  "cell": "design/hard",
+  "id": "des-0-00726",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00741": {
+  "cell": "design/medium",
+  "id": "des-0-00741",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00744": {
+  "cell": "design/medium",
+  "id": "des-0-00744",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00749": {
+  "cell": "design/medium",
+  "id": "des-0-00749",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00751": {
+  "cell": "design/medium",
+  "id": "des-0-00751",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00761": {
+  "cell": "design/hard",
+  "id": "des-0-00761",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00808": {
+  "cell": "design/hard",
+  "id": "des-0-00808",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00814": {
+  "cell": "design/medium",
+  "id": "des-0-00814",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00824": {
+  "cell": "design/easy",
+  "id": "des-0-00824",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00830": {
+  "cell": "design/hard",
+  "id": "des-0-00830",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00836": {
+  "cell": "design/hard",
+  "id": "des-0-00836",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00846": {
+  "cell": "design/medium",
+  "id": "des-0-00846",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00854": {
+  "cell": "design/easy",
+  "id": "des-0-00854",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00863": {
+  "cell": "design/easy",
+  "id": "des-0-00863",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00875": {
+  "cell": "design/easy",
+  "id": "des-0-00875",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00909": {
+  "cell": "design/easy",
+  "id": "des-0-00909",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00914": {
+  "cell": "design/hard",
+  "id": "des-0-00914",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00925": {
+  "cell": "design/hard",
+  "id": "des-0-00925",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-00929": {
+  "cell": "design/medium",
+  "id": "des-0-00929",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00947": {
+  "cell": "design/easy",
+  "id": "des-0-00947",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00961": {
+  "cell": "design/medium",
+  "id": "des-0-00961",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-00976": {
+  "cell": "design/easy",
+  "id": "des-0-00976",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-00994": {
+  "cell": "design/hard",
+  "id": "des-0-00994",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01000": {
+  "cell": "design/easy",
+  "id": "des-0-01000",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01010": {
+  "cell": "design/hard",
+  "id": "des-0-01010",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01025": {
+  "cell": "design/easy",
+  "id": "des-0-01025",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01034": {
+  "cell": "design/hard",
+  "id": "des-0-01034",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01040": {
+  "cell": "design/medium",
+  "id": "des-0-01040",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01045": {
+  "cell": "design/medium",
+  "id": "des-0-01045",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01046": {
+  "cell": "design/hard",
+  "id": "des-0-01046",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01060": {
+  "cell": "design/hard",
+  "id": "des-0-01060",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01067": {
+  "cell": "design/medium",
+  "id": "des-0-01067",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01068": {
+  "cell": "design/medium",
+  "id": "des-0-01068",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01085": {
+  "cell": "design/easy",
+  "id": "des-0-01085",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01086": {
+  "cell": "design/medium",
+  "id": "des-0-01086",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01088": {
+  "cell": "design/medium",
+  "id": "des-0-01088",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01092": {
+  "cell": "design/medium",
+  "id": "des-0-01092",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01098": {
+  "cell": "design/easy",
+  "id": "des-0-01098",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01108": {
+  "cell": "design/easy",
+  "id": "des-0-01108",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01115": {
+  "cell": "design/medium",
+  "id": "des-0-01115",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01116": {
+  "cell": "design/hard",
+  "id": "des-0-01116",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01120": {
+  "cell": "design/hard",
+  "id": "des-0-01120",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01126": {
+  "cell": "design/medium",
+  "id": "des-0-01126",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01127": {
+  "cell": "design/easy",
+  "id": "des-0-01127",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01130": {
+  "cell": "design/hard",
+  "id": "des-0-01130",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01133": {
+  "cell": "design/hard",
+  "id": "des-0-01133",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01138": {
+  "cell": "design/easy",
+  "id": "des-0-01138",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01140": {
+  "cell": "design/easy",
+  "id": "des-0-01140",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01146": {
+  "cell": "design/medium",
+  "id": "des-0-01146",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01153": {
+  "cell": "design/medium",
+  "id": "des-0-01153",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01157": {
+  "cell": "design/easy",
+  "id": "des-0-01157",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01175": {
+  "cell": "design/medium",
+  "id": "des-0-01175",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01177": {
+  "cell": "design/hard",
+  "id": "des-0-01177",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01193": {
+  "cell": "design/medium",
+  "id": "des-0-01193",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01197": {
+  "cell": "design/medium",
+  "id": "des-0-01197",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01214": {
+  "cell": "design/easy",
+  "id": "des-0-01214",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01216": {
+  "cell": "design/hard",
+  "id": "des-0-01216",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01224": {
+  "cell": "design/medium",
+  "id": "des-0-01224",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01244": {
+  "cell": "design/hard",
+  "id": "des-0-01244",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01261": {
+  "cell": "design/easy",
+  "id": "des-0-01261",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01272": {
+  "cell": "design/easy",
+  "id": "des-0-01272",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01278": {
+  "cell": "design/easy",
+  "id": "des-0-01278",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01279": {
+  "cell": "design/medium",
+  "id": "des-0-01279",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01309": {
+  "cell": "design/medium",
+  "id": "des-0-01309",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01312": {
+  "cell": "design/hard",
+  "id": "des-0-01312",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01342": {
+  "cell": "design/hard",
+  "id": "des-0-01342",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01344": {
+  "cell": "design/medium",
+  "id": "des-0-01344",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01345": {
+  "cell": "design/medium",
+  "id": "des-0-01345",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01359": {
+  "cell": "design/easy",
+  "id": "des-0-01359",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01361": {
+  "cell": "design/easy",
+  "id": "des-0-01361",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01363": {
+  "cell": "design/hard",
+  "id": "des-0-01363",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01385": {
+  "cell": "design/hard",
+  "id": "des-0-01385",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01410": {
+  "cell": "design/hard",
+  "id": "des-0-01410",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01417": {
+  "cell": "design/medium",
+  "id": "des-0-01417",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01421": {
+  "cell": "design/hard",
+  "id": "des-0-01421",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01431": {
+  "cell": "design/medium",
+  "id": "des-0-01431",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01437": {
+  "cell": "design/hard",
+  "id": "des-0-01437",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01459": {
+  "cell": "design/easy",
+  "id": "des-0-01459",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01462": {
+  "cell": "design/easy",
+  "id": "des-0-01462",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01491": {
+  "cell": "design/hard",
+  "id": "des-0-01491",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01495": {
+  "cell": "design/easy",
+  "id": "des-0-01495",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01519": {
+  "cell": "design/hard",
+  "id": "des-0-01519",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01520": {
+  "cell": "design/medium",
+  "id": "des-0-01520",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01524": {
+  "cell": "design/easy",
+  "id": "des-0-01524",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01530": {
+  "cell": "design/easy",
+  "id": "des-0-01530",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01534": {
+  "cell": "design/medium",
+  "id": "des-0-01534",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01569": {
+  "cell": "design/hard",
+  "id": "des-0-01569",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01613": {
+  "cell": "design/hard",
+  "id": "des-0-01613",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01614": {
+  "cell": "design/hard",
+  "id": "des-0-01614",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01616": {
+  "cell": "design/easy",
+  "id": "des-0-01616",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01617": {
+  "cell": "design/medium",
+  "id": "des-0-01617",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01621": {
+  "cell": "design/medium",
+  "id": "des-0-01621",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01634": {
+  "cell": "design/hard",
+  "id": "des-0-01634",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01645": {
+  "cell": "design/easy",
+  "id": "des-0-01645",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01652": {
+  "cell": "design/hard",
+  "id": "des-0-01652",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01656": {
+  "cell": "design/medium",
+  "id": "des-0-01656",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01659": {
+  "cell": "design/easy",
+  "id": "des-0-01659",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01669": {
+  "cell": "design/medium",
+  "id": "des-0-01669",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01673": {
+  "cell": "design/medium",
+  "id": "des-0-01673",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01676": {
+  "cell": "design/easy",
+  "id": "des-0-01676",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01678": {
+  "cell": "design/easy",
+  "id": "des-0-01678",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01694": {
+  "cell": "design/easy",
+  "id": "des-0-01694",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01699": {
+  "cell": "design/easy",
+  "id": "des-0-01699",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01719": {
+  "cell": "design/medium",
+  "id": "des-0-01719",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01748": {
+  "cell": "design/medium",
+  "id": "des-0-01748",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01754": {
+  "cell": "design/hard",
+  "id": "des-0-01754",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01760": {
+  "cell": "design/medium",
+  "id": "des-0-01760",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01777": {
+  "cell": "design/easy",
+  "id": "des-0-01777",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01796": {
+  "cell": "design/easy",
+  "id": "des-0-01796",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01823": {
+  "cell": "design/hard",
+  "id": "des-0-01823",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01824": {
+  "cell": "design/hard",
+  "id": "des-0-01824",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01830": {
+  "cell": "design/easy",
+  "id": "des-0-01830",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01832": {
+  "cell": "design/medium",
+  "id": "des-0-01832",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01833": {
+  "cell": "design/hard",
+  "id": "des-0-01833",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01842": {
+  "cell": "design/easy",
+  "id": "des-0-01842",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01858": {
+  "cell": "design/medium",
+  "id": "des-0-01858",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01862": {
+  "cell": "design/easy",
+  "id": "des-0-01862",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01863": {
+  "cell": "design/hard",
+  "id": "des-0-01863",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01875": {
+  "cell": "design/hard",
+  "id": "des-0-01875",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01878": {
+  "cell": "design/hard",
+  "id": "des-0-01878",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01902": {
+  "cell": "design/easy",
+  "id": "des-0-01902",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01905": {
+  "cell": "design/hard",
+  "id": "des-0-01905",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01909": {
+  "cell": "design/hard",
+  "id": "des-0-01909",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01915": {
+  "cell": "design/easy",
+  "id": "des-0-01915",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01948": {
+  "cell": "design/hard",
+  "id": "des-0-01948",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01954": {
+  "cell": "design/medium",
+  "id": "des-0-01954",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01955": {
+  "cell": "design/hard",
+  "id": "des-0-01955",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-01958": {
+  "cell": "design/easy",
+  "id": "des-0-01958",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01962": {
+  "cell": "design/medium",
+  "id": "des-0-01962",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01965": {
+  "cell": "design/medium",
+  "id": "des-0-01965",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-01988": {
+  "cell": "design/easy",
+  "id": "des-0-01988",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-01990": {
+  "cell": "design/easy",
+  "id": "des-0-01990",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02031": {
+  "cell": "design/easy",
+  "id": "des-0-02031",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02038": {
+  "cell": "design/medium",
+  "id": "des-0-02038",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02040": {
+  "cell": "design/medium",
+  "id": "des-0-02040",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02063": {
+  "cell": "design/hard",
+  "id": "des-0-02063",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02069": {
+  "cell": "design/easy",
+  "id": "des-0-02069",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02084": {
+  "cell": "design/medium",
+  "id": "des-0-02084",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02103": {
+  "cell": "design/medium",
+  "id": "des-0-02103",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02148": {
+  "cell": "design/easy",
+  "id": "des-0-02148",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02151": {
+  "cell": "design/hard",
+  "id": "des-0-02151",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02156": {
+  "cell": "design/hard",
+  "id": "des-0-02156",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02171": {
+  "cell": "design/medium",
+  "id": "des-0-02171",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02178": {
+  "cell": "design/medium",
+  "id": "des-0-02178",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02184": {
+  "cell": "design/medium",
+  "id": "des-0-02184",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02185": {
+  "cell": "design/medium",
+  "id": "des-0-02185",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02188": {
+  "cell": "design/hard",
+  "id": "des-0-02188",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02189": {
+  "cell": "design/hard",
+  "id": "des-0-02189",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02204": {
+  "cell": "design/medium",
+  "id": "des-0-02204",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02221": {
+  "cell": "design/medium",
+  "id": "des-0-02221",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02223": {
+  "cell": "design/easy",
+  "id": "des-0-02223",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02231": {
+  "cell": "design/easy",
+  "id": "des-0-02231",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02235": {
+  "cell": "design/medium",
+  "id": "des-0-02235",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02240": {
+  "cell": "design/easy",
+  "id": "des-0-02240",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02268": {
+  "cell": "design/medium",
+  "id": "des-0-02268",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02273": {
+  "cell": "design/hard",
+  "id": "des-0-02273",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02278": {
+  "cell": "design/hard",
+  "id": "des-0-02278",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02282": {
+  "cell": "design/hard",
+  "id": "des-0-02282",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02288": {
+  "cell": "design/hard",
+  "id": "des-0-02288",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02290": {
+  "cell": "design/medium",
+  "id": "des-0-02290",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02303": {
+  "cell": "design/medium",
+  "id": "des-0-02303",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02317": {
+  "cell": "design/hard",
+  "id": "des-0-02317",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02339": {
+  "cell": "design/hard",
+  "id": "des-0-02339",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02356": {
+  "cell": "design/easy",
+  "id": "des-0-02356",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02363": {
+  "cell": "design/hard",
+  "id": "des-0-02363",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02379": {
+  "cell": "design/easy",
+  "id": "des-0-02379",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02405": {
+  "cell": "design/hard",
+  "id": "des-0-02405",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02406": {
+  "cell": "design/medium",
+  "id": "des-0-02406",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02410": {
+  "cell": "design/easy",
+  "id": "des-0-02410",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02423": {
+  "cell": "design/medium",
+  "id": "des-0-02423",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02440": {
+  "cell": "design/easy",
+  "id": "des-0-02440",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02452": {
+  "cell": "design/medium",
+  "id": "des-0-02452",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02463": {
+  "cell": "design/easy",
+  "id": "des-0-02463",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02470": {
+  "cell": "design/medium",
+  "id": "des-0-02470",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02473": {
+  "cell": "design/easy",
+  "id": "des-0-02473",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02484": {
+  "cell": "design/medium",
+  "id": "des-0-02484",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02488": {
+  "cell": "design/medium",
+  "id": "des-0-02488",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02495": {
+  "cell": "design/medium",
+  "id": "des-0-02495",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02505": {
+  "cell": "design/hard",
+  "id": "des-0-02505",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02514": {
+  "cell": "design/medium",
+  "id": "des-0-02514",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02516": {
+  "cell": "design/hard",
+  "id": "des-0-02516",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02523": {
+  "cell": "design/easy",
+  "id": "des-0-02523",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02532": {
+  "cell": "design/easy",
+  "id": "des-0-02532",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02534": {
+  "cell": "design/hard",
+  "id": "des-0-02534",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02544": {
+  "cell": "design/medium",
+  "id": "des-0-02544",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02555": {
+  "cell": "design/medium",
+  "id": "des-0-02555",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02561": {
+  "cell": "design/easy",
+  "id": "des-0-02561",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02563": {
+  "cell": "design/easy",
+  "id": "des-0-02563",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02575": {
+  "cell": "design/medium",
+  "id": "des-0-02575",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02578": {
+  "cell": "design/hard",
+  "id": "des-0-02578",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02580": {
+  "cell": "design/hard",
+  "id": "des-0-02580",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02582": {
+  "cell": "design/easy",
+  "id": "des-0-02582",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02597": {
+  "cell": "design/hard",
+  "id": "des-0-02597",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02607": {
+  "cell": "design/easy",
+  "id": "des-0-02607",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02635": {
+  "cell": "design/hard",
+  "id": "des-0-02635",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02637": {
+  "cell": "design/hard",
+  "id": "des-0-02637",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02668": {
+  "cell": "design/medium",
+  "id": "des-0-02668",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02693": {
+  "cell": "design/easy",
+  "id": "des-0-02693",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02702": {
+  "cell": "design/easy",
+  "id": "des-0-02702",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02704": {
+  "cell": "design/medium",
+  "id": "des-0-02704",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02717": {
+  "cell": "design/easy",
+  "id": "des-0-02717",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02726": {
+  "cell": "design/hard",
+  "id": "des-0-02726",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02740": {
+  "cell": "design/easy",
+  "id": "des-0-02740",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02753": {
+  "cell": "design/hard",
+  "id": "des-0-02753",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02772": {
+  "cell": "design/hard",
+  "id": "des-0-02772",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02780": {
+  "cell": "design/hard",
+  "id": "des-0-02780",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02791": {
+  "cell": "design/medium",
+  "id": "des-0-02791",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02805": {
+  "cell": "design/medium",
+  "id": "des-0-02805",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02806": {
+  "cell": "design/easy",
+  "id": "des-0-02806",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02809": {
+  "cell": "design/medium",
+  "id": "des-0-02809",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02819": {
+  "cell": "design/medium",
+  "id": "des-0-02819",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02839": {
+  "cell": "design/easy",
+  "id": "des-0-02839",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02855": {
+  "cell": "design/easy",
+  "id": "des-0-02855",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02856": {
+  "cell": "design/easy",
+  "id": "des-0-02856",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02871": {
+  "cell": "design/easy",
+  "id": "des-0-02871",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02882": {
+  "cell": "design/hard",
+  "id": "des-0-02882",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02902": {
+  "cell": "design/easy",
+  "id": "des-0-02902",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02909": {
+  "cell": "design/easy",
+  "id": "des-0-02909",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02911": {
+  "cell": "design/medium",
+  "id": "des-0-02911",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02918": {
+  "cell": "design/easy",
+  "id": "des-0-02918",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02929": {
+  "cell": "design/easy",
+  "id": "des-0-02929",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02939": {
+  "cell": "design/medium",
+  "id": "des-0-02939",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02942": {
+  "cell": "design/medium",
+  "id": "des-0-02942",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02944": {
+  "cell": "design/medium",
+  "id": "des-0-02944",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02965": {
+  "cell": "design/medium",
+  "id": "des-0-02965",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02966": {
+  "cell": "design/medium",
+  "id": "des-0-02966",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-02970": {
+  "cell": "design/easy",
+  "id": "des-0-02970",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-02978": {
+  "cell": "design/hard",
+  "id": "des-0-02978",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-02992": {
+  "cell": "design/easy",
+  "id": "des-0-02992",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03005": {
+  "cell": "design/hard",
+  "id": "des-0-03005",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03009": {
+  "cell": "design/medium",
+  "id": "des-0-03009",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03026": {
+  "cell": "design/hard",
+  "id": "des-0-03026",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03034": {
+  "cell": "design/easy",
+  "id": "des-0-03034",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03046": {
+  "cell": "design/easy",
+  "id": "des-0-03046",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03049": {
+  "cell": "design/easy",
+  "id": "des-0-03049",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03054": {
+  "cell": "design/hard",
+  "id": "des-0-03054",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03055": {
+  "cell": "design/medium",
+  "id": "des-0-03055",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03059": {
+  "cell": "design/easy",
+  "id": "des-0-03059",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03064": {
+  "cell": "design/medium",
+  "id": "des-0-03064",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03082": {
+  "cell": "design/easy",
+  "id": "des-0-03082",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03088": {
+  "cell": "design/medium",
+  "id": "des-0-03088",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03101": {
+  "cell": "design/easy",
+  "id": "des-0-03101",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03132": {
+  "cell": "design/medium",
+  "id": "des-0-03132",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03135": {
+  "cell": "design/medium",
+  "id": "des-0-03135",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03137": {
+  "cell": "design/medium",
+  "id": "des-0-03137",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03138": {
+  "cell": "design/hard",
+  "id": "des-0-03138",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03148": {
+  "cell": "design/medium",
+  "id": "des-0-03148",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03151": {
+  "cell": "design/medium",
+  "id": "des-0-03151",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03152": {
+  "cell": "design/medium",
+  "id": "des-0-03152",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03162": {
+  "cell": "design/easy",
+  "id": "des-0-03162",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03172": {
+  "cell": "design/easy",
+  "id": "des-0-03172",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03183": {
+  "cell": "design/hard",
+  "id": "des-0-03183",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03185": {
+  "cell": "design/hard",
+  "id": "des-0-03185",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03196": {
+  "cell": "design/medium",
+  "id": "des-0-03196",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03200": {
+  "cell": "design/easy",
+  "id": "des-0-03200",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03201": {
+  "cell": "design/hard",
+  "id": "des-0-03201",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03202": {
+  "cell": "design/medium",
+  "id": "des-0-03202",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03217": {
+  "cell": "design/easy",
+  "id": "des-0-03217",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03218": {
+  "cell": "design/hard",
+  "id": "des-0-03218",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03233": {
+  "cell": "design/easy",
+  "id": "des-0-03233",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03236": {
+  "cell": "design/easy",
+  "id": "des-0-03236",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03243": {
+  "cell": "design/hard",
+  "id": "des-0-03243",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03261": {
+  "cell": "design/easy",
+  "id": "des-0-03261",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03263": {
+  "cell": "design/hard",
+  "id": "des-0-03263",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03264": {
+  "cell": "design/easy",
+  "id": "des-0-03264",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03265": {
+  "cell": "design/hard",
+  "id": "des-0-03265",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03286": {
+  "cell": "design/hard",
+  "id": "des-0-03286",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03307": {
+  "cell": "design/medium",
+  "id": "des-0-03307",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03309": {
+  "cell": "design/hard",
+  "id": "des-0-03309",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03323": {
+  "cell": "design/medium",
+  "id": "des-0-03323",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03326": {
+  "cell": "design/medium",
+  "id": "des-0-03326",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03356": {
+  "cell": "design/easy",
+  "id": "des-0-03356",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03373": {
+  "cell": "design/easy",
+  "id": "des-0-03373",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03377": {
+  "cell": "design/easy",
+  "id": "des-0-03377",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03383": {
+  "cell": "design/easy",
+  "id": "des-0-03383",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03386": {
+  "cell": "design/easy",
+  "id": "des-0-03386",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03391": {
+  "cell": "design/easy",
+  "id": "des-0-03391",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03393": {
+  "cell": "design/easy",
+  "id": "des-0-03393",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03410": {
+  "cell": "design/hard",
+  "id": "des-0-03410",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03427": {
+  "cell": "design/medium",
+  "id": "des-0-03427",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03442": {
+  "cell": "design/hard",
+  "id": "des-0-03442",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03462": {
+  "cell": "design/easy",
+  "id": "des-0-03462",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03465": {
+  "cell": "design/easy",
+  "id": "des-0-03465",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03482": {
+  "cell": "design/hard",
+  "id": "des-0-03482",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03486": {
+  "cell": "design/hard",
+  "id": "des-0-03486",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03491": {
+  "cell": "design/hard",
+  "id": "des-0-03491",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03494": {
+  "cell": "design/medium",
+  "id": "des-0-03494",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03520": {
+  "cell": "design/easy",
+  "id": "des-0-03520",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03531": {
+  "cell": "design/easy",
+  "id": "des-0-03531",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03548": {
+  "cell": "design/hard",
+  "id": "des-0-03548",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03570": {
+  "cell": "design/medium",
+  "id": "des-0-03570",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03597": {
+  "cell": "design/easy",
+  "id": "des-0-03597",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03604": {
+  "cell": "design/easy",
+  "id": "des-0-03604",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03641": {
+  "cell": "design/hard",
+  "id": "des-0-03641",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03651": {
+  "cell": "design/medium",
+  "id": "des-0-03651",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03653": {
+  "cell": "design/easy",
+  "id": "des-0-03653",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03659": {
+  "cell": "design/hard",
+  "id": "des-0-03659",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03708": {
+  "cell": "design/easy",
+  "id": "des-0-03708",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03732": {
+  "cell": "design/medium",
+  "id": "des-0-03732",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03739": {
+  "cell": "design/medium",
+  "id": "des-0-03739",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03756": {
+  "cell": "design/medium",
+  "id": "des-0-03756",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03771": {
+  "cell": "design/medium",
+  "id": "des-0-03771",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03774": {
+  "cell": "design/hard",
+  "id": "des-0-03774",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03781": {
+  "cell": "design/easy",
+  "id": "des-0-03781",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03803": {
+  "cell": "design/hard",
+  "id": "des-0-03803",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03812": {
+  "cell": "design/hard",
+  "id": "des-0-03812",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03818": {
+  "cell": "design/hard",
+  "id": "des-0-03818",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03821": {
+  "cell": "design/easy",
+  "id": "des-0-03821",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03826": {
+  "cell": "design/medium",
+  "id": "des-0-03826",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03829": {
+  "cell": "design/hard",
+  "id": "des-0-03829",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03845": {
+  "cell": "design/hard",
+  "id": "des-0-03845",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03869": {
+  "cell": "design/hard",
+  "id": "des-0-03869",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03870": {
+  "cell": "design/hard",
+  "id": "des-0-03870",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03872": {
+  "cell": "design/easy",
+  "id": "des-0-03872",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03874": {
+  "cell": "design/easy",
+  "id": "des-0-03874",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03888": {
+  "cell": "design/hard",
+  "id": "des-0-03888",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03889": {
+  "cell": "design/hard",
+  "id": "des-0-03889",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03890": {
+  "cell": "design/hard",
+  "id": "des-0-03890",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03907": {
+  "cell": "design/hard",
+  "id": "des-0-03907",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03908": {
+  "cell": "design/medium",
+  "id": "des-0-03908",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03913": {
+  "cell": "design/hard",
+  "id": "des-0-03913",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03930": {
+  "cell": "design/medium",
+  "id": "des-0-03930",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03940": {
+  "cell": "design/easy",
+  "id": "des-0-03940",
+  "task": "design",
+  "tier": "easy"
+ },
+ "des-0-03950": {
+  "cell": "design/hard",
+  "id": "des-0-03950",
+  "task": "design",
+  "tier": "hard"
+ },
+ "des-0-03955": {
+  "cell": "design/medium",
+  "id": "des-0-03955",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03981": {
+  "cell": "design/medium",
+  "id": "des-0-03981",
+  "task": "design",
+  "tier": "medium"
+ },
+ "des-0-03996": {
+  "cell": "design/easy",
+  "id": "des-0-03996",
+  "task": "design",
+  "tier": "easy"
+ },
+ "led-0-00152": {
+  "cell": "ledger/easy",
+  "id": "led-0-00152",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-00287": {
+  "cell": "ledger/easy",
+  "id": "led-0-00287",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-00288": {
+  "cell": "ledger/hard",
+  "id": "led-0-00288",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-00321": {
+  "cell": "ledger/hard",
+  "id": "led-0-00321",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-00346": {
+  "cell": "ledger/hard",
+  "id": "led-0-00346",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-00356": {
+  "cell": "ledger/easy",
+  "id": "led-0-00356",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-00362": {
+  "cell": "ledger/hard",
+  "id": "led-0-00362",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-00454": {
+  "cell": "ledger/medium",
+  "id": "led-0-00454",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-00456": {
+  "cell": "ledger/hard",
+  "id": "led-0-00456",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-00488": {
+  "cell": "ledger/medium",
+  "id": "led-0-00488",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-00492": {
+  "cell": "ledger/hard",
+  "id": "led-0-00492",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-00554": {
+  "cell": "ledger/hard",
+  "id": "led-0-00554",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-00590": {
+  "cell": "ledger/medium",
+  "id": "led-0-00590",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-00722": {
+  "cell": "ledger/hard",
+  "id": "led-0-00722",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-00773": {
+  "cell": "ledger/easy",
+  "id": "led-0-00773",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-00788": {
+  "cell": "ledger/easy",
+  "id": "led-0-00788",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-00867": {
+  "cell": "ledger/easy",
+  "id": "led-0-00867",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-00883": {
+  "cell": "ledger/medium",
+  "id": "led-0-00883",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-00887": {
+  "cell": "ledger/medium",
+  "id": "led-0-00887",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-00908": {
+  "cell": "ledger/easy",
+  "id": "led-0-00908",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-00916": {
+  "cell": "ledger/easy",
+  "id": "led-0-00916",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-00918": {
+  "cell": "ledger/medium",
+  "id": "led-0-00918",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-00929": {
+  "cell": "ledger/medium",
+  "id": "led-0-00929",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-00935": {
+  "cell": "ledger/easy",
+  "id": "led-0-00935",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-00951": {
+  "cell": "ledger/hard",
+  "id": "led-0-00951",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-00961": {
+  "cell": "ledger/medium",
+  "id": "led-0-00961",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-00982": {
+  "cell": "ledger/medium",
+  "id": "led-0-00982",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-00995": {
+  "cell": "ledger/easy",
+  "id": "led-0-00995",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-01001": {
+  "cell": "ledger/hard",
+  "id": "led-0-01001",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-01002": {
+  "cell": "ledger/hard",
+  "id": "led-0-01002",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-01063": {
+  "cell": "ledger/medium",
+  "id": "led-0-01063",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-01066": {
+  "cell": "ledger/medium",
+  "id": "led-0-01066",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-01124": {
+  "cell": "ledger/easy",
+  "id": "led-0-01124",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-01152": {
+  "cell": "ledger/hard",
+  "id": "led-0-01152",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-01162": {
+  "cell": "ledger/medium",
+  "id": "led-0-01162",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-01232": {
+  "cell": "ledger/easy",
+  "id": "led-0-01232",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-01234": {
+  "cell": "ledger/medium",
+  "id": "led-0-01234",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-01245": {
+  "cell": "ledger/medium",
+  "id": "led-0-01245",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-01264": {
+  "cell": "ledger/hard",
+  "id": "led-0-01264",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-01273": {
+  "cell": "ledger/hard",
+  "id": "led-0-01273",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-01285": {
+  "cell": "ledger/easy",
+  "id": "led-0-01285",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-01314": {
+  "cell": "ledger/medium",
+  "id": "led-0-01314",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-01319": {
+  "cell": "ledger/easy",
+  "id": "led-0-01319",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-01336": {
+  "cell": "ledger/hard",
+  "id": "led-0-01336",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-01345": {
+  "cell": "ledger/easy",
+  "id": "led-0-01345",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-01348": {
+  "cell": "ledger/medium",
+  "id": "led-0-01348",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-01405": {
+  "cell": "ledger/medium",
+  "id": "led-0-01405",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-01455": {
+  "cell": "ledger/hard",
+  "id": "led-0-01455",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-01469": {
+  "cell": "ledger/hard",
+  "id": "led-0-01469",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-01476": {
+  "cell": "ledger/hard",
+  "id": "led-0-01476",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-01490": {
+  "cell": "ledger/hard",
+  "id": "led-0-01490",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-01496": {
+  "cell": "ledger/hard",
+  "id": "led-0-01496",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-01565": {
+  "cell": "ledger/easy",
+  "id": "led-0-01565",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-01588": {
+  "cell": "ledger/medium",
+  "id": "led-0-01588",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-01614": {
+  "cell": "ledger/medium",
+  "id": "led-0-01614",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-01670": {
+  "cell": "ledger/hard",
+  "id": "led-0-01670",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-01673": {
+  "cell": "ledger/easy",
+  "id": "led-0-01673",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-01684": {
+  "cell": "ledger/medium",
+  "id": "led-0-01684",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-01732": {
+  "cell": "ledger/medium",
+  "id": "led-0-01732",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-01759": {
+  "cell": "ledger/medium",
+  "id": "led-0-01759",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-01770": {
+  "cell": "ledger/hard",
+  "id": "led-0-01770",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-01813": {
+  "cell": "ledger/hard",
+  "id": "led-0-01813",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-01846": {
+  "cell": "ledger/hard",
+  "id": "led-0-01846",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-01850": {
+  "cell": "ledger/medium",
+  "id": "led-0-01850",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-01873": {
+  "cell": "ledger/easy",
+  "id": "led-0-01873",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-01875": {
+  "cell": "ledger/easy",
+  "id": "led-0-01875",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-01887": {
+  "cell": "ledger/hard",
+  "id": "led-0-01887",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-01940": {
+  "cell": "ledger/easy",
+  "id": "led-0-01940",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-02029": {
+  "cell": "ledger/medium",
+  "id": "led-0-02029",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-02043": {
+  "cell": "ledger/hard",
+  "id": "led-0-02043",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-02059": {
+  "cell": "ledger/hard",
+  "id": "led-0-02059",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-02096": {
+  "cell": "ledger/easy",
+  "id": "led-0-02096",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-02107": {
+  "cell": "ledger/easy",
+  "id": "led-0-02107",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-02209": {
+  "cell": "ledger/medium",
+  "id": "led-0-02209",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-02237": {
+  "cell": "ledger/medium",
+  "id": "led-0-02237",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-02252": {
+  "cell": "ledger/medium",
+  "id": "led-0-02252",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-02325": {
+  "cell": "ledger/easy",
+  "id": "led-0-02325",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-02355": {
+  "cell": "ledger/hard",
+  "id": "led-0-02355",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-02376": {
+  "cell": "ledger/medium",
+  "id": "led-0-02376",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-02381": {
+  "cell": "ledger/easy",
+  "id": "led-0-02381",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-02444": {
+  "cell": "ledger/easy",
+  "id": "led-0-02444",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-02476": {
+  "cell": "ledger/easy",
+  "id": "led-0-02476",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-02492": {
+  "cell": "ledger/easy",
+  "id": "led-0-02492",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-02501": {
+  "cell": "ledger/easy",
+  "id": "led-0-02501",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-02521": {
+  "cell": "ledger/hard",
+  "id": "led-0-02521",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-02568": {
+  "cell": "ledger/medium",
+  "id": "led-0-02568",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-02572": {
+  "cell": "ledger/easy",
+  "id": "led-0-02572",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-02640": {
+  "cell": "ledger/hard",
+  "id": "led-0-02640",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-02663": {
+  "cell": "ledger/easy",
+  "id": "led-0-02663",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-02686": {
+  "cell": "ledger/hard",
+  "id": "led-0-02686",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-02701": {
+  "cell": "ledger/medium",
+  "id": "led-0-02701",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-02754": {
+  "cell": "ledger/medium",
+  "id": "led-0-02754",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-02762": {
+  "cell": "ledger/easy",
+  "id": "led-0-02762",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-02803": {
+  "cell": "ledger/hard",
+  "id": "led-0-02803",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-02811": {
+  "cell": "ledger/medium",
+  "id": "led-0-02811",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-02824": {
+  "cell": "ledger/hard",
+  "id": "led-0-02824",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-02831": {
+  "cell": "ledger/easy",
+  "id": "led-0-02831",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-02879": {
+  "cell": "ledger/easy",
+  "id": "led-0-02879",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-02891": {
+  "cell": "ledger/hard",
+  "id": "led-0-02891",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-02905": {
+  "cell": "ledger/easy",
+  "id": "led-0-02905",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-02917": {
+  "cell": "ledger/medium",
+  "id": "led-0-02917",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-02919": {
+  "cell": "ledger/easy",
+  "id": "led-0-02919",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-02938": {
+  "cell": "ledger/hard",
+  "id": "led-0-02938",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-02944": {
+  "cell": "ledger/medium",
+  "id": "led-0-02944",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-02979": {
+  "cell": "ledger/hard",
+  "id": "led-0-02979",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-02980": {
+  "cell": "ledger/medium",
+  "id": "led-0-02980",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-02991": {
+  "cell": "ledger/medium",
+  "id": "led-0-02991",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-03024": {
+  "cell": "ledger/hard",
+  "id": "led-0-03024",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-03026": {
+  "cell": "ledger/medium",
+  "id": "led-0-03026",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-03100": {
+  "cell": "ledger/medium",
+  "id": "led-0-03100",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-03114": {
+  "cell": "ledger/hard",
+  "id": "led-0-03114",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-03124": {
+  "cell": "ledger/easy",
+  "id": "led-0-03124",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-03253": {
+  "cell": "ledger/medium",
+  "id": "led-0-03253",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-03308": {
+  "cell": "ledger/easy",
+  "id": "led-0-03308",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-03314": {
+  "cell": "ledger/medium",
+  "id": "led-0-03314",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-03350": {
+  "cell": "ledger/medium",
+  "id": "led-0-03350",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-03376": {
+  "cell": "ledger/easy",
+  "id": "led-0-03376",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-03391": {
+  "cell": "ledger/medium",
+  "id": "led-0-03391",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-03406": {
+  "cell": "ledger/medium",
+  "id": "led-0-03406",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-03456": {
+  "cell": "ledger/hard",
+  "id": "led-0-03456",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-03466": {
+  "cell": "ledger/medium",
+  "id": "led-0-03466",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-03471": {
+  "cell": "ledger/hard",
+  "id": "led-0-03471",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-03476": {
+  "cell": "ledger/medium",
+  "id": "led-0-03476",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-03477": {
+  "cell": "ledger/medium",
+  "id": "led-0-03477",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-03567": {
+  "cell": "ledger/easy",
+  "id": "led-0-03567",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-03579": {
+  "cell": "ledger/hard",
+  "id": "led-0-03579",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-03593": {
+  "cell": "ledger/easy",
+  "id": "led-0-03593",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-03658": {
+  "cell": "ledger/hard",
+  "id": "led-0-03658",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-03671": {
+  "cell": "ledger/easy",
+  "id": "led-0-03671",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-03721": {
+  "cell": "ledger/medium",
+  "id": "led-0-03721",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-03799": {
+  "cell": "ledger/medium",
+  "id": "led-0-03799",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-03812": {
+  "cell": "ledger/easy",
+  "id": "led-0-03812",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-03819": {
+  "cell": "ledger/medium",
+  "id": "led-0-03819",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-03836": {
+  "cell": "ledger/hard",
+  "id": "led-0-03836",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-03861": {
+  "cell": "ledger/hard",
+  "id": "led-0-03861",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-03873": {
+  "cell": "ledger/easy",
+  "id": "led-0-03873",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-03893": {
+  "cell": "ledger/easy",
+  "id": "led-0-03893",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-03908": {
+  "cell": "ledger/medium",
+  "id": "led-0-03908",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-03915": {
+  "cell": "ledger/easy",
+  "id": "led-0-03915",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-03922": {
+  "cell": "ledger/hard",
+  "id": "led-0-03922",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-03968": {
+  "cell": "ledger/easy",
+  "id": "led-0-03968",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-03992": {
+  "cell": "ledger/medium",
+  "id": "led-0-03992",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-04086": {
+  "cell": "ledger/medium",
+  "id": "led-0-04086",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-04123": {
+  "cell": "ledger/easy",
+  "id": "led-0-04123",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-04127": {
+  "cell": "ledger/medium",
+  "id": "led-0-04127",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-04185": {
+  "cell": "ledger/hard",
+  "id": "led-0-04185",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-04208": {
+  "cell": "ledger/hard",
+  "id": "led-0-04208",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-04218": {
+  "cell": "ledger/hard",
+  "id": "led-0-04218",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-04224": {
+  "cell": "ledger/medium",
+  "id": "led-0-04224",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-04231": {
+  "cell": "ledger/easy",
+  "id": "led-0-04231",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-04247": {
+  "cell": "ledger/easy",
+  "id": "led-0-04247",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-04339": {
+  "cell": "ledger/medium",
+  "id": "led-0-04339",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-04433": {
+  "cell": "ledger/medium",
+  "id": "led-0-04433",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-04437": {
+  "cell": "ledger/medium",
+  "id": "led-0-04437",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-04438": {
+  "cell": "ledger/medium",
+  "id": "led-0-04438",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-04512": {
+  "cell": "ledger/medium",
+  "id": "led-0-04512",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-04564": {
+  "cell": "ledger/easy",
+  "id": "led-0-04564",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-04570": {
+  "cell": "ledger/easy",
+  "id": "led-0-04570",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-04615": {
+  "cell": "ledger/hard",
+  "id": "led-0-04615",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-04661": {
+  "cell": "ledger/easy",
+  "id": "led-0-04661",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-04671": {
+  "cell": "ledger/medium",
+  "id": "led-0-04671",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-04709": {
+  "cell": "ledger/medium",
+  "id": "led-0-04709",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-04722": {
+  "cell": "ledger/hard",
+  "id": "led-0-04722",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-04730": {
+  "cell": "ledger/medium",
+  "id": "led-0-04730",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-04772": {
+  "cell": "ledger/hard",
+  "id": "led-0-04772",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-04784": {
+  "cell": "ledger/hard",
+  "id": "led-0-04784",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-04833": {
+  "cell": "ledger/hard",
+  "id": "led-0-04833",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-04841": {
+  "cell": "ledger/easy",
+  "id": "led-0-04841",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-04878": {
+  "cell": "ledger/easy",
+  "id": "led-0-04878",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-04976": {
+  "cell": "ledger/easy",
+  "id": "led-0-04976",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-05043": {
+  "cell": "ledger/hard",
+  "id": "led-0-05043",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-05088": {
+  "cell": "ledger/medium",
+  "id": "led-0-05088",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-05151": {
+  "cell": "ledger/easy",
+  "id": "led-0-05151",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-05193": {
+  "cell": "ledger/medium",
+  "id": "led-0-05193",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-05201": {
+  "cell": "ledger/easy",
+  "id": "led-0-05201",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-05252": {
+  "cell": "ledger/medium",
+  "id": "led-0-05252",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-05283": {
+  "cell": "ledger/medium",
+  "id": "led-0-05283",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-05288": {
+  "cell": "ledger/easy",
+  "id": "led-0-05288",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-05340": {
+  "cell": "ledger/medium",
+  "id": "led-0-05340",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-05358": {
+  "cell": "ledger/easy",
+  "id": "led-0-05358",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-05413": {
+  "cell": "ledger/medium",
+  "id": "led-0-05413",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-05414": {
+  "cell": "ledger/hard",
+  "id": "led-0-05414",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-05435": {
+  "cell": "ledger/easy",
+  "id": "led-0-05435",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-05454": {
+  "cell": "ledger/easy",
+  "id": "led-0-05454",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-05511": {
+  "cell": "ledger/medium",
+  "id": "led-0-05511",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-05523": {
+  "cell": "ledger/hard",
+  "id": "led-0-05523",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-05535": {
+  "cell": "ledger/medium",
+  "id": "led-0-05535",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-05565": {
+  "cell": "ledger/hard",
+  "id": "led-0-05565",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-05578": {
+  "cell": "ledger/easy",
+  "id": "led-0-05578",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-05582": {
+  "cell": "ledger/medium",
+  "id": "led-0-05582",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-05628": {
+  "cell": "ledger/hard",
+  "id": "led-0-05628",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-05642": {
+  "cell": "ledger/easy",
+  "id": "led-0-05642",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-05655": {
+  "cell": "ledger/easy",
+  "id": "led-0-05655",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-05660": {
+  "cell": "ledger/easy",
+  "id": "led-0-05660",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-05664": {
+  "cell": "ledger/medium",
+  "id": "led-0-05664",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-05691": {
+  "cell": "ledger/easy",
+  "id": "led-0-05691",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-05700": {
+  "cell": "ledger/medium",
+  "id": "led-0-05700",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-05723": {
+  "cell": "ledger/easy",
+  "id": "led-0-05723",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-05733": {
+  "cell": "ledger/hard",
+  "id": "led-0-05733",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-05873": {
+  "cell": "ledger/medium",
+  "id": "led-0-05873",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-05938": {
+  "cell": "ledger/hard",
+  "id": "led-0-05938",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-05978": {
+  "cell": "ledger/medium",
+  "id": "led-0-05978",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-05993": {
+  "cell": "ledger/easy",
+  "id": "led-0-05993",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-06040": {
+  "cell": "ledger/hard",
+  "id": "led-0-06040",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-06175": {
+  "cell": "ledger/easy",
+  "id": "led-0-06175",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-06188": {
+  "cell": "ledger/medium",
+  "id": "led-0-06188",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-06197": {
+  "cell": "ledger/hard",
+  "id": "led-0-06197",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-06205": {
+  "cell": "ledger/hard",
+  "id": "led-0-06205",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-06209": {
+  "cell": "ledger/easy",
+  "id": "led-0-06209",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-06229": {
+  "cell": "ledger/easy",
+  "id": "led-0-06229",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-06237": {
+  "cell": "ledger/medium",
+  "id": "led-0-06237",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-06296": {
+  "cell": "ledger/medium",
+  "id": "led-0-06296",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-06428": {
+  "cell": "ledger/hard",
+  "id": "led-0-06428",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-06533": {
+  "cell": "ledger/easy",
+  "id": "led-0-06533",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-06556": {
+  "cell": "ledger/hard",
+  "id": "led-0-06556",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-06572": {
+  "cell": "ledger/medium",
+  "id": "led-0-06572",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-06592": {
+  "cell": "ledger/medium",
+  "id": "led-0-06592",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-06610": {
+  "cell": "ledger/medium",
+  "id": "led-0-06610",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-06619": {
+  "cell": "ledger/hard",
+  "id": "led-0-06619",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-06639": {
+  "cell": "ledger/hard",
+  "id": "led-0-06639",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-06700": {
+  "cell": "ledger/medium",
+  "id": "led-0-06700",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-06730": {
+  "cell": "ledger/easy",
+  "id": "led-0-06730",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-06753": {
+  "cell": "ledger/easy",
+  "id": "led-0-06753",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-06807": {
+  "cell": "ledger/easy",
+  "id": "led-0-06807",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-06808": {
+  "cell": "ledger/hard",
+  "id": "led-0-06808",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-06813": {
+  "cell": "ledger/hard",
+  "id": "led-0-06813",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-06816": {
+  "cell": "ledger/medium",
+  "id": "led-0-06816",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-06832": {
+  "cell": "ledger/easy",
+  "id": "led-0-06832",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-06836": {
+  "cell": "ledger/easy",
+  "id": "led-0-06836",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-06873": {
+  "cell": "ledger/hard",
+  "id": "led-0-06873",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-06893": {
+  "cell": "ledger/easy",
+  "id": "led-0-06893",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-06924": {
+  "cell": "ledger/medium",
+  "id": "led-0-06924",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-06932": {
+  "cell": "ledger/hard",
+  "id": "led-0-06932",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-06952": {
+  "cell": "ledger/hard",
+  "id": "led-0-06952",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-06973": {
+  "cell": "ledger/easy",
+  "id": "led-0-06973",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-07002": {
+  "cell": "ledger/hard",
+  "id": "led-0-07002",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-07004": {
+  "cell": "ledger/medium",
+  "id": "led-0-07004",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-07052": {
+  "cell": "ledger/easy",
+  "id": "led-0-07052",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-07069": {
+  "cell": "ledger/hard",
+  "id": "led-0-07069",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-07071": {
+  "cell": "ledger/hard",
+  "id": "led-0-07071",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-07081": {
+  "cell": "ledger/hard",
+  "id": "led-0-07081",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-07088": {
+  "cell": "ledger/hard",
+  "id": "led-0-07088",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-07113": {
+  "cell": "ledger/easy",
+  "id": "led-0-07113",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-07161": {
+  "cell": "ledger/hard",
+  "id": "led-0-07161",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-07171": {
+  "cell": "ledger/hard",
+  "id": "led-0-07171",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-07179": {
+  "cell": "ledger/hard",
+  "id": "led-0-07179",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-07186": {
+  "cell": "ledger/medium",
+  "id": "led-0-07186",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-07190": {
+  "cell": "ledger/easy",
+  "id": "led-0-07190",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-07199": {
+  "cell": "ledger/easy",
+  "id": "led-0-07199",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-07232": {
+  "cell": "ledger/hard",
+  "id": "led-0-07232",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-07302": {
+  "cell": "ledger/hard",
+  "id": "led-0-07302",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-07324": {
+  "cell": "ledger/easy",
+  "id": "led-0-07324",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-07391": {
+  "cell": "ledger/medium",
+  "id": "led-0-07391",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-07402": {
+  "cell": "ledger/medium",
+  "id": "led-0-07402",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-07407": {
+  "cell": "ledger/easy",
+  "id": "led-0-07407",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-07417": {
+  "cell": "ledger/easy",
+  "id": "led-0-07417",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-07430": {
+  "cell": "ledger/easy",
+  "id": "led-0-07430",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-07439": {
+  "cell": "ledger/hard",
+  "id": "led-0-07439",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-07441": {
+  "cell": "ledger/easy",
+  "id": "led-0-07441",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-07483": {
+  "cell": "ledger/hard",
+  "id": "led-0-07483",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-07484": {
+  "cell": "ledger/medium",
+  "id": "led-0-07484",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-07515": {
+  "cell": "ledger/medium",
+  "id": "led-0-07515",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-07542": {
+  "cell": "ledger/medium",
+  "id": "led-0-07542",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-07553": {
+  "cell": "ledger/medium",
+  "id": "led-0-07553",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-07555": {
+  "cell": "ledger/hard",
+  "id": "led-0-07555",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-07617": {
+  "cell": "ledger/medium",
+  "id": "led-0-07617",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-07632": {
+  "cell": "ledger/hard",
+  "id": "led-0-07632",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-07634": {
+  "cell": "ledger/medium",
+  "id": "led-0-07634",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-07721": {
+  "cell": "ledger/easy",
+  "id": "led-0-07721",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-07780": {
+  "cell": "ledger/medium",
+  "id": "led-0-07780",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-07816": {
+  "cell": "ledger/hard",
+  "id": "led-0-07816",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-07825": {
+  "cell": "ledger/medium",
+  "id": "led-0-07825",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-07858": {
+  "cell": "ledger/medium",
+  "id": "led-0-07858",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-07865": {
+  "cell": "ledger/easy",
+  "id": "led-0-07865",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-07939": {
+  "cell": "ledger/medium",
+  "id": "led-0-07939",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-07940": {
+  "cell": "ledger/medium",
+  "id": "led-0-07940",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-07959": {
+  "cell": "ledger/medium",
+  "id": "led-0-07959",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-07967": {
+  "cell": "ledger/medium",
+  "id": "led-0-07967",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-07992": {
+  "cell": "ledger/medium",
+  "id": "led-0-07992",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-08026": {
+  "cell": "ledger/easy",
+  "id": "led-0-08026",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-08051": {
+  "cell": "ledger/hard",
+  "id": "led-0-08051",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-08055": {
+  "cell": "ledger/hard",
+  "id": "led-0-08055",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-08117": {
+  "cell": "ledger/easy",
+  "id": "led-0-08117",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-08127": {
+  "cell": "ledger/medium",
+  "id": "led-0-08127",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-08146": {
+  "cell": "ledger/easy",
+  "id": "led-0-08146",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-08163": {
+  "cell": "ledger/hard",
+  "id": "led-0-08163",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-08185": {
+  "cell": "ledger/medium",
+  "id": "led-0-08185",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-08206": {
+  "cell": "ledger/easy",
+  "id": "led-0-08206",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-08221": {
+  "cell": "ledger/medium",
+  "id": "led-0-08221",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-08237": {
+  "cell": "ledger/medium",
+  "id": "led-0-08237",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-08241": {
+  "cell": "ledger/hard",
+  "id": "led-0-08241",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-08326": {
+  "cell": "ledger/medium",
+  "id": "led-0-08326",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-08383": {
+  "cell": "ledger/hard",
+  "id": "led-0-08383",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-08405": {
+  "cell": "ledger/easy",
+  "id": "led-0-08405",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-08426": {
+  "cell": "ledger/easy",
+  "id": "led-0-08426",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-08436": {
+  "cell": "ledger/medium",
+  "id": "led-0-08436",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-08442": {
+  "cell": "ledger/medium",
+  "id": "led-0-08442",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-08453": {
+  "cell": "ledger/medium",
+  "id": "led-0-08453",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-08509": {
+  "cell": "ledger/hard",
+  "id": "led-0-08509",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-08546": {
+  "cell": "ledger/hard",
+  "id": "led-0-08546",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-08647": {
+  "cell": "ledger/easy",
+  "id": "led-0-08647",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-08659": {
+  "cell": "ledger/medium",
+  "id": "led-0-08659",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-08706": {
+  "cell": "ledger/medium",
+  "id": "led-0-08706",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-08752": {
+  "cell": "ledger/hard",
+  "id": "led-0-08752",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-08763": {
+  "cell": "ledger/hard",
+  "id": "led-0-08763",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-08769": {
+  "cell": "ledger/medium",
+  "id": "led-0-08769",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-08806": {
+  "cell": "ledger/medium",
+  "id": "led-0-08806",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-08809": {
+  "cell": "ledger/hard",
+  "id": "led-0-08809",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-08832": {
+  "cell": "ledger/easy",
+  "id": "led-0-08832",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-08866": {
+  "cell": "ledger/easy",
+  "id": "led-0-08866",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-08879": {
+  "cell": "ledger/easy",
+  "id": "led-0-08879",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-08907": {
+  "cell": "ledger/hard",
+  "id": "led-0-08907",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-0-08933": {
+  "cell": "ledger/easy",
+  "id": "led-0-08933",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-0-08950": {
+  "cell": "ledger/medium",
+  "id": "led-0-08950",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-0-08974": {
+  "cell": "ledger/medium",
+  "id": "led-0-08974",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-arch-0-00016": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-00016",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-00020": {
+  "cell": "ledger/medium",
+  "id": "led-arch-0-00020",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-arch-0-00026": {
+  "cell": "ledger/medium",
+  "id": "led-arch-0-00026",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-arch-0-00065": {
+  "cell": "ledger/medium",
+  "id": "led-arch-0-00065",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-arch-0-00069": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-00069",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-00158": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-00158",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-00206": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-00206",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-00282": {
+  "cell": "ledger/medium",
+  "id": "led-arch-0-00282",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-arch-0-00320": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-00320",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-00448": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-00448",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-00471": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-00471",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-00526": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-00526",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-00638": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-00638",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-00652": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-00652",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-00671": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-00671",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-00696": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-00696",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-00719": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-00719",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-00773": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-00773",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-00790": {
+  "cell": "ledger/medium",
+  "id": "led-arch-0-00790",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-arch-0-00797": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-00797",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-00823": {
+  "cell": "ledger/medium",
+  "id": "led-arch-0-00823",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-arch-0-00849": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-00849",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-00855": {
+  "cell": "ledger/medium",
+  "id": "led-arch-0-00855",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-arch-0-00898": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-00898",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-00903": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-00903",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-00904": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-00904",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-00968": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-00968",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-00995": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-00995",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-01028": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-01028",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-01045": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-01045",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-01092": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-01092",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-01142": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-01142",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-01173": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-01173",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-01179": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-01179",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-01316": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-01316",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-01360": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-01360",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-01489": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-01489",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-01504": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-01504",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-01511": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-01511",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-01534": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-01534",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-01596": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-01596",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-01602": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-01602",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-01671": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-01671",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-01761": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-01761",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-01762": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-01762",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-01796": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-01796",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-01800": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-01800",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-01846": {
+  "cell": "ledger/medium",
+  "id": "led-arch-0-01846",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-arch-0-01912": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-01912",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-01924": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-01924",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-01952": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-01952",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-02117": {
+  "cell": "ledger/medium",
+  "id": "led-arch-0-02117",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-arch-0-02133": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-02133",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-02140": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-02140",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-02190": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-02190",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-02220": {
+  "cell": "ledger/medium",
+  "id": "led-arch-0-02220",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-arch-0-02238": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-02238",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-02312": {
+  "cell": "ledger/medium",
+  "id": "led-arch-0-02312",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-arch-0-02405": {
+  "cell": "ledger/medium",
+  "id": "led-arch-0-02405",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-arch-0-02475": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-02475",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-02529": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-02529",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-02627": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-02627",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-02675": {
+  "cell": "ledger/medium",
+  "id": "led-arch-0-02675",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-arch-0-02723": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-02723",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-02747": {
+  "cell": "ledger/medium",
+  "id": "led-arch-0-02747",
+  "task": "ledger",
+  "tier": "medium"
+ },
+ "led-arch-0-02751": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-02751",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-02776": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-02776",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-02789": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-02789",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-02790": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-02790",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-02847": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-02847",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-02865": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-02865",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-02876": {
+  "cell": "ledger/easy",
+  "id": "led-arch-0-02876",
+  "task": "ledger",
+  "tier": "easy"
+ },
+ "led-arch-0-02971": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-02971",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-02995": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-02995",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "led-arch-0-02996": {
+  "cell": "ledger/hard",
+  "id": "led-arch-0-02996",
+  "task": "ledger",
+  "tier": "hard"
+ },
+ "rep-0-00080": {
+  "cell": "repair/easy",
+  "id": "rep-0-00080#v13",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-1-00037": {
+  "cell": "repair/easy",
+  "id": "rep-1-00037#v12",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-1-00044": {
+  "cell": "repair/easy",
+  "id": "rep-1-00044#v5",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-1-00050": {
+  "cell": "repair/easy",
+  "id": "rep-1-00050#v12",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-1-00077": {
+  "cell": "repair/hard",
+  "id": "rep-1-00077#v11",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-10-00070": {
+  "cell": "repair/medium",
+  "id": "rep-10-00070",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-10-00084": {
+  "cell": "repair/easy",
+  "id": "rep-10-00084",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-10-00087": {
+  "cell": "repair/easy",
+  "id": "rep-10-00087",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-100-00030": {
+  "cell": "repair/hard",
+  "id": "rep-100-00030",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-100-00042": {
+  "cell": "repair/easy",
+  "id": "rep-100-00042#v1",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-100-00070": {
+  "cell": "repair/easy",
+  "id": "rep-100-00070",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-101-00005": {
+  "cell": "repair/medium",
+  "id": "rep-101-00005",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-101-00032": {
+  "cell": "repair/hard",
+  "id": "rep-101-00032",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-102-00004": {
+  "cell": "repair/hard",
+  "id": "rep-102-00004",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-102-00032": {
+  "cell": "repair/hard",
+  "id": "rep-102-00032",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-102-00044": {
+  "cell": "repair/easy",
+  "id": "rep-102-00044",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-102-00064": {
+  "cell": "repair/medium",
+  "id": "rep-102-00064",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-102-00072": {
+  "cell": "repair/easy",
+  "id": "rep-102-00072",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-103-00004": {
+  "cell": "repair/medium",
+  "id": "rep-103-00004",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-103-00005": {
+  "cell": "repair/easy",
+  "id": "rep-103-00005#v18",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-103-00035": {
+  "cell": "repair/easy",
+  "id": "rep-103-00035",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-103-00087": {
+  "cell": "repair/easy",
+  "id": "rep-103-00087",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-104-00052": {
+  "cell": "repair/easy",
+  "id": "rep-104-00052#v17",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-105-00034": {
+  "cell": "repair/hard",
+  "id": "rep-105-00034#v9",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-105-00044": {
+  "cell": "repair/easy",
+  "id": "rep-105-00044#v4",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-105-00052": {
+  "cell": "repair/medium",
+  "id": "rep-105-00052",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-105-00054": {
+  "cell": "repair/medium",
+  "id": "rep-105-00054",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-105-00074": {
+  "cell": "repair/medium",
+  "id": "rep-105-00074#v4",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-106-00037": {
+  "cell": "repair/easy",
+  "id": "rep-106-00037",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-106-00042": {
+  "cell": "repair/easy",
+  "id": "rep-106-00042#v14",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-106-00065": {
+  "cell": "repair/hard",
+  "id": "rep-106-00065",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-107-00007": {
+  "cell": "repair/medium",
+  "id": "rep-107-00007",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-107-00015": {
+  "cell": "repair/easy",
+  "id": "rep-107-00015#v7",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-107-00025": {
+  "cell": "repair/easy",
+  "id": "rep-107-00025",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-107-00067": {
+  "cell": "repair/hard",
+  "id": "rep-107-00067#v19",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-108-00034": {
+  "cell": "repair/hard",
+  "id": "rep-108-00034",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-108-00074": {
+  "cell": "repair/medium",
+  "id": "rep-108-00074#v18",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-109-00010": {
+  "cell": "repair/hard",
+  "id": "rep-109-00010#v4",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-109-00039": {
+  "cell": "repair/easy",
+  "id": "rep-109-00039",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-109-00040": {
+  "cell": "repair/easy",
+  "id": "rep-109-00040#v12",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-109-00045": {
+  "cell": "repair/hard",
+  "id": "rep-109-00045",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-11-00050": {
+  "cell": "repair/medium",
+  "id": "rep-11-00050",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-11-00060": {
+  "cell": "repair/medium",
+  "id": "rep-11-00060#v6",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-11-00072": {
+  "cell": "repair/medium",
+  "id": "rep-11-00072",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-110-00019": {
+  "cell": "repair/medium",
+  "id": "rep-110-00019#v3",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-110-00039": {
+  "cell": "repair/easy",
+  "id": "rep-110-00039#v2",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-110-00059": {
+  "cell": "repair/medium",
+  "id": "rep-110-00059#v18",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-110-00087": {
+  "cell": "repair/easy",
+  "id": "rep-110-00087#v2",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-111-00009": {
+  "cell": "repair/medium",
+  "id": "rep-111-00009",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-111-00059": {
+  "cell": "repair/hard",
+  "id": "rep-111-00059#v18",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-112-00010": {
+  "cell": "repair/medium",
+  "id": "rep-112-00010#v11",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-112-00059": {
+  "cell": "repair/hard",
+  "id": "rep-112-00059",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-112-00062": {
+  "cell": "repair/easy",
+  "id": "rep-112-00062",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-112-00072": {
+  "cell": "repair/easy",
+  "id": "rep-112-00072",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-112-00079": {
+  "cell": "repair/hard",
+  "id": "rep-112-00079#v15",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-112-00089": {
+  "cell": "repair/easy",
+  "id": "rep-112-00089",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-114-00020": {
+  "cell": "repair/hard",
+  "id": "rep-114-00020#v1",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-114-00027": {
+  "cell": "repair/easy",
+  "id": "rep-114-00027",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-114-00057": {
+  "cell": "repair/medium",
+  "id": "rep-114-00057#v3",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-114-00069": {
+  "cell": "repair/hard",
+  "id": "rep-114-00069",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-114-00085": {
+  "cell": "repair/easy",
+  "id": "rep-114-00085",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-115-00024": {
+  "cell": "repair/hard",
+  "id": "rep-115-00024#v9",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-115-00034": {
+  "cell": "repair/hard",
+  "id": "rep-115-00034#v14",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-115-00062": {
+  "cell": "repair/medium",
+  "id": "rep-115-00062#v5",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-115-00070": {
+  "cell": "repair/medium",
+  "id": "rep-115-00070#v18",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-116-00007": {
+  "cell": "repair/medium",
+  "id": "rep-116-00007#v18",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-116-00039": {
+  "cell": "repair/easy",
+  "id": "rep-116-00039",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-116-00074": {
+  "cell": "repair/medium",
+  "id": "rep-116-00074#v17",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-117-00060": {
+  "cell": "repair/easy",
+  "id": "rep-117-00060#v16",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-118-00032": {
+  "cell": "repair/hard",
+  "id": "rep-118-00032",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-118-00050": {
+  "cell": "repair/easy",
+  "id": "rep-118-00050",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-12-00009": {
+  "cell": "repair/medium",
+  "id": "rep-12-00009#v11",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-12-00052": {
+  "cell": "repair/medium",
+  "id": "rep-12-00052#v11",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-12-00067": {
+  "cell": "repair/hard",
+  "id": "rep-12-00067#v1",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-12-00079": {
+  "cell": "repair/hard",
+  "id": "rep-12-00079",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-120-00004": {
+  "cell": "repair/hard",
+  "id": "rep-120-00004#v17",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-120-00029": {
+  "cell": "repair/medium",
+  "id": "rep-120-00029#v2",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-120-00060": {
+  "cell": "repair/medium",
+  "id": "rep-120-00060",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-121-00055": {
+  "cell": "repair/hard",
+  "id": "rep-121-00055#v12",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-121-00059": {
+  "cell": "repair/easy",
+  "id": "rep-121-00059",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-122-00047": {
+  "cell": "repair/hard",
+  "id": "rep-122-00047",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-122-00062": {
+  "cell": "repair/medium",
+  "id": "rep-122-00062#v2",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-122-00080": {
+  "cell": "repair/easy",
+  "id": "rep-122-00080#v9",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-123-00029": {
+  "cell": "repair/medium",
+  "id": "rep-123-00029#v16",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-123-00074": {
+  "cell": "repair/medium",
+  "id": "rep-123-00074",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-124-00004": {
+  "cell": "repair/medium",
+  "id": "rep-124-00004",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-124-00009": {
+  "cell": "repair/medium",
+  "id": "rep-124-00009#v6",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-125-00077": {
+  "cell": "repair/hard",
+  "id": "rep-125-00077#v2",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-126-00040": {
+  "cell": "repair/easy",
+  "id": "rep-126-00040#v17",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-126-00065": {
+  "cell": "repair/hard",
+  "id": "rep-126-00065",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-126-00070": {
+  "cell": "repair/easy",
+  "id": "rep-126-00070#v18",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-126-00079": {
+  "cell": "repair/hard",
+  "id": "rep-126-00079",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-127-00082": {
+  "cell": "repair/easy",
+  "id": "rep-127-00082#v8",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-129-00002": {
+  "cell": "repair/hard",
+  "id": "rep-129-00002#v9",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-129-00072": {
+  "cell": "repair/medium",
+  "id": "rep-129-00072#v3",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-13-00040": {
+  "cell": "repair/easy",
+  "id": "rep-13-00040",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-13-00052": {
+  "cell": "repair/medium",
+  "id": "rep-13-00052",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-130-00000": {
+  "cell": "repair/medium",
+  "id": "rep-130-00000#v5",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-130-00042": {
+  "cell": "repair/easy",
+  "id": "rep-130-00042",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-130-00047": {
+  "cell": "repair/hard",
+  "id": "rep-130-00047",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-130-00060": {
+  "cell": "repair/easy",
+  "id": "rep-130-00060#v10",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-131-00004": {
+  "cell": "repair/medium",
+  "id": "rep-131-00004#v19",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-131-00017": {
+  "cell": "repair/easy",
+  "id": "rep-131-00017#v15",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-131-00054": {
+  "cell": "repair/easy",
+  "id": "rep-131-00054#v10",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-132-00042": {
+  "cell": "repair/easy",
+  "id": "rep-132-00042#v7",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-132-00052": {
+  "cell": "repair/medium",
+  "id": "rep-132-00052#v16",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-132-00055": {
+  "cell": "repair/hard",
+  "id": "rep-132-00055#v16",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-132-00080": {
+  "cell": "repair/easy",
+  "id": "rep-132-00080",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-14-00017": {
+  "cell": "repair/medium",
+  "id": "rep-14-00017",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-15-00019": {
+  "cell": "repair/easy",
+  "id": "rep-15-00019",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-15-00029": {
+  "cell": "repair/medium",
+  "id": "rep-15-00029#v15",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-15-00034": {
+  "cell": "repair/hard",
+  "id": "rep-15-00034",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-15-00079": {
+  "cell": "repair/hard",
+  "id": "rep-15-00079",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-16-00074": {
+  "cell": "repair/medium",
+  "id": "rep-16-00074#v5",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-16-00087": {
+  "cell": "repair/easy",
+  "id": "rep-16-00087#v3",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-17-00014": {
+  "cell": "repair/hard",
+  "id": "rep-17-00014#v5",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-17-00029": {
+  "cell": "repair/medium",
+  "id": "rep-17-00029",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-17-00054": {
+  "cell": "repair/medium",
+  "id": "rep-17-00054",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-18-00047": {
+  "cell": "repair/medium",
+  "id": "rep-18-00047",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-19-00020": {
+  "cell": "repair/hard",
+  "id": "rep-19-00020#v5",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-19-00064": {
+  "cell": "repair/medium",
+  "id": "rep-19-00064",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-19-00067": {
+  "cell": "repair/medium",
+  "id": "rep-19-00067",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-19-00080": {
+  "cell": "repair/easy",
+  "id": "rep-19-00080#v11",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-20-00014": {
+  "cell": "repair/hard",
+  "id": "rep-20-00014#v13",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-20-00060": {
+  "cell": "repair/easy",
+  "id": "rep-20-00060#v9",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-20-00062": {
+  "cell": "repair/easy",
+  "id": "rep-20-00062#v16",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-20-00075": {
+  "cell": "repair/hard",
+  "id": "rep-20-00075#v8",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-22-00010": {
+  "cell": "repair/hard",
+  "id": "rep-22-00010#v8",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-22-00019": {
+  "cell": "repair/medium",
+  "id": "rep-22-00019",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-22-00024": {
+  "cell": "repair/medium",
+  "id": "rep-22-00024",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-22-00032": {
+  "cell": "repair/hard",
+  "id": "rep-22-00032#v10",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-23-00012": {
+  "cell": "repair/hard",
+  "id": "rep-23-00012#v12",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-23-00052": {
+  "cell": "repair/medium",
+  "id": "rep-23-00052#v7",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-23-00089": {
+  "cell": "repair/easy",
+  "id": "rep-23-00089",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-24-00005": {
+  "cell": "repair/easy",
+  "id": "rep-24-00005",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-24-00007": {
+  "cell": "repair/medium",
+  "id": "rep-24-00007",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-24-00039": {
+  "cell": "repair/easy",
+  "id": "rep-24-00039#v11",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-26-00009": {
+  "cell": "repair/medium",
+  "id": "rep-26-00009",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-26-00067": {
+  "cell": "repair/hard",
+  "id": "rep-26-00067#v19",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-27-00012": {
+  "cell": "repair/medium",
+  "id": "rep-27-00012#v3",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-27-00019": {
+  "cell": "repair/easy",
+  "id": "rep-27-00019#v3",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-27-00054": {
+  "cell": "repair/easy",
+  "id": "rep-27-00054#v10",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-27-00064": {
+  "cell": "repair/easy",
+  "id": "rep-27-00064",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-27-00069": {
+  "cell": "repair/easy",
+  "id": "rep-27-00069",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-28-00012": {
+  "cell": "repair/hard",
+  "id": "rep-28-00012#v6",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-28-00032": {
+  "cell": "repair/hard",
+  "id": "rep-28-00032#v18",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-29-00012": {
+  "cell": "repair/medium",
+  "id": "rep-29-00012",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-3-00019": {
+  "cell": "repair/easy",
+  "id": "rep-3-00019",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-3-00027": {
+  "cell": "repair/medium",
+  "id": "rep-3-00027#v14",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-3-00054": {
+  "cell": "repair/easy",
+  "id": "rep-3-00054",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-30-00064": {
+  "cell": "repair/easy",
+  "id": "rep-30-00064",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-31-00049": {
+  "cell": "repair/medium",
+  "id": "rep-31-00049",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-31-00074": {
+  "cell": "repair/medium",
+  "id": "rep-31-00074#v5",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-32-00044": {
+  "cell": "repair/easy",
+  "id": "rep-32-00044",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-32-00060": {
+  "cell": "repair/easy",
+  "id": "rep-32-00060",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-33-00078": {
+  "cell": "repair/hard",
+  "id": "rep-33-00078",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-33-00085": {
+  "cell": "repair/easy",
+  "id": "rep-33-00085",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-34-00005": {
+  "cell": "repair/medium",
+  "id": "rep-34-00005",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-34-00025": {
+  "cell": "repair/medium",
+  "id": "rep-34-00025",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-34-00027": {
+  "cell": "repair/easy",
+  "id": "rep-34-00027#v8",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-34-00077": {
+  "cell": "repair/hard",
+  "id": "rep-34-00077#v10",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-35-00017": {
+  "cell": "repair/medium",
+  "id": "rep-35-00017",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-35-00054": {
+  "cell": "repair/medium",
+  "id": "rep-35-00054#v1",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-36-00007": {
+  "cell": "repair/easy",
+  "id": "rep-36-00007",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-36-00010": {
+  "cell": "repair/hard",
+  "id": "rep-36-00010",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-36-00017": {
+  "cell": "repair/easy",
+  "id": "rep-36-00017#v1",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-36-00075": {
+  "cell": "repair/hard",
+  "id": "rep-36-00075#v7",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-37-00029": {
+  "cell": "repair/medium",
+  "id": "rep-37-00029#v7",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-37-00032": {
+  "cell": "repair/hard",
+  "id": "rep-37-00032",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-37-00042": {
+  "cell": "repair/easy",
+  "id": "rep-37-00042",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-38-00019": {
+  "cell": "repair/medium",
+  "id": "rep-38-00019",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-38-00027": {
+  "cell": "repair/medium",
+  "id": "rep-38-00027",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-39-00014": {
+  "cell": "repair/hard",
+  "id": "rep-39-00014",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-39-00049": {
+  "cell": "repair/medium",
+  "id": "rep-39-00049",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-39-00060": {
+  "cell": "repair/easy",
+  "id": "rep-39-00060#v14",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-39-00078": {
+  "cell": "repair/hard",
+  "id": "rep-39-00078",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-4-00005": {
+  "cell": "repair/medium",
+  "id": "rep-4-00005#v2",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-4-00019": {
+  "cell": "repair/easy",
+  "id": "rep-4-00019#v4",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-4-00033": {
+  "cell": "repair/hard",
+  "id": "rep-4-00033",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-40-00009": {
+  "cell": "repair/medium",
+  "id": "rep-40-00009",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-40-00055": {
+  "cell": "repair/hard",
+  "id": "rep-40-00055#v13",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-41-00060": {
+  "cell": "repair/medium",
+  "id": "rep-41-00060",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-42-00000": {
+  "cell": "repair/medium",
+  "id": "rep-42-00000#v14",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-42-00009": {
+  "cell": "repair/easy",
+  "id": "rep-42-00009",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-42-00045": {
+  "cell": "repair/medium",
+  "id": "rep-42-00045#v17",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-42-00070": {
+  "cell": "repair/easy",
+  "id": "rep-42-00070#v12",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-42-00072": {
+  "cell": "repair/medium",
+  "id": "rep-42-00072",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-43-00007": {
+  "cell": "repair/medium",
+  "id": "rep-43-00007#v17",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-43-00015": {
+  "cell": "repair/medium",
+  "id": "rep-43-00015",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-43-00030": {
+  "cell": "repair/hard",
+  "id": "rep-43-00030#v2",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-45-00047": {
+  "cell": "repair/hard",
+  "id": "rep-45-00047",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-46-00017": {
+  "cell": "repair/medium",
+  "id": "rep-46-00017",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-46-00060": {
+  "cell": "repair/easy",
+  "id": "rep-46-00060",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-48-00000": {
+  "cell": "repair/hard",
+  "id": "rep-48-00000",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-48-00005": {
+  "cell": "repair/easy",
+  "id": "rep-48-00005#v10",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-48-00062": {
+  "cell": "repair/medium",
+  "id": "rep-48-00062#v7",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-49-00059": {
+  "cell": "repair/medium",
+  "id": "rep-49-00059#v7",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-49-00062": {
+  "cell": "repair/medium",
+  "id": "rep-49-00062#v14",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-5-00060": {
+  "cell": "repair/medium",
+  "id": "rep-5-00060",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-5-00065": {
+  "cell": "repair/hard",
+  "id": "rep-5-00065",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-51-00002": {
+  "cell": "repair/hard",
+  "id": "rep-51-00002",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-51-00005": {
+  "cell": "repair/medium",
+  "id": "rep-51-00005#v19",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-51-00017": {
+  "cell": "repair/easy",
+  "id": "rep-51-00017",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-51-00060": {
+  "cell": "repair/easy",
+  "id": "rep-51-00060",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-51-00072": {
+  "cell": "repair/easy",
+  "id": "rep-51-00072#v5",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-51-00080": {
+  "cell": "repair/easy",
+  "id": "rep-51-00080",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-52-00004": {
+  "cell": "repair/medium",
+  "id": "rep-52-00004",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-53-00027": {
+  "cell": "repair/medium",
+  "id": "rep-53-00027",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-53-00033": {
+  "cell": "repair/hard",
+  "id": "rep-53-00033#v6",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-53-00062": {
+  "cell": "repair/medium",
+  "id": "rep-53-00062",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-53-00064": {
+  "cell": "repair/easy",
+  "id": "rep-53-00064",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-53-00078": {
+  "cell": "repair/hard",
+  "id": "rep-53-00078#v1",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-54-00069": {
+  "cell": "repair/hard",
+  "id": "rep-54-00069#v6",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-55-00019": {
+  "cell": "repair/medium",
+  "id": "rep-55-00019",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-55-00035": {
+  "cell": "repair/easy",
+  "id": "rep-55-00035#v14",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-55-00069": {
+  "cell": "repair/medium",
+  "id": "rep-55-00069#v7",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-56-00032": {
+  "cell": "repair/hard",
+  "id": "rep-56-00032",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-56-00080": {
+  "cell": "repair/easy",
+  "id": "rep-56-00080",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-57-00044": {
+  "cell": "repair/easy",
+  "id": "rep-57-00044#v8",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-57-00055": {
+  "cell": "repair/hard",
+  "id": "rep-57-00055",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-57-00060": {
+  "cell": "repair/medium",
+  "id": "rep-57-00060#v12",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-58-00020": {
+  "cell": "repair/hard",
+  "id": "rep-58-00020",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-58-00025": {
+  "cell": "repair/medium",
+  "id": "rep-58-00025",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-58-00045": {
+  "cell": "repair/hard",
+  "id": "rep-58-00045",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-58-00057": {
+  "cell": "repair/hard",
+  "id": "rep-58-00057",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-58-00065": {
+  "cell": "repair/medium",
+  "id": "rep-58-00065#v7",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-59-00007": {
+  "cell": "repair/medium",
+  "id": "rep-59-00007#v4",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-59-00029": {
+  "cell": "repair/medium",
+  "id": "rep-59-00029",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-59-00077": {
+  "cell": "repair/hard",
+  "id": "rep-59-00077",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-59-00079": {
+  "cell": "repair/hard",
+  "id": "rep-59-00079#v16",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-6-00010": {
+  "cell": "repair/medium",
+  "id": "rep-6-00010",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-6-00033": {
+  "cell": "repair/hard",
+  "id": "rep-6-00033#v19",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-60-00022": {
+  "cell": "repair/hard",
+  "id": "rep-60-00022#v17",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-60-00064": {
+  "cell": "repair/easy",
+  "id": "rep-60-00064#v12",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-60-00074": {
+  "cell": "repair/medium",
+  "id": "rep-60-00074",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-61-00055": {
+  "cell": "repair/medium",
+  "id": "rep-61-00055",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-62-00005": {
+  "cell": "repair/medium",
+  "id": "rep-62-00005",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-62-00049": {
+  "cell": "repair/hard",
+  "id": "rep-62-00049#v13",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-62-00070": {
+  "cell": "repair/medium",
+  "id": "rep-62-00070#v3",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-63-00005": {
+  "cell": "repair/easy",
+  "id": "rep-63-00005",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-63-00019": {
+  "cell": "repair/medium",
+  "id": "rep-63-00019",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-63-00025": {
+  "cell": "repair/medium",
+  "id": "rep-63-00025#v10",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-63-00045": {
+  "cell": "repair/hard",
+  "id": "rep-63-00045#v19",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-63-00054": {
+  "cell": "repair/easy",
+  "id": "rep-63-00054",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-64-00020": {
+  "cell": "repair/medium",
+  "id": "rep-64-00020#v8",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-64-00049": {
+  "cell": "repair/hard",
+  "id": "rep-64-00049#v2",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-64-00084": {
+  "cell": "repair/easy",
+  "id": "rep-64-00084#v7",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-65-00014": {
+  "cell": "repair/hard",
+  "id": "rep-65-00014#v19",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-65-00025": {
+  "cell": "repair/easy",
+  "id": "rep-65-00025#v18",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-65-00089": {
+  "cell": "repair/easy",
+  "id": "rep-65-00089",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-66-00064": {
+  "cell": "repair/medium",
+  "id": "rep-66-00064",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-67-00037": {
+  "cell": "repair/easy",
+  "id": "rep-67-00037",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-68-00027": {
+  "cell": "repair/easy",
+  "id": "rep-68-00027#v14",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-68-00044": {
+  "cell": "repair/easy",
+  "id": "rep-68-00044#v4",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-68-00052": {
+  "cell": "repair/medium",
+  "id": "rep-68-00052#v6",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-68-00060": {
+  "cell": "repair/medium",
+  "id": "rep-68-00060#v16",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-68-00062": {
+  "cell": "repair/medium",
+  "id": "rep-68-00062",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-68-00065": {
+  "cell": "repair/medium",
+  "id": "rep-68-00065#v19",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-69-00017": {
+  "cell": "repair/medium",
+  "id": "rep-69-00017#v17",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-69-00039": {
+  "cell": "repair/easy",
+  "id": "rep-69-00039",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-69-00040": {
+  "cell": "repair/easy",
+  "id": "rep-69-00040",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-7-00033": {
+  "cell": "repair/hard",
+  "id": "rep-7-00033#v7",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-7-00062": {
+  "cell": "repair/medium",
+  "id": "rep-7-00062",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-7-00067": {
+  "cell": "repair/hard",
+  "id": "rep-7-00067#v9",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-7-00085": {
+  "cell": "repair/easy",
+  "id": "rep-7-00085#v1",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-70-00000": {
+  "cell": "repair/hard",
+  "id": "rep-70-00000#v2",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-70-00009": {
+  "cell": "repair/easy",
+  "id": "rep-70-00009",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-70-00075": {
+  "cell": "repair/hard",
+  "id": "rep-70-00075",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-71-00009": {
+  "cell": "repair/medium",
+  "id": "rep-71-00009#v1",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-72-00002": {
+  "cell": "repair/hard",
+  "id": "rep-72-00002#v12",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-72-00015": {
+  "cell": "repair/medium",
+  "id": "rep-72-00015#v8",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-72-00033": {
+  "cell": "repair/hard",
+  "id": "rep-72-00033",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-72-00045": {
+  "cell": "repair/hard",
+  "id": "rep-72-00045#v17",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-72-00082": {
+  "cell": "repair/easy",
+  "id": "rep-72-00082#v19",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-73-00052": {
+  "cell": "repair/medium",
+  "id": "rep-73-00052",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-74-00010": {
+  "cell": "repair/hard",
+  "id": "rep-74-00010",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-74-00034": {
+  "cell": "repair/hard",
+  "id": "rep-74-00034",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-74-00070": {
+  "cell": "repair/medium",
+  "id": "rep-74-00070",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-75-00070": {
+  "cell": "repair/easy",
+  "id": "rep-75-00070#v19",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-76-00030": {
+  "cell": "repair/hard",
+  "id": "rep-76-00030#v14",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-76-00077": {
+  "cell": "repair/hard",
+  "id": "rep-76-00077",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-77-00004": {
+  "cell": "repair/medium",
+  "id": "rep-77-00004#v6",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-77-00005": {
+  "cell": "repair/medium",
+  "id": "rep-77-00005",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-77-00017": {
+  "cell": "repair/easy",
+  "id": "rep-77-00017#v10",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-77-00032": {
+  "cell": "repair/hard",
+  "id": "rep-77-00032#v2",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-77-00072": {
+  "cell": "repair/medium",
+  "id": "rep-77-00072#v11",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-77-00078": {
+  "cell": "repair/hard",
+  "id": "rep-77-00078",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-77-00085": {
+  "cell": "repair/easy",
+  "id": "rep-77-00085",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-78-00030": {
+  "cell": "repair/hard",
+  "id": "rep-78-00030",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-79-00017": {
+  "cell": "repair/medium",
+  "id": "rep-79-00017#v10",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-79-00025": {
+  "cell": "repair/medium",
+  "id": "rep-79-00025",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-79-00084": {
+  "cell": "repair/easy",
+  "id": "rep-79-00084#v8",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-8-00059": {
+  "cell": "repair/medium",
+  "id": "rep-8-00059#v18",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-80-00025": {
+  "cell": "repair/medium",
+  "id": "rep-80-00025",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-80-00027": {
+  "cell": "repair/medium",
+  "id": "rep-80-00027#v7",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-80-00059": {
+  "cell": "repair/hard",
+  "id": "rep-80-00059",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-80-00062": {
+  "cell": "repair/easy",
+  "id": "rep-80-00062",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-81-00024": {
+  "cell": "repair/hard",
+  "id": "rep-81-00024#v3",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-81-00055": {
+  "cell": "repair/hard",
+  "id": "rep-81-00055#v12",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-81-00079": {
+  "cell": "repair/hard",
+  "id": "rep-81-00079",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-82-00032": {
+  "cell": "repair/hard",
+  "id": "rep-82-00032#v19",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-82-00060": {
+  "cell": "repair/easy",
+  "id": "rep-82-00060#v13",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-84-00027": {
+  "cell": "repair/medium",
+  "id": "rep-84-00027#v12",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-85-00070": {
+  "cell": "repair/medium",
+  "id": "rep-85-00070",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-86-00000": {
+  "cell": "repair/medium",
+  "id": "rep-86-00000#v18",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-86-00035": {
+  "cell": "repair/easy",
+  "id": "rep-86-00035#v4",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-86-00040": {
+  "cell": "repair/easy",
+  "id": "rep-86-00040#v2",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-86-00062": {
+  "cell": "repair/easy",
+  "id": "rep-86-00062#v14",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-86-00080": {
+  "cell": "repair/easy",
+  "id": "rep-86-00080#v16",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-87-00017": {
+  "cell": "repair/easy",
+  "id": "rep-87-00017#v12",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-87-00085": {
+  "cell": "repair/easy",
+  "id": "rep-87-00085#v2",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-88-00040": {
+  "cell": "repair/easy",
+  "id": "rep-88-00040#v4",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-89-00004": {
+  "cell": "repair/medium",
+  "id": "rep-89-00004",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-89-00072": {
+  "cell": "repair/medium",
+  "id": "rep-89-00072",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-89-00084": {
+  "cell": "repair/easy",
+  "id": "rep-89-00084#v6",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-9-00034": {
+  "cell": "repair/hard",
+  "id": "rep-9-00034#v7",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-9-00069": {
+  "cell": "repair/hard",
+  "id": "rep-9-00069",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-90-00064": {
+  "cell": "repair/medium",
+  "id": "rep-90-00064",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-91-00042": {
+  "cell": "repair/easy",
+  "id": "rep-91-00042#v10",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-91-00085": {
+  "cell": "repair/easy",
+  "id": "rep-91-00085#v8",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-92-00050": {
+  "cell": "repair/easy",
+  "id": "rep-92-00050",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-92-00082": {
+  "cell": "repair/easy",
+  "id": "rep-92-00082",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-92-00089": {
+  "cell": "repair/easy",
+  "id": "rep-92-00089#v15",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-93-00034": {
+  "cell": "repair/hard",
+  "id": "rep-93-00034",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-93-00064": {
+  "cell": "repair/easy",
+  "id": "rep-93-00064",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-93-00070": {
+  "cell": "repair/medium",
+  "id": "rep-93-00070",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-93-00072": {
+  "cell": "repair/easy",
+  "id": "rep-93-00072#v9",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-94-00055": {
+  "cell": "repair/hard",
+  "id": "rep-94-00055#v3",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-95-00005": {
+  "cell": "repair/medium",
+  "id": "rep-95-00005#v8",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-95-00045": {
+  "cell": "repair/hard",
+  "id": "rep-95-00045#v8",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-95-00052": {
+  "cell": "repair/medium",
+  "id": "rep-95-00052",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-96-00014": {
+  "cell": "repair/hard",
+  "id": "rep-96-00014",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-96-00050": {
+  "cell": "repair/medium",
+  "id": "rep-96-00050",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-96-00057": {
+  "cell": "repair/hard",
+  "id": "rep-96-00057",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-96-00087": {
+  "cell": "repair/easy",
+  "id": "rep-96-00087",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-97-00029": {
+  "cell": "repair/medium",
+  "id": "rep-97-00029",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-98-00022": {
+  "cell": "repair/hard",
+  "id": "rep-98-00022",
+  "task": "repair",
+  "tier": "hard"
+ },
+ "rep-98-00050": {
+  "cell": "repair/medium",
+  "id": "rep-98-00050",
+  "task": "repair",
+  "tier": "medium"
+ },
+ "rep-99-00040": {
+  "cell": "repair/easy",
+  "id": "rep-99-00040",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-99-00044": {
+  "cell": "repair/easy",
+  "id": "rep-99-00044",
+  "task": "repair",
+  "tier": "easy"
+ },
+ "rep-99-00074": {
+  "cell": "repair/easy",
+  "id": "rep-99-00074#v2",
+  "task": "repair",
+  "tier": "easy"
+ }
+}

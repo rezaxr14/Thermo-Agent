@@ -1,0 +1,62 @@
+{
+ "generated_at": "2026-11-19T20:21:03.613062+00:00",
+ "tokenizer": "Qwen3.5 real tokenizer via thermo_agent.synth.combine",
+ "reserve": 96,
+ "max_tokens": 8192,
+ "models": {
+  "gpt-6-luna": {
+   "accepted_rows_seen": 27,
+   "accepted_tool_rows_seen": 27,
+   "survived": 24,
+   "dropped_over_gate": 3,
+   "recovered_by_sanitizer": 5,
+   "token_max_surviving": 8011,
+   "token_max_raw": 11299,
+   "drop_reasons": {
+    "over_gate_after_sanitize": 3
+   },
+   "per_task": {
+    "design": {
+     "survived": 7,
+     "dropped": 1
+    },
+    "ledger": {
+     "survived": 9,
+     "dropped": 2
+    },
+    "repair": {
+     "survived": 8,
+     "dropped": 0
+    }
+   }
+  },
+  "claude-haiku-5-5": {
+   "accepted_rows_seen": 28,
+   "accepted_tool_rows_seen": 18,
+   "survived": 18,
+   "dropped_over_gate": 0,
+   "recovered_by_sanitizer": 16,
+   "token_max_surviving": 8173,
+   "token_max_raw": 19369,
+   "drop_reasons": {},
+   "per_task": {
+    "audit": {
+     "survived": 2,
+     "dropped": 0
+    },
+    "design": {
+     "survived": 4,
+     "dropped": 0
+    },
+    "ledger": {
+     "survived": 1,
+     "dropped": 0
+    },
+    "repair": {
+     "survived": 11,
+     "dropped": 0
+    }
+   }
+  }
+ }
+}

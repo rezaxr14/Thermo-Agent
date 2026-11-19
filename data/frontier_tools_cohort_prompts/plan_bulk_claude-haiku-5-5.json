@@ -1,0 +1,1007 @@
+{
+ "phase": "bulk",
+ "model": "claude-haiku-5-5",
+ "policy": "one diagram per model (key = row id with #vN removed); a diagram with only verifier-failed attempts stays eligible for a retry by another model; a verifier-accepted tool trace claims the diagram permanently",
+ "rows": [
+  {
+   "id": "aud-arch-0-01316",
+   "base": "aud-arch-0-01316",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-00522",
+   "base": "aud-0-00522",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02406",
+   "base": "aud-0-02406",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01346",
+   "base": "aud-0-01346",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02873",
+   "base": "aud-0-02873",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-00347",
+   "base": "aud-0-00347",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01328",
+   "base": "aud-0-01328",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02408",
+   "base": "aud-0-02408",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02840",
+   "base": "aud-0-02840",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-00759",
+   "base": "aud-arch-0-00759",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01224",
+   "base": "aud-0-01224",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-00471",
+   "base": "aud-arch-0-00471",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-00313",
+   "base": "aud-arch-0-00313",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02444",
+   "base": "aud-0-02444",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01441",
+   "base": "aud-0-01441",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01306",
+   "base": "aud-0-01306",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01911",
+   "base": "aud-0-01911",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-00180",
+   "base": "aud-0-00180",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02258",
+   "base": "aud-0-02258",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01855",
+   "base": "aud-0-01855",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-00769",
+   "base": "aud-arch-0-00769",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-00631",
+   "base": "aud-0-00631",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-00448",
+   "base": "aud-0-00448",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-00142",
+   "base": "aud-0-00142",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02111",
+   "base": "aud-0-02111",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01558",
+   "base": "aud-0-01558",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-00253",
+   "base": "aud-arch-0-00253",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-01082",
+   "base": "aud-arch-0-01082",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-00897",
+   "base": "aud-arch-0-00897",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-00775",
+   "base": "aud-arch-0-00775",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-01157",
+   "base": "aud-arch-0-01157",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02253",
+   "base": "aud-0-02253",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-01771",
+   "base": "aud-arch-0-01771",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-00627",
+   "base": "aud-arch-0-00627",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01708",
+   "base": "aud-0-01708",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01376",
+   "base": "aud-0-01376",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01121",
+   "base": "aud-0-01121",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-00565",
+   "base": "aud-0-00565",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-01484",
+   "base": "aud-arch-0-01484",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01270",
+   "base": "aud-0-01270",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-00415",
+   "base": "aud-0-00415",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-01424",
+   "base": "aud-arch-0-01424",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01681",
+   "base": "aud-0-01681",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-01927",
+   "base": "aud-arch-0-01927",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-00705",
+   "base": "aud-0-00705",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02993",
+   "base": "aud-0-02993",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02154",
+   "base": "aud-0-02154",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-00046",
+   "base": "aud-0-00046",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02042",
+   "base": "aud-0-02042",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-00059",
+   "base": "aud-0-00059",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-00249",
+   "base": "aud-arch-0-00249",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02424",
+   "base": "aud-0-02424",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-00320",
+   "base": "aud-arch-0-00320",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02357",
+   "base": "aud-0-02357",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-00767",
+   "base": "aud-arch-0-00767",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-00319",
+   "base": "aud-arch-0-00319",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01556",
+   "base": "aud-0-01556",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01934",
+   "base": "aud-0-01934",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02503",
+   "base": "aud-0-02503",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-00656",
+   "base": "aud-0-00656",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-00932",
+   "base": "aud-arch-0-00932",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02898",
+   "base": "aud-0-02898",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02480",
+   "base": "aud-0-02480",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-00239",
+   "base": "aud-arch-0-00239",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-00743",
+   "base": "aud-arch-0-00743",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-00974",
+   "base": "aud-0-00974",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01846",
+   "base": "aud-0-01846",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-01451",
+   "base": "aud-arch-0-01451",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-01505",
+   "base": "aud-arch-0-01505",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-00677",
+   "base": "aud-arch-0-00677",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02962",
+   "base": "aud-0-02962",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-00865",
+   "base": "aud-0-00865",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-00277",
+   "base": "aud-arch-0-00277",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-00817",
+   "base": "aud-0-00817",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-01001",
+   "base": "aud-arch-0-01001",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02280",
+   "base": "aud-0-02280",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01498",
+   "base": "aud-0-01498",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02262",
+   "base": "aud-0-02262",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02929",
+   "base": "aud-0-02929",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01994",
+   "base": "aud-0-01994",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-00749",
+   "base": "aud-0-00749",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-00273",
+   "base": "aud-0-00273",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-00801",
+   "base": "aud-0-00801",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-00093",
+   "base": "aud-0-00093",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01018",
+   "base": "aud-0-01018",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-00628",
+   "base": "aud-arch-0-00628",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02298",
+   "base": "aud-0-02298",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-01127",
+   "base": "aud-arch-0-01127",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-01322",
+   "base": "aud-arch-0-01322",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-00921",
+   "base": "aud-0-00921",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01105",
+   "base": "aud-0-01105",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-00520",
+   "base": "aud-arch-0-00520",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-00270",
+   "base": "aud-0-00270",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-00091",
+   "base": "aud-arch-0-00091",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02552",
+   "base": "aud-0-02552",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01134",
+   "base": "aud-0-01134",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01054",
+   "base": "aud-0-01054",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01109",
+   "base": "aud-0-01109",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02263",
+   "base": "aud-0-02263",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01093",
+   "base": "aud-0-01093",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-00725",
+   "base": "aud-0-00725",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-01950",
+   "base": "aud-arch-0-01950",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-01830",
+   "base": "aud-arch-0-01830",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02100",
+   "base": "aud-0-02100",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02939",
+   "base": "aud-0-02939",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02117",
+   "base": "aud-0-02117",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-01603",
+   "base": "aud-arch-0-01603",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-00972",
+   "base": "aud-0-00972",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-00232",
+   "base": "aud-arch-0-00232",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-01521",
+   "base": "aud-arch-0-01521",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-01077",
+   "base": "aud-arch-0-01077",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01854",
+   "base": "aud-0-01854",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01094",
+   "base": "aud-0-01094",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02172",
+   "base": "aud-0-02172",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01777",
+   "base": "aud-0-01777",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02944",
+   "base": "aud-0-02944",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02883",
+   "base": "aud-0-02883",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-01993",
+   "base": "aud-arch-0-01993",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-01512",
+   "base": "aud-arch-0-01512",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-00390",
+   "base": "aud-arch-0-00390",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "led-0-04878",
+   "base": "led-0-04878",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-arch-0-01142",
+   "base": "led-arch-0-01142",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-04123",
+   "base": "led-0-04123",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-07324",
+   "base": "led-0-07324",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-arch-0-02140",
+   "base": "led-arch-0-02140",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-08426",
+   "base": "led-0-08426",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-06753",
+   "base": "led-0-06753",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-arch-0-02723",
+   "base": "led-arch-0-02723",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-arch-0-02847",
+   "base": "led-arch-0-02847",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-02107",
+   "base": "led-0-02107",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-05993",
+   "base": "led-0-05993",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-07407",
+   "base": "led-0-07407",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-05201",
+   "base": "led-0-05201",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-05151",
+   "base": "led-0-05151",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-04231",
+   "base": "led-0-04231",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-06832",
+   "base": "led-0-06832",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-03308",
+   "base": "led-0-03308",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-arch-0-00797",
+   "base": "led-arch-0-00797",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-03593",
+   "base": "led-0-03593",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-06209",
+   "base": "led-0-06209",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-03124",
+   "base": "led-0-03124",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-02831",
+   "base": "led-0-02831",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-arch-0-00773",
+   "base": "led-arch-0-00773",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-03873",
+   "base": "led-0-03873",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-03915",
+   "base": "led-0-03915",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-07721",
+   "base": "led-0-07721",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-07052",
+   "base": "led-0-07052",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-05454",
+   "base": "led-0-05454",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-02762",
+   "base": "led-0-02762",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-arch-0-01092",
+   "base": "led-arch-0-01092",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-06175",
+   "base": "led-0-06175",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-02879",
+   "base": "led-0-02879",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-arch-0-00904",
+   "base": "led-arch-0-00904",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-04570",
+   "base": "led-0-04570",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-05358",
+   "base": "led-0-05358",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-arch-0-00995",
+   "base": "led-arch-0-00995",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-03968",
+   "base": "led-0-03968",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-arch-0-00903",
+   "base": "led-arch-0-00903",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-08026",
+   "base": "led-0-08026",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-08206",
+   "base": "led-0-08206",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "led-0-02811",
+   "base": "led-0-02811",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-07484",
+   "base": "led-0-07484",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-00883",
+   "base": "led-0-00883",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-01066",
+   "base": "led-0-01066",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-07186",
+   "base": "led-0-07186",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-03992",
+   "base": "led-0-03992",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-arch-0-02675",
+   "base": "led-arch-0-02675",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-00929",
+   "base": "led-0-00929",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-04709",
+   "base": "led-0-04709",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-07004",
+   "base": "led-0-07004",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-01234",
+   "base": "led-0-01234",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-arch-0-00790",
+   "base": "led-arch-0-00790",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-07634",
+   "base": "led-0-07634",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-01245",
+   "base": "led-0-01245",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-07992",
+   "base": "led-0-07992",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-01405",
+   "base": "led-0-01405",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-05873",
+   "base": "led-0-05873",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-00982",
+   "base": "led-0-00982",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-05535",
+   "base": "led-0-05535",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-06924",
+   "base": "led-0-06924",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-03406",
+   "base": "led-0-03406",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-00590",
+   "base": "led-0-00590",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-05340",
+   "base": "led-0-05340",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-01162",
+   "base": "led-0-01162",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-00488",
+   "base": "led-0-00488",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-00961",
+   "base": "led-0-00961",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-07939",
+   "base": "led-0-07939",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-07402",
+   "base": "led-0-07402",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-03314",
+   "base": "led-0-03314",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-01063",
+   "base": "led-0-01063",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-02991",
+   "base": "led-0-02991",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-08974",
+   "base": "led-0-08974",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-01348",
+   "base": "led-0-01348",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-04224",
+   "base": "led-0-04224",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-04086",
+   "base": "led-0-04086",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-07959",
+   "base": "led-0-07959",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-arch-0-02312",
+   "base": "led-arch-0-02312",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-07825",
+   "base": "led-0-07825",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-06610",
+   "base": "led-0-06610",
+   "cell": "ledger/medium"
+  },
+  {
+   "id": "led-0-03908",
+   "base": "led-0-03908",
+   "cell": "ledger/medium"
+  }
+ ]
+}

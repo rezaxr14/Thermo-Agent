@@ -1,0 +1,907 @@
+{
+ "phase": "bulk",
+ "model": "gpt-6-luna",
+ "policy": "one diagram per model (key = row id with #vN removed); a diagram with only verifier-failed attempts stays eligible for a retry by another model; a verifier-accepted tool trace claims the diagram permanently",
+ "rows": [
+  {
+   "id": "aud-0-01715",
+   "base": "aud-0-01715",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02307",
+   "base": "aud-0-02307",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-00702",
+   "base": "aud-arch-0-00702",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02478",
+   "base": "aud-0-02478",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02008",
+   "base": "aud-0-02008",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02728",
+   "base": "aud-0-02728",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-00512",
+   "base": "aud-0-00512",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02843",
+   "base": "aud-0-02843",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-00795",
+   "base": "aud-0-00795",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-00574",
+   "base": "aud-arch-0-00574",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01025",
+   "base": "aud-0-01025",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01472",
+   "base": "aud-0-01472",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-00905",
+   "base": "aud-arch-0-00905",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02957",
+   "base": "aud-0-02957",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-00595",
+   "base": "aud-0-00595",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-00507",
+   "base": "aud-0-00507",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01199",
+   "base": "aud-0-01199",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-01683",
+   "base": "aud-arch-0-01683",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-01538",
+   "base": "aud-arch-0-01538",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-00975",
+   "base": "aud-arch-0-00975",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-00661",
+   "base": "aud-0-00661",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-00493",
+   "base": "aud-arch-0-00493",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01927",
+   "base": "aud-0-01927",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-01289",
+   "base": "aud-arch-0-01289",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-01040",
+   "base": "aud-arch-0-01040",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02694",
+   "base": "aud-0-02694",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02419",
+   "base": "aud-0-02419",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01996",
+   "base": "aud-0-01996",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02531",
+   "base": "aud-0-02531",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01569",
+   "base": "aud-0-01569",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-00873",
+   "base": "aud-0-00873",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01678",
+   "base": "aud-0-01678",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02146",
+   "base": "aud-0-02146",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-01966",
+   "base": "aud-arch-0-01966",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01285",
+   "base": "aud-0-01285",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-00579",
+   "base": "aud-arch-0-00579",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-01772",
+   "base": "aud-arch-0-01772",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02837",
+   "base": "aud-0-02837",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-00392",
+   "base": "aud-0-00392",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01321",
+   "base": "aud-0-01321",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-00666",
+   "base": "aud-arch-0-00666",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02914",
+   "base": "aud-0-02914",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02641",
+   "base": "aud-0-02641",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02969",
+   "base": "aud-0-02969",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02176",
+   "base": "aud-0-02176",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01371",
+   "base": "aud-0-01371",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-00224",
+   "base": "aud-0-00224",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-00182",
+   "base": "aud-arch-0-00182",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-00221",
+   "base": "aud-arch-0-00221",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01523",
+   "base": "aud-0-01523",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-01467",
+   "base": "aud-arch-0-01467",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-01316",
+   "base": "aud-arch-0-01316",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02051",
+   "base": "aud-0-02051",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-00522",
+   "base": "aud-0-00522",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-01352",
+   "base": "aud-arch-0-01352",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01844",
+   "base": "aud-0-01844",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-01710",
+   "base": "aud-arch-0-01710",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-01625",
+   "base": "aud-0-01625",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-00995",
+   "base": "aud-arch-0-00995",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-0-02277",
+   "base": "aud-0-02277",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "aud-arch-0-00335",
+   "base": "aud-arch-0-00335",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-00399",
+   "base": "aud-0-00399",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01333",
+   "base": "aud-0-01333",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01742",
+   "base": "aud-0-01742",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02214",
+   "base": "aud-0-02214",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01667",
+   "base": "aud-0-01667",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-00937",
+   "base": "aud-arch-0-00937",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-00343",
+   "base": "aud-0-00343",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-00985",
+   "base": "aud-0-00985",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-00530",
+   "base": "aud-arch-0-00530",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-01003",
+   "base": "aud-arch-0-01003",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-00981",
+   "base": "aud-0-00981",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02547",
+   "base": "aud-0-02547",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-00100",
+   "base": "aud-0-00100",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02511",
+   "base": "aud-0-02511",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02827",
+   "base": "aud-0-02827",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-01387",
+   "base": "aud-arch-0-01387",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02628",
+   "base": "aud-0-02628",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-00082",
+   "base": "aud-0-00082",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02399",
+   "base": "aud-0-02399",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01253",
+   "base": "aud-0-01253",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-01106",
+   "base": "aud-arch-0-01106",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-01895",
+   "base": "aud-arch-0-01895",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-00237",
+   "base": "aud-0-00237",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01884",
+   "base": "aud-0-01884",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-00101",
+   "base": "aud-0-00101",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-00950",
+   "base": "aud-0-00950",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02012",
+   "base": "aud-0-02012",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01209",
+   "base": "aud-0-01209",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02515",
+   "base": "aud-0-02515",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02551",
+   "base": "aud-0-02551",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-01653",
+   "base": "aud-arch-0-01653",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-00173",
+   "base": "aud-arch-0-00173",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-00518",
+   "base": "aud-0-00518",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01605",
+   "base": "aud-0-01605",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02066",
+   "base": "aud-0-02066",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02550",
+   "base": "aud-0-02550",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02332",
+   "base": "aud-0-02332",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01335",
+   "base": "aud-0-01335",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-00723",
+   "base": "aud-0-00723",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-01198",
+   "base": "aud-arch-0-01198",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01354",
+   "base": "aud-0-01354",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02812",
+   "base": "aud-0-02812",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01164",
+   "base": "aud-0-01164",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-00342",
+   "base": "aud-arch-0-00342",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01082",
+   "base": "aud-0-01082",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01823",
+   "base": "aud-0-01823",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-01450",
+   "base": "aud-arch-0-01450",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-01902",
+   "base": "aud-arch-0-01902",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-01338",
+   "base": "aud-arch-0-01338",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-00151",
+   "base": "aud-arch-0-00151",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02575",
+   "base": "aud-0-02575",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02502",
+   "base": "aud-0-02502",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-00364",
+   "base": "aud-0-00364",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-01970",
+   "base": "aud-arch-0-01970",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01838",
+   "base": "aud-0-01838",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-01115",
+   "base": "aud-arch-0-01115",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-arch-0-00260",
+   "base": "aud-arch-0-00260",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-02134",
+   "base": "aud-0-02134",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01469",
+   "base": "aud-0-01469",
+   "cell": "audit/medium"
+  },
+  {
+   "id": "aud-0-01104",
+   "base": "aud-0-01104",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-arch-0-01145",
+   "base": "aud-arch-0-01145",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-arch-0-00112",
+   "base": "aud-arch-0-00112",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-01849",
+   "base": "aud-0-01849",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-arch-0-01670",
+   "base": "aud-arch-0-01670",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-00582",
+   "base": "aud-0-00582",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-arch-0-01405",
+   "base": "aud-arch-0-01405",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-01869",
+   "base": "aud-0-01869",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-arch-0-01432",
+   "base": "aud-arch-0-01432",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-arch-0-01503",
+   "base": "aud-arch-0-01503",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-00434",
+   "base": "aud-0-00434",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-02139",
+   "base": "aud-0-02139",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-arch-0-00847",
+   "base": "aud-arch-0-00847",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-01269",
+   "base": "aud-0-01269",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-01284",
+   "base": "aud-0-01284",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-arch-0-00405",
+   "base": "aud-arch-0-00405",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-02895",
+   "base": "aud-0-02895",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-00663",
+   "base": "aud-0-00663",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-02675",
+   "base": "aud-0-02675",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-00844",
+   "base": "aud-0-00844",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-01591",
+   "base": "aud-0-01591",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-01068",
+   "base": "aud-0-01068",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-02965",
+   "base": "aud-0-02965",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-02371",
+   "base": "aud-0-02371",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-02022",
+   "base": "aud-0-02022",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-00825",
+   "base": "aud-0-00825",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-02382",
+   "base": "aud-0-02382",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-02518",
+   "base": "aud-0-02518",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-02103",
+   "base": "aud-0-02103",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-arch-0-01368",
+   "base": "aud-arch-0-01368",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-02436",
+   "base": "aud-0-02436",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-01366",
+   "base": "aud-0-01366",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-01638",
+   "base": "aud-0-01638",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-02904",
+   "base": "aud-0-02904",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-arch-0-00653",
+   "base": "aud-arch-0-00653",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-arch-0-01509",
+   "base": "aud-arch-0-01509",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-01557",
+   "base": "aud-0-01557",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-arch-0-00566",
+   "base": "aud-arch-0-00566",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-arch-0-00923",
+   "base": "aud-arch-0-00923",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-arch-0-01438",
+   "base": "aud-arch-0-01438",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-arch-0-00691",
+   "base": "aud-arch-0-00691",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-arch-0-00659",
+   "base": "aud-arch-0-00659",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-02328",
+   "base": "aud-0-02328",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-02805",
+   "base": "aud-0-02805",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-arch-0-01081",
+   "base": "aud-arch-0-01081",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-02596",
+   "base": "aud-0-02596",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-arch-0-00981",
+   "base": "aud-arch-0-00981",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-00913",
+   "base": "aud-0-00913",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-02265",
+   "base": "aud-0-02265",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-02916",
+   "base": "aud-0-02916",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-02243",
+   "base": "aud-0-02243",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-arch-0-00002",
+   "base": "aud-arch-0-00002",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-arch-0-00522",
+   "base": "aud-arch-0-00522",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-00540",
+   "base": "aud-0-00540",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-01417",
+   "base": "aud-0-01417",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-0-00247",
+   "base": "aud-0-00247",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-arch-0-00785",
+   "base": "aud-arch-0-00785",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-arch-0-01630",
+   "base": "aud-arch-0-01630",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-arch-0-00561",
+   "base": "aud-arch-0-00561",
+   "cell": "audit/hard"
+  },
+  {
+   "id": "aud-arch-0-00853",
+   "base": "aud-arch-0-00853",
+   "cell": "audit/hard"
+  }
+ ]
+}

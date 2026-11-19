@@ -1,0 +1,6 @@
+{
+ "phase": "proof",
+ "model": "gpt-6-luna",
+ "policy": "one diagram per model (key = row id with #vN removed); a diagram with only verifier-failed attempts stays eligible for a retry by another model; a verifier-accepted tool trace claims the diagram permanently",
+ "rows": []
+}

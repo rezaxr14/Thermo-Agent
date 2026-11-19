@@ -1,0 +1,32 @@
+{
+ "phase": "proof",
+ "model": "claude-sonnet-5-5",
+ "policy": "one diagram per model (key = row id with #vN removed); a diagram with only verifier-failed attempts stays eligible for a retry by another model; a verifier-accepted tool trace claims the diagram permanently",
+ "rows": [
+  {
+   "id": "arch-34-00022",
+   "base": "arch-34-00022",
+   "cell": "repair/easy"
+  },
+  {
+   "id": "des-0-00544",
+   "base": "des-0-00544",
+   "cell": "design/easy"
+  },
+  {
+   "id": "aud-0-00098",
+   "base": "aud-0-00098",
+   "cell": "audit/easy"
+  },
+  {
+   "id": "led-0-01232",
+   "base": "led-0-01232",
+   "cell": "ledger/easy"
+  },
+  {
+   "id": "rep-11-00072",
+   "base": "rep-11-00072",
+   "cell": "repair/medium"
+  }
+ ]
+}

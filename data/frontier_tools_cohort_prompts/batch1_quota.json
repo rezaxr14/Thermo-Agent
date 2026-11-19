@@ -1,0 +1,13 @@
+{
+ "gpt-6-luna": {
+  "audit/easy": 60,
+  "audit/medium": 60,
+  "audit/hard": 60
+ },
+ "claude-haiku-5-5": {
+  "audit/easy": 60,
+  "audit/medium": 60,
+  "ledger/easy": 40,
+  "ledger/medium": 40
+ }
+}
