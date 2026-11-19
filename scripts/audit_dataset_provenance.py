@@ -27,8 +27,13 @@ SOURCES = {"deterministic_tools", "frontier_tools", "ground_truth"}
 AI_SOURCES = {"frontier_tools"}
 
 
-def audit_dirs(dirs: list[str]) -> dict:
-    """Return a report for all JSONL rows under the given directories."""
+def audit_dirs(dirs: list[str], root: pathlib.Path | None = None) -> dict:
+    """Return a report for all JSONL rows under the given directories.
+
+    ``root`` defaults to the repository root; tests pass a temporary root.
+    """
+    if root is None:
+        root = ROOT
     by_source: collections.Counter = collections.Counter()
     by_model: collections.Counter = collections.Counter()
     by_task_tier: dict[str, collections.Counter] = collections.defaultdict(collections.Counter)
@@ -36,11 +41,14 @@ def audit_dirs(dirs: list[str]) -> dict:
     rows_seen = 0
     files: list[str] = []
     for d in dirs:
-        root = pathlib.Path(d)
-        if not root.is_absolute():
-            root = ROOT / root
-        for path in sorted(root.rglob("*.jsonl")):
-            files.append(str(path.relative_to(ROOT)) if ROOT in path.parents else str(path))
+        directory = pathlib.Path(d)
+        if not directory.is_absolute():
+            directory = root / directory
+        for path in sorted(directory.rglob("*.jsonl")):
+            try:
+                files.append(str(path.relative_to(root)))
+            except ValueError:
+                files.append(str(path))
             for lineno, line in enumerate(path.open(encoding="utf-8"), 1):
                 if not line.strip():
                     continue
