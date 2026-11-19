@@ -75,14 +75,18 @@ Gate 0: fresh-clone `pytest` green (real-data tests marked `corpus`), stats and 
 
 ## Phase 2 — frontier tool traces *[Kaggle, after "go"]*
 
-2.1 Order (J4): `gemini-3.5-flash-lite` -> `claude-haiku-5-5` -> `gpt-6-luna` (tools, reasoning off, documented) -> premium tier only after bulk
-    shows non-zero tool yield and the 40-row pilot cost is recorded. `SPEC["limit"]=0`, rounds 6 (D4), `k_memory` 3 (D5), no cost/row cap (D1-D9).
+2.1 Order (DECISIONS section 6, supersedes J4 here): `gpt-6-luna` -> `claude-haiku-5-5` -> `gpt-6.2-sol` -> `claude-sonnet-5-5` ->
+    `claude-opus-5-5-default` -> `gemini-4-argon`. `gemini-3.5-flash-lite` is excluded by Reza. The 5-row payload proof and
+    40-row pilots are necessary but do NOT make the datagen gate green: every model must end with accepted harness-CoT
+    tool traces in all four cohort tasks and all three tiers. `SPEC["limit"]=0`, rounds 6 (D4), `k_memory` 3 (D5), no
+    cost/row cap (D1-D9).
 2.2 Download each completed journal, id-dedupe into `data/teacher_runs/hosted_<model>.jsonl`, ingest with the compact harness prompt, accept by D8.
 2.3 After every run: accepted per task x tier x model, cost per accepted trace, failure reasons -> `TEACHER_CAMPAIGN_LOG.md`; failures feed the memory
     (what failed, what worked; never model names or times).
-2.4 Re-run `mix_tool_corpora.py --stats`; **no training starts while `with tool turns` is 0** for frontier rows... Deterministic tool rows alone may
-    start SFT only if Reza says so; default is to wait for frontier tool traces.
-2.5 Rebuild `sft_mix_h` with frontier traces first (E1); rows over the 8,192 gate dropped and counted.
+2.4 Re-run `mix_tool_corpora.py --stats` and `scripts/check_datagen_complete.py`. **No training starts while the gate is red**:
+    a luna/haiku pilot alone is not enough; all six models must cover 4 tasks x 3 tiers with accepted tool traces.
+2.5 Rebuild `sft_mix_h` with frontier traces first (E1); rows over the 8,192 gate dropped and counted. Every row keeps
+    `source`, model id (AI rows) and `tier`.
 
 ## Phase 3 — SFT *[Kaggle, after "go"]*
 
