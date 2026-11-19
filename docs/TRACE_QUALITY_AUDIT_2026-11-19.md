@@ -317,3 +317,20 @@ SFT trainer, 0 rows over the 8,192 gate in all SFT corpora with stored token cou
 0 heldout overlap by independent measurement, complete GRPO structure with 100% verifier-accepted rows,
 and a fully aligned GRPO prompt set that is a strict subset of SFT (400 plain-A prompts/task are the
 only difference).
+
+## Addendum — the pilot traces are NOT a chain of thought yet (main agent, 2026-11-19)
+
+Measured on `data/frontier_tools_pilot/{gpt-6-luna,claude-haiku-5-5}/*.jsonl` with a read-only script:
+
+| model | accepted rows | rows with any reasoning text | note |
+|---|---:|---:|---|
+| `gpt-6-luna` | 24 (after over-gate drops) | **0** | API rejects tools + reasoning; `reasoning_effort="none"` is the documented deviation |
+| `claude-haiku-5-5` | 28 | **0** | no `reasoning_traces` exposed on the native-tool path with backend default |
+
+The completion text contains genuine multi-round tool calls (luna 24/24, haiku 18/28) with real physics
+results, but the visible "thought" is a short assistant sentence, not a reasoning trace. Tool results still
+carry raw `ToolInvocationResult(name=..., call_id=..., output=...)` wrappers — and haiku `call_id`s even embed
+hidden-thought blobs — which is bookkeeping that must never reach training. **Verdict: not yet a useful CoT
+dataset.** Before sending more batches: (1) strip the wrappers to the JSON payload; (2) get an explicit
+haiku reasoning probe; (3) decide with Reza whether luna's tool-revision-only chains count as CoT, since the
+provider hard-refuses tools + reasoning on this route. No further batch may be sent until this is resolved.
