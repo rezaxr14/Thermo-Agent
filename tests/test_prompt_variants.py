@@ -110,7 +110,8 @@ def test_shared_builder_matches_toolloop_base_messages(corpus_fixture_rows):
     loop = ME.ToolLoop(lambda messages: "", row, TASK, mode="agents+skills",
                        max_turns=4, max_tool_calls=6)
     expected, _ = loop._base_messages()
-    got = build_harness_tool_messages(row["prompt"], TASK, None)  # design rows have no plant
+    got = build_harness_tool_messages(row["prompt"], TASK, None,
+                                      max_turns=4, max_tool_calls=6)  # match the loop's explicit limits
     assert got == expected
 
 

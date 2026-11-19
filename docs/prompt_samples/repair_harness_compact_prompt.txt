@@ -1,0 +1,49 @@
+[system]
+You repair energy-plant models. Units are SI (K, Pa, W, kg/s). Efficiencies, second-law fractions and pressure-drop fractions are fractions, never percent. A plant is valid when it solves, passes the physics checks (mass and energy balance, exergy closure, non-negative exergy destruction, no temperature cross, plausible ranges) and meets the site requirements. Answer with a short <diagnosis> that cites only numbers shown in the input, then <edits> with at most 6 lines of the form `SET <component>.<param> = <number>`, `SET @<stream>.<field> = <number>`, `REWIRE @<stream>.<to|from> = <component>.<port>` or `FLUID @<stream> = <fluid>`. You can only change numbers, endpoints and fluids that already exist. Change as little as possible.
+
+# AGENTS.md: energy-plant tasks (compact)
+Simulated plants for AI data centres; a solver and physics verifiers judge every answer, so cite only numbers the solver reproduces.
+Conventions: SI units (K, Pa, W, kg/s); eps/dp/PR are fractions, never percent; temperature in K, never degC. Plant graph: `C <id> <type> {params}` is a component; `S <id> <from> -> <to> <fluid> {extras}` is a stream; endpoints are `<comp>.<port>` or `ext:<name>`. Gas fluids are CGAM_AIR/FLUE/CH4; others are CoolProp liquids (Water, R245fa, Cyclopentane, Toluene); a port accepts only its fluid class. A `fixed` stream produced by a component is a tear closing a loop: change both sides together. Flows a component solves itself must not be specified (engine air/fuel, chiller gen/rejection, IT coolant, heat-pump sink).
+Failure checklist (before any candidate): unit mismatch (MW vs W, kJ vs J), fraction vs percent, K vs C; sign flip; swapped ports; wrong fluid class; efficiency > 1; out-of-range parameter; unconverged tear. Locate the failing check/stream first, fix it with the fewest edits, and never invent numbers.
+Answer format (repair): <diagnosis> citing only shown numbers, then <edits> with `SET <component>.<param> = <number>`, `SET @<stream>.<field> = <number>`, `REWIRE @<stream>.<to|from> = <component>.<port>`, `FLUID @<stream> = <fluid>`; fewest edits, no add/remove components.
+
+MULTI-TURN TOOL ENVIRONMENT (physics only; there is NO answer-oracle tool).
+Emit EXACTLY: <tool_call name="TOOL_NAME">{"candidate": "..."}</tool_call>
+candidate="" for inspect_plant; your candidate answer XML for the others.
+Each result is verbatim inside <tool_result>...</tool_result>; read the numbers and revise.
+At most 6 assistant turns and 8 tool calls. Call inspect_plant first (no answer needed); when residuals ~0 and checks pass, STOP and emit ONLY: <diagnosis> + <edits>.
+Tools (one-line semantics):
+- inspect_plant(candidate=""): solver status, failed checks and key residuals for the plant/ledger AS GIVEN.
+- first_law_check(candidate): per-line/per-component mass (kg/s) and energy (W) residuals, heat/power/fuel balance, convergence, failed checks.
+- second_law_check(candidate): exergy destruction (MW), closure, eta_I/eta_II, Carnot/COP limits, failed checks.
+- validity_check(candidate): unit/range violations, site constraints, pinch approach (K), verifier verdict.
+- solve_plant(candidate): full stream state table (T K, P kPa, h/s kJ/kg, exergy).
+
+[user]
+PLANT
+PLANT dc_absorption_sampled T0=296.2607708415678 P0=101325.0 RH=0.759117165892566
+C AC compressor {"PR":13.810558167575984,"eta_s":0.8311796627973342}
+C CC combustor {"T_out":1559.8805148162041,"dp":0.04,"q_loss":0.01}
+C GT turbine {"P_out":104458.76288659793,"eta_s":0.8466381534433799}
+C DC dc_load {"P_it":28131436.945696477,"chilled_fraction":0.455350050175778,"T_return":304.76363012988645}
+C REJ heat_rejector {"approach_K":5.0,"fan_frac":0.015,"kind":"wet"}
+C HX recuperator {"T_cold_out":370.579544029403,"dp_hot":0.03}
+C CH absorption_chiller {"T_chw_out":293.4442185152505,"T_gen_out":82.6549440649618,"dT_rej":7.432197498779953,"eps":0.30916606598206825,"COP_max":0.8}
+S air ext:air -> AC.in CGAM_AIR {"m_dot":79.43039398968861,"fixed":{"T":296.2607708415678,"P":101325.0}}
+S s2 AC.out -> CC.air_in CGAM_AIR
+S fuel ext:fuel -> CC.fuel_in CH4 {"fixed":{"T":296.2607708415678,"P":2000000.0}}
+S s4 CC.out -> GT.in FLUE
+S s5 GT.out -> HX.hot_in FLUE
+S s6 HX.hot_out -> ext:stack FLUE
+S chw_ret DC.out -> CH.evap_in Water
+S chw_sup CH.evap_out -> DC.in Water {"fixed":{"T":293.4442185152505,"P":300000.0}}
+S rej_hot CH.rej_out -> REJ.in Water
+S rej_cold REJ.out -> CH.rej_in Water {"fixed":{"T":298.2077194543088,"P":101325.0}}
+S hw_hot HX.cold_out -> CH.gen_in Water
+S hw_ret CH.gen_out -> HX.cold_in Water {"fixed":{"T":355.8049440649618,"P":500000.0}}
+
+SITE
+it_load_w=28131436.945696477 cooling_load_w=12681554.71249223 grid_import_allowed=false
+
+RESULT
+SOLVER ERROR E_PROP_RANGE: Water at T=82.7 K P=5e+05 Pa: For now, we don't support T [82.6549 K] below Tmelt(p) [273.123 K] : PropsSI("H","T",82.65494406,"P",500000,"Water")

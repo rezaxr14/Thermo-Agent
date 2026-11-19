@@ -77,8 +77,12 @@ def _plant(task: str, row: dict) -> Plant | None:
 
 def build_messages(task: str, row: dict, mode: str = "agents+skills", notes: list[memory.Note] | None = None,
                    k_memory: int = 3) -> list[dict]:
+    from ..agent.tool_prompt import build_harness_tool_messages
     plant = _plant(task, row)
-    msgs = harness.augment(row["prompt"], mode, task, plant)
+    # One harness text for every arm: tracegen uses the same compact builder as
+    # the *_h training corpora and eval/GRPO. mode="none" keeps the raw prompt.
+    msgs = (list(row["prompt"]) if mode == "none"
+            else build_harness_tool_messages(row["prompt"], task, plant, mode=mode))
     if notes:
         query = row.get("fault_type", "") + " " + (plant.name if plant else "")
         msgs = memory.augment_with_memory(msgs, task, query, notes, k=k_memory, exclude_record=str(row.get("id", "")))

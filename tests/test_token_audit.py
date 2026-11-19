@@ -37,3 +37,14 @@ def test_audit_fails_a_corpus_over_the_sequence_length(corpus):
     r = token_audit.audit(corpus, max_length=10)
     assert r["fits"] is False and r["over_total"] == 1
     assert r["over"][0]["tokens"] > 10 and r["over"][0]["task"] == "repair"
+
+
+def test_audit_sees_frontier_named_files(corpus):
+    """`frontier_<task>_<split>.jsonl` must be measured; it used to report rows 0 / fits true."""
+    row = json.loads((corpus / "repair_train.jsonl").read_text(encoding="utf-8").splitlines()[0])
+    (corpus / "repair_train.jsonl").unlink()
+    write(corpus / "frontier_repair_train.jsonl", [row])
+    r = token_audit.audit(corpus)
+    f = r["files"]["frontier_repair_train"]
+    assert f["n"] == 1 and f["total_max"] > 0
+    assert r["rows"] == 1 and r["over_total"] == 0

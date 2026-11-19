@@ -50,8 +50,11 @@ def audit(data_dir, max_length: int = 8192, reserve: int = TOKEN_RESERVE, tasks=
               "max_length": max_length, "tool_token_gate": TOOL_TOKEN_GATE,
               "files": {}, "over": []}
     for task in tasks:
-        for p in sorted(root.glob(f"{task}_*.jsonl")):
-            split = p.stem[len(task) + 1:]
+        # Frontier dirs name their files `frontier_<task>_<split>.jsonl`; without this second
+        # pattern the audit printed `rows 0 / fits true` for a full frontier corpus.
+        for p, kind in [(q, "") for q in sorted(root.glob(f"{task}_*.jsonl"))] + \
+                       [(q, "frontier_") for q in sorted(root.glob(f"frontier_{task}_*.jsonl"))]:
+            split = p.stem.split(f"{task}_", 1)[1]
             prompts, comps, totals, harness, memory = [], [], [], 0, 0
             tool_masked, tool_rows, dropped = 0, 0, 0
             for line in p.open(encoding="utf-8"):
@@ -73,7 +76,7 @@ def audit(data_dir, max_length: int = 8192, reserve: int = TOKEN_RESERVE, tasks=
                 if total > max_length:
                     report["over"].append({"id": row.get("id"), "task": task, "split": split,
                                            "tokens": total})
-            report["files"][f"{task}_{split}"] = {
+            report["files"][f"{kind}{task}_{split}"] = {
                 "n": len(totals), "prompt_p50": _q(prompts, .5), "prompt_p99": _q(prompts, .99),
                 "prompt_max": max(prompts, default=0), "completion_p50": _q(comps, .5),
                 "total_p99": _q(totals, .99), "total_max": max(totals, default=0),

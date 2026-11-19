@@ -89,7 +89,9 @@ def test_finalize_guarantees_nonempty_sft_ending_in_final_answer():
 # P0-9: one rounds constant, one memory retrieval, no double tool execution
 # --------------------------------------------------------------------------- #
 def test_system_prompt_states_the_single_rounds_constant():
-    assert DEFAULT_MAX_ROUNDS == 4
+    # DECISIONS D4 fixes 6 rounds; this test guards that the prompt states the same number the
+    # graph enforces, not a second hard-coded value (it asserted 4 while the code said 6).
+    assert DEFAULT_MAX_ROUNDS == 6
     row = _row()
     ctx = build_context({"row": row, "task": "repair", "notes": [], "mode": "agents+skills"})
     assert "up to %d rounds" % DEFAULT_MAX_ROUNDS in ctx["system_prompt"]
