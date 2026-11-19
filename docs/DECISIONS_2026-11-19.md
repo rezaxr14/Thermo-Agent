@@ -167,3 +167,26 @@ frontier harness-CoT datagen we intend to make:
    missing. Training starts only when it exits zero.
 4. Provenance per row: deterministic vs AI-generated, and for AI rows the exact model id, in every training and
    test row. Pilots are logged in `docs/TEACHER_CAMPAIGN_LOG.md` with successes and failures (short recaps).
+
+## 7. Hugging Face / Kaggle data relay (Reza, 2026-11-19)
+
+1. **Two separate private HF locations, never mixed:**
+   - checkpoints/state: `Reza-Nadimi/thermo-agent-checkpoints` (`thermo_agent/train/hf_sync.py` refuses any other id).
+     SFT adapter, merged SFT and each GRPO adapter live under DISTINCT prefixes (`sft/`, `sft_merged/`,
+     `grpo_k4/`, `grpo_k8/`, `grpo_k16/`) so an upload can never overwrite another stage. GRPO is initialised from
+     the merged SFT adapter (C10) and then trained on its own adapter; it is not a rewrite of the SFT adapter.
+   - corpora: `Reza-Nadimi/thermo-agent-corpora` (`scripts/sync_corpora_hf.py` refuses any other id).
+2. **Why GRPO has its own data:** SFT rows teach the policy the answer/tool format; GRPO needs the same task prompts
+   to sample rollouts and score them with the task verifiers/rewards. The reference answer is a reward input, not the
+   object of supervised loss. Different prompt sets are allowed only when documented in the manifests; the SFT
+   adapter is only the starting policy for GRPO.
+3. **What is synced:** the audited v2 corpora, A-slice, frontier trace dirs, memory (success/failure recaps) and
+   `heldout_v2` **prompts only — never answers, verdicts or reports**. Every commit carries an allow-list manifest
+   with paths, sha256, sizes and timestamp. Sync additively; never delete a remote file.
+4. **Cadence:** commit to HF after each completed datagen batch and after every training save/resume; refresh the
+   Kaggle datasets (`thermo-agent-code`, `thermo-agent-corpus`, `thermo-agent-resume`, `thermo-teacher-prompts`,
+   `thermo-teacher-prompts-big`, `thermo-agent-eval-replays`) before each Kaggle run and download results after it.
+   Kaggle commands use `socks5h://localhost:10808` scoped to that command only; non-Kaggle traffic never uses it.
+5. **Hard boundary:** only the ids above may be written to. No other HF dataset/model repo and no other Kaggle
+   dataset or kernel is created, modified or deleted. Tokens stay in `.env`/environment, never in notebooks,
+   manifests, logs or datasets. The operational field guide is `HF_KAGGLE_SKILL.md`.
