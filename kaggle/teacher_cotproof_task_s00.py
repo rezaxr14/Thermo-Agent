@@ -218,7 +218,7 @@ def _find_export_dir(root: pathlib.Path):
         if not base.exists():
             continue
         for marker in base.rglob("repair_train.jsonl"):
-            if all((marker.parent / "%s_train.jsonl" % t).exists() for t in TASKS):
+            if all((marker.parent / ("%s_train.jsonl" % t)).exists() for t in TASKS):
                 return marker.parent
     local = root / "data" / "frontier_export"
     if (local / "repair_train.jsonl").exists():
@@ -409,6 +409,11 @@ def thermo_teacher_cotproof_s00(llm):
     if not MODEL_OK:
         print("[warn] model %r not in the expected hosted list; recording its real name"
               % MODEL_SLUG, flush=True)
+    # Reza's rule: hosted AI runs use ONLY luna/haiku. Kaggle auto-runs the session
+    # default model when a task is pushed, so fail fast before any model call.
+    ALLOWED = ("gpt-6-luna", "claude-haiku-5-5")
+    if not any(a in str(MODEL_SLUG).lower() for a in ALLOWED):
+        raise SystemExit("budget-only hosted task: refusing model %r" % MODEL_SLUG)
 
     COUNTS.update(attempted=0, answered=0, error=0, skipped=0, graded=0, deferred=0)
     ERROR = None

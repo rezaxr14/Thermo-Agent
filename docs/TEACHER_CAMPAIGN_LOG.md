@@ -621,3 +621,8 @@ audits must also pass. Training starts only when the gate exits zero. The gate w
 - FIX: renamed final call to thermo_teacher_cotproof_s00.run(kbench.llm); pushed task v6 with --no-run equivalent (push without --wait does not auto-run), then explicitly invoked only gpt-6-luna and claude-haiku-5-5.
 - RULE: never let the task auto-run a default model; always push without --wait and run luna/haiku explicitly.
 
+
+## cotproof v6/v7 failures (2026-11-20)
+- v6 auto-ran default gemini and failed with TypeError: PosixPath %% str in _find_export_dir (operator precedence); fixed by parenthesizing the filename format.
+- v7 adds a hard budget-only guard: any model other than gpt-6-luna or claude-haiku-5-5 exits before a model call, so auto-run default models spend no quota.
+
