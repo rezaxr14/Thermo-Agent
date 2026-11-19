@@ -75,11 +75,12 @@ Gate 0: fresh-clone `pytest` green (real-data tests marked `corpus`), stats and 
 
 ## Phase 2 — frontier tool traces *[Kaggle, after "go"]*
 
-2.1 Order (DECISIONS section 6, supersedes J4 here): `gpt-6-luna` -> `claude-haiku-5-5` -> `gpt-6.2-sol` -> `claude-sonnet-5-5` ->
-    `claude-opus-5-5-default` -> `gemini-4-argon`. `gemini-3.5-flash-lite` is excluded by Reza. The 5-row payload proof and
-    40-row pilots are necessary but do NOT make the datagen gate green: every model must end with accepted harness-CoT
-    tool traces in all four cohort tasks and all three tiers. `SPEC["limit"]=0`, rounds 6 (D4), `k_memory` 3 (D5), no
-    cost/row cap (D1-D9).
+2.1 **Budget only until Reza says otherwise (override of DECISIONS §6 point 1):** run larger batches with `gpt-6-luna`
+    and `claude-haiku-5-5` first; update local memory and the short success/failure memory served to the Kaggle harness
+    after every batch. `gpt-6.2-sol`, `claude-sonnet-5-5`, `claude-opus-5-5-default` and `gemini-4-argon` are NOT to be
+    used without asking Reza first; `gemini-3.5-flash-lite` stays excluded. The 5-row proof and 40-row pilots are done
+    and do NOT make the gate green. The Kaggle harness work is done by the main agent with full context. `SPEC["limit"]=0`,
+    rounds 6 (D4), `k_memory` 3 (D5), no cost/row cap (D1-D9).
 2.2 Download each completed journal, id-dedupe into `data/teacher_runs/hosted_<model>.jsonl`, ingest with the compact harness prompt, accept by D8.
 2.3 After every run: accepted per task x tier x model, cost per accepted trace, failure reasons -> `TEACHER_CAMPAIGN_LOG.md`; failures feed the memory
     (what failed, what worked; never model names or times).
