@@ -2,7 +2,10 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional
-import CoolProp.CoolProp as CP
+try:  # hosted benchmarks venv may lack CoolProp; ideal-gas states do not need it
+    import CoolProp.CoolProp as CP
+except ModuleNotFoundError:  # pragma: no cover - depends on the interpreter
+    CP = None
 from . import gasprops as gp, fluids as fl
 
 GAS_PRESETS: dict[str, dict] = {"CGAM_AIR": gp.AIR_CGAM, "CH4": {"CH4": 1.0}}
@@ -57,7 +60,7 @@ def M_of(fluid, comp):
 
 def _quality(fluid, h, P):
     try:
-        q = CP.PropsSI("Q", "H", h / fl.M(fluid), "P", P, fluid)
+        q = fl._cp().PropsSI("Q", "H", h / fl.M(fluid), "P", P, fluid)
         return q if 0 <= q <= 1 else None
     except Exception:
         return None

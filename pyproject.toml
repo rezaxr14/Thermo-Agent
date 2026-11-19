@@ -9,6 +9,9 @@ dev = ["pytest", "cantera", "tokenizers"]   # cantera regenerates core/data/nasa
 train = ["torch", "transformers", "datasets", "accelerate", "peft", "trl", "bitsandbytes"]   # TRL 1.17.1 was the version inspected when writing the scripts
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+    "corpus: requires the untracked real data corpora (data/processed*, data/sft*, data/grpo*, data/frontier*); skipped cleanly on a fresh clone",
+]
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"

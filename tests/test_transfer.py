@@ -55,13 +55,16 @@ def test_ingest_keeps_accepted_answers_and_turns_rejections_into_memory(tmp_path
 
     report = transfer.ingest(tmp_path / "export", comps, out, mem, tasks=("repair",), model="claude-sonnet")
     kept = read(out / "frontier_repair_train.jsonl")
-    assert len(kept) == 1 and kept[0]["source"] == "frontier" and kept[0]["task"] == "repair"
+    assert len(kept) == 1 and kept[0]["source"] == "frontier:claude-sonnet" and kept[0]["task"] == "repair"
     assert kept[0]["validation"]["reasons"]
     assert "plant_broken" in kept[0], "label columns must survive for the GRPO reward functions"
     assert report["accepted"] == 1 and report["attempts"] == 2
     assert report["stats"]["rejected:repair"] == 1
     notes = memory.load(mem / "frontier_notes.jsonl")
-    assert len(notes) == 1 and notes[0].source.startswith("frontier:")
+    assert len(notes) == 2, "both the accepted and the rejected attempt land in memory"
+    assert all(n.source.startswith("frontier:") for n in notes)
+    assert any(n.accepted for n in notes) and any(not n.accepted for n in notes)
+    assert report["stats"]["memory_success_notes"] >= 1 and report["stats"]["memory_notes"] >= 2
 
 
 def test_ingest_is_resumable(tmp_path):

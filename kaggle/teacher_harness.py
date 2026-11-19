@@ -37,10 +37,12 @@ with zipfile.ZipFile(bundles[0]) as zf:
 sys.path.insert(0, str(ROOT))
 os.chdir(ROOT)
 
+from thermo_agent.teacher.agent_graph import DEFAULT_MAX_ROUNDS  # single rounds constant
+
 OUT = WORK / "harness_completions.jsonl"
 MODEL = os.environ.get("HARNESS_MODEL", "gemini-3.5-flash-lite")
 LIMIT = int(os.environ.get("LIMIT", "0"))
-ROUNDS = int(os.environ.get("ROUNDS", "3"))
+ROUNDS = int(os.environ.get("ROUNDS", str(DEFAULT_MAX_ROUNDS)))
 
 # %%
 from thermo_agent.kaggle_notebook import find_input, setup, token
@@ -89,7 +91,8 @@ with OUT.open("a", encoding="utf-8") as fh:
                "ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
         try:
             ctx = build_context({"row": row, "task": task, "notes": fresh_notes(),
-                                 "k_memory": 3, "mode": "agents+skills"})
+                                 "k_memory": 3, "mode": "agents+skills",
+                                 "max_rounds": ROUNDS})
             usage_holder = {}
             respond = make_respond(llm, kbench, actors, system_prompt=ctx["system_prompt"],
                                    max_tool_rounds=ROUNDS, usage_holder=usage_holder)
@@ -97,7 +100,7 @@ with OUT.open("a", encoding="utf-8") as fh:
             rec["completion"] = state["final"]
             rec["verdict"] = {k: v for k, v in state["verdict"].items() if k != "failed"}
             rec["trajectory"] = {"turns": state["turns"], "notes_used": state["notes_used"],
-                                 "tools_available": tool_names()}
+                                 "tools_available": tool_names(), "final": state["final"]}
             rec["sft_completion"] = state["sft_completion"]
             rec["usage"] = usage_of(usage_holder["chat"]) if "chat" in usage_holder else {}
         except Exception as exc:
@@ -106,4 +109,4 @@ with OUT.open("a", encoding="utf-8") as fh:
         if written % 25 == 0:
             print(f"{i+1}/{len(rows)}  {written} new", flush=True)
 
-print(f"wrote {written} rows to {OUT}; ingest with transfer.ingest --harness tools")
+print(f"wrote {written} rows to {OUT}; ingest with transfer.ingest")

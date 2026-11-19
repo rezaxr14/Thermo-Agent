@@ -5,6 +5,78 @@ Everything under "Generate data" and every test runs on CPU. The GPU steps (eval
 Kaggle's dual T4 through `scripts/train_dual_t4.sh`; Section 10 lists what is most likely to need a fix. Run the
 steps in order and stop at the first failure; send back the failing command and its output.
 
+## Current plan: teacher campaign, Kaggle pushes, held-out scoring
+
+The three commands below are the active plan. Sections 0–11 that follow are the older step-by-step procedure and
+are kept for reference; the current state is summarised in `docs/STATUS.md`.
+
+### (a) Run the teacher campaign (budget models first)
+
+```powershell
+# Safe default: print the exact driver + ingest commands, no API calls and no writes.
+pwsh -File scripts/run_teacher_campaign.ps1 -DryRun
+
+# Actually run the budget tier (200 rows per model), resuming from shards already on disk.
+pwsh -File scripts/run_teacher_campaign.ps1 -Execute -Rows 200 -Resume
+
+# One task only:
+pwsh -File scripts/run_teacher_campaign.ps1 -Execute -Task repair -Rows 200 -Resume
+
+# Only after the budget tier has reported its accepted-CoT yield:
+pwsh -File scripts/run_teacher_campaign.ps1 -Execute -Tier expensive -AllowExpensive -Rows 200 -Resume
+```
+
+The budget tier runs `gpt-6-luna` first, then `claude-haiku-5-5`, with reasoning ON; `gemini-3.5-flash-lite` is
+excluded and must not consume quota. These are hosted-only slugs, so run them as the hosted task
+`thermo-teacher-tools-s00` via `pwsh -File scripts/run_teacher_hosted.ps1 -Execute -m <slug>`, not on the local SDK
+driver. The opt-in expensive tier is `gpt-6.2-sol`, `claude-sonnet-5-5`, `claude-opus-5-5-default` (`claude-opus`)
+and `gemini-4-argon` (`gemini-4`) — only after the budget tier reports verifier-accepted reasoning-trace yield, and
+`claude-sonnet-5-5` additionally needs Reza's explicit go-ahead. Any explicit mixed `-Models` list is reordered
+budget-first, and `-Execute` on the expensive tier requires `-AllowExpensive`. **REMINDER:** revisit
+`claude-sonnet-5-5` before spending on that tier — it was deferred as too expensive
+(`docs/TEACHER_MODEL_CHOICES.md`). `-DryRun` is the default and wins if both switches are passed.
+Preflight refuses to start unless `KAGGLE_API_TOKEN` and `HF_TOKEN` are available (from the environment or `.env`);
+their values are never printed. Each model writes its own append-only shard
+`data/teacher_runs/harness_<model>_<task>.jsonl`, then `transfer.ingest` adds accepted tool-CoT rows with
+`source=frontier_tools`. Full contract in `docs/TEACHER_CAMPAIGN.md`.
+
+### (b) Push the smoke, train and eval kernels
+
+```powershell
+pwsh -File scripts/make_kaggle_bundle.ps1
+pwsh scripts/upload_corpus_dataset.ps1            # includes heldout.zip, rebuilt every upload
+$k = '.venv/Scripts/kaggle.exe'
+foreach ($dir in @('kaggle/train_kernel_smoke', 'kaggle/train_kernel', 'kaggle/eval_kernel')) {
+    $p = (Resolve-Path $dir).Path                  # absolute path required on Windows
+    & $k kernels push -p "$p" --accelerator NvidiaTeslaT4
+}
+& $k kernels status rezanadimi/thermo-train-smoke
+& $k kernels logs   rezanadimi/thermo-train-smoke
+```
+
+`kernels push` runs the kernel; add `--no-run` to only save a version. Fused wheels come from
+`rezanadimi/thermo-kernel-wheels` through `kernel_sources`; no worker recompiles. The pushed smoke kernel carries the
+PyPI-pinned numpy/scipy shim in `thermo_agent/kaggle_notebook.py::setup()` (`numpy==2.4.4`, `scipy==1.17.1`).
+Confirm the step-20 evaluation no longer OOMs before any training session.
+
+### (c) Score every arm on `data/heldout`
+
+```powershell
+$env:DATA_DIRS = 'heldout'                         # resolves to the frozen data/heldout set in the worker
+$env:ARMS = 'ours_base,ours_sft,ours_harness,ours_sft_grpo_k4,ours_sft_grpo_k8,ours_sft_grpo_k16,frontier_zero,frontier_tools,frontier_harness,other_model'
+$env:LIMIT = '0'                                   # 0 = no cap: held-out cells reach 70 rows, so a positive cap truncates and model_eval refuses
+$k = '.venv/Scripts/kaggle.exe'
+$p = (Resolve-Path 'kaggle/eval_kernel').Path
+& $k kernels push -p "$p" --accelerator NvidiaTeslaT4
+& $k kernels logs rezanadimi/thermo-eval-run
+```
+
+`kaggle/eval_runner.py` writes one `reports/<arm>.json` per arm and assembles
+`paper/assets/model_results_manifest.json` / `paper/assets/model_results.json`. Reports are not overwritten unless
+`FORCE=1`. The GRPO arms use distinct checkpoint dirs (`runs/grpo_<task>_k4`, `_k8`, `_k16`), so k=4/8/16 never
+share weights. `model_eval` scores only the `test_*` splits by default (`DEFAULT_SPLITS`), so train/val files in
+`data/heldout` are never scored.
+
 ## 0. Hardware
 
 | GPU | Use |
@@ -89,7 +161,9 @@ python -m thermo_agent.teacher.transfer ingest data/frontier_export completions.
 ```
 
 This is the legacy zero-shot baseline arm (kept for the held-out baseline). The current tool-CoT generation runs in
-the LangGraph harness (`kaggle/teacher_harness.py`) with `claude-haiku-5-5` / `gemini-3.5-flash-lite` / `gpt-6-luna`.
+the LangGraph harness (`kaggle/teacher_harness.py`), with `gpt-6-luna` then `claude-haiku-5-5` (reasoning ON) run as
+the hosted task `thermo-teacher-tools-s00` via `pwsh -File scripts/run_teacher_hosted.ps1 -Execute -m <slug>`;
+`gemini-3.5-flash-lite` is excluded and must not consume quota.
 **REMINDER:** revisit `claude-sonnet-5-5` later — it was deferred as too expensive.
 
 The Kaggle half needs only a browser: the local CLI returns 403 until the account's phone/identity verification is
@@ -305,7 +379,7 @@ Send `summary.md`, `versions.txt`, the data report, and any failing command with
 2. TRL arguments written against TRL 1.17.1 source: `SFTConfig(completion_only_loss, max_length, model_init_kwargs)`, `GRPOConfig(reward_weights, chat_template_kwargs, loss_type, mask_truncated_completions, vllm_mode)`; a version mismatch shows up as an unexpected-keyword error.
 3. 4-bit loading (`--qlora`, `--load-4bit`) and merging an adapter trained in 4-bit.
 4. Greedy generation length (`max_new_tokens` 400 in the evaluator, `max_completion_length` 320 in GRPO): a truncated answer has no closing tag and scores zero.
-5. Template: `enable_thinking=False` is passed to `apply_chat_template`; if the template ignores it, SFT, GRPO and evaluation still agree with each other, but a thinking block may appear in answers (the evaluator strips ` thinking...`).
+5. Template: training uses `enable_thinking=True` (single constant `train.render.TRAIN_ON_REASONING`). Measured on the cached `Qwen/Qwen3.5-4B` tokenizer: with `True`, the generation prompt is a literal prefix of the full rendered conversation, so `completion_only_loss` masks exactly the prompt and the stored `<think>…</think>` reasoning stays trainable. With `False` the template injects an empty closed `<think>\n\n</think>\n\n`, the prefix check fails, and masking would train a duplicated `</think>`. `scripts/check_qwen_tool_template.py` re-checks this on any tokenizer.
 6. Time per GRPO step on a T4 is unknown; use the smoke run to extrapolate before committing to 300 steps.
 
 ## 11. Qwen3.5-4B architecture for LoRA
@@ -332,3 +406,135 @@ Send `summary.md`, `versions.txt`, the data report, and any failing command with
 - Attention: `q_proj`, `k_proj`, `v_proj`, `o_proj`, `linear_q_proj`, `linear_k_proj`, `linear_v_proj`, `linear_out_proj`
 - FFN: `gate_proj`, `up_proj`, `down_proj`
 - (Skip `patch_embed.proj` and vision attention/FFN — not used)
+
+## 2026-11-19 — exact hosted-pilot and smoke commands
+
+Two paths are about to run. Every command below is copied from a script that exists in this repo. The scripts call
+`.venv/Scripts/kaggle.exe` and `.venv/Scripts/python.exe`; bare `kaggle` / `python` are shorthand, not what the
+scripts actually invoke. Keep each command on its own line.
+
+### 1. Environment preflight (once per shell)
+
+All Kaggle traffic from this machine must go through the local SOCKS proxy (`scripts/run_teacher_hosted.ps1`,
+`scripts/upload_corpus_dataset.ps1`, `docs/KAGGLE_CLI.md`). The token line is the exact safe assignment used by
+`scripts/upload_corpus_dataset.ps1` and `docs/KAGGLE_CLI.md` — value read from `.env`, never printed:
+```powershell
+$env:HTTP_PROXY = 'socks5h://localhost:10808'
+$env:HTTPS_PROXY = 'socks5h://localhost:10808'
+$env:PYTHONIOENCODING = 'utf-8'
+$env:KAGGLE_API_TOKEN = (& .venv/Scripts/python.exe -c "from pathlib import Path; print([l.split('=',1)[1].strip() for l in Path('.env').read_text().splitlines() if l.startswith('KAGGLE_API_TOKEN=')][0])")
+```
+`scripts/run_teacher_hosted.ps1` reads the same key through its `Get-Secret 'KAGGLE_API_TOKEN'` helper and also
+refuses to start if it is missing.
+
+### 2. Code bundle (`rezanadimi/thermo-agent-code`)
+
+```
+pwsh -File scripts/make_kaggle_bundle.ps1
+```
+This writes `kaggle_bundle.zip` at the repo root. Stage the fresh zip into the dataset directory, then version it
+(the dataset dir already holds `dataset-metadata.json` with id `rezanadimi/thermo-agent-code`):
+```
+$codeDir = (Resolve-Path 'data/kaggle_datasets/thermo-agent-code').Path
+Copy-Item -Force kaggle_bundle.zip (Join-Path $codeDir 'kaggle_bundle.zip')
+.venv/Scripts/kaggle.exe datasets version -p "$codeDir" -m "rebuild code bundle for hosted pilot" -t -r skip
+```
+Confirm `ready`:
+```
+.venv/Scripts/kaggle.exe datasets status rezanadimi/thermo-agent-code
+```
+`unverified`: the `Copy-Item` staging line and the `datasets status` command are not used by any script in this
+repo. `make_kaggle_bundle.ps1` only writes the root zip; the repo has no staging step. The only existing
+confirmation pattern is `kaggle datasets list -s <slug>` (existence only, does not prove `ready`). The `-m` message
+text is a free-form version note, not a script-defined flag value.
+
+### 3. Hosted teacher pilot (`thermo-teacher-tools-s00`, `gpt-6-luna`)
+
+Push both datasets (exact flags from `scripts/run_teacher_hosted.ps1`):
+```
+.venv/Scripts/kaggle.exe benchmarks tasks push thermo-teacher-tools-s00 -f kaggle/teacher_harness_task_s00.py -d rezanadimi/thermo-agent-code -d rezanadimi/thermo-teacher-prompts-big
+```
+Run:
+```
+.venv/Scripts/kaggle.exe benchmarks tasks run thermo-teacher-tools-s00 -m gpt-6-luna --wait 5400
+```
+Download (`-m` selects the run, `-o` only names the output directory; the downloaded journal filename is
+model-independent — `harness_completions.jsonl`, fallback `completions.jsonl`):
+```
+.venv/Scripts/kaggle.exe benchmarks tasks download thermo-teacher-tools-s00 -m gpt-6-luna -o data/teacher_runs/kaggle_hosted/gpt-6-luna
+```
+Append-to-shard rule: APPEND the downloaded journal, id-deduped, to this model's own append-only shard
+`data/teacher_runs/hosted_gpt-6-luna.jsonl`. Never overwrite another model's journal; each model has exactly one
+shard. `scripts/run_teacher_hosted.ps1` performs this append and then ingest. Then run ingest explicitly:
+```
+.venv/Scripts/python.exe -m thermo_agent.teacher.transfer ingest data/frontier_export data/teacher_runs/hosted_gpt-6-luna.jsonl data/frontier --memory-dir data/memory --model gpt-6-luna
+```
+In-task hard stop: `SPEC["max_cost_usd"] = 2.0` in `kaggle/teacher_harness_task_s00.py` breaks the task with status
+`paused` / `cost_cap` when spend reaches it; the override is the `HARNESS_MAX_COST_USD` environment variable (read
+in the task). Deferred-to-ingest verdict rule: the compact prompt shard has no plant/spec columns, so rows are not
+gradable inside the task and carry `verdict = {accepted: None, graded: False, reason: "deferred_to_ingest"}`.
+The hosted verdict is never proof of acceptance; `transfer.ingest` re-grades against the full export by id and is
+the only source of acceptance for those rows.
+
+### 4. Smoke kernel (`rezanadimi/thermo-train-smoke`)
+
+Generate the notebook (all flags exist in `scripts/make_smoke_kernel.py`; note the default task is `ledger`, so set
+`repair` explicitly):
+```
+python scripts/make_smoke_kernel.py --steps 20 --rows 64 --task repair --ngpu 1 --batch 1 --sft-data sft_tools --grpo-data grpo_tools
+```
+Push (an absolute path is required on Windows):
+```
+$smokeDir = (Resolve-Path 'kaggle/train_kernel_smoke').Path
+.venv/Scripts/kaggle.exe kernels push -p "$smokeDir" --accelerator NvidiaTeslaT4
+```
+Status and logs:
+```
+.venv/Scripts/kaggle.exe kernels status rezanadimi/thermo-train-smoke
+.venv/Scripts/kaggle.exe kernels logs rezanadimi/thermo-train-smoke
+```
+Required success criteria before any training session: setup stages `sft_tools` / `grpo_tools` (from `SFT_DATA` /
+`GRPO_DATA`; no missing-corpus error), the training loss falls over the 20 steps, and the step-20 evaluation passes
+(no OOM — the original reason for the smoke gate).
+
+### 5. Stats
+
+```
+python scripts/teacher_campaign_stats.py
+```
+It writes `data/teacher_runs/CAMPAIGN_STATS.json` (machine-readable snapshot) and
+`docs/TEACHER_CAMPAIGN_LOG.md` (append-friendly human log; prior snapshots are preserved under History).
+
+## 2026-11-19 — optional-dependency fallback, smoke OOM, planned harness corpora
+
+### Hosted because of missing optional deps
+The benchmarks venv (`/benchmarks/.venv`, Python 3.12) has no scipy and may have no CoolProp; the hosted task must
+still run. Exact fallback behaviour today:
+
+- scipy: `thermo_agent/core/_roots.py` uses scipy `brentq` when importable and a pure-Python bracketing Brent
+  otherwise; `design/search.py` imports scipy lazily. `using_scipy` records which path is active.
+- CoolProp: `core/fluids.py` / `core/props.py` import it optionally. The task tries
+  `pip install --target /kaggle/working/pylibs CoolProp==6.8.0`; if that fails (network unavailable) it prints
+  `[deps] CoolProp unavailable ...; gas-only plants will run` and continues with gas-only plants — it never fails
+  the whole task for a missing real-fluid backend.
+
+One-line check on this box (prints `False` only when scipy is absent; `True` on a normal dev box):
+
+```
+python -c "from thermo_agent.core._roots import using_scipy; print(using_scipy)"
+```
+
+### Smoke v26 / v27 (short)
+v26 OOM'd at the first backward on one T4 (13.55 GiB in use, 1.10 GiB requested); v27 pushed `sdpa` attention,
+non-reentrant gradient checkpointing (SFT + GRPO) and `expandable_segments:True` in `kaggle/train_runner.py`.
+**Result pending** — keep the step-20 no-OOM gate in section 4 before any training session.
+
+### Planned: harness-aligned tool corpora (not run)
+Training tool rows still use only the plain `harness="none"` system prompt (740 chars for repair), while eval and
+teacher tracegen already separate Z/H prompts. `--prompt-variant {plain,harness_tools}` work is in progress to emit
+`*_h` corpora matching `ours_harness`; the gap stays **OPEN** until the code lands. Planned command shape —
+**planned, verify against `--help` before running**:
+
+```
+python scripts/build_tool_corpus.py --prompt-variant harness_tools --out-harness data/sft_tools_h --grpo-out-harness data/grpo_tools_h
+```

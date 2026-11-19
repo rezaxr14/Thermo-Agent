@@ -13,13 +13,123 @@ Prompts are rendered with the tokenizer exactly as GRPO and inference will rende
 If the checkpoint loads only through an image-text class, load that class and pass the model object to
 SFTTrainer instead of the string."""
 from __future__ import annotations
-import argparse, json, os, pathlib, random
+import argparse, json, os, pathlib, random, re
 
 from . import ddp
 from .checkpoint import latest
 from .config import BASE_MODEL, SftSettings, supported
 from . import hf_sync
-from .render import render_pair, prefix_report
+from .render import CHAT_KW, render_pair, prefix_report  # CHAT_KW is the shared enable_thinking value; render_pair applies it to every row we tokenize
+
+
+# Tool results are produced by the environment at inference time, so the student must never be
+# trained to predict them. A trajectory is stored as one assistant message with these inline
+# tags (see teacher.agent_graph.sft_completion); the tags and everything between them are masked.
+# Our XML traces use <tool_result>; Qwen3.5's native chat template renders tool results as
+# <tool_response>, so both forms are masked. Tool CALLS stay trainable: only the results are
+# environment output.
+_TOOL_RESULT_TAGS = {
+    "tool_result": ("<tool_result>", "</tool_result>"),
+    "tool_response": ("<tool_response>", "</tool_response>"),
+}
+_TOOL_RESULT_OPEN = _TOOL_RESULT_TAGS["tool_result"][0]
+_TOOL_RESULT_CLOSE = _TOOL_RESULT_TAGS["tool_result"][1]
+_TOOL_RESULT_TAG = re.compile("|".join(
+    re.escape(tag) for pair in _TOOL_RESULT_TAGS.values() for tag in pair))
+
+
+def _tool_result_spans(text: str) -> list[tuple[int, int]]:
+    """Character spans ``[start, end)`` of every tool-result block.
+
+    Both our XML ``<tool_result>`` and Qwen's native ``<tool_response>`` forms are recognised.
+    The opening and closing tags are included. Nesting is tracked separately per tag name with
+    a depth counter; a block that never closes (depth > 0 at the end) masks from its opening tag
+    to the end of the text. A stray closing tag with no matching open is ignored.
+    """
+    spans: list[tuple[int, int]] = []
+    opens = {pair[0]: name for name, pair in _TOOL_RESULT_TAGS.items()}
+    closes = {pair[1]: name for name, pair in _TOOL_RESULT_TAGS.items()}
+    depth = {name: 0 for name in _TOOL_RESULT_TAGS}
+    start = 0
+    for match in _TOOL_RESULT_TAG.finditer(text):
+        tag = match.group(0)
+        if tag in opens:
+            name = opens[tag]
+            if depth[name] == 0:
+                start = match.start()
+            depth[name] += 1
+        else:
+            name = closes[tag]
+            if depth[name]:
+                depth[name] -= 1
+                if depth[name] == 0:
+                    spans.append((start, match.end()))
+    for name, level in depth.items():
+        if level:
+            spans.append((max(0, start), len(text)))
+    return sorted(set(spans))
+
+
+def mask_tool_result_spans(text, offsets, labels):
+    """Mask every token that lies in a ``<tool_result>`` span by setting its label to ``-100``.
+
+    ``text`` is the exact string that was tokenized, ``offsets`` is the fast tokenizer's
+    ``offset_mapping`` (one ``(start, end)`` character span per token, aligned 1:1 with
+    ``labels``), and ``labels`` is a list or tensor of token ids / ``-100`` entries. A token is
+    masked when its half-open character span ``[start, end)`` intersects any tool-result span
+    (tags included), so tags split across several tokens are covered too. Multiple spans are
+    handled; nested or unclosed blocks mask to end-of-text. Plain text is returned unchanged.
+    The input is never mutated (a tensor is cloned, a list is copied).
+    """
+    spans = _tool_result_spans(text)
+    if not spans:
+        return labels
+    out = labels.clone() if hasattr(labels, "clone") else list(labels)
+    for i, (start, end) in enumerate(offsets):
+        if start is None or end is None:  # fast tokenizers emit (0, 0) for added special tokens
+            continue
+        if any(start < span_end and end > span_start for span_start, span_end in spans):
+            out[i] = -100
+    return out
+
+
+def _common_prefix_length(a, b) -> int:
+    """Length of the longest shared prefix of two token-id sequences (TRL's prompt boundary)."""
+    n = 0
+    for x, y in zip(a, b):
+        if x != y:
+            break
+        n += 1
+    return n
+
+
+def preprocess_row(tok, row: dict) -> dict:
+    """Tokenize one SFT row and build labels with the prompt and tool results masked.
+
+    Produces ``input_ids`` and fully-formed ``labels`` so TRL's ``SFTTrainer`` skips its own
+    tokenization and label building. This keeps ``completion_only_loss=True`` (the prompt is
+    masked) while additionally masking tool-result spans; the chunked loss already ignores
+    ``-100`` labels and normalizes by the unmasked token count over the whole batch.
+    """
+    pair = render_pair(tok, row)
+    prompt, completion = pair["prompt"], pair["completion"]
+    eos = getattr(tok, "eos_token", None)
+    if eos and not completion.endswith(eos):  # TRL appends EOS to plain-text completions
+        completion += eos
+    text = prompt + completion
+    prompt_ids = tok(prompt)["input_ids"]
+    encoded = tok(text, return_offsets_mapping=True)
+    input_ids = encoded["input_ids"]
+    prompt_len = _common_prefix_length(prompt_ids, input_ids)
+    labels = [-100] * prompt_len + list(input_ids[prompt_len:])
+    return {"input_ids": list(input_ids),
+            "labels": mask_tool_result_spans(text, encoded["offset_mapping"], labels)}
+
+
+def preprocess_rows(tok, rows: list[dict]):
+    """Tokenize rows into a dataset ready for ``SFTTrainer`` (with tool results masked)."""
+    from datasets import Dataset
+    return Dataset.from_list([preprocess_row(tok, row) for row in rows])
 
 
 def read_rows(data_dir, tasks, split, seed=0, limit=None):
@@ -82,7 +192,6 @@ def main():
         print("PREFIX CHECK:", json.dumps(prefix_report(tok, ex), indent=1)); return
     _report_topology(a.dtype)
 
-    from datasets import Dataset
     from peft import LoraConfig
     from transformers import AutoTokenizer
     from trl import SFTConfig
@@ -90,7 +199,9 @@ def main():
     tok = AutoTokenizer.from_pretrained(a.model)
     tr, va = read_rows(a.data, a.tasks, "train", limit=a.limit_rows), read_rows(a.data, a.tasks, "val", limit=a.limit_rows)
     if not tr: raise SystemExit(f"no training rows for {a.tasks} in {a.data}")
-    train = Dataset.from_list([render_pair(tok, r) for r in tr]); val = Dataset.from_list([render_pair(tok, r) for r in va]) if va else None
+    # Tokenize here so labels already mask the prompt AND every <tool_result> span. TRL sees
+    # `input_ids` + `labels` and therefore skips its own tokenization/label building.
+    train = preprocess_rows(tok, tr); val = preprocess_rows(tok, va) if va else None
     init = ddp.model_init_kwargs(a.dtype)
     if a.qlora:
         import torch
@@ -98,7 +209,7 @@ def main():
         init["quantization_config"] = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4", bnb_4bit_compute_dtype=getattr(torch, a.dtype))
     cfg = SFTConfig(**supported(SFTConfig, output_dir=a.out, learning_rate=s.lr, num_train_epochs=s.epochs, max_steps=a.max_steps, max_length=s.max_length,
                     per_device_train_batch_size=s.per_device_batch, gradient_accumulation_steps=s.grad_accum, max_grad_norm=s.max_grad_norm,
-                    gradient_checkpointing=True, dataloader_num_workers=a.num_workers,
+                    gradient_checkpointing=True, gradient_checkpointing_kwargs={"use_reentrant": False}, dataloader_num_workers=a.num_workers,
                     logging_steps=5, eval_strategy="steps" if val else "no", eval_steps=s.eval_steps,
                     save_strategy="steps", save_steps=s.save_steps, save_total_limit=2,
                     completion_only_loss=True, model_init_kwargs=init, report_to="none", seed=0,
@@ -115,6 +226,9 @@ def main():
     if torch.cuda.is_available():
         print(f"[memory] {params / 1e9:.2f}B params, weight dtype {next(base_model.parameters()).dtype}, "
               f"{torch.cuda.memory_allocated() / 2**30:.2f} GiB on {torch.cuda.get_device_name(0)}", flush=True)
+        print(f"[attn] requested={init.get('attn_implementation')} "
+              f"resolved={getattr(getattr(base_model, 'config', None), '_attn_implementation', None)} "
+              f"checkpointing={bool(getattr(base_model, 'is_gradient_checkpointing', False))}", flush=True)
     lora = LoraConfig(r=s.lora.r, lora_alpha=s.lora.alpha, lora_dropout=s.lora.dropout, target_modules=s.lora.target_modules, task_type="CAUSAL_LM")
     repo, callback = hf_sync.prepare(a.hf_repo, "sft", a.out, a.hf_sync)
     resume = latest(a.out)

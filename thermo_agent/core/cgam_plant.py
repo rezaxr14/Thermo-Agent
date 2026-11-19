@@ -5,7 +5,7 @@ Independent of the generic engine; used to cross-check it. Molar SI internally, 
 from __future__ import annotations
 from dataclasses import dataclass, field
 import numpy as np
-from scipy.optimize import brentq
+from ._roots import brentq
 from . import gasprops as gp
 from . import fluids as fl
 

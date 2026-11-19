@@ -89,18 +89,18 @@ adds their records and downstream links without rewriting the existing ones
 
 ## Current exact stats (generated from `data/provenance/stats.json`)
 
-Generated from 38202 ledger records
-(`sha256:2628f481ddd07a2d`, 60671599 bytes).
+Generated from 38218 ledger records
+(`sha256:0841cfbd1bddd4c3`, 60693168 bytes).
 
 ### Totals
 
 | Metric | Value |
 |---|---|
-| Traces | 38202 |
+| Traces | 38218 |
 | Downstream entries | 57514 |
-| Journal occurrences | 5673 |
-| Accepted / rejected / unknown | 635 / 421 / 37146 |
-| Acceptance rate of known traces | 60.1326% |
+| Journal occurrences | 5677 |
+| Accepted / rejected / unknown | 635 / 429 / 37154 |
+| Acceptance rate of known traces | 59.6805% |
 | Total cost (nanodollars) | 3152867300 |
 | Total cost (USD) | 3.152867 |
 | Nanodollars per accepted trace | 4965145.35 |
@@ -109,9 +109,9 @@ Generated from 38202 ledger records
 
 | Kind | Traces | With downstream | Coverage |
 |---|---|---|---|
-| adversarial | 388 | 0 | 0.0% |
+| adversarial | 402 | 0 | 0.0% |
 | frontier | 3512 | 1376 | 39.18% |
-| harness | 1146 | 120 | 10.4712% |
+| harness | 1148 | 120 | 10.453% |
 | synthetic | 33156 | 27767 | 83.7465% |
 
 ### Coverage by first-seen source
@@ -119,37 +119,38 @@ Generated from 38202 ledger records
 | Source | Traces | With downstream | Coverage |
 |---|---|---|---|
 | frontier | 209 | 112 | 53.5885% |
-| memory | 388 | 0 | 0.0% |
+| memory | 402 | 0 | 0.0% |
 | processed | 27418 | 23540 | 85.856% |
 | processed_arch | 5544 | 4227 | 76.2446% |
 | processed_big | 194 | 0 | 0.0% |
-| teacher_runs | 4449 | 1384 | 31.1081% |
+| teacher_runs | 4451 | 1384 | 31.0941% |
 
 ### By model
 
 | Model | Traces | Accepted | Rejected | Acc. rate (known) | Cost (n$) | Input tok. | Output tok. | Cost/accepted (n$) |
 |---|---|---|---|---|---|---|---|---|
-| (adversarial/memory) | 388 | 0 | 388 | 0.0% | 0 | 0 | 0 | n/a |
+| (adversarial/memory) | 402 | 0 | 396 | 0.0% | 0 | 0 | 0 | n/a |
 | (synthetic) | 33156 | 0 | 0 | 0.0% | 0 | 0 | 0 | n/a |
 | anthropic/claude-sonnet-5-5@default | 5 | 0 | 0 | 0.0% | 0 | 0 | 0 | n/a |
 | google/gemini-3.1-flash-lite-preview | 2460 | 513 | 0 | 100.0% | 1751449500 | 4501674 | 417354 | 3414131.58 |
 | google/gemini-3.8-flash | 208 | 0 | 33 | 0.0% | 612315750 | 371051 | 89074 | n/a |
+| gpt-6-luna | 2 | 0 | 0 | 0.0% | 0 | 0 | 0 | n/a |
 | openai/gpt-5.4-nano-2026-03-17 | 1985 | 122 | 0 | 100.0% | 789102050 | 2586850 | 299961 | 6468049.59 |
 
 ### By task
 
 | Task | Traces | Accepted | Rejected | Cost (n$) |
 |---|---|---|---|---|
-| audit | 5613 | 0 | 125 | 1174276860 |
-| design | 4983 | 140 | 177 | 509263030 |
-| ledger | 12268 | 160 | 51 | 740150190 |
-| repair | 15338 | 335 | 68 | 729177220 |
+| audit | 5616 | 0 | 127 | 1174276860 |
+| design | 4987 | 140 | 179 | 509263030 |
+| ledger | 12271 | 160 | 53 | 740150190 |
+| repair | 15344 | 335 | 70 | 729177220 |
 
 ### By split
 
 | Split | Traces |
 |---|---|
-| (none) | 3658 |
+| (none) | 3674 |
 | test_id | 2375 |
 | test_ood_climate | 675 |
 | test_ood_fault | 7827 |
@@ -163,10 +164,10 @@ Generated from 38202 ledger records
 
 | Harness | Traces | Share |
 |---|---|---|
-| agents+skills | 652 | 1.7067% |
-| none | 37056 | 97.0002% |
-| skills | 170 | 0.445% |
-| tools | 324 | 0.8481% |
+| agents+skills | 652 | 1.706% |
+| none | 37070 | 96.9962% |
+| skills | 170 | 0.4448% |
+| tools | 326 | 0.853% |
 
 ### Paraphrase expansion
 
@@ -235,17 +236,30 @@ By task: {'repair': 117276}
 `data/memory/failure_reasons.json` has no per-trace ids, so it is reported here
 and in `stats.json` only (it is never turned into synthetic ledger records).
 
-Total recorded failures: **167**.
-By task: {"audit": 167}.
-By fault type: {"": 167}.
+Total recorded failures: **0**.
+By task: {}.
+By fault type: {}.
 
 | Top lesson | Count |
 |---|---|
-| Attempt rejected (format: unknown component ids ['DC']). | 57 |
-| Attempt rejected (format: need <ranking>, <change> and <prediction> blocks). | 42 |
-| Attempt rejected (change: change not allowed; prediction: no usable prediction). | 13 |
-| Attempt rejected (grounding: only 77% of the numbers in <analysis> are in the plant). | 4 |
-| Attempt rejected (grounding: only 62% of the numbers in <analysis> are in the plant). | 3 |
-| Attempt rejected (grounding: only 71% of the numbers in <analysis> are in the plant). | 3 |
-| Attempt rejected (grounding: only 50% of the numbers in <analysis> are in the plant). | 2 |
-| Attempt rejected (grounding: only 55% of the numbers in <analysis> are in the plant). | 2 |
+
+## 2026-11-19 — provenance ledger re-run
+
+Auditor re-ran the builder exactly as documented; no code/data was hand-edited:
+`$env:PYTHONIOENCODING='utf-8'; .venv/Scripts/python.exe scripts/build_provenance_ledger.py 2>&1 | Select-Object -Last 40` → exit code 0.
+Script takes no CLI args (no argparse in `main()`); docstring documents three derived outputs.
+Outputs rewritten: `data/provenance/trace_ledger.jsonl`, `data/provenance/stats.json`, `docs/PROVENANCE.md`.
+Builder stdout ended with: `wrote 38218 provenance records` (plus stats + docs lines).
+
+Counts (regenerated `stats.json`, cross-checked against the ledger):
+| Metric | Count |
+|---|---|
+| Total records | 38218 |
+| by_kind | synthetic 33156; frontier 3512; harness 1148; adversarial 402 |
+| by_first_seen_source | processed 27418; processed_arch 5544; teacher_runs 4451; memory 402; frontier 209; processed_big 194 |
+| from `data/memory/*.jsonl` | 402 (agent_patterns 14; adversarial_repair 24; frontier_notes 364) |
+| from `data/frontier/*.jsonl` | 209 (audit 8; design 43; ledger 93; repair 65) |
+
+Seed notes: all 14 `agent_patterns.jsonl` rows appear as `kind=adversarial`, with `acceptance.source=seed:method` and `origin.source=seed:method` (14/14) and `record_id` empty (14/14); status is rejected 8 / unknown 6 / accepted 0. The 635 verifier-accepted rows all come from `data/frontier/*.jsonl`; 0 carry a `seed:method` source. Seed notes are therefore labelled as non-verifier evidence, not as verifier-accepted rows.
+
+Secret scan of all 3 generated files: `KAGGLE_API_TOKEN` 0, `HF_TOKEN` 0, `sk-` 0, `C:\Users` 0, known secret-prefix tokens 0. Generic high-entropy regex: 10 matches in 5 `error` fields, all Anthropic API `request_id` values inside 400 BadRequestError messages (values redacted at inspection; provider request IDs, not credentials). Verdict: no secret or absolute local path leaked.

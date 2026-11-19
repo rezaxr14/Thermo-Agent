@@ -13,3 +13,6 @@ Objective: among plants that solve, pass all checks and meet the site, burn the 
 - District heat: exhaust heat is free if enough remains after cooling; a heat pump costs electricity but leaves exhaust for an ORC.
 - Continuous parameters: turbine PR and T4 trade cycle efficiency against exhaust temperature; hot-water `T_hw` and `dT_hw` must keep the generator duty feasible; `dT_rej` sets rejection flow and temperature level; `P_orc_bar` and `orc_frac` must keep the pinch and the exhaust floor feasible.
 - Check the feasibility mechanisms (exhaust heat available vs duty, temperature levels, water) before optimising fuel.
+
+## Environment: tools, limits, final format
+Inventory the skills and physics tools first, then examine the site against known failure modes before proposing a candidate. At most 4 turns and 6 tool calls. Tools return JSON (no answer oracle): `inspect_plant` (as-given state, failed checks; call it first), `first_law_check` (mass/energy residuals, balance), `second_law_check` (exergy destruction, reversibility limits), `validity_check` (unit/range, site, pinch, verdict), `solve_plant` (stream states). Read the numbers, revise and re-check; stop when checks pass. Final answer: `<rationale>...</rationale>` then `<design>` with `key = value` lines.

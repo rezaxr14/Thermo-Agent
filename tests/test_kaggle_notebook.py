@@ -6,10 +6,14 @@ model to prove the loop is resumable and records failures, and re-check that the
 """
 import importlib.util
 import json
+import os
 import re
 import pathlib
 import sys
 import types
+import zipfile
+
+import pytest
 
 from thermo_agent.teacher import transfer
 
@@ -135,7 +139,8 @@ def test_train_notebook_is_generated_and_has_no_token():
             "kaggle/train.ipynb is stale: run `python kaggle/make_notebook.py`")
         code = "".join("".join(c["source"]) for c in json.loads(out.read_text(encoding="utf-8"))["cells"]
                        if c["cell_type"] == "code")
-        assert "torch.distributed.run" in code and "--hf-sync" in code and "hf:merged/sft" in code
+        # P0-10: GRPO is initialised from the LOCAL merged SFT weights (runs/sft_merged), not a remote alias.
+        assert "torch.distributed.run" in code and "--hf-sync" in code and "sft_merged" in code
         assert "hf_sync.ensure_private_repo" in code
         assert "kaggle_notebook import" in code and "token()" in code, "the token must come from the shared Kaggle Secret helper"
         assert not re.search(r"hf_[A-Za-z0-9]{20,}", code), "no token literal in the notebook"
@@ -188,3 +193,192 @@ def test_shared_notebook_setup_has_no_token_literal():
     for name in ("train_runner.py", "teacher_harness.py", "eval_runner.py"):
         src = (KAGGLE / name).read_text(encoding="utf-8")
         assert "from thermo_agent.kaggle_notebook import" in src, f"{name} must use the shared setup"
+
+
+def test_setup_exports_pinned_site_first_and_parent_never_imports_numeric(tmp_path, monkeypatch):
+    """PINNED_SITE must lead the child PYTHONPATH, and the parent module must never import numpy."""
+    import thermo_agent.kaggle_notebook as kn
+
+    source = (ROOT / "thermo_agent" / "kaggle_notebook.py").read_text(encoding="utf-8")
+    assert kn.PINNED_SITE == pathlib.Path("/kaggle/working/pydeps")
+    assert "_purge_numeric_modules" not in source
+    assert "_blas_supports_fpe" not in source
+    assert not re.search(r"(?m)^\s*(?:import\s+numpy\b|from\s+numpy\b)", source), (
+        "the parent setup module must never import numpy")
+
+    # Fake just enough of the two Kaggle datasets to run setup() without installing anything.
+    code = tmp_path / "code"
+    (code / "thermo_agent" / "train").mkdir(parents=True)
+    (code / "thermo_agent" / "train" / "sft.py").write_text("", encoding="utf-8")
+    corpus = tmp_path / "corpus"
+    for name in ("sft", "grpo"):
+        (corpus / name).mkdir(parents=True)
+    root = tmp_path / "thermo-agent"
+    monkeypatch.setattr(kn, "find_input", lambda name: code if name == "thermo-agent-code" else corpus)
+    monkeypatch.setenv("PYTHONPATH", "/existing/entry")
+
+    before = pathlib.Path.cwd()
+    try:
+        got = kn.setup(root=root, install=False)
+    finally:
+        os.chdir(before)
+    assert got == root
+    entries = os.environ["PYTHONPATH"].split(os.pathsep)
+    assert entries[0] == str(kn.PINNED_SITE), "PINNED_SITE must be first on the child PYTHONPATH"
+    assert entries[1] == str(root), "the repo root must still be present"
+    assert entries[2] == "/existing/entry", "the pre-existing PYTHONPATH must be preserved"
+
+
+# --- corpus staging + pre-DDP guards (the v25 "no training rows in data/sft_all" failure) ---
+
+def _fake_code_and_corpus(tmp_path, dirs=(), zips=()):
+    """Minimal code bundle + corpus dataset: dirs are directories, zips are <name>.zip archives."""
+    code = tmp_path / "code"
+    (code / "thermo_agent" / "train").mkdir(parents=True)
+    (code / "thermo_agent" / "train" / "sft.py").write_text("", encoding="utf-8")
+    corpus = tmp_path / "corpus"
+    corpus.mkdir(parents=True)
+    for name in dirs:
+        d = corpus / name
+        d.mkdir(parents=True)
+        (d / f"{name}_train.jsonl").write_text("{}\n", encoding="utf-8")
+    for name in zips:
+        payload = tmp_path / f"_{name}_payload"
+        payload.mkdir()
+        row = payload / "repair_train.jsonl"
+        row.write_text("{}\n", encoding="utf-8")
+        with zipfile.ZipFile(corpus / f"{name}.zip", "w") as zf:
+            zf.write(row, "repair_train.jsonl")
+    return code, corpus
+
+
+def _setup_with(tmp_path, monkeypatch, code, corpus, **kwargs):
+    """Run setup() against fake Kaggle inputs, restoring cwd/PYTHONPATH afterwards."""
+    import thermo_agent.kaggle_notebook as kn
+
+    monkeypatch.setattr(kn, "find_input", lambda name: code if name == "thermo-agent-code" else corpus)
+    monkeypatch.setenv("PYTHONPATH", "/existing/entry")
+    root = tmp_path / "thermo-agent"
+    before = pathlib.Path.cwd()
+    try:
+        got = kn.setup(root=root, install=False, **kwargs)
+    finally:
+        os.chdir(before)
+    return kn, root, got
+
+
+def test_setup_default_stages_merged_and_heldout_from_zips(tmp_path, monkeypatch, capsys):
+    """The default corpora now include sft_all/grpo_all/heldout, extracted from <name>.zip."""
+    code, corpus = _fake_code_and_corpus(
+        tmp_path, dirs=("sft", "grpo"), zips=("sft_all", "grpo_all", "heldout"))
+    kn, root, got = _setup_with(tmp_path, monkeypatch, code, corpus)
+    assert got == root
+    for name in ("sft_all", "grpo_all", "heldout"):
+        assert (root / "data" / name / "repair_train.jsonl").is_file(), f"{name} was not staged"
+    for name in ("sft", "grpo", "sft_all", "grpo_all", "heldout"):
+        assert name in kn.STAGED_CORPORA
+    assert kn.MISSING_CORPORA == ()
+    assert "[corpus] staged" in capsys.readouterr().out
+
+
+def test_setup_missing_corpus_is_skipped_not_faked(tmp_path, monkeypatch, capsys):
+    """An absent corpus is skipped, printed as missing, and no empty dir is created for it."""
+    code, corpus = _fake_code_and_corpus(tmp_path)
+    kn, root, got = _setup_with(tmp_path, monkeypatch, code, corpus, corpora=("ghost",))
+    assert got == root
+    assert "[corpus] missing ghost" in capsys.readouterr().out
+    assert not (root / "data" / "ghost").exists(), "a missing corpus must not create an empty dir"
+    assert kn.MISSING_CORPORA == ("ghost",)
+    assert kn.STAGED_CORPORA == ()
+
+
+def _runner_cell(make_notebook, name, needle, tmp_path):
+    """Build a runner notebook and return the source of the cell defining `needle`."""
+    nb = pathlib.Path(make_notebook.build(KAGGLE / name, tmp_path / f"{name}.ipynb"))
+    for cell in json.loads(nb.read_text(encoding="utf-8"))["cells"]:
+        src = "".join(cell["source"])
+        if cell["cell_type"] == "code" and needle in src:
+            return src
+    raise AssertionError(f"no code cell in {name} contains {needle!r}")
+
+
+def test_train_runner_pre_ddp_corpus_guard(tmp_path):
+    """require_train_corpus() fails before DDP on an empty corpus, and passes with one train row."""
+    make_notebook = _load_make_notebook()
+    src = _runner_cell(make_notebook, "train_runner.py", "def require_train_corpus", tmp_path)
+    ns = {"ROOT": tmp_path}
+    exec(compile(src, "<train-corpus-guard>", "exec"), ns)  # noqa: S102
+    guard = ns["require_train_corpus"]
+
+    d = tmp_path / "data" / "sft_all"
+    d.mkdir(parents=True)
+    with pytest.raises(SystemExit) as exc:
+        guard("sft_all", "SFT_DATA")
+    msg = str(exc.value)
+    assert "sft_all" in msg and "SFT_DATA" in msg
+    assert str(d) in msg, "the error must name the missing corpus dir"
+
+    (d / "repair_train.jsonl").write_text("{}\n", encoding="utf-8")
+    assert guard("sft_all", "SFT_DATA") == d
+
+
+def test_eval_runner_heldout_test_guard(tmp_path):
+    """require_test_corpus() fails with the missing path when heldout has no *_test_*.jsonl."""
+    make_notebook = _load_make_notebook()
+    src = _runner_cell(make_notebook, "eval_runner.py", "def require_test_corpus", tmp_path)
+    ns = {"ROOT": tmp_path}
+    exec(compile(src, "<eval-corpus-guard>", "exec"), ns)  # noqa: S102
+    guard = ns["require_test_corpus"]
+
+    d = tmp_path / "data" / "heldout"
+    d.mkdir(parents=True)
+    with pytest.raises(SystemExit) as exc:
+        guard("heldout")
+    msg = str(exc.value)
+    assert "heldout" in msg and "*_test_*.jsonl" in msg
+    assert str(d) in msg, "the error must name the missing corpus dir"
+
+    (d / "repair_test_ood_fault.jsonl").write_text("{}\n", encoding="utf-8")
+    assert guard("heldout") == d
+
+
+def test_grpo_batch_math_for_k_4_8_16(tmp_path, monkeypatch):
+    """The GRPO cell must resolve a k-divisible per-device batch so ddp.assert_grpo_batches accepts k=4/8/16."""
+    make_notebook = _load_make_notebook()
+    src = _runner_cell(make_notebook, "train_runner.py", "--num-generations", tmp_path)
+    from thermo_agent.train.ddp import grpo_batches_divisible
+
+    calls = []
+    ns = {
+        "os": os, "PY": "python", "NGPU": 2, "ROOT": tmp_path,
+        "merged": tmp_path / "sft_merged", "GRPO_DATA": "grpo_all", "SYNC": "auto", "LIMITS": [],
+        "status": lambda **kw: calls.append(("status", kw)),
+        "require_train_corpus": lambda *a, **kw: None,
+        "hf_sync": types.SimpleNamespace(local_steps=lambda *a, **kw: []),
+        "run": lambda argv: calls.append(("run", argv)),
+    }
+
+    for k in (4, 8, 16):
+        monkeypatch.setenv("GRPO_K", str(k))
+        monkeypatch.delenv("GRPO_BATCH", raising=False)
+        monkeypatch.delenv("GRPO_ACCUM", raising=False)
+        calls.clear()
+        exec(compile(src, "<train-grpo>", "exec"), ns)  # noqa: S102
+
+        argv = next(a for name, a in calls if name == "run")
+        flag = lambda name: argv[argv.index(name) + 1]  # noqa: E731
+        batch, accum = int(flag("--per-device-batch")), int(flag("--grad-accum"))
+        assert flag("--num-generations") == str(k)
+        assert batch % k == 0, f"k={k}: per-device batch {batch} is not divisible by k"
+        assert accum == 2, "default grad-accum must stay 2"
+        assert grpo_batches_divisible(batch, accum, 2, k), "effective batch must be a whole group too"
+
+    # Explicit env overrides win over the k-derived default.
+    monkeypatch.setenv("GRPO_K", "8")
+    monkeypatch.setenv("GRPO_BATCH", "32")
+    monkeypatch.setenv("GRPO_ACCUM", "4")
+    calls.clear()
+    exec(compile(src, "<train-grpo>", "exec"), ns)  # noqa: S102
+    argv = next(a for name, a in calls if name == "run")
+    assert argv[argv.index("--per-device-batch") + 1] == "32"
+    assert argv[argv.index("--grad-accum") + 1] == "4"

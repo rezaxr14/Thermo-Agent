@@ -9,6 +9,9 @@ source. It is attached to Kaggle as `heldout.zip` in the corpus dataset and is t
 which ALL arms are scored (so the zero-shot frontier baseline and our final model are directly
 comparable on identical, never-seen rows).
 
+**Evaluation protocol is frozen in `docs/EVAL_PROTOCOL.md`**: only the `test_*` rows below are scored, with identical
+splits and limits for every arm; the complete arm/config table and the power statement live there.
+
 ## Splits (D8 / the user's cohort-coverage decision)
 
 | Task | splits present | rows (sampled from generation) |
@@ -17,9 +20,14 @@ comparable on identical, never-seen rows).
 | audit  | train, val, test_id, test_ood_topology | 84 / 9 / 16 / 6 |
 | ledger | train, val, test_id, test_ood_fault, test_ood_topology | 60 / 10 / 11 / 32 / 7 |
 | design | train, val, test_id, test_ood_climate, test_ood_load, test_ood_scale | 54 / 4 / 4 / 20 / 13 / 14 |
+| **test total** | 12 `test_*` files | **214 ids** (repair 91, audit 22, ledger 50, design 51) |
 
-Evaluation uses the `test_*` splits only (train/val are never scored). Together they cover every
-OOD family: structural (fault/topology) for repair/audit/ledger and climate/load/scale for design.
+Counts re-measured 2026-11-19 by counting non-empty lines in every `*_test_*.jsonl`; all ids are unique per file and
+each row's `split` matches its filename. These agree with the `counts` in `meta_<task>.json`. Evaluation uses the
+`test_*` splits only (train/val are never scored). The twelve cells cover every OOD family the generators support:
+`test_ood_fault` for repair and ledger, `test_ood_topology` for repair, audit and ledger, and climate/load/scale for
+design. Audit has no `test_ood_fault` cell; design rows carry no `topology` field. `LIMIT` must be at least 70 (the
+largest cell) so no cell is truncated.
 
 ## Difficulty balance (D-cohort decision)
 
@@ -32,6 +40,9 @@ OOD family: structural (fault/topology) for repair/audit/ledger and climate/load
 the seen corpora (seed-namespace + first-line-sample proof).
 
 ## Arms scored here (in order, each recorded separately)
+
+The authoritative arm list and exact configs are the frozen `docs/EVAL_PROTOCOL.md` §3 (which also includes
+`ours_base`, `ours_harness` and the frontier Z/H distinction). The original objective list was:
 
 1. `frontier_zero` — frontier zero-shot baseline.
 2. `frontier_tools` — frontier + our verifier tool (replay).

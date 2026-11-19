@@ -21,11 +21,16 @@ def main():
     ap.add_argument("--batch", default="1")
     ap.add_argument("--accum", default="8")
     ap.add_argument("--maxlen", default="")
+    ap.add_argument("--sft-data", default="sft_tools",
+                    help="corpus staged as SFT_DATA; sft_tools is the multi-turn tool corpus")
+    ap.add_argument("--grpo-data", default="grpo_tools",
+                    help="corpus staged as GRPO_DATA; grpo_tools holds the matching tool prompts")
     ap.add_argument("--out", default="kaggle/train_kernel_smoke")
     a = ap.parse_args()
 
     env = {"STEPS": a.steps, "ROWS": a.rows, "TASK": a.task, "NGPU": a.ngpu,
-           "SFT_BATCH": a.batch, "SFT_ACCUM": a.accum}
+           "SFT_BATCH": a.batch, "SFT_ACCUM": a.accum,
+           "SFT_DATA": a.sft_data, "GRPO_DATA": a.grpo_data}
     if a.maxlen:
         env["MAXLEN"] = a.maxlen
     source = ["import os\n"] + [f'os.environ["{k}"]="{v}"\n' for k, v in env.items()]

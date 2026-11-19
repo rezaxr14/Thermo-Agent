@@ -129,6 +129,11 @@ def validate(task: str, completion: str, row: dict) -> dict:
     return VALIDATORS[task](completion, row)
 
 
+def _has_tool_turns(text: str) -> bool:
+    """True only when the stored SFT completion actually contains a tool call/result turn."""
+    return "<tool_call" in text or "<tool_result" in text
+
+
 def teacher_row(task: str, completion: str, row: dict, verdict: dict, tag: str = "",
                 trajectory: dict | None = None) -> dict:
     """SFT-shaped row from a validated teacher answer; task columns are kept for the GRPO reward functions.
@@ -150,7 +155,10 @@ def teacher_row(task: str, completion: str, row: dict, verdict: dict, tag: str =
            "validation": {"reward": verdict["reward"], "reasons": verdict["reasons"]}}
     if trajectory is not None:
         out["trajectory"] = {k: v for k, v in trajectory.items() if k != "sft_completion"}
-        out["source"] = "frontier_tools"
+        # Only a completion that really contains tool turns is a tool-using CoT. A harness
+        # record with no tool calls must not be mislabelled just because it carried a trajectory.
+        if _has_tool_turns(sft_text):
+            out["source"] = "frontier_tools"
     for k in KEEP[task]:
         if k in row:
             out[k] = row[k]
@@ -175,6 +183,112 @@ def rejection_note(task: str, row: dict, verdict: dict, source: str = "validator
         id=f"{task}-{rid}-{hashlib.md5((reason + source).encode()).hexdigest()[:8]}",
         task=task, fault_type=fault, architecture=str(row.get("topology", "")),
         symptoms=reason, lesson=lesson, fix=fix, source=source, accepted=False, record_id=rid,
+    )
+
+
+# Positive, class-level phrasings of the same mistake classes the failure memory teaches.  They describe the
+# pattern that *worked*, never this plant's numbers (those live in `fix`, which is taken from the completion).
+_SUCCESS_HINT = {
+    "wrong_fluid": "fixed by correcting the destination-component fluid, not the label",
+    "unit_slip": "fixed by correcting the power of ten, not the digits",
+    "sign_flip": "fixed by flipping the sign back; the magnitude was already right",
+    "efficiency_gt_1": "fixed by writing the efficiency as a fraction in (0, 1], not a percentage",
+    "swapped_ports": "fixed by swapping the two stream endpoints back, without touching parameters",
+}
+
+
+def _cap(text: str, limit: int = 240) -> str:
+    """Keep notes short; class-level lessons must never turn into answer dumps."""
+    text = " ".join((text or "").split())
+    return text if len(text) <= limit else text[: limit - 3].rstrip() + "..."
+
+
+def _completion_text(row: dict) -> str:
+    """The candidate's own completion (not the ground-truth plant/spec)."""
+    value = row.get("completion")
+    if isinstance(value, list) and value:
+        value = value[0].get("content") if isinstance(value[0], dict) else None
+    return value if isinstance(value, str) else ""
+
+
+def _block(text: str, tag: str) -> str:
+    open_tag, close_tag = f"<{tag}>", f"</{tag}>"
+    if open_tag in text and close_tag in text:
+        return text.split(open_tag, 1)[1].split(close_tag, 1)[0].strip()
+    return ""
+
+
+def _lines(text: str) -> list[str]:
+    return [" ".join(line.split()) for line in text.splitlines() if line.strip()]
+
+
+def _success_fix(task: str, text: str) -> str:
+    """The reusable edit pattern, taken only from the completion the verifier accepted."""
+    if task == "repair":
+        return "; ".join(_lines(_block(text, "edits")))
+    if task == "ledger":
+        return "; ".join(_lines(_block(text, "fix")))
+    if task == "audit":
+        ranked = " ".join(_block(text, "ranking").split())
+        change = " ".join(_block(text, "change").split())
+        return "; ".join(p for p in (ranked, change) if p)
+    if task == "design":
+        # Type + key capacities only -- never the whole <design> block as JSON.
+        keep = ("prime_mover", "cooling", "rejection", "bottoming",
+                "P_orc_bar", "T_hw", "dT_hw", "dT_rej", "orc_frac")
+        pairs = []
+        for line in _lines(_block(text, "design")):
+            if "=" not in line:
+                continue
+            key, value = (p.strip() for p in line.split("=", 1))
+            if key in keep:
+                pairs.append(f"{key} = {value}")
+        return "; ".join(pairs)
+    return ""
+
+
+def success_note(task: str, row: dict, verdict: dict, source: str = "validator") -> memory.Note:
+    """Turn a verifier-accepted attempt into a short lesson about what worked.
+
+    The lesson is class-level and built only from the verifier's verdict (reasons / reward / exact) plus a count
+    of the candidate's own edits.  `fix` is the reusable edit pattern lifted from the accepted *completion*,
+    never from ``row["plant_original"]`` / ``ref_spec`` / ``ed_json`` -- so no ground-truth answer, stream table,
+    model id, timestamp, cost or token figure is ever written to memory.
+    """
+    fault = row.get("fault_type") or (row.get("fault_types") or [""])[0]
+    reasons = "; ".join(verdict.get("reasons", [])) or "verifier accepted"
+    text = _completion_text(row)
+
+    if task == "repair":
+        n_edits = len(_lines(_block(text, "edits")))
+        detail = "plant verified" + (" exactly" if verdict.get("exact") else "")
+        if n_edits:
+            detail += f", {n_edits} edit{'' if n_edits == 1 else 's'}"
+        hint = _SUCCESS_HINT.get(fault, "")
+        lesson = f"Attempt accepted ({detail})." + (f" Fault class {fault} is {hint}." if fault and hint else "")
+    elif task == "audit":
+        detail = "ranking + change valid"
+        reward = verdict.get("reward")
+        if isinstance(reward, (int, float)):
+            err = 1.0 - float(reward)
+            if err >= 0:
+                detail += f", pred_err {err:.2f}"
+        lesson = f"Attempt accepted ({detail})."
+    elif task == "ledger":
+        lesson = "Attempt accepted (closure residual ~0, ledger repaired)."
+    elif task == "design":
+        lesson = "Attempt accepted (spec valid and grounded)."
+    else:
+        lesson = f"Attempt accepted ({reasons})."
+
+    lesson = _cap(lesson)
+    fix = _cap(_success_fix(task, text))
+    rid = str(row.get("id", ""))
+    digest = hashlib.md5((lesson + fix + source).encode()).hexdigest()[:8]
+    return memory.Note(
+        id=f"{task}-{rid}-ok-{digest}",
+        task=task, fault_type=fault, architecture=str(row.get("topology", "")),
+        symptoms=reasons, lesson=lesson, fix=fix, source=source, accepted=True, record_id=rid,
     )
 
 

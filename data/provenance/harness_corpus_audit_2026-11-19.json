@@ -1,0 +1,1334 @@
+{
+  "anomalies": [],
+  "gate": 8192,
+  "generated_by": "scripts/audit_harness_corpus.py",
+  "generated_from": {
+    "data/grpo_tools_h/audit_train.jsonl": {
+      "bytes": 9415764,
+      "rows": 240,
+      "sha256": "925b04d48b6c4197469a111ea8f25cbf651baf20abf0f50b9ce620edecc39dda"
+    },
+    "data/grpo_tools_h/design_train.jsonl": {
+      "bytes": 7491144,
+      "rows": 240,
+      "sha256": "305578faf15a90dada74b9186d461edebf75c996e822d316aa702d9a2903501e"
+    },
+    "data/grpo_tools_h/ledger_train.jsonl": {
+      "bytes": 7943510,
+      "rows": 240,
+      "sha256": "4f14bba83803fc165f36c97ee01186866679d086055f5c7719b6544e33f36b60"
+    },
+    "data/grpo_tools_h/repair_train.jsonl": {
+      "bytes": 7306792,
+      "rows": 240,
+      "sha256": "38c117daccaa4875ef1fc16c3feb610d7b4bd0172d2b50c3b8bcbc2bb56fc169"
+    },
+    "data/sft_tools_h/audit_train.jsonl": {
+      "bytes": 7546311,
+      "rows": 240,
+      "sha256": "3377010e32a337ac6e6ccf0dbba8b574e043be07c7ef3662451b130f7be48726"
+    },
+    "data/sft_tools_h/design_train.jsonl": {
+      "bytes": 5221782,
+      "rows": 240,
+      "sha256": "87f6e723d82193ffdd84ba038d6975e70b084b459bca908c904dbfcc581ff45f"
+    },
+    "data/sft_tools_h/ledger_train.jsonl": {
+      "bytes": 6486714,
+      "rows": 240,
+      "sha256": "ff633e77deea882c525b1aa452c076d82feb0484460dd6abe430c1d68b9da548"
+    },
+    "data/sft_tools_h/repair_train.jsonl": {
+      "bytes": 6152371,
+      "rows": 240,
+      "sha256": "139a6b5f8fa869196bb9eafb07af70c111127edfb70e6946348560e49365c2ba"
+    }
+  },
+  "inputs": [
+    "data/grpo_tools_h",
+    "data/sft_tools_h"
+  ],
+  "note": "counts and lengths only; no prompt/completion text. rendered=chat-template(add_generation_prompt=False); pipeline=plain prompt+completion+reserve (the build's 8192 gate).",
+  "over_8192_pipeline": [
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00052-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 11605
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00011-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 11222
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00063-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 11174
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00052-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 10962
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00117-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 10861
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00011-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 10524
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00063-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 10514
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00117-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 10217
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00081-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 10131
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00079-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9844
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00133-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9805
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00081-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 9540
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00043-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9507
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00142-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9494
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00160-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9485
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00016-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9481
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00061-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9481
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00007-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9466
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00094-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9434
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00029-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9431
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00031-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9429
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00002-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9428
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00157-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9425
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00162-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9422
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00058-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9418
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00027-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9398
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00139-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9383
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00079-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 9315
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00133-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 9314
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00121-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9092
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00004-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9088
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00065-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9087
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00090-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9084
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00013-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9082
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00040-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9078
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00047-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9077
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00101-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9077
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00112-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9076
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00072-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9075
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00092-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9075
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00146-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9064
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00009-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9062
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00049-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9051
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00043-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 9031
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00142-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 9022
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00160-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 9017
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00035-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9016
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00098-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9015
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00016-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 9014
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00061-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 9013
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00116-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9010
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00008-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9005
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00143-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 9004
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00007-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 9000
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00017-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8994
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00078-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8978
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00060-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8906
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00132-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8898
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00069-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8897
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00141-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8892
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00051-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8891
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00033-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8889
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00159-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8889
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00150-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8888
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00096-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8887
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00105-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8879
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00162-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8877
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00123-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8876
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00114-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8873
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00058-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8869
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00087-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8868
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00094-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8860
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00029-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8858
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00002-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8855
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00157-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8855
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00031-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8854
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00139-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8844
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00027-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8829
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "led-0-00088-dt-recover-c3c2",
+      "task": "ledger",
+      "tokens": 8788
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "led-0-00058-dt-recover-c3c2",
+      "task": "ledger",
+      "tokens": 8691
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "led-0-00088-dt-direct-c3c2",
+      "task": "ledger",
+      "tokens": 8678
+    },
+    {
+      "dir": "data/grpo_tools_h",
+      "id": "aud-0-00052-t-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8614
+    },
+    {
+      "dir": "data/grpo_tools_h",
+      "id": "aud-0-00052-t-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8614
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00140-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8604
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00048-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8599
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00082-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8595
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00019-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8592
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00120-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8591
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00095-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8590
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00163-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8590
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00093-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8588
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00147-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8584
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "led-0-00058-dt-direct-c3c2",
+      "task": "ledger",
+      "tokens": 8581
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00100-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8573
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00102-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8573
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00121-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8569
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00065-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8568
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00004-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8566
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00129-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8565
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00090-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8563
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00101-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8561
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00047-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8560
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00040-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8559
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00073-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8559
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00013-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8557
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00092-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8557
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00072-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8556
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00112-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8555
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00091-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8553
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00009-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8548
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00146-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8548
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "led-0-00187-dt-recover-c3c2",
+      "task": "ledger",
+      "tokens": 8548
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00098-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8538
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00049-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8536
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00116-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8534
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00008-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8533
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00017-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8524
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00035-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8514
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00067-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8513
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00099-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8511
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00038-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8505
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00143-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8505
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00144-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8500
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00130-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8496
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00135-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8496
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00108-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8495
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00164-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8495
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00056-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8493
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "led-0-00121-dt-recover-c3c2",
+      "task": "ledger",
+      "tokens": 8491
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00045-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8487
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00119-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8486
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00018-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8477
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00103-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8475
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00166-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8473
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00076-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8459
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00110-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8458
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00085-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8450
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "led-0-00187-dt-direct-c3c2",
+      "task": "ledger",
+      "tokens": 8438
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00078-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8418
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "led-0-00121-dt-direct-c3c2",
+      "task": "ledger",
+      "tokens": 8381
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "led-0-00130-dt-recover-c3c2",
+      "task": "ledger",
+      "tokens": 8371
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00060-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8365
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00132-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8358
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00069-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8357
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00141-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8353
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00051-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8351
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00033-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8350
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00096-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8350
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00159-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8349
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00150-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8348
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00105-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8340
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00123-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8336
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00114-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8334
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00087-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8329
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "led-0-00130-dt-direct-c3c2",
+      "task": "ledger",
+      "tokens": 8261
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "led-0-00013-dt-recover-c3c2",
+      "task": "ledger",
+      "tokens": 8252
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "led-0-00108-dt-recover-c3c2",
+      "task": "ledger",
+      "tokens": 8248
+    }
+  ],
+  "over_8192_rendered": [
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00052-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8549
+    },
+    {
+      "dir": "data/sft_tools_h",
+      "id": "aud-0-00052-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8549
+    },
+    {
+      "dir": "data/grpo_tools_h",
+      "id": "aud-0-00052-t-dt-direct-c3c2",
+      "task": "audit",
+      "tokens": 8538
+    },
+    {
+      "dir": "data/grpo_tools_h",
+      "id": "aud-0-00052-t-dt-recover-c3c2",
+      "task": "audit",
+      "tokens": 8538
+    }
+  ],
+  "per_dir_task": {
+    "data/grpo_tools_h": {
+      "audit": {
+        "chars": {
+          "max": 29052,
+          "median": 20488,
+          "min": 15577,
+          "n": 240,
+          "p95": 24625
+        },
+        "n": 240,
+        "pipeline": {
+          "max": 8614,
+          "median": 5989,
+          "min": 4603,
+          "n": 240,
+          "p95": 7195
+        },
+        "rendered": {
+          "max": 8538,
+          "median": 5913,
+          "min": 4527,
+          "n": 240,
+          "p95": 7119
+        }
+      },
+      "design": {
+        "chars": {
+          "max": 13583,
+          "median": 13414,
+          "min": 13288,
+          "n": 240,
+          "p95": 13573
+        },
+        "n": 240,
+        "pipeline": {
+          "max": 3794,
+          "median": 3724,
+          "min": 3650,
+          "n": 240,
+          "p95": 3768
+        },
+        "rendered": {
+          "max": 3717,
+          "median": 3648,
+          "min": 3573,
+          "n": 240,
+          "p95": 3691
+        }
+      },
+      "ledger": {
+        "chars": {
+          "max": 16615,
+          "median": 14880,
+          "min": 14131,
+          "n": 240,
+          "p95": 16005
+        },
+        "n": 240,
+        "pipeline": {
+          "max": 6069,
+          "median": 4988,
+          "min": 4524,
+          "n": 240,
+          "p95": 5768
+        },
+        "rendered": {
+          "max": 5992,
+          "median": 4910,
+          "min": 4447,
+          "n": 240,
+          "p95": 5691
+        }
+      },
+      "repair": {
+        "chars": {
+          "max": 19586,
+          "median": 15534,
+          "min": 10672,
+          "n": 240,
+          "p95": 19472
+        },
+        "n": 240,
+        "pipeline": {
+          "max": 5756,
+          "median": 4656,
+          "min": 3313,
+          "n": 240,
+          "p95": 5709
+        },
+        "rendered": {
+          "max": 5680,
+          "median": 4580,
+          "min": 3237,
+          "n": 240,
+          "p95": 5633
+        }
+      }
+    },
+    "data/sft_tools_h": {
+      "audit": {
+        "chars": {
+          "max": 36682,
+          "median": 26958,
+          "min": 20707,
+          "n": 240,
+          "p95": 30916
+        },
+        "n": 240,
+        "pipeline": {
+          "max": 11605,
+          "median": 8494,
+          "min": 6548,
+          "n": 240,
+          "p95": 9509
+        },
+        "rendered": {
+          "max": 8549,
+          "median": 5924,
+          "min": 4538,
+          "n": 240,
+          "p95": 7130
+        }
+      },
+      "design": {
+        "chars": {
+          "max": 20860,
+          "median": 19792,
+          "min": 17254,
+          "n": 240,
+          "p95": 20791
+        },
+        "n": 240,
+        "pipeline": {
+          "max": 7384,
+          "median": 6847,
+          "min": 5334,
+          "n": 240,
+          "p95": 7283
+        },
+        "rendered": {
+          "max": 3730,
+          "median": 3658,
+          "min": 3581,
+          "n": 240,
+          "p95": 3702
+        }
+      },
+      "ledger": {
+        "chars": {
+          "max": 22624,
+          "median": 19194,
+          "min": 17752,
+          "n": 240,
+          "p95": 21228
+        },
+        "n": 240,
+        "pipeline": {
+          "max": 8788,
+          "median": 6878,
+          "min": 6011,
+          "n": 240,
+          "p95": 8147
+        },
+        "rendered": {
+          "max": 6007,
+          "median": 4926,
+          "min": 4462,
+          "n": 240,
+          "p95": 5706
+        }
+      },
+      "repair": {
+        "chars": {
+          "max": 23925,
+          "median": 19376,
+          "min": 13572,
+          "n": 240,
+          "p95": 22584
+        },
+        "n": 240,
+        "pipeline": {
+          "max": 7352,
+          "median": 5918,
+          "min": 4239,
+          "n": 240,
+          "p95": 6955
+        },
+        "rendered": {
+          "max": 5690,
+          "median": 4590,
+          "min": 3247,
+          "n": 240,
+          "p95": 5643
+        }
+      }
+    }
+  },
+  "per_task": {
+    "audit": {
+      "chars": {
+        "max": 36682,
+        "median": 22659,
+        "min": 15577,
+        "n": 480,
+        "p95": 29690
+      },
+      "n": 480,
+      "pipeline": {
+        "max": 11605,
+        "median": 7023,
+        "min": 4603,
+        "n": 480,
+        "p95": 9418
+      },
+      "rendered": {
+        "max": 8549,
+        "median": 5918,
+        "min": 4527,
+        "n": 480,
+        "p95": 7129
+      }
+    },
+    "design": {
+      "chars": {
+        "max": 20860,
+        "median": 15418,
+        "min": 13288,
+        "n": 480,
+        "p95": 20686
+      },
+      "n": 480,
+      "pipeline": {
+        "max": 7384,
+        "median": 4564,
+        "min": 3650,
+        "n": 480,
+        "p95": 7244
+      },
+      "rendered": {
+        "max": 3730,
+        "median": 3652,
+        "min": 3573,
+        "n": 480,
+        "p95": 3699
+      }
+    },
+    "ledger": {
+      "chars": {
+        "max": 22624,
+        "median": 17184,
+        "min": 14131,
+        "n": 480,
+        "p95": 20772
+      },
+      "n": 480,
+      "pipeline": {
+        "max": 8788,
+        "median": 6069,
+        "min": 4524,
+        "n": 480,
+        "p95": 7920
+      },
+      "rendered": {
+        "max": 6007,
+        "median": 4916,
+        "min": 4447,
+        "n": 480,
+        "p95": 5698
+      }
+    },
+    "repair": {
+      "chars": {
+        "max": 23925,
+        "median": 16830,
+        "min": 10672,
+        "n": 480,
+        "p95": 21930
+      },
+      "n": 480,
+      "pipeline": {
+        "max": 7352,
+        "median": 5138,
+        "min": 3313,
+        "n": 480,
+        "p95": 6728
+      },
+      "rendered": {
+        "max": 5690,
+        "median": 4584,
+        "min": 3237,
+        "n": 480,
+        "p95": 5642
+      }
+    }
+  },
+  "schema_version": 1,
+  "token_reserve": 96,
+  "tokenizer": "measured",
+  "tokenizer_info": {
+    "method": "local_auto_chat_template",
+    "name": "Qwen/Qwen3.5-4B",
+    "path": "C:\\Users\\rezax\\.cache\\thermo\\qwen3.5-4b",
+    "reason": null,
+    "status": "measured"
+  },
+  "totals": {
+    "malformed_or_anomalous": 0,
+    "over_8192_pipeline": 157,
+    "over_8192_rendered": 4,
+    "rows": 1920
+  }
+}

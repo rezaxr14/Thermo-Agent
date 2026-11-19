@@ -2,7 +2,6 @@
 from __future__ import annotations
 import itertools, random
 import numpy as np
-from scipy.optimize import minimize
 from ..core.schema import Site
 from .spec import DISCRETE, CONTINUOUS, HEAT_SOURCES, default_spec, required_keys
 from .build import evaluate_design
@@ -29,7 +28,9 @@ def polish(site: Site, spec: dict, max_evals: int = 60, trace: list | None = Non
         if trace is not None: trace.append((n["evals"], best["fuel"]))                  # best fuel after each evaluation
         return INVALID if e.fuel_w is None else e.fuel_w / 1e6
     x0 = (np.array([spec[k] for k in keys]) - lo) / (hi - lo)
-    if keys: minimize(f, x0, method="Nelder-Mead", options={"maxfev": max_evals, "xatol": 1e-3, "fatol": 1e-4, "initial_simplex": _simplex(x0)})
+    if keys:
+        from scipy.optimize import minimize  # lazy: hosted task venv has no scipy and never designs via polish
+        minimize(f, x0, method="Nelder-Mead", options={"maxfev": max_evals, "xatol": 1e-3, "fatol": 1e-4, "initial_simplex": _simplex(x0)})
     else: f(x0)
     return best["spec"], best["fuel"], n["evals"]
 

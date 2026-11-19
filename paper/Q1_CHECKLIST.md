@@ -42,8 +42,10 @@ excluded from every training and prompt corpus), so each score is directly compa
    `runs/grpo_k16`) so runs never overwrite one another.
 4. **Other thermodynamics LLMs** on the same held-out set (domain-model arm), recorded once a real thermo-model id is
    supplied rather than the current GPT-nano stand-in.
-5. **Model-choice note.** The chosen cheap generators are `claude-haiku-5-5`, `gemini-3.5-flash-lite` and
-   `gpt-6-luna` (reasoning on); `claude-sonnet-5-5` is deferred to a later round as too expensive.
+5. **Model-choice note.** The chosen budget generators are `gpt-6-luna` then `claude-haiku-5-5` (reasoning on);
+   the expensive tier (`gpt-6.2-sol`, `claude-sonnet-5-5`, `claude-opus-5-5`, `gemini-4-argon`) comes after that, and
+   `claude-sonnet-5-5` needs the user's explicit go-ahead. `gemini-3.5-flash-lite` is excluded: the user judged it the
+   weakest of the three budget models, so it must not consume quota.
 
 ## Highest-value additions if time permits
 

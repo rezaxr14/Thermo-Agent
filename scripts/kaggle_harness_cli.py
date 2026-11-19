@@ -24,9 +24,16 @@ sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 
 from thermo_agent.teacher import cli_runner, progress
+
+# kbench_adapter imports kaggle_benchmarks, which reads LLMS_AVAILABLE / MODEL_PROXY_* at IMPORT
+# time. Populate the refreshed Benchmarks env BEFORE that import, or the model registry is empty
+# and every lookup silently falls back to the account default.
+for _k, _v in cli_runner.proxy_env().items():
+    os.environ[_k] = _v
+
 from thermo_agent.train import hf_sync
 from thermo_agent.teacher import memory as mem
-from thermo_agent.teacher.agent_graph import run as run_graph, build_context
+from thermo_agent.teacher.agent_graph import DEFAULT_MAX_ROUNDS, run as run_graph, build_context
 from thermo_agent.teacher.kbench_adapter import make_respond, usage_of
 from thermo_agent.teacher.toolkit import tool_names
 from thermo_agent.teacher.transfer import load_exports
@@ -55,16 +62,14 @@ def main():
     ap.add_argument("--export-dir", default="data/frontier_export")
     ap.add_argument("--split", default="train")
     ap.add_argument("--limit", type=int, default=200)
-    ap.add_argument("--model", default="gemini-3.5-flash-lite")
+    ap.add_argument("--model", default="google/gemini-3.1-flash-lite-preview")
     ap.add_argument("--reserve", type=float, default=0.5)
     ap.add_argument("--max-seconds", type=float, default=4 * 3600)
-    ap.add_argument("--rounds", type=int, default=3)
+    ap.add_argument("--rounds", type=int, default=DEFAULT_MAX_ROUNDS)
     ap.add_argument("--k-memory", type=int, default=3)
     a = ap.parse_args()
     OUT = pathlib.Path(a.out)
 
-    for k, v in cli_runner.dotenv(cli_runner.PROXY_ENV).items():
-        os.environ[k] = v
     import kaggle_benchmarks as kbench
     from kaggle_benchmarks import actors
 
@@ -74,6 +79,11 @@ def main():
     pending = [r for r in rows if r["id"] not in done][:a.limit]
 
     llm = kbench.llms.get(a.model, kbench.llm)
+    if getattr(llm, "name", None) != a.model:
+        # kbench.llms.get falls back to the account default on a miss. Never let a row be
+        # produced by a model other than the one its provenance will name.
+        raise SystemExit(f"model {a.model!r} is not available to this Benchmarks account "
+                         f"(would fall back to {getattr(llm, 'name', None)!r}); available: {sorted(kbench.llms)}")
     print(f"pending={len(pending)} done={len(done)} model={a.model} tools={tool_names()}", flush=True)
     started, written = time.time(), 0
     for i, row in enumerate(pending):
@@ -92,7 +102,8 @@ def main():
                     os.environ[k] = v
             # Build the full system prompt once so the adapter can deliver it to the LLM.
             ctx = build_context({"row": row, "task": task, "notes": fresh_notes(),
-                                 "k_memory": a.k_memory, "mode": "agents+skills"})
+                                 "k_memory": a.k_memory, "mode": "agents+skills",
+                                 "max_rounds": a.rounds})
             usage_holder = {}
             respond = make_respond(llm, kbench, actors, system_prompt=ctx["system_prompt"],
                                    max_tool_rounds=a.rounds, usage_holder=usage_holder)
@@ -101,7 +112,7 @@ def main():
             rec["completion"] = state["final"]
             rec["verdict"] = {k: v for k, v in state["verdict"].items() if k != "failed"}
             rec["trajectory"] = {"turns": state["turns"], "notes_used": state["notes_used"],
-                                 "tools_available": tool_names()}
+                                 "tools_available": tool_names(), "final": state["final"]}
             rec["sft_completion"] = state["sft_completion"]
             rec["usage"] = usage_of(usage_holder["chat"]) if "chat" in usage_holder else {}
         except Exception as exc:

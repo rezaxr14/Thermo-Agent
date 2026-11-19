@@ -26,6 +26,12 @@ import shutil
 import sys
 import zipfile
 
+# T4
+
+# 14.56 GiB with a 4B fp16 base leaves little headroom. Expandable segments remove the
+# reserved-but-unallocated fragmentation that made smoke v26 fail on the first backward.
+os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
+
 WORK = pathlib.Path("/kaggle/working")
 ROOT = WORK / "thermo-agent"
 code_root = None
@@ -50,15 +56,49 @@ print("code unpacked at", ROOT)
 # %%
 from thermo_agent.kaggle_notebook import (
     WORK, assert_pinned_environment, find_input, restore_checkpoints, run, setup, status, token,
+    torch_device_count, torch_facts,
 )
 
-ROOT = setup()   # install dependencies and copy the corpora
+# Read the corpus selectors BEFORE setup() so a custom SFT_DATA/GRPO_DATA is always staged. The
+# merged corpora (sft_all / grpo_all) are the defaults; the original sft / grpo stay available too.
+SFT_DATA = os.environ.get("SFT_DATA", "sft_all")
+GRPO_DATA = os.environ.get("GRPO_DATA", "grpo_all")
+ROOT = setup(corpora=tuple(dict.fromkeys(
+    (SFT_DATA, GRPO_DATA, "sft", "grpo", "sft_all", "grpo_all"))))  # install deps + stage corpora
 
 # Pin check in the notebook itself: every version comes from kaggle/environment.lock.json and
 # the fused wheels come from kernel_sources. A drift fails here, it is never repaired by compiling.
 assert_pinned_environment(ROOT / "kaggle" / "environment.lock.json")
 status(stage="setup", state="done", root=str(ROOT))
 print("code and corpora ready at", ROOT)
+
+# %%
+def require_train_corpus(name, env_var):
+    """Fail before DDP if the requested corpus dir is missing or has no *_train.jsonl rows.
+
+    Naming the dir, the files actually present and the env var to set turns the v25 failure
+    ("no training rows for [...] in .../data/sft_all") into an immediate, actionable error.
+    """
+    data_root = ROOT / "data"
+    d = data_root / name
+    inside = sorted(p.name for p in d.glob("*_train.jsonl")) if d.is_dir() else []
+    if not inside:
+        present = sorted(p.name for p in data_root.iterdir()) if data_root.is_dir() else []
+        existing = sorted(p.name for p in d.iterdir()) if d.is_dir() else []
+        raise SystemExit(
+            f"[corpus] no *_train.jsonl rows for corpus {name!r} at {d}. "
+            f"Files actually present in that dir: {existing}. "
+            f"Corpora staged under {data_root}: {present}. "
+            f"Set {env_var} to a staged corpus directory name before running this cell."
+        )
+    print(f"[corpus] {name}: {len(inside)} train split(s): {inside}", flush=True)
+    return d
+
+
+# %%
+# Fail fast on a bad env var before any DDP cell is launched.
+require_train_corpus(SFT_DATA, "SFT_DATA")
+require_train_corpus(GRPO_DATA, "GRPO_DATA")
 
 # %%
 # Cross-session resume: with no Kaggle Secret, HF sync cannot relay checkpoints. The local CLI
@@ -79,11 +119,13 @@ else:
 
 # %%
 print(ddp.topology_line())
-import torch
-status(stage="preflight", state="running", torch=torch.__version__, cuda=torch.version.cuda)
-assert torch.cuda.device_count() == 2, "start this notebook with Accelerator: GPU T4 x2 (two T4s visible)"
+# Torch facts come from a short subprocess with the pinned PYTHONPATH; the notebook (parent) process
+# must never pull torch or numpy into itself after setup(), or it would reload the corrupt preloaded wheel.
+_tf = torch_facts()
+status(stage="preflight", state="running", torch=_tf["torch"], cuda=_tf["cuda"])
+assert torch_device_count() == 2, "start this notebook with Accelerator: GPU T4 x2 (two T4s visible)"
 assert ddp.dtype_for_capability(7, 5) == "float16", "T4 must run fp16"
-status(stage="preflight", state="done", gpus=torch.cuda.device_count())
+status(stage="preflight", state="done", gpus=torch_device_count())
 
 # %%
 # Optional smoke limits: set STEPS=20 and ROWS=64 to validate the whole path before the long run.
@@ -93,9 +135,7 @@ SYNC = os.environ.get("THERMO_HF_SYNC", "auto")
 LIMITS = (["--max-steps", str(STEPS)] if STEPS else []) + (["--limit-rows", str(ROWS)] if ROWS else [])
 PY = sys.executable
 NGPU = int(os.environ.get("NGPU", "2"))
-# The merged corpora include the expert-scale cycle rows; the original corpora remain untouched.
-SFT_DATA = os.environ.get("SFT_DATA", "sft_all")
-GRPO_DATA = os.environ.get("GRPO_DATA", "grpo_all")
+# SFT_DATA / GRPO_DATA are read in the setup cell above (before setup() stages the corpora).
 SFT_BATCH = os.environ.get("SFT_BATCH", "2")
 SFT_ACCUM = os.environ.get("SFT_ACCUM", "8")
 MAXLEN = os.environ.get("MAXLEN", "")
@@ -105,6 +145,8 @@ print("[loss] tiles", LOSS_TOKENS, "tokens x", LOSS_VOCAB, "vocabulary entries",
 
 # %%
 # Stage 1: SFT. Every save pushes the adapter, optimizer, scheduler, scaler and RNG to the private repo.
+# Re-check here so a bad env var fails before launching DDP even if setup ran in an earlier cell.
+require_train_corpus(SFT_DATA, "SFT_DATA")
 status(stage="sft", state="running", steps=STEPS, rows=ROWS, batch=SFT_BATCH, accum=SFT_ACCUM,
        loss_tokens=LOSS_TOKENS, loss_vocab=LOSS_VOCAB)
 run([PY, "-m", "torch.distributed.run", "--standalone", "--nproc_per_node", str(NGPU), "--module", "thermo_agent.train.sft",
@@ -129,21 +171,30 @@ run([PY, "-m", "thermo_agent.train.merge", adapter, merged,
 status(stage="merge", state="done")
 
 # %%
-# Stage 2: GRPO. `--init hf:merged/sft` reuses the merged model from the repo, so no SFT is redone here.
-# Each task has its own checkpoint prefix (`grpo_repair`, ...), and can be run in a separate session.
+# Stage 2: GRPO. `--init runs/sft_merged` reuses the merged model from the merge cell, so no SFT is redone here.
+# Each task x k has its own checkpoint prefix (`grpo_ledger_k4`, ...), and can run in a separate session.
 TASK = os.environ.get("TASK", "ledger")
 # GRPO group size k (rollouts per prompt). Each k gets its OWN output dir so checkpoints never
 # overwrite: k=4 -> runs/grpo_{TASK}_k4, k=8 -> ..._k8, k=16 -> ..._k16. SFT alone is runs/sft.
 GRPO_K = int(os.environ.get("GRPO_K", "4"))
+# ddp.assert_grpo_batches requires per_device_batch % k == 0 (and the effective batch too).
+# Default to the smallest value that also keeps the >=4 throughput floor, so k=4/8/16 all start
+# without extra env vars; GRPO_BATCH/GRPO_ACCUM remain overridable for a custom topology.
+GRPO_BATCH = int(os.environ.get("GRPO_BATCH", str(max(4, GRPO_K))))
+GRPO_ACCUM = int(os.environ.get("GRPO_ACCUM", "2"))
 GRPO_STAGE = f"grpo_{TASK}_k{GRPO_K}"
-status(stage=GRPO_STAGE, state="running", k=GRPO_K)
-# With a token, load the merged weights from HF. Without one, use the merge cell's local output;
-# this changes only where the same weights come from, not the model or any training setting.
-INIT = "hf:merged/sft" if os.environ.get("HF_TOKEN") else str(merged)
+print(f"[grpo] k={GRPO_K} per-device-batch={GRPO_BATCH} grad-accum={GRPO_ACCUM}", flush=True)
+status(stage=GRPO_STAGE, state="running", k=GRPO_K, batch=GRPO_BATCH, accum=GRPO_ACCUM)
+# GRPO must start from the merged SFT policy, never from base Qwen. The merge cell writes these
+# weights to runs/sft_merged (and also pushes them to HF); pass that local dir as --init in both
+# the token and no-token paths so the checkpoint and the eval arms share the same base model.
+INIT = str(merged)
+# Same pre-DDP guard for GRPO: a bad GRPO_DATA must fail before the second DDP launch too.
+require_train_corpus(GRPO_DATA, "GRPO_DATA")
 run([PY, "-m", "torch.distributed.run", "--standalone", "--nproc_per_node", str(NGPU), "--module", "thermo_agent.train.grpo",
      ROOT / "data" / GRPO_DATA, ROOT / "runs" / GRPO_STAGE, "--task", TASK,
      "--init", INIT, "--dtype", "float16", "--num-generations", str(GRPO_K),
-     "--per-device-batch", "4", "--grad-accum", "2", "--num-workers", "2",
+     "--per-device-batch", str(GRPO_BATCH), "--grad-accum", str(GRPO_ACCUM), "--num-workers", "2",
      "--rollout-log", ROOT / "runs" / GRPO_STAGE / "rollouts.jsonl",
      "--hf-sync", SYNC, *LIMITS])
 status(stage=GRPO_STAGE, state="done", k=GRPO_K, local_steps=hf_sync.local_steps(ROOT / "runs", GRPO_STAGE))

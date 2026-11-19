@@ -2,7 +2,7 @@
 True when finished or False when an inlet is not yet available (the engine retries)."""
 from __future__ import annotations
 import math
-from scipy.optimize import brentq
+from ._roots import brentq
 from . import gasprops as gp, fluids as fl
 from .props import (State, SolveError, state_TP, state_hP, state_sP, state_sat, is_gas)
 

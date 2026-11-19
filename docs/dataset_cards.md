@@ -2,6 +2,30 @@
 
 All three datasets are synthetic: plants and sites are sampled by the code in this repository and labelled by the simulator and verifiers. They are not measurements. Measured data (the Frontier energy dataset) can set site specifications through `thermo_agent.datasets.frontier`, but no measured data is inside these files. Files are written as `<task>_<split>.jsonl` plus `meta_<task>.json` (seed, settings, CoolProp and schema versions). The data files are not in the repository; generate them with the commands in `docs/RUNBOOK.md`. Licence: not yet chosen by the authors.
 
+## Held-out evaluation cells (measured 2026-11-19)
+
+Only the `test_*` rows of `data/heldout` (seed 987654) are scored; the frozen protocol is `docs/EVAL_PROTOCOL.md`.
+Counts below were measured by counting non-empty lines in each `*_test_*.jsonl`, not copied from prose; they agree with
+the `counts` in `meta_<task>.json`. **214 test ids in 12 cells.**
+
+| Task | `test_id` | `test_ood_fault` | `test_ood_topology` | `test_ood_climate` | `test_ood_load` | `test_ood_scale` | task total |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| repair | 6 | 70 | 15 | — | — | — | 91 |
+| audit | 16 | — | 6 | — | — | — | 22 |
+| ledger | 11 | 32 | 7 | — | — | — | 50 |
+| design | 4 | — | — | 20 | 13 | 14 | 51 |
+
+Measured topology composition of the held-out `test_ood_topology` cells: repair 15 rows = `dc_engine_absorption-ext` 5
++ `dc_engine_electric-ext` 10; audit 6 rows = 1 + 5; ledger 7 rows = 2 + 5. This corrects the generic card wording
+below ("steam-ORC plant and gas-engine plants"): the frozen held-out topology cells contain **only the two extended
+gas-engine topologies**, no steam-ORC. Design rows have no `topology` field. Audit has no `test_ood_fault` cell.
+The repair/ledger `test_ood_fault` cells mix the in-training topologies (repair: cgam_orc 4, dc_absorption 28,
+dc_electric 28, dc_engine_absorption 6, dc_engine_electric 4; ledger: 3, 9, 16, 2, 2).
+
+Every cell is below 85 rows (largest: repair `test_ood_fault`, n = 70), so no cell supports a 15-point pairwise claim
+at 80% power; see `docs/EVAL_PROTOCOL.md` §6 for the computed minimum detectable differences and the only defensible
+merges.
+
 ## Ledger
 Purpose: repair an equation-level fault in the exergy ledger of a solved plant (stream exergy lines, component destruction lines, the ambient constant). These faults leave a plant that solves and passes parameter-range checks; only the ledger's own checks (closure, negative destruction) can reveal them, and some are invisible even to those. Generator: `thermo_agent.ledger.data`; 13 fault types in three layers (stream lines, component lines, the T0 constant); one fault (70 percent) or two. No code is executed: lines are arithmetic expressions checked by a restricted evaluator.
 Columns: `id`, `split`, `topology`, `fault_types`, `prompt`, `completion`, `ledger`, `min_edits`.

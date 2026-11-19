@@ -16,6 +16,24 @@ import json
 import pathlib
 
 from ..synth.combine import TOKEN_RESERVE, tokenizer, tokenizer_path
+from .sft import _tool_result_spans
+
+# Rows longer than this are dropped by `synth.combine` before they reach the trainer; this audit
+# counts them so a corpus can be checked without silently truncating a long tool trajectory.
+TOOL_TOKEN_GATE = 8000
+
+
+def tool_result_tokens(tok, text: str) -> int:
+    """Number of tokens in `text` whose character offsets fall inside a <tool_result> span.
+
+    These are exactly the tokens the SFT label mask sets to -100 (tags included), measured with
+    the same real tokenizer used for the rest of the audit.
+    """
+    spans = _tool_result_spans(text)
+    if not spans:
+        return 0
+    return sum(1 for s, e in tok.encode(text, add_special_tokens=False).offsets
+               if any(s < b and e > a for a, b in spans))
 
 
 def _q(xs: list[int], f: float) -> int:
@@ -29,33 +47,61 @@ def audit(data_dir, max_length: int = 8192, reserve: int = TOKEN_RESERVE, tasks=
         raise SystemExit("no tokenizer: set THERMO_TOKENIZER or cache the Qwen3.5 tokenizer.json")
     root = pathlib.Path(data_dir)
     report = {"data": str(root), "tokenizer": str(tokenizer_path()), "reserve": reserve,
-              "max_length": max_length, "files": {}, "over": []}
+              "max_length": max_length, "tool_token_gate": TOOL_TOKEN_GATE,
+              "files": {}, "over": []}
     for task in tasks:
         for p in sorted(root.glob(f"{task}_*.jsonl")):
             split = p.stem[len(task) + 1:]
             prompts, comps, totals, harness, memory = [], [], [], 0, 0
+            tool_masked, tool_rows, dropped = 0, 0, 0
             for line in p.open(encoding="utf-8"):
                 row = json.loads(line)
                 pr = len(tok.encode("".join(m.get("content", "") for m in row["prompt"]), add_special_tokens=False).ids)
-                co = len(tok.encode(row["completion"][0]["content"], add_special_tokens=False).ids)
+                completion_text = row["completion"][0]["content"]
+                co = len(tok.encode(completion_text, add_special_tokens=False).ids)
+                masked = tool_result_tokens(tok, completion_text)
+                tool_masked += masked
+                tool_rows += bool(masked)
                 prompts.append(pr)
                 comps.append(co)
-                totals.append(pr + co + reserve)
+                total = pr + co + reserve
+                totals.append(total)
                 harness += row.get("harness", "none") != "none"
                 memory += bool(row.get("memory_notes"))
-                if pr + co + reserve > max_length:
+                if total > TOOL_TOKEN_GATE:  # dropped by combine, never truncated by the trainer
+                    dropped += 1
+                if total > max_length:
                     report["over"].append({"id": row.get("id"), "task": task, "split": split,
-                                           "tokens": pr + co + reserve})
+                                           "tokens": total})
             report["files"][f"{task}_{split}"] = {
                 "n": len(totals), "prompt_p50": _q(prompts, .5), "prompt_p99": _q(prompts, .99),
                 "prompt_max": max(prompts, default=0), "completion_p50": _q(comps, .5),
                 "total_p99": _q(totals, .99), "total_max": max(totals, default=0),
                 "over": sum(1 for t in totals if t > max_length), "harness_rows": harness, "memory_rows": memory,
+                "tool_result_tokens": tool_masked, "tool_result_rows": tool_rows,
+                "dropped_8000": dropped,
             }
     report["rows"] = sum(f["n"] for f in report["files"].values())
+    report["tool_result_tokens"] = sum(f["tool_result_tokens"] for f in report["files"].values())
+    report["tool_result_rows"] = sum(f["tool_result_rows"] for f in report["files"].values())
+    report["dropped_8000_total"] = sum(f["dropped_8000"] for f in report["files"].values())
     report["over_total"] = len(report["over"])
     report["fits"] = report["over_total"] == 0
     return report
+
+
+def summary_table(report: dict) -> str:
+    """Printable table of per-file tool-result and 8k-drop counts (plus totals)."""
+    cols = (("file", 26), ("rows", 7), ("tool_tok", 9), ("tool_rows", 10), (">8000", 7), ("total_max", 10))
+    lines = ["  ".join(f"{name:<{w}}" if i == 0 else f"{name:>{w}}" for i, (name, w) in enumerate(cols))]
+    for name in sorted(report["files"]):
+        f = report["files"][name]
+        vals = (name, f["n"], f["tool_result_tokens"], f["tool_result_rows"], f["dropped_8000"], f["total_max"])
+        lines.append("  ".join(f"{v:<{w}}" if i == 0 else f"{v:>{w}}" for i, (v, (_, w)) in enumerate(zip(vals, cols))))
+    totals = ("TOTAL", report["rows"], report["tool_result_tokens"], report["tool_result_rows"],
+              report["dropped_8000_total"], max((f["total_max"] for f in report["files"].values()), default=0))
+    lines.append("  ".join(f"{v:<{w}}" if i == 0 else f"{v:>{w}}" for i, (v, (_, w)) in enumerate(zip(totals, cols))))
+    return "\n".join(lines)
 
 
 def main():
@@ -70,8 +116,11 @@ def main():
         p = pathlib.Path(a.out)
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(json.dumps(r, indent=1), encoding="utf-8")
+    print(summary_table(r))
     print(json.dumps({"data": r["data"], "rows": r["rows"], "max_length": r["max_length"],
                       "tokenizer": r["tokenizer"], "over_total": r["over_total"], "fits": r["fits"],
+                      "tool_result_tokens": r["tool_result_tokens"], "tool_result_rows": r["tool_result_rows"],
+                      "dropped_8000_total": r["dropped_8000_total"],
                       "worst": sorted(r["files"].items(), key=lambda kv: -kv[1]["total_max"])[:3],
                       "over_examples": r["over"][:5]}, indent=1))
     raise SystemExit(0 if r["fits"] else 1)

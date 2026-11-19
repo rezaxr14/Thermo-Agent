@@ -3,6 +3,41 @@
 Working copy: `C:\Users\rezax\Home\Code\thermo_agent\Repo` on REZA_PC (git, branch `main`). No SSH, no WSL: every
 step below runs in this checkout.
 
+## Current implementation state (verified 2026-11-19)
+
+This is the truth snapshot for the current plan. The longer historical sections below are kept for provenance;
+where they call an older smoke version or an older teacher pass "current", read this section instead.
+
+- **Done — self-correcting teacher harness.** `thermo_agent/teacher/agent_graph.py` is a LangGraph `StateGraph`
+  (`build_context -> propose -> {call_tools -> reflect -> propose}* -> finalize -> END`, up to `max_rounds=4`).
+  `thermo_agent/teacher/toolkit.py` exposes five real tools — `inspect_plant`, `first_law_check`,
+  `second_law_check`, `validity_check`, `solve_plant` — each built from the model's own candidate (or the given
+  plant for `inspect_plant`) and run through the real solver/verifiers. The old `check_answer` oracle was removed
+  from the tool list; acceptance stays at grading time as the GRPO reward.
+  `thermo_agent/teacher/compact_memory.py` implements the D10 guidance and D11 compact memory (what failed ->
+  what works; model ids, timestamps, cost and logs stripped) and is wired into `build_context`.
+- **Done — held-out set.** `data/heldout/` is frozen with seed **987654** (present in each `meta_*.json`). It is
+  the single set on which all arms are scored and is excluded from every training corpus and teacher prompt shard.
+- **Done — evaluation arms.** `kaggle/eval_runner.py` defines the arms, including `ours_sft_grpo_k4`,
+  `ours_sft_grpo_k8` and `ours_sft_grpo_k16`. Each k pulls its **own** checkpoint dir
+  (`runs/grpo_<task>_k4`, `_k8`, `_k16`), so the three scores never share weights. The final comparison is scored
+  with `DATA_DIRS=heldout`.
+- **Done — smoke environment.** The smoke kernel (`rezanadimi/thermo-train-smoke`, labelled v23 in the current
+  campaign record; the Kaggle CLI does not expose a version number in this checkout) was pushed with the
+  PyPI-pinned numpy/scipy shim in `thermo_agent/kaggle_notebook.py::setup()`: `numpy==2.4.4`, `scipy==1.17.1`,
+  installed from `https://pypi.org/simple` and verified in a clean subprocess before the worker continues.
+- **Pending — teacher campaign.** The frontier tool-CoT campaign has **not** been executed. Run
+  `scripts/run_teacher_campaign.ps1` with the budget models first, then the expensive tier (see `docs/RUNBOOK.md`
+  and `docs/TEACHER_MODEL_CHOICES.md`).
+- **Not done — no trained weights.** No SFT or GRPO adapter / merged weights exist yet (`runs/` contains only
+  smoke directories), so every trained-model arm is still unscored.
+- **Model order.** Budget first: `gpt-6-luna`, then `claude-haiku-5-5`, reasoning ON; `gemini-3.5-flash-lite` is
+  excluded and must not consume quota. These are hosted-only slugs run as the hosted task `thermo-teacher-tools-s00`
+  via `scripts/run_teacher_hosted.ps1 -m <slug>`, not the local SDK driver. Then the opt-in expensive tier:
+  `gpt-6.2-sol`, `claude-sonnet-5-5`, `claude-opus-5-5-default` (`claude-opus`), `gemini-4-argon` (`gemini-4`) —
+  only after the budget tier reports verifier-accepted reasoning-trace yield, and `claude-sonnet-5-5` additionally
+  needs Reza's explicit go-ahead. **REMINDER: revisit `claude-sonnet-5-5`** (deferred as too expensive).
+
 ## Environment
 
 | Item | Value |
@@ -183,7 +218,8 @@ so `data/frontier_export` stays valid for the teacher.
 - GRPO uses the **same prompts** as SFT (with harness/memory); its loader keeps only the prompt and the reward
   columns.
 
-Trainings have not been run yet locally: the 4050 cannot hold a 4B model for training.
+Trainings have not been run yet locally: the 4050 cannot hold a 4B model for training. No SFT or GRPO weights
+exist anywhere yet (locally or on Kaggle); see the current-state section above.
 
 ### Measured Kaggle smoke (dual-T4 path)
 
@@ -201,7 +237,8 @@ Trainings have not been run yet locally: the 4050 cannot hold a 4B model for tra
   If the eval still OOMs, the remaining cause is the linear-attention fallback kernel and the next step is to
   install the project's fused `flash-linear-attention` kernels in the worker, not to shorten the window.
   Local CUDA check: train loss 6.953, eval loss 6.948 (reference full-logits fp16 loss 6.948).
-- Smoke v18 with this fix was pushed; its result is the current gate for the full run.
+- Historical: smoke v18 with this eval-path fix was pushed. **Superseded** — the pushed smoke environment and its
+  PyPI-pinned numpy/scipy shim are recorded in the current-state section above, not here.
 - Kaggle's Secrets service was unreachable inside the worker (`Connection error trying to communicate with
   service`), so v17 had no `HF_TOKEN`: checkpoints stayed local to that session. Cross-session HF resume
   requires the secret to be reachable in the worker; no token was copied into code or datasets.
@@ -220,13 +257,15 @@ Trainings have not been run yet locally: the 4050 cannot hold a 4B model for tra
 - Run `pytest -q` before any commit that touches `thermo_agent/`; `paper/tools/verify_paper.py` checks that every
   `\val{...}` used in the sections exists in the generated assets (the LaTeX build itself needs a TeX installation).
 
-## Kaggle (teacher pass) — completed
+## Kaggle (legacy zero-shot teacher pass) — completed; superseded for training data
 
 The teacher pass was executed with the Kaggle CLI (not the browser notebook): 1,600 prompts per model,
 Gemini 513 accepted / $1.090957 and GPT-5.4-nano 122 accepted / $0.658021; 3,668 raw training answers,
 635 verifier-accepted rows, 635 used in both merged corpora (`data/sft_all` / `data/grpo_all`; the legacy 460 was
 the 4k-gated `data/sft` / `data/grpo` subset). Held-out answers: 360 per model. Full accounting and
 provenance are in `docs/API_USAGE_AND_PROGRESS.md`; `docs/TEACHER_MODEL_CHOICES.md` carries the model decision.
+This pass is the **legacy zero-shot baseline**; the current tool-CoT campaign is still pending (see the
+current-state section above).
 
 ## Expert-scale cycles and per-trace provenance (new)
 
@@ -244,24 +283,74 @@ provenance are in `docs/API_USAGE_AND_PROGRESS.md`; `docs/TEACHER_MODEL_CHOICES.
   origin, journal line, cost, acceptance and downstream artifact links. It is auto-discovering: dropping a
   new big-model journal into `data/teacher_runs/` adds traces without a code change.
 
-## Model campaign round 2 (user decision, 2026-11-18)
+## Model campaign round 2 (user decision, 2026-11-18) — superseded; pending execution
 
 - Hosted task `thermo-teacher-big-s00` is now at **version 3** with reasoning **ON** (`reasoning="low"`,
   1,536 output tokens) to capture reasoning traces where possible. Reasoning also fixes the Claude 400.
-- User-selected cheap models for this round: `claude-haiku-5-5`, `gemini-3.5-flash-lite`, `gpt-6-luna`.
+- User-selected cheap models for this round: `gpt-6-luna`, then `claude-haiku-5-5` (reasoning ON);
+  `gemini-3.5-flash-lite` is excluded and must not consume quota. Superseded by the current campaign order in the
+  current-state section above.
   Driver `scripts/run_big_teacher_v2.ps1` runs them sequentially and ingests additively.
 - **REMINDER: revisit `claude-sonnet-5-5` later** — the user deferred it as too expensive and wants to decide
   after seeing how many accepted reasoning traces the cheap models produce.
 - `gemini-3.8-flash` already ingested 33 accepted / 200 attempted; the ledger is at **38,202 traces**.
+- **Stale:** this round-2 driver (`scripts/run_big_teacher_v2.ps1`) describes the earlier hosted pass. The current
+  campaign is `scripts/run_teacher_campaign.ps1` and has not been executed yet; see the current-state section.
 
 ## Next
 
-1. Publish the prebuilt fused-kernel wheels (`pwsh scripts/publish_wheel_dataset.ps1`), re-upload the code bundle,
-   and push the smoke kernel with the wheel and resume datasets attached. Verify that the fused kernels remove the
-   reference-kernel fallback warnings and that the step-20 evaluation no longer OOMs.
-2. Launch the full SFT run (`kaggle/train_kernel`, 2x T4), relay each session's newest checkpoint with
-   `pwsh scripts/resume_kaggle_checkpoint.ps1`, then merge and run GRPO per task.
-3. Run the eval kernel arms (`ours_base`, `ours_sft`, `ours_harness`, `ours_grpo`) and fold the new rows into the
-   comparison manifest, tables and the regenerable trace figure. Static SVG figures stay untouched.
-4. Fill the remaining Q1 items in `paper/Q1_CHECKLIST.md` (ablation, significance, GPU-hour totals, memory ablation)
+1. Run the teacher campaign: `pwsh -File scripts/run_teacher_campaign.ps1 -Execute -Rows 200 -Resume` — budget models
+   first; the expensive tier is opt-in (`-Tier expensive -AllowExpensive`). See `docs/RUNBOOK.md` and
+   `docs/TEACHER_MODEL_CHOICES.md`.
+2. Ingest the verifier-accepted tool-CoT traces additively and rebuild the tool-using corpora; push an updated code
+   bundle. Wheels travel to the kernels via `kernel_sources` from `rezanadimi/thermo-kernel-wheels` — there is no
+   wheel-dataset publish step (the earlier `scripts/publish_wheel_dataset.ps1` reference was stale).
+3. Push the smoke, train and eval kernels (`docs/RUNBOOK.md`); confirm the step-20 evaluation no longer OOMs and
+   record seconds per step before sizing the SFT run.
+4. Run SFT, then GRPO per task at k=4, 8 and 16, each into its own checkpoint dir. No weights exist yet.
+5. Score every arm on `data/heldout` with `DATA_DIRS=heldout` and assemble `paper/assets/model_results.json`.
+6. Fill the remaining Q1 items in `paper/Q1_CHECKLIST.md` (ablation, significance, GPU-hour totals, memory ablation)
    and redraw the three externally-drawn figures that still show pilot samples.
+
+## Addendum 2026-11-19 — verified facts (appended; does not supersede the sections above)
+
+### Hosted teacher task `thermo-teacher-tools-s00`
+- **v3 / v4 errored before any model call**: the benchmarks venv (`/benchmarks/.venv`, Python 3.12) lacked scipy,
+  then CoolProp. No model was billed on those versions.
+- **Fix (in the tree today):** scipy root-finding goes through `thermo_agent/core/_roots.py` (scipy `brentq` with a
+  pure-Python fallback); `design/search.py` imports scipy lazily; `core/fluids.py` and `core/props.py` use optional
+  CoolProp imports. The hosted task tries `pip install --target /kaggle/working/pylibs CoolProp==6.8.0` and
+  degrades to gas-only plants when the network is unavailable — it never fails the whole task on a missing
+  real-fluid backend.
+- **`thermo-agent-code` dataset versions:** v30 "scipy-free physics core", v31 "optional CoolProp + lazy scipy".
+- **v5** built and ran `gemini-3.8-flash`. The `gpt-6-luna` pilot is **pending task readiness**.
+
+### Smoke kernel `rezanadimi/thermo-train-smoke` v26 / v27
+- **v26 failed** with CUDA OOM at the **first backward on one T4**: **13.55 GiB in use, 1.10 GiB requested**.
+- Hypothesis: eager/math attention on a full-attention layer at ~5.7k tokens materialises 16 heads × seq² × fp16
+  ≈ 1 GiB.
+- **v27 fixes pushed, result pending:** `attn_implementation="sdpa"` in `ddp.model_init_kwargs`;
+  `gradient_checkpointing_kwargs={"use_reentrant": False}` for SFT and GRPO; and
+  `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` in `kaggle/train_runner.py`.
+
+### Corpus inventory (`docs/CORPUS_INVENTORY_2026-11-19.md`)
+| corpus | rows | note |
+| --- | ---: | --- |
+| `data/sft_tools` | 960 | 240/task; 480 direct + 480 recover; 2–4 tool pairs per row |
+| `data/grpo_tools` | 960 | same mix; multi-turn trace in `trajectory.sft_completion` |
+| `data/frontier` | 668 | 635 accepted / 33 rejected; **0 rows with tool calls** → 0 usable frontier tool traces |
+| `data/heldout` | 12 test files | 214 ids; SHA-256 `8b409359e7a2dd441d0be99c89c00f0f3c61320f9d06e9695cc22569f8ef4c6e` |
+
+### Prompt separation — OPEN
+Eval and teacher tracegen already emit separate Z (zero-shot) and H (harness) prompts, but training rows still
+carry only the plain `harness="none"` system prompt (740 chars for repair). A `--prompt-variant
+{plain,harness_tools}` implementation is in progress to emit `*_h` corpora whose system prompt matches the
+`ours_harness` eval arm. **Recorded as OPEN until the code lands and the corpora are built.**
+
+### Kaggle quota snapshot (2026-11-19)
+| Metric | Value |
+| --- | --- |
+| Monthly spend | $6.05 / $100 used |
+| Daily spend | $0.02 / $10 used |
+| GPU time | 3.74 h used / 26.26 h remaining |
+| Refill | 2026-11-21 |

@@ -11,7 +11,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 import numpy as np
-from scipy.optimize import brentq
+from ._roots import brentq
 
 R = 8.314462618
 _DATA = json.loads((Path(__file__).parent / "data" / "nasa7_gri30.json").read_text())["species"]

@@ -51,7 +51,7 @@ with a metadata file that records the seed, the settings and the CoolProp and sc
 \paragraph{Architecture corpus.} Repair rows built from the catalog of \val{corp.n_arch} diagrams (\val{corp.n_dc} data-center plants and the steam plant), with the same fault injectors as the Repair set. Held out: the eight gas-engine plants with the ideal-rejection boundary and the steam plant. The generator was asked for \val{corp.arch_requested} fault injections and kept \val{corp.arch_kept}
 (train \val{corp.arch_rows.train}, validation \val{corp.arch_rows.val}, in-distribution test \val{corp.arch_rows.test_id}, held-out faults \val{corp.arch_rows.test_ood_fault}, held-out diagrams \val{corp.arch_rows.test_ood_topology}).
 
-\paragraph{Teacher answers, teacher-authored diagrams and memory notes.} Teacher answers are stored with the verdict of the tool suite; accepted answers become rows with the source tag \texttt{frontier}, and every rejected attempt is kept. Teacher-authored plants are stored with the checks they passed or failed, and accepted plants enter the catalog as new diagrams. Memory notes are mined from rejected attempts and carry the task, fault class, diagram, symptom, lesson and fix; the record that a note was mined from is stored so that it can be excluded at retrieval.
+\paragraph{Teacher answers, teacher-authored diagrams and memory notes.} Teacher answers are stored with the verdict of the tool suite; accepted answers become rows with the source tag \texttt{frontier}, and every rejected attempt is kept. Teacher-authored plants are stored with the checks they passed or failed, and accepted plants enter the catalog as new diagrams. Memory notes are mined from rejected and accepted attempts and carry the task, fault class, diagram, symptom, lesson, fix and an explicit \texttt{accepted} flag; the record that a note was mined from is stored so that it can be excluded at retrieval.
 Sizes of the final corpus: \val{corp.rows} rows, \val{corp.rows_train} in the training split (Repair \val{corp.rows.repair.train}, Ledger \val{corp.rows.ledger.train}, Audit \val{corp.rows.audit.train}, Design \val{corp.rows.design.train}); the held-out-diagram split has \val{corp.rows.repair.test_ood_topology} Repair, \val{corp.rows.audit.test_ood_topology} Audit and \val{corp.rows.ledger.test_ood_topology} Ledger rows.
 
 \begin{table}[tbp]
@@ -77,6 +77,9 @@ Everything in \cref{sec:baselines,sec:findings,sec:trace} was computed on one CP
 \section{Harness text}\label{app:harness}
 
 The harness file \texttt{AGENTS.md} has \val{har.agents_lines} lines (\val{har.agents_chars} characters), whose sections are listed in \cref{tab:agents}. The skills are listed in \cref{tab:skills} and the modes in \cref{tab:modes}. The memory layer is separate from the four modes (\cref{sec:harness}). The held-out component is the gas engine, with \val{har.engine_n_ports} ports; it appears in the held-out-topology splits, with \val{har.heldout_repair_engine_rows} of \val{har.heldout_repair_rows} Repair rows and \val{har.heldout_audit_engine_rows} of \val{har.heldout_audit_rows} Audit rows in those splits involving an engine plant (the others use the steam-ORC plant).
+
+\paragraph{Served memory block.}
+The compact memory appended to the system prompt is a header followed by one line per retrieved note, each marked \texttt{OK} or \texttt{FAIL} and pairing a fault class with a fix pattern, not the ledger. Model and provider ids, timestamps, cost, token counts, latency, record ids, architecture and raw checker logs are dropped before prompting; the full ledger stays on disk. At most one \texttt{seed:method} note is served per block.
 
 \begin{table}[tbp]
 \centering

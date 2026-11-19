@@ -1,7 +1,10 @@
 """The CoT data-gen harness is a LangGraph state machine using REAL numeric physics tools."""
 import json
 
-from thermo_agent.teacher.agent_graph import run
+from thermo_agent.teacher import agent_graph
+from thermo_agent.teacher import compact_memory
+from thermo_agent.teacher import memory as mem
+from thermo_agent.teacher.agent_graph import DEFAULT_MAX_ROUNDS, build_context, finalize, run
 from thermo_agent.teacher.toolkit import make_tools, tool_names
 
 
@@ -9,8 +12,16 @@ def _row():
     return json.loads(open("data/processed/repair_train.jsonl", encoding="utf-8").readline())
 
 
+def _note(note_id, record_id):
+    """A rejected failure note whose text overlaps the query below (so retrieval returns it)."""
+    return mem.Note(id=note_id, task="repair", fault_type="unit_slip",
+                    architecture="dc_chp", symptoms="unbalanced plant",
+                    lesson="wrong power of ten", fix="SET eta = 0.85",
+                    source="test", accepted=False, record_id=record_id)
+
+
 def test_tools_are_real_solver_results():
-    assert tool_names() == ["check_answer", "first_law_check", "second_law_check", "validity_check", "solve_plant"]
+    assert tool_names() == ["inspect_plant", "first_law_check", "second_law_check", "validity_check", "solve_plant"]
     row = _row()
     gt = row["completion"][0]["content"]
     t = {x.__name__: x for x in make_tools("repair", row)}
@@ -33,10 +44,155 @@ def test_graph_self_corrects_and_records_trajectory():
             return gt, [], "balances close"
         return gt, [{"name": "first_law_check", "arguments": {"candidate": gt}}], "checking"
 
-    state = run(row, "repair", respond, max_rounds=3)
+    state = run(row, "repair", respond, max_rounds=DEFAULT_MAX_ROUNDS)
     assert state["accepted"] is True
     assert state["verdict"]["accepted"] is True
     sft = state["sft_completion"]
     assert "<tool_call" in sft and "<tool_result" in sft
     assert "mass_residual_kg_s" in sft  # a real numeric tool result is in the SFT text
     assert state["final"] == gt
+    assert sft.rstrip().endswith(gt)  # the accepted answer is always the last block
+
+
+def test_finalize_guarantees_nonempty_sft_ending_in_final_answer():
+    row = _row()
+    gt = row["completion"][0]["content"]
+
+    # No recorded turns: fall back to a single assistant turn holding the final answer.
+    out = finalize({"task": "repair", "row": row, "last_text": gt,
+                    "last_reasoning": "", "turns": []})
+    assert out["turns"] == [{"assistant": gt, "reasoning": "",
+                             "tool_calls": [], "tool_results": []}]
+    assert out["sft_completion"].strip() == gt
+    assert out["final"] == gt
+
+    # Recorded turns with an empty answer must not yield empty SFT text.
+    out2 = finalize({"task": "repair", "row": row, "last_text": gt,
+                     "last_reasoning": "",
+                     "turns": [{"assistant": "",
+                                "reasoning": "",
+                                "tool_calls": [{"name": "first_law_check", "arguments": {}}],
+                                "tool_results": []}]})
+    assert out2["sft_completion"].strip() == gt
+
+    # Already ending with the final answer: do not duplicate it.
+    turns = [{"assistant": "earlier candidate", "reasoning": "",
+              "tool_calls": [], "tool_results": []},
+             {"assistant": gt, "reasoning": "", "tool_calls": [], "tool_results": []}]
+    out3 = finalize({"task": "repair", "row": row, "last_text": gt,
+                     "last_reasoning": "", "turns": turns})
+    assert out3["sft_completion"].rstrip().endswith(gt)
+    assert out3["sft_completion"].count(gt) == 1
+
+
+# --------------------------------------------------------------------------- #
+# P0-9: one rounds constant, one memory retrieval, no double tool execution
+# --------------------------------------------------------------------------- #
+def test_system_prompt_states_the_single_rounds_constant():
+    assert DEFAULT_MAX_ROUNDS == 4
+    row = _row()
+    ctx = build_context({"row": row, "task": "repair", "notes": [], "mode": "agents+skills"})
+    assert "up to %d rounds" % DEFAULT_MAX_ROUNDS in ctx["system_prompt"]
+
+    # A driver override is forwarded into build_context, so the prompt states the number
+    # actually passed to the adapter instead of a hard-coded constant.
+    ctx2 = build_context({"row": row, "task": "repair", "notes": [],
+                          "mode": "agents+skills", "max_rounds": 7})
+    assert "up to 7 rounds" in ctx2["system_prompt"]
+    assert "up to %d rounds" % DEFAULT_MAX_ROUNDS not in ctx2["system_prompt"]
+
+
+def test_build_context_retrieves_memory_once_and_notes_used_match_served(monkeypatch):
+    row = {"id": "row-current",
+           "prompt": [
+               {"role": "system", "content": "You are a plant engineer."},
+               {"role": "user", "content": "unit_slip dc_chp unbalanced plant wrong power of ten"},
+           ]}
+    notes = [
+        _note("note-current", "row-current"),  # mined from this very row -> must be excluded
+        _note("note-a", "rep-a"),
+        _note("note-b", "rep-b"),
+    ]
+
+    calls = []
+    real_retrieve = mem.retrieve
+
+    def spy_retrieve(query, notes_, k=3, task=None, exclude_record="", min_score=0.02):
+        calls.append({"k": k, "task": task, "exclude_record": exclude_record})
+        return real_retrieve(query, notes_, k=k, task=task,
+                             exclude_record=exclude_record, min_score=min_score)
+
+    served = []
+    real_compact = compact_memory.compact_notes
+
+    def spy_compact(notes_, k=5):
+        served.append(list(notes_))  # exactly the notes rendered into the system prompt
+        return real_compact(notes_, k=k)
+
+    monkeypatch.setattr(mem, "retrieve", spy_retrieve)
+    monkeypatch.setattr(compact_memory, "compact_notes", spy_compact)
+
+    ctx = build_context({"row": row, "task": "repair", "notes": notes,
+                         "k_memory": 3, "mode": "agents+skills"})
+
+    assert len(calls) == 1, "memory must be retrieved exactly once per episode"
+    assert calls[0]["exclude_record"] == row["id"]
+    assert calls[0]["task"] == "repair"
+    assert len(served) == 1
+    assert ctx["notes_used"], "the fixture must actually retrieve at least one note"
+    assert ctx["notes_used"] == [n.id for n in served[0]], (
+        "notes_used must be exactly the notes rendered into the served context")
+    assert "note-current" not in ctx["notes_used"], "the current record's note was served"
+
+
+def test_four_tuple_finalizes_without_reexecuting_tools(monkeypatch):
+    """A full 4-tuple trajectory jumps to finalize; the graph never runs the tools again."""
+    row = _row()
+    counter = {"n": 0}
+
+    def spy_tool(candidate):
+        counter["n"] += 1
+        return "SPY RESULT"
+
+    spy_tool.__name__ = "spy_tool"
+    monkeypatch.setattr(agent_graph, "make_tools", lambda task, row_: [spy_tool])
+
+    answer = row["completion"][0]["content"]
+    turns = [{"assistant": answer, "reasoning": "done", "tool_calls": [], "tool_results": []}]
+
+    def respond(messages, tools):
+        # The adapter already ran the tool in its native loop; the 4-tuple still carries the
+        # call. The graph must discard those calls and finalize with the recorded turns.
+        return answer, [{"name": "spy_tool", "arguments": {"candidate": "REEXEC_MARKER"}}], "done", turns
+
+    state = run(row, "repair", respond)
+
+    assert counter["n"] == 0, "LangGraph re-executed a tool from the 4-tuple trajectory"
+    assert state["done"] is True
+    assert state["rounds"] == 0
+    assert state["last_calls"] == []
+    assert state["turns"] == turns
+
+
+def test_spy_would_catch_a_second_execution_on_the_three_tuple_path(monkeypatch):
+    """Sensitivity control: the spy above really does observe the graph's own tool execution."""
+    row = _row()
+    counter = {"n": 0}
+
+    def spy_tool(candidate):
+        counter["n"] += 1
+        return "SPY RESULT"
+
+    spy_tool.__name__ = "spy_tool"
+    monkeypatch.setattr(agent_graph, "make_tools", lambda task, row_: [spy_tool])
+
+    answer = row["completion"][0]["content"]
+
+    def respond(messages, tools):
+        if any("Tool results:" in m["content"] for m in messages):
+            return answer, [], "done"
+        return answer, [{"name": "spy_tool", "arguments": {"candidate": "x"}}], "checking"
+
+    state = run(row, "repair", respond)
+    assert counter["n"] == 1
+    assert state["rounds"] == 1

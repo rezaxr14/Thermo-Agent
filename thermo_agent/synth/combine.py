@@ -205,7 +205,7 @@ def _check(task: str, rows: list[dict], limit: int, problems: list[str]) -> dict
 
 
 def build(processed, frontier, memory_dir, out_dir, tasks=TASKS, variants: int = 20,
-          harness_fraction: float = 0.35, k_memory: int = 3, max_chars: int = 11500,
+          harness_fraction: float = 0.35, k_memory: int = 3, max_chars: int = 22000,
           splits=None, check_limit: int = 0, extra_processed=(), max_tokens: int = 8000) -> dict:
     proc_dirs = [pathlib.Path(processed)] + [pathlib.Path(p) for p in extra_processed]
     front, mem = pathlib.Path(frontier), pathlib.Path(memory_dir)
@@ -293,7 +293,10 @@ def main():
     ap.add_argument("--variants", type=int, default=20)
     ap.add_argument("--harness-fraction", type=float, default=0.35)
     ap.add_argument("--k-memory", type=int, default=3)
-    ap.add_argument("--max-prompt-chars", type=int, default=11500)
+    # 22k chars is the cheap pre-filter paired with the 8k-token gate (Budget default): ~3.7 chars/token
+    # means a full 8k-token prompt is ~30k chars, so this only stops absurdly large inputs before tokenizing.
+    # The legacy 11.5k value belonged to the old 4k gate and dropped valid repair/harness rows at the char gate.
+    ap.add_argument("--max-prompt-chars", type=int, default=22000)
     ap.add_argument("--max-prompt-tokens", type=int, default=8000,
                     help="prompt + completion + chat-marker reserve; 8000 leaves 192 tokens under SFT max_length 8192")
     ap.add_argument("--check-limit", type=int, default=0)

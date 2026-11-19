@@ -61,6 +61,7 @@ while fixing the harness.
 Recorded in `docs/TEACHER_MODEL_CHOICES.md` and `docs/STATUS.md`:
 - now: `claude-haiku-5-5`, `gemini-3.5-flash-lite`, `gpt-6-luna`, reasoning ON (`reasoning="low"`).
 - **REMINDER: revisit `claude-sonnet-5-5` later** — the user explicitly deferred it as too expensive.
+2026-11-19: budget tier is luna then haiku; expensive tier after; gemini-3.5-flash-lite is excluded and must not consume quota.
 
 ## D8 — Zero-shot baseline -> tool CoT -> train -> eval on same held-out set -> compare
 Recorded in full in `docs/TRAINING_DATA_PROTOCOL.md` (section "The decision, in order").
@@ -116,3 +117,69 @@ still recorded for provenance.
 
 How to verify any of this yourself: open the linked file, or run
 `python -m pytest tests/test_agent_graph.py -q` (checks the graph and real numeric tools).
+
+---
+
+# Addendum 2026-11-19 (same convention: user intent, verbatim where possible)
+
+## D12 - Two data sources across the four task families - answer with yes/no
+> "our training data is consisted of two things right? deterministic 20 varient stuff and frontier ai in
+> harnes traces in 4 cohortes? give me a yes or no , do we train on both of thesee right?"
+
+Honest answer recorded in `docs/DIRECTIVE_COMPLIANCE_AUDIT_2026-11-19.md`: there are **three** streams
+(20-variant zero-shot, deterministic multi-turn tools, frontier tool CoT), the four "cohorts" are the four
+task families, and frontier tool CoT is **0 rows today**, so training on it has not happened.
+
+## D13 - Traces first, training later (binding order)
+> "we will not train on this craps we will make that fuking ai shit frst then we will start traninng"
+
+Order is binding: no SFT/GRPO run starts until verifier-accepted frontier tool traces exist and are mixed in.
+Recorded as the gating condition in the audit doc and in `docs/STATUS.md`.
+
+## D14 - Many more AI traces, multi-model
+> "in crease ai traces we will make a lot of them with luna and hiki and some of them with sol and oppos and
+> sonnet and geimini 4 stuff"
+
+Bulk from `gpt-6-luna` and `claude-haiku-5-5`; a premium subset from sol / opus / sonnet / gemini-4.
+Exact count plan and caps: "Trace campaign v2" in `docs/DIRECTIVE_COMPLIANCE_AUDIT_2026-11-19.md`.
+Premium slugs are read from the hosted run menu, never invented.
+
+## D15 - Prompt separation is mandatory in tracegen, training and evals
+> "we need different prompts for hte ai mdeos (zero shot + no harnes , baseline + harness, traned model +
+> harnes and stuff like that) in training and in tracegen and in evals ... so our traned model + harness does
+> not get feed zero shot prompt, and our zeroshot runs dont get feed the multi turn harness usage prompts"
+
+Implemented as a matrix in the audit doc. Two real leaks were found and fixed on 2026-11-19:
+GRPO eval arms scored without tools, and `HFGenerator` rendering `enable_thinking=False` while training
+rendered `True`. One open item remains: replay arms re-execute stored `<tool_call>` blocks.
+
+## D16 - Smoke-test before any big run
+> "actually smoke test cople of compilations before commiting to a big run so we dont get hit by this kind of problems"
+
+Smoke kernel v28 was pushed and came back **ERROR**; its log has not been triaged yet, so the gate is
+**closed** and no training was started. This is recorded as an open blocker, not as a pass.
+
+## D17 - Sync artifacts to Hugging Face and Kaggle datasets
+> "also sync our stuff to the huggingface and kaggle datasets"
+
+Scripts exist (`scripts/sync_corpora_hf.py`, `scripts/upload_corpus_dataset.ps1` with `_h` corpora added).
+They have **not been executed** yet; no upload is claimed.
+
+## D18 - Free subagents for bulk work
+> "use subagents you shit"
+
+Bulk work runs on `opencode/hy4-flash-free` subagents. No DeepSeek subagents are ever launched.
+Three were used on 2026-11-19 (corpus token audit, mix harness tests, eval-arm separation tests).
+
+## D19 - Document every instruction so an independent model can audit the work
+> "doucument all of my instruction so a clude can check them and find your cheats and dihinisty and your trash builds"
+
+`docs/DIRECTIVE_COMPLIANCE_AUDIT_2026-11-19.md` is the audit target: directive-by-directive status,
+evidence paths, reproducing commands, and a self-reported deviation list.
+
+## D20 - Epoch count is the user's decision, not the assistant's
+> "and who told you to do 1 epoch idiot"
+
+`thermo_agent/train/config.py` had `epochs = 1` as an assistant placeholder sized against quota. It was
+never authorized. It is now treated as **undecided** until the user sets it; the audit doc records the
+time cost of each option.

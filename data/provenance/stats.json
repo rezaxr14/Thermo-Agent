@@ -1,13 +1,13 @@
 {
   "acceptance": {
-    "acceptance_rate_of_known_pct": 60.1326,
-    "accepted_share_of_all_pct": 1.6622,
+    "acceptance_rate_of_known_pct": 59.6805,
+    "accepted_share_of_all_pct": 1.6615,
     "counts": {
       "accepted": 635,
-      "rejected": 421,
-      "unknown": 37146
+      "rejected": 429,
+      "unknown": 37154
     },
-    "known_traces": 1056
+    "known_traces": 1064
   },
   "by_first_seen_file": {
     "data/frontier/frontier_audit_train.jsonl": 8,
@@ -15,6 +15,7 @@
     "data/frontier/frontier_ledger_train.jsonl": 93,
     "data/frontier/frontier_repair_train.jsonl": 65,
     "data/memory/adversarial_repair.jsonl": 24,
+    "data/memory/agent_patterns.jsonl": 14,
     "data/memory/frontier_notes.jsonl": 364,
     "data/processed/audit_test_id.jsonl": 299,
     "data/processed/audit_test_ood_topology.jsonl": 135,
@@ -65,7 +66,8 @@
     "data/teacher_runs/eval_all.jsonl": 360,
     "data/teacher_runs/eval_gptnano_all.jsonl": 360,
     "data/teacher_runs/harness_completions.jsonl": 204,
-    "data/teacher_runs/harness_eval_completions.jsonl": 120
+    "data/teacher_runs/harness_eval_completions.jsonl": 120,
+    "data/teacher_runs/pilot_gpt-6-luna.jsonl": 2
   },
   "by_model": {
     "(adversarial/memory)": {
@@ -77,9 +79,9 @@
       "cost_per_accepted_usd": null,
       "input_tokens": 0,
       "output_tokens": 0,
-      "rejected": 388,
-      "traces": 388,
-      "unknown": 0
+      "rejected": 396,
+      "traces": 402,
+      "unknown": 6
     },
     "(synthetic)": {
       "acceptance_rate_of_known_pct": 0.0,
@@ -133,6 +135,19 @@
       "traces": 208,
       "unknown": 175
     },
+    "gpt-6-luna": {
+      "acceptance_rate_of_known_pct": 0.0,
+      "accepted": 0,
+      "accepted_share_of_all_pct": 0.0,
+      "cost_nanodollars": 0,
+      "cost_per_accepted_nanodollars": null,
+      "cost_per_accepted_usd": null,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "rejected": 0,
+      "traces": 2,
+      "unknown": 2
+    },
     "openai/gpt-5.4-nano-2026-03-17": {
       "acceptance_rate_of_known_pct": 100.0,
       "accepted": 122,
@@ -148,7 +163,7 @@
     }
   },
   "by_split": {
-    "(none)": 3658,
+    "(none)": 3674,
     "test_id": 2375,
     "test_ood_climate": 675,
     "test_ood_fault": 7827,
@@ -162,26 +177,26 @@
     "audit": {
       "accepted": 0,
       "cost_nanodollars": 1174276860,
-      "rejected": 125,
-      "traces": 5613
+      "rejected": 127,
+      "traces": 5616
     },
     "design": {
       "accepted": 140,
       "cost_nanodollars": 509263030,
-      "rejected": 177,
-      "traces": 4983
+      "rejected": 179,
+      "traces": 4987
     },
     "ledger": {
       "accepted": 160,
       "cost_nanodollars": 740150190,
-      "rejected": 51,
-      "traces": 12268
+      "rejected": 53,
+      "traces": 12271
     },
     "repair": {
       "accepted": 335,
       "cost_nanodollars": 729177220,
-      "rejected": 68,
-      "traces": 15338
+      "rejected": 70,
+      "traces": 15344
     }
   },
   "cost": {
@@ -222,6 +237,13 @@
         "input_tokens": 371051,
         "output_tokens": 89074
       },
+      "gpt-6-luna": {
+        "accepted_traces": 0,
+        "cost_nanodollars": 0,
+        "cost_per_accepted_nanodollars": null,
+        "input_tokens": 0,
+        "output_tokens": 0
+      },
       "openai/gpt-5.4-nano-2026-03-17": {
         "accepted_traces": 122,
         "cost_nanodollars": 789102050,
@@ -238,7 +260,7 @@
     "by_kind": {
       "adversarial": {
         "coverage_pct": 0.0,
-        "traces": 388,
+        "traces": 402,
         "with_downstream": 0
       },
       "frontier": {
@@ -247,8 +269,8 @@
         "with_downstream": 1376
       },
       "harness": {
-        "coverage_pct": 10.4712,
-        "traces": 1146,
+        "coverage_pct": 10.453,
+        "traces": 1148,
         "with_downstream": 120
       },
       "synthetic": {
@@ -265,7 +287,7 @@
       },
       "memory": {
         "coverage_pct": 0.0,
-        "traces": 388,
+        "traces": 402,
         "with_downstream": 0
       },
       "processed": {
@@ -284,13 +306,13 @@
         "with_downstream": 0
       },
       "teacher_runs": {
-        "coverage_pct": 31.1081,
-        "traces": 4449,
+        "coverage_pct": 31.0941,
+        "traces": 4451,
         "with_downstream": 1384
       }
     },
-    "coverage_pct": 76.6007,
-    "traces_total": 38202,
+    "coverage_pct": 76.5686,
+    "traces_total": 38218,
     "traces_with_downstream": 29263
   },
   "downstream": {
@@ -590,86 +612,33 @@
   "generator": "scripts/build_provenance_ledger.py",
   "harness_modes": {
     "agents+skills": {
-      "share_pct": 1.7067,
+      "share_pct": 1.706,
       "traces": 652
     },
     "none": {
-      "share_pct": 97.0002,
-      "traces": 37056
+      "share_pct": 96.9962,
+      "traces": 37070
     },
     "skills": {
-      "share_pct": 0.445,
+      "share_pct": 0.4448,
       "traces": 170
     },
     "tools": {
-      "share_pct": 0.8481,
-      "traces": 324
+      "share_pct": 0.853,
+      "traces": 326
     }
   },
   "ledger": {
-    "bytes": 60671599,
+    "bytes": 60693168,
     "path": "data/provenance/trace_ledger.jsonl",
-    "records": 38202,
-    "sha256": "2628f481ddd07a2dfde5005d4148395fb76a26f2ff802c1916ba3b74c019ddc2"
+    "records": 38218,
+    "sha256": "0841cfbd1bddd4c3beeaecbba4c8a14990d543cc5a4520e7331f9a31febe1024"
   },
   "memory_failure_reasons": {
-    "by_fault_type": {
-      "": 167
-    },
-    "by_task": {
-      "audit": 167
-    },
-    "n": 167,
-    "top_lessons": [
-      {
-        "count": 57,
-        "lesson": "Attempt rejected (format: unknown component ids ['DC'])."
-      },
-      {
-        "count": 42,
-        "lesson": "Attempt rejected (format: need <ranking>, <change> and <prediction> blocks)."
-      },
-      {
-        "count": 13,
-        "lesson": "Attempt rejected (change: change not allowed; prediction: no usable prediction)."
-      },
-      {
-        "count": 4,
-        "lesson": "Attempt rejected (grounding: only 77% of the numbers in <analysis> are in the plant)."
-      },
-      {
-        "count": 3,
-        "lesson": "Attempt rejected (grounding: only 62% of the numbers in <analysis> are in the plant)."
-      },
-      {
-        "count": 3,
-        "lesson": "Attempt rejected (grounding: only 71% of the numbers in <analysis> are in the plant)."
-      },
-      {
-        "count": 2,
-        "lesson": "Attempt rejected (grounding: only 50% of the numbers in <analysis> are in the plant)."
-      },
-      {
-        "count": 2,
-        "lesson": "Attempt rejected (grounding: only 55% of the numbers in <analysis> are in the plant)."
-      },
-      {
-        "count": 2,
-        "lesson": "Attempt rejected (grounding: only 69% of the numbers in <analysis> are in the plant)."
-      },
-      {
-        "count": 2,
-        "lesson": "Attempt rejected (grounding: only 73% of the numbers in <analysis> are in the plant)."
-      },
-      {
-        "count": 2,
-        "lesson": "Attempt rejected (grounding: only 76% of the numbers in <analysis> are in the plant)."
-      },
-      {
-        "count": 2,
-        "lesson": "Attempt rejected (prediction: relative error 0.74 is above 0.5)."
-      }
-    ]
+    "by_fault_type": {},
+    "by_task": {},
+    "n": 0,
+    "top_lessons": []
   },
   "notes": [
     "One ledger record per canonical trace id; paraphrase #vN markers are variants, not traces.",
@@ -688,7 +657,7 @@
   },
   "reproducible": true,
   "schema_version": "1.0",
-  "source_latest_timestamp": "2026-11-18T16:37:57Z",
+  "source_latest_timestamp": "2026-11-19T09:02:04Z",
   "sources_discovered": {
     "frontier": [
       "data/frontier/frontier_audit_train.jsonl",
@@ -765,11 +734,14 @@
       "data/teacher_runs/harness_completions.jsonl",
       "data/teacher_runs/harness_eval_completions.jsonl",
       "data/teacher_runs/harness_eval_completions2.jsonl",
+      "data/teacher_runs/pilot_gemini31.jsonl",
+      "data/teacher_runs/pilot_gpt-6-luna.jsonl",
       "data/teacher_runs/probe_gemini.jsonl",
       "data/teacher_runs/probe_gptnano.jsonl"
     ],
     "memory": [
       "data/memory/adversarial_repair.jsonl",
+      "data/memory/agent_patterns.jsonl",
       "data/memory/frontier_notes.jsonl"
     ],
     "metas": [
@@ -886,20 +858,20 @@
   "totals": {
     "by_first_seen_source": {
       "frontier": 209,
-      "memory": 388,
+      "memory": 402,
       "processed": 27418,
       "processed_arch": 5544,
       "processed_big": 194,
-      "teacher_runs": 4449
+      "teacher_runs": 4451
     },
     "by_kind": {
-      "adversarial": 388,
+      "adversarial": 402,
       "frontier": 3512,
-      "harness": 1146,
+      "harness": 1148,
       "synthetic": 33156
     },
     "downstream_entries": 57514,
-    "journal_occurrences": 5673,
-    "traces": 38202
+    "journal_occurrences": 5677,
+    "traces": 38218
   }
 }

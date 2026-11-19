@@ -1,10 +1,11 @@
 """Export exactly the rows the evaluator samples, so saved frontier answers can be replayed by id.
 
-    python scripts/make_eval_export.py --out data/frontier_eval_export --limit 30
+    python scripts/make_eval_export.py --out data/frontier_heldout_export --limit <large>
 
 `model_eval` reads ground-truth rows in file order and takes the first `--limit` of each split. A teacher export
 built from the SFT corpus selects different ids, so replay cannot find them. This script uses the same
 `eval.rows.load_split` ordering and keeps only the prompt fields; no ground-truth completion is written.
+The default `--dirs` is the frozen held-out set so replay ids overlap the set every arm is scored on.
 """
 from __future__ import annotations
 
@@ -20,7 +21,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--out", default="data/frontier_eval_export")
     ap.add_argument("--limit", type=int, default=30)
-    ap.add_argument("--dirs", nargs="+", default=["data/processed", "data/processed_arch"])
+    ap.add_argument("--dirs", nargs="+", default=["data/heldout"])
     a = ap.parse_args()
     out = pathlib.Path(a.out); out.mkdir(parents=True, exist_ok=True)
     total = 0

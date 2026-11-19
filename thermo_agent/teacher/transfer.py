@@ -24,10 +24,24 @@ import collections
 import hashlib
 import json
 import pathlib
+import re
 
 from . import memory, validate
 
 TASKS = ("repair", "ledger", "audit", "design")
+
+# Provenance helpers.  A frontier row records where it came from on the row itself:
+# source="frontier:<model>", model=<slug>, provider=<coarse label>, and run_id when
+# a journal id is available.  Only the model *label* is ever stored -- no credentials.
+MODEL_SUFFIX_RE = re.compile(r"-t-([A-Za-z0-9][A-Za-z0-9._-]*)$")
+PROVIDER_HINTS = (
+    ("openai", ("openai", "gpt", "chatgpt", "codex", "o1", "o3", "o4")),
+    ("anthropic", ("anthropic", "claude")),
+    ("google", ("google", "gemini", "gemma", "vertex")),
+)
+VALID_PROVIDERS = ("openai", "anthropic", "google", "other")
+# A run id is a short label, never a credential.  Refuse anything that looks like one.
+_SECRETISH = re.compile(r"(?:hf_[A-Za-z0-9]{20,}|sk-[A-Za-z0-9]{16,}|KGAT_|(?i:token|secret|password|api[_-]?key))")
 
 
 def _read(path: pathlib.Path) -> list[dict]:
@@ -102,8 +116,42 @@ def _slug(text: str) -> str:
     return "".join(c if c.isalnum() else "-" for c in str(text)).strip("-")[:40] or "teacher"
 
 
+def model_from_id(row_id: str) -> str | None:
+    """The producing model slug encoded in a teacher row's ``-t-<model>`` id suffix."""
+    match = MODEL_SUFFIX_RE.search(str(row_id or ""))
+    return match.group(1) if match else None
+
+
+def provider_for(model: str) -> str:
+    """Coarse provider label derived from a model slug (never from credentials)."""
+    tokens = [t for t in re.split(r"[^a-z0-9]+", str(model or "").lower()) if t]
+    for provider, hints in PROVIDER_HINTS:
+        for token in tokens:
+            if any(token.startswith(hint) for hint in hints):
+                return provider
+    return "other"
+
+
+def _safe_run_id(value) -> str | None:
+    """Keep a short journal/run label; drop empty, oversized or secret-looking values."""
+    text = str(value or "").strip()
+    if not text or len(text) > 128 or _SECRETISH.search(text):
+        return None
+    return text
+
+
+def provenance_fields(model: str = "", run_id=None) -> dict:
+    """Explicit provenance stamped on every row produced by :func:`ingest`."""
+    slug = _slug(model)
+    fields = {"source": f"frontier:{slug}", "model": slug, "provider": provider_for(slug)}
+    safe_run = _safe_run_id(run_id)
+    if safe_run:
+        fields["run_id"] = safe_run
+    return fields
+
+
 def ingest(export_dir, completions_path, out_dir, memory_dir=None, tasks=TASKS, split: str = "train",
-           min_reward: float = 0.0, model: str = "") -> dict:
+           min_reward: float = 0.0, model: str = "", run_id: str | None = None) -> dict:
     exports = load_exports(export_dir, tasks, split)
     out = pathlib.Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
@@ -114,6 +162,8 @@ def ingest(export_dir, completions_path, out_dir, memory_dir=None, tasks=TASKS, 
     notes: list[memory.Note] = []
     stats = collections.Counter()
     seen_answers: set[str] = set()
+    n_success_notes = 0
+    base_provenance = provenance_fields(model, run_id)
     for record in _read(pathlib.Path(completions_path)):
         rid = str(record.get("id", ""))
         text = _text(record)
@@ -141,11 +191,28 @@ def ingest(export_dir, completions_path, out_dir, memory_dir=None, tasks=TASKS, 
             if traj_raw and record.get("sft_completion"):
                 trajectory = dict(traj_raw)
                 trajectory["sft_completion"] = record["sft_completion"]
-            accepted[task].append(validate.teacher_row(task, text, row, verdict, tag=_slug(model),
-                                                       trajectory=trajectory))
+            teacher = validate.teacher_row(task, text, row, verdict, tag=base_provenance["model"],
+                                           trajectory=trajectory)
+            # The validator tags genuine tool traces "frontier_tools"; keep that signal
+            # additively while source itself becomes an explicit per-row provenance field.
+            original_source = teacher.get("source")
+            provenance = dict(base_provenance)
+            if "run_id" not in provenance:
+                row_run = _safe_run_id(record.get("run_id") or row.get("run_id"))
+                if row_run:
+                    provenance["run_id"] = row_run
+            teacher.update(provenance)
+            if original_source and original_source not in ("frontier", f"frontier:{base_provenance['model']}"):
+                teacher["source_detail"] = original_source
+            accepted[task].append(teacher)
             stats[f"accepted:{task}"] += 1
             if trajectory is not None:
                 stats["accepted_tool_using"] += 1
+            # Accepted attempts become reusable "what worked" memory too.  `success_note` reads the fix from
+            # the candidate's own completion, so pass it on the row (export rows deliberately carry no answer).
+            note_row = dict(row, completion=[{"role": "assistant", "content": text}])
+            notes.append(validate.success_note(task, note_row, verdict, source=f"frontier:{_slug(model)}"))
+            n_success_notes += 1
         else:
             if verdict["accepted"]:
                 verdict = dict(verdict, accepted=False, reasons=verdict["reasons"] + [f"reward {verdict['reward']:.2f} below {min_reward}"])
@@ -159,9 +226,11 @@ def ingest(export_dir, completions_path, out_dir, memory_dir=None, tasks=TASKS, 
             for row in rows:
                 fh.write(json.dumps(row) + "\n")
     # The summary records how often each failure reason appeared; deduped notes teach the class of mistake and
-    # frequency notes make the common ones more likely to be retrieved into a prompt.
-    summary = memory.summarize(notes)
-    frequent = memory.frequency_notes(notes)
+    # frequency notes make the common ones more likely to be retrieved into a prompt.  failure_reasons.json
+    # stays failures-only; accepted notes join the retrieval memory alongside them.
+    failures = [n for n in notes if not n.accepted]
+    summary = memory.summarize(failures)
+    frequent = memory.frequency_notes(failures)
     notes = memory.dedupe_lessons(notes)
     if memory_dir:
         path = pathlib.Path(memory_dir) / "frontier_notes.jsonl"
@@ -171,6 +240,7 @@ def ingest(export_dir, completions_path, out_dir, memory_dir=None, tasks=TASKS, 
         (pathlib.Path(memory_dir) / "failure_reasons.json").write_text(
             json.dumps(summary, indent=1, sort_keys=True) + "\n", encoding="utf-8")
         stats["memory_notes"] = len(notes) + len(frequent)
+        stats["memory_success_notes"] = n_success_notes
         stats["frequent_lessons"] = len(frequent)
     from .progress import usage_totals
     report = {"model": model, "attempts": stats["attempts"], "accepted": sum(v for k, v in stats.items() if k.startswith("accepted:")),
@@ -197,6 +267,7 @@ def main():
     ing.add_argument("out_dir")
     ing.add_argument("--memory-dir", default=None)
     ing.add_argument("--model", default="", help="teacher model label, recorded on every row and note")
+    ing.add_argument("--run-id", default=None, help="journal/run label recorded on every accepted row (never a secret)")
     ing.add_argument("--tasks", nargs="+", default=list(TASKS), choices=list(TASKS))
     ing.add_argument("--split", default="train")
     ing.add_argument("--min-reward", type=float, default=0.0)
@@ -206,7 +277,7 @@ def main():
         print(json.dumps(export(a.sft_dir, a.out_dir, a.tasks, a.split, a.per_task, a.seed), indent=1))
     else:
         print(json.dumps(ingest(a.export_dir, a.completions, a.out_dir, a.memory_dir, a.tasks, a.split,
-                                a.min_reward, a.model), indent=1))
+                                a.min_reward, a.model, a.run_id), indent=1))
 
 
 if __name__ == "__main__":

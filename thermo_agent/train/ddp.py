@@ -77,14 +77,46 @@ def grpo_batches_divisible(per_device: int, grad_accum: int, world_size: int, nu
     return effective_batch(per_device, grad_accum, world_size) % num_generations == 0
 
 
-def assert_grpo_batches(per_device: int, grad_accum: int, world_size: int, num_generations: int) -> None:
+def grpo_batch_error(per_device: int, grad_accum: int, world_size: int, num_generations: int) -> str:
+    """Exact, actionable message for a batch that cannot hold whole GRPO groups."""
     eff = effective_batch(per_device, grad_accum, world_size)
+    return (
+        f"GRPO batch is not group-aligned: per_device_train_batch_size={per_device} must be a multiple "
+        f"of num_generations (k={num_generations}), and the effective batch "
+        f"{per_device}x{grad_accum}x{world_size}={eff} must be divisible by k. For k={num_generations} "
+        f"use --per-device-batch {max(num_generations, 4)} --grad-accum {grad_accum} "
+        "(dual-T4 defaults: --per-device-batch 4 --grad-accum 2)."
+    )
+
+
+def assert_grpo_batches(per_device: int, grad_accum: int, world_size: int, num_generations: int) -> None:
+    """Refuse a batch that would split a group of `num_generations` completions across steps/ranks."""
     if not grpo_batches_divisible(per_device, grad_accum, world_size, num_generations):
-        raise ValueError(
-            f"effective batch {per_device}x{grad_accum}x{world_size}={eff} is not divisible by "
-            f"num_generations={num_generations} (per-device batch {per_device} must also be a multiple); the "
-            "dual-T4 setting is --per-device-batch 4 --grad-accum 2"
-        )
+        raise ValueError(grpo_batch_error(per_device, grad_accum, world_size, num_generations))
+
+
+def assert_fp16_lora_ddp(
+    dtype: str,
+    init_kwargs: dict | None,
+    lora_config: object | None,
+    *,
+    deepspeed: object = None,
+    fsdp: object = None,
+) -> None:
+    """Guard the documented recipe: full fp16 LoRA, DDP replication, no QLoRA/FSDP/ZeRO.
+
+    Kept as pure Python so the CPU tests can assert the recipe without importing torch or building a model.
+    """
+    if dtype != "float16":
+        raise ValueError("Only fp16 LoRA DDP is supported on the dual-T4 target; pass --dtype float16")
+    if "quantization_config" in (init_kwargs or {}):
+        raise ValueError("QLoRA (a 4-bit quantization_config) is not part of the fp16 LoRA DDP recipe; drop --qlora")
+    if deepspeed not in (None, "", {}):
+        raise ValueError("DeepSpeed/ZeRO is not used: the recipe replicates the model with DDP")
+    if fsdp not in (None, "", {}):
+        raise ValueError("FSDP is not used: the recipe replicates the model with DDP")
+    if lora_config is None:
+        raise ValueError("The recipe needs a LoRA config (full fine-tuning is not used)")
 
 
 def barrier() -> None:
@@ -96,13 +128,22 @@ def barrier() -> None:
 
 
 def model_init_kwargs(dtype: str) -> dict:
-    """TRL passes this to `from_pretrained`; transformers renamed `torch_dtype` to `dtype` in v5."""
+    """TRL passes this to `from_pretrained`; transformers renamed `torch_dtype` to `dtype` in v5.
+
+    `attn_implementation="sdpa"` is deliberate: Qwen3.5's hybrid layers are eager by default on
+    this config, and one full-attention layer at ~5.7k tokens materialises a ~1 GiB score matrix
+    (16 heads x seq^2 x fp16), which is exactly the allocation that OOM'd smoke v26 on a T4.
+    SDPA's memory-efficient kernel is available on Turing for fp16 and does not change weights.
+    """
     import inspect
+    import os
     import torch
     from transformers import AutoModelForCausalLM
 
     params = inspect.signature(AutoModelForCausalLM.from_pretrained).parameters
-    return {"dtype": getattr(torch, dtype)} if "dtype" in params else {"torch_dtype": getattr(torch, dtype)}
+    kwargs = {"dtype": getattr(torch, dtype)} if "dtype" in params else {"torch_dtype": getattr(torch, dtype)}
+    kwargs["attn_implementation"] = os.environ.get("THERMO_ATTN", "sdpa")
+    return kwargs
 
 
 def describe_runtime() -> dict:

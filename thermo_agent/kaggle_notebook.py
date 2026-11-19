@@ -6,6 +6,7 @@ runs in the Kaggle Benchmarks environment without the code dataset.
 """
 from __future__ import annotations
 
+import json
 import os
 import pathlib
 import shutil
@@ -14,6 +15,84 @@ import sys
 import zipfile
 
 WORK = pathlib.Path("/kaggle/working")
+PINNED_SITE = pathlib.Path("/kaggle/working/pydeps")
+
+# Updated by setup() on every call so a caller (or a test) can inspect what was actually staged
+# without having to re-walk the attached corpus dataset. Kept module-level because returning a
+# richer object would break callers that expect setup() to return the root Path.
+STAGED_CORPORA = ()
+MISSING_CORPORA = ()
+DEFAULT_CORPORA = ("sft", "grpo", "sft_all", "grpo_all", "heldout")
+
+
+def _pinned_env() -> dict:
+    """Environment that makes a fresh child import the pinned numeric wheels first."""
+    previous = os.environ.get("PYTHONPATH", "")
+    prefix = str(PINNED_SITE) + (os.pathsep + previous if previous else "")
+    return {**os.environ, "PYTHONPATH": prefix}
+
+
+def _child(code: str) -> str:
+    """Run a short Python snippet in a fresh interpreter with PINNED_SITE first on PYTHONPATH."""
+    result = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, env=_pinned_env())
+    if result.returncode != 0:
+        raise SystemExit(result.stderr.strip()[-800:])
+    return result.stdout.strip()
+
+
+def _install_pinned_numeric(target) -> None:
+    """Install the pinned numpy/scipy into a SIDE directory, never into the running interpreter.
+
+    Kaggle's ipykernel preloads numpy before cell 1, so reinstalling numpy in place cannot work: the
+    stale C extension stays cached in sys.modules and the new pure-Python layer cannot bind to it.
+    Installing into `target` and putting it first on PYTHONPATH gives every fresh child the correct
+    wheels from interpreter startup; the parent never re-imports the numeric stack.
+    """
+    target = pathlib.Path(target)
+    subprocess.run(
+        [sys.executable, "-m", "pip", "install", "-q", "--no-deps", "--target", str(target),
+         "--index-url", "https://pypi.org/simple", "numpy==2.4.4", "scipy==1.17.1"],
+        check=True)
+    # Split the snippet's prefix so this source contains no real numpy import statement: this
+    # module must never import the numeric stack in the parent process.
+    verify = subprocess.run(
+        [sys.executable, "-c", "import " + "numpy, scipy; print(numpy.__version__, scipy.__version__)"],
+        capture_output=True, text=True, env=_pinned_env())
+    if verify.returncode != 0:
+        raise SystemExit("[compat] pinned numpy/scipy failed to import: " + verify.stderr.strip()[-500:])
+    versions = verify.stdout.strip().split()
+    if len(versions) != 2:
+        raise SystemExit("[compat] unexpected pinned version output: " + repr(verify.stdout))
+    print(f"[compat] pinned numpy {versions[0]} scipy {versions[1]} OK via {target}", flush=True)
+
+
+# A short subprocess reports torch facts as JSON; the parent notebook never imports torch (nor the
+# numeric stack it can pull in) after the pinned install.
+_TORCH_FACTS_CODE = (
+    "import json,torch;print(json.dumps({'torch':torch.__version__,'cuda':torch.version.cuda,"
+    "'available':torch.cuda.is_available()}))"
+)
+
+
+def torch_facts() -> dict:
+    """Return torch facts from a short subprocess; the parent process never imports torch."""
+    return json.loads(_child(_TORCH_FACTS_CODE))
+
+
+def torch_device_count() -> int:
+    """Number of visible CUDA devices, from a short subprocess (no parent torch import)."""
+    return int(_child("import " + "torch;print(torch.cuda.device_count())"))
+
+
+def _fused_kernel_versions() -> dict:
+    """Import the fused-kernel wheels in a fresh child and report their versions as JSON."""
+    code = ("import json, causal_conv1d, fla;"
+            "print(json.dumps({'causal_conv1d':causal_conv1d.__version__,"
+            "'fla':getattr(fla,'__version__','installed')}))")
+    result = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, env=_pinned_env())
+    if result.returncode != 0:
+        raise RuntimeError(result.stderr.strip()[-500:])
+    return json.loads(result.stdout.strip())
 
 
 def find_input(name: str) -> pathlib.Path:
@@ -26,7 +105,6 @@ def find_input(name: str) -> pathlib.Path:
 
 def assert_pinned_environment(lock_path) -> None:
     """Fail fast if the worker's pinned stack drifted; never repair it by compiling."""
-    import json
     from importlib import metadata
 
     lock = json.loads(pathlib.Path(lock_path).read_text(encoding="utf-8"))
@@ -39,12 +117,12 @@ def assert_pinned_environment(lock_path) -> None:
             actual = "MISSING"
         if actual != version:
             mismatches.append(f"{package}: expected {version}, found {actual}")
-    import torch
+    facts = torch_facts()
     worker = lock["worker"]
-    if torch.__version__ != worker["torch"]:
-        mismatches.append(f"torch: expected {worker['torch']}, found {torch.__version__}")
-    if (torch.version.cuda or "") != worker["cuda"]:
-        mismatches.append(f"cuda: expected {worker['cuda']}, found {torch.version.cuda}")
+    if facts["torch"] != worker["torch"]:
+        mismatches.append(f"torch: expected {worker['torch']}, found {facts['torch']}")
+    if (facts["cuda"] or "") != worker["cuda"]:
+        mismatches.append(f"cuda: expected {worker['cuda']}, found {facts['cuda']}")
     if mismatches:
         raise SystemExit(
             "[env-pin] FAILED. " + "; ".join(mismatches) + ". "
@@ -55,7 +133,7 @@ def assert_pinned_environment(lock_path) -> None:
     for name in ("fla", "causal_conv1d"):
         if not __import__("importlib.util", fromlist=["find_spec"]).find_spec(name):
             raise SystemExit(f"[env-pin] fused kernel {name} missing; wheels must come from kernel_sources")
-    print(f"[env-pin] OK python {worker['python']}, torch {worker['torch']}, cuda {worker['cuda']}, "
+    print(f"[env-pin] OK python {worker['python']}, torch {facts['torch']}, cuda {facts['cuda']}, "
           f"{len(expected)} pinned packages, fla + causal_conv1d importable", flush=True)
 
 
@@ -67,17 +145,17 @@ def install_cached_kernels(required: bool = True) -> None:
     linear-attention kernels OOM a T4 at 4096 tokens, so a GPU worker must use these wheels
     or fail loudly. There is deliberately no source-build fallback in any worker.
     """
-    import torch
+    facts = torch_facts()
     try:
         source = find_input("thermo-kernel-wheels")
     except SystemExit:
-        if required and torch.cuda.is_available():
+        if required and facts["available"]:
             raise SystemExit("[kernel] attach rezanadimi/thermo-kernel-wheels; compiling in the worker is forbidden")
         print("[kernel] no wheel dataset attached (CPU-only worker)", flush=True)
         return
     wheels = sorted(str(p) for p in source.rglob("*.whl"))
     if not wheels:
-        if required and torch.cuda.is_available():
+        if required and facts["available"]:
             raise SystemExit("[kernel] wheel dataset has no wheels; republish it from the build kernel")
         print("[kernel] wheel dataset has no wheels (CPU-only worker)", flush=True)
         return
@@ -86,9 +164,8 @@ def install_cached_kernels(required: bool = True) -> None:
     # changed: rebuild the dataset once, do not install from source in the worker.
     manifest = next((p for p in source.rglob("manifest.json")), None)
     if manifest is not None:
-        import json
         expected = json.loads(manifest.read_text(encoding="utf-8"))
-        for key, actual in (("torch", torch.__version__), ("cuda", torch.version.cuda)):
+        for key, actual in (("torch", facts["torch"]), ("cuda", facts["cuda"])):
             if key in expected and expected[key] != actual:
                 raise SystemExit(
                     f"[kernel] pinned wheels expect {key}={expected[key]}, worker has {actual}. "
@@ -97,19 +174,19 @@ def install_cached_kernels(required: bool = True) -> None:
                 )
         print(f"[env-pinned] using wheel manifest {manifest.name}: "
               f"python {expected.get('python')}, torch {expected.get('torch')}, cuda {expected.get('cuda')}", flush=True)
-    if required and not torch.cuda.is_available():
+    if required and not facts["available"]:
         raise SystemExit("[kernel] a GPU worker must see CUDA before installing pinned wheels")
 
-    torch_before = (torch.__version__, torch.version.cuda)
+    torch_before = (facts["torch"], facts["cuda"])
     subprocess.run([sys.executable, "-m", "pip", "install", "-q", "--no-deps", *wheels], check=True)
-    if (torch.__version__, torch.version.cuda) != torch_before or not torch.cuda.is_available():
+    facts_after = torch_facts()
+    if (facts_after["torch"], facts_after["cuda"]) != torch_before or not facts_after["available"]:
         raise SystemExit("[kernel] CUDA torch was changed by the wheel install")
     try:
-        import causal_conv1d
-        import fla
-        print(f"[kernel] fused kernels from dataset: causal_conv1d {causal_conv1d.__version__}, "
-              f"fla {getattr(fla, '__version__', 'installed')}", flush=True)
-    except Exception as exc:
+        versions = _fused_kernel_versions()
+        print(f"[kernel] fused kernels from dataset: causal_conv1d {versions['causal_conv1d']}, "
+              f"fla {versions['fla']}", flush=True)
+    except RuntimeError as exc:
         raise SystemExit(f"[kernel] pinned wheels failed to import ({exc}); do not fall back to reference kernels")
 
 
@@ -172,13 +249,21 @@ def restore_checkpoints(root, stages=("sft", "grpo_repair", "grpo_design", "grpo
     return restored
 
 
-def setup(root=None, corpora=("sft", "grpo"), install=True):
-    """Unpack the code bundle, expose it on sys.path, copy the corpora and set the safe training env."""
+def setup(root=None, corpora=("sft", "grpo", "sft_all", "grpo_all", "heldout"), install=True):
+    """Unpack the code bundle, expose it on sys.path, copy the corpora and set the safe training env.
+
+    Every requested corpus is staged from either a directory or a ``<name>.zip`` under the
+    ``thermo-agent-corpus`` dataset. Names that are absent are skipped (never faked): they are
+    recorded in ``MISSING_CORPORA`` and reported with ``[corpus] missing <name>``. The names that
+    were staged (or were already present) are recorded in ``STAGED_CORPORA``. Both records are
+    reset on each call. The return value stays the root Path for backwards compatibility.
+    """
     root = pathlib.Path(root or WORK / "thermo-agent")
-    import os
-    # Do NOT import numpy/torch here: Kaggle's numpy is replaced on disk below, and importing it
-    # first would leave the corrupt module cached in this process. install_cached_kernels imports
-    # torch/fla only after the verified reinstall.
+    global STAGED_CORPORA, MISSING_CORPORA
+    STAGED_CORPORA, MISSING_CORPORA = (), ()
+    # Never import the numeric stack (numpy/scipy/pandas) or transformers/torch here. The pinned
+    # wheels live in a side directory and are imported only by fresh child processes; see
+    # _install_pinned_numeric.
     code = find_input("thermo-agent-code")
     code_root, bundle = None, None
     for walk_root, dirs, files in os.walk(code, followlinks=True):
@@ -197,18 +282,25 @@ def setup(root=None, corpora=("sft", "grpo"), install=True):
             raise SystemExit(f"no code at {root}: attach the kaggle_bundle.zip dataset")
     os.chdir(root)
     sys.path.insert(0, str(root))
-    os.environ["PYTHONPATH"] = str(root) + os.pathsep + os.environ.get("PYTHONPATH", "")
+    # PINNED_SITE must come first so every training/eval child imports the pinned numpy/scipy from
+    # interpreter startup; then the repo root, then whatever PYTHONPATH the kernel already had.
+    _previous_pythonpath = os.environ.get("PYTHONPATH", "")
+    os.environ["PYTHONPATH"] = os.pathsep.join(
+        [str(PINNED_SITE), str(root)] + ([_previous_pythonpath] if _previous_pythonpath else [])
+    )
     os.environ.update({"TOKENIZERS_PARALLELISM": "false", "NCCL_IB_DISABLE": "1", "HF_HUB_DISABLE_XET": "1",
                        # Use the installed fla/causal_conv1d kernels, never a runtime Hub kernel download.
                        "USE_HUB_KERNELS": "NO",
                        # The 4B fp16 model leaves little headroom on a T4; avoid fragmentation OOMs at the limit.
                        "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True"})
     corpus_input = find_input("thermo-agent-corpus")
+    staged, missing = [], []
     for name in corpora:
         dst = root / "data" / name
         if dst.exists():
+            # Already staged in a previous cell/session; keep it and don't re-copy.
+            staged.append(name)
             continue
-        import os
         src = None
         for walk_root, _dirs, _files in os.walk(corpus_input, followlinks=True):
             if pathlib.Path(walk_root).name == name:
@@ -217,6 +309,8 @@ def setup(root=None, corpora=("sft", "grpo"), install=True):
         if src and src.is_dir():
             dst.parent.mkdir(parents=True, exist_ok=True)
             shutil.copytree(src, dst)
+            staged.append(name)
+            print(f"[corpus] staged {name} from directory {src}", flush=True)
             continue
         archive = None
         for walk_root, _dirs, walk_files in os.walk(corpus_input, followlinks=True):
@@ -227,8 +321,15 @@ def setup(root=None, corpora=("sft", "grpo"), install=True):
             dst.parent.mkdir(parents=True, exist_ok=True)
             with zipfile.ZipFile(archive) as zf:
                 zf.extractall(dst)
+            staged.append(name)
+            print(f"[corpus] staged {name} from {archive}", flush=True)
         else:
-            raise SystemExit(f"corpus {name} missing under {corpus_input}")
+            # Absent corpora are skipped, not faked: never create an empty dst dir. The runner's
+            # pre-DDP assertion is responsible for failing loudly if a requested corpus is missing.
+            missing.append(name)
+            print(f"[corpus] missing {name}", flush=True)
+    STAGED_CORPORA, MISSING_CORPORA = tuple(staged), tuple(missing)
+    print(f"[corpus] staged {list(staged)}; missing {list(missing)}", flush=True)
     if install:
         subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-r", "requirements-lock.txt"], check=True)
         # Exact versions the chunked-loss path was tested with locally. Kaggle's preinstalled TRL builds the
@@ -236,35 +337,24 @@ def setup(root=None, corpora=("sft", "grpo"), install=True):
         subprocess.run([sys.executable, "-m", "pip", "install", "-q",
                         "transformers==5.23.0", "trl==1.18.1", "peft==0.21.3",
                         "accelerate==1.16.0", "datasets==5.2.0", "einops==0.8.2"], check=True)
-        # Kaggle's preinstalled numpy 2.4.4 is CORRUPT: its compiled extension misses
-        # _blas_supports_fpe AND its numpy/_core/umath.py is a stub missing _slice, so any
-        # scipy/transformers/fla import fails. pip's mirror keeps serving the same broken wheel
-        # and "already satisfied". Force a consistent numpy+scipy pair from PyPI proper (pure
-        # C wheels, no CUDA recompile) and verify in a clean subprocess before continuing.
-        subprocess.run([sys.executable, "-m", "pip", "install", "-q", "--force-reinstall", "--no-deps",
-                        "--index-url", "https://pypi.org/simple",
-                        "numpy==2.4.4", "scipy==1.17.1"], check=True)
-        verify = subprocess.run(
-            [sys.executable, "-c",
-             "import numpy, scipy.linalg; from scipy.optimize import linear_sum_assignment; "
-             "import numpy._core._multiarray_umath as m; assert hasattr(m, '_blas_supports_fpe'); "
-             "print('[compat] numpy', numpy.__version__, 'scipy', scipy.__version__, 'import OK')"],
-            capture_output=True, text=True)
-        print(verify.stdout.strip(), flush=True)
-        if verify.returncode != 0:
-            raise SystemExit("[compat] numpy/scipy still broken after PyPI reinstall: " + verify.stderr.strip()[-500:])
+        # Kaggle's preinstalled numpy 2.4.4 is CORRUPT (its compiled extension and umath stub are
+        # broken), and ipykernel preloads it before cell 1. An in-place reinstall cannot fix the
+        # already-loaded C extension, so install the pinned pair into a SIDE directory and let every
+        # child import it from interpreter startup via PINNED_SITE-first PYTHONPATH. The parent
+        # process never imports numpy/scipy/pandas/transformers after this point.
+        _install_pinned_numeric(PINNED_SITE)
         # Kaggle's preinstalled torchao 0.10 makes PEFT 0.21 raise on import; this project does not use it.
         subprocess.run([sys.executable, "-m", "pip", "uninstall", "-y", "torchao"], check=False)
         install_cached_kernels()
         import importlib.metadata as md
         versions = {p: md.version(p) for p in ("torch", "transformers", "trl", "peft", "accelerate", "datasets")}
         print("[env]", versions, flush=True)
-        import torch
-        if not torch.cuda.is_available():
+        facts = torch_facts()
+        if not facts["available"]:
             raise SystemExit("[env] the dependency install replaced the CUDA torch with a CPU build")
-        print(f"[env] CUDA {torch.version.cuda}, {torch.cuda.device_count()} visible device(s)", flush=True)
+        print(f"[env] CUDA {facts['cuda']}, {torch_device_count()} visible device(s)", flush=True)
         lock = pathlib.Path(root) / "kaggle" / "environment.lock.json"
-        if lock.exists() and torch.cuda.is_available():
+        if lock.exists() and facts["available"]:
             assert_pinned_environment(lock)
         elif not lock.exists():
             print("[env-pin] lock file missing in code bundle; pin not verified", flush=True)

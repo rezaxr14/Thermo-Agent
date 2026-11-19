@@ -3,6 +3,18 @@
 Snapshot: 2026-11-18. All numbers are generated from files in this repository; `docs/PROVENANCE.md`,
 `docs/API_USAGE_AND_PROGRESS.md`, `docs/STATUS.md` and `paper/Q1_CHECKLIST.md` carry the detailed records.
 
+## Current implementation plan
+
+The current state (verified in `docs/STATUS.md`) is: the LangGraph self-correcting harness with five real physics
+tools and compact memory is done (`thermo_agent/teacher/agent_graph.py`, `toolkit.py`, `compact_memory.py`); the
+held-out set is frozen at seed 987654 (`data/heldout/`); the evaluation arms include SFT+GRPO at k=4, 8 and 16 with
+separate checkpoint dirs (`kaggle/eval_runner.py`); and the smoke kernel was pushed with the PyPI-pinned
+numpy/scipy shim (`thermo_agent/kaggle_notebook.py`). The teacher tool-CoT campaign is **pending** — run
+`scripts/run_teacher_campaign.ps1` (budget models first; then the expensive tier), with model order and the standing
+`claude-sonnet-5-5` reminder in `docs/TEACHER_MODEL_CHOICES.md`. **No SFT or GRPO weights exist yet.** Exact commands
+for the campaign, the three Kaggle kernel pushes and scoring every arm on `data/heldout` with `DATA_DIRS=heldout`
+are in `docs/RUNBOOK.md`.
+
 ## 1. Goal
 
 Train a 4B physics-grounded agent for four industrial-thermodynamics tasks (Repair, Design, Audit, Ledger) and
@@ -41,8 +53,9 @@ frontier rows are present in both merged corpora (the legacy 4k-gated `data/sft`
 The zero-shot frontier rows above are kept as legacy training data, but the current objective is to teach the 4B
 student **tool use**. Frontier models run inside a **LangGraph harness**
 (`thermo_agent/teacher/agent_graph.py`: `build_context -> propose -> {call_tools -> reflect -> propose}* ->
-finalize -> END`) with **real physics tools** from `thermo_agent/teacher/toolkit.py`: `first_law_check`,
-`second_law_check`, `validity_check`, `solve_plant` and `check_answer`. The tools build the plant from the model's
+finalize -> END`) with **real physics tools** from `thermo_agent/teacher/toolkit.py`: `inspect_plant`,
+`first_law_check`, `second_law_check`, `validity_check` and `solve_plant` (the old `check_answer` oracle is no longer
+exposed). The tools build the plant from the model's
 own candidate and run the actual sequential-modular solver, returning numbers with units. `build_context` injects
 **AGENTS.md + component/task SKILL.md** (the same skills the student trains on) and **fresh failure memory** reloaded
 from `data/memory/*.jsonl` on every row. The model may call tools over multiple rounds, read numeric feedback and
@@ -50,8 +63,12 @@ revise before finalizing.
 
 When the verifiers accept a tool-using trace, the **entire trajectory** — reasoning, tool calls, numeric tool results
 and revisions — is saved as the SFT completion (`source=frontier_tools`), so the student imitates the tool-using
-behaviour, not merely the final answer. Generation uses `claude-haiku-5-5`, `gemini-3.5-flash-lite` and
-`gpt-6-luna` with reasoning ON; **REMINDER: revisit `claude-sonnet-5-5` later** (deferred as too expensive). Every
+behaviour, not merely the final answer. Generation uses `gpt-6-luna` then `claude-haiku-5-5` with reasoning ON, run
+as the hosted task `thermo-teacher-tools-s00` via `scripts/run_teacher_hosted.ps1 -m <slug>`;
+`gemini-3.5-flash-lite` is excluded and must not consume quota. The expensive tier (`gpt-6.2-sol`,
+`claude-sonnet-5-5`, `claude-opus-5-5`, `gemini-4-argon`) follows only after the budget tier reports accepted
+reasoning traces, and `claude-sonnet-5-5` needs Reza's explicit go-ahead.
+**REMINDER: revisit `claude-sonnet-5-5` later** (deferred as too expensive). Every
 arm is scored on the held-out `data/heldout` set (fresh seed 987654, excluded from all corpora), with each checkpoint
 in its own path (`runs/sft`, `runs/grpo_k4`, `runs/grpo_k8`, `runs/grpo_k16`).
 
@@ -90,9 +107,10 @@ in its own path (`runs/sft`, `runs/grpo_k4`, `runs/grpo_k8`, `runs/grpo_k16`).
 
 - No full SFT or GRPO weights exist; v19 smoke has not started, so fused-kernel eval is unverified.
 - `ours_base`, `ours_sft`, `ours_harness`, `ours_grpo` eval arms have not run; the manifest has only 3 replay arms.
-- Big hosted-model journals for the chosen cheap models (`claude-haiku-5-5`, `gemini-3.5-flash-lite`,
-  `gpt-6-luna`, reasoning ON) are pending; the hosted task is at version 3. **REMINDER:** revisit
-  `claude-sonnet-5-5` later — it was deferred as too expensive.
+- Big hosted-model journals for the chosen cheap models (`gpt-6-luna` then `claude-haiku-5-5`, reasoning ON, run as
+  hosted task `thermo-teacher-tools-s00` via `scripts/run_teacher_hosted.ps1 -m <slug>`) are pending;
+  `gemini-3.5-flash-lite` is excluded and must not consume quota. The hosted task is at version 3. **REMINDER:**
+  revisit `claude-sonnet-5-5` later — it was deferred as too expensive and needs Reza's explicit go-ahead.
 - Q1 ablations, significance tests, GPU-hour totals, memory ablation, cost-quality frontier remain pending
   (`paper/Q1_CHECKLIST.md`). Three externally drawn figures still show pilot samples.
 - No dedicated thermo LLM id was supplied; `other_model` is a GPT-nano stand-in.

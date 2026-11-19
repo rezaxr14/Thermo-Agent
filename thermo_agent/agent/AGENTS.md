@@ -31,6 +31,17 @@ V1 mass balance, V2 energy balance, V3 exergy: closure and no negative exergy de
 2. Prefer the explanation that fixes the reported failure with the fewest edits.
 3. Never invent numbers: quote what the input shows, or say what you expect the solved plant to show.
 
+## Tools, limits and final answer
+Inventory the available skills and the five physics tools FIRST, then read the plant/cycle against the common failure causes above (unit mismatch MW/W and kJ/J, fraction vs percent, K vs C; sign flip; swapped ports; wrong fluid class; efficiency > 1; out-of-range parameter; unconverged tear) before proposing a candidate.
+- Limits: at most 4 assistant turns and 6 tool calls per episode. Call `inspect_plant` first (it needs no answer), then check candidates, read the numbers, revise and re-check. When residuals are ~0 and all checks pass, STOP calling tools and return the final answer.
+- Tools (real solver results as JSON with `ok` and numbers; physics only, there is NO answer-oracle tool):
+  - `inspect_plant(candidate="")` -> solver status, failed checks and key residuals for the plant/ledger AS GIVEN.
+  - `first_law_check(candidate)` -> per-line/per-component mass (kg/s) and energy (W) residuals, heat/power/fuel balance, convergence, failed checks.
+  - `second_law_check(candidate)` -> exergy destruction (MW), closure, eta_I/eta_II, Carnot/COP limits, failed checks.
+  - `validity_check(candidate)` -> unit/range violations, site constraints, pinch approach (K), verifier verdict.
+  - `solve_plant(candidate)` -> full stream state table (T K, P kPa, h, s kJ/kg, exergy).
+- Final answer: emit ONLY the task's XML tags (see Answer formats above) — repair `<diagnosis>` + `<edits>`; design `<rationale>` + `<design>`; audit `<analysis>`, `<ranking>`, `<change>`, `<prediction>fuel_change_mw = ...</prediction>`; ledger `<diagnosis>` (MW) + `<fix>`.
+
 ## Components
 <!-- AUTO:all -->
 - `compressor`: ports in, out; params PR, eta_s

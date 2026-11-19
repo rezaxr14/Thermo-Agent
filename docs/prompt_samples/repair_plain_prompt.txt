@@ -1,0 +1,31 @@
+[system]
+You repair energy-plant models. Units are SI (K, Pa, W, kg/s). Efficiencies, second-law fractions and pressure-drop fractions are fractions, never percent. A plant is valid when it solves, passes the physics checks (mass and energy balance, exergy closure, non-negative exergy destruction, no temperature cross, plausible ranges) and meets the site requirements. Answer with a short <diagnosis> that cites only numbers shown in the input, then <edits> with at most 6 lines of the form `SET <component>.<param> = <number>`, `SET @<stream>.<field> = <number>`, `REWIRE @<stream>.<to|from> = <component>.<port>` or `FLUID @<stream> = <fluid>`. You can only change numbers, endpoints and fluids that already exist. Change as little as possible.
+
+[user]
+PLANT
+PLANT dc_absorption_sampled T0=296.2607708415678 P0=101325.0 RH=0.759117165892566
+C AC compressor {"PR":13.810558167575984,"eta_s":0.8311796627973342}
+C CC combustor {"T_out":1559.8805148162041,"dp":0.04,"q_loss":0.01}
+C GT turbine {"P_out":104458.76288659793,"eta_s":0.8466381534433799}
+C DC dc_load {"P_it":28131436.945696477,"chilled_fraction":0.455350050175778,"T_return":304.76363012988645}
+C REJ heat_rejector {"approach_K":5.0,"fan_frac":0.015,"kind":"wet"}
+C HX recuperator {"T_cold_out":370.579544029403,"dp_hot":0.03}
+C CH absorption_chiller {"T_chw_out":293.4442185152505,"T_gen_out":82.6549440649618,"dT_rej":7.432197498779953,"eps":0.30916606598206825,"COP_max":0.8}
+S air ext:air -> AC.in CGAM_AIR {"m_dot":79.43039398968861,"fixed":{"T":296.2607708415678,"P":101325.0}}
+S s2 AC.out -> CC.air_in CGAM_AIR
+S fuel ext:fuel -> CC.fuel_in CH4 {"fixed":{"T":296.2607708415678,"P":2000000.0}}
+S s4 CC.out -> GT.in FLUE
+S s5 GT.out -> HX.hot_in FLUE
+S s6 HX.hot_out -> ext:stack FLUE
+S chw_ret DC.out -> CH.evap_in Water
+S chw_sup CH.evap_out -> DC.in Water {"fixed":{"T":293.4442185152505,"P":300000.0}}
+S rej_hot CH.rej_out -> REJ.in Water
+S rej_cold REJ.out -> CH.rej_in Water {"fixed":{"T":298.2077194543088,"P":101325.0}}
+S hw_hot HX.cold_out -> CH.gen_in Water
+S hw_ret CH.gen_out -> HX.cold_in Water {"fixed":{"T":355.8049440649618,"P":500000.0}}
+
+SITE
+it_load_w=28131436.945696477 cooling_load_w=12681554.71249223 grid_import_allowed=false
+
+RESULT
+SOLVER ERROR E_PROP_RANGE: Water at T=82.7 K P=5e+05 Pa: For now, we don't support T [82.6549 K] below Tmelt(p) [273.123 K] : PropsSI("H","T",82.65494406,"P",500000,"Water")

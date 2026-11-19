@@ -1,12 +1,14 @@
-"""Hindsight failure memory.
+"""Hindsight memory: verifier-rejected failure modes AND verifier-accepted working patterns.
 
 Every attempt made against the physics tool suite is recorded, accepted or rejected. Rejected attempts become
-short notes: the symptom the verifier reported, the mistake class, and the correct pattern from ground truth.
-At training and inference time the notes are retrieved by token overlap with the current plant and appended to
-the system prompt, so the model reads the failure modes that are plausible for this plant before it answers.
+short notes: the symptom the verifier reported, the mistake class, and the correct pattern. Accepted attempts
+become equally short "what worked" notes. At training and inference time the notes are retrieved by token
+overlap with the current plant and appended to the system prompt, so the model sees both the failure modes and
+the working patterns that are plausible for this plant before it answers.
 
-Notes describe *classes* of mistakes, never the answer to the current row: retrieval is by plant tokens and
-task, and any note mined from the same record id is excluded.
+Notes describe *classes*, never the answer to the current row: retrieval is by plant tokens and task, and any
+note mined from the same record id is excluded. Accepted notes ("OK") can never crowd out the failure notes
+("FAIL"): retrieval reserves at least one failure slot whenever failures are relevant.
 """
 from __future__ import annotations
 
@@ -32,12 +34,17 @@ class Note:
     lesson: str
     fix: str
     source: str
-    accepted: bool
+    accepted: bool = False  # legacy notes predate this flag; missing => treated as a failure
     record_id: str = ""
     extra: dict = field(default_factory=dict, compare=False)
 
     def to_dict(self) -> dict:
         return asdict(self)
+
+
+def _accepted(note: Note) -> bool:
+    """Backwards compatible accepted check: legacy rows without the flag are failures."""
+    return bool(getattr(note, "accepted", False))
 
 
 def tokens(text: str) -> set[str]:
@@ -62,6 +69,12 @@ def score(query_tokens: set[str], note: Note) -> float:
     return base
 
 
+def _is_seed(note: Note) -> bool:
+    """Hand-written method notes (source ``seed:*``) are guidance, not verifier evidence."""
+    return bool((getattr(note, "extra", None) or {}).get("seed")) or str(
+        getattr(note, "source", "")).startswith("seed:")
+
+
 def retrieve(query: str, notes: list[Note], k: int = 3, task: str | None = None,
              exclude_record: str = "", min_score: float = 0.02) -> list[Note]:
     q = tokens(query)
@@ -75,16 +88,41 @@ def retrieve(query: str, notes: list[Note], k: int = 3, task: str | None = None,
         if s >= min_score:
             scored.append((s, n))
     scored.sort(key=lambda sn: (-sn[0], sn[1].id))
-    return [n for _, n in scored[:k]]
+    top = scored[:k]
+    # Seed method notes are useful as a recap, but verifier-mined notes are evidence: serve at most
+    # ONE seed note per block and backfill its slots with the next-best mined note, so generic
+    # guidance cannot crowd out the plant-specific successes/failures the tools actually produced.
+    seed_positions = [i for i, (_, n) in enumerate(top) if _is_seed(n)]
+    if len(seed_positions) > 1:
+        keep_index = seed_positions[0]
+        kept = [top[keep_index]]
+        mined = [sn for i, sn in enumerate(top) if i != keep_index and not _is_seed(sn[1])]
+        backfill = [sn for sn in scored[k:] if not _is_seed(sn[1])]
+        top = mined + backfill[:max(0, k - 1 - len(mined))]
+        top.append(kept[0])
+        top.sort(key=lambda sn: (-sn[0], sn[1].id))
+        top = top[:k]
+    # Working patterns must not crowd out the failure lessons: reserve at least one slot for the best-ranked
+    # failure (min(1, k//2) == 1 for every useful k >= 2) whenever a failure is relevant at all.
+    reserved = min(1, k // 2)
+    if reserved and len(top) == k and not any(not _accepted(n) for _, n in top):
+        for candidate in scored[k:]:
+            if not _accepted(candidate[1]):
+                top[-1] = candidate
+                break
+    return [n for _, n in top]
 
 
 def format_notes(notes: list[Note]) -> str:
     if not notes:
         return ""
-    lines = ["KNOWN FAILURE MODES (retrieved from earlier attempts that the verifiers rejected; check each against this plant before answering):"]
+    lines = ["KNOWN FAILURE MODES AND WORKING PATTERNS (retrieved from earlier verifier-rejected attempts and "
+             "verifier-accepted solutions; check each against this plant before answering):"]
     for n in notes:
-        fix = f" Correct pattern: {n.fix}" if n.fix else ""
-        lines.append(f"- {n.fault_type or n.task}: {n.lesson}{fix}")
+        marker = "OK  " if _accepted(n) else "FAIL"
+        label = f"{n.task}/{n.fault_type}" if n.fault_type else n.task
+        fix = f" Fix: {n.fix}" if n.fix else ""
+        lines.append(f"- {marker} {label}: Lesson: {n.lesson}{fix}")
     return "\n".join(lines)
 
 
@@ -120,10 +158,14 @@ def load(path) -> list[Note]:
 
 
 def dedupe(notes: list[Note]) -> list[Note]:
-    """One note per (task, fault type, lesson, fix); keep the first id for determinism."""
+    """One note per (task, fault type, lesson, fix, kind); keep the first id for determinism.
+
+    `accepted` is part of the key so a working pattern is never deduplicated away by a failure with identical
+    text (or vice versa).
+    """
     seen, out = set(), []
     for n in sorted(notes, key=lambda x: x.id):
-        key = (n.task, n.fault_type, n.lesson, n.fix)
+        key = (n.task, n.fault_type, n.lesson, n.fix, _accepted(n))
         if key in seen:
             continue
         seen.add(key)
@@ -132,14 +174,14 @@ def dedupe(notes: list[Note]) -> list[Note]:
 
 
 def dedupe_lessons(notes: list[Note]) -> list[Note]:
-    """One note per (task, fault type, lesson), ignoring the plant-specific fix.
+    """One note per (task, fault type, lesson, kind), ignoring the plant-specific fix.
 
-    Failure memory should teach the class of mistake, not one plant's stream names, so the mined corpus keeps a
-    single example per lesson.
+    Memory teaches classes, not one plant's stream names, so we keep a single example per lesson -- but in two
+    separate classes: an accepted note and a rejected note with the same lesson text are both kept.
     """
     seen, out = set(), []
     for n in sorted(notes, key=lambda x: x.id):
-        key = (n.task, n.fault_type, n.lesson)
+        key = (n.task, n.fault_type, n.lesson, _accepted(n))
         if key in seen:
             continue
         seen.add(key)

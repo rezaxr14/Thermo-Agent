@@ -22,8 +22,8 @@ Honesty notes (things that are true about the data, not covered-up):
   is encoded in the filename, the id prefix and the ``meta_*.json`` file. The
   ``sft_all`` / ``grpo_all`` derivatives do carry ``task``. This suite checks all three
   encodings so "completion, id, task, split" is genuinely verified per case.
-* ``check_answer`` deliberately returns ``{accepted, reward, reasons}`` with **no ``ok``
-  key**; the other four tools return ``ok``. Both success conventions are asserted.
+* ``check_answer`` (the accept/reward oracle) is deliberately NOT in the tool list; grading
+  stays at acceptance time and as the GRPO reward. All five physics tools return ``ok``.
 * A ledger is a system of balance/exergy equations, not a physical plant, so its
   ``solve_plant`` correctly reports ``ok: true`` with **zero streams**. The real ledger
   numbers are exposed by the first-law, second-law and validity tools instead.
@@ -58,7 +58,7 @@ EVAL_SPLITS = ("test_id", "test_ood_fault", "test_ood_topology",
 ID_PREFIX_TO_TASK = {"rep": "repair", "des": "design", "aud": "audit",
                      "led": "ledger", "arch": "repair"}
 HELD_OUT_SEED = 987654
-TOOL_NAMES = ["check_answer", "first_law_check", "second_law_check",
+TOOL_NAMES = ["inspect_plant", "first_law_check", "second_law_check",
               "validity_check", "solve_plant"]
 
 TIER_CASES = (
@@ -262,11 +262,11 @@ def test_all_five_tools_accept_ground_truth_across_cohorts(source: str, task: st
     tools = {fn.__name__: fn for fn in make_tools(task, row)}
     assert tool_names() == TOOL_NAMES
     assert set(tools) == set(TOOL_NAMES)
+    # The accept/reward oracle is never exposed to teacher or student.
+    assert "check_answer" not in tools
 
-    checked = json.loads(tools["check_answer"](ground_truth))
-    # check_answer is the one tool without an `ok` flag: its success flag is `accepted`.
-    assert checked["accepted"] is True, (source, task, checked)
-    assert isinstance(checked["reward"], (int, float))
+    inspected = json.loads(tools["inspect_plant"](""))
+    assert inspected["task"] == task, (source, task, inspected)
 
     first = json.loads(tools["first_law_check"](ground_truth))
     assert first["ok"] is True, (source, task, first)

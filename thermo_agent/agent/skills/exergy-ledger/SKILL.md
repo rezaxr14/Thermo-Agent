@@ -18,3 +18,6 @@ description: Use for ledger-repair tasks: the stream exergy lines E[x], componen
 ## Fixing
 - Write the whole corrected expression: `FIX ED[HX] = E[s5] + E[hw_ret] - E[s6] - E[hw_hot]`. Fix only lines that are wrong; changing a correct line is penalised.
 - After your fixes the ledger must close, every `ED` must be non-negative, and every fixed line must equal its true value.
+
+## Environment: tools, limits, final format
+Inventory the skills and physics tools first, then examine the ledger against known failure modes before proposing a candidate. At most 4 turns and 6 tool calls. Tools return JSON (no answer oracle): `inspect_plant` (as-given per-line residuals, failed lines; call it first), `first_law_check` (per-line residuals, closure, balance), `second_law_check` (exergy destruction, closure), `validity_check` (verdict, failed checks), `solve_plant` (states; ledger has no streams). Read the numbers, revise and re-check; stop when checks pass. Final answer: `<diagnosis>...</diagnosis>` citing MW figures, then `<fix>` with `FIX T0/E[...]/ED[...] = <expr>` lines.

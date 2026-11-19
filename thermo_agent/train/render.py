@@ -1,12 +1,17 @@
 """Render training pairs exactly as GRPO and inference will see the prompt.
 
-GRPO and the evaluator build the prompt with apply_chat_template(prompt, add_generation_prompt=True, enable_thinking=False).
-Rendering a whole conversation for SFT can differ from that in the assistant prefix (for example an empty thinking block),
-which would train the model on a prefix it never sees later. So SFT uses plain text: prompt = the generation prompt string,
-completion = the assistant text."""
+Measured with the cached Qwen3.5-4B tokenizer: with ``enable_thinking=True``
+``apply_chat_template(sys+user, add_generation_prompt=True)`` is a LITERAL PREFIX of
+``apply_chat_template(sys+user+assistant_containing_<think>)``. With ``False`` the template
+injects an empty closed ``<think>\n\n</think>\n\n`` into the generation prompt, which is NOT
+a prefix. Our stored trajectories keep ``<think>...</think>`` inside the assistant content,
+so ``completion_only_loss`` masking aligns only when reasoning is enabled. TRAIN_ON_REASONING
+is exported so SFT and GRPO share one value.
+"""
 from __future__ import annotations
 
-CHAT_KW = {"enable_thinking": False}
+TRAIN_ON_REASONING = True
+CHAT_KW = {"enable_thinking": TRAIN_ON_REASONING}
 
 
 def generation_prompt(tok, messages: list[dict]) -> str:

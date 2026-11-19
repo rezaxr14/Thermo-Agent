@@ -4,6 +4,8 @@ $ErrorActionPreference = 'Stop'
 Set-Location (Split-Path $PSScriptRoot -Parent)
 $py = if (Test-Path '.venv/Scripts/python.exe') { '.venv/Scripts/python.exe' } else { 'python' }
 New-Item -ItemType Directory -Force -Path 'reports' | Out-Null
+# Frozen held-out set: every arm is scored on the same never-seen rows and the same splits.
+$dataDirs = 'data/heldout'
 
 $merged = 'data/teacher_runs/eval_all.jsonl'
 Get-ChildItem 'data/teacher_runs' -Filter 'eval_test_*.jsonl' | Where-Object Name -notlike 'eval_gptnano_*' |
@@ -17,9 +19,8 @@ $arms = @(
 )
 foreach ($a in $arms) {
     if (-not (Test-Path $a.replay)) { "skip $($a.name): missing $($a.replay)"; continue }
-    $splitArgs = if ($a.name -eq 'frontier_tools') { @('--splits','test_id') } else { @() }
-    & $py -m thermo_agent.eval.model_eval data/processed data/processed_arch `
-        --backend replay --replay $a.replay --tasks repair design audit ledger @splitArgs `
+    & $py -m thermo_agent.eval.model_eval $dataDirs `
+        --backend replay --replay $a.replay --tasks repair design audit ledger `
         --limit 30 --harness $a.harness --model-family $a.family --tool-access $a.tools `
         --zero-shot --display-name $a.name --out "reports/eval_$($a.name).json"
     if ($LASTEXITCODE -ne 0) { throw "eval failed: $($a.name)" }

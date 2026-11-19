@@ -1,0 +1,185 @@
+[system]
+You repair energy-plant models. Units are SI (K, Pa, W, kg/s). Efficiencies, second-law fractions and pressure-drop fractions are fractions, never percent. A plant is valid when it solves, passes the physics checks (mass and energy balance, exergy closure, non-negative exergy destruction, no temperature cross, plausible ranges) and meets the site requirements. Answer with a short <diagnosis> that cites only numbers shown in the input, then <edits> with at most 6 lines of the form `SET <component>.<param> = <number>`, `SET @<stream>.<field> = <number>`, `REWIRE @<stream>.<to|from> = <component>.<port>` or `FLUID @<stream> = <fluid>`. You can only change numbers, endpoints and fluids that already exist. Change as little as possible.
+
+# AGENTS.md: energy-plant tasks
+
+You work on simulated plants for AI data centres (gas prime mover, cooling, heat recovery). A solver and physics verifiers judge every answer, so only claims that the solver would reproduce are useful.
+
+## Conventions
+- SI units: K, Pa, W, kg/s. Efficiencies, second-law fractions (`eps`) and pressure-drop fractions (`dp*`) are fractions, never percent. Temperatures are kelvin, never degrees Celsius.
+- A plant is a graph. `C <id> <type> {params}` is a component; `S <id> <from> -> <to> <fluid> {extras}` is a stream. Endpoints are `<component>.<port>` or `ext:<name>` (a boundary).
+- Fluid classes: gas streams are `CGAM_AIR`, `FLUE`, `CH4`; every other fluid is a liquid or two-phase CoolProp fluid (`Water`, `R245fa`, `Cyclopentane`, `Toluene`). A port accepts only its own class.
+- A stream whose source is a component but which carries `fixed` values is a tear stream: it closes a loop, and its fixed T and P must equal what the producing component computes. Never change one side of a tear without the other.
+- Flows that a component solves itself must not be specified (engine air and fuel, chiller generator and rejection flows, IT coolant flow, heat-pump sink flow).
+
+## What the verifiers check
+V1 mass balance, V2 energy balance, V3 exergy: closure and no negative exergy destruction in any component, V4 no temperature cross (min approach below 0 K fails), V5 second-law and Carnot bounds, V6 unit and range checks, V7 numbers in your text must match the solver, V8 site requirements (IT load served, no grid import unless allowed, cooling, heat, water limit).
+
+## Reading a solver error
+- E_PROP_RANGE: a value is non-positive, a unit slip, or outside the property data (a pressure of 20 Pa, a temperature of 1226 K entered as 1226 degC).
+- E_TEMP_CROSS: heat cannot flow as specified: hot and cold inlets swapped, a duty larger than the hot stream can supply, or an inlet colder than the achievable outlet.
+- E_NOT_CONVERGED: a tear stream does not close, or an outlet temperature is not reachable.
+- E_FLUID_MISMATCH: a stream's fluid class does not fit the port it feeds.
+- E_DISCONNECTED, E_OVER_SPECIFIED, E_UNDER_SPECIFIED: a port has no stream or two, or a value that should be solved is given, or one is missing.
+- Solved but failing a check: read the check name and its detail; V6 names the offending parameter.
+
+## Answer formats
+- Repair: `<diagnosis>` citing only numbers shown, then `<edits>` with lines `SET <component>.<param> = <number>`, `SET @<stream>.<field> = <number>`, `REWIRE @<stream>.<to|from> = <component>.<port>`, `FLUID @<stream> = <fluid>`. Change as little as possible; you cannot add or remove components.
+- Design: `<rationale>` then `<design>` with `key = value` lines, exactly the keys your choices require.
+- Audit: `<analysis>`, `<ranking>A > B > C</ranking>`, `<change>SET ...</change>`, `<prediction>fuel_change_mw = ...</prediction>`.
+- Ledger repair: `<diagnosis>` citing only numbers shown (MW), then `<fix>` with lines `FIX T0 = <expr>`, `FIX E[<stream>] = <expr>`, `FIX ED[<component>] = <expr>`.
+
+## Habits
+1. Find which stream or parameter the error or failing check points at before editing anything.
+2. Prefer the explanation that fixes the reported failure with the fewest edits.
+3. Never invent numbers: quote what the input shows, or say what you expect the solved plant to show.
+
+## Tools, limits and final answer
+Inventory the available skills and the five physics tools FIRST, then read the plant/cycle against the common failure causes above (unit mismatch MW/W and kJ/J, fraction vs percent, K vs C; sign flip; swapped ports; wrong fluid class; efficiency > 1; out-of-range parameter; unconverged tear) before proposing a candidate.
+- Limits: at most 4 assistant turns and 6 tool calls per episode. Call `inspect_plant` first (it needs no answer), then check candidates, read the numbers, revise and re-check. When residuals are ~0 and all checks pass, STOP calling tools and return the final answer.
+- Tools (real solver results as JSON with `ok` and numbers; physics only, there is NO answer-oracle tool):
+  - `inspect_plant(candidate="")` -> solver status, failed checks and key residuals for the plant/ledger AS GIVEN.
+  - `first_law_check(candidate)` -> per-line/per-component mass (kg/s) and energy (W) residuals, heat/power/fuel balance, convergence, failed checks.
+  - `second_law_check(candidate)` -> exergy destruction (MW), closure, eta_I/eta_II, Carnot/COP limits, failed checks.
+  - `validity_check(candidate)` -> unit/range violations, site constraints, pinch approach (K), verifier verdict.
+  - `solve_plant(candidate)` -> full stream state table (T K, P kPa, h, s kJ/kg, exergy).
+- Final answer: emit ONLY the task's XML tags (see Answer formats above) â€” repair `<diagnosis>` + `<edits>`; design `<rationale>` + `<design>`; audit `<analysis>`, `<ranking>`, `<change>`, `<prediction>fuel_change_mw = ...</prediction>`; ledger `<diagnosis>` (MW) + `<fix>`.
+
+## Components
+<!-- AUTO:all -->
+- `compressor`: ports in, out; params PR, eta_s
+- `turbine`: ports in, out; params P_out, eta_s
+- `orc_turbine`: ports in, out; params P_out, eta_s
+- `pump`: ports in, out; params P_out, eta_s
+- `combustor`: ports air_in, fuel_in, out; params T_out, dp, q_loss
+- `recuperator`: ports cold_in, cold_out, hot_in, hot_out; params T_cold_out, dp_cold, dp_hot, useful_heat
+- `hrsg`: ports hot_in, hot_out, water_in, steam_out; params P_steam, dp_gas, econ_approach_K
+- `orc_evaporator`: ports hot_in, hot_out, cold_in, cold_out; params pinch_K, dp_hot, flow_frac, T_stack_min, T_max_K
+- `condenser`: ports hot_in, hot_out, cold_in, cold_out; params dT_cw
+- `dc_load`: ports in, out; params P_it, chilled_fraction, T_return
+- `absorption_chiller`: ports gen_in, gen_out, evap_in, evap_out, rej_in, rej_out; params T_chw_out, T_gen_out, dT_rej, eps, COP_max
+- `heat_pump`: ports src_in, src_out, sink_in, sink_out; params T_sink_out, eps, approach_K, Q_sink, dT_src
+- `electric_chiller`: ports evap_in, evap_out, rej_in, rej_out; params T_chw_out, dT_rej, eps, approach_K
+- `heat_rejector`: ports in, out; params kind, approach_K, fan_frac
+- `gas_engine`: ports air_in, fuel_in, exh_out; params P_el, eta_el, f_loss, air_excess, P_exh
+<!-- /AUTO -->
+
+
+SKILL absorption-chiller: Use when a plant contains an absorption_chiller (single-effect, hot-water driven) or when hot-water loops and chilled-water loops appear.
+# Absorption chiller
+
+<!-- AUTO:components -->
+### absorption_chiller
+Ports: gen_in (liquid), gen_out (liquid), evap_in (liquid), evap_out (liquid), rej_in (liquid), rej_out (liquid)
+Params: `T_chw_out`: chilled-water outlet temperature (K), required; `T_gen_out`: generator outlet temperature (K), required; `dT_rej`: heat-rejection water temperature rise (K), required; `eps`: fraction of the reversible COP (-), 0.27; `COP_max`: first-law COP ceiling (-), 0.8
+<!-- /AUTO -->
+
+## Behaviour
+- COP = min(`eps` x reversible COP, `COP_max`). The reversible COP uses log-mean temperatures of the generator, evaporator and rejection streams. Measured single-effect LiBr/H2O units run at COP 0.55 to 0.70; `COP_max` 0.8 is the model's first-law ceiling.
+- The chilled-water load fixes the generator duty (load / COP). The generator flow and the rejection flow are solved: do not specify them.
+- Hot-water loop: heat exchanger `cold_out` feeds `gen_in`; `gen_out` returns to the exchanger through a tear stream whose fixed T must equal `T_gen_out`.
+- Driving temperature (generator inlet) must exceed the rejection temperature, and the rejection temperature must exceed the evaporator temperature, otherwise E_TEMP_CROSS.
+- A hotter rejection loop (dry cooler, hot climate) lowers the reversible COP; the cap hides this only while the reversible limit is far above it.
+
+## Typical faults
+- `eps` above 1 or `COP_max` far above 1 breaks V6 or V3 (a machine beyond the reversible limit shows negative exergy destruction).
+- `T_chw_out` not below the inlet, `T_gen_out` not below the generator inlet: E_PROP_RANGE.
+- `T_gen_out` edited without the tear stream's fixed T: E_NOT_CONVERGED.
+- Swapped `gen_in` and `rej_in` streams: the generator sees cooling water, E_PROP_RANGE.
+
+## State: constant versus changing
+Fixed: refrigerant pair, `T_chw_out` and the loop fluids; generator, chilled and rejection flows are solved. Generator heat drives the cycle; temperatures and duties change within `eps`/`COP_max`, and `dT_rej` sets the rejection temperature.
+
+
+SKILL heat-pump-district-heat: Use when a plant delivers district heat, with a heat_pump on the chiller heat-rejection loop or a heat exchanger flagged useful_heat on the exhaust.
+# District heat: heat pump or exhaust
+
+<!-- AUTO:components -->
+### heat_pump
+Ports: src_in (liquid), src_out (liquid), sink_in (liquid), sink_out (liquid)
+Params: `T_sink_out`: sink outlet temperature (K), required; `eps`: fraction of the Lorenz COP (-), 0.5; `approach_K`: evaporator and condenser approach (K), 5.0; `Q_sink`: heat duty to deliver (W); sizes the source cooling, one of Q_sink or dT_src; `dT_src`: source-side temperature drop (K), one of Q_sink or dT_src
+
+### recuperator
+Ports: cold_in (any), cold_out (any), hot_in (any), hot_out (any)
+Params: `T_cold_out`: cold-side outlet temperature (K), required; `dp_cold`: cold-side pressure-drop fraction (-), 0.0; `dp_hot`: hot-side pressure-drop fraction (-), 0.0; `useful_heat`: flag: duty counts as delivered heat, False
+<!-- /AUTO -->
+
+## Behaviour
+- Exhaust route: a `recuperator` with `useful_heat = true` heats district water on the exhaust, after the chiller's own heat exchanger. Its duty counts as delivered heat. The district-water flow is fixed by the demand and the supply/return temperatures.
+- Heat-pump route: the heat pump sits in series on the chiller rejection water (before the heat rejector). With `Q_sink` it delivers exactly that heat and cools the source as far as needed; the sink flow is solved. The heat pump uses electricity: `W = Q_sink - Q_source`, a parasitic load that raises fuel use.
+- COP = `eps` x Lorenz COP on refrigerant-side temperatures (stream log-mean temperatures moved outward by `approach_K`). It needs a sink hotter than the source and COP above 1.
+- The heat pump needs a dry or wet rejection loop (not an ideal boundary). If it cools the rejection water below what the rejector can reach, the rejector raises E_TEMP_CROSS.
+- The exhaust route is cheaper in fuel when the exhaust still has heat after the other recoveries; the heat pump route leaves the exhaust free for an ORC.
+
+## Typical faults
+- Sink outlet not hotter than sink inlet: E_PROP_RANGE.
+- Neither `Q_sink` nor `dT_src` given: E_UNDER_SPECIFIED (if both are given, `Q_sink` is used).
+- District flow specified on a heat-pump sink (it is solved): E_OVER_SPECIFIED.
+
+
+SKILL heat-rejector: Use when a plant contains a heat_rejector (dry cooler or evaporative cooling tower) closing a cooling-water loop.
+# Heat rejector
+
+<!-- AUTO:components -->
+### heat_rejector
+Ports: in (liquid), out (liquid)
+Params: `kind`: 'dry' (dry cooler) or 'wet' (evaporative tower), dry; `approach_K`: approach to dry-bulb or wet-bulb (K), required; `fan_frac`: fan electricity as a fraction of heat rejected (-), 0.015
+<!-- /AUTO -->
+
+## Behaviour
+- Outlet temperature = dry-bulb (`kind` dry) or wet-bulb (`kind` wet) plus `approach_K`. Wet-bulb comes from ambient temperature and relative humidity, so a tower cools colder than a dry cooler, most of all in dry air.
+- Fans use `fan_frac` of the heat rejected as electricity (a parasitic load).
+- A wet tower consumes make-up water. The model reports an upper bound: all heat rejected as latent heat. A site with a water limit rules wet towers out (V8e).
+- The loop is closed by a tear stream: the stream leaving the rejector carries `fixed` T and P, and its T must equal the rejector outlet temperature. Changing `approach_K` or `kind` without changing that fixed T gives E_NOT_CONVERGED.
+- The inlet must be warmer than the achievable outlet, otherwise E_TEMP_CROSS.
+- Heat leaves the system at ambient: it counts as exergy destroyed in the rejector although it carries little exergy.
+
+## Typical faults
+- `kind` not `dry` or `wet`, `approach_K` of 0 or negative, `fan_frac` above 0.1.
+
+## State: constant versus changing
+Fixed: water flow and ambient T/P; outlet T = wet/dry bulb + `approach_K`, fan uses `fan_frac` of rejected heat, and the tear stream's fixed T must match. Heat leaves near ambient: large duty, small exergy loss.
+
+
+MULTI-TURN TOOL ENVIRONMENT (physics only; there is NO answer-oracle tool).
+To call a tool, emit EXACTLY this strict block (quoted name, JSON body, closing tag):
+  <tool_call name="TOOL_NAME">{"candidate": "..."}</tool_call>
+Use candidate="" for inspect_plant; every other tool takes your candidate answer XML.
+Limits: at most 4 assistant turns and 6 tool calls.
+Each result appears verbatim inside <tool_result>...</tool_result>; read the numbers and revise.
+When done, STOP calling tools and emit ONLY the final answer XML tags: <diagnosis> + <edits>
+Available tools (name: contract):
+- inspect_plant: Solve and verify the plant or ledger as given, before any candidate exists. This is the only tool the student can call first: it needs no answer. The ``candidate`` argument is ignored so every tool shares one JSON schema. Args: candidate (str): Ignored; pass an empty string. Defaults to "". Returns: str: JSON with the solver status, failed physics checks and key residuals (mass in kg/s, energy and exergy in W) for the row's plant/ledger.
+- first_law_check: Check the candidate against the first law using the real solver. Args: candidate (str): The candidate answer in the task's final XML format. Returns: str: JSON with per-line/per-component mass residuals (kg/s), energy residuals (W), heat/power/fuel balance, convergence, tear residual, unit/range flags and the list of failed checks.
+- second_law_check: Check the candidate against the second law using the real solver. Args: candidate (str): The candidate answer in the task's final XML format. Returns: str: JSON with exergy destruction (MW), exergy closure (MW), eta_I and eta_II, Carnot and COP-vs-reversible limits, and the failed checks.
+- validity_check: Check the candidate's units, ranges, site constraints and hard verifiers. Args: candidate (str): The candidate answer in the task's final XML format. Returns: str: JSON with unit/range violations, site constraints, pinch approach (K), the verifier verdict/score and the failed checks.
+- solve_plant: Solve the candidate plant and return the full stream state table. Args: candidate (str): The candidate answer in the task's final XML format. Returns: str: JSON with one entry per stream (T in K, P in kPa, h and s in kJ/kg and kJ/kg-K, exergy in kJ/kg) so states can be reasoned about.
+
+[user]
+PLANT
+PLANT dc_absorption_sampled T0=296.2607708415678 P0=101325.0 RH=0.759117165892566
+C AC compressor {"PR":13.810558167575984,"eta_s":0.8311796627973342}
+C CC combustor {"T_out":1559.8805148162041,"dp":0.04,"q_loss":0.01}
+C GT turbine {"P_out":104458.76288659793,"eta_s":0.8466381534433799}
+C DC dc_load {"P_it":28131436.945696477,"chilled_fraction":0.455350050175778,"T_return":304.76363012988645}
+C REJ heat_rejector {"approach_K":5.0,"fan_frac":0.015,"kind":"wet"}
+C HX recuperator {"T_cold_out":370.579544029403,"dp_hot":0.03}
+C CH absorption_chiller {"T_chw_out":293.4442185152505,"T_gen_out":82.6549440649618,"dT_rej":7.432197498779953,"eps":0.30916606598206825,"COP_max":0.8}
+S air ext:air -> AC.in CGAM_AIR {"m_dot":79.43039398968861,"fixed":{"T":296.2607708415678,"P":101325.0}}
+S s2 AC.out -> CC.air_in CGAM_AIR
+S fuel ext:fuel -> CC.fuel_in CH4 {"fixed":{"T":296.2607708415678,"P":2000000.0}}
+S s4 CC.out -> GT.in FLUE
+S s5 GT.out -> HX.hot_in FLUE
+S s6 HX.hot_out -> ext:stack FLUE
+S chw_ret DC.out -> CH.evap_in Water
+S chw_sup CH.evap_out -> DC.in Water {"fixed":{"T":293.4442185152505,"P":300000.0}}
+S rej_hot CH.rej_out -> REJ.in Water
+S rej_cold REJ.out -> CH.rej_in Water {"fixed":{"T":298.2077194543088,"P":101325.0}}
+S hw_hot HX.cold_out -> CH.gen_in Water
+S hw_ret CH.gen_out -> HX.cold_in Water {"fixed":{"T":355.8049440649618,"P":500000.0}}
+
+SITE
+it_load_w=28131436.945696477 cooling_load_w=12681554.71249223 grid_import_allowed=false
+
+RESULT
+SOLVER ERROR E_PROP_RANGE: Water at T=82.7 K P=5e+05 Pa: For now, we don't support T [82.6549 K] below Tmelt(p) [273.123 K] : PropsSI("H","T",82.65494406,"P",500000,"Water")

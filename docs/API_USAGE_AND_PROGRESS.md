@@ -81,8 +81,11 @@ revisions) is persisted as the SFT completion with `source=frontier_tools`, so t
 tool-using behaviour. Ingest is additive and provenance is recorded per trace in
 `data/provenance/trace_ledger.jsonl`.
 
-Current model choice for generating these traces: `claude-haiku-5-5`, `gemini-3.5-flash-lite`, `gpt-6-luna`,
-reasoning ON (`reasoning="low"`); **REMINDER: revisit `claude-sonnet-5-5` later** (deferred as too expensive). All
+Current model choice for generating these traces: `gpt-6-luna` then `claude-haiku-5-5`, reasoning ON
+(`reasoning="low"`), run as the hosted task `thermo-teacher-tools-s00` via
+`scripts/run_teacher_hosted.ps1 -m <slug>`; `gemini-3.5-flash-lite` is excluded and must not consume quota.
+The expensive tier follows only after the budget tier reports accepted reasoning traces.
+**REMINDER: revisit `claude-sonnet-5-5` later** (deferred as too expensive — needs Reza's explicit go-ahead). All
 arms are scored on the held-out `data/heldout` set (fresh seed 987654, excluded from every corpus), with each
 checkpoint in its own path (`runs/sft`, `runs/grpo_k4`, `runs/grpo_k8`, `runs/grpo_k16`).
 
@@ -190,9 +193,11 @@ the nominal 35 % applied per base row.
   (with `sft_all.zip` / `grpo_all.zip`), `thermo-teacher-prompts`, `thermo-agent-resume`,
   `thermo-agent-eval-replays`; fused wheels come from kernel `thermo-kernel-wheels` via `kernel_sources`.
 - Hosted-task campaign round 2 (`thermo-teacher-big-s00` v3, prompt dataset `thermo-teacher-prompts-big`):
-  **`claude-haiku-5-5`, `gemini-3.5-flash-lite`, `gpt-6-luna`**, reasoning ON (`reasoning="low"`, 1,536 output
-  tokens) on 974 previously-unaccepted prompts, additive to the old journals. **REMINDER:** revisit
-  `claude-sonnet-5-5` later — the user deferred it as too expensive. No accepted rows from those models yet.
+  **`gpt-6-luna` then `claude-haiku-5-5`**, reasoning ON (`reasoning="low"`, 1,536 output tokens) on 974
+  previously-unaccepted prompts, run as hosted task `thermo-teacher-tools-s00` via
+  `scripts/run_teacher_hosted.ps1 -m <slug>`; `gemini-3.5-flash-lite` is excluded and must not consume quota.
+  Additive to the old journals. **REMINDER:** revisit `claude-sonnet-5-5` later — the user deferred it as too
+  expensive and it needs Reza's explicit go-ahead. No accepted rows from those models yet.
 
 ## 8. Reproduction commands
 

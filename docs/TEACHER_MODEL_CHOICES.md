@@ -20,9 +20,45 @@ instead of a name in a notebook cell.
 4. **Keep the decision with the data.** The chosen `model` id is written on every completion line, on every accepted
    corpus row, and on every failure-memory note. A change of model never silently mixes provenance.
 
-The cheap models chosen for this round are **`claude-haiku-5-5`, `gemini-3.5-flash-lite` and `gpt-6-luna`**, with
+## Measured availability (verified 2026-11-19)
+
+Which route a model uses is a fact about availability, not a preference. The SDK's `kbench.llms` exposes exactly
+8 keys in this account; every other slug is reachable **only** as a hosted task via `-m <slug>` (per
+`docs/DECISIONS.md`; no network probe was run offline).
+
+| Route | Reachable slugs |
+|---|---|
+| Local SDK — `kbench.llms` (8 keys) | `anthropic/claude-sonnet-5@default`, `deepseek-ai/deepseek-r1-0528`, `google/gemini-3-flash-preview`, `google/gemini-3.1-flash-lite-preview`, `ibm/granite-4.0-h-small`, `openai/gpt-5.4-nano-2026-03-17`, `openai/gpt-oss-120b`, `qwen/qwen3-next-80b-a3b-instruct` |
+| Hosted task only (`-m <slug>`) | `gpt-6-luna`, `claude-haiku-5-5`, `claude-sonnet-5-5`, `claude-opus-5-5-default` (opus-5-5), `gemini-4-argon`, `gpt-6.2-sol` |
+
+**Rule: choose the route by availability, never rely on `kbench.llms.get` fallback.** That call silently falls back
+to the account default on a miss, so the local SDK driver hard-fails when the resolved `llm.name` is not the
+requested model instead of writing rows mislabelled with a model that did not produce them. Consequently
+`gpt-6-luna`, `claude-haiku-5-5` and the whole expensive tier run on the hosted route
+(`scripts/run_teacher_hosted.ps1` / `thermo-teacher-tools-s00`, see `docs/TEACHER_CAMPAIGN.md`), never on the local
+SDK driver (`scripts/run_teacher_campaign.ps1`).
+
+## Current campaign order (budget first, then expensive)
+
+The current campaign runs in this order, budget first (see `docs/TEACHER_CAMPAIGN.md` for the two routes):
+
+1. **Budget tier:** `gpt-6-luna`, `claude-haiku-5-5` — reasoning ON. These are hosted-only slugs, so they run on
+   Route A (`scripts/run_teacher_hosted.ps1`, task `thermo-teacher-tools-s00`), never on the local SDK driver.
+2. **Expensive tier:** `gpt-6.2-sol`, `claude-sonnet-5-5`, `claude-opus-5-5-default` (the `claude-opus` family) and
+   `gemini-4-argon` (the `gemini-4` family) — also hosted-only; only after the budget tier has reported its
+   verifier-accepted reasoning-trace yield, and only with Reza's explicit go-ahead for Sonnet.
+
+**Do NOT spend quota on `gemini-3.5-flash-lite`.** Per Reza's directive it is the dumbest of the three budget models;
+avoid it entirely on both routes.
+
+**Standing reminder:** revisit `claude-sonnet-5-5` later — the user deferred it as too expensive. Decide after the
+budget models report how many accepted reasoning traces they yield. Do not spend on the expensive tier before that
+check.
+
+The cheap models chosen for this round are **`claude-haiku-5-5` and `gpt-6-luna`** (hosted-only slugs), with
 reasoning **ON** (`reasoning="low"`, 1,536 output tokens) so reasoning traces are captured where the provider exposes
-them; the probe shortlist is those three and may pick among them. The old `MODEL = anthropic/claude-sonnet-5-5@default`
+them; the probe shortlist is those two and may pick among them. `gemini-3.5-flash-lite` is excluded — see the
+do-not-use note above. The old `MODEL = anthropic/claude-sonnet-5-5@default`
 default is retired (Sonnet was too expensive and produced 0 usable rows in the earlier pass). **REMINDER: revisit
 `claude-sonnet-5-5` later** — the user explicitly deferred it; decide after the cheap models report how many
 accepted reasoning traces they yield. After the first ingest, fill this table from `reports/frontier_ingest.json` and
@@ -51,8 +87,10 @@ captured. Reasoning also avoids the `thinking:{type:disabled}` 400 that `reasoni
 | `google/gemini-3.8-flash` | run complete, ingested | 200 attempted, 33 accepted, 167 rejected | `data/teacher_runs/completions_big_gemini-3.8-flash.jsonl` |
 | `anthropic/claude-sonnet-5-5@default` | attempted, produced 0 usable rows | all 5 calls 400'd on the thinking parameter | `data/teacher_runs/completions_big_claude-sonnet-5-5-default.jsonl` |
 | `claude-haiku-5-5` | round 2 (cheap Claude chosen by user) | pending | hosted task v3 |
-| `gemini-3.5-flash-lite` | round 2 (cheap + good, chosen by user) | pending | hosted task v3 |
 | `gpt-6-luna` | round 2 (cheap GPT, chosen by user) | pending | hosted task v3 |
+
+**Do NOT use `gemini-3.5-flash-lite`:** per Reza's directive it is the dumbest of the three budget models; it is
+excluded from the budget tier and no quota should be spent on it.
 
 **REMINDER (from the user):** revisit `claude-sonnet-5-5` in a later round after the cheap models report how many
 verifier-accepted reasoning traces they yield; the user deferred Sonnet as too expensive for now.

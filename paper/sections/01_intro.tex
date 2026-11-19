@@ -32,7 +32,7 @@ shows the system.
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=\linewidth]{figures/pdf/fig_overview.pdf}
-\caption{System overview. Four sources feed one corpus: ground-truth paraphrases, the architecture catalog, frontier-model answers and frontier-authored plants (reached through Kaggle's model access). Every candidate must pass the physics tool suite (first law, second law, component limits); accepted rows go to the corpus, rejected attempts go to the failure memory, which feeds back into the prompts. Harness text is added to \val{corp.harness_fraction}\% of the rows, and SFT and GRPO run data-parallel on two T4 GPUs. The figure shows the design, not results: the teacher paths are designed and their results are pending, no model has been trained, and every trained-model statement is marked pending.}
+\caption{System overview. Four sources feed one corpus: ground-truth paraphrases, the architecture catalog, frontier-model answers and frontier-authored plants (reached through Kaggle's model access). Every candidate must pass the physics tool suite (first law, second law, component limits); accepted rows go to the corpus, and accepted and rejected attempts go to the memory, which feeds back into the prompts. Harness text is added to \val{corp.harness_fraction}\% of the rows, and SFT and GRPO run data-parallel on two T4 GPUs. The figure shows the design, not results: the teacher paths are designed and their results are pending, no model has been trained, and every trained-model statement is marked pending.}
 \label{fig:fig_overview}
 \end{figure}
 
@@ -44,7 +44,7 @@ The evaluation is organised around eight preregistered questions (\cref{sec:prot
 \item A second-law-verified environment for data-center energy systems: \val{env.n_components}
 component models, exergy accounting against an explicit dead state, and verifiers V1 to V8
 whose checks are the reward (\cref{sec:method}).
-\item A verifier-gated training corpus: paraphrased ground-truth traces, a catalog of \val{corp.n_arch} plant diagrams with whole diagrams held out, frontier-model answers and plants accepted only by the physics tool suite, and a retrievable memory of rejected attempts (\cref{sec:corpus}).
+\item A verifier-gated training corpus: paraphrased ground-truth traces, a catalog of \val{corp.n_arch} plant diagrams with whole diagrams held out, frontier-model answers and plants accepted only by the physics tool suite, and a retrievable memory of accepted and rejected attempts (\cref{sec:corpus}).
 \item Four task families with structural out-of-distribution splits: Repair (parameter-level faults,
 \val{env.n_repair_faults} types), Design (a catalog of \val{env.n_catalog} configurations,
 \val{env.n_catalog_heat} when there is a heat demand, plus continuous parameters), Audit (rank

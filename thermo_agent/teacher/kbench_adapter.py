@@ -25,7 +25,10 @@ def _message_turns(chat) -> tuple[str, list[dict]]:
     current = None
     for m in chat.messages:
         sender = getattr(m, "sender", None)
-        name = getattr(sender, "name", "") if sender is not None else ""
+        # kbench names a tool sender after the tool (e.g. "first_law_check", not "Tool") and
+        # the model actor after its slug (not "Assistant"). The stable discriminator is the
+        # actor's role, not its name.
+        role = getattr(sender, "role", "") if sender is not None else ""
         content = str(getattr(m, "content", "") or "")
         traces = getattr(m, "reasoning_traces", None)
         if traces:
@@ -33,12 +36,12 @@ def _message_turns(chat) -> tuple[str, list[dict]]:
         calls = []
         for c in getattr(m, "tool_calls", None) or []:
             calls.append({"name": getattr(c, "name", "?"), "arguments": getattr(c, "arguments", {})})
-        if name == "Assistant" or (calls and name not in ("User", "System", "Tool")):
+        if role == "assistant" or (calls and role not in ("user", "system", "tool")):
             if current is not None:
                 turns.append(current)
             current = {"assistant": content, "reasoning": str(traces) if traces else "",
                        "tool_calls": calls, "tool_results": []}
-        elif name == "Tool":
+        elif role == "tool":
             if current is None:
                 current = {"assistant": "", "reasoning": "", "tool_calls": [], "tool_results": []}
             current["tool_results"].append(content)
@@ -47,21 +50,57 @@ def _message_turns(chat) -> tuple[str, list[dict]]:
     return reasoning, turns
 
 
+def reasoning_for_model(model: str) -> str | None:
+    """Reasoning level that is valid alongside native function tools.
+
+    gpt-6-luna (and the rest of the gpt-6 chat-completions family) rejects
+    ``tools`` + ``reasoning_effort`` on /v1/chat/completions with a hard 400:
+
+        Function tools with reasoning_effort are not supported ... To use function
+        tools, use /v1/responses or set reasoning_effort to 'none'.
+
+    kbench's native tool loop always goes through chat.completions, so the only
+    supported combination on that path is ``reasoning_effort="none"``. Returning
+    None means "do not override the backend default" (correct for models that do
+    support tools and reasoning together, e.g. Claude and Gemini).
+    """
+    m = str(model or "").lower()
+    if m.startswith(("openai/gpt-6", "openai/gpt-6.", "gpt-6", "openai/gpt-5.6")):
+        return "none"
+    return None
+
+
 def make_respond(llm, kbench, actors, *, system_prompt: str, max_tool_rounds: int = 3,
-                 usage_holder: dict | None = None):
+                 usage_holder: dict | None = None, reasoning: str | None = None):
     """Build respond(messages, tools) -> (text, tool_calls, reasoning, turns).
 
     `messages` is the full LangGraph conversation; the system message is installed as the
     kbench chat's system_instructions and the unique user task is sent once. native_tool_agent
     then owns the multi-round tool loop inside the single chat.
+
+    `reasoning` is forwarded to kbench only when it is not None, so models that accept
+    tools and reasoning together keep their traces; gpt-6 chat-completions needs "none".
     """
+    tool_kwargs = {"max_tool_rounds": max_tool_rounds}
+    if reasoning is not None:
+        tool_kwargs["reasoning"] = reasoning
+
     def respond(messages, tools):
-        sys = next((m["content"] for m in messages if m["role"] == "system"), system_prompt)
-        user = "\n\n".join(m["content"] for m in messages if m["role"] == "user")
+        sys = "\n\n".join(m["content"] for m in messages if m["role"] == "system") or system_prompt
         with kbench.chats.new("agent", system_instructions=sys or None) as chat:
-            actors.user.send(user)
+            # Replay the WHOLE conversation into this one chat, not just the last message:
+            # system text is already installed as system_instructions by chats.new; every
+            # user/assistant turn is sent with its own role so the model keeps its history.
+            for m in messages:
+                role = m.get("role")
+                if role == "system":
+                    continue
+                if role == "assistant":
+                    actors.Actor(name="Assistant", role="assistant").send(m.get("content", ""))
+                else:
+                    actors.user.send(m.get("content", ""))
             try:
-                msg = native_tool_agent(llm, tools, max_tool_rounds=max_tool_rounds)
+                msg = native_tool_agent(llm, tools, **tool_kwargs)
             except ToolInvocationLimitExhausted:
                 actors.user.send("Stop calling tools. Return your final XML answer now.")
                 msg = llm.respond()

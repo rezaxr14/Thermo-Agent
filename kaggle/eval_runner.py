@@ -42,18 +42,45 @@ os.chdir(ROOT)
 # %%
 from thermo_agent.kaggle_notebook import assert_pinned_environment, find_input, run, setup, token
 
-ROOT = setup()
+# Stage the frozen held-out split and the tool corpora (plus the standard train corpora that setup()
+# already staged) so every arm is scored on the same never-seen rows and the tool arms have data.
+ROOT = setup(corpora=("sft", "grpo", "sft_all", "grpo_all", "heldout", "sft_tools", "grpo_tools"))
 # Pin check in the notebook itself; no source builds in any Kaggle worker.
 assert_pinned_environment(ROOT / "kaggle" / "environment.lock.json")
+
+# %%
+def require_test_corpus(name):
+    """Fail before scoring if the frozen held-out corpus has no *_test_*.jsonl splits."""
+    d = ROOT / "data" / name
+    tests = sorted(str(p) for p in d.glob("*_test_*.jsonl")) if d.is_dir() else []
+    if not tests:
+        raise SystemExit(
+            f"[corpus] no *_test_*.jsonl in {d} (missing path: {d / '*_test_*.jsonl'}); "
+            f"attach a corpus dataset with a {name} test split before scoring"
+        )
+    print(f"[corpus] {name}: {len(tests)} test split(s)", flush=True)
+    return d
+
+
+# %%
+# DATA_DIRS defaults to heldout; fail loudly here rather than emitting empty reports downstream.
+require_test_corpus("heldout")
+
 REPORTS = ROOT / "reports"
 REPORTS.mkdir(parents=True, exist_ok=True)
-LIMIT = int(os.environ.get("LIMIT", "30"))
+# LIMIT=0 means "no cap": score every row in every held-out split. The frozen eval set has cells
+# up to 70 rows (repair/test_ood_fault), so any positive default would silently truncate them.
+# model_eval treats --limit 0 as no cap and refuses to emit a report whose scored ids are fewer
+# than the split's manifest ids, so an accidental override fails loudly instead of biasing a number.
+LIMIT = int(os.environ.get("LIMIT", "0"))
 FORCE = os.environ.get("FORCE", "0") == "1"
 SPLITS = os.environ.get("SPLITS", "").split(",") if os.environ.get("SPLITS") else None
-# DATA_DIRS: which ground truth to score on. The held-out set (data/heldout, fresh seed) is what
-# every arm is finally compared on; it is excluded from every training corpus and teacher shard.
+# DATA_DIRS: which ground truth to score on. Default to the frozen held-out set (data/heldout,
+# fresh seed 987654): every arm is scored on the same never-seen rows, and it is excluded from
+# every training corpus and teacher shard. Same splits for every arm (SPLITS, if set, applies to all).
+DEFAULT_DATA_DIRS = "heldout"
 DATA_DIRS = [ROOT / "data" / d for d in os.environ.get(
-    "DATA_DIRS", "processed,processed_arch").split(",")]
+    "DATA_DIRS", DEFAULT_DATA_DIRS).split(",")]
 ARMS = os.environ.get(
     "ARMS",
     "ours_base,ours_sft,ours_harness,ours_sft_grpo_k4,ours_sft_grpo_k8,ours_sft_grpo_k16,"
@@ -99,15 +126,44 @@ ADAPTER = pulled or os.environ.get("ADAPTER", "")
 # With no Kaggle Secret, the trained arms take the adapter from a local checkpoint in the
 # attached dataset/code tree via ADAPTER (and GRPO_ADAPTER for the RL stage). No token is stored.
 GRPO_ADAPTER = os.environ.get("GRPO_ADAPTER", merged or ADAPTER)
-# Pull each distinct k checkpoint into its own dir so k=4/8/16 never share weights.
+# GRPO LoRAs are trained on top of the merged SFT weights, so score them on that same base -- never
+# on the raw Qwen weights (model_eval's default). TASK is the single task each checkpoint was trained on.
+SFT_MERGED = str(merged or (ROOT / "runs" / "sft_merged"))
+TASK = os.environ.get("TASK", "ledger")
+
+
+def _has_adapter_weights(path):
+    """True only for a real adapter/checkpoint dir with something loadable, not an empty placeholder."""
+    p = pathlib.Path(path) if path else None
+    if not p or not p.is_dir():
+        return False
+    if any((p / f).exists() for f in ("adapter_config.json", "adapter_model.safetensors", "config.json")):
+        return True
+    return any(c.is_dir() and c.name.startswith("checkpoint-") for c in p.iterdir())
+
+
+def require_adapter(path, stage):
+    """A missing adapter is a hard error: never score the base model under a GRPO label."""
+    if not _has_adapter_weights(path):
+        raise SystemExit(
+            f"GRPO adapter for stage {stage} is missing or empty at {path}; "
+            "refusing to score the base model under a GRPO label"
+        )
+    return path
+
+
+# Pull each distinct k checkpoint into its own dir so k=4/8/16 never share weights. The stage name
+# grpo_{task}_k{k} is simultaneously the HF prefix, the local runs/ dir and the eval pull key.
 GRPO_K_ADAPTERS = {}
 for _k in (4, 8, 16):
-    _stage = f"grpo_{os.environ.get('TASK', 'ledger')}_k{_k}"
+    _stage = f"grpo_{TASK}_k{_k}"
+    _dir = ROOT / "runs" / _stage
     if os.environ.get("HF_TOKEN"):
-        GRPO_K_ADAPTERS[_k] = hf_sync.pull_checkpoint(ROOT / "runs", REPO, _stage, os.environ["HF_TOKEN"])
-        print(f"grpo k={_k} adapter:", GRPO_K_ADAPTERS[_k], flush=True)
+        _pulled = hf_sync.pull_checkpoint(ROOT / "runs", REPO, _stage, os.environ["HF_TOKEN"])
+        print(f"grpo k={_k} adapter:", _pulled, flush=True)
     else:
-        GRPO_K_ADAPTERS[_k] = ROOT / "runs" / _stage
+        _pulled = None
+    GRPO_K_ADAPTERS[_k] = require_adapter(_pulled or _dir, _stage)
 
 # %%
 # One spec per arm. `replay` scores saved Kaggle answers with the same verifiers and prompt rows; the frontier
@@ -115,28 +171,43 @@ for _k in (4, 8, 16):
 SPECS = {
     "ours_base": {"backend": "hf", "model": "Qwen/Qwen3.5-4B", "family": "ours", "harness": "none",
                   "tool_access": "none", "zero_shot": True},
+    # ours_sft and every GRPO arm share the SAME harness mode (agents+skills) and the same held-out
+    # splits, so the only difference between arms is the weights.
     "ours_sft": {"backend": "hf", "model": "Qwen/Qwen3.5-4B", "adapter": ADAPTER, "family": "ours",
-                 "harness": "none", "tool_access": "none", "zero_shot": False},
+                 "harness": "agents+skills", "tool_access": "none", "zero_shot": False},
+    # The real Z-vs-H contrast: ours_sft is prompt-only (no tools), ours_harness is the tool-using
+    # H mode (--tool-access tools --harness agents+skills). Identical weights, different inference.
     "ours_harness": {"backend": "hf", "model": "Qwen/Qwen3.5-4B", "adapter": ADAPTER, "family": "ours",
-                     "harness": "agents+skills", "tool_access": "none", "zero_shot": False},
-    "ours_grpo": {"backend": "hf", "model": "Qwen/Qwen3.5-4B", "adapter": GRPO_ADAPTER, "family": "ours",
-                  "harness": "agents+skills", "tool_access": "none", "zero_shot": False},
+                     "harness": "agents+skills", "tool_access": "tools", "zero_shot": False},
+    # GRPO is trained inside the multi-turn tool environment, so all three k arms are scored
+    # WITH tools: scoring them tool-free would measure a job they were never trained for.
+    "ours_grpo": {"backend": "hf", "model": SFT_MERGED, "adapter": GRPO_ADAPTER, "family": "ours",
+                  "harness": "agents+skills", "tool_access": "tools", "zero_shot": False,
+                  "train_task": TASK},
     # SFT + GRPO at group sizes k=4,8,16. Each pulls its OWN distinct checkpoint dir (written by
     # the train notebook as runs/grpo_<task>_k<k>) so the three scores never use the same weights.
-    "ours_sft_grpo_k4": {"backend": "hf", "model": "Qwen/Qwen3.5-4B", "family": "ours",
-                          "harness": "agents+skills", "tool_access": "none", "zero_shot": False,
-                          "grpo_k": 4},
-    "ours_sft_grpo_k8": {"backend": "hf", "model": "Qwen/Qwen3.5-4B", "family": "ours",
-                          "harness": "agents+skills", "tool_access": "none", "zero_shot": False,
-                          "grpo_k": 8},
-    "ours_sft_grpo_k16": {"backend": "hf", "model": "Qwen/Qwen3.5-4B", "family": "ours",
-                           "harness": "agents+skills", "tool_access": "none", "zero_shot": False,
-                           "grpo_k": 16},
+    # The base is the merged SFT policy (SFT_MERGED); train_task records which task each checkpoint
+    # was trained on, and is written into every report and the manifest.
+    "ours_sft_grpo_k4": {"backend": "hf", "model": SFT_MERGED, "family": "ours",
+                          "harness": "agents+skills", "tool_access": "tools", "zero_shot": False,
+                          "grpo_k": 4, "train_task": TASK},
+    "ours_sft_grpo_k8": {"backend": "hf", "model": SFT_MERGED, "family": "ours",
+                          "harness": "agents+skills", "tool_access": "tools", "zero_shot": False,
+                          "grpo_k": 8, "train_task": TASK},
+    "ours_sft_grpo_k16": {"backend": "hf", "model": SFT_MERGED, "family": "ours",
+                           "harness": "agents+skills", "tool_access": "tools", "zero_shot": False,
+                           "grpo_k": 16, "train_task": TASK},
     "frontier_zero": {"backend": "replay", "replay": str(WORK / "eval_all.jsonl"), "family": "frontier",
                       "harness": "none", "tool_access": "none", "zero_shot": True},
+    # Replay arms: "tools" is the ORIGINAL (historical) arm label, NOT a valid H.MODES
+    # prompt mode. The replay generator ignores messages, so the scored prompt is the
+    # stored one in the replay file (already augmented by the teacher harness). model_eval
+    # normalizes this label to agents+skills for (message-ignoring) augmentation, keeps
+    # "tools" as harness_label in the report, and never passes "tools" to H.augment.
     "frontier_tools": {"backend": "replay", "replay": str(WORK / "harness_eval_completions2.jsonl"),
                        "family": "frontier", "harness": "tools", "tool_access": "tools", "zero_shot": True},
     # Frontier model inside our LangGraph harness with tools + skills + memory (tool-using CoT).
+    # Same as above: "tools" is the original label; the scored prompt is the stored one.
     "frontier_harness": {"backend": "replay", "replay": str(WORK / "harness_completions.jsonl"),
                          "family": "frontier", "harness": "tools", "tool_access": "tools", "zero_shot": True},
     # The measured domain-model arm is the saved GPT-nano answers, not a live localhost endpoint.
@@ -159,14 +230,20 @@ def run_arm(name):
            "--backend", spec["backend"], "--harness", spec["harness"],
            "--limit", str(LIMIT), "--out", str(out), "--model-family", spec["family"],
            "--tool-access", spec["tool_access"], "--display-name", name]
+    if spec["backend"] == "hf":
+        # model_eval defaults to base Qwen; pass the spec's base explicitly so GRPO arms load the
+        # merged SFT weights (SFT_MERGED) instead.
+        cmd += ["--model", spec["model"]]
     if spec.get("zero_shot"):
         cmd.append("--zero-shot")
-    arm_splits = SPLITS or (["test_id"] if name == "frontier_tools" else None)
-    if arm_splits:
-        cmd += ["--splits", *arm_splits]
+    # One split set for every arm: no arm (including frontier_tools) is restricted to test_id.
+    if SPLITS:
+        cmd += ["--splits", *SPLITS]
     adapter = spec.get("adapter")
     if spec.get("grpo_k") is not None:
         adapter = GRPO_K_ADAPTERS[spec["grpo_k"]]
+    if spec.get("train_task"):
+        require_adapter(adapter, f"grpo/{name}")
     if spec["backend"] == "hf" and adapter:
         cmd += ["--adapter", str(adapter), "--dtype", "float16"]
     if spec["backend"] == "replay":
@@ -189,11 +266,30 @@ for name in ARMS:
 print("reports:", {k: str(v) for k, v in written.items()})
 
 # %%
+# Arm config table. Record which GRPO task produced each checkpoint INSIDE every report as well as
+# the manifest, so a report can never be read as a different arm (or as base-model scoring).
+def arm_config(name):
+    spec = SPECS[name]
+    return {"display_name": name, "family": spec["family"], "harness": spec["harness"],
+            "tool_access": spec["tool_access"], "zero_shot": spec["zero_shot"],
+            "backend": spec["backend"], "model": spec.get("model"),
+            "train_task": spec.get("train_task"), "grpo_k": spec.get("grpo_k"),
+            "data_dirs": [str(d) for d in DATA_DIRS], "splits": SPLITS}
+
+
+for name, out in written.items():
+    if not out.exists():
+        continue
+    try:
+        report = json.loads(out.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        continue
+    report["arm_config"] = arm_config(name)
+    out.write_text(json.dumps(report, indent=1) + "\n", encoding="utf-8")
+
+# %%
 # Build the paper's comparison asset from whatever reports exist.
-manifest = {"arms": {name: {"report": str(REPORTS / f"{name}.json"),
-                            "family": spec["family"], "harness": spec["harness"],
-                            "tool_access": spec["tool_access"], "zero_shot": spec["zero_shot"],
-                            "display_name": name}
+manifest = {"arms": {name: {"report": str(REPORTS / f"{name}.json"), **arm_config(name)}
                      for name, spec in SPECS.items() if (REPORTS / f"{name}.json").exists()}}
 mpath = ROOT / "paper" / "assets" / "model_results_manifest.json"
 mpath.write_text(json.dumps(manifest, indent=1) + "\n", encoding="utf-8")
