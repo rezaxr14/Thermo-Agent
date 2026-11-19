@@ -37,27 +37,43 @@ Put `harness_config.json` in the attached dataset (it is generated from HF, so e
   "manifest": "audit_medium_manifest.json",
   "memory_dir": "",
   "export_dir": "",
+  "model_shards": {
+    "gpt-6-luna": "prompts_audit_medium_luna.jsonl",
+    "claude-haiku-5-5": "prompts_audit_medium_haiku.jsonl"
+  },
+  "tiers": ["easy", "medium", "hard"],
+  "equal_tiers": true,
+  "tier_field": "tier",
+  "cell_field": "cell",
+  "pipeline": {
+    "gate_tokens": 8192,
+    "ingest": true,
+    "memory": true,
+    "mix_refresh": true
+  },
   "allowed_models": ["gpt-6-luna", "claude-haiku-5-5"]
 }
 ```
 
-Local environment variables override the file: `HARNESS_MODE`, `HARNESS_SHARD`, `HARNESS_LIMIT`, `HARNESS_ROUNDS`, `HARNESS_K_MEMORY`, `HARNESS_JOURNAL`, `HARNESS_MANIFEST`, `HARNESS_ALLOWED_MODELS`, `HARNESS_CONFIG`.
+`tiers` selects which difficulty levels are sent; `equal_tiers: true` cuts each batch into equal thirds (remainder to hard) using `tier_field` or the `cell` label's last segment. `model_shards` assigns a unique shard per model. `pipeline` is the contract for the local gate/ingest/memory/mix steps; all flags are exposed here and in `HARNESS_*` env vars.
+
+Local environment variables override the file: `HARNESS_MODE`, `HARNESS_SHARD`, `HARNESS_LIMIT`, `HARNESS_ROUNDS`, `HARNESS_K_MEMORY`, `HARNESS_JOURNAL`, `HARNESS_MANIFEST`, `HARNESS_ALLOWED_MODELS`, `HARNESS_MODEL_SHARDS` (JSON), `HARNESS_TIERS` (comma list), `HARNESS_EQUAL_TIERS`, `HARNESS_TIER_FIELD`, `HARNESS_CELL_FIELD`, `HARNESS_PIPELINE` (JSON), `HARNESS_CONFIG`.
 
 ## Commands
 
 ```powershell
 # push (auto-run default is skipped by the guard; no quota spent)
-powershell -NoProfile -File scripts/kaggle_project.ps1 benchmarks tasks push thermo-kaggle-runner `
+powershell -NoProfile -File scripts/kaggle_project.ps1 benchmarks tasks push thermo-teacher-cotproof-s00 `
   --file notebooks/kaggle_model_runner.py `
   --kaggle-dataset rezanadimi/thermo-agent-data
 
 # run explicitly, only budget models
-powershell -NoProfile -File scripts/kaggle_project.ps1 benchmarks tasks run thermo-kaggle-runner `
-  -m gpt-6-luna -m claude-haiku-5-5 --wait 1800 -v
+powershell -NoProfile -File scripts/kaggle_project.ps1 benchmarks tasks run thermo-teacher-cotproof-s00 `
+  --model gpt-6-luna --model claude-haiku-5-5 --wait 1800 -v
 
 # download journals
-powershell -NoProfile -File scripts/kaggle_project.ps1 benchmarks tasks download thermo-kaggle-runner `
-  -m gpt-6-luna -o data/teacher_runs/kaggle_hosted/budget_batches
+powershell -NoProfile -File scripts/kaggle_project.ps1 benchmarks tasks download thermo-teacher-cotproof-s00 `
+  --model gpt-6-luna --model claude-haiku-5-5 --output data/teacher_runs/kaggle_hosted/budget_batches
 ```
 
 Then gate/ingest locally:

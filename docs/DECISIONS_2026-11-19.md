@@ -219,4 +219,7 @@ frontier harness-CoT datagen we intend to make:
 11. **One reusable Kaggle notebook (Reza, 2026-11-20):** `notebooks/kaggle_model_runner.py` / `.ipynb` is the
    single generic Kaggle task for every workflow (tracegen, eval, zero-shot, cohorts, with/without tools and
    harness). It is configured by `harness_config.json` in the HF-fed dataset or `HARNESS_*` env vars, hard-blocks
-   gemini 3.8/3.5, and skips non-allowed models before any model call. Do not create per-task variants again.
+   gemini 3.8/3.5, and skips non-allowed models before any model call. All controls are exposed in
+   `harness_config.json` / `HARNESS_*`: models, per-model shards, mode, rounds, memory, journal/manifest names,
+   `tiers` + `equal_tiers` (equal thirds across easy/medium/hard), and the `pipeline` contract (gate/ingest/memory/mix).
+   Do not create per-task variants again.

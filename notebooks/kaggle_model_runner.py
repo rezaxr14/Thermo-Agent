@@ -41,6 +41,7 @@ OUT = pathlib.Path("/kaggle/working")
 IS_KAGGLE = pathlib.Path("/kaggle/input").exists()
 
 TASKS = ("repair", "ledger", "audit", "design")
+TIERS = ("easy", "medium", "hard")
 DEFAULT_ALLOWED = ("gpt-6-luna", "claude-haiku-5-5")
 BLOCKED = ("gemini-3.8-flash", "gemini-3.5-flash-lite")
 TOOL_MODES = ("harness", "eval_h", "cohort_h")
@@ -63,6 +64,16 @@ DEFAULTS = {
     "code_dataset": "rezanadimi/thermo-agent-data",
     "data_dataset": "rezanadimi/thermo-agent-data",
     "model_shards": {},
+    "tiers": list(TIERS),
+    "equal_tiers": True,
+    "tier_field": "tier",
+    "cell_field": "cell",
+    "pipeline": {
+        "gate_tokens": 8192,
+        "ingest": True,
+        "memory": True,
+        "mix_refresh": True,
+    },
     "config_file": "harness_config.json",
 }
 
@@ -104,7 +115,9 @@ class Config:
 
     def __init__(self, mode, shard, limit, rounds, k_memory, deadline_seconds,
                  max_cost_usd, journal, manifest, memory_dir, export_dir,
-                 allowed_models, code_dataset, data_dataset, model_shards=None):
+                 allowed_models, code_dataset, data_dataset, model_shards=None,
+                 tiers=None, equal_tiers=True, tier_field="tier", cell_field="cell",
+                 pipeline=None):
         self.mode = mode
         self.shard = shard
         self.limit = limit
@@ -120,6 +133,39 @@ class Config:
         self.code_dataset = code_dataset
         self.data_dataset = data_dataset
         self.model_shards = dict(model_shards or {})
+        self.tiers = tuple(tiers or TIERS)
+        self.equal_tiers = bool(equal_tiers)
+        self.tier_field = tier_field
+        self.cell_field = cell_field
+        self.pipeline = dict(pipeline or DEFAULTS["pipeline"])
+
+    def tier_of(self, row: dict) -> str:
+        """Read the tier from an explicit field or a `task/tier` cell label."""
+        value = row.get(self.tier_field)
+        if value in self.tiers:
+            return str(value)
+        cell = str(row.get(self.cell_field) or "")
+        tail = cell.split("/")[-1]
+        return tail if tail in self.tiers else ""
+
+    def select_rows(self, rows: list[dict]) -> list[dict]:
+        """Enforce the requested tiers and equal thirds before the row limit."""
+        allowed = [r for r in rows if self.tier_of(r) in self.tiers]
+        if not self.equal_tiers:
+            return allowed
+        buckets = {t: [] for t in self.tiers}
+        for row in allowed:
+            buckets[self.tier_of(row)].append(row)
+        sizes = {t: len(v) for t, v in buckets.items()}
+        # Equal thirds, remainder to the higher tier (same rule as the corpora).
+        q = min(sizes.values()) if sizes else 0
+        # Equal thirds: use the same count in every tier; never give the remainder
+        # to hard here, because the caller wants exactly balanced tiers.
+        target = {t: min(sizes[t], q) for t in self.tiers}
+        out = []
+        for tier in self.tiers:
+            out.extend(buckets[tier][:target[tier]])
+        return out
 
     @property
     def uses_tools(self) -> bool:
@@ -149,6 +195,12 @@ class Config:
         rounds = number("rounds", int, DEFAULTS["rounds"])
         if rounds <= 0:
             rounds = 6 if mode in TOOL_MODES else 1
+        equal_tiers = values.get("equal_tiers", True)
+        if isinstance(equal_tiers, str):
+            equal_tiers = equal_tiers.strip().lower() in ("1", "true", "yes", "on")
+        tiers = values.get("tiers") or list(TIERS)
+        if isinstance(tiers, str):
+            tiers = [t.strip() for t in tiers.split(",") if t.strip()]
         return Config(
             mode=mode,
             shard=str(values.get("shard") or DEFAULTS["shard"]),
@@ -165,6 +217,11 @@ class Config:
             code_dataset=str(values.get("code_dataset") or DEFAULTS["code_dataset"]),
             data_dataset=str(values.get("data_dataset") or DEFAULTS["data_dataset"]),
             model_shards=values.get("model_shards") or {},
+            tiers=tiers,
+            equal_tiers=equal_tiers,
+            tier_field=str(values.get("tier_field") or "tier"),
+            cell_field=str(values.get("cell_field") or "cell"),
+            pipeline=values.get("pipeline") or DEFAULTS["pipeline"],
         )
 
 
@@ -196,6 +253,11 @@ def resolve_config() -> Config:
             values["model_shards"] = json.loads(values["model_shards"])
         except ValueError:
             raise SystemExit("HARNESS_MODEL_SHARDS must be a JSON object")
+    if isinstance(values.get("pipeline"), str):
+        try:
+            values["pipeline"] = json.loads(values["pipeline"])
+        except ValueError:
+            raise SystemExit("HARNESS_PIPELINE must be a JSON object")
     cfg = Config.from_dict(values)
     if cfg.rounds <= 0:
         cfg.rounds = 6 if cfg.uses_tools else 1
@@ -214,6 +276,9 @@ SPEC = {
     "k_memory": CFG.k_memory,
     "allowed_models": list(CFG.allowed_models),
     "model_shards": dict(CFG.model_shards),
+    "tiers": list(CFG.tiers),
+    "equal_tiers": CFG.equal_tiers,
+    "pipeline": dict(CFG.pipeline),
 }
 SPEC_SHA = hashlib.sha256(json.dumps(SPEC, sort_keys=True).encode()).hexdigest()[:16]
 JOURNAL = OUT / CFG.journal
@@ -221,6 +286,7 @@ MANIFEST = OUT / CFG.manifest
 COUNTS = {"attempted": 0, "answered": 0, "error": 0, "skipped": 0}
 MODEL_SLUG = "unknown"
 ACTIVE_SHARD = CFG.shard
+TIER_COUNTS: dict[str, int] = {}
 ERROR = None
 ROWS_SOURCE = ""
 ROWS_DETAIL = ""
@@ -236,6 +302,8 @@ def _manifest(status: str, stage: str, **kw) -> None:
         "model": MODEL_SLUG, "shard": ACTIVE_SHARD, "rows_source": ROWS_SOURCE,
         "rows_detail": ROWS_DETAIL, "rows_total": ROWS_TOTAL,
         "memory_notes_loaded": MEMORY_NOTES_LOADED, "reasoning": REASONING_LEVEL or "backend-default",
+        "tiers": list(CFG.tiers), "equal_tiers": CFG.equal_tiers, "tier_counts": dict(TIER_COUNTS),
+        "pipeline": dict(CFG.pipeline),
         "limits": {"limit": CFG.limit, "rounds": CFG.rounds, "k_memory": CFG.k_memory,
                    "deadline_seconds": CFG.deadline_seconds},
         "counts": COUNTS, "spec_sha": SPEC_SHA, **kw,
@@ -376,7 +444,7 @@ if IS_KAGGLE:
     @kbench.task(name="thermo-teacher-cotproof-s00",
                  description="Generic thermo-agent model runner (budget models only by default)")
     def thermo_teacher_cotproof_s00(llm):
-        global MODEL_SLUG, ACTIVE_SHARD, ERROR, ROWS_SOURCE, ROWS_DETAIL, ROWS_TOTAL
+        global MODEL_SLUG, ACTIVE_SHARD, TIER_COUNTS, ERROR, ROWS_SOURCE, ROWS_DETAIL, ROWS_TOTAL
         global MEMORY_NOTES_LOADED, REASONING_LEVEL
 
         llm = llm or kbench.llm
@@ -391,6 +459,8 @@ if IS_KAGGLE:
         _manifest("running", "start")
 
         rows, ROWS_SOURCE, ROWS_DETAIL = _load_rows(ACTIVE_SHARD)
+        rows = CFG.select_rows(rows)
+        TIER_COUNTS = {t: sum(1 for r in rows if CFG.tier_of(r) == t) for t in CFG.tiers}
         if CFG.limit > 0:
             rows = rows[:CFG.limit]
         ROWS_TOTAL = len(rows)

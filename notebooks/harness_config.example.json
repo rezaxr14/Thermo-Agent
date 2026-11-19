@@ -14,6 +14,16 @@
     "gpt-6-luna": "prompts_batch1_gpt-6-luna.jsonl",
     "claude-haiku-5-5": "prompts_batch1_claude-haiku-5-5.jsonl"
   },
+  "tiers": ["easy", "medium", "hard"],
+  "equal_tiers": true,
+  "tier_field": "tier",
+  "cell_field": "cell",
+  "pipeline": {
+    "gate_tokens": 8192,
+    "ingest": true,
+    "memory": true,
+    "mix_refresh": true
+  },
   "allowed_models": ["gpt-6-luna", "claude-haiku-5-5"],
   "code_dataset": "rezanadimi/thermo-agent-data",
   "data_dataset": "rezanadimi/thermo-agent-data"

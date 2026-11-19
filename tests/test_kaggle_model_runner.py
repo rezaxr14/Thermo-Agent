@@ -59,6 +59,21 @@ def test_per_model_shard_mapping():
     assert cfg.shard_for("some-other-model") == "default.jsonl"
 
 
+def test_equal_tiers_selection_and_pipeline_exposed():
+    m = _load()
+    cfg = m.Config.from_dict({"tiers": ["easy", "medium", "hard"], "equal_tiers": True,
+                              "pipeline": {"gate_tokens": 8192, "ingest": True,
+                                           "memory": True, "mix_refresh": True}})
+    rows = ([{"id": f"e{i}", "tier": "easy"} for i in range(50)]
+            + [{"id": f"m{i}", "cell": "repair/medium"} for i in range(40)]
+            + [{"id": f"h{i}", "tier": "hard"} for i in range(60)])
+    chosen = cfg.select_rows(rows)
+    counts = {t: sum(1 for r in chosen if cfg.tier_of(r) == t) for t in m.TIERS}
+    assert counts == {"easy": 40, "medium": 40, "hard": 40}
+    assert cfg.pipeline["gate_tokens"] == 8192
+    assert cfg.pipeline["mix_refresh"] is True
+
+
 def test_task_file_and_parse_models():
     m = _load()
     assert m.task_file("audit") == "audit_train.jsonl"

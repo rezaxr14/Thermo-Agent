@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import pathlib
 import sys
 from collections import Counter
@@ -43,7 +44,7 @@ COHORT = ROOT / "data" / "frontier_tools_cohort"
 QUARANTINE = ROOT / "data" / "overgate_quarantine"
 MEMORY_FILES = ("agent_patterns.jsonl", "frontier_notes.jsonl",
                 "agent_success_patterns.jsonl")
-MAX_TOKENS = 8192
+MAX_TOKENS = int(os.environ.get("HARNESS_GATE_TOKENS", "8192"))
 
 
 def _notes() -> list:
