@@ -20,6 +20,7 @@ Kaggle datasets; the HF token comes from Kaggle Secrets, never from the notebook
 
 # %%
 # Bootstrap with the standard library only: the code bundle is not on sys.path until it is unpacked.
+import json
 import os
 import pathlib
 import shutil
@@ -52,6 +53,40 @@ else:
 sys.path.insert(0, str(ROOT))
 os.chdir(ROOT)
 print("code unpacked at", ROOT)
+
+# %% [markdown]
+# # Training controls (edit here, or set the matching environment variable)
+# Every knob for SFT, GRPO, data, tiers, decoding and checkpointing is exposed below.
+# The dict is applied with `setdefault`, so an explicit env var always wins.
+
+# %%
+TRAIN_CONFIG = {
+    # data: the v2 mixes are rebuilt after each frontier batch; tiers must be equal thirds
+    "SFT_DATA": "sft_mix_v2",
+    "GRPO_DATA": "grpo_mix_v2",
+    "TIERS": "easy,medium,hard",
+    "TIER_EQUAL_THIRDS": "1",
+    "TASKS": "repair,design,audit,ledger",
+    # SFT (DECISIONS A1-A10 / B1-B7)
+    "STEPS": "0", "ROWS": "0", "NGPU": "2",
+    "SFT_BATCH": "2", "SFT_ACCUM": "8", "MAXLEN": "",
+    "LOSS_TOKENS": "512", "LOSS_VOCAB": "8192",
+    "LORA_R": "32", "LORA_ALPHA": "64", "LORA_DROPOUT": "0.05",
+    "LR": "1e-4", "EPOCHS": "3", "PATIENCE": "3",
+    "SAVE_STEPS": "50", "EVAL_STEPS": "50", "SEED": "0",
+    # GRPO (DECISIONS C1-C10)
+    "GRPO_K": "4", "GRPO_BATCH": "2", "GRPO_ACCUM": "4",
+    "GRPO_LR": "2e-5", "GRPO_STEPS": "100",
+    "MAX_COMPLETION_LENGTH": "4096", "MAX_TOOL_CALLING_ITERATIONS": "6",
+    "TEMPERATURE": "1.0", "TOP_P": "1.0", "TOP_K": "0", "MIN_P": "0",
+    "BETA": "0.0", "SCALE_REWARDS": "group", "LOSS": "dapo",
+    "MAX_TOOL_CALLS": "8", "MAX_TURNS": "6",
+    # checkpoints / evaluation
+    "THERMO_HF_SYNC": "auto", "TASK": "ledger",
+}
+for _key, _value in TRAIN_CONFIG.items():
+    os.environ.setdefault(_key, str(_value))
+print(json.dumps(TRAIN_CONFIG, indent=1, sort_keys=True))
 
 # %%
 from thermo_agent.kaggle_notebook import (
@@ -149,10 +184,13 @@ print("[loss] tiles", LOSS_TOKENS, "tokens x", LOSS_VOCAB, "vocabulary entries",
 require_train_corpus(SFT_DATA, "SFT_DATA")
 status(stage="sft", state="running", steps=STEPS, rows=ROWS, batch=SFT_BATCH, accum=SFT_ACCUM,
        loss_tokens=LOSS_TOKENS, loss_vocab=LOSS_VOCAB)
+SFT_TASKS = [t.strip() for t in os.environ.get("TASKS", "repair,design,audit,ledger").split(",") if t.strip()]
+SAVE_STEPS = os.environ.get("SAVE_STEPS", "50")
 run([PY, "-m", "torch.distributed.run", "--standalone", "--nproc_per_node", str(NGPU), "--module", "thermo_agent.train.sft",
      ROOT / "data" / SFT_DATA, ROOT / "runs" / "sft", "--dtype", "float16",
-     "--tasks", "repair", "design", "audit", "ledger",
+     "--tasks", *SFT_TASKS,
      "--per-device-batch", SFT_BATCH, "--grad-accum", SFT_ACCUM, "--num-workers", "2",
+     "--save-steps", SAVE_STEPS,
      "--loss-token-chunk", LOSS_TOKENS, "--loss-vocab-chunk", LOSS_VOCAB,
      *(["--max-length", MAXLEN] if MAXLEN else []),
      "--hf-sync", SYNC, *LIMITS])
@@ -192,12 +230,21 @@ status(stage=GRPO_STAGE, state="running", k=GRPO_K, batch=GRPO_BATCH, accum=GRPO
 INIT = str(merged)
 # Same pre-DDP guard for GRPO: a bad GRPO_DATA must fail before the second DDP launch too.
 require_train_corpus(GRPO_DATA, "GRPO_DATA")
+GRPO_STEPS = int(os.environ.get("GRPO_STEPS", "0") or 0)
+ROWS = int(os.environ.get("ROWS", "0") or 0)  # cell must be runnable standalone
+GRPO_LIMITS = (["--max-steps", str(GRPO_STEPS)] if GRPO_STEPS else []) + (
+    ["--limit-rows", str(ROWS)] if ROWS else [])
+MAX_COMPLETION = os.environ.get("MAX_COMPLETION_LENGTH", "4096")
+TOOL_ITERS = os.environ.get("MAX_TOOL_CALLING_ITERATIONS", "6")
 run([PY, "-m", "torch.distributed.run", "--standalone", "--nproc_per_node", str(NGPU), "--module", "thermo_agent.train.grpo",
      ROOT / "data" / GRPO_DATA, ROOT / "runs" / GRPO_STAGE, "--task", "joint",
      "--init", INIT, "--dtype", "float16", "--num-generations", str(GRPO_K),
      "--per-device-batch", str(GRPO_BATCH), "--grad-accum", str(GRPO_ACCUM), "--num-workers", "2",
+     "--save-steps", os.environ.get("SAVE_STEPS", "50"),
+     "--max-completion-length", MAX_COMPLETION,
+     "--max-tool-calling-iterations", TOOL_ITERS,
      "--rollout-log", ROOT / "runs" / GRPO_STAGE / "rollouts.jsonl",
-     "--hf-sync", SYNC, *LIMITS])
+     "--hf-sync", SYNC, *GRPO_LIMITS])
 status(stage=GRPO_STAGE, state="done", k=GRPO_K, local_steps=hf_sync.local_steps(ROOT / "runs", GRPO_STAGE))
 
 # %%

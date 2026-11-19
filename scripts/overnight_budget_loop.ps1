@@ -3,7 +3,7 @@
 param(
   [int]$MaxBatches = 100,
   [double]$MinDailyQuota = 0.50,
-  [int]$RebuildEvery = 10
+  [int]$RebuildEvery = 1
 )
 
 $env:PYTHONIOENCODING = 'utf-8'
