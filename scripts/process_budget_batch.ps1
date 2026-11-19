@@ -16,7 +16,7 @@ $tokemanifest = Join-Path $dir "tokengate_manifest.json"
 $env:PYTHONIOENCODING = 'utf-8'
 & .venv/Scripts/python.exe scripts/frontier_cohort_tokengate.py journal $Model $journalPath $gated $tokemanifest
 if ($LASTEXITCODE -ne 0) { throw "token gate failed for $Model" }
-& .venv/Scripts/python.exe -m thermo_agent.teacher.transfer.ingest data/processed $gated $OutDir `
+& .venv/Scripts/python.exe -m thermo_agent.teacher.transfer ingest data/processed $gated $OutDir `
   --model $Model --run-id $RunId --memory-dir data/memory `
   --extra-export-dir data/processed_arch --extra-export-dir data/frontier_prov --extra-export-dir data/a_slice
 if ($LASTEXITCODE -ne 0) { throw "ingest failed for $Model" }

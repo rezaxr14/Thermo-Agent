@@ -4,7 +4,7 @@ Rule: only `gpt-6-luna` and `claude-haiku-5-5` on hosted Kaggle runs. No premium
 
 ## Baseline at start of overnight work
 
-- Gate: `passed=false`, **84** accepted frontier traces, **55/72** model×task×tier cells missing.
+- Gate: `passed=false`, **84** accepted frontier traces, **24 budget cells** model×task×tier cells missing.
 - Completed proof: luna run `7233597` (5 rows, 5 accepted, $0.003358), haiku run `7233598` (5 rows, 5 accepted, $0.012746).
 - Missing budget cells: luna/audit easy+medium+hard; haiku/audit easy+medium, haiku/ledger easy+medium.
 
@@ -12,7 +12,7 @@ Rule: only `gpt-6-luna` and `claude-haiku-5-5` on hosted Kaggle runs. No premium
 
 | Batch | Task version | Models | Rows/model | Accepted after gate | Cost | Gate cells still missing | Notes |
 |---|---:|---|---:|---:|---:|---:|---|
-| proof | 8 | luna, haiku | 5 | 5 + 5 | $0.016104 | 55/72 | Haiku sanitizer recovered over-gate wrappers. |
+| proof | 8 | luna, haiku | 5 | 5 + 5 | $0.016104 | 24 budget cells | Haiku sanitizer recovered over-gate wrappers. |
 | batch 1 | 9 | luna, haiku | 100 | pending | pending | pending | Generic runner pushed into the existing task; per-model shards from unique-diagram plans. |
 
 ## Reusable code

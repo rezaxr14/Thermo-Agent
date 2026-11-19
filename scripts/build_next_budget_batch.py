@@ -70,16 +70,26 @@ def main() -> int:
         used = used_ids(model)
         missing = {cell for cell, counts in coverage.items()
                    if cell.startswith(model + "/") and any(v == 0 for v in counts.values())}
-        candidates = []
+        # Equal thirds across easy/medium/hard for every 100-row batch; within
+        # each tier prefer cells that are still missing in the gate.
+        quotas = {"easy": BATCH_SIZE // 3, "medium": BATCH_SIZE // 3,
+                  "hard": BATCH_SIZE - 2 * (BATCH_SIZE // 3)}
+        by_tier = {"easy": [], "medium": [], "hard": []}
         for entry in plan["rows"]:
             rid = str(entry["id"])
             base = str(entry.get("base") or rid).split("#v", 1)[0]
             if base in used or rid not in all_rows:
                 continue
-            priority = 0 if entry.get("cell") in missing else 1
-            candidates.append((priority, rid, entry))
-        candidates.sort(key=lambda x: (x[0], x[1]))
-        chosen = candidates[:BATCH_SIZE]
+            cell = str(entry.get("cell") or "")
+            tier = cell.split("/")[-1]
+            if tier not in by_tier:
+                continue
+            priority = 0 if cell in missing else 1
+            by_tier[tier].append((priority, rid, entry))
+        chosen = []
+        for tier, quota in quotas.items():
+            rows = sorted(by_tier[tier], key=lambda x: (x[0], x[1]))
+            chosen.extend(rows[:quota])
         if not chosen:
             raise SystemExit(f"{model}: no unused rows left in plan")
         shard = PROMPTS / f"prompts_batch{n}_{model}.jsonl"

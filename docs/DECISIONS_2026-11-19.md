@@ -154,12 +154,14 @@ sampled pass@8 mode in `HFGenerator` (temperature/top_p/top_k/seed); `heldout_v2
 Reza's correction: the luna/haiku payload proof and pilots do NOT make the gate green. Green requires **all** the
 frontier harness-CoT datagen we intend to make:
 
-1. **Reza's later override (2026-11-19): budget only for now.** Run larger batches with `gpt-6-luna` and
-   `claude-haiku-5-5` first, in batches, updating local memory and the memory served to the Kaggle harness after
-   each batch. **Do not use mid or flagship tiers** (`gpt-6.2-sol`, `claude-sonnet-5-5`,
-   `claude-opus-5-5-default`, `gemini-4-argon`) without asking Reza and getting an explicit go for that specific
-   run. `gemini-3.5-flash-lite` stays excluded. The Kaggle harness work is done by the main agent (or a subagent
-   given the full harness context), not delegated blindly.
+1. **Reza's later override (2026-11-19/20): budget only, thousands of traces.** Run larger batches with
+   `gpt-6-luna` and `claude-haiku-5-5` first, in batches, updating local memory and the memory served to the
+   Kaggle harness after each batch. The target is **thousands** of verifier-accepted harness-CoT traces, with
+   **no cap**; the 24 budget cells (2 models × 4 tasks × 3 tiers) are only a coverage floor, not a stopping
+   number. The old 72-cell premium target is discarded. **Do not use mid or flagship tiers** (`gpt-6.2-sol`,
+   `claude-sonnet-5-5`, `claude-opus-5-5-default`, `gemini-4-argon`) without asking Reza and getting an explicit
+   go for that specific run. `gemini-3.5-flash-lite` and `gemini-3.8-flash` stay excluded. The Kaggle harness
+   work is done by the main agent (or a subagent given the full harness context), not delegated blindly.
 2. For **every model**: verifier-accepted tool traces (at least one `<tool_call>` and `<tool_result>` turn, final
    answer accepted) in **all four cohort tasks** (repair, design, audit, ledger) and in **all three tiers**
    (easy, medium, hard), tiered by the same documented per-task size measure as the deterministic rows
