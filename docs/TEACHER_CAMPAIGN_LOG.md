@@ -626,3 +626,9 @@ audits must also pass. Training starts only when the gate exits zero. The gate w
 - v6 auto-ran default gemini and failed with TypeError: PosixPath %% str in _find_export_dir (operator precedence); fixed by parenthesizing the filename format.
 - v7 adds a hard budget-only guard: any model other than gpt-6-luna or claude-haiku-5-5 exits before a model call, so auto-run default models spend no quota.
 
+
+## Budget proof batch 1 (2026-11-20)
+- gpt-6-luna run 7233597: 5 journal rows, 5 accepted tool traces, 0 over gate; cost $0.003358.
+- claude-haiku-5-5 run 7233598: 5 journal rows, 5 accepted tool traces (sanitizer recovered over-gate rows), max surviving 7,696 tokens; cost $0.012746.
+- Gate now counts 84 accepted tool traces; luna/audit and haiku/audit+ledger cells still empty. No premium models run.
+

@@ -36,6 +36,8 @@ from thermo_agent.teacher import memory as mem, validate  # noqa: E402
 from thermo_agent.teacher.agent_graph import build_context  # noqa: E402
 
 EXPORT = ROOT / "data" / "frontier_export"
+A_SLICE = ROOT / "data" / "a_slice"
+PROCESSED = ROOT / "data" / "processed"
 PILOT = ROOT / "data" / "frontier_tools_pilot"
 COHORT = ROOT / "data" / "frontier_tools_cohort"
 QUARANTINE = ROOT / "data" / "overgate_quarantine"
@@ -102,15 +104,22 @@ def sanitize(text: str, trajectory: dict | None = None) -> tuple[str, dict | Non
 
 
 def _export_rows() -> dict[str, dict]:
+    """Full rows for re-grading. Proof/cohort shards may use A-slice ids."""
     out = {}
-    for task in tier_mod.TASKS:
-        path = EXPORT / f"{task}_train.jsonl"
-        if path.exists():
+    for directory in (EXPORT, A_SLICE, PROCESSED):
+        for task in tier_mod.TASKS:
+            path = directory / f"{task}_train.jsonl"
+            if not path.exists():
+                continue
             for line in path.open(encoding="utf-8"):
-                if line.strip():
-                    row = json.loads(line)
-                    row.setdefault("task", task)
-                    out[str(row["id"])] = row
+                if not line.strip():
+                    continue
+                row = json.loads(line)
+                rid = str(row["id"])
+                if rid in out:
+                    continue
+                row.setdefault("task", task)
+                out[rid] = row
     return out
 
 
