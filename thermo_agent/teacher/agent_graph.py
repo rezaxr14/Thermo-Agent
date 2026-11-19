@@ -25,7 +25,7 @@ from __future__ import annotations
 import json
 from typing import Any, TypedDict
 
-from ..agent.harness import augment
+from ..agent.tool_prompt import build_harness_tool_messages
 from ..core.schema import Plant
 from . import memory as mem
 from .toolkit import make_tools, tool_names
@@ -80,7 +80,15 @@ class AgentState(TypedDict, total=False):
 # nodes
 # --------------------------------------------------------------------------- #
 def build_context(state: AgentState) -> dict:
-    """System prompt = AGENTS.md + skills + fresh failure memory + tool contract."""
+    """System prompt = task statement + artefact-free compact harness + short memory recaps.
+
+    The harness is appended by the ONE shared builder used by tracegen, the ``*_h``
+    training corpora and eval/GRPO, so a given (task, plant, config) always produces
+    the same harness text (J2/J3 harness-hash invariant). Only the row's own system
+    prompt (the task statement) and the retrieved success/failure recaps are added
+    here; row-level bookkeeping (id, run_id, manifests, journal metadata) is never
+    read, and the verbose full AGENTS.md + component-skill block is never served.
+    """
     row, task = state["row"], state["task"]
     original = "\n\n".join(m["content"] for m in row["prompt"] if m["role"] == "system")
     plant = None
@@ -90,7 +98,13 @@ def build_context(state: AgentState) -> dict:
                 plant = Plant.model_validate_json(row[key]); break
             except Exception:
                 pass
-    sys = augment([{"role": "system", "content": original}], state.get("mode", "agents+skills"), task, plant)[0]["content"]
+    # The shared compact builder carries compact AGENTS.md + the ONE selected skill
+    # + the five-tool contract. max_turns is the round limit the graph enforces, so
+    # the number the model reads always equals the number actually used.
+    sys = build_harness_tool_messages(
+        [{"role": "system", "content": original}], task, plant,
+        mode=state.get("mode", "agents+skills"),
+        max_turns=state.get("max_rounds", DEFAULT_MAX_ROUNDS))[0]["content"]
     notes = state.get("notes") or []
     # D10/D11: guidance first (inventory skills/tools, then examine the cycle against memory),
     # then a TOKEN-EFFICIENT memory that carries only what failed and what works — no model ids,
@@ -110,14 +124,13 @@ def build_context(state: AgentState) -> dict:
         compact = compact_notes(retrieved, k=state.get("k_memory", 3))
         if compact:
             sys += "\n\n" + compact
+    # Short reminder only: the tool contract above already lists the five tools, their
+    # numbers and the final-answer tags. Keep the enforced round count in the prompt
+    # (D4) without re-sending the whole contract or the tool-name list.
     sys += (
-        "\n\nYou have REAL physics tools and you SHOULD use them to solve and self-correct. "
-        "Call them on candidate answers and USE the returned numbers (mass/energy residuals in kg/s and W, "
-        "exergy destruction in MW, Carnot/COP limits, stream states) to find what is wrong, revise, and call "
-        "again (up to %d rounds). Tools: %s. You also have skills and retrieved failure memory above: use them "
-        "to choose a better design/repair. Then STOP calling tools and return the final answer in the task's "
-        "XML tags exactly as specified above. Never invent numbers; use tool output, skills and memory."
-    ) % (state.get("max_rounds", DEFAULT_MAX_ROUNDS), ", ".join(tool_names()))
+        "\n\nYou have REAL physics tools; use their numbers to solve and self-correct "
+        "(up to %d rounds). Then STOP and emit the final answer in the task's XML tags."
+    ) % state.get("max_rounds", DEFAULT_MAX_ROUNDS)
     tools = make_tools(task, row)
     notes_used = [n.id for n in retrieved]
     user = "\n\n".join(m["content"] for m in row["prompt"] if m["role"] != "system")

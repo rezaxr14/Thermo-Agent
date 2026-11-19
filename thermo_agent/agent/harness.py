@@ -54,15 +54,26 @@ def augment(messages: list[dict], mode: str, task: str, plant: Plant | None = No
 
 def augment_with_memory(messages: list[dict], mode: str, task: str, plant: Plant | None = None,
                         notes=None, k: int = 3, exclude_record: str = "") -> list[dict]:
-    """`augment` plus hindsight failure notes retrieved for this plant.
+    """`augment` plus short success/failure recaps retrieved for this plant.
 
     Kept separate from `augment` so the harness ablation (`MODES`) is unchanged; memory is an extra layer that
-    can be switched on independently in training and evaluation.
+    can be switched on independently in training and evaluation. Only the reasoning-carrying recap is served:
+    never the note id, record/id suffix, source model, timestamp, cost/token/latency fields or the raw journal.
     """
     from ..teacher import memory
+    from ..teacher.compact_memory import compact_notes
     from .dsl import plant_to_text
     out = augment(messages, mode, task, plant)
     if not notes:
         return out
-    query = plant_to_text(plant) if plant is not None else ""
-    return memory.augment_with_memory(out, task, query, notes, k=k, exclude_record=exclude_record)
+    # A plant gives the best query; without one (Design, or a text-only caller)
+    # fall back to the task text carried in the messages so memory is still served.
+    query = (plant_to_text(plant) if plant is not None else
+             " ".join(str(m.get("content", "")) for m in messages if m.get("role") != "system"))
+    retrieved = memory.retrieve(query, notes, k=k, task=task, exclude_record=exclude_record)
+    block = compact_notes(retrieved, k=k)
+    if not block:
+        return out
+    result = [dict(m) for m in out]
+    result[0]["content"] = result[0]["content"] + "\n\n" + block
+    return result
