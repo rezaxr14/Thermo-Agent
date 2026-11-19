@@ -71,6 +71,11 @@ HF/Kaggle clients and **never print or upload them**. No tokens in notebooks, co
 metadata or logs. The Kaggle proxy (`socks5h://127.0.0.1:10808`) is set only in the kaggle subprocess
 environment - non-Kaggle calls are never proxied.
 
+**Single Kaggle dataset:** `rezanadimi/thermo-agent-data`. It is populated by the private kernel
+`rezanadimi/thermo-agent-hf-to-kaggle-dataset-bridge` (`kaggle/hf_to_kaggle_kernel/`), which downloads
+`Reza-Nadimi/thermo-agent-corpora` with `HF_TOKEN` from Kaggle Secrets and publishes it as a dataset
+version. No local data upload is used. All older thermo-agent Kaggle datasets were removed.
+
 **HF is the only bridge to Kaggle.** Never upload data directly from this machine to a Kaggle dataset.
 Push it to the private HF corpus repo first; Kaggle kernels pull from there and save results into their
 Kaggle dataset. Local → HF → Kaggle, always.

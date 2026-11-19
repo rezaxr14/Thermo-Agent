@@ -58,6 +58,7 @@ if __name__ == "__main__":
     pairs = [(HERE / "teacher_benchmark.py", HERE / "teacher.ipynb"),
              (HERE / "train_runner.py", HERE / "train.ipynb"),
              (HERE / "teacher_harness.py", HERE / "teacher_harness.ipynb"),
-             (HERE / "eval_runner.py", HERE / "eval.ipynb")]
+             (HERE / "eval_runner.py", HERE / "eval.ipynb"),
+             (HERE / "hf_to_kaggle_dataset.py", HERE / "hf_to_kaggle_dataset.ipynb")]
     built = [build(*pair) for pair in pairs]
     print("\n".join(str(p) for p in built))
