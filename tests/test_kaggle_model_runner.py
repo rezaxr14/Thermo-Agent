@@ -88,6 +88,39 @@ def test_redaction_masks_full_assignment():
     assert "apikey" not in m.redact("KAGGLE_API_TOKEN=apikey123")
 
 
+def test_explicit_shard_beats_export_directory():
+    """Regression: attached training mixes must never replace the batch shard."""
+    m = _load()
+    shard = pathlib.Path("prompts_batch11_gpt-6-luna.jsonl")
+    export = pathlib.Path("data/sft_mix_v2")
+    assert m.choose_rows_source(shard.name, shard, export) == ("shard", shard)
+
+
+def test_export_directory_is_only_a_fallback():
+    m = _load()
+    export = pathlib.Path("data/sft_mix_v2")
+    assert m.choose_rows_source("missing.jsonl", None, export) == ("export", export)
+
+
+def test_no_shard_and_no_export_fails_loudly():
+    import pytest
+    m = _load()
+    with pytest.raises(SystemExit):
+        m.choose_rows_source("missing.jsonl", None, None)
+
+
+def test_notebook_matches_canonical_runner_source():
+    """The .ipynb is derived; edit the .py and run notebooks/build_runner_notebook.py."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "build_runner_notebook", ROOT / "notebooks/build_runner_notebook.py")
+    builder = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(builder)
+    head, tail = builder.split_source(
+        (ROOT / "notebooks/kaggle_model_runner.py").read_text(encoding="utf-8"))
+    assert builder.notebook_code() == head + tail
+
+
 def test_notebook_and_example_exist():
     assert (ROOT / "notebooks/kaggle_model_runner.ipynb").is_file()
     example = json.loads((ROOT / "notebooks/harness_config.example.json").read_text(encoding="utf-8"))

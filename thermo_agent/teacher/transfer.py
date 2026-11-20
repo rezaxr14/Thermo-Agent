@@ -157,12 +157,25 @@ def _safe_run_id(value) -> str | None:
 
 
 def provenance_fields(model: str = "", run_id=None) -> dict:
-    """Explicit provenance stamped on every row produced by :func:`ingest`."""
+    """Explicit provenance stamped on every row produced by :func:`ingest`.
+
+    Two shapes on purpose:
+      * top-level ``source``/``model``/``provider`` -- the row's human label, and
+        ``source == "frontier:<model>"`` (asserted by the frontier tests);
+      * ``provenance`` dict -- the machine-readable provenance contract that the
+        training mix and the progress report read (``provenance.model``).
+    """
     slug = _slug(model)
-    fields = {"source": f"frontier:{slug}", "model": slug, "provider": provider_for(slug)}
+    provider = provider_for(slug)
+    fields = {
+        "source": f"frontier:{slug}", "model": slug, "provider": provider,
+        "provenance": {"source_family": "ai_generated", "generator": "frontier_teacher",
+                       "model": slug, "provider": provider},
+    }
     safe_run = _safe_run_id(run_id)
     if safe_run:
         fields["run_id"] = safe_run
+        fields["provenance"]["run_id"] = safe_run
     return fields
 
 

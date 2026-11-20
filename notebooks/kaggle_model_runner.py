@@ -110,6 +110,21 @@ def task_file(task: str) -> str:
     return f"{task}_train.jsonl"
 
 
+def choose_rows_source(shard: str, shard_path, export_path):
+    """Explicit shard wins; an export directory is only a fallback.
+
+    Regression guard: once the training mixes and accepted-frontier dir were attached
+    to the Kaggle dataset, `_find_export_dir` matched them first and every 100-row
+    batch silently loaded untiered corpus rows, filtered to `rows=0`, and completed
+    with a 0-byte journal.
+    """
+    if shard_path is not None:
+        return "shard", shard_path
+    if export_path is not None:
+        return "export", export_path
+    raise SystemExit(f"shard {shard!r} not found and no export directory is attached")
+
+
 class Config:
     """Plain class (no dataclass): importable from a file path without sys.modules tricks."""
 
@@ -400,22 +415,28 @@ if IS_KAGGLE:
         return None
 
     def _load_rows(shard: str) -> tuple[list[dict], str, str]:
-        export = _find_export_dir()
-        if export is not None:
-            rows = {}
-            for task in TASKS:
-                path = export / task_file(task)
-                if not path.is_file():
-                    continue
-                for line in path.open(encoding="utf-8"):
-                    if line.strip():
-                        row = json.loads(line)
-                        rows[str(row["id"])] = row
-            if rows:
-                return list(rows.values()), "export", str(export)
-        path = _find_shard(shard)
-        rows = [json.loads(line) for line in path.open(encoding="utf-8") if line.strip()]
-        return rows, "shard", str(path)
+        # An explicit shard ALWAYS wins (see choose_rows_source): export discovery is
+        # a fallback for callers that attach a corpus instead of a shard.
+        try:
+            path = _find_shard(shard)
+        except SystemExit:
+            path = None
+        kind, source = choose_rows_source(shard, path, _find_export_dir())
+        if kind == "shard":
+            rows = [json.loads(line) for line in pathlib.Path(source).open(encoding="utf-8")
+                    if line.strip()]
+            return rows, "shard", str(source)
+        export = pathlib.Path(source)
+        rows = {}
+        for task in TASKS:
+            task_path = export / task_file(task)
+            if not task_path.is_file():
+                continue
+            for line in task_path.open(encoding="utf-8"):
+                if line.strip():
+                    row = json.loads(line)
+                    rows[str(row["id"])] = row
+        return list(rows.values()), "export", str(export)
 
     def _fresh_notes() -> list:
         dirs = []
@@ -464,6 +485,20 @@ if IS_KAGGLE:
         if CFG.limit > 0:
             rows = rows[:CFG.limit]
         ROWS_TOTAL = len(rows)
+        if ROWS_TOTAL == 0:
+            # Never let an empty batch look like a completed one: the overnight loop
+            # gates the journal, and a 0-byte file is indistinguishable from success.
+            reason = (f"rows=0 shard={ACTIVE_SHARD} source={ROWS_SOURCE} "
+                      f"file={ROWS_DETAIL} tiers={TIER_COUNTS}")
+            ERROR = reason
+            print(f"[runner][ERROR] {reason}", flush=True)
+            with JOURNAL.open("a", encoding="utf-8") as fh:
+                fh.write(json.dumps({"id": "__error__", "error": reason,
+                                     "shard": ACTIVE_SHARD, "model": MODEL_SLUG,
+                                     "ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())},
+                                    ensure_ascii=False) + "\n")
+            _manifest("error", reason)
+            return
         notes = _fresh_notes()
         MEMORY_NOTES_LOADED = len(notes)
         tools = tool_names() if CFG.uses_tools else []

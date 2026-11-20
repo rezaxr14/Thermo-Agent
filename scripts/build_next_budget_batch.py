@@ -56,6 +56,32 @@ def batch_number() -> int:
     return n
 
 
+def interleave(tier_rows, quota):
+    """Pick `quota` rows, taking one per (priority, cell) in turn.
+
+    Sorting by id alone starves whole cells: audit ids sort before ledger ids, so a
+    100-row batch could spend every easy slot on audit/easy and never touch
+    ledger/easy. Missing cells (priority 0) are still served before present ones.
+    """
+    buckets = {}
+    for priority, rid, entry in tier_rows:
+        key = (priority, str(entry.get("cell") or ""))
+        buckets.setdefault(key, []).append((priority, rid, entry))
+    for key in buckets:
+        buckets[key].sort(key=lambda x: x[1])
+    keys = sorted(buckets)
+    idx = {k: 0 for k in keys}
+    take = []
+    while len(take) < quota and any(idx[k] < len(buckets[k]) for k in keys):
+        for k in keys:
+            if len(take) >= quota:
+                break
+            if idx[k] < len(buckets[k]):
+                take.append(buckets[k][idx[k]])
+                idx[k] += 1
+    return take
+
+
 def main() -> int:
     missing_all = gate_missing_cells()
     all_rows = {}
@@ -89,8 +115,7 @@ def main() -> int:
             by_tier[tier].append((priority, rid, entry))
         chosen = []
         for tier, quota in quotas.items():
-            rows = sorted(by_tier[tier], key=lambda x: (x[0], x[1]))
-            chosen.extend(rows[:quota])
+            chosen.extend(interleave(by_tier[tier], quota))
         if not chosen:
             raise SystemExit(f"{model}: no unused rows left in plan")
         shard = PROMPTS / f"prompts_batch{n}_{model}.jsonl"
