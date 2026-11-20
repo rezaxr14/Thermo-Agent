@@ -21,3 +21,9 @@ Rule: only `gpt-6-luna` and `claude-haiku-5-5` on hosted Kaggle runs. No premium
 - `scripts/build_next_budget_batch.py` — builds the next 100-row per-model shards from the missing gate cells.
 - `scripts/process_budget_batch.ps1` — gate → ingest → audit one downloaded journal.
 - `scripts/kaggle_project.ps1` — the only Kaggle CLI wrapper; reads credentials from root `.env` and scopes the SOCKS proxy to one command.
+
+## Current tally
+
+- Accepted tool traces: **256**.
+- Budget cells still empty: **7** (luna/audit easy+medium+hard; haiku/audit easy+medium; haiku/ledger easy+medium).
+- Goal: thousands of traces, no cap, equal thirds across easy/medium/hard.
