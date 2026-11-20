@@ -58,6 +58,12 @@ commit everything and my prompts verbatuim in a file i will ask cladue for a dir
 and proccess the kaggle runs and also inculde new subagent works in the commit and push i will get feedback and after that we are continue to work , include this prompt in the verbaitm as well, we will get a detailed instructions and fix our project  and the harness and how we do stuff here. and we will tidy up the docs so we dont have stale of docs filling my docs file we will combine the stuff to eachitehr , i dont want to have 10 user directions and decitions and shit like that, you are incredible irrisponsable and litter all around, and we need to decide how to treat already captured Cot's my inturations is too keep them and add these new stuff on top of them and make our tools backward compatible, or make cople of subagents to go and check and modyfy them one by one proeprly sub agents are free so we dont loose anything but then need to do it reraly one by one no bulshit grep and replace nonsense same for the detreministic traning data we have (multi turn and other wise) and the ground trughts dataset, realy anything inculde this in the commit nad push so i can get a feed back and move a head , commit some samples from everywhre so claude can know what in the hell is going on here, and we need a anti litter rule so we dont just make a documnet if exist a elready made document which we can reuse (add,delete,modify,add new date), we need to load the skill on demand, we kinda need to show a disctiption and load the full skill when the models reach for them like a proper harness, do this and commit and push so i can get a feed back so ew can continue with the project
 ```
 
+## 10
+
+```
+fuck off and commit and push i did not told you to dod these i told you to put this shit in a file and pus hso cladue can figure your stupid ass out stop you stupid agents
+```
+
 ---
 
 ## Earlier standing instructions (from the session checkpoint preamble, paraphrased by the harness — not verbatim)
