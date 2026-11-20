@@ -31,14 +31,12 @@ MIX_DIRS = ("data/sft_mix_v2", "data/grpo_mix_v2")
 # DECISIONS section 6: the gate stays red after the luna/haiku pilots. Every
 # model in the decided cohort must have accepted harness-CoT traces in all four
 # tasks and all three tiers. These are coverage floors, never caps (D1..D9).
+# Reza (2026-11-20): forget the 72-cell target. Only the 24 BUDGET cells
+# (2 models x 4 tasks x 3 tiers) count for the training gate. Premium models are
+# not part of this gate and must never be run without an explicit go.
 FRONTIER_MODELS: dict[str, tuple[str, ...]] = {
     "gpt-6-luna": ("gpt-6-luna", "openai/gpt-6-luna"),
     "claude-haiku-5-5": ("claude-haiku-5-5", "anthropic/claude-haiku-5-5"),
-    "gpt-6.2-sol": ("gpt-6.2-sol", "openai/gpt-6.2-sol"),
-    "claude-sonnet-5-5": ("claude-sonnet-5-5", "anthropic/claude-sonnet-5-5"),
-    "claude-opus-5-5-default": ("claude-opus-5-5-default", "claude-opus-5-5",
-                               "anthropic/claude-opus-5-5-default"),
-    "gemini-4-argon": ("gemini-4-argon", "google/gemini-4-argon"),
 }
 FRONTIER_DIR_GLOBS = ("data/frontier_tools*/**/*.jsonl", "data/frontier_tools_clean*/**/*.jsonl")
 

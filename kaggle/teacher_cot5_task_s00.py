@@ -22,9 +22,9 @@ import zipfile
 
 SPEC = {
     "task_name": "thermo-teacher-cot5-s00",
-    "dataset": "rezanadimi/thermo-teacher-prompts-big",
-    "code_dataset": "rezanadimi/thermo-agent-code",
-    "shard": "prompts_s00.jsonl",
+    "dataset": "rezanadimi/thermo-agent-data",
+    "code_dataset": "rezanadimi/thermo-agent-data",
+    "shard": "prompts_proof.jsonl",
     "limit": 5,           # 0 = every row in the shard (no assistant-invented row cap)
     "max_cost_usd": 0.0,  # 0 = no internal cost stop (account-level quotas still apply)
     # "rounds" is filled from agent_graph.DEFAULT_MAX_ROUNDS after the bootstrap import,

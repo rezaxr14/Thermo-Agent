@@ -1,0 +1,182 @@
+{
+  "repo_id": "Reza-Nadimi/thermo-agent-corpora",
+  "timestamp_utc": "2026-11-20T01:25:48Z",
+  "message": "budget frontier traces incorporated into training mix",
+  "tag": "budget-mix-20261120045548",
+  "mode": "upload",
+  "additive_only": true,
+  "heldout_prompts_only": true,
+  "dirs": [
+    "data/frontier_tools_cohort",
+    "data/frontier_tools_accepted",
+    "data/memory",
+    "data/sft_mix_v2",
+    "data/grpo_mix_v2"
+  ],
+  "file_count": 27,
+  "total_bytes": 233397996,
+  "files": [
+    {
+      "path": "data/frontier_tools_cohort/claude-haiku-5-5/frontier_audit_train.jsonl",
+      "sha256": "70648f3a32b4562c2bd37b8c7556488fbe30c646912e9d82cabb9cffcd577db6",
+      "size_bytes": 40370,
+      "local_path": "data/frontier_tools_cohort/claude-haiku-5-5/frontier_audit_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort/claude-haiku-5-5/frontier_design_train.jsonl",
+      "sha256": "5735aee24044e0dbdd71f4ea416a5a109f9ec8783fc80fc80b89515ba577d6ad",
+      "size_bytes": 93193,
+      "local_path": "data/frontier_tools_cohort/claude-haiku-5-5/frontier_design_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort/claude-haiku-5-5/frontier_ledger_train.jsonl",
+      "sha256": "2a220ac2d054dc571c2337135234e2bd6f8d3af8f57376db8c28c79ead2c4702",
+      "size_bytes": 19394,
+      "local_path": "data/frontier_tools_cohort/claude-haiku-5-5/frontier_ledger_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort/claude-haiku-5-5/frontier_repair_train.jsonl",
+      "sha256": "3c90b6c20a8b9b8c43bcb472a1d6f491db6c2cb7d2d7551279fca0626869a53f",
+      "size_bytes": 2791281,
+      "local_path": "data/frontier_tools_cohort/claude-haiku-5-5/frontier_repair_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort/gpt-6-luna/frontier_design_train.jsonl",
+      "sha256": "4441380137000a65d3d779471a4d77c4833abb885be4225c28dde2b347ab103f",
+      "size_bytes": 197149,
+      "local_path": "data/frontier_tools_cohort/gpt-6-luna/frontier_design_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort/gpt-6-luna/frontier_ledger_train.jsonl",
+      "sha256": "3dcfd9e3fe579e0edd8494f7e9ea80b982c563f53f5ccc640068fe458e647306",
+      "size_bytes": 214712,
+      "local_path": "data/frontier_tools_cohort/gpt-6-luna/frontier_ledger_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort/gpt-6-luna/frontier_repair_train.jsonl",
+      "sha256": "c034a63e8285abb1256b1b80a289266c176246445be4aec868c11b12f87482bf",
+      "size_bytes": 2622566,
+      "local_path": "data/frontier_tools_cohort/gpt-6-luna/frontier_repair_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort/TOKENGATE_PILOT.json",
+      "sha256": "9616b2bfa6b45cab617ff183ad555981b0bdc765490d4ac5fe0e4b6b94967550",
+      "size_bytes": 1248,
+      "local_path": "data/frontier_tools_cohort/TOKENGATE_PILOT.json"
+    },
+    {
+      "path": "data/frontier_tools_accepted/frontier_audit_train.jsonl",
+      "sha256": "74604fbc15938d9c067602a2fa1fa19a81724f417bab6d70d6b27c15a832f44b",
+      "size_bytes": 40734,
+      "local_path": "data/frontier_tools_accepted/frontier_audit_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_accepted/frontier_design_train.jsonl",
+      "sha256": "7388992692a52afe02e4fcba469d55180e3a8658bf1509e4883f3a60dc2ab1d9",
+      "size_bytes": 233332,
+      "local_path": "data/frontier_tools_accepted/frontier_design_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_accepted/frontier_ledger_train.jsonl",
+      "sha256": "6b19c35b675387a7be9c01f9dc69db45287d459ac6fd00ff4e6dca8913974b2e",
+      "size_bytes": 220576,
+      "local_path": "data/frontier_tools_accepted/frontier_ledger_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_accepted/frontier_repair_train.jsonl",
+      "sha256": "de799795d24ad42050ebf081b7a85a838dcd1e4213ee47fc47db94db9fadb5ae",
+      "size_bytes": 2736467,
+      "local_path": "data/frontier_tools_accepted/frontier_repair_train.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_accepted/MANIFEST.json",
+      "sha256": "dfaded6799f06e920c7308bf36df7ce52f61654c43da6819e6bc12cd0712dbc6",
+      "size_bytes": 144,
+      "local_path": "data/frontier_tools_accepted/MANIFEST.json"
+    },
+    {
+      "path": "data/memory/adversarial_repair.jsonl",
+      "sha256": "647498a014a08ea33dd8c14e4aac86089429cfa66804708525f3a7284beb932a",
+      "size_bytes": 11479,
+      "local_path": "data/memory/adversarial_repair.jsonl"
+    },
+    {
+      "path": "data/memory/agent_patterns.jsonl",
+      "sha256": "6b676ce43c1b98002e1abb3208b7a061c1fc448b9c0fce0a6e0c5c63046426c6",
+      "size_bytes": 7176,
+      "local_path": "data/memory/agent_patterns.jsonl"
+    },
+    {
+      "path": "data/memory/agent_success_patterns.jsonl",
+      "sha256": "50dea0a680f8aeaa7f73075476a7beef713151fb2bbdb4c8bf92e36618c0e31d",
+      "size_bytes": 3335,
+      "local_path": "data/memory/agent_success_patterns.jsonl"
+    },
+    {
+      "path": "data/memory/failure_reasons.json",
+      "sha256": "f78017b74a2181a6852efba717909b6a4ecf2f444587dad997c40a87ab97b3f0",
+      "size_bytes": 76,
+      "local_path": "data/memory/failure_reasons.json"
+    },
+    {
+      "path": "data/memory/frontier_notes.jsonl",
+      "sha256": "aedd5db769e461bee8499a9a8db08e3176a0201138604489a1a7254bb061bf92",
+      "size_bytes": 209586,
+      "local_path": "data/memory/frontier_notes.jsonl"
+    },
+    {
+      "path": "data/sft_mix_v2/audit_train.jsonl",
+      "sha256": "4d598a8232a5a368ad90ccbaddbbedd24896142a48146aa53306c83752466c94",
+      "size_bytes": 27348005,
+      "local_path": "data/sft_mix_v2/audit_train.jsonl"
+    },
+    {
+      "path": "data/sft_mix_v2/design_train.jsonl",
+      "sha256": "4f1e1cd54e1e7995abf38ad59ec3ff0aa5b36f3fe81f3ea691fed422855e1b60",
+      "size_bytes": 19413996,
+      "local_path": "data/sft_mix_v2/design_train.jsonl"
+    },
+    {
+      "path": "data/sft_mix_v2/ledger_train.jsonl",
+      "sha256": "a0e6201d87506898a36ac181474ff224110d5ac18f7997241855a2f8fd8d51f6",
+      "size_bytes": 29156145,
+      "local_path": "data/sft_mix_v2/ledger_train.jsonl"
+    },
+    {
+      "path": "data/sft_mix_v2/MANIFEST.json",
+      "sha256": "8ba92449e972cb73d75ad69c1ee1ee1bf662ce5414adc1bcaf02faf8981a9926",
+      "size_bytes": 50010,
+      "local_path": "data/sft_mix_v2/MANIFEST.json"
+    },
+    {
+      "path": "data/sft_mix_v2/repair_train.jsonl",
+      "sha256": "d380b4cfd400c10d5d5dfe1f44eaaaf789afd4c0a3f9ac7e4c929dcc4b0689b3",
+      "size_bytes": 25466845,
+      "local_path": "data/sft_mix_v2/repair_train.jsonl"
+    },
+    {
+      "path": "data/grpo_mix_v2/audit_train.jsonl",
+      "sha256": "06572ebfcb570d98ba79631db27a5ce0102a0ef2e11c8b94c7d73e2c64b3095c",
+      "size_bytes": 33639886,
+      "local_path": "data/grpo_mix_v2/audit_train.jsonl"
+    },
+    {
+      "path": "data/grpo_mix_v2/design_train.jsonl",
+      "sha256": "54ba57fbc9b3e1bd5b9687c6e193d19262d79ede0638abcd8ecb1f93b5f874ac",
+      "size_bytes": 29301862,
+      "local_path": "data/grpo_mix_v2/design_train.jsonl"
+    },
+    {
+      "path": "data/grpo_mix_v2/ledger_train.jsonl",
+      "sha256": "0940a4356390b90aa05d5c53ad5c3cedd198db7150f91121f29a790174d34179",
+      "size_bytes": 32025926,
+      "local_path": "data/grpo_mix_v2/ledger_train.jsonl"
+    },
+    {
+      "path": "data/grpo_mix_v2/repair_train.jsonl",
+      "sha256": "4a378e4cc33b30372a89578013b5ab9f8837a8bd0b8c5f99c0cfad34434417da",
+      "size_bytes": 27552503,
+      "local_path": "data/grpo_mix_v2/repair_train.jsonl"
+    }
+  ]
+}
