@@ -9,6 +9,13 @@ Standing rules: fp16 LoRA only (B6); additive-only (no corpus/model/journal dele
 through the SOCKS proxy; free subagents only; no assistant-chosen caps or hyper-parameters; every gate ends with a `docs/DECISIONS.md`
 entry, an updated `docs/STATUS.md`, regenerated dataset stats and one commit.
 
+**Data-flow rule (DECISIONS §7.8–§7.11, binding).** Every file that touches Kaggle goes through the private HF
+corpus repo first: **local → `Reza-Nadimi/thermo-agent-corpora` → Kaggle kernel → ONE Kaggle dataset
+(`thermo-agent-corpus`)**. No local data upload to Kaggle; code/prompt datasets are attached read-only; no account
+littering. All credentials come only from the repository-root `.env`. One generic reusable notebook
+(`notebooks/kaggle_model_runner.py` / `.ipynb`) serves every workflow; no per-task variants. The runner hard-blocks
+gemini 3.8/3.5 and skips non-allowed models before any model call.
+
 ## Binding order and current datagen status (Reza directive, 2026-11-19)
 
 Reza's directive (DECISIONS §4, which supersedes any conflicting line above) is binding:
@@ -27,16 +34,25 @@ Reza's directive (DECISIONS §4, which supersedes any conflicting line above) is
    with task + tier, prompt rendering, label masking, collator, checkpoint/resume,
    eval/save cadence, red smoke kernel), each fix with a test.
 
-**Current reality (2026-11-19):** datagen is *not* complete, so no training has started
-and no SFT/GRPO/eval result exists. `data/processed` deterministic ground truth is intact
-(27,418 rows, nothing deleted/overwritten). The A-slice exists as a copy of 1,600 plain rows
-(400/task = round(4,800 × 0.3333)). Deterministic tool corpora are at **960 rows**
-(240/task; `--limit 120` = 120 plants × 2 variants × 4 tasks) — **a known under-build
-defect to fix**, not grounds for training on a partial corpus. Only **32** frontier tool
-traces exist, all `google-gemini-3-8-flash`; the other planned models have none. `heldout_v2`
-is not yet generated. Test = `data/heldout_v2`; `data/heldout` (214 ids) is dev.
+**Current reality (2026-11-20):** the input-side datagen items are **complete** except the frontier CoT
+campaign, which is **in progress**; no training has started and no SFT/GRPO/eval result or checkpoint exists.
+`data/processed` deterministic ground truth is intact (27,418 rows, nothing deleted/overwritten). The A-slice is
+a complete copy of 1,600 plain rows (400/task = round(4,800 × 0.3333)). Deterministic tool corpora are **DONE at
+4,800 rows per task family** (600 plants × 2 variants (`direct`, `recover`) × 4 tasks), with real tool results,
+verifier acceptance and equal-thirds tiers per task. `heldout_v2` is **generated and FROZEN** (3,476 scored rows,
+12 cells, equal thirds, contamination scan PASS). The compact harness (≤2,500 tokens, one text for every arm), the
+`*_h`/`sft_mix_h` rebuild, the training-path fixes (task+tier loading, one harness rendering, tool-result label
+masking, collator, checkpoint/resume, eval/save cadence, red smoke kernel), per-row provenance and the token gate
+(8,192; over-gate rows dropped, never truncated) are all **DONE** with tests. Frontier harness CoT is **IN PROGRESS**:
+only `gpt-6-luna` and `claude-haiku-5-5` are authorized; each has a 5-row proof (5/5 accepted) and one 100-row batch
+completed, with the journals at gate/ingest/audit. The target is **thousands** of traces with **no cap**, equal thirds
+across easy/medium/hard; the old 72-cell premium target is **discarded**. Premium models and gemini 3.8/3.5 are not
+to be run. Test = `data/heldout_v2`; `data/heldout` (214 ids) is dev.
 
 ## Phase 0 — make the inputs correct (local, CPU, no Kaggle)
+
+*Phase 0 status: **DONE** (2026-11-20). Items 0.1–0.7 are built, audited and covered by tests; the per-item notes
+below are retained as the acceptance record.*
 
 0.1 **Compact harness (J2/J3).** Cut the harness block to <= 2,500 tokens (real Qwen3.5 tokenizer), one text for every arm.
     Acceptance: `scripts/audit_harness_corpus.py` prints max harness-block tokens <= 2,500 and one sha for tracegen, training, eval.
@@ -46,9 +62,9 @@ is not yet generated. Test = `data/heldout_v2`; `data/heldout` (214 ids) is dev.
     dropped). Rule from DECISIONS section 1: audit losing > 10% -> cap tool outputs, never raise `max_length`.
 0.4 **Deterministic traces to 600 plants/task** x 2 variants (direct, recover) = 4,800 tool rows (E1), tiers equal thirds for
     repair/audit, 50/50 easy/medium for ledger/design; 100% verifier-accepted; real tool results verbatim.
-    *Status:* currently **960 rows** (240/task; `--limit 120` = 120 plants × 2 variants × 4 tasks). This is a
-    **known under-build defect to fix before training**, not a reason to train on a partial corpus. Reza's directive
-    (§4.2) extends equal-thirds tiers to **all four** tasks in training and test, not just repair/audit.
+    *Status: **DONE**.* 4,800 rows (600 plants × 2 variants × 4 tasks) in each tool corpus, with real physics tool
+    results and 100% verifier acceptance. Reza's directive (§4.2) applied equal-thirds tiers to **all four** tasks in
+    training and test, not just repair/audit; exact counts are in the manifests.
 0.5 **A-slice builder (E2).** One paraphrase per ground-truth plant from `sft_all`, task-balanced, size R_tool/3; plain prompt;
     marked `prompt_variant=plain`. Mixing script writes `data/sft_mix_h` and `data/grpo_tools_h`; `mix_tool_corpora.py --stats` must
     show `with tool turns > 0` for the tool part.
@@ -58,9 +74,11 @@ is not yet generated. Test = `data/heldout_v2`; `data/heldout` (214 ids) is dev.
     document merged cells; difficulty tiers easy/medium/hard (hard = 19-component cycle where generators support it), equal thirds per task
     (Reza directive §4.2). Freeze manifest + hash, write the eval protocol, scan every training dir for content overlap (hash of
     plant/site/spec), rename current `data/heldout` role to dev.
-    *Status:* **not yet generated.** Test = `data/heldout_v2`; `data/heldout` (214 ids) is **dev**, not test. Note that
-    `docs/EVAL_PROTOCOL_HELD_OUT_DEV.md` was frozen while `data/heldout` was still the eval set; its test-set role is
-    superseded by F1 (its cell counts still describe the dev set). Phase 5 scores on `heldout_v2`, never `data/heldout`.
+    *Status: **DONE and FROZEN**.* Test = `data/heldout_v2` (3,476 scored rows, 12 cells, equal thirds per task,
+    contamination scan PASS with zero overlap; test hash `3cc51773…` recorded in `docs/EVAL_PROTOCOL.md`);
+    `data/heldout` (214 ids) is **dev**, not test. Note that `docs/EVAL_PROTOCOL_HELD_OUT_DEV.md` was frozen while
+    `data/heldout` was still the eval set; its test-set role is superseded by F1 (its cell counts still describe the
+    dev set). Phase 5 scores on `heldout_v2`, never `data/heldout`.
 0.7 **Tests that make the decisions stick:** `tests/test_decisions_applied.py` (values), contamination test on content hashes, tool-trace round trip
     (record -> ingest -> row has tool turns and ends with the verified answer), `finalize` appends the final turn, ledger tool no crash on malformed
     candidate, audit tool depends on the candidate, GRPO stage names distinct per k, eval raises on a missing adapter.
@@ -75,17 +93,22 @@ Gate 0: fresh-clone `pytest` green (real-data tests marked `corpus`), stats and 
 
 ## Phase 2 — frontier tool traces *[Kaggle, after "go"]*
 
-2.1 **Budget only until Reza says otherwise (override of DECISIONS §6 point 1):** run larger batches with `gpt-6-luna`
-    and `claude-haiku-5-5` first; update local memory and the short success/failure memory served to the Kaggle harness
-    after every batch. `gpt-6.2-sol`, `claude-sonnet-5-5`, `claude-opus-5-5-default` and `gemini-4-argon` are NOT to be
-    used without asking Reza first; `gemini-3.5-flash-lite` stays excluded. The 5-row proof and 40-row pilots are done
-    and do NOT make the gate green. The Kaggle harness work is done by the main agent with full context. `SPEC["limit"]=0`,
-    rounds 6 (D4), `k_memory` 3 (D5), no cost/row cap (D1-D9).
+2.1 **Only `gpt-6-luna` and `claude-haiku-5-5` (DECISIONS §6.1, override of §6 point 1):** run larger batches with these
+    two models; update local memory and the short success/failure memory served to the Kaggle harness after every batch.
+    Premium models (`gpt-6.2-sol`, `claude-sonnet-5-5`, `claude-opus-5-5-default`, `gemini-4-argon`) and
+    `gemini-3.8-flash`/`gemini-3.5-flash-lite` are NOT to be run — none was run, no traces/costs/scores exist for them.
+    The target is **thousands of verifier-accepted traces, NO CAP** on traces, per-model counts, cost or rows, in equal
+    thirds across easy/medium/hard. **The old 72-cell premium target is DISCARDED.** Each model's 5-row proof (5/5
+    accepted) and one 100-row batch are complete; journals are at the gate/ingest/audit stage. The Kaggle harness work
+    is done by the main agent with full context. Use the one generic runner
+    `notebooks/kaggle_model_runner.py` through the HF-only bridge; `limit 0`, rounds 6 (D4), `k_memory` 3 (D5), no
+    cost/row cap (D1-D9).
 2.2 Download each completed journal, id-dedupe into `data/teacher_runs/hosted_<model>.jsonl`, ingest with the compact harness prompt, accept by D8.
 2.3 After every run: accepted per task x tier x model, cost per accepted trace, failure reasons -> `TEACHER_CAMPAIGN_LOG.md`; failures feed the memory
     (what failed, what worked; never model names or times).
 2.4 Re-run `mix_tool_corpora.py --stats` and `scripts/check_datagen_complete.py`. **No training starts while the gate is red**:
-    a luna/haiku pilot alone is not enough; all six models must cover 4 tasks x 3 tiers with accepted tool traces.
+    a proof or one batch alone is not enough; the campaign runs until thousands of accepted traces exist, in equal thirds
+    per task, with no cap. The rejected 72-cell six-model target is not the gate.
 2.5 Rebuild `sft_mix_h` with frontier traces first (E1); rows over the 8,192 gate dropped and counted. Every row keeps
     `source`, model id (AI rows) and `tier`.
 

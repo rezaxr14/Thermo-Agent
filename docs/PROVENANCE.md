@@ -38,19 +38,35 @@ or AI-generated and, if AI, which model produced it. The fields are:
 | --- | --- | --- | --- | ---: |
 | Deterministic ground truth | synth generators + simulator/verifiers | none (deterministic) | `data/processed` (plus `processed_arch`, `processed_big`) | **27,418** across all splits; train split: repair 5,458 / ledger 4,846 / audit 2,192 / design 1,768 |
 | Plain A-slice (COPY of ground truth) | `build_a_slice.py`, seeded, 1 paraphrase per plant | none (deterministic copy) | `data/a_slice` | **1,600** (400/task) = round(4,800 × 0.3333) |
-| Deterministic tool traces | `synth.tool_traces`, `--limit 120`: 120 plants × 2 variants (direct, recover) × 4 tasks | none (deterministic) | `data/sft_tools`, `data/grpo_tools` | **960** (240/task) — under the decided 4,800; known defect to fix |
-| Frontier tool traces (AI) | hosted Kaggle task `thermo-teacher-tools-s00` v6, run `7179338`, verifier-accepted | `google-gemini-3-8-flash` | `data/frontier_tools` (as received), `data/frontier_tools_clean_v2` (sanitized) | **32** (repair 9, ledger 10, audit 6, design 7); 40 attempts, 5× HTTP 429, $0.842202 total |
+| Deterministic tool traces | `synth.tool_traces`, 600 plants × 2 variants (`direct`, `recover`) × 4 tasks | none (deterministic) | `data/sft_tools_v2*`, `data/grpo_tools_v2*` (and `*_h`, `sft_mix_v2`) | **DONE: 4,800 per task family**, 100% verifier-accepted, real tool results, equal-thirds tiers |
+| Frontier harness CoT (AI) | generic Kaggle runner, verifier-accepted | `gpt-6-luna`, `claude-haiku-5-5` | per-model frontier trace dirs fed from the HF corpus repo | **IN PROGRESS**: each model's 5-row proof (5/5 accepted) and one 100-row batch completed; batch journals at gate/ingest/audit. Target **thousands**, no cap, equal thirds. |
 
-**Unknown / not yet generated — frontier models with NO tool traces collected:**
-`gpt-6-luna`, `claude-haiku-5-5`, `gemini-3.5-flash-lite`, `gpt-6.2-sol`,
-`claude-opus-5-5-default` (`claude-opus`), `claude-sonnet-5-5`,
-`gemini-4-argon` (`gemini-4`). These are **planned** per DECISIONS D / J4; never
-imply their traces exist. The only frontier model with accepted tool traces is
-`google-gemini-3-8-flash` (32 rows).
+**Frontier CoT provenance (current campaign, DECISIONS §6.1).** Only `gpt-6-luna` and
+`claude-haiku-5-5` are authorized. Each AI row carries the exact `model` id,
+`provider`, `run_id`, tool turns and the per-row deterministic-vs-AI tag. The old
+72-cell six-model premium target is **discarded**. Premium models
+(`gpt-6.2-sol`, `claude-sonnet-5-5`, `claude-opus-5-5-default`, `gemini-4-argon`)
+and `gemini-3.8-flash` / `gemini-3.5-flash-lite` are **not to be run**; no
+traces, costs or scores are claimed for them. The small set of legacy pilot rows
+recorded in the generated ledger below comes from a superseded early campaign and
+is not part of the current authorized frontier campaign.
 
 Nothing in `data/processed` was deleted or overwritten; the A-slice is an
-additional copy, and the sanitized frontier rows are a new directory, leaving
-`data/frontier_tools` as received.
+additional copy. Deterministic rows are never labelled as AI; AI rows are never
+labelled as deterministic.
+
+**Data flow and memory (DECISIONS §7.8–§7.11).** Every file that touches Kaggle goes
+through the private HF corpus repo first: **local → `Reza-Nadimi/thermo-agent-corpora`
+→ Kaggle kernel → ONE Kaggle dataset (`thermo-agent-corpus`)**; no local data uploads
+to Kaggle; credentials only in the repository-root `.env`; one generic reusable
+Kaggle notebook for all workflows. RAG memory records **short success/failure
+recaps** (what failed → what works); model ids, timestamps, cost and raw checker
+logs are stripped before a note is served to a prompt.
+
+> **Generated tables below are a historical ledger snapshot.** They are rewritten by
+> `scripts/build_provenance_ledger.py` from the journals currently on disk and reflect
+> the superseded early pilot; they are not a statement of the current authorized
+> luna/haiku campaign, and no model arm has been trained or evaluated.
 
 ## Regenerate
 

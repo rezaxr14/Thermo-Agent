@@ -3,19 +3,19 @@
 \toprule
  & Stage 1: SFT & Stage 2: GRPO \\
 \midrule
-Base model & \texttt{Qwen/Qwen3.5-4B} & \texttt{Qwen/Qwen3.5-4B} \\
-Method & LoRA SFT, all tasks in one adapter & GRPO per task on the merged SFT model \\
+Base model & \texttt{Qwen/Qwen3.5-4B} & merged best SFT checkpoint (\texttt{runs/sft\_merged}) \\
+Method & LoRA SFT, all tasks in one adapter & one joint LoRA GRPO run over all four tasks from the merged SFT policy \\
 Precision and parallelism & fp16 LoRA, DDP over 2 ranks (2 T4), no 4-bit & fp16 LoRA, DDP over 2 ranks, no 4-bit \\
-LoRA rank / alpha / dropout & 16 / 32 / 0.05 & 8 / 16 / 0.05 \\
+LoRA rank / alpha / dropout & 32 / 64 / 0.05 & 8 / 16 / 0.05 \\
 Target modules & all-linear & all-linear \\
-Learning rate & 0.0002 & 5e-05 \\
-Epochs or steps & 1 epoch & 300 steps (maximum) \\
-Maximum length (tokens) & 8192 & completion 320 \\
-Batch per device / accumulation / ranks & 2 / 8 / 2 & 4 / 2 / 2 \\
-Effective batch & 32 sequences & 16 prompts, 4 completions each \\
-Group size / temperature & -- & 4 / 1 \\
+Learning rate & 0.0001 (cosine, 5\% warmup, weight decay 0) & 0.00002 (constant, 10 warmup steps) \\
+Epochs or steps & at most 3 epochs, early stopping patience 3 evals, best loaded; max\_steps off & $S$ steps ($S\le100$, set by the G1 smoke), same $S$ for every $k$ \\
+Maximum length (tokens) & 8{,}192; over-gate rows dropped, not truncated & completion 4{,}096; at most 6 tool rounds; if dev truncation $>10\%$, raise to 6{,}144 \\
+Batch per device / accumulation / ranks & 2 / 8 / 2 & 2 / $k$ / 2 (4 prompts per optimizer step) \\
+Effective batch & 32 sequences & 4 prompts $\times$ $k$ completions = $4k$ sequences ($k=4,8,16$) \\
+Group size / sampling & -- & $k\in\{4,8,16\}$; temperature 1.0, top-$p$ 1.0, top-$k$ off, no penalties \\
 Gradient clipping & max norm 1 & max norm 1 \\
-Loss & causal LM, completion tokens only & dapo-style, KL coefficient 0, truncated completions masked \\
-Prompt rendering & tokenizer generation prompt, thinking disabled & same text as SFT and evaluation \\
+Loss & causal LM, completion tokens only; \texttt{<tool\_result>} spans masked & dapo-style, group-normalized (scale=group), KL coefficient 0, truncated completions masked \\
+Prompt rendering & one compact harness for every tool row, plain prompt for the A-slice; thinking enabled & same text as SFT and evaluation; thinking enabled \\
 \bottomrule
 \end{tabular}\endgroup

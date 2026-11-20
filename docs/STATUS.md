@@ -3,49 +3,67 @@
 Working copy: `C:\Users\rezax\Home\Code\thermo_agent\Repo` on REZA_PC (git, branch `main`). No SSH, no WSL: every
 step below runs in this checkout.
 
-## Truth snapshot — 2026-11-19 (LATEST; supersedes every section below)
+## Truth snapshot — 2026-11-20 (LATEST; supersedes every section below)
 
-Authoritative decisions: `docs/DECISIONS_2026-11-19.md`. Plan: `docs/IMPLEMENTATION_PLAN.md`.
-Where any older section below calls a corpus, eval set, model order or smoke version "current", read this
-section instead.
+Authoritative decisions: `docs/DECISIONS_2026-11-19.md` (esp. §4–§7, §7.9–§7.11). Plan: `docs/IMPLEMENTATION_PLAN.md`.
+Source-of-truth reads for this snapshot: `docs/BUDGET_BATCH_REPORT.md`, `notebooks/README.md`,
+`notebooks/kaggle_model_runner.py`, `docs/TRACE_QUALITY_AUDIT_2026-11-19.md`,
+`docs/HOSTED_V6_ASSESSMENT_2026-11-19.md`, `docs/EVAL_PROTOCOL.md`. Where any older section below calls a
+corpus, eval set, model order or smoke version "current", read this section instead.
 
-**Ordering (Reza directive, DECISIONS §4).** ALL datagen complete first — deterministic tool corpora at the
-decided 4,800 rows, all authorised frontier tool-CoT traces, the plain A-slice and `heldout_v2` — then
-**SFT → GRPO (k=4/8/16) → every eval arm**. Tiers are **equal thirds per task** (`easy`/`medium`/`hard`) in both
-training and test data. The training path is audited and fixed with tests before the first training run.
-**No model has been trained, no arm scored, and no Kaggle run under this plan has occurred.** The only hosted
-compute so far is the teacher datagen task that produced the 32 traces below; it is not a training run.
+**What has NOT happened:** no SFT step, no GRPO step, no model evaluation and no checkpoint exists anywhere.
+No arm has been scored, and no results table claims measured model performance. The only hosted compute is
+teacher datagen, not training.
 
-**Data provenance (see the source-family table in `docs/PROVENANCE.md` and `docs/dataset_cards.md`).**
-Every row states deterministic-vs-AI and, if AI, its `model`. Fields: `source`
-(`ground_truth` / `deterministic_tools` / frontier value with `source_detail: frontier_tools`),
-`provenance` (`{generator, variant, source_row_id, source_dir}` on deterministic rows), `model` (AI rows only),
-`paraphrase` (A-slice rows). Frontier rows carry `model`/`provider`/`run_id` instead of a `provenance` dict.
+**Paper artifact caveat:** `paper/generated/table_results.tex`, `table_comparison.tex`, `table_training.tex` and
+`values.tex` were updated by hand to pending/decided content. Do NOT rerun
+`paper/tools/generate_paper_assets.py` until its generator is updated, or it will overwrite these with stale
+values. The build path is `paper/build_paper.ps1` (48-page `main.pdf`, no undefined refs); `verify_paper.py`
+exits 1 here only because MiKTeX's `latexmk` needs Perl, which is not installed.
 
-| Source family | Producer | Model (AI) | Where stored | Rows |
-| --- | --- | --- | --- | ---: |
-| Deterministic ground truth | synth + simulator/verifiers; **nothing deleted or overwritten** | none | `data/processed` | **27,418** all splits; train repair 5,458 / ledger 4,846 / audit 2,192 / design 1,768 |
-| Plain A-slice (COPY) | `build_a_slice.py`, seeded, 1 paraphrase/plant, plain prompt, no tool markers | none | `data/a_slice` | **1,600** (400/task) = round(4,800 × 0.3333) |
-| Deterministic tool traces | `synth.tool_traces`, `--limit 120` = 120 plants × 2 variants × 4 tasks | none | `data/sft_tools`, `data/grpo_tools` | **960** (240/task) — **under the decided 4,800; known defect to fix**, not a reason to train on a partial corpus |
-| Frontier tool traces (AI) | hosted task `thermo-teacher-tools-s00` v6, run `7179338`, verifier-accepted | `google-gemini-3-8-flash` | `data/frontier_tools` (as received), `data/frontier_tools_clean_v2` (sanitized) | **32** (repair 9, ledger 10, audit 6, design 7); 40 attempts, 5× 429, $0.842202 = $0.0263/accepted |
+**Ordering (Reza directive, DECISIONS §4).** ALL datagen first, then **SFT → GRPO (k=4/8/16) → every eval arm**.
+Tiers are **equal thirds per task** (`easy`/`medium`/`hard`) in both training and test data. Training starts only
+when every datagen item is built, audited and committed. The remaining datagen item is the frontier CoT campaign.
 
-- **Multi-turn traces exist and are multi-turn.** Deterministic `data/sft_tools` rows store the whole
-  `tool_call`/`tool_result` round sequence in one SFT `completion`; `data/grpo_tools` rows store the same rounds in
-  `trajectory.turns`. Frontier clean rows carry a 5-turn `trajectory` and a `model` field.
-- **Only 32 frontier tool traces exist, all `google-gemini-3-8-flash`.** Sanitized copies are in
-  `data/frontier_tools_clean_v2` (0/32 over the 8,192 gate after removing the provider `call_id` wrapper);
-  `data/frontier_tools` is unchanged. This is a pilot yield, not a corpus.
-- **Frontier models with NO traces — unknown / not yet generated (planned only):** `gpt-6-luna`,
-  `claude-haiku-5-5`, `gemini-3.5-flash-lite`, `gpt-6.2-sol`, `claude-opus-5-5-default` (`claude-opus`),
-  `claude-sonnet-5-5`, `gemini-4-argon` (`gemini-4`). Per DECISIONS D / J4 these are planned; do not imply
-  traces, cost or scores exist for them.
-- **Test / dev split (F1):** test = `data/heldout_v2` (not yet generated); `data/heldout` (214 ids) is **dev**.
-  The older "Done — held-out set", "final comparison scored with `DATA_DIRS=heldout`" and "Next" item 5
-  (score on `data/heldout`) below are superseded. `docs/EVAL_PROTOCOL_HELD_OUT_DEV.md` was frozen while
-  `data/heldout` was still the eval set; its test role is superseded by F1, its 214-id table still describes dev.
-- **Open items:** compact harness + gate re-measure (0.1–0.2), deterministic corpus expansion 960 → 4,800 (0.4),
-  frontier campaign for the remaining models (Phase 2), `sft_mix_h`, `heldout_v2`, and the audited/fixed training
-  path. Status detail: the "Truth snapshot (evening)" section below is now historical.
+### Datagen state (truthful, 2026-11-20)
+
+| Item | State | Evidence |
+| --- | --- | --- |
+| Deterministic tool corpora | **DONE** — 4,800 rows per task family (600 plants × 2 variants `direct`/`recover` × 4 tasks), real physics tool results, verifier accepted | `data/sft_tools_v2*`, `data/grpo_tools_v2*`, manifests |
+| Equal-thirds tiers | **DONE** — `easy`/`medium`/`hard` per task from `thermo_agent/synth/tiers.py`, remainder to hard, exact counts in manifests | `docs/EVAL_PROTOCOL.md` §2, trace audit §1 |
+| Plain A-slice | **DONE** — 1,600 rows (400/task) = round(4,800 × 0.3333), plain prompt, no tool markers | `data/a_slice` |
+| `heldout_v2` (test) | **DONE and FROZEN** — 3,476 scored rows in 12 cells, equal thirds per task, contamination scan PASS (overlap 0) | `docs/EVAL_PROTOCOL.md` (test hash `3cc51773…`) |
+| Compact harness + gate re-measure | **DONE** — one ≤2,500-token text for tracegen/training/eval; build_trace re-measures on the rendered row; gate 8,192, over-gate rows dropped not truncated | DECISIONS J2/J3, §1 |
+| `*_h` corpora / `sft_mix_h` | **DONE** — every tool row uses the compact harness; plain prompt only for the A-slice (E4) | `data/sft_tools_v2_h`, `data/sft_mix_v2` |
+| Training-path fixes | **DONE** — task+tier loading, one harness rendering, `<tool_result>`/`<tool_response>` label masking, collator, checkpoint/resume, eval/save cadence, red smoke kernel; each with a test | `tests/test_decisions_applied.py`, `tests/test_tool_loss_masking.py` |
+| Provenance | **DONE** — every row states deterministic vs AI and, if AI, the exact `model` id | `docs/PROVENANCE.md`, `docs/dataset_cards.md` |
+| Token efficiency | **DONE** — token gate measured with the real Qwen3.5 tokenizer, over-gate rows dropped and counted, never truncated | `docs/TRACE_QUALITY_AUDIT_2026-11-19.md` §2 |
+| Frontier harness CoT | **IN PROGRESS** — see below | `docs/BUDGET_BATCH_REPORT.md` |
+
+### Frontier CoT campaign (IN PROGRESS)
+
+- **Only `gpt-6-luna` and `claude-haiku-5-5` are authorized.** Completed so far: each model's **5-row proof**
+  (luna run `7233597`, 5/5 accepted, \$0.003358; haiku run `7233598`, 5/5 accepted, \$0.012746) and **one
+  100-row batch per model** on task version 9. The 100-row journals are at the local token-gate → ingest →
+  audit stage; no accepted-row count is claimed here.
+- **Target: THOUSANDS of verifier-accepted harness-CoT traces with NO CAP** on traces, per-model counts, cost or
+  rows (DECISIONS §6.1, D1/D2/D6/D7/D9). Coverage is equal thirds across `easy`/`medium`/`hard` in all four
+  tasks; this is a floor, not a stopping number. **The old 72-cell (six-model) premium target is DISCARDED.**
+- **Not to be run, and no traces/costs/scores are implied for them:** `gpt-6.2-sol`, `claude-sonnet-5-5`,
+  `claude-opus-5-5-default`, `gemini-4-argon`, `gemini-3.8-flash`, `gemini-3.5-flash-lite`. The generic runner
+  hard-blocks gemini 3.8/3.5 and skips non-allowed models before any model call
+  (`notebooks/kaggle_model_runner.py`).
+- Data flow: **local → private HF repo `Reza-Nadimi/thermo-agent-corpora` → Kaggle kernel → ONE Kaggle dataset**
+  (`thermo-agent-corpus`), with code/prompt datasets attached read-only. **No local data uploads to Kaggle.**
+  All credentials live only in the repository-root `.env`. One generic reusable notebook
+  (`notebooks/kaggle_model_runner.py` / `.ipynb`) serves every workflow (tracegen, eval, zero-shot, cohorts,
+  with/without tools and harness); no per-task variants.
+- RAG memory stores **short success/failure recaps** (what failed → what works), with model ids, timestamps,
+  cost and raw checker logs stripped before prompting.
+
+Test = `data/heldout_v2`; `data/heldout` (214 ids) is **dev** only. The older "Done — held-out set",
+"final comparison scored with `DATA_DIRS=heldout`" and "Next" item 5 below are superseded. The
+"Truth snapshot (evening)" and every older section below are historical.
 
 ## Truth snapshot (2026-11-19 evening; historical — superseded by the section above)
 
@@ -146,6 +164,10 @@ Never give a job the same name as the script it runs.
 ## Data pipeline
 
 The corpus has four sources, all deterministic or verifier-grounded (no free-form CoT labels):
+
+> **Historical (superseded).** This describes the legacy zero-shot corpus. The current training mix adds
+> verifier-accepted frontier **harness-CoT** traces (luna/haiku campaign, in progress) on top of the complete
+> 4,800-row deterministic tool corpora; see the 2026-11-20 snapshot above.
 
 1. **Ground-truth paraphrases** (`thermo_agent/synth/paraphrase.py`): every ground-truth repair row is re-emitted
    with `--variants 20` truthful phrasings built from the fault facts. A row picks its variants by a hash of its id,
@@ -372,20 +394,19 @@ current-state section above).
 - **Stale:** this round-2 driver (`scripts/run_big_teacher_v2.ps1`) describes the earlier hosted pass. The current
   campaign is `scripts/run_teacher_campaign.ps1` and has not been executed yet; see the current-state section.
 
-## Next
+## Next (current plan; supersedes the older items below)
 
-1. Run the teacher campaign: `pwsh -File scripts/run_teacher_campaign.ps1 -Execute -Rows 200 -Resume` — budget models
-   first; the expensive tier is opt-in (`-Tier expensive -AllowExpensive`). See `docs/RUNBOOK.md` and
-   `docs/TEACHER_MODEL_CHOICES.md`.
-2. Ingest the verifier-accepted tool-CoT traces additively and rebuild the tool-using corpora; push an updated code
-   bundle. Wheels travel to the kernels via `kernel_sources` from `rezanadimi/thermo-kernel-wheels` — there is no
-   wheel-dataset publish step (the earlier `scripts/publish_wheel_dataset.ps1` reference was stale).
-3. Push the smoke, train and eval kernels (`docs/RUNBOOK.md`); confirm the step-20 evaluation no longer OOMs and
-   record seconds per step before sizing the SFT run.
-4. Run SFT, then GRPO per task at k=4, 8 and 16, each into its own checkpoint dir. No weights exist yet.
-5. Score every arm on `data/heldout` with `DATA_DIRS=heldout` and assemble `paper/assets/model_results.json`.
-6. Fill the remaining Q1 items in `paper/Q1_CHECKLIST.md` (ablation, significance, GPU-hour totals, memory ablation)
-   and redraw the three externally-drawn figures that still show pilot samples.
+1. **Finish the frontier CoT campaign** (the only open datagen item): larger batches with `gpt-6-luna` and
+   `claude-haiku-5-5` only, equal thirds across easy/medium/hard, until thousands of verifier-accepted traces
+   exist with no cap. After each batch, refresh local + served memory (short success/failure recaps) via
+   `transfer.ingest`, then gate/ingest/audit the downloaded journal locally. Use the one generic runner
+   `notebooks/kaggle_model_runner.py` and the HF-only bridge (local → `Reza-Nadimi/thermo-agent-corpora` → Kaggle
+   → one `thermo-agent-corpus` dataset). No premium or gemini 3.8/3.5 run.
+2. Re-run `scripts/check_datagen_complete.py`; training starts only when it exits zero.
+3. Run SFT, then one joint GRPO run per k ∈ {4,8,16} from the merged SFT checkpoint, then score every arm on
+   `data/heldout_v2` (`LIMIT=0`). No checkpoint exists yet; nothing is scored until the gate is green.
+4. Only after the first full score: regenerate `paper/assets/*.json`, `paper/generated/*.tex`, the paper PDF and
+   the provenance/dataset-card docs, then fill the remaining Q1 items in `paper/Q1_CHECKLIST.md`.
 
 ## Addendum 2026-11-19 — verified facts (appended; does not supersede the sections above)
 
