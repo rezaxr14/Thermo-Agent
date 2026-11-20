@@ -68,8 +68,9 @@ def main() -> int:
     for model in MODELS:
         plan = json.loads((PROMPTS / f"plan_bulk_{model}.json").read_text(encoding="utf-8"))
         used = used_ids(model)
-        missing = {cell for cell, counts in coverage.items()
-                   if cell.startswith(model + "/") and any(v == 0 for v in counts.values())}
+        # Gate keys are "<model>/<task>/<tier>"; plan cells are "<task>/<tier>".
+        missing = {key.split("/", 1)[1] for key, counts in coverage.items()
+                   if key.startswith(model + "/") and any(v == 0 for v in counts.values())}
         # Equal thirds across easy/medium/hard for every 100-row batch; within
         # each tier prefer cells that are still missing in the gate.
         quotas = {"easy": BATCH_SIZE // 3, "medium": BATCH_SIZE // 3,
