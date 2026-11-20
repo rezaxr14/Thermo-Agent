@@ -173,11 +173,21 @@ def render(row: dict, notes: dict[str, dict]) -> str:
         out.append(str(message.get("content") or ""))
 
     name, skill = served_skill(str(row.get("task") or ""))
-    head("SKILL SERVED (reconstructed from TASK_SKILLS, not persisted per row)")
-    if not name:
+    recorded_skill = str(traj.get("served_skill") or "")
+    system_hash = str(traj.get("system_prompt_sha256") or "")
+    head("SKILL SERVED")
+    if recorded_skill:
+        out.append(f"skill: {recorded_skill}  (persisted in the trace)")
+        if name:
+            out.append("")
+            out.append(truncate(skill, 4000))
+        if system_hash:
+            out.append(f"\nsystem prompt sha256: {system_hash}")
+    elif not name:
         out.append(f"(no skill is mapped for task {row.get('task')!r} in TASK_SKILLS; none was served)")
     else:
-        out.append(f"skill: {name}\n")
+        out.append(f"skill: {name}  (reconstructed from TASK_SKILLS: this row predates capture)")
+        out.append("")
         out.append(truncate(skill, 4000))
 
     head("TOOLS OFFERED TO THE MODEL")
@@ -199,6 +209,10 @@ def render(row: dict, notes: dict[str, dict]) -> str:
         if note.get("fix"):
             out.append(f"  fix     : {note.get('fix')}")
         out.append(f"  served  : {compact_note_line(note)}")
+    memory_block = str(traj.get("memory_block") or "")
+    if memory_block:
+        out.append("\nExact block sent to the model:")
+        out.append(memory_block)
 
     head(f"TRAJECTORY ({len(turns)} turns)")
     for i, turn in enumerate(turns, 1):
@@ -230,13 +244,20 @@ def render(row: dict, notes: dict[str, dict]) -> str:
 
     head("CAPTURE AUDIT")
     calls = [c.get("name") for t in turns for c in (t.get("tool_calls") or [])]
+    has_reasoning = any((t.get("reasoning") or "").strip() for t in turns)
     out += [
         f"tool calls captured      : {len(calls)} {sorted(set(calls))}",
         f"assistant prose turns    : {sum(1 for t in turns if (t.get('assistant') or '').strip())}/{len(turns)}",
-        f"reasoning turns captured : {sum(1 for t in turns if (t.get('reasoning') or '').strip())}/{len(turns)}",
-        f"memory notes served      : {len(served)} (ids persisted, text resolved from data/memory)",
-        f"skill id persisted       : {'no - reconstructed: ' + name if name else 'no skill mapped for this task'}",
-        f"served system prompt     : NOT persisted (base prompt only; harness is added at request time)",
+        f"reasoning turns captured : {sum(1 for t in turns if (t.get('reasoning') or '').strip())}/{len(turns)}"
+        + ("" if has_reasoning else "  (provider returns none for this model/tool combo)"),
+        f"memory notes served      : {len(served)} (ids persisted"
+        + (", exact block persisted" if str(traj.get('memory_block') or '') else
+           ", text resolved from data/memory") + ")",
+        ("skill id persisted      : " + recorded_skill) if recorded_skill
+        else ("skill id persisted      : no - reconstructed: " + name if name
+              else "skill id persisted      : no skill mapped for this task"),
+        ("system prompt sha256     : " + system_hash) if system_hash
+        else "served system prompt     : NOT persisted (row predates capture)",
         f"tool results present     : {sum(len(t.get('tool_results') or []) for t in turns)}",
     ]
     return "\n".join(out)

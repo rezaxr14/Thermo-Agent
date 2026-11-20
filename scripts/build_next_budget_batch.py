@@ -21,6 +21,7 @@ COHORT = ROOT / "data/frontier_tools_cohort"
 JOURNALS = ROOT / "data/teacher_runs/kaggle_hosted/budget_batches"
 MODELS = ("gpt-6-luna", "claude-haiku-5-5")
 BATCH_SIZE = 100
+TIERS = ("easy", "medium", "hard")
 
 
 def gate_missing_cells() -> list[str]:
@@ -82,6 +83,27 @@ def interleave(tier_rows, quota):
     return take
 
 
+def stamp_rows(chosen, all_rows):
+    """Give every chosen row an explicit tier/cell, or refuse to build the shard.
+
+    The hosted runner filters on `tier`; a shard without it loads fine and then
+    selects 0 rows, which is how two batches produced 0-byte journals.
+    """
+    lines = []
+    counts = {t: 0 for t in TIERS}
+    for _, rid, entry in chosen:
+        row = dict(all_rows[rid])
+        cell = str(entry.get("cell") or "")
+        tier = cell.split("/")[-1]
+        if tier not in TIERS or "/" not in cell:
+            raise SystemExit(f"row {rid} has no usable cell/tier ({cell!r})")
+        row["cell"] = cell
+        row["tier"] = tier
+        counts[tier] += 1
+        lines.append(json.dumps(row, ensure_ascii=False) + "\n")
+    return lines, counts
+
+
 def main() -> int:
     missing_all = gate_missing_cells()
     all_rows = {}
@@ -119,17 +141,10 @@ def main() -> int:
         if not chosen:
             raise SystemExit(f"{model}: no unused rows left in plan")
         shard = PROMPTS / f"prompts_batch{n}_{model}.jsonl"
-        lines = []
-        for _, rid, entry in chosen:
-            row = dict(all_rows[rid])
-            # The hosted runner needs the tier/cell explicitly; prompts_all.jsonl
-            # carries only the artefact and the compact prompt.
-            row["cell"] = str(entry.get("cell") or "")
-            row["tier"] = str(entry.get("cell") or "").split("/")[-1]
-            lines.append(json.dumps(row, ensure_ascii=False) + "\n")
+        lines, counts = stamp_rows(chosen, all_rows)
         shard.write_text("".join(lines), encoding="utf-8")
         model_shards[model] = shard.name
-        print(f"{model}: batch {n} {len(chosen)} rows, "
+        print(f"{model}: batch {n} {len(chosen)} rows tiers={counts}, "
               f"{sum(1 for p, _, _ in chosen if p == 0)} from missing cells -> {shard.name}")
     config = {
         "mode": "harness", "shard": "prompts_proof.jsonl", "limit": BATCH_SIZE,

@@ -564,7 +564,13 @@ if IS_KAGGLE:
                         rec["trajectory"] = {"turns": state.get("turns") or [],
                                              "notes_used": state.get("notes_used") or [],
                                              "tools_available": tools,
-                                             "final": rec["completion"]}
+                                             "final": rec["completion"],
+                                             # Proof of what the harness actually served:
+                                             # the selected skill id, the exact system-prompt
+                                             # hash, and the compact memory block.
+                                             "served_skill": state.get("served_skill") or "",
+                                             "system_prompt_sha256": state.get("system_prompt_sha256") or "",
+                                             "memory_block": state.get("memory_block") or ""}
                         rec["usage"] = usage_of(holder["chat"]) if "chat" in holder else {}
                     else:
                         messages = row.get("prompt") if isinstance(row.get("prompt"), list) else []

@@ -1,0 +1,94 @@
+{
+  "balance": {
+    "claude-haiku-5-5": {
+      "easy": 34.9,
+      "hard": 38.5,
+      "known_tier_rows": 109,
+      "medium": 26.6
+    },
+    "gpt-6-luna": {
+      "easy": 35.1,
+      "hard": 36.9,
+      "known_tier_rows": 111,
+      "medium": 27.9
+    }
+  },
+  "defects": {
+    "malformed_json": 0,
+    "missing_provenance_model": 0,
+    "non_frontier_tools_source": 0,
+    "unknown_tier": 8
+  },
+  "matrix": {
+    "claude-haiku-5-5": {
+      "audit": {
+        "easy": 0,
+        "hard": 2,
+        "medium": 0
+      },
+      "design": {
+        "easy": 1,
+        "hard": 2,
+        "medium": 1
+      },
+      "ledger": {
+        "easy": 0,
+        "hard": 1,
+        "medium": 0
+      },
+      "repair": {
+        "easy": 37,
+        "hard": 37,
+        "medium": 28
+      }
+    },
+    "gpt-6-luna": {
+      "audit": {
+        "easy": 0,
+        "hard": 0,
+        "medium": 0
+      },
+      "design": {
+        "easy": 2,
+        "hard": 3,
+        "medium": 2
+      },
+      "ledger": {
+        "easy": 3,
+        "hard": 3,
+        "medium": 3
+      },
+      "repair": {
+        "easy": 34,
+        "hard": 35,
+        "medium": 26
+      }
+    }
+  },
+  "per_model": {
+    "claude-haiku-5-5": 113,
+    "gpt-6-luna": 115
+  },
+  "per_task": {
+    "audit": 2,
+    "design": 11,
+    "ledger": 10,
+    "repair": 205
+  },
+  "per_tier": {
+    "easy": 77,
+    "hard": 83,
+    "medium": 60,
+    "unknown": 8
+  },
+  "total_accepted_traces": 228,
+  "zero_cells": [
+    "gpt-6-luna/audit/easy",
+    "gpt-6-luna/audit/medium",
+    "gpt-6-luna/audit/hard",
+    "claude-haiku-5-5/audit/easy",
+    "claude-haiku-5-5/audit/medium",
+    "claude-haiku-5-5/ledger/easy",
+    "claude-haiku-5-5/ledger/medium"
+  ]
+}

@@ -15,6 +15,18 @@ $gated = Join-Path $dir "gated.jsonl"
 $tokemanifest = Join-Path $dir "tokengate_manifest.json"
 $env:PYTHONIOENCODING = 'utf-8'
 
+# An empty journal is NOT a completed batch. Twice this loop "succeeded" on a
+# 0-byte file while the hosted runner had actually attempted zero rows. Refuse
+# both an empty file and the runner's explicit "__error__" journal row.
+if ((Get-Item $journalPath).Length -eq 0) {
+  throw "journal is empty: $journalPath (the runner attempted 0 rows; check the Kaggle log for [runner][ERROR])"
+}
+$errRow = Select-String -Path $journalPath -Pattern '"id"\s*:\s*"__error__"' -Quiet
+if ($errRow) {
+  $detail = (Select-String -Path $journalPath -Pattern '__error__' | Select-Object -First 1).Line
+  throw "runner journalled an error instead of traces: $detail"
+}
+
 # Pipeline controls are exposed in harness_config.json / HARNESS_* env vars.
 $cfgPath = 'data/frontier_tools_cohort_prompts/harness_config.json'
 $pipeline = $null

@@ -88,9 +88,21 @@ def test_render_shows_tool_call_result_memory_and_final(tmp_path):
 def test_render_labels_skill_as_reconstructed_and_reasoning_as_missing(tmp_path):
     _write_row(tmp_path, "claude-haiku-5-5", _row())
     text = mod.render(mod.find_row("des-1", tmp_path), {})
-    assert "reconstructed from TASK_SKILLS, not persisted per row" in text
+    assert "reconstructed from TASK_SKILLS" in text
     assert "reasoning: (not captured)" in text
-    assert "skill id persisted       : no" in text
+    assert "skill id persisted      : no" in text
+
+
+def test_persisted_skill_and_memory_block_take_precedence(tmp_path):
+    row = _row()
+    row["trajectory"]["served_skill"] = "design-catalog"
+    row["trajectory"]["system_prompt_sha256"] = "abc123"
+    row["trajectory"]["memory_block"] = "FAILURE MEMORY (compact block)"
+    text = mod.render(row, {})
+    assert "skill: design-catalog  (persisted in the trace)" in text
+    assert "system prompt sha256: abc123" in text
+    assert "FAILURE MEMORY (compact block)" in text
+    assert "reconstructed" not in text
 
 
 def test_missing_memory_id_is_reported_not_dropped(tmp_path):

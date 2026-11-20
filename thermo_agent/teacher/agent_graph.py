@@ -22,6 +22,7 @@ tools are never run twice.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 from typing import Any, TypedDict
 
@@ -105,6 +106,12 @@ def build_context(state: AgentState) -> dict:
         [{"role": "system", "content": original}], task, plant,
         mode=state.get("mode", "agents+skills"),
         max_turns=state.get("max_rounds", DEFAULT_MAX_ROUNDS))[0]["content"]
+    # Record WHICH skill was served. The skill bytes ride inside the system prompt, so
+    # without this the trace cannot prove a skill was read; the name is deterministic
+    # from TASK_SKILLS[task] and the hash covers the exact text sent.
+    from ..agent.harness import TASK_SKILLS
+    skill_names = list(TASK_SKILLS.get(task) or [])
+    served_skill = skill_names[0] if skill_names else ""
     notes = state.get("notes") or []
     # D10/D11: guidance first (inventory skills/tools, then examine the cycle against memory),
     # then a TOKEN-EFFICIENT memory that carries only what failed and what works — no model ids,
@@ -115,6 +122,7 @@ def build_context(state: AgentState) -> dict:
     # record. The one result feeds both the served (compact) block and `notes_used`, so the
     # journal cannot claim notes the model was never shown (or show a note twice).
     retrieved: list = []
+    memory_block = ""
     if notes:
         retrieved = mem.retrieve(
             " ".join(m["content"] for m in row["prompt"]), notes,
@@ -123,6 +131,7 @@ def build_context(state: AgentState) -> dict:
         )
         compact = compact_notes(retrieved, k=state.get("k_memory", 3))
         if compact:
+            memory_block = compact
             sys += "\n\n" + compact
     # Short reminder only: the tool contract above already lists the five tools, their
     # numbers and the final-answer tags. Keep the enforced round count in the prompt
@@ -137,6 +146,9 @@ def build_context(state: AgentState) -> dict:
     return {
         "system_prompt": sys, "tools": tools, "tool_map": {t.__name__: t for t in tools},
         "notes_used": notes_used,
+        "served_skill": served_skill,
+        "memory_block": memory_block,
+        "system_prompt_sha256": hashlib.sha256(sys.encode("utf-8")).hexdigest(),
         "messages": [{"role": "system", "content": sys}, {"role": "user", "content": user}],
         "turns": [], "rounds": 0, "done": False,
     }
@@ -320,6 +332,9 @@ def run_direct(row: dict, task: str, respond, *, notes=None, k_memory=3,
         "accepted": out["accepted"],
         "sft_completion": out["sft_completion"],
         "notes_used": ctx["notes_used"],
+        "served_skill": ctx.get("served_skill", ""),
+        "memory_block": ctx.get("memory_block", ""),
+        "system_prompt_sha256": ctx.get("system_prompt_sha256", ""),
         "tools_available": tool_names(),
         "done": out["done"],
     }

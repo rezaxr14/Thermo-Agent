@@ -4,6 +4,7 @@ History: sorting candidate rows by id alone spent every easy slot on `audit/easy
 because `aud-*` sorts before `led-*`, so `ledger/easy` stayed empty across batches.
 """
 import importlib.util
+import json
 import pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -46,3 +47,22 @@ def test_equal_third_quotas_are_33_33_34():
     quotas = {"easy": mod.BATCH_SIZE // 3, "medium": mod.BATCH_SIZE // 3,
               "hard": mod.BATCH_SIZE - 2 * (mod.BATCH_SIZE // 3)}
     assert quotas == {"easy": 33, "medium": 33, "hard": 34}
+
+def test_stamp_rows_adds_tier_and_cell():
+    all_rows = {"a": {"id": "a", "prompt": []}, "b": {"id": "b", "prompt": []}}
+    chosen = [(0, "a", {"cell": "audit/easy"}), (1, "b", {"cell": "ledger/hard"})]
+    lines, counts = mod.stamp_rows(chosen, all_rows)
+    assert counts == {"easy": 1, "medium": 0, "hard": 1}
+    rows = [json.loads(line) for line in lines]
+    assert rows[0]["tier"] == "easy" and rows[0]["cell"] == "audit/easy"
+    assert rows[1]["tier"] == "hard" and rows[1]["cell"] == "ledger/hard"
+
+
+def test_stamp_rows_refuses_untiered_rows():
+    """A shard without tiers selects 0 rows on the hosted runner (0-byte journal)."""
+    import pytest
+    all_rows = {"a": {"id": "a"}}
+    with pytest.raises(SystemExit):
+        mod.stamp_rows([(0, "a", {"cell": ""})], all_rows)
+    with pytest.raises(SystemExit):
+        mod.stamp_rows([(0, "a", {"cell": "audit"})], all_rows)

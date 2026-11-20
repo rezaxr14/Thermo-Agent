@@ -198,3 +198,31 @@ def test_spy_would_catch_a_second_execution_on_the_three_tuple_path(monkeypatch)
     state = run(row, "repair", respond)
     assert counter["n"] == 1
     assert state["rounds"] == 1
+
+def test_build_context_records_served_skill_and_prompt_hash():
+    """The trace must be able to prove which skill was served and the exact prompt bytes."""
+    row = {"id": "row-design",
+           "prompt": [{"role": "system", "content": "You design plants."},
+                      {"role": "user", "content": "SITE it_load_w=1"}]}
+    ctx = build_context({"row": row, "task": "design", "notes": [],
+                         "mode": "agents+skills"})
+    assert ctx["served_skill"] == "design-catalog"
+    assert len(ctx["system_prompt_sha256"]) == 64
+    assert ctx["memory_block"] == ""
+    # A task with no mapped skill records an empty id rather than inventing one.
+    repair = build_context({"row": row, "task": "repair", "notes": [],
+                            "mode": "agents+skills"})
+    assert repair["served_skill"] == ""
+
+
+def test_build_context_records_the_exact_memory_block(monkeypatch):
+    row = {"id": "row-current",
+           "prompt": [{"role": "system", "content": "You are a plant engineer."},
+                      {"role": "user", "content": "unit_slip dc_chp unbalanced plant wrong power of ten"}]}
+    notes = [_note("note-a", "rep-a"), _note("note-b", "rep-b")]
+    ctx = build_context({"row": row, "task": "repair", "notes": notes,
+                         "k_memory": 3, "mode": "agents+skills"})
+    assert ctx["notes_used"], "fixture must retrieve at least one note"
+    for line in ctx["memory_block"].splitlines()[1:]:
+        assert line.startswith("- "), "served block must be the compact render"
+    assert ctx["memory_block"] in ctx["system_prompt"]

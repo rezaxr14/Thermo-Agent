@@ -69,7 +69,7 @@ function Wait-Kernel {
 }
 
 function Commit-Work([string]$message) {
-  git add data/frontier_tools_cohort data/memory docs/BUDGET_BATCH_REPORT.md data/frontier_tools_accepted
+  git add data/frontier_tools_cohort data/memory docs/BUDGET_BATCH_REPORT.md data/frontier_tools_accepted data/sft_mix_v2 data/grpo_mix_v2 reports/DATAGEN_PROGRESS.md reports/datagen_progress.json
   $diff = git diff --cached --stat
   if ($diff) {
     git commit -m $message | Out-Null
@@ -92,6 +92,8 @@ function Update-TrainingData {
   & .venv/Scripts/python.exe scripts/sync_corpora_hf.py --dirs data/frontier_tools_cohort data/frontier_tools_accepted data/memory data/sft_mix_v2 data/grpo_mix_v2 `
     --message "budget frontier traces incorporated into training mix" --tag "budget-mix-$(Get-Date -Format yyyyMMddHHmmss)"
   if ($LASTEXITCODE -ne 0) { Fail "HF sync failed" }
+  # Refresh the human progress view every batch so cell coverage is never a guess.
+  & .venv/Scripts/python.exe scripts/report_datagen_progress.py --json reports/datagen_progress.json --md reports/DATAGEN_PROGRESS.md | Out-Null
   Commit-Work "budget: refresh training mix with accepted frontier traces"
 }
 
@@ -147,6 +149,7 @@ for ($b = 1; $b -le $MaxBatches; $b++) {
     powershell -NoProfile -File scripts/process_budget_batch.ps1 -Model $model -Journal $journal -RunId $runid |
       Select-String -Pattern 'accepted_tool_rows|survived|dropped_over_gate|accepted frontier tool traces' |
       ForEach-Object { Log "  $model $($_.Line.Trim())" }
+    if ($LASTEXITCODE -ne 0) { Fail "gate/ingest failed for $model ($journal); see empty/error-journal guard" }
   }
 
   & .venv/Scripts/python.exe scripts/build_accepted_frontier.py | ForEach-Object { Log "  $_" }
