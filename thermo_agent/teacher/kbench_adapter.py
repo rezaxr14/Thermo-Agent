@@ -20,7 +20,14 @@ from kaggle_benchmarks.tools.native import native_tool_agent
 
 
 def _message_turns(chat) -> tuple[str, list[dict]]:
-    """Read the assistant answers, tool calls, tool results and reasoning off the chat."""
+    """Read the assistant answers, tool calls, tool results and reasoning off the chat.
+
+    The per-turn assistant text IS the reasoning trace for chat-completions models
+    (luna runs with ``reasoning_effort="none"`` and puts its CoT in the visible
+    assistant message). Only when the provider returns a separate hidden trace do
+    we prefer that trace. Keeping the visible text as ``reasoning`` is what lets a
+    later turn replay the model's own prior reasoning, tool use and momentum.
+    """
     turns, reasoning = [], ""
     current = None
     for m in chat.messages:
@@ -31,15 +38,18 @@ def _message_turns(chat) -> tuple[str, list[dict]]:
         role = getattr(sender, "role", "") if sender is not None else ""
         content = str(getattr(m, "content", "") or "")
         traces = getattr(m, "reasoning_traces", None)
-        if traces:
-            reasoning += str(traces) + "\n"
+        trace_text = str(traces).strip() if traces else ""
+        # Visible per-turn prose is the reasoning when the provider hides none.
+        turn_reasoning = trace_text or content.strip()
+        if turn_reasoning:
+            reasoning = (reasoning + "\n" + turn_reasoning).strip()
         calls = []
         for c in getattr(m, "tool_calls", None) or []:
             calls.append({"name": getattr(c, "name", "?"), "arguments": getattr(c, "arguments", {})})
         if role == "assistant" or (calls and role not in ("user", "system", "tool")):
             if current is not None:
                 turns.append(current)
-            current = {"assistant": content, "reasoning": str(traces) if traces else "",
+            current = {"assistant": content, "reasoning": turn_reasoning,
                        "tool_calls": calls, "tool_results": []}
         elif role == "tool":
             if current is None:

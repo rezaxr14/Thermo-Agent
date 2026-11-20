@@ -305,7 +305,10 @@ def has_thinking(row: dict[str, Any]) -> bool:
             if traj.get(key):
                 return True
         for turn in traj.get("turns") or []:
-            if isinstance(turn, dict) and any(turn.get(k) for k in ("reasoning", "thinking", "thought")):
+            # The visible assistant prose is the reasoning trace for chat-completions
+            # models; counting only "reasoning" reported these traces as thinking-free.
+            if isinstance(turn, dict) and any(
+                    turn.get(k) for k in ("reasoning", "thinking", "thought", "assistant")):
                 return True
     completion = str(row.get("completion") or "")
     return "<thinking>" in completion or "<analysis>" in completion

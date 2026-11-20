@@ -31,9 +31,22 @@ GOOD_PRACTICE = (
 )
 
 
+# Raw per-turn capture markup is trajectory data, never reusable memory. Strip the whole
+# block (including anything inside it) before any other cleanup so a hidden chain, a tool
+# payload or a numeric result cannot leak into the block the model is served.
+_TRAJECTORY_MARKUP_RE = re.compile(
+    r"<\s*(think|tool_call|tool_result)\b[^>]*>.*?<\s*/\s*\1\s*>", re.I | re.S)
+
+
+def _strip_trajectory_markup(text: str) -> str:
+    """Remove <think>/<tool_call>/<tool_result> blocks (case-insensitive, DOTALL)."""
+    return _TRAJECTORY_MARKUP_RE.sub(" ", text or "")
+
+
 def _clean(text: str) -> str:
     """Strip verbosity in a lesson while keeping its reasoning content."""
-    text = re.sub(r"\s+", " ", (text or "").strip())
+    text = _strip_trajectory_markup(text or "")
+    text = re.sub(r"\s+", " ", text.strip())
     # Drop provider/model slugs, whether '/' or '-' separated. The old rule only
     # handled the slash form, so `google-gemini-...` and bare `luna-2` leaked.
     text = re.sub(r"\b(?:google|openai|anthropic)[/-][A-Za-z0-9._-]+", "", text, flags=re.I)

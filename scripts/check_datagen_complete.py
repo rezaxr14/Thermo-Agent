@@ -42,7 +42,16 @@ FRONTIER_DIR_GLOBS = ("data/frontier_tools*/**/*.jsonl", "data/frontier_tools_cl
 
 
 def _frontier_rows() -> list[dict]:
-    """Accepted tool-bearing frontier rows, deduplicated by (model, task, id)."""
+    """Accepted tool-bearing rows for the 24 BUDGET cells, deduplicated by diagram.
+
+    Only `gpt-6-luna` and `claude-haiku-5-5` count toward the training gate (Reza,
+    2026-11-20, DECISIONS §6). Old gemini/premium traces may still live under
+    `data/frontier_tools*`, so they must not inflate the reported cohort count.
+
+    A diagram can appear in more than one store (cohort, accepted, pilot, clean)
+    and with a `#vN` retry suffix. Dedupe on the base diagram id so one accepted
+    trace is counted once, never once per copy.
+    """
     seen: set[tuple[str, str, str]] = set()
     rows: list[dict] = []
     for pattern in FRONTIER_DIR_GLOBS:
@@ -54,7 +63,9 @@ def _frontier_rows() -> list[dict]:
                     row = json.loads(line)
                 except ValueError:
                     continue
-                model = str(row.get("model") or (row.get("provenance") or {}).get("model") or "")
+                model = _model_name(row)
+                if model is None:
+                    continue
                 task = str(row.get("task") or "")
                 blob = json.dumps(row, ensure_ascii=False)
                 if "<tool_call" not in blob or "<tool_result" not in blob:
@@ -64,7 +75,8 @@ def _frontier_rows() -> list[dict]:
                 # positive reward with no rejection marker must count here too.
                 if not is_verifier_accepted(row):
                     continue
-                key = (model, task, str(row.get("record_id") or row.get("id") or ""))
+                base_id = str(row.get("record_id") or row.get("id") or "").split("#v", 1)[0]
+                key = (model, task, base_id)
                 if key in seen:
                     continue
                 seen.add(key)

@@ -196,7 +196,8 @@ def test_four_tuple_finalizes_without_reexecuting_tools(monkeypatch):
     assert state["done"] is True
     assert state["rounds"] == 0
     assert state["last_calls"] == []   # the 4-tuple's calls were discarded, not run
-    assert state["turns"] == [{"assistant": "FINAL ANSWER", "reasoning": "",
+    # Per-turn visible assistant prose IS the reasoning for chat-completions models.
+    assert state["turns"] == [{"assistant": "FINAL ANSWER", "reasoning": "FINAL ANSWER",
                                "tool_calls": [], "tool_results": []}]
 
 

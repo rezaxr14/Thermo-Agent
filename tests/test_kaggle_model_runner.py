@@ -125,3 +125,29 @@ def test_notebook_and_example_exist():
     assert (ROOT / "notebooks/kaggle_model_runner.ipynb").is_file()
     example = json.loads((ROOT / "notebooks/harness_config.example.json").read_text(encoding="utf-8"))
     assert example["allowed_models"] == ["gpt-6-luna", "claude-haiku-5-5"]
+
+def test_partial_tier_shard_is_not_balanced_to_zero():
+    """Regression: batch 11's haiku shard had easy+medium only; min() over all
+    tiers was 0, so every row was dropped and the journal stayed empty."""
+    m = _load()
+    cfg = m.Config.from_dict({"tiers": ["easy", "medium", "hard"], "equal_tiers": True})
+    rows = ([{"id": f"e{i}", "tier": "easy"} for i in range(3)]
+            + [{"id": f"m{i}", "tier": "medium"} for i in range(3)])
+    assert cfg.select_rows(rows) == rows
+
+
+def test_full_tier_shard_is_trimmed_to_equal_thirds():
+    m = _load()
+    cfg = m.Config.from_dict({"tiers": ["easy", "medium", "hard"], "equal_tiers": True})
+    rows = ([{"id": f"e{i}", "tier": "easy"} for i in range(5)]
+            + [{"id": f"m{i}", "tier": "medium"} for i in range(5)]
+            + [{"id": f"h{i}", "tier": "hard"} for i in range(2)])
+    selected = cfg.select_rows(rows)
+    assert len(selected) == 6
+    assert {r["tier"] for r in selected} == {"easy", "medium", "hard"}
+
+
+def test_untiered_shard_selects_nothing_so_the_runner_fails_loudly():
+    m = _load()
+    cfg = m.Config.from_dict({"tiers": ["easy", "medium", "hard"], "equal_tiers": True})
+    assert cfg.select_rows([{"id": "x"}]) == []

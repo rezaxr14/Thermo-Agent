@@ -172,11 +172,23 @@ class Config:
         for row in allowed:
             buckets[self.tier_of(row)].append(row)
         sizes = {t: len(v) for t, v in buckets.items()}
-        # Equal thirds, remainder to the higher tier (same rule as the corpora).
-        q = min(sizes.values()) if sizes else 0
-        # Equal thirds: use the same count in every tier; never give the remainder
-        # to hard here, because the caller wants exactly balanced tiers.
-        target = {t: min(sizes[t], q) for t in self.tiers}
+        if not any(sizes.values()):
+            return []
+        # A deliberately partial shard (the batch builder round-robins across cells,
+        # so it can emit only easy+medium) must NOT be balanced against an empty
+        # tier: min() over all tiers is 0, which selected nothing and produced
+        # 0-byte journals. Balance only across the tiers the shard actually has.
+        present = [t for t in self.tiers if sizes[t]]
+        if len(present) < len(self.tiers):
+            return allowed
+        # A shard is already "equal thirds" when tier counts differ by at most
+        # one (33/33/34, or 40/40/40). Keep all of it: rounding a 100-row shard
+        # down to 99 would drop a row for no benefit. Only a genuinely lopsided
+        # shard (e.g. 40/40/60) is trimmed to q per tier.
+        if max(sizes.values()) - min(sizes.values()) <= 1:
+            return allowed
+        q = min(sizes[t] for t in present)
+        target = {t: q for t in self.tiers}
         out = []
         for tier in self.tiers:
             out.extend(buckets[tier][:target[tier]])

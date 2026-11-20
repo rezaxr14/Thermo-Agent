@@ -197,12 +197,21 @@ def call_tools(state: AgentState) -> dict:
 
 
 def reflect(state: AgentState) -> dict:
-    """Feed numeric results back as a user turn so the model revises its answer."""
+    """Feed numeric results back so the model revises while keeping its own reasoning.
+
+    The next turn must see the assistant text/reasoning that produced these tool
+    calls. That is the whole point of a multi-turn agentic episode: the model
+    carries its reasoning, the skill it chose and its momentum into the revision.
+    Emit the reasoning once: if it is already the assistant text, do not repeat it.
+    """
     feedback = "\n".join(f"[{c['name']}] {r}" for c, r in
                          zip(state["turns"][-1]["tool_calls"], state["turns"][-1]["tool_results"]))
-    think = f"\n<think>\n{state['last_reasoning']}\n</think>" if state["last_reasoning"] else ""
+    assistant_text = state["last_text"] or ""
+    reason = (state["last_reasoning"] or "").strip()
+    if reason and reason not in assistant_text:
+        assistant_text = f"<think>\n{reason}\n</think>\n{assistant_text}".strip()
     msgs = state["messages"] + [
-        {"role": "assistant", "content": state["last_text"] + think},
+        {"role": "assistant", "content": assistant_text},
         {"role": "user", "content": "Tool results:\n" + feedback +
          "\nRevise the answer using these numbers, or if it is correct, STOP calling tools and return the final answer in XML tags."},
     ]
@@ -222,10 +231,14 @@ def finalize(state: AgentState) -> dict:
                   "tool_calls": [], "tool_results": []}]
     parts = []
     for t in turns:
-        if t.get("reasoning"):
-            parts.append(f"<think>\n{t['reasoning']}\n</think>")
-        if t.get("assistant"):
-            parts.append(t["assistant"])
+        reason = str(t.get("reasoning") or "").strip()
+        assistant = str(t.get("assistant") or "").strip()
+        # The visible per-turn prose is the reasoning for chat-completions models.
+        # Emit it once, not as both <think> and assistant text.
+        if reason and reason != assistant:
+            parts.append(f"<think>\n{reason}\n</think>")
+        if assistant:
+            parts.append(assistant)
         for call, result in zip(t.get("tool_calls", []), t.get("tool_results", [])):
             args = call.get("arguments", "")
             args = args if isinstance(args, str) else json.dumps(args, ensure_ascii=False)

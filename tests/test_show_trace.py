@@ -6,7 +6,7 @@ These tests build a tiny fake cohort on disk, so they assert the reader's contra
   * a tool call and its result are rendered,
   * served-memory ids are resolved back to note text,
   * the skill block is labelled reconstructed, never claimed as captured,
-  * an empty `reasoning` field is reported as "not captured".
+  * an empty `reasoning` field falls back to the visible assistant prose (which IS the reasoning for chat-completions models).
 """
 import importlib.util
 import json
@@ -89,7 +89,7 @@ def test_render_labels_skill_as_reconstructed_and_reasoning_as_missing(tmp_path)
     _write_row(tmp_path, "claude-haiku-5-5", _row())
     text = mod.render(mod.find_row("des-1", tmp_path), {})
     assert "reconstructed from TASK_SKILLS" in text
-    assert "reasoning: (not captured)" in text
+    assert "reasoning: <design>PR = 20</design>" in text
     assert "skill id persisted      : no" in text
 
 

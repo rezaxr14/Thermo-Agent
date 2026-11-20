@@ -107,6 +107,12 @@ for ($b = 1; $b -le $MaxBatches; $b++) {
   & .venv/Scripts/python.exe scripts/build_next_budget_batch.py
   if ($LASTEXITCODE -ne 0) { Fail "batch shard build failed" }
 
+  # Zero-cost gate: replay the hosted runner's own selection locally. A shard that
+  # would yield 0 rows is rejected here, before any HF/Kaggle/model call.
+  Log "batch $b : preflight local shards"
+  & .venv/Scripts/python.exe scripts/preflight_budget_batch.py --model gpt-6-luna --model claude-haiku-5-5
+  if ($LASTEXITCODE -ne 0) { Fail "local preflight failed; refusing to schedule a paid run" }
+
   Log "batch $b : syncing prompts/config to HF"
   & .venv/Scripts/python.exe scripts/sync_corpora_hf.py --dirs data/frontier_tools_cohort_prompts `
     --message "budget batch $b shards" --tag "budget-batch-$b"
@@ -115,6 +121,12 @@ for ($b = 1; $b -le $MaxBatches; $b++) {
   Log "batch $b : refreshing Kaggle dataset from HF"
   Invoke-K @('kernels', 'push', '--path', 'kaggle/hf_to_kaggle_kernel') | Out-Null
   Wait-Kernel
+
+  # The Kaggle copy is what the runner actually reads. Re-run the same gate on the
+  # downloaded bytes, so a stale/partial dataset cannot schedule a paid run either.
+  Log "batch $b : preflight Kaggle dataset bytes"
+  & .venv/Scripts/python.exe scripts/preflight_budget_batch.py --dataset --model gpt-6-luna --model claude-haiku-5-5
+  if ($LASTEXITCODE -ne 0) { Fail "dataset preflight failed (stale or incomplete Kaggle copy)" }
 
   Log "batch $b : pushing generic runner and waiting for auto-run skip"
   $pushOut = (Invoke-K @('benchmarks', 'tasks', 'push', $TASK, '--file', 'notebooks/kaggle_model_runner.py',

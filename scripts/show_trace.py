@@ -7,13 +7,14 @@ notes that were served. This reader renders all of it, resolves the memory note 
 back to the note text, and reconstructs the one task skill the harness would have
 served.
 
-Two things are NOT recorded per row and are therefore shown as reconstructed or
-flagged as missing:
+The served skill is chosen at request time by ``TASK_SKILLS[task]``; newer rows
+persist its id and exact system-prompt hash, older rows show the reconstructed id.
 
-  * the served skill: it is chosen at request time by ``TASK_SKILLS[task]`` and
-    embedded in the system prompt; only the id is deterministic, not the bytes.
-  * per-turn ``reasoning``: the provider adapter does not persist it, so the field
-    is empty in every captured turn.
+Per-turn reasoning: for chat-completions models (including luna) the visible
+assistant text IS the reasoning trace, so it is captured in ``turn["assistant"]``
+and mirrored to ``turn["reasoning"]``. A hidden provider trace, when present, is
+shown instead of the visible text. Absence in an older row means the row predates
+this capture fix, not that the model produced no reasoning.
 
 Usage
     python scripts/show_trace.py --id rep-11-00050-t-claude-haiku-5-5
@@ -221,8 +222,11 @@ def render(row: dict, notes: dict[str, dict]) -> str:
         out.append(f"\n--- turn {i} ---")
         assistant = str(turn.get("assistant") or "").strip()
         reasoning = str(turn.get("reasoning") or "").strip()
+        # Visible assistant prose is the reasoning for chat-completions models.
+        shown_reasoning = reasoning or assistant
         out.append(f"assistant: {assistant if assistant else '(empty: tool-only turn)'}")
-        out.append(f"reasoning: {reasoning if reasoning else '(not captured)'}")
+        out.append("reasoning: " + (shown_reasoning if shown_reasoning
+                                    else "(none in this turn)"))
         if not calls:
             out.append("tool calls: none (final answer turn)")
             continue
@@ -244,12 +248,14 @@ def render(row: dict, notes: dict[str, dict]) -> str:
 
     head("CAPTURE AUDIT")
     calls = [c.get("name") for t in turns for c in (t.get("tool_calls") or [])]
-    has_reasoning = any((t.get("reasoning") or "").strip() for t in turns)
+    # assistant prose is the reasoning trace for chat-completions models.
+    def _reason(t):
+        return (str(t.get("reasoning") or "").strip()
+                or str(t.get("assistant") or "").strip())
     out += [
         f"tool calls captured      : {len(calls)} {sorted(set(calls))}",
         f"assistant prose turns    : {sum(1 for t in turns if (t.get('assistant') or '').strip())}/{len(turns)}",
-        f"reasoning turns captured : {sum(1 for t in turns if (t.get('reasoning') or '').strip())}/{len(turns)}"
-        + ("" if has_reasoning else "  (provider returns none for this model/tool combo)"),
+        f"reasoning turns captured : {sum(1 for t in turns if _reason(t))}/{len(turns)}",
         f"memory notes served      : {len(served)} (ids persisted"
         + (", exact block persisted" if str(traj.get('memory_block') or '') else
            ", text resolved from data/memory") + ")",
