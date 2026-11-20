@@ -51,3 +51,7 @@ Rule: only `gpt-6-luna` and `claude-haiku-5-5` on hosted Kaggle runs. No premium
 ## Batch 4 (overnight)
 - Ran luna+haiku, gated and ingested accepted traces; memory updated by transfer.ingest.
 
+
+## Batch 5 (overnight)
+- Ran luna+haiku, gated and ingested accepted traces; memory updated by transfer.ingest.
+
