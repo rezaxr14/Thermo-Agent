@@ -28,6 +28,19 @@ def main() -> int:
                 if not line.strip():
                     continue
                 row = json.loads(line)
+                # transfer.ingest writes `source="frontier:<model>"`. The mix and
+                # provenance audit expect the canonical `frontier_tools` family.
+                original_source = str(row.get("source") or "")
+                model = (row.get("model") or (row.get("provenance") or {}).get("model")
+                         or (original_source.split(":", 1)[1] if ":" in original_source else "unknown"))
+                prov = dict(row.get("provenance") or {})
+                prov["original_source"] = original_source
+                prov["generator"] = "frontier_tools"
+                prov["source_family"] = "ai_generated"
+                prov["model"] = model
+                row["source"] = "frontier_tools"
+                row["source_model"] = model
+                row["provenance"] = prov
                 rid = str(row.get("record_id") or row.get("id") or "")
                 if rid in seen:
                     continue
