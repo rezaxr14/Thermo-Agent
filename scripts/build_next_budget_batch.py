@@ -11,6 +11,7 @@ from __future__ import annotations
 import ast
 import json
 import pathlib
+import re
 import subprocess
 import sys
 
@@ -22,30 +23,29 @@ MODELS = ("gpt-6-luna", "claude-haiku-5-5")
 BATCH_SIZE = 100
 
 
-def gate_coverage() -> dict[str, dict[str, int]]:
+def gate_missing_cells() -> list[str]:
+    """Parse the explicit 'missing cells' list from the live gate detail."""
     proc = subprocess.run([sys.executable, "scripts/check_datagen_complete.py"],
                           cwd=ROOT, capture_output=True, text=True)
     report = json.loads(proc.stdout)
     item = next(i for i in report["items"] if i["name"].startswith("frontier CoT"))
-    detail = item["detail"]
-    if "; coverage=" not in detail:
-        raise SystemExit("gate detail has no coverage map")
-    return ast.literal_eval(detail.split("; coverage=", 1)[1])
+    match = re.search(r"missing cells: (\[.*?\]);", item["detail"])
+    if not match:
+        raise SystemExit("gate detail has no missing-cell list")
+    return list(ast.literal_eval(match.group(1)))
 
 
 def used_ids(model: str) -> set[str]:
+    """Only ACCEPTED traces count as used; a failed question may be retried.
+
+    Journals contain every attempt, including failures that never enter training.
+    Counting them would permanently exclude exactly the cells we still need.
+    """
     used: set[str] = set()
     for path in (COHORT / model).glob("*.jsonl"):
         for line in path.open(encoding="utf-8"):
             if line.strip():
                 used.add(str(json.loads(line).get("record_id") or json.loads(line).get("id")))
-    if JOURNALS.is_dir():
-        for path in JOURNALS.rglob("*.jsonl"):
-            if model.replace("/", "-") not in str(path).replace("\\", "/").lower():
-                continue
-            for line in path.open(encoding="utf-8"):
-                if line.strip():
-                    used.add(str(json.loads(line).get("id") or ""))
     return {u.split("#v", 1)[0] for u in used if u}
 
 
@@ -57,7 +57,7 @@ def batch_number() -> int:
 
 
 def main() -> int:
-    coverage = gate_coverage()
+    missing_all = gate_missing_cells()
     all_rows = {}
     for line in (PROMPTS / "prompts_all.jsonl").open(encoding="utf-8"):
         if line.strip():
@@ -69,8 +69,8 @@ def main() -> int:
         plan = json.loads((PROMPTS / f"plan_bulk_{model}.json").read_text(encoding="utf-8"))
         used = used_ids(model)
         # Gate keys are "<model>/<task>/<tier>"; plan cells are "<task>/<tier>".
-        missing = {key.split("/", 1)[1] for key, counts in coverage.items()
-                   if key.startswith(model + "/") and any(v == 0 for v in counts.values())}
+        missing = {cell.split("/", 1)[1] for cell in missing_all
+                   if cell.startswith(model + "/")}
         # Equal thirds across easy/medium/hard for every 100-row batch; within
         # each tier prefer cells that are still missing in the gate.
         quotas = {"easy": BATCH_SIZE // 3, "medium": BATCH_SIZE // 3,
@@ -94,8 +94,15 @@ def main() -> int:
         if not chosen:
             raise SystemExit(f"{model}: no unused rows left in plan")
         shard = PROMPTS / f"prompts_batch{n}_{model}.jsonl"
-        shard.write_text("".join(json.dumps(all_rows[rid], ensure_ascii=False) + "\n"
-                                 for _, rid, _ in chosen), encoding="utf-8")
+        lines = []
+        for _, rid, entry in chosen:
+            row = dict(all_rows[rid])
+            # The hosted runner needs the tier/cell explicitly; prompts_all.jsonl
+            # carries only the artefact and the compact prompt.
+            row["cell"] = str(entry.get("cell") or "")
+            row["tier"] = str(entry.get("cell") or "").split("/")[-1]
+            lines.append(json.dumps(row, ensure_ascii=False) + "\n")
+        shard.write_text("".join(lines), encoding="utf-8")
         model_shards[model] = shard.name
         print(f"{model}: batch {n} {len(chosen)} rows, "
               f"{sum(1 for p, _, _ in chosen if p == 0)} from missing cells -> {shard.name}")

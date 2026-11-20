@@ -6,13 +6,27 @@
   "k_memory": 3,
   "deadline_seconds": 0,
   "max_cost_usd": 0.0,
-  "journal": "batch1_completions.jsonl",
-  "manifest": "batch1_manifest.json",
+  "journal": "batch11_completions.jsonl",
+  "manifest": "batch11_manifest.json",
   "memory_dir": "",
   "export_dir": "",
   "model_shards": {
-    "gpt-6-luna": "prompts_batch1_gpt-6-luna.jsonl",
-    "claude-haiku-5-5": "prompts_batch1_claude-haiku-5-5.jsonl"
+    "gpt-6-luna": "prompts_batch11_gpt-6-luna.jsonl",
+    "claude-haiku-5-5": "prompts_batch11_claude-haiku-5-5.jsonl"
+  },
+  "tiers": [
+    "easy",
+    "medium",
+    "hard"
+  ],
+  "equal_tiers": true,
+  "tier_field": "tier",
+  "cell_field": "cell",
+  "pipeline": {
+    "gate_tokens": 8192,
+    "ingest": true,
+    "memory": true,
+    "mix_refresh": true
   },
   "allowed_models": [
     "gpt-6-luna",
