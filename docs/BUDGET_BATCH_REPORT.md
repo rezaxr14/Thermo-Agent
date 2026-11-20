@@ -27,3 +27,7 @@ Rule: only `gpt-6-luna` and `claude-haiku-5-5` on hosted Kaggle runs. No premium
 - Accepted tool traces: **256**.
 - Budget cells still empty: **7** (luna/audit easy+medium+hard; haiku/audit easy+medium; haiku/ledger easy+medium).
 - Goal: thousands of traces, no cap, equal thirds across easy/medium/hard.
+
+## Batch 2 (overnight)
+- Ran luna+haiku, gated and ingested accepted traces; memory updated by transfer.ingest.
+

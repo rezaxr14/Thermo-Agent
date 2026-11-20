@@ -1,0 +1,10 @@
+{
+ "by_task": {
+  "audit": 2,
+  "design": 9,
+  "ledger": 9,
+  "repair": 109
+ },
+ "generator": "build_accepted_frontier",
+ "rows": 129
+}
