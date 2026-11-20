@@ -32,6 +32,32 @@ KEEP = {
     "design": ("site", "ref_fuel_w", "ref_spec"),
 }
 
+# Scoring-only columns the local verifier needs in order to return a trustworthy
+# verdict.  Hosted prompt shards deliberately strip these answer-bearing fields
+# (see scripts/make_hosted_prompts.FORBIDDEN_KEYS), so when any is absent the
+# verdict is DEFERRED to ``transfer.ingest``, which joins the full export by id.
+# Every local corpus row carries all of them, so real local validation is
+# unchanged.  Declared here (next to KEEP) so every caller shares ONE mapping.
+REQUIRED_SCORING_FIELDS = {
+    "repair": ("plant_broken", "plant_original", "min_edits"),
+    "ledger": ("ledger", "fault_types", "min_edits"),
+    "audit": ("plant", "ed_json", "fuel_w", "net_w"),
+    "design": ("site", "ref_spec"),
+}
+
+
+def missing_scoring_fields(task: str, row: dict) -> list[str]:
+    """The scoring-only columns absent from `row` (prompt shards omit them by design)."""
+    return [k for k in REQUIRED_SCORING_FIELDS.get(task, ()) if k not in row]
+
+
+def deferred_verdict(missing: list[str]) -> dict:
+    """Distinct, non-raising verdict for a row whose grading belongs to ingest."""
+    names = ", ".join(sorted(missing))
+    return {"accepted": False, "reward": 0.0,
+            "reasons": [f"validation deferred: missing scoring fields {names}"],
+            "deferred": True, "failed": [], "exact": False}
+
 CLASS_HINT = {
     "wrong_fluid": "Copying the broken label back, or inventing a third fluid, does not work; the destination component fixes the fluid class.",
     "unit_slip": "Correct the power of ten, not the digits.",
@@ -44,7 +70,7 @@ CLASS_HINT = {
 def _verdict(accepted: bool, reasons: list[str], reward: float = 0.0, failed: list[str] | None = None,
              exact: bool = False) -> dict:
     return {"accepted": bool(accepted), "reasons": [r for r in reasons if r], "reward": float(reward),
-            "failed": list(failed or []), "exact": bool(exact)}
+            "failed": list(failed or []), "exact": bool(exact), "deferred": False}
 
 
 def validate_repair(completion: str, row: dict) -> dict:

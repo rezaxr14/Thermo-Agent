@@ -57,6 +57,44 @@ _COMPACT_TOOL_LINE = {
                     'exergy).'),
 }
 
+# One-line semantics for the nine continuous-input component tools (opt-in hosted mode).
+# These are deliberately short: do NOT duplicate the long SKILL.md tool-guide text here.
+_COMPACT_TOOL_LINE.update({
+    "fluid_state": ('fluid_state(candidate): real-fluid/gas state from any two properties '
+                    '(T_K, P_kPa, h_kJ_kg, s_kJ_kgK, q); T, P, h, s, rho, cp, phase.'),
+    "saturation_state": ('saturation_state(candidate): T_sat/P_sat, h_fg, s_fg, v_f/v_g at T '
+                         'or P and quality.'),
+    "turbomachine": ('turbomachine(candidate): compressor/turbine/pump/fan outlet state, '
+                     'specific work, power, exergy destruction from inlet state and eta_s.'),
+    "heat_exchanger": ('heat_exchanger(candidate): two-stream duty, both outlets, min approach, '
+                       'LMTD and UA from one outlet temperature, duty or effectiveness.'),
+    "combustor": ('combustor(candidate): fuel/air/flue flows, heat release, AFR, adiabatic '
+                  'flame temperature and CO2 flow.'),
+    "cycle_performance": ('cycle_performance(candidate): Carnot/Lorenz limit and real '
+                          'efficiency or COP for Rankine, ORC, heat-pump, chiller, absorption.'),
+    "flow_network": ('flow_network(candidate): mixer/splitter/valve/pipe outlets, mass and '
+                     'energy residuals, entropy generation and exergy destruction.'),
+    "psychrometrics": ('psychrometrics(candidate): humid-air humidity ratio, enthalpy, dew and '
+                       'wet bulb, density and cooling-tower approach.'),
+    "exergy_stream": ('exergy_stream(candidate): physical + chemical flow exergy of one stream '
+                      'vs the dead state, plus h and s.'),
+})
+
+# The two on-demand skill tools (opt-in, dynamic mode only). Skill bodies are
+# delivered as tool results, never embedded in this prompt.
+_COMPACT_TOOL_LINE.update({
+    "list_skills": ('list_skills(candidate): compact JSON catalog of relevant skills '
+                    '(name, description, components/variants/task) with a hint to call '
+                    'load_skill; candidate is a JSON object {"task", "components", "query"} '
+                    '(all optional); never returns full skill bodies.'),
+    "load_skill": ('load_skill(candidate): candidate is {"name": "..."}; returns the FULL '
+                   'SKILL.md text as this tool result only — call list_skills first to find '
+                   'names; the system prompt is never changed.'),
+})
+
+_PLANT_TOOL_NAMES = frozenset({
+    "inspect_plant", "first_law_check", "second_law_check", "validity_check", "solve_plant"})
+
 
 def tool_contract(tools, task, max_turns, max_tool_calls) -> str:
     """The five tools' schemas/contracts as text (Google-style docstrings from the toolkit).
@@ -83,17 +121,19 @@ def tool_contract(tools, task, max_turns, max_tool_calls) -> str:
 
 
 def compact_tool_contract(task, max_turns, max_tool_calls, tools=None) -> str:
-    """The same five-tool contract with one-line semantics (J2/J3 compact path).
+    """The same tool contract with one-line semantics (J2/J3 compact path).
 
     Only the *presentation* is shortened: tool names, arguments, the
     ``<tool_call>``/``<tool_result>`` format, the multi-turn rules and the
-    final-answer tags are identical to :func:`tool_contract`.
+    final-answer tags are identical to :func:`tool_contract`. By default only the
+    five plant tools are named; the nine component tools appear only when the
+    caller passes them in ``tools`` (the hosted ``include_dynamic=True`` mode).
     """
     tags = FINAL_TAGS.get(task, ("the task's XML tags",))
     lines = [
         "MULTI-TURN TOOL ENVIRONMENT (physics only; there is NO answer-oracle tool).",
         'Emit EXACTLY: <tool_call name="TOOL_NAME">{"candidate": "..."}</tool_call>',
-        'candidate="" for inspect_plant; your candidate answer XML for the others.',
+        'candidate="" for inspect_plant; your candidate answer XML for the other plant tools.',
         "Each result is verbatim inside <tool_result>...</tool_result>; read the numbers and revise.",
         f"At most {max_turns} assistant turns and {max_tool_calls} tool calls. Call inspect_plant "
         "first (no answer needed); when residuals ~0 and checks pass, STOP and emit ONLY: "
@@ -102,6 +142,9 @@ def compact_tool_contract(task, max_turns, max_tool_calls, tools=None) -> str:
     ]
     names = [fn.__name__ for fn in tools] if tools is not None else [
         "inspect_plant", "first_law_check", "second_law_check", "validity_check", "solve_plant"]
+    if any(n not in _PLANT_TOOL_NAMES for n in names):
+        lines.append('For the component tools, candidate is a JSON object string, '
+                     'e.g. {"fluid": "Water", "T_K": 300, "P_kPa": 101.325}.')
     for name in names:
         line = _COMPACT_TOOL_LINE.get(name)
         if line is None and tools is not None:
@@ -119,6 +162,10 @@ def _compact_selected_skill(task: str) -> str:
     deliberately *not* included (they are non-selected and duplicate AGENTS.md
     and each other). The skill's ``## Environment:`` section repeats the tool
     contract and final-answer format, so it is dropped.
+
+    This is the DEFAULT-mode path: it is byte-for-byte the original compact
+    text so the accepted traces / deterministic rows keep validating. Dynamic
+    mode instead serves :func:`_compact_skill_catalog`.
     """
     names = H.TASK_SKILLS.get(task, [])
     if not names:
@@ -126,6 +173,44 @@ def _compact_selected_skill(task: str) -> str:
     skill = H.read_skill(names[0])          # "SKILL <name>: <description>\n<body>"
     skill = skill.split("\n## Environment:")[0].rstrip()
     return skill
+
+
+def _tools_include_dynamic(tools) -> bool:
+    """Infer dynamic mode from the tool list when no explicit flag is passed.
+
+    A caller that supplies the 11 opt-in tools (nine component + two skill tools)
+    gets the on-demand catalog; a caller that supplies nothing or the five plant
+    tools gets the original, byte-identical compact prompt.
+    """
+    if not tools:
+        return False
+    from ..teacher.thermo_tools import DYNAMIC_TOOL_NAMES
+    from ..teacher.toolkit import SKILL_TOOL_NAMES
+    names = {getattr(fn, "__name__", "") for fn in tools}
+    return bool(names & (set(DYNAMIC_TOOL_NAMES) | set(SKILL_TOOL_NAMES)))
+
+
+def _compact_skill_catalog(task: str) -> str:
+    """On-demand skill catalog for the COMPACT dynamic-mode prompt.
+
+    One line per skill (frontmatter description only): the task's primary skill
+    plus every component skill in the library. No SKILL.md body is ever inlined;
+    the model calls ``list_skills``/``load_skill`` to inspect a skill in full.
+    """
+    from ..teacher.toolkit import all_skill_metadata
+    metas = all_skill_metadata()
+    by_name = {m["name"]: m for m in metas}
+    lines = ["SKILL CATALOG (descriptions only; full text arrives as a tool result):"]
+    primary = (H.TASK_SKILLS.get(task) or [None])[0]
+    if primary and primary in by_name:
+        m = by_name[primary]
+        lines.append(f"Primary skill for {task}: {m['name']}: {m['description']}")
+    lines.append("Use list_skills/load_skill to inspect a skill in full before applying it.")
+    lines.append("Available component skills (call load_skill(name) for the full text):")
+    for m in metas:
+        if m["components"]:
+            lines.append(f"- {m['name']}: {m['description']}")
+    return "\n".join(lines)
 
 
 def compact_agents_md(task: str) -> str:
@@ -165,23 +250,33 @@ def _default_tools():
 
 def build_compact_harness_messages(messages, task, plant, mode="agents+skills",
                                    max_turns=6, max_tool_calls=8, tools=None,
-                                   include_contract=True) -> list[dict]:
+                                   include_contract=True,
+                                   include_dynamic: bool | None = None) -> list[dict]:
     """A deep copy of ``messages`` with the J2/J3 compact harness appended.
 
     The appended block is a single, task-determined text: compact AGENTS.md +
-    the one selected skill + the compact five-tool contract. It is the source of
-    truth shared by tracegen, the ``*_h`` training corpora and eval/GRPO.
+    the selected skill (default mode) OR the on-demand skill catalog (dynamic
+    mode) + the compact tool contract. It is the source of truth shared by
+    tracegen, the ``*_h`` training corpora and eval/GRPO.
     ``mode="none"`` adds the contract only (matching the original builder).
     ``include_contract=False`` is the no-tools (Z) eval arm: compact AGENTS +
     skill but no tool contract. The input list and its dicts are never mutated.
+
+    ``include_dynamic`` defaults to ``None`` (infer from ``tools``). DEFAULT mode
+    (no opt-in tools) is byte-for-byte the original text; only dynamic mode
+    serves descriptions + ``load_skill`` instead of an inlined full skill body.
     """
     out = [dict(m) for m in messages]
+    dynamic = _tools_include_dynamic(tools) if include_dynamic is None else bool(include_dynamic)
     parts = []
     if mode != "none":
         parts.append(compact_agents_md(task))
-        skill = _compact_selected_skill(task)
-        if skill:
-            parts.append(skill)
+        if dynamic:
+            parts.append(_compact_skill_catalog(task))
+        else:
+            skill = _compact_selected_skill(task)
+            if skill:
+                parts.append(skill)
     if include_contract:
         parts.append(compact_tool_contract(
             task, max_turns, max_tool_calls,
@@ -198,18 +293,23 @@ def build_compact_harness_messages(messages, task, plant, mode="agents+skills",
 
 def build_harness_tool_messages(messages, task, plant, mode="agents+skills",
                                 max_turns=6, max_tool_calls=8, tools=None,
-                                compact=True) -> list[dict]:
+                                compact=True,
+                                include_dynamic: bool | None = None) -> list[dict]:
     """A deep copy of ``messages`` with the harness and tool contract appended.
 
     ``compact=True`` (the default) delegates to :func:`build_compact_harness_messages`
     so every arm sees one identical harness text. ``compact=False`` keeps the
     original verbose behaviour (full AGENTS.md + all selected component skills
     + toolkit docstrings) for before/after comparison only.
+
+    ``include_dynamic`` is forwarded to the compact builder; ``None`` infers it
+    from ``tools``. The default path is unchanged.
     """
     if compact:
         return build_compact_harness_messages(
             messages, task, plant, mode=mode, max_turns=max_turns,
-            max_tool_calls=max_tool_calls, tools=tools)
+            max_tool_calls=max_tool_calls, tools=tools,
+            include_dynamic=include_dynamic)
     augmented = [dict(m) for m in H.augment(list(messages), mode, task, plant)]
     contract = tool_contract(tools if tools is not None else _default_tools(),
                              task, max_turns, max_tool_calls)

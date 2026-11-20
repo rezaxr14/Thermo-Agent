@@ -119,6 +119,10 @@ def test_tool_readiness_for_every_task(built):
                              "mode": "agents+skills"})
         tools = make_tools(task, row)
         assert [t.__name__ for t in tools] == tool_names()
+        # Hosted opt-in adds nine component tools + two on-demand skill tools.
+        all_tools = make_tools(task, row, include_dynamic=True)
+        assert [t.__name__ for t in all_tools] == tool_names(include_dynamic=True)
+        assert len(all_tools) == 16
         inspect = tools[0]
         assert inspect.__name__ == tool_names()[0] == "inspect_plant"
 

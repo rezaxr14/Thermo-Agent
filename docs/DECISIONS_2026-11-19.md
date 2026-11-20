@@ -223,3 +223,49 @@ frontier harness-CoT datagen we intend to make:
    `harness_config.json` / `HARNESS_*`: models, per-model shards, mode, rounds, memory, journal/manifest names,
    `tiers` + `equal_tiers` (equal thirds across easy/medium/hard), and the `pipeline` contract (gate/ingest/memory/mix).
    Do not create per-task variants again.
+
+## 8. Anti-litter rule (Reza, 2026-11-20)
+
+Verbatim intent (prompt 9, `docs/USER_PROMPTS_VERBATIM.md`): "...we will tidy up the docs so we dont have stale of docs
+filling my docs file we will combine the stuff to eachitehr , i dont want to have 10 user directions and decitions and
+shit like that... we need a anti litter rule so we dont just make a documnet if exist a elready made document which we
+can reuse (add,delete,modify,add new date)".
+
+Binding consequences:
+
+1. **One authoritative doc per topic.** Before creating any new doc, search the existing `docs/` set and reuse/extend
+   the doc that already owns the topic — add a dated entry, modify a section, or delete a superseded section. Never
+   create a second doc for the same topic. A dated filename is not a licence to duplicate a topic that already has a home.
+2. **Dated entries, not new files.** New decisions, status facts, handoffs and audits go into an existing doc as a
+   `YYYY-MM-DD — ...` entry. Historical sections inside a doc are kept and marked superseded, not forked into new files.
+3. **No bulk grep-and-replace on traces or corpora.** Any migration is trace-by-trace (see §9).
+4. **Consolidation performed 2026-11-20.** `docs/HANDOFF_2026-11-20.md` was a transient handoff created minutes before
+   this rule. Its still-useful content was merged into `docs/STATUS.md`, `docs/PROVENANCE.md` and
+   `docs/IMPLEMENTATION_PLAN.md`, and the handoff file was **deleted**. Reason for deletion: it was a duplicate
+   status/handoff note with no unique binding decision, provenance record or user prompt; keeping it would create the
+   second "user direction/decision" doc Reza rejected. **No other doc was deleted.** Binding decisions, provenance and
+   the full verbatim prompt record remain in their existing docs.
+
+## 9. How we treat already captured CoTs (Reza, 2026-11-20)
+
+Verbatim intent (prompt 9): "...we need to decide how to treat already captured Cot's my inturations is too keep them
+and add these new stuff on top of them and make our tools backward compatible, or make cople of subagents to go and
+check and modyfy them one by one proeprly sub agents are free so we dont loose anything but then need to do it reraly
+one by one no bulshit grep and replace nonsense same for the detreministic traning data we have (multi turn and other
+wise) and the ground trughts dataset, realy anything...".
+
+Decision:
+
+1. **KEEP every already captured CoT and all deterministic data unchanged.** The **237 accepted frontier cohort rows**,
+   every deterministic tool corpus (`sft_tools_v2*`, `grpo_tools_v2*`), the A-slice, frozen `heldout_v2` and all
+   ground-truth datasets stay as they are. Nothing is rewritten, regenerated or re-labelled to "fit" the new tools.
+2. **New capability is additive and opt-in; tools are backward compatible.** The 9 new continuous-input,
+   CoolProp-backed dynamic tools (fluid state, saturation, turbomachine, HX, combustor, cycles, flow network,
+   psychrometrics, exergy) are enabled only with `include_dynamic`. Old 5-tool traces remain valid: they parse, ingest
+   and score with no change, and keep their original provenance fields. New tools/skills are loaded on demand — the
+   harness shows a short description and loads the full skill when a model reaches for it.
+3. **No migration unless a specific defect is found.** Bulk grep-and-replace on any trace, corpus or ground-truth file
+   is **BANNED**. A subagent may audit and modify traces **one by one**, and only when a named trace has a specific,
+   diagnosed defect; the audit and change are recorded in that trace's provenance / a dated entry. This applies equally
+   to multi-turn traces, deterministic training data and ground truths.
+4. This decision is recorded here rather than in a new "CoT decision" doc, per §8.

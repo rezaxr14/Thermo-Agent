@@ -5,7 +5,8 @@ from thermo_agent.teacher import agent_graph
 from thermo_agent.teacher import compact_memory
 from thermo_agent.teacher import memory as mem
 from thermo_agent.teacher.agent_graph import DEFAULT_MAX_ROUNDS, build_context, finalize, run
-from thermo_agent.teacher.toolkit import make_tools, tool_names
+from thermo_agent.teacher.toolkit import SKILL_TOOL_NAMES, make_tools, tool_names
+from thermo_agent.teacher.thermo_tools import DYNAMIC_TOOL_NAMES
 
 
 def _row():
@@ -22,6 +23,8 @@ def _note(note_id, record_id):
 
 def test_tools_are_real_solver_results():
     assert tool_names() == ["inspect_plant", "first_law_check", "second_law_check", "validity_check", "solve_plant"]
+    assert tool_names(include_dynamic=True) == tool_names() + list(DYNAMIC_TOOL_NAMES) + list(SKILL_TOOL_NAMES)
+    assert len(tool_names(include_dynamic=True)) == 16
     row = _row()
     gt = row["completion"][0]["content"]
     t = {x.__name__: x for x in make_tools("repair", row)}
@@ -157,7 +160,7 @@ def test_four_tuple_finalizes_without_reexecuting_tools(monkeypatch):
         return "SPY RESULT"
 
     spy_tool.__name__ = "spy_tool"
-    monkeypatch.setattr(agent_graph, "make_tools", lambda task, row_: [spy_tool])
+    monkeypatch.setattr(agent_graph, "make_tools", lambda task, row_, **kw: [spy_tool])
 
     answer = row["completion"][0]["content"]
     turns = [{"assistant": answer, "reasoning": "done", "tool_calls": [], "tool_results": []}]
@@ -186,7 +189,7 @@ def test_spy_would_catch_a_second_execution_on_the_three_tuple_path(monkeypatch)
         return "SPY RESULT"
 
     spy_tool.__name__ = "spy_tool"
-    monkeypatch.setattr(agent_graph, "make_tools", lambda task, row_: [spy_tool])
+    monkeypatch.setattr(agent_graph, "make_tools", lambda task, row_, **kw: [spy_tool])
 
     answer = row["completion"][0]["content"]
 
@@ -209,10 +212,35 @@ def test_build_context_records_served_skill_and_prompt_hash():
     assert ctx["served_skill"] == "design-catalog"
     assert len(ctx["system_prompt_sha256"]) == 64
     assert ctx["memory_block"] == ""
-    # A task with no mapped skill records an empty id rather than inventing one.
+    # Repair now has its own diagnosis skill; the served id tracks TASK_SKILLS.
     repair = build_context({"row": row, "task": "repair", "notes": [],
                             "mode": "agents+skills"})
-    assert repair["served_skill"] == ""
+    assert repair["served_skill"] == "repair-diagnosis"
+
+
+def test_build_context_dynamic_opt_in_controls_tools_and_prompt():
+    """The hosted flag decides both the executable tool list and the served contract text."""
+    row = _row()
+    base = {"row": row, "task": "repair", "notes": [], "mode": "agents+skills"}
+    default = build_context(base)
+    dynamic = build_context({**base, "include_dynamic": True})
+
+    assert [t.__name__ for t in default["tools"]] == tool_names()
+    assert [t.__name__ for t in dynamic["tools"]] == tool_names(include_dynamic=True)
+    assert len(dynamic["tools"]) == 16
+    assert "check_answer" not in dynamic["tool_map"]
+    assert default["include_dynamic"] is False and dynamic["include_dynamic"] is True
+
+    # The compact contract names the dynamic tools only when opted in.
+    assert all(n not in default["system_prompt"] for n in DYNAMIC_TOOL_NAMES)
+    assert all(n in dynamic["system_prompt"] for n in DYNAMIC_TOOL_NAMES)
+    assert "JSON object string" in dynamic["system_prompt"]
+    assert "JSON object string" not in default["system_prompt"]
+    # execute a dynamic tool through the same fn(candidate) parser path the graph uses.
+    fn = dynamic["tool_map"]["fluid_state"]
+    import json as _json
+    out = _json.loads(fn(_json.dumps({"fluid": "Water", "T_K": 300.0, "P_kPa": 101.325})))
+    assert out["ok"] is True and out["fluid"] == "Water"
 
 
 def test_build_context_records_the_exact_memory_block(monkeypatch):

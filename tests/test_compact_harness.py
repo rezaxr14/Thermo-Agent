@@ -19,9 +19,12 @@ from thermo_agent.agent.tool_prompt import (
     FINAL_TAGS,
     build_compact_harness_messages,
     build_harness_tool_messages,
+    compact_tool_contract,
 )
 from thermo_agent.core.schema import Plant
 from thermo_agent.synth.combine import tokenizer
+from thermo_agent.teacher.thermo_tools import DYNAMIC_TOOL_NAMES
+from thermo_agent.teacher.toolkit import make_tools
 
 ROOT = Path(__file__).resolve().parents[1]
 TASKS = ("repair", "design", "audit", "ledger")
@@ -151,3 +154,37 @@ def test_tool_call_and_result_format_unchanged():
     assert '{"candidate": "..."}' in system
     assert "<tool_result>" in system and "</tool_result>" in system
     assert "answer-oracle" in system
+
+
+# --------------------------------------------------------------------------- #
+# 4. opt-in dynamic tools: named only when included, still under the token gate
+# --------------------------------------------------------------------------- #
+def _dynamic_system(task: str) -> str:
+    row = _row(task)
+    tools = make_tools(task, row, include_dynamic=True)
+    return build_harness_tool_messages(list(row["prompt"]), task, _plant(row),
+                                        tools=tools)[0]["content"]
+
+
+@pytest.mark.parametrize("task", TASKS)
+def test_dynamic_tools_named_only_when_included(task):
+    # Test the contract itself: the row/skill text may legitimately mention a
+    # component (e.g. "combustor"), so the whole harness block is too coarse.
+    row = _row(task)
+    default = compact_tool_contract(task, 6, 8)
+    assert all(name not in default for name in DYNAMIC_TOOL_NAMES)
+    dynamic = compact_tool_contract(
+        task, 6, 8, tools=make_tools(task, row, include_dynamic=True))
+    assert all(name in dynamic for name in DYNAMIC_TOOL_NAMES)
+    assert "JSON object string" in dynamic
+
+
+@pytest.mark.parametrize("task", TASKS)
+def test_dynamic_compact_harness_stays_under_token_ceiling(task):
+    tok = _tok()
+    row = _row(task)
+    base = row["prompt"][0]["content"]
+    system = _dynamic_system(task)
+    block = system[len(base):] if system.startswith(base) else system
+    n = _ntok(tok, block)
+    assert n <= TOKEN_CEILING, f"{task}: dynamic compact harness is {n} tokens"

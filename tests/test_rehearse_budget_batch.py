@@ -110,6 +110,19 @@ def test_error_row_guard(rehearsal, tmp_path):
     assert "runner journalled an error instead of traces" in str(excinfo.value)
 
 
+def test_all_rows_errored_journal_is_refused(rehearsal, tmp_path):
+    """A non-empty journal whose rows all failed must not look like a batch."""
+    journal = tmp_path / "all_errors.jsonl"
+    journal.write_text("".join(
+        json.dumps({"id": f"row-{i}", "error": "KeyError: 'ed_json'",
+                    "completion": "", "sft_completion": ""}) + "\n"
+        for i in range(3)), encoding="utf-8")
+    with pytest.raises(rehearsal.JournalGuardError) as excinfo:
+        rehearsal.validate_journal(journal)
+    assert "0 usable completions" in str(excinfo.value)
+    assert "ed_json" in str(excinfo.value)
+
+
 def test_healthy_journal_passes_guard(rehearsal, tmp_path):
     journal = tmp_path / "journal.jsonl"
     journal.write_text(
@@ -124,6 +137,7 @@ def test_reject_path_self_checks(rehearsal, tmp_path):
     guards = rehearsal.check_reject_paths(tmp_path)
     assert "journal is empty:" in guards["empty"]
     assert "runner journalled an error instead of traces" in guards["error"]
+    assert "0 usable completions" in guards["no_completions"]
 
 
 # ---------------------------------------------------------------------------

@@ -11,6 +11,48 @@ Source-of-truth reads for this snapshot: `docs/BUDGET_BATCH_REPORT.md`, `noteboo
 `docs/HOSTED_V6_ASSESSMENT_2026-11-19.md`, `docs/EVAL_PROTOCOL.md`. Where any older section below calls a
 corpus, eval set, model order or smoke version "current", read this section instead.
 
+### Local verification and current facts (2026-11-20)
+
+- **Commit `4228347`** is in place and `docs/USER_PROMPTS_VERBATIM.md` carries Reza's prompts **1-9** verbatim
+  (prompt 9 added 2026-11-20). That file's wording is not to be edited.
+- **Provenance audit OK:** `scripts/audit_provenance_chain.py --strict` → **PROVENANCE OK, 8/8 checks pass**
+  (237 cohort rows carry model/provider/run_id/source; prompt shards clean; no harness bookkeeping leakage; memory
+  has both accepted and rejected notes; 320 frontier mix rows traced — 258 cohort + 62 documented legacy gemini;
+  0 `ref_spec` leaks in 11,520 mix rows). Detail in `docs/PROVENANCE.md`.
+- **Preflight OK:** `scripts/preflight_budget_batch.py` replays the hosted runner's `Config.select_rows` locally
+  against the Kaggle dataset bytes; wired into `scripts/overnight_budget_loop.ps1` before any HF/Kaggle/model call.
+- **Rehearsal OK:** `scripts/rehearse_budget_batch.py` builds runner-shaped fake journals, runs the real token gate
+  and real `transfer.ingest` into a temp dir, and checks the empty/`__error__` guards — both budget models 4/4
+  accepted. Zero quota spent.
+- **Runner selection fix:** partial-tier shards no longer balance against empty tiers (the cause of the 0-byte
+  journals); `notebooks/kaggle_model_runner.ipynb` regenerated.
+- **Datagen gate honesty:** `scripts/check_datagen_complete.py` counts only the 24 budget cells and dedupes by base
+  diagram id (was inflated by legacy copies).
+- **Reasoning capture:** per-turn assistant prose IS the reasoning trace for chat-completions models; captured,
+  replayed into later turns, never served as raw text through memory. `reasoning_effort` stays off for models that
+  reject it (`reasoning_for_model`).
+- **Skills + dynamic tools:** 27 `SKILL.md` files cover every solver component, variants, tools, pinch, exergy,
+  design-selection and repair diagnosis. `thermo_agent/teacher/thermo_tools.py` adds 9 continuous-input,
+  CoolProp-backed dynamic tools (fluid state, saturation, turbomachine, HX, combustor, cycles, flow network,
+  psychrometrics, exergy) with 29 tests. Skills load on demand (short description, full skill on demand). Dynamic
+  tools are opt-in (`include_dynamic`); old 5-tool traces stay valid (DECISIONS §9).
+- **GRPO scoring join + expanded scoring-only export DONE:** `ref_fuel_w`/`ref_spec`/`ref_evals` were stripped from the
+  training mix rows; the scoring-time join reads them from `data/frontier_export/design_train.jsonl` so GRPO design
+  rewards still work — **1,216/1,216 design rows resolved** (`tests/test_design_scoring_refs.py`).
+- **Test suite:** 10 failures from verbose-harness skill bloat are being fixed by another agent (no AI/Kaggle).
+  Final counts land in the next commit. Re-run `scripts/audit_provenance_chain.py --strict` after those integrations
+  (it was already green before them).
+- **No SFT step, GRPO step, model evaluation or checkpoint exists.** Training waits for Reza's "datagen complete"
+  and "go".
+- **Kaggle runs v19/v20 (luna + haiku) reported COMPLETED and are being processed** per Reza's prompt 9 —
+  download → gate → ingest → memory/mix refresh. All older 0-byte `batch*_completions.jsonl` files are known failed
+  attempts and must be refused by `process_budget_batch.ps1`. No other Kaggle command beyond these runs has been issued.
+- **Rules unchanged:** only `gpt-6-luna`/`claude-haiku-5-5` may be called; gemini 3.8/3.5 hard-banned; premium needs
+  explicit permission; Kaggle traffic via `socks5h://127.0.0.1:10808`; credentials only from repo-root `.env`; never
+  print tokens. One hosted task `thermo-teacher-cotproof-s00`; one Kaggle dataset (`thermo-agent-corpus`, per
+  DECISIONS §7.5/§7.9); local → HF → bridge kernel → dataset only. New docs are governed by the anti-litter rule
+  (DECISIONS §8); orientation samples live in `data/samples/`.
+
 **What has NOT happened:** no SFT step, no GRPO step, no model evaluation and no checkpoint exists anywhere.
 No arm has been scored, and no results table claims measured model performance. The only hosted compute is
 teacher datagen, not training.

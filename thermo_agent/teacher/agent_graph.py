@@ -99,13 +99,21 @@ def build_context(state: AgentState) -> dict:
                 plant = Plant.model_validate_json(row[key]); break
             except Exception:
                 pass
-    # The shared compact builder carries compact AGENTS.md + the ONE selected skill
-    # + the five-tool contract. max_turns is the round limit the graph enforces, so
-    # the number the model reads always equals the number actually used.
+    # Build the tools first: the same list feeds both the tool contract (so the compact
+    # prompt names exactly the tools the model may call) and the executor's tool_map.
+    # By default this is the five-plant-tool contract; the hosted frontier harness sets
+    # include_dynamic=True to offer the nine continuous-input component tools as well.
+    include_dynamic = bool(state.get("include_dynamic", False))
+    tools = make_tools(task, row, include_dynamic=include_dynamic)
+    # The shared compact builder carries compact AGENTS.md + either the ONE
+    # selected skill (default) or the on-demand skill catalog (dynamic mode) +
+    # the tool contract. max_turns is the round limit the graph enforces, so the
+    # number the model reads always equals the number actually used.
     sys = build_harness_tool_messages(
         [{"role": "system", "content": original}], task, plant,
         mode=state.get("mode", "agents+skills"),
-        max_turns=state.get("max_rounds", DEFAULT_MAX_ROUNDS))[0]["content"]
+        max_turns=state.get("max_rounds", DEFAULT_MAX_ROUNDS), tools=tools,
+        include_dynamic=include_dynamic)[0]["content"]
     # Record WHICH skill was served. The skill bytes ride inside the system prompt, so
     # without this the trace cannot prove a skill was read; the name is deterministic
     # from TASK_SKILLS[task] and the hash covers the exact text sent.
@@ -140,11 +148,11 @@ def build_context(state: AgentState) -> dict:
         "\n\nYou have REAL physics tools; use their numbers to solve and self-correct "
         "(up to %d rounds). Then STOP and emit the final answer in the task's XML tags."
     ) % state.get("max_rounds", DEFAULT_MAX_ROUNDS)
-    tools = make_tools(task, row)
     notes_used = [n.id for n in retrieved]
     user = "\n\n".join(m["content"] for m in row["prompt"] if m["role"] != "system")
     return {
         "system_prompt": sys, "tools": tools, "tool_map": {t.__name__: t for t in tools},
+        "include_dynamic": include_dynamic,
         "notes_used": notes_used,
         "served_skill": served_skill,
         "memory_block": memory_block,
@@ -219,8 +227,15 @@ def reflect(state: AgentState) -> dict:
 
 
 def finalize(state: AgentState) -> dict:
-    """Verifier verdict + full SFT trajectory (reasoning, tool calls, numeric results, revisions)."""
-    from .validate import validate
+    """Verifier verdict + full SFT trajectory (reasoning, tool calls, numeric results, revisions).
+
+    Hosted prompt shards carry the conversation plus tool inputs but deliberately omit
+    answer-bearing scoring columns. For those rows the local verifier cannot produce a
+    trustworthy verdict (it used to raise ``KeyError: 'ed_json'``), so the verdict is
+    DEFERRED to ``transfer.ingest``, which joins the full export by id. The trajectory
+    is still recorded in full. Local corpus rows keep the exact real verifier verdict.
+    """
+    from .validate import deferred_verdict, missing_scoring_fields, validate
     last_assistant = state["last_text"] or (state["turns"][-1]["assistant"] if state["turns"] else "")
     final = last_assistant or ""
     turns = state["turns"]
@@ -252,7 +267,14 @@ def finalize(state: AgentState) -> dict:
             sft = final
         elif not sft.rstrip().endswith(final.rstrip()):
             sft = sft.rstrip() + "\n" + final
-    verdict = validate(state["task"], final, state["row"])
+    row = state["row"]
+    missing = missing_scoring_fields(state["task"], row)
+    # An input-only hosted row is recognisable by its carried prompt; a bare/partial
+    # dict is an ordinary verifier input and keeps the previous local behaviour.
+    if missing and isinstance(row.get("prompt"), list):
+        verdict = deferred_verdict(missing)
+    else:
+        verdict = validate(state["task"], final, row)
     return {"final": final, "turns": turns, "verdict": verdict,
             "accepted": verdict["accepted"], "sft_completion": sft, "done": True}
 
@@ -294,7 +316,7 @@ def _get_graph():
 
 
 def run(row: dict, task: str, respond, notes=None, max_rounds=DEFAULT_MAX_ROUNDS, k_memory=3,
-        mode="agents+skills") -> AgentState:
+        mode="agents+skills", include_dynamic=False) -> AgentState:
     """Convenience entry point. `respond(messages, tools) -> (text, tool_calls, reasoning)`.
 
     Requires langgraph (local driver only). The hosted path uses `run_direct` instead.
@@ -302,12 +324,14 @@ def run(row: dict, task: str, respond, notes=None, max_rounds=DEFAULT_MAX_ROUNDS
     init: AgentState = {
         "row": row, "task": task, "respond": respond, "notes": notes or [],
         "max_rounds": max_rounds, "k_memory": k_memory, "mode": mode,
+        "include_dynamic": include_dynamic,
     }
     return _get_graph().invoke(init)
 
 
 def run_direct(row: dict, task: str, respond, *, notes=None, k_memory=3,
-               mode="agents+skills", max_rounds=DEFAULT_MAX_ROUNDS) -> dict:
+               mode="agents+skills", max_rounds=DEFAULT_MAX_ROUNDS,
+               include_dynamic=False) -> dict:
     """Drive the native tool loop WITHOUT langgraph; reproduce the graph's 4-tuple path exactly.
 
     The adapter (`kbench_adapter.make_respond`) is the DRIVER: it runs the whole multi-turn
@@ -323,6 +347,7 @@ def run_direct(row: dict, task: str, respond, *, notes=None, k_memory=3,
     init: AgentState = {
         "row": row, "task": task, "respond": respond, "notes": notes or [],
         "max_rounds": max_rounds, "k_memory": k_memory, "mode": mode,
+        "include_dynamic": include_dynamic,
     }
     ctx = build_context(init)
     text, calls, reasoning, turns = respond(ctx["messages"], ctx["tools"])
@@ -348,6 +373,6 @@ def run_direct(row: dict, task: str, respond, *, notes=None, k_memory=3,
         "served_skill": ctx.get("served_skill", ""),
         "memory_block": ctx.get("memory_block", ""),
         "system_prompt_sha256": ctx.get("system_prompt_sha256", ""),
-        "tools_available": tool_names(),
+        "tools_available": tool_names(include_dynamic=include_dynamic),
         "done": out["done"],
     }

@@ -98,8 +98,11 @@ from thermo_agent.kaggle_notebook import (
 # merged corpora (sft_all / grpo_all) are the defaults; the original sft / grpo stay available too.
 SFT_DATA = os.environ.get("SFT_DATA", "sft_all")
 GRPO_DATA = os.environ.get("GRPO_DATA", "grpo_all")
+# `frontier_export` is the scoring-only source for design reference answers. The GRPO
+# design reward joins ref_fuel_w/ref_spec/ref_evals from data/frontier_export at scoring
+# time; if the corpus dataset does not stage it, the reward fails loudly (never scores 0).
 ROOT = setup(corpora=tuple(dict.fromkeys(
-    (SFT_DATA, GRPO_DATA, "sft", "grpo", "sft_all", "grpo_all"))))  # install deps + stage corpora
+    (SFT_DATA, GRPO_DATA, "sft", "grpo", "sft_all", "grpo_all", "frontier_export"))))  # install deps + stage corpora
 
 # Pin check in the notebook itself: every version comes from kaggle/environment.lock.json and
 # the fused wheels come from kernel_sources. A drift fails here, it is never repaired by compiling.

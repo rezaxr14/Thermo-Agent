@@ -27,6 +27,27 @@ if ($errRow) {
   throw "runner journalled an error instead of traces: $detail"
 }
 
+# A journal can be non-empty and carry no error ROW yet still contain zero
+# usable traces: every record can have `error` set and empty completion (this
+# happened when the hosted runner graded audit rows without their scoring-only
+# fields). That must be refused just as loudly as an empty journal.
+$total = 0; $usable = 0; $errored = 0; $firstError = ''
+foreach ($line in Get-Content $journalPath) {
+  if (-not $line.Trim()) { continue }
+  $total++
+  try { $rec = $line | ConvertFrom-Json } catch { $errored++; if (-not $firstError) { $firstError = 'malformed JSON journal line' }; continue }
+  if ($rec.error) {
+    $errored++
+    if (-not $firstError) { $firstError = [string]$rec.error }
+    continue
+  }
+  if (($rec.completion -and [string]$rec.completion -ne '') -or
+      ($rec.sft_completion -and [string]$rec.sft_completion -ne '')) { $usable++ }
+}
+if ($total -gt 0 -and $usable -eq 0) {
+  throw "journal has $total rows but 0 usable completions ($errored errored; first error: $firstError); refusing to process"
+}
+
 # Pipeline controls are exposed in harness_config.json / HARNESS_* env vars.
 $cfgPath = 'data/frontier_tools_cohort_prompts/harness_config.json'
 $pipeline = $null

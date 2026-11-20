@@ -26,7 +26,8 @@
     "gate_tokens": 8192,
     "ingest": true,
     "memory": true,
-    "mix_refresh": true
+    "mix_refresh": true,
+    "dynamic_tools": true
   },
   "allowed_models": [
     "gpt-6-luna",

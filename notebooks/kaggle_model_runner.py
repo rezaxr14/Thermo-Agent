@@ -73,6 +73,7 @@ DEFAULTS = {
         "ingest": True,
         "memory": True,
         "mix_refresh": True,
+        "dynamic_tools": False,
     },
     "config_file": "harness_config.json",
 }
@@ -197,6 +198,22 @@ class Config:
     @property
     def uses_tools(self) -> bool:
         return self.mode in TOOL_MODES
+
+    @property
+    def dynamic_tools(self) -> bool:
+        """Whether to offer the 11 opt-in tools in the hosted harness: nine
+        continuous-input component tools plus the two on-demand skill tools
+        (``list_skills`` / ``load_skill``), with descriptions only in the compact
+        prompt and full skill text delivered as tool results.
+
+        Driven by ``pipeline.dynamic_tools`` in harness_config.json (or the
+        ``HARNESS_PIPELINE`` env override). OFF by default so ordinary runs keep the
+        five-plant-tool contract; the frontier cohort config turns it on.
+        """
+        value = self.pipeline.get("dynamic_tools", False)
+        if isinstance(value, str):
+            return value.strip().lower() in ("1", "true", "yes", "on")
+        return bool(value)
 
     def shard_for(self, model: str) -> str:
         """Per-model shard keeps one diagram per model (no duplicate questions)."""
@@ -513,7 +530,7 @@ if IS_KAGGLE:
             return
         notes = _fresh_notes()
         MEMORY_NOTES_LOADED = len(notes)
-        tools = tool_names() if CFG.uses_tools else []
+        tools = tool_names(include_dynamic=CFG.dynamic_tools) if CFG.uses_tools else []
         print(f"[runner] mode={CFG.mode} rows={ROWS_TOTAL} model={MODEL_SLUG} "
               f"tools={','.join(tools) or 'none'} rounds={CFG.rounds} notes={len(notes)}", flush=True)
 
@@ -551,7 +568,8 @@ if IS_KAGGLE:
                 try:
                     if CFG.uses_tools:
                         ctx = build_context({"row": row, "task": task, "notes": notes,
-                                             "k_memory": CFG.k_memory, "mode": "agents+skills"})
+                                             "k_memory": CFG.k_memory, "mode": "agents+skills",
+                                             "include_dynamic": CFG.dynamic_tools})
                         reasoning = reasoning_for_model(MODEL_SLUG)
                         REASONING_LEVEL = reasoning
                         for attempt in (0, 1):
@@ -563,7 +581,8 @@ if IS_KAGGLE:
                             try:
                                 state = run_direct(row, task, respond, notes=notes,
                                                    max_rounds=CFG.rounds,
-                                                   k_memory=CFG.k_memory, mode="agents+skills")
+                                                   k_memory=CFG.k_memory, mode="agents+skills",
+                                                   include_dynamic=CFG.dynamic_tools)
                                 break
                             except Exception as exc:
                                 if "reasoning_effort" not in str(exc) or reasoning is not None or attempt:

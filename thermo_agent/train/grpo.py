@@ -359,8 +359,14 @@ def derive_grad_accum(k: int, *, prompts_per_step: int | None = None,
 
 
 def load_rows(data_dir, split="train", task="repair"):
-    """Per-task (legacy) loader. Now reads task + tier like the joint loader does."""
-    cols = tuple(dict.fromkeys((*TASKS[task][2], "task", "tier", "id")))
+    """Per-task (legacy) loader. Now reads task + tier like the joint loader does.
+
+    ``ref_*`` scoring answers are never copied into a training row: the design
+    reward joins them from the scoring-only export at scoring time using ``id``
+    / ``record_id`` (see :mod:`thermo_agent.design.rewards`).
+    """
+    cols = tuple(dict.fromkeys((*TASKS[task][2], "task", "tier", "id", "record_id")))
+    cols = tuple(c for c in cols if not c.startswith("ref_"))
     rows, info = corpus_data.load_shards(data_dir, task, split)
     corpus_data.assert_tiers_resolved(task, info)
     return [{k: row.get(k, "") for k in cols} for row in rows]
@@ -370,7 +376,7 @@ def load_rows(data_dir, split="train", task="repair"):
 # C9: joint corpus, uniform (task x tier) sampler and per-row reward dispatch.
 # All of this is additive: load_rows and the four reward implementations stay as they are.
 # --------------------------------------------------------------------------- #
-_JOINT_COLUMN_DEFAULTS = {"deducible": False, "min_edits": 0, "ref_fuel_w": 0.0,
+_JOINT_COLUMN_DEFAULTS = {"deducible": False, "min_edits": 0,
                           "fuel_w": 0.0, "net_w": 0.0, "best_gain_w": 0.0}
 
 
@@ -383,13 +389,17 @@ def joint_rows(data_dir, split: str = "train") -> list[dict]:
     """Load all four GRPO corpora into one dataset whose rows carry ``task`` and ``tier``.
 
     Every reward column used by any task is present in every row (with a neutral default when the
-    source corpus does not have it). The dispatcher below makes sure a reward function only sees
-    the rows of its own task, so the defaults are never actually scored. Tiers are read from the
-    corpus when present and otherwise derived with ``synth.tiers`` (equal thirds per task), so
-    ``sample_joint`` really samples over task x tier instead of collapsing to one ``<missing>``
-    cell. Frontier shards are included (DECISIONS E1).
+    source corpus does not have it), EXCEPT the ``ref_*`` scoring-only answers: those are joined
+    from the scoring-only export into an ephemeral reward kwargs copy, never into a training row.
+    ``id``/``record_id`` are kept so the join can resolve each row. The dispatcher below makes
+    sure a reward function only sees the rows of its own task, so the defaults are never actually
+    scored. Tiers are read from the corpus when present and otherwise derived with ``synth.tiers``
+    (equal thirds per task), so ``sample_joint`` really samples over task x tier instead of
+    collapsing to one ``<missing>`` cell. Frontier shards are included (DECISIONS E1).
     """
-    cols = tuple(dict.fromkeys(c for _, _, task_cols in TASKS.values() for c in task_cols))
+    cols = tuple(dict.fromkeys(
+        c for _, _, task_cols in TASKS.values() for c in (*task_cols, "id", "record_id")))
+    cols = tuple(c for c in cols if not c.startswith("ref_"))
     out: list[dict] = []
     for task in JOINT_TASKS:
         loaded, info = corpus_data.load_shards(data_dir, task, split)
@@ -402,7 +412,9 @@ def joint_rows(data_dir, split: str = "train") -> list[dict]:
                 raise ValueError(f"unknown task {row['task']!r} in {data_dir}; expected one of {JOINT_TASKS}")
             row["tier"] = raw["tier"]
             if "id" in raw:
-                row["id"] = raw["id"]   # provenance for the rollout log; ignored by rewards
+                row["id"] = raw["id"]   # provenance for the rollout log + scoring join key
+            if "record_id" in raw:
+                row["record_id"] = raw["record_id"]   # preferred scoring join key
             out.append(row)
     if not out:
         raise ValueError(f"no joint GRPO rows found under {data_dir} (split={split})")
@@ -612,6 +624,11 @@ def main():
         funcs, weights = TASKS[a.task][0], TASKS[a.task][1]
     if a.limit_rows is not None:
         rows = rows[: a.limit_rows]
+    # Scoring-only design answers are joined at reward time. Resolve them once here,
+    # before any model/CUDA work, so a missing/incomplete export fails loudly and early.
+    design_rows = [r for r in rows if (r.get("task") or a.task) == "design"]
+    if design_rows:
+        design_rewards.assert_references_for_rows(design_rows)
     # Prompt hygiene (item 2): harness rows must come from the one compact builder.
     for row in rows:
         assert_compact_harness(row)

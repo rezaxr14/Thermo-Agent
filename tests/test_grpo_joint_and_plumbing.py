@@ -83,10 +83,14 @@ def test_joint_rows_carry_task_and_tier(tmp_path):
     assert len(rows) == 4 * len(TIERS) * 3
     assert {r["task"] for r in rows} == set(grpo.JOINT_TASKS)
     assert {(r["task"], r["tier"]) for r in rows} == {(t, tier) for t in grpo.JOINT_TASKS for tier in TIERS}
-    # Every reward column used by any task exists (with neutral defaults) in every joint row.
+    # Every reward column used by any task exists (with neutral defaults) in every joint row,
+    # EXCEPT the scoring-only ref_* answers: those are joined at scoring time, never stored
+    # in a training row. id/record_id are kept as join keys.
     for row in rows:
+        assert not any(str(k).startswith("ref_") for k in row)
+        assert "id" in row and "record_id" in row
         for _, _, cols in grpo.TASKS.values():
-            assert set(cols) <= set(row)
+            assert {c for c in cols if not c.startswith("ref_")} <= set(row)
     assert grpo.row_tier({"tier": "hard"}) == "hard"
     assert grpo.row_tier({}) == grpo.UNKNOWN_TIER
 

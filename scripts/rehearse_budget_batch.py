@@ -59,6 +59,10 @@ EMPTY_GUARD_TEXT = (
     "check the Kaggle log for [runner][ERROR])"
 )
 ERROR_GUARD_TEXT = "runner journalled an error instead of traces: {detail}"
+NO_COMPLETIONS_GUARD_TEXT = (
+    "journal has {total} rows but 0 usable completions "
+    "({errored} errored; first error: {first}); refusing to process"
+)
 _ERROR_ROW = re.compile(r'"id"\s*:\s*"__error__"')
 
 
@@ -82,14 +86,38 @@ def validate_journal(path: str | pathlib.Path) -> int:
 
     detail = None
     count = 0
+    total = 0
+    usable = 0
+    errored = 0
+    first_error = ""
     with p.open(encoding="utf-8") as fh:
         for line in fh:
+            if not line.strip():
+                continue
             count += 1
+            total += 1
             if _ERROR_ROW.search(line):
                 detail = line.rstrip("\r\n")
                 break
+            try:
+                rec = json.loads(line)
+            except ValueError:
+                errored += 1
+                if not first_error:
+                    first_error = "malformed JSON journal line"
+                continue
+            if rec.get("error"):
+                errored += 1
+                if not first_error:
+                    first_error = str(rec["error"])
+                continue
+            if str(rec.get("completion") or "") or str(rec.get("sft_completion") or ""):
+                usable += 1
     if detail is not None:
         raise JournalGuardError(ERROR_GUARD_TEXT.format(detail=detail))
+    if total and not usable:
+        raise JournalGuardError(NO_COMPLETIONS_GUARD_TEXT.format(
+            total=total, errored=errored, first=first_error or "unknown"))
     return count
 
 
@@ -118,7 +146,21 @@ def check_reject_paths(out_dir: pathlib.Path) -> dict:
         error_msg = str(exc)
     else:
         raise AssertionError("__error__-row guard did not fire")
-    return {"empty": empty_msg, "error": error_msg}
+
+    no_comp = out_dir / "_guard_no_completions.jsonl"
+    no_comp.write_text(json.dumps({
+        "id": "row-1", "error": "KeyError: 'ed_json'",
+        "completion": "", "sft_completion": "",
+    }) + "\n", encoding="utf-8")
+    try:
+        validate_journal(no_comp)
+    except JournalGuardError as exc:
+        assert "0 usable completions" in str(exc), exc
+        no_comp_msg = str(exc)
+    else:
+        raise AssertionError("no-completions guard did not fire")
+    return {"empty": empty_msg, "error": error_msg,
+            "no_completions": no_comp_msg}
 
 
 # ---------------------------------------------------------------------------

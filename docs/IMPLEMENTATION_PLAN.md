@@ -16,6 +16,14 @@ littering. All credentials come only from the repository-root `.env`. One generi
 (`notebooks/kaggle_model_runner.py` / `.ipynb`) serves every workflow; no per-task variants. The runner hard-blocks
 gemini 3.8/3.5 and skips non-allowed models before any model call.
 
+**Local-only verification gates (2026-11-20, no quota).** `scripts/preflight_budget_batch.py` (replays
+`Config.select_rows` against the Kaggle dataset bytes) runs in `scripts/overnight_budget_loop.ps1` before any
+HF/Kaggle/model call, and `scripts/rehearse_budget_batch.py` exercises the real token gate and `transfer.ingest` on
+fake journals — both green. The scoring-time join for design `ref_*` fields (1,216/1,216 rows) and the 9 opt-in
+dynamic tools are wired locally; their final test counts land in the next commit. Kaggle runs v19/v20 are completed
+and being processed per Reza's prompt 9. New docs are governed by the anti-litter rule (DECISIONS §8); orientation
+samples are in `data/samples/`.
+
 ## Binding order and current datagen status (Reza directive, 2026-11-19)
 
 Reza's directive (DECISIONS §4, which supersedes any conflicting line above) is binding:

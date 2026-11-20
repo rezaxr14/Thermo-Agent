@@ -63,6 +63,24 @@ Kaggle notebook for all workflows. RAG memory records **short success/failure
 recaps** (what failed → what works); model ids, timestamps, cost and raw checker
 logs are stripped before a note is served to a prompt.
 
+### 2026-11-20 — provenance audit OK (8/8) and current cohort counts
+
+`scripts/audit_provenance_chain.py --strict` reports **PROVENANCE OK: 8/8 checks pass**.
+Findings:
+
+- **237 accepted frontier cohort rows** carry `model`, `provider`, `run_id` and `source`
+  (`source_detail: frontier_tools`).
+- Prompt shards are clean — no answers or scoring reference leaked into tracegen prompts.
+- No harness bookkeeping (ids, manifests, run ids) leaks into model-visible text.
+- Memory has both accepted and rejected notes (short success/failure recaps only).
+- **320 frontier mix rows traced**: 258 cohort rows + 62 documented legacy gemini rows.
+- **0 `ref_spec` leaks in 11,520 mix rows** — the scoring-only `ref_*` fields (`ref_fuel_w`, `ref_spec`,
+  `ref_evals`) were stripped from `sft_mix_v2` / `grpo_mix_v2` training rows and are read at scoring time from
+  `data/frontier_export/design_train.jsonl` for GRPO design rewards (**1,216/1,216 design rows resolved**).
+
+This audit is read-only: all already captured CoTs and deterministic data are kept unchanged (DECISIONS §9);
+no trace was bulk-rewritten. Per-trace audits are allowed only for a specific diagnosed defect.
+
 > **Generated tables below are a historical ledger snapshot.** They are rewritten by
 > `scripts/build_provenance_ledger.py` from the journals currently on disk and reflect
 > the superseded early pilot; they are not a statement of the current authorized

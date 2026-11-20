@@ -39,6 +39,68 @@ def test_design_without_a_plant_gets_only_its_catalog_skill():
     assert s == ["design-catalog"], "all component skills at once do not fit the 4096-token prompt budget"
     assert H.skills_for(None, "ledger") == ["exergy-ledger"]
 
+
+def test_repair_skill_mapped_and_component_skills_selected_from_frontmatter():
+    # Repair traces must carry a real diagnosis skill instead of an empty map.
+    assert H.TASK_SKILLS["repair"] == ["repair-diagnosis"]
+    rng = random.Random(7)
+    eng, _, _ = sample_plant(rng, topology="dc_engine_electric")
+    selected = H.skills_for(eng, "repair")
+    assert "repair-diagnosis" in selected
+
+    comp_types = {c.type for c in eng.components}
+    expected = set()
+    for n in H.skill_names():
+        comps = B.frontmatter((H.ROOT / "skills" / n / "SKILL.md").read_text()).get("components")
+        if comps and any(c in comp_types for c in comps):
+            expected.add(n)
+    assert len(expected) >= 3, "the fixture plant should exercise several component skills"
+    assert expected <= set(selected), "component skills are selected via `components:` frontmatter"
+    # The task skill stays first so the compact builder keeps serving exactly one skill.
+    assert selected[0] == "repair-diagnosis"
+
 def test_harness_size_is_bounded():
     # AGENTS.md plus one task skill must leave room for the plant text inside max_length 4096.
     assert len(H.augment(MSGS, "agents+skills", "design")[0]["content"]) < 9000
+
+
+def test_verbose_harness_stays_bounded_for_a_19_component_plant():
+    """A plant matching many component skills must not silently blow the verbose harness budget.
+
+    This is the regression for the 27-skill library: with every matching component skill
+    rendered, the same plant produced ~31k chars / ~8.3k tokens, over both the corpus'
+    22k-char prefilter and the ~4k-token SFT budget, so `combine` silently dropped every
+    such row. The bounded verbose path must stay under both gates and keep the task skill.
+    """
+    from thermo_agent.core.schema import Component, Plant
+    from thermo_agent.synth.combine import TOKEN_RESERVE, tokenizer
+
+    types = [
+        "compressor", "combustor", "turbine", "recuperator", "hrsg", "orc_evaporator",
+        "orc_turbine", "pump", "condenser", "absorption_chiller", "heat_pump",
+        "electric_chiller", "dc_load", "mixer", "splitter", "valve", "heat_rejector",
+        "gas_engine", "compressor",  # 19 components, 14 distinct types -> many skills
+    ]
+    plant = Plant(name="kitchen-sink", streams=[],
+                  components=[Component(id=f"c{i}", type=t) for i, t in enumerate(types)])
+
+    tok = tokenizer()
+    for task, skill in H.TASK_SKILLS.items():
+        # skills_for itself stays unbounded (selection semantics are unchanged);
+        # only the rendered verbose text is capped.
+        assert len(H.skills_for(plant, task)) > 5
+        text = H.augment(MSGS, "agents+skills", task, plant)[0]["content"]
+        assert f"SKILL {skill[0]}" in text, f"{task}: task skill was not kept"
+        assert len(text) < 22000, f"{task}: verbose harness is {len(text)} chars"
+        if tok is not None:
+            n = len(tok.encode(text, add_special_tokens=False).ids) + TOKEN_RESERVE
+            assert n <= 4000, f"{task}: verbose harness is {n} tokens"
+
+
+def test_compact_path_still_selects_exactly_one_task_skill():
+    """The bounded verbose path must not change the compact production contract."""
+    from thermo_agent.agent.tool_prompt import _compact_selected_skill
+    for task, skill in H.TASK_SKILLS.items():
+        block = _compact_selected_skill(task)
+        kept = [n for n in H.skill_names() if f"SKILL {n}" in block]
+        assert kept == [skill[0]], f"{task}: compact harness must serve one task skill"

@@ -16,6 +16,8 @@ import pytest
 
 from thermo_agent.agent.env import ThermoEnv
 from thermo_agent.teacher import toolkit
+from thermo_agent.teacher.toolkit import SKILL_TOOL_NAMES
+from thermo_agent.teacher.thermo_tools import DYNAMIC_TOOL_NAMES
 from thermo_agent.teacher.validate import validate
 
 pytestmark = pytest.mark.corpus
@@ -24,6 +26,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ROW_PATH = ROOT / "data" / "processed" / "repair_train.jsonl"
 TOOL_NAMES = ["inspect_plant", "first_law_check", "second_law_check",
               "validity_check", "solve_plant"]
+ALL_TOOL_NAMES = TOOL_NAMES + list(DYNAMIC_TOOL_NAMES) + list(SKILL_TOOL_NAMES)
 
 
 @pytest.fixture(scope="module")
@@ -51,12 +54,40 @@ def test_tools_names_equal_toolkit(row: dict):
     env = ThermoEnv(row, "repair")
     assert [fn.__name__ for fn in env.tools] == toolkit.tool_names()
     assert toolkit.tool_names() == TOOL_NAMES
+    # Opt-in hosted mode exposes all 16 tools (14 physics + 2 skill) via the parser path.
+    assert toolkit.tool_names(include_dynamic=True) == ALL_TOOL_NAMES
+    dyn = ThermoEnv(row, "repair", include_dynamic=True)
+    assert [fn.__name__ for fn in dyn.tools] == toolkit.tool_names(include_dynamic=True)
+    assert [fn.__name__ for fn in dyn.tools] == ALL_TOOL_NAMES
+    assert "check_answer" not in ALL_TOOL_NAMES
 
 
 def test_no_oracle_tool(row: dict):
     names = [fn.__name__ for fn in ThermoEnv(row, "repair").tools]
     assert "check_answer" not in names
     assert not any("answer" in n or "oracle" in n for n in names)
+
+
+def test_dynamic_tools_are_callable_through_the_shared_parser(row: dict):
+    """The hosted opt-in binds the 9 JSON-object tools behind the same fn(candidate) path."""
+    env = ThermoEnv(row, "repair", include_dynamic=True)
+    fluid = json.loads(env._call("fluid_state", json.dumps(
+        {"fluid": "Water", "T_K": 300.0, "P_kPa": 101.325})))
+    assert fluid["ok"] is True and fluid["fluid"] == "Water"
+    assert isinstance(fluid["T_K"], float)
+    # Invalid JSON is a uniform ok:false payload, never an exception.
+    bad = json.loads(env._call("turbomachine", "not json"))
+    assert bad["ok"] is False and bad["error"]
+    # Default env still has only the five plant tools.
+    assert len(ThermoEnv(row, "repair").tools) == 5
+
+
+def test_observation_block_names_dynamic_tools_only_when_enabled(row: dict):
+    default = ThermoEnv(row, "repair").observation_block()
+    dynamic = ThermoEnv(row, "repair", include_dynamic=True).observation_block()
+    assert all(n not in default for n in DYNAMIC_TOOL_NAMES)
+    assert all(n in dynamic for n in DYNAMIC_TOOL_NAMES)
+    assert "JSON object string" in dynamic
 
 
 # ---------------------------------------------------------------------------

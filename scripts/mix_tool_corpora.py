@@ -38,9 +38,11 @@ is 0 (the default) is ``--frontier-ratio R`` (R > 0) used, capping to
 is no cap: every eligible row is taken.  A positive cap applies a seeded
 shuffle, so the chosen ids are reproducible from ``--seed``.
 
-Rows are passed through unchanged (no re-rendering, no truncation, no field
-drops).  Ids are deduplicated within each source; an id shared between sources
-in the same output stream is a hard error.
+Rows are passed through with no re-rendering or truncation, except that
+scoring-only ``ref_*`` answer fields (``ref_spec``, ``ref_evals``, ``ref_fuel_w``)
+are scrubbed at write time; every other field is preserved.  Ids are deduplicated
+within each source; an id shared between sources in the same output stream is a
+hard error.
 
 Plain A-slice (decision E2)
 ---------------------------
@@ -166,6 +168,31 @@ def _prompt_text(prompt) -> str:
     if isinstance(prompt, list):
         return "\n".join(str(m.get("content", "")) for m in prompt if isinstance(m, dict))
     return ""
+
+
+# Scoring-only reference answer fields must never be written into a training mix
+# row.  Design reference specs / evals / fuel targets live only in
+# `data/frontier_export/design_train.jsonl` and are joined for scoring at scoring
+# time; storing them next to a prompt leaks the answer even when the prompt itself
+# does not render them.  `completion` / `trajectory.sft_completion` are the
+# training *target*, not reference answers, and are deliberately kept.
+ANSWER_KEY_PREFIX = "ref_"
+
+
+def strip_answer_fields(value):
+    """Recursively drop every ``ref_*`` answer/scoring key from a JSON value.
+
+    Applied at WRITE time (after tiering): design tier derivation legitimately
+    reads ``ref_spec`` to measure the reference design, so the in-memory plan must
+    keep it until every row has an explicit ``tier``.  Only the bytes written to
+    ``sft_mix_v2`` / ``grpo_mix_v2`` are scrubbed; every input corpus stays intact.
+    """
+    if isinstance(value, dict):
+        return {k: strip_answer_fields(v) for k, v in value.items()
+                if not str(k).startswith(ANSWER_KEY_PREFIX)}
+    if isinstance(value, list):
+        return [strip_answer_fields(v) for v in value]
+    return value
 
 
 def to_harness_prompt(row: dict, task: str) -> dict:
@@ -746,7 +773,11 @@ def write_mix(plan: dict, out_sft: pathlib.Path, out_grpo: pathlib.Path,
             path = directory / name
             with path.open("w", encoding="utf-8") as fh:
                 for row in grouped.get(name, []):
-                    fh.write(json.dumps(row, ensure_ascii=False) + "\n")
+                    # Scrub scoring-only ref_* answer fields from the emitted row.
+                    # Tiering already happened in build_mix() using ref_spec, and the
+                    # explicit `tier` column survives, so downstream loaders never
+                    # need the reference answer to reconstruct a tier.
+                    fh.write(json.dumps(strip_answer_fields(row), ensure_ascii=False) + "\n")
             owned.append(_rel(path))
 
     manifest = {
@@ -765,6 +796,10 @@ def write_mix(plan: dict, out_sft: pathlib.Path, out_grpo: pathlib.Path,
             "prompt_variant": "harness_tools" if plan["harness_prompt"] else "plain",
             "cap_precedence": "--frontier-per-task wins when > 0; otherwise "
                               "--frontier-ratio; 0/0 means no cap",
+            # Scoring-only answer fields (ref_spec/ref_evals/ref_fuel_w, any ref_*)
+            # are joined from data/frontier_export for scoring and never written
+            # into a mix row. Applied at write time, after tiering.
+            "answer_fields_stripped": ANSWER_KEY_PREFIX + "*",
         },
         "totals": {"sft": len(plan["sft_rows"]), "grpo": len(plan["grpo_rows"])},
         "counts": plan["counts"],

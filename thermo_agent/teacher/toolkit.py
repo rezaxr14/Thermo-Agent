@@ -36,10 +36,158 @@ from dataclasses import dataclass, field
 from ..core.schema import Plant, Site
 from ..core.solve import solve
 from ..verify.verifiers import run_all
+from ..agent import harness as H
+from ..agent.build_harness import frontmatter
 from ..agent.dsl import parse_edits, edits_to_patch, EditError
 from ..synth.faults import apply_patch, _dump
 from ..design.spec import parse_design, DesignError
 from ..design.build import evaluate_design
+from .thermo_tools import DYNAMIC_TOOL_NAMES, dynamic_tools
+
+# The eleven extra tools are OFF by default: the 4,800 deterministic corpora and
+# every accepted frontier trace keep their five-tool contract. The hosted cohort
+# harness opts in with ``include_dynamic=True`` (pipeline flag): nine continuous-
+# input component tools plus the two on-demand skill tools below.
+
+# The two on-demand skill tools are kept SEPARATE from ``DYNAMIC_TOOL_NAMES``
+# (thermo_tools.py, nine CoolProp tools): that registry and its tests are frozen,
+# and the skill tools read the SKILL.md library instead of calling CoolProp.
+SKILL_TOOL_NAMES = ("list_skills", "load_skill")
+_SKILL_HINT = "call load_skill(name) for the full text"
+
+
+# --------------------------------------------------------------------------- #
+# on-demand skill library (metadata catalog + full-text loader)
+# --------------------------------------------------------------------------- #
+def _meta_list(value) -> list[str]:
+    """Normalise a frontmatter value (list or ``[a, b]`` string) to a clean list."""
+    if value is None:
+        return []
+    if isinstance(value, (list, tuple)):
+        return [str(x).strip() for x in value if str(x).strip()]
+    return [x.strip() for x in str(value).strip().strip("[]").split(",") if x.strip()]
+
+
+def skill_metadata(name: str) -> dict | None:
+    """Frontmatter-only record for one skill: no skill body ever leaves here.
+
+    Returns ``None`` for a name that is not in the library, so callers can validate
+    untrusted names without touching the filesystem (no path traversal).
+    """
+    if name not in H.skill_names():
+        return None
+    path = H.ROOT / "skills" / name / "SKILL.md"
+    fm = frontmatter(path.read_text(encoding="utf-8"))
+    return {
+        "name": name,
+        "description": " ".join(str(fm.get("description", "")).split()),
+        "components": _meta_list(fm.get("components")),
+        "variants": _meta_list(fm.get("variants")),
+        "task": (str(fm["task"]).strip() or None) if fm.get("task") else None,
+    }
+
+
+def all_skill_metadata() -> list[dict]:
+    """Compact catalog records for the whole skill library, in deterministic order."""
+    return [m for n in H.skill_names() if (m := skill_metadata(n)) is not None]
+
+
+def skill_body(name: str) -> str | None:
+    """The full SKILL.md text with frontmatter stripped — exactly what
+    ``H.read_skill(name)`` returns minus its ``SKILL <name>: <description>``
+    header line. ``None`` for an unknown name. Never called with an
+    unvalidated path: membership in the library is checked first.
+    """
+    if name not in H.skill_names():
+        return None
+    text = (H.ROOT / "skills" / name / "SKILL.md").read_text(encoding="utf-8")
+    return re.sub(r"^---\n.*?\n---\n", "", text, flags=re.S)
+
+
+def _skill_object(candidate: str) -> dict:
+    """Decode the single ``candidate`` slot into a JSON object (or raise)."""
+    if not isinstance(candidate, str) or not candidate.strip():
+        raise ValueError("candidate must be a JSON object string")
+    obj = json.loads(candidate)
+    if not isinstance(obj, dict):
+        raise ValueError("candidate must decode to a JSON object")
+    return obj
+
+
+def _skill_matches(meta: dict, task: str, components: list[str], query: str) -> bool:
+    haystack = " ".join([meta["name"], meta["description"],
+                         *meta["components"], *meta["variants"],
+                         meta["task"] or ""]).lower()
+    if task and task not in haystack:
+        return False
+    if components and not (set(meta["components"]) & set(components)):
+        return False
+    if query and query not in haystack:
+        return False
+    return True
+
+
+def list_skills(candidate: str = "") -> str:
+    """List skills matching optional task/components/query filters.
+
+    Args:
+        candidate (str): JSON object with optional ``task``, ``components``
+            (list) and ``query`` (string) filters. An empty object lists the
+            whole library. All filters are lowercase substring/exact-component
+            matches; multiple filters are ANDed.
+
+    Returns:
+        str: JSON with ``ok``, ``hint``, ``n`` and a compact ``skills`` catalog
+        (name, description, components, variants, task). NEVER a skill body.
+        Malformed input returns ``{"ok": false, ...}``; the tool never raises.
+    """
+    try:
+        obj = _skill_object(candidate)
+        task = str(obj["task"]).strip().lower() if obj.get("task") else ""
+        components = _meta_list(obj.get("components"))
+        query = str(obj["query"]).strip().lower() if obj.get("query") else ""
+        catalog = [m for m in all_skill_metadata()
+                   if not (task or components or query) or _skill_matches(m, task, components, query)]
+        return json.dumps({"ok": True, "hint": _SKILL_HINT, "n": len(catalog),
+                           "skills": catalog}, ensure_ascii=False)
+    except Exception as exc:
+        return json.dumps({"ok": False, "error": f"{type(exc).__name__}: {exc}",
+                           "hint": _SKILL_HINT, "available": list(H.skill_names())},
+                          ensure_ascii=False)
+
+
+def load_skill(candidate: str = "") -> str:
+    """Return the FULL SKILL.md body of one named skill as this tool's result.
+
+    Args:
+        candidate (str): JSON object with a single ``name`` key, e.g.
+            ``{"name": "compressor"}``. The name is validated against the
+            skill library exactly, so paths/traversal are rejected.
+
+    Returns:
+        str: JSON with ``ok``, ``name`` and the frontmatter-stripped ``text``,
+        or ``{"ok": false, "error": "unknown skill", "available": [...]}``.
+        The text is a tool result only — the harness never writes it back into
+        the system prompt. The tool never raises.
+    """
+    try:
+        obj = _skill_object(candidate)
+        name = obj.get("name")
+        if not isinstance(name, str) or not name.strip():
+            raise ValueError("missing non-empty 'name'")
+        text = skill_body(name.strip())
+        if text is None:
+            raise KeyError("unknown skill")
+        return json.dumps({"ok": True, "name": name.strip(), "text": text},
+                          ensure_ascii=False)
+    except Exception:
+        return json.dumps({"ok": False, "error": "unknown skill",
+                           "available": list(H.skill_names())}, ensure_ascii=False)
+
+
+def skill_tools() -> list:
+    """The two on-demand skill tools as ``(candidate: str) -> str`` callables."""
+    return [list_skills, load_skill]
 
 
 @dataclass
@@ -335,12 +483,19 @@ def _unsolved_payload(ev: _Eval) -> dict:
             "failed_checks": [f"solver:{code}"]}
 
 
-def make_tools(task: str, row: dict, candidate_of=lambda c: c):
+def make_tools(task: str, row: dict, candidate_of=lambda c: c, include_dynamic: bool = False):
     """Tool signatures are plain str -> str so kbench builds a clean JSON schema.
 
     `candidate_of` lets a caller unwrap an answer from a wrapper if needed. The oracle
     ``check_answer`` is intentionally absent: grading stays at acceptance time / in the GRPO
     reward, never in the teacher's or student's tool list.
+
+    With ``include_dynamic=True`` the nine continuous-input component tools from
+    :mod:`thermo_agent.teacher.thermo_tools` are appended, followed by the two
+    on-demand skill tools (:func:`list_skills`, :func:`load_skill`). All eleven are
+    ``(candidate: str) -> str`` callables (``candidate`` is a JSON object string), so the
+    shared tool-call parser executes them exactly like the five plant tools. The default
+    is ``False`` so every existing corpus/trace keeps the five-tool contract.
     """
     def check(candidate: str) -> _Eval:
         return _eval(task, candidate_of(candidate), row)
@@ -493,8 +648,15 @@ def make_tools(task: str, row: dict, candidate_of=lambda c: c):
         return json.dumps(_with_meta({"ok": True, "n_streams": len(streams), "streams": streams}, ev.meta),
                           ensure_ascii=False)
 
-    return [inspect_plant, first_law_check, second_law_check, validity_check, solve_plant]
+    tools = [inspect_plant, first_law_check, second_law_check, validity_check, solve_plant]
+    if include_dynamic:
+        tools.extend(dynamic_tools())
+        tools.extend(skill_tools())
+    return tools
 
 
-def tool_names() -> list[str]:
-    return ["inspect_plant", "first_law_check", "second_law_check", "validity_check", "solve_plant"]
+def tool_names(include_dynamic: bool = False) -> list[str]:
+    names = ["inspect_plant", "first_law_check", "second_law_check", "validity_check", "solve_plant"]
+    if include_dynamic:
+        names += list(DYNAMIC_TOOL_NAMES) + list(SKILL_TOOL_NAMES)
+    return names

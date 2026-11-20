@@ -1624,6 +1624,7 @@
  "config": {
   "a_slice": "data/a_slice",
   "a_slice_ratio": 0.0,
+  "answer_fields_stripped": "ref_*",
   "cap_precedence": "--frontier-per-task wins when > 0; otherwise --frontier-ratio; 0/0 means no cap",
   "deterministic_grpo": "data/grpo_tools_v2_h",
   "deterministic_sft": "data/sft_tools_v2_h",
@@ -1840,7 +1841,7 @@
   "with_tool_turns": 129
  },
  "frontier_reprompted": 129,
- "generated_at": "2026-11-20T02:23:14.930177+00:00",
+ "generated_at": "2026-11-20T08:12:33.543933+00:00",
  "generator": "mix_tool_corpora.py",
  "input_file_hashes": {
   "data/a_slice/audit_train.jsonl": "7eec6b3580097c9a807da9a659a7f4de1e9f05c6a59761213dd2cda48545a973",

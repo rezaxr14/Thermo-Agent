@@ -67,6 +67,7 @@ reports/data_report.json
 data/grpo/
 data/frontier_export/
 data/_pre_leakfix/
+data/_pre_ref_fix/
 session-*.json
 reports/combine_*.json
 reports/token_audit_*.json

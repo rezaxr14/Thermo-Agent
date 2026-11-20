@@ -67,13 +67,18 @@ class ThermoEnv:
         reward: The verifier reward from :meth:`step`, or ``None`` before it.
     """
 
-    def __init__(self, row: dict, task: str, max_turns: int = 6, max_tool_calls: int = 8) -> None:
+    def __init__(self, row: dict, task: str, max_turns: int = 6, max_tool_calls: int = 8,
+                 include_dynamic: bool = False) -> None:
         self.max_turns = max_turns
         self.max_tool_calls = max_tool_calls
+        # OFF by default: all corpora and accepted traces keep the five-tool contract.
+        # The hosted frontier harness opts in for the nine continuous-input tools.
+        self.include_dynamic = bool(include_dynamic)
         self._tools_by_name: dict[str, Callable[..., str]] = {}
         self._bind(row, task)
         # TRL/kbench consume `tools` order; it must equal the toolkit's canonical order.
-        assert [fn.__name__ for fn in self.tools] == toolkit.tool_names()
+        assert [fn.__name__ for fn in self.tools] == toolkit.tool_names(
+            include_dynamic=self.include_dynamic)
         self.reset()
 
     # ------------------------------------------------------------------ #
@@ -83,8 +88,12 @@ class ThermoEnv:
         """Bind the toolkit's closures to ``row``/``task`` and verify their order."""
         self.row = row
         self.task = task
-        self._tools_by_name = {fn.__name__: fn for fn in toolkit.make_tools(task, row)}
-        assert list(self._tools_by_name) == toolkit.tool_names()
+        self._tools_by_name = {
+            fn.__name__: fn for fn in toolkit.make_tools(
+                task, row, include_dynamic=self.include_dynamic)
+        }
+        assert list(self._tools_by_name) == toolkit.tool_names(
+            include_dynamic=self.include_dynamic)
 
     @staticmethod
     def _prompt_text(row: dict) -> str:
@@ -118,9 +127,19 @@ class ThermoEnv:
 
     @property
     def tools(self) -> list[Callable[..., str]]:
-        """The five physics tools as bound methods, in ``toolkit.tool_names()`` order."""
-        return [self.inspect_plant, self.first_law_check, self.second_law_check,
+        """The physics tools in ``toolkit.tool_names()`` order.
+
+        The five plant tools are bound methods; the nine continuous-input component
+        tools (when ``include_dynamic`` is on) are plain ``(candidate) -> str`` callables
+        from :mod:`thermo_agent.teacher.thermo_tools`, executed through the same
+        ``_call``/parser path as the plant tools.
+        """
+        base = [self.inspect_plant, self.first_law_check, self.second_law_check,
                 self.validity_check, self.solve_plant]
+        if self.include_dynamic:
+            # Nine continuous-input component tools + the two on-demand skill tools.
+            return base + toolkit.dynamic_tools() + toolkit.skill_tools()
+        return base
 
     # ------------------------------------------------------------------ #
     # tools
@@ -237,9 +256,9 @@ class ThermoEnv:
             str: The observation block text.
         """
         contract = _FINAL_XML.get(self.task, _UNKNOWN_XML)
-        return "\n".join([
+        lines = [
             _TOOL_PROMPT_MARKER,
-            "Inventory the available skills and the five physics tools first; then examine the "
+            "Inventory the available skills and the physics tools first; then examine the "
             "plant/cycle against known failure modes before proposing a candidate.",
             f"Limits: at most {self.max_turns} assistant turns and {self.max_tool_calls} tool calls.",
             "Tools return JSON with real numbers (physics only; there is no answer-oracle tool):",
@@ -248,9 +267,18 @@ class ThermoEnv:
             "- second_law_check(candidate) -> exergy destruction, eta_I/eta_II and reversibility limits.",
             "- validity_check(candidate) -> unit/range, site and pinch violations, verifier verdict.",
             "- solve_plant(candidate) -> full stream state table (T, P, h, s, exergy).",
+        ]
+        if self.include_dynamic:
+            # Short one-liners only, shared with the compact contract (no skill-text duplication).
+            from .tool_prompt import _COMPACT_TOOL_LINE
+            lines.append("Component/skill tools take a JSON object string as candidate:")
+            for name in toolkit.DYNAMIC_TOOL_NAMES + toolkit.SKILL_TOOL_NAMES:
+                lines.append("- " + _COMPACT_TOOL_LINE[name])
+        lines += [
             "Read the numbers, revise and re-check; when residuals are ~0 and all checks pass, stop.",
             "Final answer (stop calling tools and emit exactly these tags): " + contract,
-        ])
+        ]
+        return "\n".join(lines)
 
 
 def row_has_harness_tools(row: dict) -> bool:

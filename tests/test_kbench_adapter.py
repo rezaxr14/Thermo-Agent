@@ -183,7 +183,7 @@ def test_four_tuple_finalizes_without_reexecuting_tools(monkeypatch):
 
     spy_tool.__name__ = "spy_tool"
     # make_tools is a module global looked up inside build_context.
-    monkeypatch.setattr(agent_graph, "make_tools", lambda task, row_: [spy_tool])
+    monkeypatch.setattr(agent_graph, "make_tools", lambda task, row_, **kw: [spy_tool])
 
     def respond(messages, tools):
         text, _calls, reasoning, turns = base(messages, tools)
@@ -211,7 +211,7 @@ def test_spy_would_catch_a_second_execution(monkeypatch):
         return "SPY RESULT"
 
     spy_tool.__name__ = "spy_tool"
-    monkeypatch.setattr(agent_graph, "make_tools", lambda task, row_: [spy_tool])
+    monkeypatch.setattr(agent_graph, "make_tools", lambda task, row_, **kw: [spy_tool])
 
     def respond(messages, tools):
         if any("Tool results:" in m["content"] for m in messages):

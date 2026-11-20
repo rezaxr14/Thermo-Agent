@@ -8,12 +8,14 @@ import json
 from functools import lru_cache
 from pathlib import Path
 
-from thermo_agent.teacher.toolkit import make_tools, tool_names
+from thermo_agent.teacher.toolkit import SKILL_TOOL_NAMES, make_tools, tool_names
+from thermo_agent.teacher.thermo_tools import DYNAMIC_TOOL_NAMES
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data" / "processed"
 
 PHYSICS_TOOLS = ["inspect_plant", "first_law_check", "second_law_check", "validity_check", "solve_plant"]
+ALL_TOOLS = PHYSICS_TOOLS + list(DYNAMIC_TOOL_NAMES) + list(SKILL_TOOL_NAMES)
 NUM = (int, float)
 
 
@@ -44,10 +46,20 @@ def _j(text: str) -> dict:
 def test_check_answer_absent_from_tool_lists():
     assert "check_answer" not in tool_names()
     assert tool_names() == PHYSICS_TOOLS
+    # Opt-in mode: 5 plant + 9 component + 2 on-demand skill tools, still no oracle.
+    assert tool_names(include_dynamic=True) == ALL_TOOLS
+    assert len(ALL_TOOLS) == 16
+    assert "check_answer" not in tool_names(include_dynamic=True)
     for task in ("repair", "audit", "ledger", "design"):
         tools = _tools(task)
         assert "check_answer" not in tools, task
         assert set(tools) == set(PHYSICS_TOOLS), task
+        dynamic = {fn.__name__: fn for fn in make_tools(task, _row(task), include_dynamic=True)}
+        assert "check_answer" not in dynamic, task
+        assert list(dynamic) == ALL_TOOLS, task
+        # The nine extras are the unchanged module-level callables: fn(candidate).
+        for name in DYNAMIC_TOOL_NAMES:
+            assert json.loads(dynamic[name](""))["ok"] is False, (task, name)
 
 
 # --------------------------------------------------------------------------------------
