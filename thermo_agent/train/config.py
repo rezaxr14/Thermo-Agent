@@ -1,7 +1,7 @@
 """Training settings. Values come from: Schulman et al. 2025 (LoRA on all linear layers, LR ~10x full fine-tuning,
 low rank is enough for RL), Luo et al. 2026 (SFT then GRPO with a group of 4), and TRL's GRPOConfig defaults.
 
-Dual-T4 target (see docs/DUAL_T4.md): full fp16 LoRA, two DDP ranks, no 4-bit quantisation. The T4 is Turing,
+Dual-T4 target (see docs/RUNBOOK.md): full fp16 LoRA, two DDP ranks, no 4-bit quantisation. The T4 is Turing,
 so fp16 is the only half-precision format it has fast kernels for; bf16 must not be selected there.
 """
 from dataclasses import dataclass, field, fields

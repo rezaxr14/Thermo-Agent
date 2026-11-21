@@ -5,7 +5,7 @@ Reads every journal in ``data/teacher_runs/*.jsonl`` plus the optional
 ``data/memory/failure_reasons.json`` and writes two *outputs*:
 
 * ``data/teacher_runs/CAMPAIGN_STATS.json`` -- machine-readable snapshot.
-* ``docs/TEACHER_CAMPAIGN_LOG.md``         -- human-readable, append-friendly log.
+* ``reports/teacher_campaign_log.md``         -- human-readable, append-friendly log.
 
 The markdown log is never rewritten destructively: on each run the previous
 "Latest snapshot" is moved verbatim into "History" under its own timestamp and
@@ -48,7 +48,7 @@ if str(ROOT) not in sys.path:
 RUNS_REL = Path("data/teacher_runs")
 MEMORY_REL = Path("data/memory/failure_reasons.json")
 STATS_REL = RUNS_REL / "CAMPAIGN_STATS.json"
-LOG_REL = Path("docs/TEACHER_CAMPAIGN_LOG.md")
+LOG_REL = Path("reports/teacher_campaign_log.md")
 
 LATEST_HEADING = "## Latest snapshot"
 HISTORY_HEADING = "## History"

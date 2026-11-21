@@ -77,7 +77,7 @@ HARNESS_MARKER = "MULTI-TURN TOOL ENVIRONMENT"
 
 # Never write into any of these (additive-only contract; see build_tool_corpus.py).
 PROTECTED = (
-    "data/sft_tools", "data/grpo_tools", "data/sft_tools_h", "data/grpo_tools_h",
+    "data/sft_tools", "data/grpo_tools", "data/sft_tools_h", "data/grpo_tools_h", "data/sft_tools_v3", "data/grpo_tools_v3",
     "data/sft_all", "data/grpo_all", "data/sft", "data/grpo",
     "data/frontier", "data/frontier_prov", "data/a_slice", "data/heldout",
     "data/frontier_export", "data/frontier_eval_export",
@@ -185,7 +185,7 @@ def strip_answer_fields(value):
     Applied at WRITE time (after tiering): design tier derivation legitimately
     reads ``ref_spec`` to measure the reference design, so the in-memory plan must
     keep it until every row has an explicit ``tier``.  Only the bytes written to
-    ``sft_mix_v2`` / ``grpo_mix_v2`` are scrubbed; every input corpus stays intact.
+    ``sft_mix_v3`` / ``grpo_mix_v3`` are scrubbed; every input corpus stays intact.
     """
     if isinstance(value, dict):
         return {k: strip_answer_fields(v) for k, v in value.items()
@@ -410,7 +410,7 @@ def build_mix(deterministic_sft: pathlib.Path | str,
                 raise SystemExit(
                     f"--harness-prompt needs the *_h deterministic corpora: {len(plain)} "
                     f"{task} row(s) still carry the plain prompt (e.g. {plain[:3]}). Pass "
-                    "--deterministic-sft data/sft_tools_h --deterministic-grpo data/grpo_tools_h.")
+                    "--deterministic-sft data/sft_tools_v3_h --deterministic-grpo data/grpo_tools_v3_h.")
 
         # ---- frontier candidates ----------------------------------------- #
         candidates: list[dict] = []
@@ -826,10 +826,10 @@ def write_mix(plan: dict, out_sft: pathlib.Path, out_grpo: pathlib.Path,
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--deterministic-sft", default="data/sft_tools",
-                    help="input deterministic SFT corpus dir (default: data/sft_tools)")
-    ap.add_argument("--deterministic-grpo", default="data/grpo_tools",
-                    help="input deterministic GRPO corpus dir (default: data/grpo_tools)")
+    ap.add_argument("--deterministic-sft", default="data/sft_tools_v3_h",
+                    help="input deterministic SFT corpus dir (default: data/sft_tools_v3_h)")
+    ap.add_argument("--deterministic-grpo", default="data/grpo_tools_v3_h",
+                    help="input deterministic GRPO corpus dir (default: data/grpo_tools_v3_h)")
     ap.add_argument("--frontier", default="data/frontier",
                     help="input teacher frontier dir (default: data/frontier)")
     ap.add_argument("--out-sft", default="data/sft_mix",

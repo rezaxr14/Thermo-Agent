@@ -4,7 +4,7 @@ Reza's rule: every row must say where it came from -- deterministic ground truth
 or an AI-generated trace named by its exact model -- and must carry a real
 `tier` (equal thirds per task, see `thermo_agent/synth/tiers.py`).
 
-    python scripts/audit_dataset_provenance.py data/sft_mix_v2 data/grpo_mix_v2
+    python scripts/audit_dataset_provenance.py data/sft_mix_v3 data/grpo_mix_v3
 
 Read-only: never writes to the audited directories. Exit code 1 on any missing
 field, an unknown tier, or an AI row without a model id.

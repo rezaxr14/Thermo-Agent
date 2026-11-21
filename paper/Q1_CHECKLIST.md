@@ -17,7 +17,7 @@ what can only be written after the Kaggle teacher pass and the GPU runs.
 ## Needs the remaining runs (do not write these claims yet)
 
 1. Actual numbers in `tab:results`, `tab:comparison`, `tab:ablation`: trained 4B vs baselines vs frontier arms, with CIs and Holm-corrected paired tests.
-2. Teacher acceptance rate and cost per accepted row for the chosen model, including the model-selection probe (`docs/TEACHER_MODEL_CHOICES.md`).
+2. Teacher acceptance rate and cost per accepted row for the chosen model, including the model-selection probe (`docs/TEACHER_CAMPAIGN.md`).
 3. GRPO-vs-SFT delta on each reward channel, and zero-variance group share measured with the *trained* SFT policy rather than the simulated one.
 4. Tool-usage statistics: calls per answer, calls vs success, and reasoning-trace quality, from `reports/tool_usage.json`.
 5. Failure-memory ablation (none / retrieved / random) with repeated-failure counts from `data/memory/failure_reasons.json`.

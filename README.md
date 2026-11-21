@@ -20,7 +20,7 @@ thermo_agent/
   agent/     also AGENTS.md, skills/*/SKILL.md (generated sections), harness.py (ablation modes), build_harness.py
   design/    also trace_eval.py (trace-weighted fuel, ideal part-load)  modular.py (N identical units at rated load)  curves.py (anytime curves)
   datasets/  frontier.py (explicit column mapping -> Site and loop settings)
-data/  requirements-lock.txt  .github/workflows/tests.yml (not run by the author)  tests/  docs/ (RUNBOOK.md, dataset_cards.md)  paper/ (outline.md, methods_draft.md, refs.bib, method_justification.md)
+data/  requirements-lock.txt  .github/workflows/tests.yml (not run by the author)  tests/  docs/ (RUNBOOK.md, PROVENANCE.md)  paper/ (outline.md, methods_draft.md, refs.bib, method_justification.md)
 ```
 
     pip install -e ".[dev]" && pytest
@@ -59,4 +59,4 @@ Resumable training: with `HF_TOKEN` in `.env` (or a Kaggle Secret), each Trainer
 `<token owner>/thermo-agent-checkpoints`; a restarted session pulls the newest checkpoint automatically.
 `python -m thermo_agent.train.hf_sync init` creates the repo; `status`, `push`, `pull`, `push-merged` and
 `pull-merged` inspect or move the state. Nothing is written to any other Hugging Face repo. The Kaggle training
-notebook is `kaggle/train.ipynb` (generated from `train_runner.py`); see `docs/DUAL_T4.md`.
+notebook is `kaggle/train.ipynb` (generated from `train_runner.py`); see `docs/RUNBOOK.md`.

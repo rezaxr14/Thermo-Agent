@@ -45,7 +45,7 @@ from thermo_agent.kaggle_notebook import assert_pinned_environment, find_input, 
 
 # Stage the frozen held-out split and the tool corpora (plus the standard train corpora that setup()
 # already staged) so every arm is scored on the same never-seen rows and the tool arms have data.
-ROOT = setup(corpora=("sft", "grpo", "sft_all", "grpo_all", "heldout", "sft_tools", "grpo_tools"))
+ROOT = setup(corpora=("sft", "grpo", "sft_all", "grpo_all", "heldout", "sft_tools_v3_h", "grpo_tools_v3_h"))
 # Pin check in the notebook itself; no source builds in any Kaggle worker.
 assert_pinned_environment(ROOT / "kaggle" / "environment.lock.json")
 

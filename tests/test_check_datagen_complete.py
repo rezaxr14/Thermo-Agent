@@ -24,7 +24,7 @@ def test_gate_lists_all_items_and_is_not_passed_on_empty_repo(tmp_path, monkeypa
     report = gate.check()
     assert report["passed"] is False
     names = {i["name"] for i in report["items"]}
-    assert {"data/sft_tools_v2 rows", "A-slice", "heldout_v2 frozen",
+    assert {"data/sft_tools_v3 rows", "A-slice", "heldout_v2 frozen",
             "provenance/tier audit",
             "frontier CoT cohort (models x tasks x tiers)"} <= names
 

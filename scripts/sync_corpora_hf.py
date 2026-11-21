@@ -47,15 +47,14 @@ NEEDED = (
     "data/teacher_runs", "data/kaggle_datasets", "data/provenance",
     "data/frontier", "data/frontier_eval_export", "data/frontier_export",
     "data/frontier_prov", "data/frontier_tools", "data/frontier_tools_clean",
-    "data/frontier_tools_clean_v2", "data/frontier_tools_cohort",
+    "data/frontier_tools_clean", "data/frontier_tools_cohort",
     "data/frontier_tools_accepted", "data/frontier_tools_cohort_prompts",
     "data/frontier_tools_pilot",
-    "data/sft_tools_v2", "data/grpo_tools_v2",
-    "data/sft_tools_v2_h", "data/grpo_tools_v2_h",
-    "data/sft_mix_v2", "data/grpo_mix_v2",
+    "data/sft_tools_v3", "data/grpo_tools_v3",
+    "data/sft_tools_v3_h", "data/grpo_tools_v3_h",
+    "data/sft_mix_v3", "data/grpo_mix_v3",
     "data/a_slice", "data/memory", "data/heldout_v2",
 )
-DEFAULT_DIRS = tuple(d for d in NEEDED if Path(d).is_dir())
 ALLOWED_PREFIXES = NEEDED
 HELDOUT_DIRS = ("data/heldout_v2",)
 
@@ -231,11 +230,11 @@ def dataset_card() -> str:
         "# thermo-agent corpora\n\n"
         "Private mirror of the CURRENT additive training corpora used by the thermo-agent project.\n"
         "Checkpoints live in a different repo (`thermo-agent-checkpoints`) under distinct stage prefixes.\n\n"
-        "- `data/sft_tools_v2` / `data/grpo_tools_v2`: deterministic multi-turn tool traces.\n"
-        "- `data/sft_tools_v2_h` / `data/grpo_tools_v2_h`: same completions with the compact\n"
+        "- `data/sft_tools_v3` / `data/grpo_tools_v3`: deterministic multi-turn tool traces.\n"
+        "- `data/sft_tools_v3_h` / `data/grpo_tools_v3_h`: same completions with the compact\n"
         "  harness-tool system prompt used by the `ours_harness` eval arm.\n"
-        "- `data/sft_mix_v2` / `data/grpo_mix_v2`: mixed tool + plain corpora.\n"
-        "- `data/a_slice`, `data/frontier_tools_clean_v2`, `data/frontier_tools_pilot`,\n"
+        "- `data/sft_mix_v3` / `data/grpo_mix_v3`: mixed tool + plain corpora.\n"
+        "- `data/a_slice`, `data/frontier_tools_clean`, `data/frontier_tools_pilot`,\n"
         "  `data/frontier_tools_cohort`: A-slice and verifier-graded frontier teacher traces.\n"
         "- `data/memory`: served success/failure notes.\n"
         "- `data/heldout_v2`: **prompts only** — completions, reports, verdicts and ground truth are\n"
@@ -249,7 +248,7 @@ def dataset_card() -> str:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--repo", default=PROJECT_REPO, help=f"must be {PROJECT_REPO}")
-    ap.add_argument("--dirs", nargs="+", default=list(DEFAULT_DIRS))
+    ap.add_argument("--dirs", nargs="+", default=None, help="default: every NEEDED dir that exists (evaluated at run time)")
     ap.add_argument("--dry-run", action="store_true", help="plan + manifest only; no network, no token")
     ap.add_argument("--message", default="sync thermo-agent corpora", help="explicit commit message")
     ap.add_argument("--tag", default="", help="short version tag recorded in the manifest and commit")
@@ -262,7 +261,7 @@ def main() -> int:
     except ValueError as exc:
         raise SystemExit(str(exc))
 
-    dirs = check_dirs(a.dirs)
+    dirs = check_dirs(a.dirs if a.dirs else [d for d in NEEDED if Path(d).is_dir()])
     records: list[dict] = []
     for p in dirs:
         files = plan_files(p)

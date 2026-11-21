@@ -181,7 +181,7 @@ def provenance_fields(model: str = "", run_id=None) -> dict:
 
 def ingest(export_dir, completions_path, out_dir, memory_dir=None, tasks=TASKS, split: str = "train",
            min_reward: float = 0.0, model: str = "", run_id: str | None = None,
-           extra_export_dirs=()) -> dict:
+           extra_export_dirs=(), require_tools: bool = False) -> dict:
     exports = load_exports(export_dir, tasks, split, extra_export_dirs)
     out = pathlib.Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
@@ -213,6 +213,17 @@ def ingest(export_dir, completions_path, out_dir, memory_dir=None, tasks=TASKS, 
         seen_answers.add(digest)
         verdict = validate.validate(task, text, row)
         if verdict["accepted"] and verdict["reward"] >= min_reward:
+            # Reasoning gate (2026-11-20): a tool trace without chain of thought is not training data.
+            traj_probe = record.get("trajectory")
+            used_tools = any(t.get("tool_calls") for t in (traj_probe or {}).get("turns", []))
+            if used_tools or require_tools:
+                rep = validate.reasoning_report(traj_probe)
+                if not rep["ok"]:
+                    why = "no_reasoning" if used_tools else "no_tool_use"
+                    stats[f"rejected_{why}:{task}"] += 1
+                    stats[f"rejected:{task}"] += 1
+                    stats[f"reason:{why}"] += 1
+                    continue        # verifier-correct but unusable as CoT: no physics memory note, stays in the journal
             # A tool-using trace carries its full trajectory (reasoning + tool calls + numeric
             # results + revisions). Persist it as the SFT completion so the student learns to
             # use tools/skills/memory and self-correct, not just to emit the final answer.
@@ -232,6 +243,9 @@ def ingest(export_dir, completions_path, out_dir, memory_dir=None, tasks=TASKS, 
                 if row_run:
                     provenance["run_id"] = row_run
             teacher.update(provenance)
+            for _k in ("tier", "topology", "topology_label"):
+                if row.get(_k) is not None:
+                    teacher.setdefault(_k, row[_k])
             if original_source and original_source not in ("frontier", f"frontier:{base_provenance['model']}"):
                 teacher["source_detail"] = original_source
             accepted[task].append(teacher)
@@ -301,6 +315,8 @@ def main():
     ing.add_argument("--tasks", nargs="+", default=list(TASKS), choices=list(TASKS))
     ing.add_argument("--split", default="train")
     ing.add_argument("--min-reward", type=float, default=0.0)
+    ing.add_argument("--require-tools", action="store_true",
+                     help="tool-harness batches: an answer with no tool trajectory is rejected (no reasoning to learn from)")
     ing.add_argument("--extra-export-dir", action="append", default=[],
                      help="additional corpus dir searched for task columns when an id is not in export_dir "
                           "(e.g. data/processed_arch for arch ids); earlier dirs win")
@@ -310,7 +326,7 @@ def main():
         print(json.dumps(export(a.sft_dir, a.out_dir, a.tasks, a.split, a.per_task, a.seed), indent=1))
     else:
         print(json.dumps(ingest(a.export_dir, a.completions, a.out_dir, a.memory_dir, a.tasks, a.split,
-                                a.min_reward, a.model, a.run_id, a.extra_export_dir), indent=1))
+                                a.min_reward, a.model, a.run_id, a.extra_export_dir, a.require_tools), indent=1))
 
 
 if __name__ == "__main__":

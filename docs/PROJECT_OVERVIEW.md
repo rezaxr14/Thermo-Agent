@@ -1,7 +1,7 @@
 # thermo-agent — project overview (for external review)
 
 Snapshot: 2026-11-18. All numbers are generated from files in this repository; `docs/PROVENANCE.md`,
-`docs/API_USAGE_AND_PROGRESS.md`, `docs/STATUS.md` and `paper/Q1_CHECKLIST.md` carry the detailed records.
+`docs/TEACHER_CAMPAIGN.md`, `docs/STATUS.md` and `paper/Q1_CHECKLIST.md` carry the detailed records.
 
 ## Current implementation plan
 
@@ -11,7 +11,7 @@ held-out set is frozen at seed 987654 (`data/heldout/`); the evaluation arms inc
 separate checkpoint dirs (`kaggle/eval_runner.py`); and the smoke kernel was pushed with the PyPI-pinned
 numpy/scipy shim (`thermo_agent/kaggle_notebook.py`). The teacher tool-CoT campaign is **pending** — run
 `scripts/run_teacher_campaign.ps1` (budget models first; then the expensive tier), with model order and the standing
-`claude-sonnet-5-5` reminder in `docs/TEACHER_MODEL_CHOICES.md`. **No SFT or GRPO weights exist yet.** Exact commands
+`claude-sonnet-5-5` reminder in `docs/TEACHER_CAMPAIGN.md`. **No SFT or GRPO weights exist yet.** Exact commands
 for the campaign, the three Kaggle kernel pushes and scoring every arm on `data/heldout` with `DATA_DIRS=heldout`
 are in `docs/RUNBOOK.md`.
 

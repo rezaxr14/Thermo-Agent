@@ -5,7 +5,7 @@ description: Keep this project's Hugging Face corpora dataset and its Kaggle dat
 
 # HF + Kaggle dataset sync: project field guide
 
-Short actionable companion to `KAGGLE_SKILL.md` (benchmarks) and `docs/KAGGLE_CLI.md` (raw commands).
+Short actionable companion to `KAGGLE_SKILL.md` (benchmarks) and `docs/RUNBOOK.md` (raw commands).
 Read those for model calls and quota. This file is only about **data movement**.
 
 ## 1. Two HF repos, never mixed

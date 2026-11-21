@@ -20,7 +20,7 @@ sys.path.insert(0, str(ROOT))
 from thermo_agent.train import grpo  # noqa: E402
 from thermo_agent.design import rewards as DR  # noqa: E402
 
-DESIGN_MIX = ROOT / "data" / "grpo_mix_v2" / "design_train.jsonl"
+DESIGN_MIX = ROOT / "data" / "grpo_mix_v3" / "design_train.jsonl"
 DESIGN_REFS = ROOT / "data" / "frontier_export" / "design_train.jsonl"
 
 

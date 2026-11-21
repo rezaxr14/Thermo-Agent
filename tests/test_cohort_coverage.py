@@ -259,8 +259,8 @@ def test_all_five_tools_accept_ground_truth_across_cohorts(source: str, task: st
     assert row is not None
     ground_truth = row["completion"][0]["content"]
 
-    tools = {fn.__name__: fn for fn in make_tools(task, row)}
-    assert tool_names() == TOOL_NAMES
+    tools = {fn.__name__: fn for fn in make_tools(task, row, include_dynamic=False)}
+    assert tool_names(include_dynamic=False) == TOOL_NAMES
     assert set(tools) == set(TOOL_NAMES)
     # The accept/reward oracle is never exposed to teacher or student.
     assert "check_answer" not in tools

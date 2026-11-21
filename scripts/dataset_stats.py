@@ -7,7 +7,7 @@ One command regenerates both a deterministic JSON snapshot and a markdown table:
         --dirs data/sft_tools data/grpo_tools data/sft_all data/grpo_all \
                data/frontier data/heldout \
         --out data/provenance/dataset_stats_2026-11-19.json \
-        --markdown docs/DATASET_STATS_2026-11-19.md
+        --markdown reports/dataset_stats.md
 
 Design rules
 ------------

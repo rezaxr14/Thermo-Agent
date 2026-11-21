@@ -54,8 +54,10 @@ commit everything and my prompts verbatuim in a file i will ask cladue for a dir
 
 ## 9
 
+*(2026-11-20: this entry had been recorded truncated at "...no bulshit grep and re"; completed from the full text Reza re-sent in prompt 12. Wording is Reza's.)*
+
 ```
-and proccess the kaggle runs and also inculde new subagent works in the commit and push i will get feedback and after that we are continue to work , include this prompt in the verbaitm as well, we will get a detailed instructions and fix our project  and the harness and how we do stuff here. and we will tidy up the docs so we dont have stale of docs filling my docs file we will combine the stuff to eachitehr , i dont want to have 10 user directions and decitions and shit like that, you are incredible irrisponsable and litter all around, and we need to decide how to treat already captured Cot's my inturations is too keep them and add these new stuff on top of them and make our tools backward compatible, or make cople of subagents to go and check and modyfy them one by one proeprly sub agents are free so we dont loose anything but then need to do it reraly one by one no bulshit grep and replace nonsense same for the detreministic traning data we have (multi turn and other wise) and the ground trughts dataset, realy anything inculde this in the commit nad push so i can get a feed back and move a head , commit some samples from everywhre so claude can know what in the hell is going on here, and we need a anti litter rule so we dont just make a documnet if exist a elready made document which we can reuse (add,delete,modify,add new date), we need to load the skill on demand, we kinda need to show a disctiption and load the full skill when the models reach for them like a proper harness, do this and commit and push so i can get a feed back so ew can continue with the project
+and proccess the kaggle runs and also inculde new subagent works in the commit and push i will get feedback and after that we are continue to work , include this prompt in the verbaitm as well, we will get a detailed instructions and fix our project  and the harness and how we do stuff here. and we will tidy up the docs so we dont have stale of docs filling my docs file we will combine the stuff to eachitehr , i dont want to have 10 user directions and decitions and shit like that, you are incredible irrisponsable and litter all around, and we need to decide how to treat already captured Cot's my inturations is too keep them and add these new stuff on top of them and make our tools backward compatible, or make cople of subagents to go and check and modyfy them one by one proeprly sub agents are free so we dont loose anything but then need to do it reraly one by one no bulshit grep and replace nonsense same for the detreministic traning data we have (multi turn and other wise) and the ground trughts dataset, realy anything inculde this in the commit nad push so i can get a feed back and move a head , commit some samples from everywhere so claude can know what in the hell is going on here, and we need a anti litter rule so we dont just make a documnet if exist a elready made document which we can reuse (add,delete,modify,add new date), we need to load the skill on demand, we kinda need to show a disctiption and load the full skill when the models reach for them like a proper harness, do this and commit and push so i can get a feed back so ew can continue with the project
 ```
 
 ## 10
@@ -68,6 +70,24 @@ fuck off and commit and push i did not told you to dod these i told you to put t
 
 ```
 do do fuking this and put this in a file and push idiot
+```
+
+## 12
+
+*(sent to Claude, not to the local agent; Claude's answer is the 2026-11-20 review in `docs/AUDITS.md` and the patch that carries it)*
+
+```
+go and pull and give me a patch for  this 
+and proccess the kaggle runs and also inculde new subagent works in the commit and push i will get feedback and after that we are continue to work , include this prompt in the verbaitm as well, we will get a detailed instructions and fix our project  and the harness and how we do stuff here. and we will tidy up the docs so we dont have stale of docs filling my docs file we will combine the stuff to eachitehr , i dont want to have 10 user directions and decitions and shit like that, you are incredible irrisponsable and litter all around, and we need to decide how to treat already captured Cot's my inturations is too keep them and add these new stuff on top of them and make our tools backward compatible, or make cople of subagents to go and check and modyfy them one by one proeprly sub agents are free so we dont loose anything but then need to do it reraly one by one no bulshit grep and replace nonsense same for the detreministic traning data we have (multi turn and other wise) and the ground trughts dataset, realy anything inculde this in the commit nad push so i can get a feed back and move a head , commit some samples from everywhere so claude can know what in the hell is going on here, and we need a anti litter rule so we dont just make a documnet if exist a elready made document which we can reuse (add,delete,modify,add new date), we need to load the skill on demand, we kinda need to show a disctiption and load the full skill when the models reach for them like a proper harness, do this and commit and push so i can get a feed back so ew can continue with the project 
+acturally pull and understad what i am dealin with
+```
+
+## 13
+
+*(sent to Claude; answered by the 2026-11-20 hard-fix patch — see `docs/AUDITS.md` and `docs/DECISIONS.md`, 2026-11-20)*
+
+```
+i am not applying this patch fix everything  you mentioned here i dont give a shit about compatibilitiy if these traces ae shit we move them out to archive and make new ones that are actually usable i dont care about anything fix every fuking thing wrong with htis project nad give m e patch and prompt to sent to my agent, idont wnat you to be a pussy, make real change that actually fixxes what is wrong with the project, i dotn what anythign t obe off by defualt retardetness FIX FUKKING EVERYTHING PROPERLY, for the ai models that dont except reasoning  as none we need to capture the conversation in the multiple round and treat them as resonong and chain of Tought and properly make our traning data, give me a final patch that does everything
 ```
 
 ---

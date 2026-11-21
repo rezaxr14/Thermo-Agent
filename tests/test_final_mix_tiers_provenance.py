@@ -43,7 +43,7 @@ def test_final_mix_has_equal_thirds_and_known_sources(task, kind):
 
 
 def test_final_mix_manifest_records_tiers_and_provenance():
-    manifest_path = ROOT / "data/sft_mix_v2/MANIFEST.json"
+    manifest_path = ROOT / "data/sft_mix_v3/MANIFEST.json"
     if not manifest_path.is_file():
         pytest.skip("v2 mix manifest not built yet")
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))

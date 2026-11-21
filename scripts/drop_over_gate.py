@@ -31,7 +31,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_AUDIT = "data/provenance/harness_corpus_audit_2026-11-19.json"
-SOURCE_DIRS = ("data/sft_tools_h", "data/grpo_tools_h")
+SOURCE_DIRS = ("data/sft_tools_v3_h", "data/grpo_tools_v3_h")
 TARGET_DIRS = ("data/sft_tools_h_gated", "data/grpo_tools_h_gated")
 
 

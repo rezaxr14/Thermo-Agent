@@ -32,6 +32,7 @@ silently emitted; with ``strict=True`` (the default for direct callers) it raise
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 
@@ -134,44 +135,169 @@ def _wrong_candidate(task: str, row: dict, variant: str) -> tuple[str, str]:
 
 
 def _plan(task: str, variant: str, final: str, wrong_label: str, wrong: str) -> list[tuple[str, str, str]]:
-    """Ordered (tool_name, candidate, templated reasoning lead) steps."""
+    """Ordered (tool_name, candidate, reasoning kind) steps; the reasoning text is built from real tool facts."""
     recover = variant.startswith("recover")
-    solve_plant = ("solve_plant", final, "Inspect the stream states of the verified plant.")
     if task == "repair":
-        inspect = ("inspect_plant", "", "Inspect the broken plant as given before editing.")
-        check = ("validity_check", final, "Apply the corrected edits and check the repaired plant.")
-        law = ("first_law_check", final, "Confirm the mass and energy balances of the repaired plant.")
-        if not recover:
-            return [inspect, check, law]
-        bad = ("validity_check", wrong,
-               f"Test the {wrong_label} candidate first and read the failure reported by the tool.")
-        return [inspect, bad, check]
+        steps = [("inspect_plant", "", "inspect")]
+        if recover:
+            steps.append(("validity_check", wrong, "bad_guess"))
+        steps += [("validity_check", final, "apply_fix"), ("first_law_check", final, "confirm")]
+        return steps if not recover else steps[:3]
     if task == "audit":
-        inspect = ("inspect_plant", "", "Inspect the solved plant as given before ranking it.")
-        rank = ("second_law_check", final,
-                "Rank the components by exergy destruction, propose the SET change and re-check its fuel effect.")
-        confirm = ("validity_check", final, "Confirm the re-solved plant with the change applied is valid.")
-        if not recover:
-            return [inspect, rank, confirm]
-        bad = ("second_law_check", wrong,
-               "Propose no SET change first and read the candidate effect reported by the tool.")
-        return [inspect, bad, rank, confirm]
+        steps = [("inspect_plant", "", "inspect")]
+        if recover:
+            steps.append(("second_law_check", wrong, "bad_guess"))
+        steps += [("second_law_check", final, "rank_and_change"), ("validity_check", final, "confirm")]
+        return steps
     if task == "ledger":
-        inspect = ("inspect_plant", "",
-                   "Inspect the ledger as given for closure failure and negative exergy destruction.")
-        confirm = ("validity_check", final,
-                   "Apply the line fixes and confirm closure and non-negative destruction.")
-        if not recover:
-            return [inspect, confirm]
-        bad = ("validity_check", wrong, "Try an empty fix list first and read the tool's failure.")
-        return [inspect, bad, confirm]
+        steps = [("inspect_plant", "", "inspect")]
+        if recover:
+            steps.append(("validity_check", wrong, "bad_guess"))
+        steps.append(("validity_check", final, "apply_fix"))
+        return steps
     if task == "design":
-        check = ("validity_check", final, "Build and verify the candidate specification.")
-        if not recover:
-            return [check, solve_plant]
-        bad = ("validity_check", wrong, "Try an empty specification first and read the tool's failure.")
-        return [bad, check, solve_plant]
+        steps = []
+        if recover:
+            steps.append(("validity_check", wrong, "bad_guess"))
+        steps += [("validity_check", final, "propose_design"), ("solve_plant", final, "confirm")]
+        return steps
     raise KeyError(f"unknown task {task!r}")
+
+
+# ---- reasoning built from the real tool results (v3, 2026-11-20) -------------------------------------------
+# Every number below is copied from a tool's JSON or from the ground-truth explanation; nothing is invented.
+_OPENERS = {
+    "repair": ("Before editing anything I will inspect the plant as given; the solver status and failed checks should show what is wrong.",
+               "First I inspect the broken plant to see the solver status, the failed checks and which stream or component they point at.",
+               "I start by solving the plant exactly as given and reading what fails before I propose any edit."),
+    "audit": ("Before proposing a change I will inspect the solved plant: total destruction and fuel input show how much room there is.",
+              "First I read the solved plant's totals (exergy destruction, fuel, net work) so the change I propose can be sized against them.",
+              "I start from the plant as given and read its overall balances before ranking components."),
+    "ledger": ("Before fixing any line I will inspect the ledger as given and compare each line with its recomputed value.",
+               "First I read the ledger lines against their recomputed values; a line with a large residual is the suspect.",
+               "I start by checking the closure and every line residual of the ledger as given."),
+}
+_HYPOTHESIS = {
+    "no_edits": "As a baseline I submit no edit at all, to see whether the checks fail without any change.",
+    "echo_broken": "As a control I resubmit the plant unchanged, to confirm that the failure comes from the current wiring.",
+    "wrong_scale": "I try the obvious parameter correction with a rescaled value to see whether the failure is only a unit or scale issue.",
+    "third_fluid": "I try swapping to a different fluid class to test whether the mismatch is about the fluid label.",
+    "bad_port": "I try rewiring a port to test whether the connection, not the fluid, is the problem.",
+    "empty": "As a first probe I submit an empty answer to see exactly what the checker demands.",
+}
+
+
+def _data(payload: str) -> dict:
+    try:
+        d = json.loads(payload)
+        return d if isinstance(d, dict) else {}
+    except (TypeError, ValueError):
+        return {}
+
+
+def _as_list(x):
+    if isinstance(x, str):
+        try:
+            import ast
+            x = ast.literal_eval(x)
+        except (ValueError, SyntaxError):
+            return []
+    return x if isinstance(x, list) else []
+
+
+def _inner(final: str, tags=("diagnosis", "analysis", "rationale")) -> str:
+    for t in tags:
+        m = re.search(rf"<{t}>(.*?)</{t}>", final, re.S)
+        if m:
+            return " ".join(m.group(1).split())
+    return ""
+
+
+def _block(final: str, tag: str, limit: int = 2) -> str:
+    m = re.search(rf"<{tag}>(.*?)</{tag}>", final, re.S)
+    lines = [ln.strip() for ln in (m.group(1) if m else "").splitlines() if ln.strip()]
+    return "; ".join(lines[:limit])
+
+
+def _tool_facts(task: str, tool: str, d: dict) -> str:
+    """One readable sentence of the numbers a tool result actually contains."""
+    if not d:
+        return "the tool returned nothing usable"
+    if d.get("ok") is False:
+        return f"the tool rejected the input ({d.get('error') or ', '.join(d.get('failed_checks') or []) or 'no detail'})"
+    bits = []
+    if d.get("solver_status") not in (None, "OK"):
+        bits.append(f"solver status {d['solver_status']}" + (f" ({d['solver_message']})" if d.get("solver_message") else ""))
+    if d.get("failed_checks"):
+        bits.append("failed checks " + ", ".join(map(str, d["failed_checks"][:4])))
+    flags = d.get("unit_range_flags")
+    if flags:
+        bits.append("unit/range flags " + ", ".join(map(str, flags[:3])))
+    lines = _as_list(d.get("per_line_residuals"))
+    worst = [x for x in lines if isinstance(x, dict) and x.get("residual_W") not in (None, 0.0)]
+    if worst:
+        w = max(worst, key=lambda x: abs(x["residual_W"]))
+        bits.append(f"line {w['line']} is {w['value_MW']} MW but recomputes to {w['recomputed_MW']} MW (residual {w['residual_W']} W)")
+    elif lines:
+        bits.append(f"all {len(lines)} ledger lines match their recomputed values")
+    comps = _as_list(d.get("per_component_exergy_destruction_MW"))
+    if comps:
+        top = sorted((c for c in comps if isinstance(c, dict)), key=lambda c: -c.get("exergy_destruction_MW", 0))[:3]
+        bits.append("largest exergy destruction " + ", ".join(f"{c['component']} {c['exergy_destruction_MW']} MW" for c in top))
+    elif d.get("total_exergy_destruction_MW") and tool == "inspect_plant":
+        bits.append(f"total exergy destruction {d['total_exergy_destruction_MW']} MW"
+                    + (f" for {round(d['Q_fuel_W'] / 1e6, 2)} MW of fuel" if d.get("Q_fuel_W") else ""))
+    eff = d.get("candidate_effect")
+    eff = eff if isinstance(eff, dict) else (_as_list(eff) and {} or {})
+    if not eff and isinstance(d.get("candidate_effect"), str):
+        try:
+            import ast
+            eff = ast.literal_eval(d["candidate_effect"])
+        except (ValueError, SyntaxError):
+            eff = {}
+    if isinstance(eff, dict) and eff.get("delta_fuel_W") is not None:
+        if eff.get("change"):
+            bits.append(f"the change {eff['change']} shifts fuel by {round(eff['delta_fuel_W'] / 1e6, 4)} MW"
+                        + ("" if eff.get("change_valid", True) else " but is not valid"))
+        else:
+            bits.append("with no change proposed the fuel input is unchanged")
+    if d.get("valid") is True and not d.get("failed_checks"):
+        bits.append("all checks pass")
+    elif d.get("valid") is False and not d.get("failed_checks"):
+        bits.append("the plant is not valid")
+    if d.get("closure_residual_w") not in (None, 0.0) or d.get("ledger_closure_residual_W") not in (None, 0.0):
+        bits.append(f"closure residual {d.get('ledger_closure_residual_W', d.get('closure_residual_w'))} W")
+    appr = d.get("min_approach_K")
+    if isinstance(appr, list) and appr and isinstance(appr[0], dict):
+        bits.append("minimum approach " + ", ".join(f"{a['component']} {a['min_approach_K']} K" for a in appr[:3]))
+    if tool in ("solve_plant", "inspect_plant") and d.get("Q_fuel_W") and d.get("W_net_W"):
+        bits.append(f"fuel {round(d['Q_fuel_W'] / 1e6, 2)} MW, net work {round(d['W_net_W'] / 1e6, 2)} MW")
+    if tool == "solve_plant" and d.get("n_streams"):
+        bits.append(f"{d['n_streams']} streams solved")
+    if d.get("T_max_K"):
+        bits.append(f"peak temperature {d['T_max_K']} K")
+    return "; ".join(bits) or "no check fails"
+
+
+def _reasoning(kind: str, task: str, tool: str, last: dict, final: str, wrong_label: str, pick: int) -> str:
+    gt = _inner(final)
+    facts = _tool_facts(task, tool, last) if last else ""
+    if kind == "inspect":
+        return _think(_OPENERS[task][pick % len(_OPENERS[task])])
+    if kind == "bad_guess":
+        return _think(_HYPOTHESIS.get(wrong_label, _HYPOTHESIS["empty"]), f"What I know so far: {facts}." if facts else "")
+    if kind == "apply_fix":
+        lead = (f"That probe fails: {facts}." if wrong_label else f"The result says: {facts}.") if facts else ""
+        edit = _block(final, "edits") or _block(final, "fix")
+        return _think(lead, gt, f"So I apply: {edit}, and verify the result." if edit else "So I apply the correction and verify the result.")
+    if kind == "rank_and_change":
+        change = _block(final, "change", 1)
+        return _think(f"The latest result shows: {facts}.", gt, f"I test the proposed change ({change}) against the solver." if change else "")
+    if kind == "propose_design":
+        return _think(gt, "I write this specification and check it against the verifier." if not wrong_label else "The probe taught me what the checker demands; now the specification from the site analysis.")
+    if kind == "confirm":
+        return _think(f"The last check reports: {facts}.", "Next I confirm the balances/state of the result before answering.")
+    return _think(facts)
 
 
 def build_trace(row: dict, task: str, *, variant: str = "direct",
@@ -199,9 +325,11 @@ def build_trace(row: dict, task: str, *, variant: str = "direct",
     tools = _tools(task, row)
     dropped: list[dict] = []
     turns: list[dict] = []
-    last = ""
-    for name, candidate, lead in _plan(task, variant, final, wrong_label, wrong):
-        reasoning = _think(lead, f"Previous tool result: {_facts(last)}" if last else "")
+    last_raw, last_tool = "", ""
+    seen_facts: list[str] = []
+    pick = int(hashlib.md5(str(row.get("id", "")).encode()).hexdigest(), 16)
+    for name, candidate, kind in _plan(task, variant, final, wrong_label, wrong):
+        reasoning = _reasoning(kind, task, last_tool, _data(last_raw), final, wrong_label if recover else "", pick)
         try:
             raw = tools[name](candidate or "")
         except Exception as exc:  # a tool failure must never invent a result
@@ -213,11 +341,19 @@ def build_trace(row: dict, task: str, *, variant: str = "direct",
         turn = _turn(reasoning=reasoning, name=name, candidate=candidate or "")
         turn["tool_results"] = [raw]
         turns.append(turn)
-        last = raw
+        last_raw, last_tool = raw, name
+        seen_facts.append(_tool_facts(task, name, _data(raw)))
+    last = last_raw
 
     if last:
-        final_reasoning = _think("The tool evidence is in; return the verifier-accepted answer.",
-                                 f"Last tool result: {_facts(last)}")
+        trivial = {"no check fails", "all checks pass"}
+        informative = [f for f in seen_facts if f not in trivial]
+        problem = informative[0] if informative else ""
+        verified = "; ".join(f for f in dict.fromkeys(seen_facts[-2:]) if f != problem) or "all checks pass"
+        final_reasoning = _think(
+            (f"What was wrong: {problem}." if problem and len(seen_facts) > 1 else ""),
+            f"What the final checks confirm: {verified}.",
+            "I report the verified result below.")
     else:
         final_reasoning = ""
     turns.append(_turn(reasoning=final_reasoning, assistant=final))

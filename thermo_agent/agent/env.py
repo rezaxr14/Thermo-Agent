@@ -47,8 +47,8 @@ _UNKNOWN_XML = "the task's XML tags exactly as specified in the prompt."
 _TOOL_PROMPT_MARKER = "MULTI-TURN TOOL ENVIRONMENT"
 
 # Fail fast at import if the toolkit's tool list changes underneath this class.
-assert tuple(toolkit.tool_names()) == ("inspect_plant", "first_law_check", "second_law_check",
-                                       "validity_check", "solve_plant")
+assert tuple(toolkit.tool_names(include_dynamic=False)) == (
+    "inspect_plant", "first_law_check", "second_law_check", "validity_check", "solve_plant")
 
 
 class ThermoEnv:
@@ -68,11 +68,10 @@ class ThermoEnv:
     """
 
     def __init__(self, row: dict, task: str, max_turns: int = 6, max_tool_calls: int = 8,
-                 include_dynamic: bool = False) -> None:
+                 include_dynamic: bool = True) -> None:
         self.max_turns = max_turns
         self.max_tool_calls = max_tool_calls
-        # OFF by default: all corpora and accepted traces keep the five-tool contract.
-        # The hosted frontier harness opts in for the nine continuous-input tools.
+        # ON by default (2026-11-20): nine continuous-input component tools + on-demand skills everywhere.
         self.include_dynamic = bool(include_dynamic)
         self._tools_by_name: dict[str, Callable[..., str]] = {}
         self._bind(row, task)

@@ -1,0 +1,124 @@
+{
+ "__SAMPLE__": {
+  "note": "deterministic tool trace v3 (thermo_agent/synth/tool_traces.py) built on one heldout_v2 row per task for illustration only (never trained on). Every reasoning block is built from the numbers in the previous tool result; messages capped at 420 chars."
+ },
+ "repair": [
+  {
+   "reasoning": "<think> I start by solving the plant exactly as given and reading what fails before I propose any edit. </think>",
+   "tool": [
+    "inspect_plant"
+   ],
+   "result": "{\"ok\": true, \"task\": \"repair\", \"solved\": false, \"converged\": false, \"solver_status\": \"E_FLUID_MISMATCH\", \"solver_message\": \"DC.out expects a liquid stream but chw_ret carries CGAM_AIR\", \"valid\": false...[TRUNCATED 292]"
+  },
+  {
+   "reasoning": "<think> As a baseline I submit no edit at all, to see whether the checks fail without any change. What I know so far: solver status E_FLUID_MISMATCH (DC.out expects a liquid stream but chw_ret carries CGAM_AIR); failed checks solver:E_FLUID_MISMATCH. </think>",
+   "tool": [
+    "validity_check"
+   ],
+   "result": "{\"ok\": false, \"error\": \"EditError: no <edits> block\", \"failed_checks\": [\"parse: EditError: no <edits> block\"]}"
+  },
+  {
+   "reasoning": "<think> That probe fails: the tool rejected the input (EditError: no <edits> block). Stream chw_ret is labelled CGAM_AIR, but it feeds CH.evap_in, which expects a stream of the other fluid class; its neighbours in the same loop carry Water. So I apply: FLUID @chw_ret = Water, and verify the result. </think>",
+   "tool": [
+    "validity_check"
+   ],
+   "result": "{\"ok\": true, \"valid\": true, \"score\": 1.0, \"failed_checks\": [], \"checks\": [{\"name\": \"V1_mass_balance\", \"ok\": true, \"detail\": \"\"}, {\"name\": \"V2_energy_balance\", \"ok\": true, \"detail\": \"\"}, {\"name\": \"V3a_...[TRUNCATED 953]"
+  },
+  {
+   "reasoning": "<think> What was wrong: solver status E_FLUID_MISMATCH (DC.out expects a liquid stream but chw_ret carries CGAM_AIR); failed checks solver:E_FLUID_MISMATCH. What the final checks confirm: the tool rejected the input (EditError: no <edits> block); all checks pass; minimum approach HX 163.193 K; peak temperature 1542.58 K. I report the verified result below. </think>",
+   "tool": [],
+   "result": null
+  }
+ ],
+ "audit": [
+  {
+   "reasoning": "<think> Before proposing a change I will inspect the solved plant: total destruction and fuel input show how much room there is. </think>",
+   "tool": [
+    "inspect_plant"
+   ],
+   "result": "{\"ok\": true, \"task\": \"audit\", \"solved\": true, \"converged\": true, \"solver_status\": \"OK\", \"solver_message\": \"\", \"valid\": true, \"failed_checks\": [], \"checks\": [{\"name\": \"V1_mass_balance\", \"ok\": true, \"de...[TRUNCATED 879]"
+  },
+  {
+   "reasoning": "<think> As a first probe I submit an empty answer to see exactly what the checker demands. What I know so far: total exergy destruction 34.111331 MW for 72.51 MW of fuel; all checks pass; fuel 72.51 MW, net work 29.7 MW. </think>",
+   "tool": [
+    "second_law_check"
+   ],
+   "result": "{\"ok\": true, \"per_component_exergy_destruction_MW\": [{\"component\": \"AC\", \"exergy_destruction_MW\": 2.177781}, {\"component\": \"AP\", \"exergy_destruction_MW\": 1.638727}, {\"component\": \"CC\", \"exergy_destruc...[TRUNCATED 857]"
+  },
+  {
+   "reasoning": "<think> The latest result shows: largest exergy destruction CC 22.100856 MW, HRSG 4.13808 MW, GT 3.000775 MW; with no change proposed the fuel input is unchanged. Exergy is destroyed mostly in CC (22.1 MW), HRSG (4.14 MW), GT (3 MW), with a fuel input of 72.5 MW. The change SET AC.PR = 12.7552 should lower fuel input for the same services. I test the proposed change (SET AC.PR = 12.7552) against the solver. </think>",
+   "tool": [
+    "second_law_check"
+   ],
+   "result": "{\"ok\": true, \"per_component_exergy_destruction_MW\": [{\"component\": \"AC\", \"exergy_destruction_MW\": 2.223672}, {\"component\": \"AP\", \"exergy_destruction_MW\": 1.360619}, {\"component\": \"CC\", \"exergy_destruc...[TRUNCATED 847]"
+  },
+  {
+   "reasoning": "<think> The last check reports: largest exergy destruction CC 21.964651 MW, HRSG 4.060284 MW, GT 3.143529 MW; the change SET AC.PR = 12.7552 shifts fuel by -0.3772 MW. Next I confirm the balances/state of the result before answering. </think>",
+   "tool": [
+    "validity_check"
+   ],
+   "result": "{\"ok\": true, \"valid\": true, \"score\": 1.0, \"failed_checks\": [], \"checks\": [{\"name\": \"V1_mass_balance\", \"ok\": true, \"detail\": \"\"}, {\"name\": \"V2_energy_balance\", \"ok\": true, \"detail\": \"\"}, {\"name\": \"V3a_...[TRUNCATED 1066]"
+  },
+  {
+   "reasoning": "<think> What was wrong: total exergy destruction 34.111331 MW for 72.51 MW of fuel; all checks pass; fuel 72.51 MW, net work 29.7 MW. What the final checks confirm: largest exergy destruction CC 21.964651 MW, HRSG 4.060284 MW, GT 3.143529 MW; the change SET AC.PR = 12.7552 shifts fuel by -0.3772 MW; the change SET AC.PR = 12.7552 shifts fuel by -0.3772 MW; all checks pass; minimum approach AP 62.204 K, HRSG 25.132 K,...[TRUNCATED 84]",
+   "tool": [],
+   "result": null
+  }
+ ],
+ "ledger": [
+  {
+   "reasoning": "<think> Before fixing any line I will inspect the ledger as given and compare each line with its recomputed value. </think>",
+   "tool": [
+    "inspect_plant"
+   ],
+   "result": "{\"ok\": true, \"task\": \"ledger\", \"solved\": true, \"converged\": true, \"solver_status\": \"OK\", \"solver_message\": \"\", \"valid\": null, \"failed_checks\": [], \"checks\": [{\"name\": \"parsed\", \"ok\": true, \"detail\": \"...[TRUNCATED 3766]"
+  },
+  {
+   "reasoning": "<think> As a first probe I submit an empty answer to see exactly what the checker demands. What I know so far: line E[s8] is 1.103704 MW but recomputes to 2.152354 MW (residual -1048649.779 W); total exergy destruction 56.283829 MW. </think>",
+   "tool": [
+    "validity_check"
+   ],
+   "result": "{\"ok\": false, \"error\": \"ledger: ValueError: no <fix> block\", \"failed_checks\": [\"parse: ledger: ValueError: no <fix> block\"]}"
+  },
+  {
+   "reasoning": "<think> That probe fails: the tool rejected the input (ledger: ValueError: no <fix> block). E[s8] lacks the chemical exergy term ech[s8] that the other stream lines have; it evaluates to 1.104 MW. So I apply: FIX E[s8] = m[s8]*(h[s8] - T0*s[s8] - g0[s8] + ech[s8])/1e6, and verify the result. </think>",
+   "tool": [
+    "validity_check"
+   ],
+   "result": "{\"ok\": true, \"valid\": true, \"score\": null, \"failed_checks\": [], \"checks\": [{\"name\": \"parsed\", \"ok\": true, \"detail\": \"\"}, {\"name\": \"any\", \"ok\": true, \"detail\": \"\"}, {\"name\": \"closure\", \"ok\": 1.0, \"deta...[TRUNCATED 392]"
+  },
+  {
+   "reasoning": "<think> What was wrong: line E[s8] is 1.103704 MW but recomputes to 2.152354 MW (residual -1048649.779 W); total exergy destruction 56.283829 MW. What the final checks confirm: the tool rejected the input (ledger: ValueError: no <fix> block); all checks pass. I report the verified result below. </think>",
+   "tool": [],
+   "result": null
+  }
+ ],
+ "design": [
+  {
+   "reasoning": "<think> As a first probe I submit an empty answer to see exactly what the checker demands. </think>",
+   "tool": [
+    "validity_check"
+   ],
+   "result": "{\"ok\": false, \"error\": \"DesignError: no <design> block\", \"failed_checks\": [\"parse: DesignError: no <design> block\"]}"
+  },
+  {
+   "reasoning": "<think> engine with absorption cooling and a dry heat-rejection loop, an ORC on r245fa bottoming. turbine prime mover is rejected because its exhaust is too hot for that ORC fluid at this site; electric cooling is rejected because its exhaust is too hot for that ORC fluid at this site; wet rejection is rejected because its exhaust cannot supply the required heat duty; none bottoming would burn about 1 percent more fu...[TRUNCATED 185]",
+   "tool": [
+    "validity_check"
+   ],
+   "result": "{\"ok\": true, \"valid\": true, \"score\": 1.0, \"failed_checks\": [], \"checks\": [{\"name\": \"V1_mass_balance\", \"ok\": true, \"detail\": \"\"}, {\"name\": \"V2_energy_balance\", \"ok\": true, \"detail\": \"\"}, {\"name\": \"V3a_...[TRUNCATED 1115]"
+  },
+  {
+   "reasoning": "<think> The last check reports: all checks pass; minimum approach HX 39.403 K, EVA 3.0 K, COND 8.0 K; peak temperature 860.12 K. Next I confirm the balances/state of the result before answering. </think>",
+   "tool": [
+    "solve_plant"
+   ],
+   "result": "{\"ok\": true, \"n_streams\": 17, \"streams\": [{\"stream\": \"air\", \"T_K\": 288.34, \"P_kPa\": 101.325, \"h_kJ_kg\": -174.464, \"s_kJ_kgK\": 6.92145, \"m_dot_kg_s\": 11.98621, \"e_ph_kJ_kg\": 0.0, \"e_ch_kJ_kg\": 0.0}, {\"...[TRUNCATED 2544]"
+  },
+  {
+   "reasoning": "<think> What was wrong: the tool rejected the input (DesignError: no <design> block). What the final checks confirm: all checks pass; minimum approach HX 39.403 K, EVA 3.0 K, COND 8.0 K; peak temperature 860.12 K; 17 streams solved. I report the verified result below. </think>",
+   "tool": [],
+   "result": null
+  }
+ ]
+}

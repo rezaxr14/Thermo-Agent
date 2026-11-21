@@ -51,7 +51,7 @@ if str(ROOT) not in sys.path:
 import dataset_stats as ds  # noqa: E402  (reuse quantiles / length_stats / _safe_output)
 from thermo_agent.synth.combine import TOKENIZER_ENV, TOKEN_RESERVE, tokenizer_path  # noqa: E402
 
-DEFAULT_DIRS = ("data/sft_tools_h", "data/grpo_tools_h")
+DEFAULT_DIRS = ("data/sft_tools_v3_h", "data/grpo_tools_v3_h")
 DEFAULT_OUT = "data/provenance/harness_corpus_audit_2026-11-19.json"
 GATE = 8192
 MODEL_ID = "Qwen/Qwen3.5-4B"

@@ -5,13 +5,15 @@ step below runs in this checkout.
 
 ## Truth snapshot — 2026-11-20 (LATEST; supersedes every section below)
 
-Authoritative decisions: `docs/DECISIONS_2026-11-19.md` (esp. §4–§7, §7.9–§7.11). Plan: `docs/IMPLEMENTATION_PLAN.md`.
-Source-of-truth reads for this snapshot: `docs/BUDGET_BATCH_REPORT.md`, `notebooks/README.md`,
-`notebooks/kaggle_model_runner.py`, `docs/TRACE_QUALITY_AUDIT_2026-11-19.md`,
-`docs/HOSTED_V6_ASSESSMENT_2026-11-19.md`, `docs/EVAL_PROTOCOL.md`. Where any older section below calls a
+Authoritative decisions: `docs/DECISIONS.md` (esp. §4–§7, §7.9–§7.11). Plan: `docs/IMPLEMENTATION_PLAN.md`.
+Source-of-truth reads for this snapshot: `reports/budget_batches.md`, `notebooks/README.md`,
+`notebooks/kaggle_model_runner.py`, `docs/AUDITS.md`,
+`docs/TEACHER_CAMPAIGN.md`, `docs/EVAL_PROTOCOL.md`. Where any older section below calls a
 corpus, eval set, model order or smoke version "current", read this section instead.
 
 ### Local verification and current facts (2026-11-20)
+
+- **2026-11-20 Claude review applied (hard fix, no compatibility):** docs 35 -> 10 files; reasoning-free AI traces (237) and deterministic v1/v2 archived to `data/archive/2026-11-20_pre_cot/`; reasoning is mandatory and default (contract + ingest gate); on-demand skills and component tools default ON; ledger tool no longer names the faulty line; deterministic traces v3 reason from tool numbers. Live corpora must be rebuilt (see `docs/IMPLEMENTATION_PLAN.md` Next actions). Findings: `docs/AUDITS.md`; decisions: `docs/DECISIONS.md`.
 
 - **Commit `4228347`** is in place and `docs/USER_PROMPTS_VERBATIM.md` carries Reza's prompts **1-9** verbatim
   (prompt 9 added 2026-11-20). That file's wording is not to be edited.
@@ -78,9 +80,9 @@ when every datagen item is built, audited and committed. The remaining datagen i
 | Compact harness + gate re-measure | **DONE** — one ≤2,500-token text for tracegen/training/eval; build_trace re-measures on the rendered row; gate 8,192, over-gate rows dropped not truncated | DECISIONS J2/J3, §1 |
 | `*_h` corpora / `sft_mix_h` | **DONE** — every tool row uses the compact harness; plain prompt only for the A-slice (E4) | `data/sft_tools_v2_h`, `data/sft_mix_v2` |
 | Training-path fixes | **DONE** — task+tier loading, one harness rendering, `<tool_result>`/`<tool_response>` label masking, collator, checkpoint/resume, eval/save cadence, red smoke kernel; each with a test | `tests/test_decisions_applied.py`, `tests/test_tool_loss_masking.py` |
-| Provenance | **DONE** — every row states deterministic vs AI and, if AI, the exact `model` id | `docs/PROVENANCE.md`, `docs/dataset_cards.md` |
-| Token efficiency | **DONE** — token gate measured with the real Qwen3.5 tokenizer, over-gate rows dropped and counted, never truncated | `docs/TRACE_QUALITY_AUDIT_2026-11-19.md` §2 |
-| Frontier harness CoT | **IN PROGRESS** — see below | `docs/BUDGET_BATCH_REPORT.md` |
+| Provenance | **DONE** — every row states deterministic vs AI and, if AI, the exact `model` id | `docs/PROVENANCE.md`, `docs/PROVENANCE.md` |
+| Token efficiency | **DONE** — token gate measured with the real Qwen3.5 tokenizer, over-gate rows dropped and counted, never truncated | `docs/AUDITS.md` §2 |
+| Frontier harness CoT | **IN PROGRESS** — see below | `reports/budget_batches.md` |
 
 ### Frontier CoT campaign (IN PROGRESS)
 
@@ -109,14 +111,14 @@ Test = `data/heldout_v2`; `data/heldout` (214 ids) is **dev** only. The older "D
 
 ## Truth snapshot (2026-11-19 evening; historical — superseded by the section above)
 
-Authoritative values: `docs/DECISIONS_2026-11-19.md`. Plan: `docs/IMPLEMENTATION_PLAN.md` (traces first, then train,
+Authoritative values: `docs/DECISIONS.md`. Plan: `docs/IMPLEMENTATION_PLAN.md` (traces first, then train,
 then score). Hard rule still standing: no `kaggle` command without Reza's "go".
 
 - **Done - first real frontier tool traces.** `thermo-teacher-tools-s00` version 6 (`google/gemini-3.8-flash`, run
   `7179338`) produced **32 verifier-accepted tool-using CoT traces** out of 40 attempts (repair 9, ledger 10, audit 6,
   design 7), 5 turns each, 1 rejected for grounding, 5 rows lost to provider 429s. Cost $0.842202 = **$0.0263 per
   accepted trace**. Rows in `data/frontier_tools/frontier_*_train.jsonl` (32 unique `record_id`s). Assessment:
-  `docs/HOSTED_V6_ASSESSMENT_2026-11-19.md`.
+  `docs/TEACHER_CAMPAIGN.md`.
 - **Done - ingest id resolution.** `ingest --extra-export-dir` (repeatable) + `record_id` keying; without it 12 of the
   32 traces were silently dropped because their ids live in `data/processed_arch` or `data/frontier_prov`, not in
   `data/processed`. Tests in `tests/test_transfer.py` (6 pass).
@@ -163,7 +165,7 @@ where they call an older smoke version or an older teacher pass "current", read 
   installed from `https://pypi.org/simple` and verified in a clean subprocess before the worker continues.
 - **Pending — teacher campaign.** The frontier tool-CoT campaign has **not** been executed. Run
   `scripts/run_teacher_campaign.ps1` with the budget models first, then the expensive tier (see `docs/RUNBOOK.md`
-  and `docs/TEACHER_MODEL_CHOICES.md`).
+  and `docs/TEACHER_CAMPAIGN.md`).
 - **Not done — no trained weights.** No SFT or GRPO adapter / merged weights exist yet (`runs/` contains only
   smoke directories), so every trained-model arm is still unscored.
 - **Model order.** Budget first: `gpt-6-luna`, then `claude-haiku-5-5`, reasoning ON; `gemini-3.5-flash-lite` is
@@ -227,7 +229,7 @@ The corpus has four sources, all deterministic or verifier-grounded (no free-for
 4. **Hindsight failure memory** (`thermo_agent/teacher/memory.py`): lessons mined from rejected attempts are
    retrieved per prompt (k=3) and injected as "known failure modes". There are **342** stored notes
    (318 from rejected frontier answers across all four tasks + 24 from the adversarial repair miner); the
-   graded rejection summary counts 965 attempts before deduplication. See `docs/API_USAGE_AND_PROGRESS.md`.
+   graded rejection summary counts 965 attempts before deduplication. See `docs/TEACHER_CAMPAIGN.md`.
 
 `scripts/build_corpus.ps1` stages, audits, verifies and swaps two corpora:
 
@@ -402,7 +404,7 @@ The teacher pass was executed with the Kaggle CLI (not the browser notebook): 1,
 Gemini 513 accepted / $1.090957 and GPT-5.4-nano 122 accepted / $0.658021; 3,668 raw training answers,
 635 verifier-accepted rows, 635 used in both merged corpora (`data/sft_all` / `data/grpo_all`; the legacy 460 was
 the 4k-gated `data/sft` / `data/grpo` subset). Held-out answers: 360 per model. Full accounting and
-provenance are in `docs/API_USAGE_AND_PROGRESS.md`; `docs/TEACHER_MODEL_CHOICES.md` carries the model decision.
+provenance are in `docs/TEACHER_CAMPAIGN.md`; `docs/TEACHER_CAMPAIGN.md` carries the model decision.
 This pass is the **legacy zero-shot baseline**; the current tool-CoT campaign is still pending (see the
 current-state section above).
 
@@ -471,7 +473,7 @@ current-state section above).
   `gradient_checkpointing_kwargs={"use_reentrant": False}` for SFT and GRPO; and
   `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` in `kaggle/train_runner.py`.
 
-### Corpus inventory (`docs/CORPUS_INVENTORY_2026-11-19.md`)
+### Corpus inventory (`docs/PROVENANCE.md`)
 | corpus | rows | note |
 | --- | ---: | --- |
 | `data/sft_tools` | 960 | 240/task; 480 direct + 480 recover; 2–4 tool pairs per row |

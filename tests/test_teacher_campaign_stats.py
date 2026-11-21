@@ -84,7 +84,7 @@ def _seed(tmp_path: Path, *, rows: list[dict] | None = None,
         logs.mkdir(parents=True, exist_ok=True)
         for name, content in reports.items():
             (logs / name).write_text(content, encoding="utf-8")
-    log_path = tmp_path / "docs" / "TEACHER_CAMPAIGN_LOG.md"
+    log_path = tmp_path / "reports" / "teacher_campaign_log.md"
     if log is not None:
         log_path.parent.mkdir(parents=True, exist_ok=True)
         log_path.write_text(log, encoding="utf-8")

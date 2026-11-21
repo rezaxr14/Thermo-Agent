@@ -106,9 +106,9 @@ def skill_body(name: str) -> str | None:
 
 def _skill_object(candidate: str) -> dict:
     """Decode the single ``candidate`` slot into a JSON object (or raise)."""
-    if not isinstance(candidate, str) or not candidate.strip():
+    if not isinstance(candidate, str):
         raise ValueError("candidate must be a JSON object string")
-    obj = json.loads(candidate)
+    obj = json.loads(candidate) if candidate.strip() else {}   # blank == empty filter object
     if not isinstance(obj, dict):
         raise ValueError("candidate must decode to a JSON object")
     return obj
@@ -327,21 +327,19 @@ def _ledger_eval(candidate: str, row: dict, as_given: bool = False) -> _Eval:
         truth = float(truth_E.get(sid, val))
         resid = (val - truth) * 1e6
         line_residuals.append({"line": f"E[{sid}]", "value_MW": _fmt(val, 6),
-                               "truth_MW": _fmt(truth, 6), "residual_W": _fmt(resid, 3),
-                               "ok": abs(resid) <= tol_w})
+                               "recomputed_MW": _fmt(truth, 6), "residual_W": _fmt(resid, 3)})
         balances.append(_B(f"E[{sid}]", energy_residual=resid))
     for cid, val in (r.get("ED") or {}).items():
         truth = float(truth_ED.get(cid, val))
         resid = (val - truth) * 1e6
         line_residuals.append({"line": f"ED[{cid}]", "value_MW": _fmt(val, 6),
-                               "truth_MW": _fmt(truth, 6), "residual_W": _fmt(resid, 3),
-                               "ok": abs(resid) <= tol_w})
+                               "recomputed_MW": _fmt(truth, 6), "residual_W": _fmt(resid, 3)})
         balances.append(_B(f"ED[{cid}]", energy_residual=resid, exergy_destruction_w=val * 1e6))
 
     failed_lines = sorted(r.get("errors") or {})
     for key, detail in (r.get("errors") or {}).items():
-        line_residuals.append({"line": key, "value_MW": None, "truth_MW": None,
-                               "residual_W": None, "ok": False, "error": str(detail)})
+        line_residuals.append({"line": key, "value_MW": None, "recomputed_MW": None,
+                               "residual_W": None, "error": str(detail)})
         balances.append(_B(key))
     negative = [f"ED[{c}]" for c, v in (r.get("ED") or {}).items() if v < -1e-5 * ef]
     failed_lines += negative
@@ -352,10 +350,11 @@ def _ledger_eval(candidate: str, row: dict, as_given: bool = False) -> _Eval:
             "E_fuel_w": ef * 1e6,
             "T0_K": float((data.get("consts_true") or {}).get("T0", 0.0))}
     res = _LedgerResult(balances=balances, kpis=kpis,
-                        message=("ledger line errors: " + ", ".join(failed_lines)) if failed_lines else "")
+                        message=(f"{len(failed_lines)} ledger line(s) fail the checks; read per_line_residuals") if failed_lines else "")
 
     n_lines = max(len(line_residuals), 1)
-    n_ok = sum(1 for x in line_residuals if x["ok"] and x.get("truth_MW") is not None)
+    n_ok = sum(1 for x in line_residuals
+               if x.get("recomputed_MW") is not None and abs(x["residual_W"]) <= tol_w and "error" not in x)
     exact = n_ok / n_lines
     closure_ok = closure is not None and abs(closure) <= 1e-6 * ef
     if as_given:
@@ -483,7 +482,7 @@ def _unsolved_payload(ev: _Eval) -> dict:
             "failed_checks": [f"solver:{code}"]}
 
 
-def make_tools(task: str, row: dict, candidate_of=lambda c: c, include_dynamic: bool = False):
+def make_tools(task: str, row: dict, candidate_of=lambda c: c, include_dynamic: bool = True):
     """Tool signatures are plain str -> str so kbench builds a clean JSON schema.
 
     `candidate_of` lets a caller unwrap an answer from a wrapper if needed. The oracle
@@ -495,7 +494,7 @@ def make_tools(task: str, row: dict, candidate_of=lambda c: c, include_dynamic: 
     on-demand skill tools (:func:`list_skills`, :func:`load_skill`). All eleven are
     ``(candidate: str) -> str`` callables (``candidate`` is a JSON object string), so the
     shared tool-call parser executes them exactly like the five plant tools. The default
-    is ``False`` so every existing corpus/trace keeps the five-tool contract.
+    is ``True`` (2026-11-20): every harness, trace, training and eval path uses the full on-demand toolset; pass ``False`` only for the five-tool unit tests.
     """
     def check(candidate: str) -> _Eval:
         return _eval(task, candidate_of(candidate), row)
@@ -535,7 +534,6 @@ def make_tools(task: str, row: dict, candidate_of=lambda c: c, include_dynamic: 
         if ev.meta.get("ledger"):
             payload["ledger_closure_residual_W"] = _fmt(ev.meta.get("closure_residual_w"), 3)
             payload["per_line_residuals"] = ev.meta.get("line_residuals", [])
-            payload["failed_lines"] = ev.meta.get("failed_lines", [])
             payload["n_lines"] = ev.meta.get("n_lines", 0)
         return json.dumps(_with_meta(payload, ev.meta), ensure_ascii=False)
 
@@ -572,7 +570,6 @@ def make_tools(task: str, row: dict, candidate_of=lambda c: c, include_dynamic: 
         if ev.meta.get("ledger"):
             payload["per_line_residuals"] = ev.meta.get("line_residuals", [])
             payload["ledger_closure_residual_W"] = _fmt(ev.meta.get("closure_residual_w"), 3)
-            payload["failed_lines"] = ev.meta.get("failed_lines", [])
         return json.dumps(_with_meta(payload, ev.meta), ensure_ascii=False)
 
     def second_law_check(candidate: str) -> str:
@@ -655,7 +652,7 @@ def make_tools(task: str, row: dict, candidate_of=lambda c: c, include_dynamic: 
     return tools
 
 
-def tool_names(include_dynamic: bool = False) -> list[str]:
+def tool_names(include_dynamic: bool = True) -> list[str]:
     names = ["inspect_plant", "first_law_check", "second_law_check", "validity_check", "solve_plant"]
     if include_dynamic:
         names += list(DYNAMIC_TOOL_NAMES) + list(SKILL_TOOL_NAMES)

@@ -5,10 +5,13 @@ from thermo_agent.design.data import make_row as design_row, sample_site
 from thermo_agent.audit.data import make_row as audit_row
 from thermo_agent.ledger.data import make_row as ledger_row
 
-CARD = (pathlib.Path(__file__).parent.parent / "docs" / "dataset_cards.md").read_text()
+CARD = (pathlib.Path(__file__).parent.parent / "docs" / "PROVENANCE.md").read_text()
 
 def _documented(section):
-    body = CARD.split(f"## {section}")[1].split("\n## ")[0]
+    # dataset cards now live as "### <Task>" sections inside docs/PROVENANCE.md (merged 2026-11-20)
+    m = re.search(rf"(?m)^###? {re.escape(section)}\s*$", CARD)
+    body = CARD[m.end():]
+    body = re.split(r"(?m)^#{2,3} ", body)[0]
     return set(re.findall(r"`(\w+)`", re.search(r"Columns: (.*)", body).group(1)))
 
 def test_documented_columns_equal_actual_columns():

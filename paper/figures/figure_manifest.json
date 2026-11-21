@@ -125,7 +125,7 @@
     },
     {
      "asset": "assets/splits.json",
-     "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/dataset_cards.md",
+     "command": "row counts per split of the generated datasets (seed 0; design: 16 chunks of 6 sites); definitions from docs/PROVENANCE.md",
      "seed": 0,
      "n": 1265,
      "kind": "synthetic"

@@ -3,18 +3,18 @@
 Reads ground-truth rows from ``data/processed*`` (never from the single-turn corpora),
 turns each one into deterministic tool traces with ``synth.tool_traces.build_trace``,
 and mixes in accepted frontier rows **only when their SFT text really contains tool
-turns**.  Outputs go to new, additive directories ``data/sft_tools`` and
-``data/grpo_tools``; ``data/sft_all``, ``data/grpo_all`` and ``data/frontier*`` are
+turns**.  Outputs go to new, additive directories ``data/sft_tools_v3`` and
+``data/grpo_tools_v3``; ``data/sft_all``, ``data/grpo_all`` and ``data/frontier*`` are
 never opened for writing.
 
-    python scripts/build_tool_corpus.py --src data/processed --out data/sft_tools \
-        --grpo-out data/grpo_tools --tasks repair,design,audit,ledger --split train \
+    python scripts/build_tool_corpus.py --src data/processed --out data/sft_tools_v3 \
+        --grpo-out data/grpo_tools_v3 --tasks repair,design,audit,ledger --split train \
         --limit 5
 
     # opt-in: prompts get AGENTS.md + skills + the exact eval tool contract;
     # written to new additive *_h directories (default: <out>_h / <grpo-out>_h)
-    python scripts/build_tool_corpus.py --src data/processed --out data/sft_tools \
-        --grpo-out data/grpo_tools --prompt-variant harness_tools
+    python scripts/build_tool_corpus.py --src data/processed --out data/sft_tools_v3 \
+        --grpo-out data/grpo_tools_v3 --prompt-variant harness_tools
 
 The SFT manifest records per-task/per-source counts, char-length statistics, the
 over-8k drop count and the held-out contamination guard result.
@@ -42,10 +42,10 @@ from thermo_agent.synth import tool_traces  # noqa: E402
 from thermo_agent.teacher import validate  # noqa: E402
 
 TASKS = ("repair", "design", "audit", "ledger")
-# `frontier_tools_clean_v2` is the canonical sanitised tool-trace export: the raw
+# `frontier_tools_clean` is the canonical sanitised tool-trace export: the raw
 # `data/frontier_tools` and zero-shot `data/frontier*` rows carry no usable tool
 # turns, so the cleaned 32 traces would otherwise never reach the corpora.
-FRONTIER_DIRS = ("data/frontier", "data/frontier_prov", "data/frontier_tools_clean_v2")
+FRONTIER_DIRS = ("data/frontier", "data/frontier_prov", "data/frontier_tools_clean")
 PROTECTED = ("data/sft_all", "data/grpo_all", "data/sft", "data/grpo",
              "data/frontier", "data/frontier_prov", "data/frontier_export")
 
@@ -565,8 +565,8 @@ def build(src: list[str], out: str, grpo_out: str, tasks=TASKS, split: str = "tr
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--src", default="data/processed", help="comma-separated processed data dirs")
-    ap.add_argument("--out", default="data/sft_tools")
-    ap.add_argument("--grpo-out", default="data/grpo_tools")
+    ap.add_argument("--out", default="data/sft_tools_v3")
+    ap.add_argument("--grpo-out", default="data/grpo_tools_v3")
     ap.add_argument("--tasks", default=",".join(TASKS), help="comma-separated task names")
     ap.add_argument("--split", default="train")
     ap.add_argument("--limit", type=int, default=0, help="rows per source/task (0 = all)")

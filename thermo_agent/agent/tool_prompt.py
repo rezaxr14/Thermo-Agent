@@ -5,7 +5,7 @@ Training rows must see the *same* system prompt the model sees at eval time in
 multi-turn tool contract. Keeping the text in one module avoids eval/training
 prompt drift.
 
-J2/J3 (docs/DECISIONS_2026-11-19.md): the compact harness is <= 2,500 real
+J2/J3 (docs/DECISIONS.md): the compact harness is <= 2,500 real
 Qwen3.5 tokens. ``build_compact_harness_messages`` is the single source of that
 text and every arm (tracegen, training ``*_h`` corpora, eval/GRPO) calls it
 through ``build_harness_tool_messages``. The original verbose builder is kept
@@ -120,14 +120,18 @@ def tool_contract(tools, task, max_turns, max_tool_calls) -> str:
     return "\n".join(lines)
 
 
+# 2026-11-20: reasoning prose is REQUIRED for every tool turn (the old traces had none and were archived).
+RATIONALE_LINE = ("Before EVERY tool call write 1-2 sentences of reasoning (what you are checking and why); "
+                  "after a result, one sentence on what the numbers imply. Cite only numbers shown.")
+
+
 def compact_tool_contract(task, max_turns, max_tool_calls, tools=None) -> str:
     """The same tool contract with one-line semantics (J2/J3 compact path).
 
     Only the *presentation* is shortened: tool names, arguments, the
     ``<tool_call>``/``<tool_result>`` format, the multi-turn rules and the
-    final-answer tags are identical to :func:`tool_contract`. By default only the
-    five plant tools are named; the nine component tools appear only when the
-    caller passes them in ``tools`` (the hosted ``include_dynamic=True`` mode).
+    final-answer tags are identical to :func:`tool_contract`. The default tool list is
+    the full on-demand toolset (plant tools + component tools + list_skills/load_skill).
     """
     tags = FINAL_TAGS.get(task, ("the task's XML tags",))
     lines = [
@@ -135,13 +139,13 @@ def compact_tool_contract(task, max_turns, max_tool_calls, tools=None) -> str:
         'Emit EXACTLY: <tool_call name="TOOL_NAME">{"candidate": "..."}</tool_call>',
         'candidate="" for inspect_plant; your candidate answer XML for the other plant tools.',
         "Each result is verbatim inside <tool_result>...</tool_result>; read the numbers and revise.",
+        RATIONALE_LINE,
         f"At most {max_turns} assistant turns and {max_tool_calls} tool calls. Call inspect_plant "
         "first (no answer needed); when residuals ~0 and checks pass, STOP and emit ONLY: "
         + " + ".join(tags) + ".",
         "Tools (one-line semantics):",
     ]
-    names = [fn.__name__ for fn in tools] if tools is not None else [
-        "inspect_plant", "first_law_check", "second_law_check", "validity_check", "solve_plant"]
+    names = [fn.__name__ for fn in (tools if tools is not None else _default_tools(True))]
     if any(n not in _PLANT_TOOL_NAMES for n in names):
         lines.append('For the component tools, candidate is a JSON object string, '
                      'e.g. {"fluid": "Water", "T_K": 300, "P_kPa": 101.325}.')
@@ -183,7 +187,7 @@ def _tools_include_dynamic(tools) -> bool:
     tools gets the original, byte-identical compact prompt.
     """
     if not tools:
-        return False
+        return True        # default harness = on-demand skills + component tools (2026-11-20)
     from ..teacher.thermo_tools import DYNAMIC_TOOL_NAMES
     from ..teacher.toolkit import SKILL_TOOL_NAMES
     names = {getattr(fn, "__name__", "") for fn in tools}
@@ -241,11 +245,13 @@ def compact_agents_md(task: str) -> str:
     ])
 
 
-def _default_tools():
-    """The five physics tools in canonical order, for text-only prompt building."""
+def _default_tools(dynamic: bool = True):
+    """The physics tools in canonical order (plus the component and on-demand skill tools), for prompt building."""
     from .env import ThermoEnv
-    return [ThermoEnv.inspect_plant, ThermoEnv.first_law_check, ThermoEnv.second_law_check,
+    from ..teacher import toolkit
+    base = [ThermoEnv.inspect_plant, ThermoEnv.first_law_check, ThermoEnv.second_law_check,
             ThermoEnv.validity_check, ThermoEnv.solve_plant]
+    return base + toolkit.dynamic_tools() + toolkit.skill_tools() if dynamic else base
 
 
 def build_compact_harness_messages(messages, task, plant, mode="agents+skills",
@@ -280,7 +286,7 @@ def build_compact_harness_messages(messages, task, plant, mode="agents+skills",
     if include_contract:
         parts.append(compact_tool_contract(
             task, max_turns, max_tool_calls,
-            tools if tools is not None else _default_tools()))
+            tools if tools is not None else _default_tools(dynamic)))
     if not parts:
         return out
     block = "\n\n".join(parts)

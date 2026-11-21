@@ -92,13 +92,13 @@ def test_explicit_shard_beats_export_directory():
     """Regression: attached training mixes must never replace the batch shard."""
     m = _load()
     shard = pathlib.Path("prompts_batch11_gpt-6-luna.jsonl")
-    export = pathlib.Path("data/sft_mix_v2")
+    export = pathlib.Path("data/sft_mix_v3")
     assert m.choose_rows_source(shard.name, shard, export) == ("shard", shard)
 
 
 def test_export_directory_is_only_a_fallback():
     m = _load()
-    export = pathlib.Path("data/sft_mix_v2")
+    export = pathlib.Path("data/sft_mix_v3")
     assert m.choose_rows_source("missing.jsonl", None, export) == ("export", export)
 
 

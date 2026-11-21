@@ -2,7 +2,7 @@
     python -m thermo_agent.train.sft DATA_DIR OUT_DIR [--tasks repair design audit ledger] [--model Qwen/Qwen3.5-4B]
         [--dtype bfloat16|float16] [--qlora] [--max-steps N] [--limit-rows N] [--print-sample]
         [--per-device-batch 2] [--grad-accum 8] [--grad-norm 1.0] [--num-workers 2]
-Dual T4 (see docs/DUAL_T4.md):
+Dual T4 (see docs/RUNBOOK.md):
     torchrun --standalone --nproc_per_node=2 --module thermo_agent.train.sft DATA_DIR runs/sft \
         --dtype float16 --per-device-batch 2 --grad-accum 8
 DDP replicates the frozen base model; only LoRA gradients cross PCIe. fp16 runs under the Trainer's AMP
@@ -190,7 +190,7 @@ def main():
     if a.max_length: s.max_length = a.max_length
     world = ddp.world_size_from_env()
     if a.qlora and world > 1:
-        raise SystemExit("QLoRA + DDP is not supported here: use full fp16 LoRA (drop --qlora), as in docs/DUAL_T4.md")
+        raise SystemExit("QLoRA + DDP is not supported here: use full fp16 LoRA (drop --qlora), as in docs/RUNBOOK.md")
     if a.print_sample:
         from transformers import AutoTokenizer
         tr = read_rows(a.data, a.tasks, "train", limit=1)

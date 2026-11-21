@@ -480,7 +480,7 @@ journals: 26  rows: 5677  accepted: 2  rejected: 9  ungraded: 5666  graded: 11  
 ingest reports: 1 read, 1 skipped, 0 rows graded by ingest
 failure classes: {'api:bad_request': 5, 'api:timeout': 2, 'auth:missing_proxy': 2}
 wrote data\teacher_runs\CAMPAIGN_STATS.json
-wrote docs\TEACHER_CAMPAIGN_LOG.md
+wrote docs\reports/teacher_campaign_log.md
 ```
 
 - The script did **not** report "no graded rows yet": 11 of 5,677 rows are graded (2 accepted, 9 rejected), giving
@@ -520,7 +520,7 @@ Steward note: appended after the earlier records; `scripts/teacher_campaign_stat
   `gradient_checkpointing_kwargs={"use_reentrant": False}` (SFT and GRPO), and
   `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` in `kaggle/train_runner.py`.
 
-### Corpus inventory (measured, see `docs/CORPUS_INVENTORY_2026-11-19.md`)
+### Corpus inventory (measured, see `docs/PROVENANCE.md`)
 | corpus | rows | accepted / rejected | rows with tool calls |
 | --- | ---: | ---: | ---: |
 | `data/sft_tools` | 960 | n/a (deterministic) | 960 (2–4 pairs/row) |
@@ -539,7 +539,7 @@ the `ours_harness` eval arm) is in progress — gap recorded as **OPEN** until t
 
 ## 2026-11-19 — budget-tier payload proof + 40-row pilots (Phase 1.3 / 2.1)
 
-### Binding rule (Reza, `docs/DECISIONS_2026-11-19.md` section 6)
+### Binding rule (Reza, `docs/DECISIONS.md` section 6)
 
 These pilots do **not** make the project ready for training. `scripts/check_datagen_complete.py` stays RED until the
 **full frontier cohort** exists: budget (`gpt-6-luna`, `claude-haiku-5-5`) **and then** premium (`gpt-6.2-sol`,

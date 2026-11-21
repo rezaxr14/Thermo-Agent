@@ -1,6 +1,6 @@
 # Implementation plan — traces first, then train, then score
 
-Status: **decided.** Every value lives in `docs/DECISIONS_2026-11-19.md` (IDs A1..J5). Do not change a value; to change one,
+Status: **decided.** Every value lives in `docs/DECISIONS.md` (IDs A1..J5). Do not change a value; to change one,
 add a superseding entry there with the measurement that justifies it. Order is fixed by Reza: make the AI traces first, then train.
 **HARD RULE stays until Reza lifts it:** no `kaggle` command (push, run, sync, upload) is executed from this plan. Everything
 marked *[Kaggle]* below is prepared, dry-run and tested locally, then waits for "go".
@@ -23,6 +23,17 @@ fake journals — both green. The scoring-time join for design `ref_*` fields (1
 dynamic tools are wired locally; their final test counts land in the next commit. Kaggle runs v19/v20 are completed
 and being processed per Reza's prompt 9. New docs are governed by the anti-litter rule (DECISIONS §8); orientation
 samples are in `data/samples/`.
+
+## Next actions (2026-11-20, from the Claude review — in this order, one commit each)
+
+Data that exists after the patch: `heldout_v2` (test), `data/a_slice` (plain ground-truth rows), prompt shards. Everything else live must be rebuilt.
+
+1. **Apply and verify.** `git am` the patch; `pytest` (fresh clone); `python kaggle/make_notebook.py`; `scripts/make_smoke_kernel.py` then the smoke-notebook test. Fix any dangling reference; never recreate a merged doc.
+2. **Re-measure the prompt budget.** The default prompt now carries the reasoning rule and the 16-tool schema. Run `scripts/audit_harness_corpus.py` and `thermo_agent/train/token_audit` on a sample of rendered rows per task; if the harness block + tool schema exceeds the 2,500-token budget or rows exceed the 8,192 gate, cut the skill catalog descriptions / tool docstrings, not the reasoning rule. Record the numbers in `docs/DECISIONS.md`.
+3. **Rebuild deterministic traces.** `python scripts/build_tool_corpus.py --src data/processed --out data/sft_tools_v3 --grpo-out data/grpo_tools_v3 --tasks repair,design,audit,ledger --split train` (and the `_h` harness-prompt variants), 600 plants per task x {direct, recover}, then `scripts/audit_harness_corpus.py`, `scripts/drop_over_gate.py`, `scripts/dataset_stats.py`. Have subagents review 30 rows per task one at a time (read the whole row; verdict line each).
+4. **Reasoning pilot, then bulk.** Regenerate shards with the new contract (`scripts/frontier_cohort_shards.py`), run 40 rows (10 per task, equal tiers) through luna and haiku via `scripts/overnight_budget_loop.ps1`'s single-batch path. Report per model x task: share of tool turns with reasoning, mean reasoning chars, accepted vs `rejected_no_reasoning` vs verifier-rejected, cost per accepted trace. Only then run bulk. Diagnose audit/ledger/design yield from the raw journals first (it was repair-only before).
+5. **Mix.** `scripts/mix_tool_corpora.py` with `data/sft_tools_v3_h`, the new `data/frontier_tools_accepted`, `data/a_slice` -> `data/sft_mix_v3` / `data/grpo_mix_v3`; provenance audit (`scripts/audit_provenance_chain.py --strict`); upload with `scripts/upload_corpus_dataset.ps1`.
+6. Training and scoring stay blocked until Reza says "datagen complete" and "go".
 
 ## Binding order and current datagen status (Reza directive, 2026-11-19)
 
@@ -84,7 +95,7 @@ below are retained as the acceptance record.*
     plant/site/spec), rename current `data/heldout` role to dev.
     *Status: **DONE and FROZEN**.* Test = `data/heldout_v2` (3,476 scored rows, 12 cells, equal thirds per task,
     contamination scan PASS with zero overlap; test hash `3cc51773…` recorded in `docs/EVAL_PROTOCOL.md`);
-    `data/heldout` (214 ids) is **dev**, not test. Note that `docs/EVAL_PROTOCOL_HELD_OUT_DEV.md` was frozen while
+    `data/heldout` (214 ids) is **dev**, not test. Note that `reports/heldout_dev_protocol.md` was frozen while
     `data/heldout` was still the eval set; its test-set role is superseded by F1 (its cell counts still describe the
     dev set). Phase 5 scores on `heldout_v2`, never `data/heldout`.
 0.7 **Tests that make the decisions stick:** `tests/test_decisions_applied.py` (values), contamination test on content hashes, tool-trace round trip
@@ -112,7 +123,7 @@ Gate 0: fresh-clone `pytest` green (real-data tests marked `corpus`), stats and 
     `notebooks/kaggle_model_runner.py` through the HF-only bridge; `limit 0`, rounds 6 (D4), `k_memory` 3 (D5), no
     cost/row cap (D1-D9).
 2.2 Download each completed journal, id-dedupe into `data/teacher_runs/hosted_<model>.jsonl`, ingest with the compact harness prompt, accept by D8.
-2.3 After every run: accepted per task x tier x model, cost per accepted trace, failure reasons -> `TEACHER_CAMPAIGN_LOG.md`; failures feed the memory
+2.3 After every run: accepted per task x tier x model, cost per accepted trace, failure reasons -> `reports/teacher_campaign_log.md`; failures feed the memory
     (what failed, what worked; never model names or times).
 2.4 Re-run `mix_tool_corpora.py --stats` and `scripts/check_datagen_complete.py`. **No training starts while the gate is red**:
     a proof or one batch alone is not enough; the campaign runs until thousands of accepted traces exist, in equal thirds

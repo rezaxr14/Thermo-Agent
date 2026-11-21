@@ -70,7 +70,7 @@ TOOL_MARKERS = ("<tool_call", "<tool_result")
 # output, so it is not protected here; the non-empty check below is what stops an overwrite.
 PROTECTED = (
     "data/sft_all", "data/grpo_all", "data/sft", "data/grpo",
-    "data/sft_tools", "data/grpo_tools", "data/sft_tools_h", "data/grpo_tools_h",
+    "data/sft_tools", "data/grpo_tools", "data/sft_tools_h", "data/grpo_tools_h", "data/sft_tools_v3", "data/grpo_tools_v3",
     "data/sft_mix", "data/grpo_mix", "data/sft_mix_h", "data/grpo_mix_h",
     "data/heldout", "data/heldout_v2", "data/frontier",
 )

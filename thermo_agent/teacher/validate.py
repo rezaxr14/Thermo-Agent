@@ -12,6 +12,7 @@ and checking the plant. Rejections are not thrown away: they become hindsight-me
 from __future__ import annotations
 
 import hashlib
+import re
 
 from ..agent.dsl import EditError, edits_to_patch, parse_edits
 from ..audit import rewards as audit_rewards
@@ -153,6 +154,37 @@ def validate(task: str, completion: str, row: dict) -> dict:
     if task not in VALIDATORS:
         raise KeyError(f"unknown task {task!r}")
     return VALIDATORS[task](completion, row)
+
+
+MIN_COT_CHARS = 30        # a tool turn needs at least this much reasoning text to count
+
+
+def _turn_cot(turn: dict) -> str:
+    """The reasoning of one assistant turn: the provider's reasoning trace if any, else the visible prose.
+
+    Models that refuse a reasoning parameter (e.g. gpt-6-luna on chat-completions with tools) think out loud in
+    the visible message; that prose, across the multi-round conversation, IS their chain of thought.
+    """
+    r = str(turn.get("reasoning") or "").strip()
+    a = re.sub(r"<tool_call.*?</tool_call>", "", str(turn.get("assistant") or ""), flags=re.S).strip()
+    return r or a
+
+
+def reasoning_report(trajectory: dict | None) -> dict:
+    """Is this tool-using trajectory a usable chain of thought? (gate used at ingest, 2026-11-20)
+
+    Usable means: the first tool turn carries reasoning, at least 75% of tool turns carry >= MIN_COT_CHARS of
+    reasoning, and the reasoning is not one repeated sentence (distinct >= 60% of the reasoned turns).
+    """
+    turns = (trajectory or {}).get("turns") or []
+    tool_turns = [t for t in turns if t.get("tool_calls")]
+    texts = [_turn_cot(t) for t in tool_turns]
+    reasoned = [x for x in texts if len(x) >= MIN_COT_CHARS]
+    distinct = len(set(reasoned))
+    first_ok = bool(texts) and len(texts[0]) >= MIN_COT_CHARS
+    ok = bool(tool_turns) and first_ok and len(reasoned) >= 0.75 * len(texts) and distinct >= 0.6 * max(len(reasoned), 1)
+    return {"tool_turns": len(tool_turns), "reasoned_turns": len(reasoned), "distinct": distinct,
+            "cot_chars": sum(len(x) for x in reasoned), "first_turn_reasoned": first_ok, "ok": ok}
 
 
 def _has_tool_turns(text: str) -> bool:

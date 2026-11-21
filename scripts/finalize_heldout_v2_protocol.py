@@ -2,7 +2,7 @@
 
 Deterministic: re-running after a manifest change updates every number in the protocol.
 The protocol records BOTH roles: test = ``data/heldout_v2`` (F1), dev = old ``data/heldout``
-(214 ids).  Default output is ``docs/EVAL_PROTOCOL_HELD_OUT_DEV.md``; pass ``--out`` to render
+(214 ids).  Default output is ``reports/heldout_dev_protocol.md``; pass ``--out`` to render
 to another path (the canonical ``docs/EVAL_PROTOCOL.md`` can be produced that way by the owner
 of that file).
 """
@@ -14,7 +14,7 @@ import pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "data/heldout_v2/MANIFEST.json"
-DEFAULT_OUT = ROOT / "docs/EVAL_PROTOCOL_HELD_OUT_DEV.md"
+DEFAULT_OUT = ROOT / "reports/heldout_dev_protocol.md"
 
 # Frozen facts of the OLD dev set (docs/EVAL_PROTOCOL.md at freeze, eval_set_version below).
 DEV_HASH = "8b409359e7a2dd441d0be99c89c00f0f3c61320f9d06e9695cc22569f8ef4c6e"

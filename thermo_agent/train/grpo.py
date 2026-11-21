@@ -7,7 +7,7 @@ C9: the default ``--task joint`` run reads all four task corpora, samples prompt
 (task, tier), and dispatches each row to its own task's reward functions. The per-task choices are
 kept for backward compatibility. C4a: the default grad_accum is *derived* from k (see
 :func:`derive_grad_accum`); an explicit ``--grad-accum`` still wins.
-Dual T4 (see docs/DUAL_T4.md):
+Dual T4 (see docs/RUNBOOK.md):
     torchrun --standalone --nproc_per_node=2 --module thermo_agent.train.grpo DATA_DIR runs/grpo_ledger \
         --task ledger --init runs/sft_merged --dtype float16 --per-device-batch 4 --grad-accum 2
 Each rank draws its own prompts, so data parallelism splits the rollout work instead of duplicating it. The

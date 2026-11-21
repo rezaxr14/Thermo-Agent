@@ -45,13 +45,13 @@ CANONICAL_FRONTIER_SOURCE = "frontier_tools"
 # minus the current luna/haiku cohort (traced separately) and the prompt-shard dir
 # (no trace rows). A small set of gemini-3.8-flash traces was legitimately carried
 # forward from here into the mix; the 32 cleaned traces in
-# ``data/frontier_tools_clean_v2`` are explicitly expected by the datagen gate and
-# were never to be re-run (docs/PROVENANCE.md, docs/DECISIONS_2026-11-19.md §6).
+# ``data/frontier_tools_clean`` are explicitly expected by the datagen gate and
+# were never to be re-run (docs/PROVENANCE.md, docs/DECISIONS.md §6).
 # Every row in these stores names its model explicitly in ``model``/``source``.
 LEGACY_FRONTIER_DIRS = (
     "data/frontier_tools",
     "data/frontier_tools_clean",
-    "data/frontier_tools_clean_v2",
+    "data/frontier_tools_clean",
     "data/frontier_tools_pilot",
     "data/frontier_tools_accepted",
 )
@@ -672,8 +672,8 @@ def main(argv=None) -> int:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--cohort", default="data/frontier_tools_cohort")
     ap.add_argument("--prompts", default="data/frontier_tools_cohort_prompts")
-    ap.add_argument("--sft", default="data/sft_mix_v2")
-    ap.add_argument("--grpo", default="data/grpo_mix_v2")
+    ap.add_argument("--sft", default="data/sft_mix_v3")
+    ap.add_argument("--grpo", default="data/grpo_mix_v3")
     ap.add_argument("--memory", default="data/memory")
     ap.add_argument("--legacy-frontier", nargs="*", default=list(LEGACY_FRONTIER_DIRS),
                     help="legacy accepted-trace stores to trace mix frontier rows "

@@ -29,7 +29,7 @@ def test_smoke_notebook_matches_generator():
     nb = json.loads((KAGGLE / "train.ipynb").read_text(encoding="utf-8"))
     env = {"STEPS": "20", "ROWS": "64", "TASK": "repair", "NGPU": "1",
            "SFT_BATCH": "1", "SFT_ACCUM": "8",
-           "SFT_DATA": "sft_tools", "GRPO_DATA": "grpo_tools"}
+           "SFT_DATA": "sft_tools_v3_h", "GRPO_DATA": "grpo_tools_v3_h"}
     source = ["import os\n"] + [f'os.environ["{k}"]="{v}"\n' for k, v in env.items()]
     nb["cells"].insert(0, {"cell_type": "code", "metadata": {}, "execution_count": None,
                            "outputs": [], "source": source})

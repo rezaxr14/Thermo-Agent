@@ -23,10 +23,10 @@ from thermo_agent.synth import tiers as tier_mod  # noqa: E402
 
 TOOL_ROWS_EXPECTED = 4_800          # DECISIONS E1: 600 plants x 2 variants x 4 tasks
 A_ROWS_EXPECTED = 1_600             # DECISIONS E2/J1: round(4,800 x 0.3333)
-FRONTIER_CLEAN = "data/frontier_tools_clean_v2"
-V2_TOOL_DIRS = ("data/sft_tools_v2", "data/grpo_tools_v2",
-                "data/sft_tools_v2_h", "data/grpo_tools_v2_h")
-MIX_DIRS = ("data/sft_mix_v2", "data/grpo_mix_v2")
+FRONTIER_CLEAN = "data/frontier_tools_clean"
+V2_TOOL_DIRS = ("data/sft_tools_v3", "data/grpo_tools_v3",
+                "data/sft_tools_v3_h", "data/grpo_tools_v3_h")
+MIX_DIRS = ("data/sft_mix_v3", "data/grpo_mix_v3")
 
 # DECISIONS section 6: the gate stays red after the luna/haiku pilots. Every
 # model in the decided cohort must have accepted harness-CoT traces in all four

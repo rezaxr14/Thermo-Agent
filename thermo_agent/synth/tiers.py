@@ -1,6 +1,6 @@
 """Task difficulty tiers: `easy` / `medium` / `hard`, equal thirds within a task.
 
-Reza's directive (2026-11-19, `docs/DECISIONS_2026-11-19.md` section 4): "we will
+Reza's directive (2026-11-19, `docs/DECISIONS.md` section 4): "we will
 include tiers equal thirds ... make the training data and test data properly".
 
 How a tier is decided

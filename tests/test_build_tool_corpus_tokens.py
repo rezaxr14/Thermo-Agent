@@ -159,7 +159,7 @@ def test_frontier_grpo_row_carries_real_tool_turns(tmp_path: Path, monkeypatch):
     build path hardcoded `turns: []` for every frontier row.
     """
     root = Path(__file__).resolve().parents[1]
-    source = root / "data/frontier_tools_clean_v2/frontier_repair_train.jsonl"
+    source = root / "data/frontier_tools_clean/frontier_repair_train.jsonl"
     frontier_row = json.loads(source.read_text(encoding="utf-8").splitlines()[0])
     fdir = tmp_path / "frontier"
     fdir.mkdir()

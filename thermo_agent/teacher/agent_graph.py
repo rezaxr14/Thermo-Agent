@@ -103,7 +103,7 @@ def build_context(state: AgentState) -> dict:
     # prompt names exactly the tools the model may call) and the executor's tool_map.
     # By default this is the five-plant-tool contract; the hosted frontier harness sets
     # include_dynamic=True to offer the nine continuous-input component tools as well.
-    include_dynamic = bool(state.get("include_dynamic", False))
+    include_dynamic = bool(state.get("include_dynamic", True))
     tools = make_tools(task, row, include_dynamic=include_dynamic)
     # The shared compact builder carries compact AGENTS.md + either the ONE
     # selected skill (default) or the on-demand skill catalog (dynamic mode) +
@@ -316,7 +316,7 @@ def _get_graph():
 
 
 def run(row: dict, task: str, respond, notes=None, max_rounds=DEFAULT_MAX_ROUNDS, k_memory=3,
-        mode="agents+skills", include_dynamic=False) -> AgentState:
+        mode="agents+skills", include_dynamic=True) -> AgentState:
     """Convenience entry point. `respond(messages, tools) -> (text, tool_calls, reasoning)`.
 
     Requires langgraph (local driver only). The hosted path uses `run_direct` instead.
@@ -331,7 +331,7 @@ def run(row: dict, task: str, respond, notes=None, max_rounds=DEFAULT_MAX_ROUNDS
 
 def run_direct(row: dict, task: str, respond, *, notes=None, k_memory=3,
                mode="agents+skills", max_rounds=DEFAULT_MAX_ROUNDS,
-               include_dynamic=False) -> dict:
+               include_dynamic=True) -> dict:
     """Drive the native tool loop WITHOUT langgraph; reproduce the graph's 4-tuple path exactly.
 
     The adapter (`kbench_adapter.make_respond`) is the DRIVER: it runs the whole multi-turn

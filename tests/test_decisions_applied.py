@@ -1,4 +1,4 @@
-"""Fails if a decided value (docs/DECISIONS_2026-11-19.md) drifts in code. Change a value only by a new DECISIONS entry."""
+"""Fails if a decided value (docs/DECISIONS.md) drifts in code. Change a value only by a new DECISIONS entry."""
 from thermo_agent.train.config import SftSettings, GrpoSettings, LoraSettings
 
 

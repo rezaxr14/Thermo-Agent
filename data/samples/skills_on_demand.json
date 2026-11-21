@@ -1,0 +1,45 @@
+{
+ "__SAMPLE__": {
+  "note": "what the model sees: list_skills('{}') returns descriptions only; load_skill returns the full body as a tool result (never written into the system prompt)."
+ },
+ "list_skills_first3": [
+  {
+   "name": "absorption-chiller",
+   "description": "Use when a plant contains an absorption_chiller (single-effect, hot-water driven) or when hot-water loops and chilled-water loops appear.",
+   "components": [
+    "absorption_chiller"
+   ],
+   "variants": [],
+   "task": null
+  },
+  {
+   "name": "combustor",
+   "description": "Use when a plant contains a combustor: fuel and air burned to a set outlet temperature with pressure drop and heat loss, limited by oxygen, excess air and emissions.",
+   "components": [
+    "combustor"
+   ],
+   "variants": [
+    "gas_turbine_canular",
+    "boiler_burner",
+    "engine_cylinder"
+   ],
+   "task": null
+  },
+  {
+   "name": "compressor",
+   "description": "Use when a plant contains a compressor: gas compression by pressure ratio and isentropic efficiency, with surge and discharge-temperature limits.",
+   "components": [
+    "compressor"
+   ],
+   "variants": [
+    "centrifugal",
+    "reciprocating",
+    "screw",
+    "scroll"
+   ],
+   "task": null
+  }
+ ],
+ "n_skills": 27,
+ "load_skill_compressor_head": "# Compressor\n\nObjective: set a pressure ratio and efficiency that reach the outlet pressure without surge, an excessive discharge temperature, or wasted shaft work.\n\n## Variants\n| variant | when it fits | key limits |\n| --- | --- | --- |\n| centrifugal | high flow, moderate PR | surge at low flow; PR per stage bounded |\n| reciprocating | low flow, high PR | valve losses and pulsation |\n| screw | moderate flow, oil-flooded | leakage grows with PR |\n| scroll | small flow, oil-free | fixed built-in volume ratio |\n\n## Physics and equations\n- `P2 = P1 * PR`; isentropic target `h2s = h(s1, P2)`; `h2 = h1 + (h2s - h1)/eta_s`; shaft power `W = -m_dot*(h2 - h1)` in W.\n- Discharge temperature comes from `h2`; it is an output, never an input. Both ports take a gas-class fluid (`CGAM_AIR`, `FLUE`, `CH4`).\n- Intercooling is a plant-level choice: split the total PR over several `compressor` components ...[TRUNCATED 1607 chars]"
+}

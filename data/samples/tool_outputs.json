@@ -1,0 +1,140 @@
+{
+ "__SAMPLE__": {
+  "note": "inspect_plant('') on the first heldout_v2 test_id row of each task (default 16-tool set); long lists cut. Ledger per_line_residuals state value_MW, recomputed_MW and residual_W only: no ok flag, no failing-line list."
+ },
+ "repair": {
+  "ok": true,
+  "task": "repair",
+  "solved": false,
+  "converged": false,
+  "solver_status": "E_FLUID_MISMATCH",
+  "solver_message": "DC.out expects a liquid stream but chw_ret carries CGAM_AIR",
+  "valid": false,
+  "failed_checks": [
+   "solver:E_FLUID_MISMATCH"
+  ],
+  "checks": [],
+  "tear_stream_residual": 0.0,
+  "n_streams": 0,
+  "n_components": 7,
+  "max_mass_residual_kg_s": 0.0,
+  "max_energy_residual_W": 0.0,
+  "exergy_closure_residual_W": null,
+  "total_exergy_destruction_MW": 0.0,
+  "Q_fuel_W": null,
+  "W_net_W": null
+ },
+ "design": {
+  "ok": false,
+  "task": "design",
+  "error": "design has no plant to inspect before a <design> candidate",
+  "failed_checks": [
+   "inspect: design has no plant to inspect before a <design> candidate"
+  ]
+ },
+ "audit": {
+  "ok": true,
+  "task": "audit",
+  "solved": true,
+  "converged": true,
+  "solver_status": "OK",
+  "solver_message": "",
+  "valid": true,
+  "failed_checks": [],
+  "checks": [
+   {
+    "name": "V1_mass_balance",
+    "ok": true,
+    "detail": ""
+   },
+   {
+    "name": "V2_energy_balance",
+    "ok": true,
+    "detail": ""
+   },
+   "...[8 more]"
+  ],
+  "tear_stream_residual": 0.0,
+  "n_streams": 17,
+  "n_components": 9,
+  "max_mass_residual_kg_s": 0.0,
+  "max_energy_residual_W": 0.0,
+  "exergy_closure_residual_W": -0.0,
+  "total_exergy_destruction_MW": 34.111331,
+  "Q_fuel_W": 72507918.5,
+  "W_net_W": 29703613.1
+ },
+ "ledger": {
+  "ok": true,
+  "task": "ledger",
+  "solved": true,
+  "converged": true,
+  "solver_status": "OK",
+  "solver_message": "",
+  "valid": null,
+  "failed_checks": [],
+  "checks": [
+   {
+    "name": "parsed",
+    "ok": true,
+    "detail": ""
+   },
+   {
+    "name": "any",
+    "ok": true,
+    "detail": ""
+   },
+   {
+    "name": "closure",
+    "ok": 1.0,
+    "detail": ""
+   },
+   {
+    "name": "nonneg",
+    "ok": 1.0,
+    "detail": ""
+   },
+   {
+    "name": "exact",
+    "ok": 0.9428571428571428,
+    "detail": ""
+   },
+   {
+    "name": "has_diag",
+    "ok": true,
+    "detail": ""
+   },
+   {
+    "name": "all_correct",
+    "ok": false,
+    "detail": ""
+   }
+  ],
+  "tear_stream_residual": 0.0,
+  "n_streams": 0,
+  "n_components": 0,
+  "max_mass_residual_kg_s": 0.0,
+  "max_energy_residual_W": 1048649.779,
+  "exergy_closure_residual_W": 0.0,
+  "total_exergy_destruction_MW": 56.283829,
+  "Q_fuel_W": null,
+  "W_net_W": null,
+  "ledger_closure_residual_W": 0.0,
+  "per_line_residuals": [
+   {
+    "line": "E[air]",
+    "value_MW": -0.0,
+    "recomputed_MW": -0.0,
+    "residual_W": 0.0
+   },
+   {
+    "line": "E[s2]",
+    "value_MW": 20.439895,
+    "recomputed_MW": 20.439895,
+    "residual_W": 0.0
+   },
+   "...[33 more]"
+  ],
+  "n_lines": 35
+ }
+}

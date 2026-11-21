@@ -14,7 +14,7 @@ import pytest
 from scripts import mix_tool_corpora as mix
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-MIX_DIRS = ("data/sft_mix_v2", "data/grpo_mix_v2")
+MIX_DIRS = ("data/sft_mix_v3", "data/grpo_mix_v3")
 TIERS = ("easy", "medium", "hard")
 SOURCES = {"deterministic_tools", "frontier_tools", "ground_truth"}
 
@@ -111,7 +111,7 @@ def test_mix_rows_keep_training_fields(directory):
 
 
 def test_mix_manifest_records_answer_field_scrub():
-    manifest_path = ROOT / "data/sft_mix_v2/MANIFEST.json"
+    manifest_path = ROOT / "data/sft_mix_v3/MANIFEST.json"
     if not manifest_path.is_file():
         pytest.skip("v2 mix manifest not built yet")
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))

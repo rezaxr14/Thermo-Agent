@@ -157,11 +157,11 @@ def _shard_row(row: dict, task: str) -> dict:
 
 def _fake_respond(text: str):
     """The 4-tuple shape the real kbench adapter hands back to run_direct."""
-    turns = [{"assistant": text, "reasoning": "fake reasoning",
+    turns = [{"assistant": text, "reasoning": "fake reasoning about the tool numbers shown",
               "tool_calls": [], "tool_results": []}]
 
     def respond(messages, tools):
-        return text, [], "fake reasoning", turns
+        return text, [], "fake reasoning about the tool numbers shown", turns
 
     return respond
 
@@ -174,12 +174,12 @@ def test_audit_row_without_ed_json_finalizes_deferred_with_full_trajectory():
             "<change>SET component-1.eta = 0.9</change>\n"
             "<prediction>0.3</prediction>\n"
             "<analysis>the plant streams give this effect</analysis>")
-    turns = [{"assistant": text, "reasoning": "fake reasoning",
+    turns = [{"assistant": text, "reasoning": "fake reasoning about the tool numbers shown",
               "tool_calls": [], "tool_results": []}]
 
     # Direct finalize (the LangGraph path) must not raise and must still record SFT text.
     out = finalize({"task": "audit", "row": row, "last_text": text,
-                    "last_reasoning": "fake reasoning", "turns": turns})
+                    "last_reasoning": "fake reasoning about the tool numbers shown", "turns": turns})
     assert out["done"] is True
     assert out["final"] == text
     assert out["turns"] == turns

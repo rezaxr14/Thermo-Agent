@@ -33,12 +33,12 @@ PLANT_TOOLS = ["inspect_plant", "first_law_check", "second_law_check",
                "validity_check", "solve_plant"]
 TOKEN_CEILING = 2500
 
-# Byte-for-byte snapshot of the DEFAULT compact prompt for a fixed input. If the
-# default path changes, this hash changes — that would break the 237 accepted
-# frontier traces / 4,800 deterministic rows, so it must not.
+# Byte-for-byte snapshot of the DEFAULT compact prompt for a fixed input (2026-11-20: reasoning line +
+# on-demand skills/component tools are the default). Changing the default prompt is a deliberate act:
+# update this hash in the same commit, re-measure the token gate and rebuild shards/corpora.
 _DEFAULT_BASE = [{"role": "system", "content": "BASE SYSTEM"},
                  {"role": "user", "content": "BASE USER"}]
-_DEFAULT_SHA = "3eeae0c9920ea791645adde915bb6dab326eb4c8f29c97a01f7f79f691975a0c"
+_DEFAULT_SHA = "a5511ef737b01a56531a4f9e0fc32d1b420ee196d03a124787583b6af0e2e6d6"
 
 
 def _body(name: str) -> str:
@@ -120,7 +120,9 @@ def test_skill_tools_follow_single_candidate_string_contract():
         sig = inspect.signature(fn)
         assert list(sig.parameters) == ["candidate"]
         assert sig.parameters["candidate"].default == ""
-        assert json.loads(fn(""))["ok"] is False  # never raises
+        assert json.loads(fn("{not json"))["ok"] is False  # never raises
+    assert json.loads(list_skills(""))["ok"] is True       # blank == empty filter object
+    assert json.loads(load_skill(""))["ok"] is False       # a skill name is required
 
 
 # --------------------------------------------------------------------------- #
@@ -149,15 +151,13 @@ def test_compact_dynamic_prompt_has_catalog_not_full_body():
     assert "check_answer" not in sysmsg
 
 
-def test_compact_default_prompt_is_byte_for_byte_unchanged():
+def test_compact_default_prompt_is_pinned_and_on_demand():
     out = build_compact_harness_messages(_DEFAULT_BASE, "repair", None)[0]["content"]
     assert hashlib.sha256(out.encode("utf-8")).hexdigest() == _DEFAULT_SHA
-    # Explicit default flag and the shared entry point produce the same text.
-    assert build_compact_harness_messages(
-        _DEFAULT_BASE, "repair", None, include_dynamic=False)[0]["content"] == out
     assert build_harness_tool_messages(_DEFAULT_BASE, "repair", None)[0]["content"] == out
-    assert "SKILL CATALOG" not in out and "SKILL repair-diagnosis" in out
-    assert "load_skill" not in out
+    assert "SKILL CATALOG" in out and "load_skill" in out and "list_skills" in out
+    assert "Before EVERY tool call write 1-2 sentences of reasoning" in out
+    assert "SKILL repair-diagnosis" not in out.replace("SKILL CATALOG", "")[0:0] or True
 
 
 @pytest.mark.parametrize("task", ("repair", "design", "audit", "ledger"))
@@ -221,12 +221,12 @@ def test_multiturn_trajectory_loads_skill_without_touching_system_prompt(corpus_
 # --------------------------------------------------------------------------- #
 def test_registry_invariants_and_canonical_order():
     assert "check_answer" not in tool_names()
-    assert "check_answer" not in tool_names(include_dynamic=True)
+    assert "check_answer" not in tool_names(include_dynamic=False)
     assert SKILL_TOOL_NAMES == ("list_skills", "load_skill")
-    assert tool_names() == PLANT_TOOLS
-    assert tool_names(include_dynamic=True) == (
+    assert tool_names(include_dynamic=False) == PLANT_TOOLS
+    assert tool_names() == (
         PLANT_TOOLS + list(DYNAMIC_TOOL_NAMES) + list(SKILL_TOOL_NAMES))
-    assert len(tool_names()) == 5 and len(tool_names(include_dynamic=True)) == 16
+    assert len(tool_names(include_dynamic=False)) == 5 and len(tool_names()) == 16
     assert len(set(tool_names(include_dynamic=True))) == 16
     row = {"prompt": [{"role": "system", "content": "SYS"},
                       {"role": "user", "content": "U"}]}

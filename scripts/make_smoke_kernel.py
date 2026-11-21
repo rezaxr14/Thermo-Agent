@@ -21,9 +21,9 @@ def main():
     ap.add_argument("--batch", default="1")
     ap.add_argument("--accum", default="8")
     ap.add_argument("--maxlen", default="")
-    ap.add_argument("--sft-data", default="sft_tools",
+    ap.add_argument("--sft-data", default="sft_tools_v3_h",
                     help="corpus staged as SFT_DATA; sft_tools is the multi-turn tool corpus")
-    ap.add_argument("--grpo-data", default="grpo_tools",
+    ap.add_argument("--grpo-data", default="grpo_tools_v3_h",
                     help="corpus staged as GRPO_DATA; grpo_tools holds the matching tool prompts")
     ap.add_argument("--out", default="kaggle/train_kernel_smoke")
     a = ap.parse_args()

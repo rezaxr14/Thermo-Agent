@@ -29,9 +29,9 @@ ALL_TOOLS = PLANT_TOOLS + list(DYNAMIC_TOOL_NAMES) + list(SKILL_TOOL_NAMES)
 # --------------------------------------------------------------------------- #
 # 1. opt-in registry: default 5, hosted 16 (14 physics + 2 skill), no oracle
 # --------------------------------------------------------------------------- #
-def test_registry_default_off_and_opt_in_on():
-    assert tool_names() == PLANT_TOOLS
-    assert tool_names(include_dynamic=True) == ALL_TOOLS
+def test_registry_default_on_and_five_tool_opt_out():
+    assert tool_names() == ALL_TOOLS                    # 2026-11-20: full on-demand toolset is the default
+    assert tool_names(include_dynamic=False) == PLANT_TOOLS
     assert len(ALL_TOOLS) == 16
     assert len(set(ALL_TOOLS)) == 16
     assert "check_answer" not in tool_names()
@@ -39,8 +39,8 @@ def test_registry_default_off_and_opt_in_on():
 
     row = {"prompt": [{"role": "system", "content": "SYS"},
                       {"role": "user", "content": "U"}]}
-    assert [f.__name__ for f in make_tools("repair", row)] == PLANT_TOOLS
-    assert [f.__name__ for f in make_tools("repair", row, include_dynamic=True)] == ALL_TOOLS
+    assert [f.__name__ for f in make_tools("repair", row, include_dynamic=False)] == PLANT_TOOLS
+    assert [f.__name__ for f in make_tools("repair", row)] == ALL_TOOLS
 
 
 def test_dynamic_callables_keep_the_single_candidate_slot():
@@ -89,10 +89,9 @@ def test_agent_graph_call_tools_executes_dynamic_candidate_json(corpus_fixture_r
 def test_compact_prompt_names_dynamic_tools_only_when_included(corpus_fixture_rows):
     row = corpus_fixture_rows["design"][0]
     base = [{"role": "system", "content": "base"}, {"role": "user", "content": "u"}]
-    without = build_compact_harness_messages(list(base), "design", None)[0]["content"]
-    with_dyn = build_compact_harness_messages(
-        list(base), "design", None, tools=make_tools("design", row, include_dynamic=True)
-    )[0]["content"]
+    without = build_compact_harness_messages(list(base), "design", None,
+                                             tools=make_tools("design", row, include_dynamic=False))[0]["content"]
+    with_dyn = build_compact_harness_messages(list(base), "design", None)[0]["content"]      # default
     assert all(n not in without for n in DYNAMIC_TOOL_NAMES)
     assert all(n in with_dyn for n in DYNAMIC_TOOL_NAMES)
     assert "JSON object string" not in without
@@ -119,13 +118,13 @@ def test_repair_skill_and_component_skills_excluded_from_compact(corpus_fixture_
     if plant is not None:
         assert any(n not in H.TASK_SKILLS["repair"] for n in H.skills_for(plant, "repair"))
 
-    # The compact builder deliberately serves only the task's first skill.
+    # Default (2026-11-20): skills are on demand. The prompt carries the catalog (descriptions), never a body.
+    from thermo_agent.teacher.toolkit import skill_body
     compact = build_compact_harness_messages(
         [{"role": "system", "content": "base"}], "repair", plant)[0]["content"]
-    assert "SKILL repair-diagnosis" in compact
+    assert "SKILL CATALOG" in compact and "load_skill" in compact
     for name in H.skill_names():
-        if name != "repair-diagnosis":
-            assert f"SKILL {name}" not in compact, f"component skill {name} leaked into compact"
+        assert skill_body(name)[:80] not in compact, f"skill body {name} leaked into the prompt"
 
 
 # --------------------------------------------------------------------------- #

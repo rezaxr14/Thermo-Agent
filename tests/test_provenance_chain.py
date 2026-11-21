@@ -290,7 +290,7 @@ def test_mix_row_without_cohort_match_fails(tmp_path):
 
 # --- legacy carry-forward (superseded early campaign, e.g. gemini-3.8-flash) --
 def _legacy_trace_row(record_id: str, model: str = "google-gemini-3-8-flash") -> dict:
-    """Shape of a row in data/frontier_tools_clean_v2: id == the mix record_id."""
+    """Shape of a row in data/frontier_tools_clean: id == the mix record_id."""
     return {
         "id": record_id,
         "record_id": record_id.split("-t-", 1)[0],
@@ -301,7 +301,7 @@ def _legacy_trace_row(record_id: str, model: str = "google-gemini-3-8-flash") ->
 
 
 def _make_legacy_store(tmp_path: pathlib.Path, rows: list[dict]) -> pathlib.Path:
-    directory = tmp_path / "legacy" / "frontier_tools_clean_v2"
+    directory = tmp_path / "legacy" / "frontier_tools_clean"
     _write_jsonl(directory / "frontier_repair_train.jsonl", rows)
     return directory
 
@@ -407,8 +407,8 @@ def test_mix_leakage_ref_spec_fails(tmp_path):
 def test_real_audit_executes_all_checks():
     results = run_audit(
         ROOT / "data/frontier_tools_cohort",
-        ROOT / "data/sft_mix_v2",
-        ROOT / "data/grpo_mix_v2",
+        ROOT / "data/sft_mix_v3",
+        ROOT / "data/grpo_mix_v3",
         ROOT / "data/memory",
         prompts=ROOT / "data/frontier_tools_cohort_prompts",
         sample=3,

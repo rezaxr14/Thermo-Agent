@@ -14,7 +14,7 @@ import scripts.sync_corpora_hf as sync
 @pytest.fixture
 def workspace(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
-    (tmp_path / "data" / "sft_tools_v2").mkdir(parents=True)
+    (tmp_path / "data" / "sft_tools_v3").mkdir(parents=True)
     (tmp_path / "data" / "heldout_v2").mkdir(parents=True)
     return tmp_path
 
@@ -43,7 +43,7 @@ def test_path_outside_allow_list_is_refused(workspace):
         with pytest.raises(SystemExit, match="refusing to upload"):
             sync.check_dirs([bad])
     # Only the needed dirs are allowed.
-    assert sync.check_dirs(["data/sft_tools_v2"]) == [sync.Path("data/sft_tools_v2")]
+    assert sync.check_dirs(["data/sft_tools_v3"]) == [sync.Path("data/sft_tools_v3")]
     assert sync.check_dirs(["data/teacher_runs"]) == [sync.Path("data/teacher_runs")]
 
 
@@ -72,13 +72,13 @@ def test_heldout_answers_reports_and_verdicts_are_filtered(workspace):
     assert "PROMPT TEXT" in transformed
 
     # A non-held-out corpus is uploaded byte-for-byte (no filtering, no surprises).
-    other = workspace / "data" / "sft_tools_v2" / "repair_train.jsonl"
+    other = workspace / "data" / "sft_tools_v3" / "repair_train.jsonl"
     other.write_text('{"completion": "KEEP ME"}\n', encoding="utf-8")
     assert sync.transform_bytes(other, other.read_bytes()) == other.read_bytes()
 
 
 def test_dry_run_produces_an_auditable_manifest(workspace, monkeypatch, capsys):
-    (workspace / "data" / "sft_tools_v2" / "repair_train.jsonl").write_text(
+    (workspace / "data" / "sft_tools_v3" / "repair_train.jsonl").write_text(
         '{"id":"s1","prompt":[{"role":"user","content":"hi"}]}\n', encoding="utf-8")
     (workspace / "data" / "heldout_v2" / "repair_test_id.jsonl").write_text(
         '{"id":"h1","prompt":[{"role":"user","content":"hi"}],"completion":"LEAK"}\n', encoding="utf-8")
@@ -95,7 +95,7 @@ def test_dry_run_produces_an_auditable_manifest(workspace, monkeypatch, capsys):
     assert manifest["heldout_prompts_only"] is True
     assert manifest["timestamp_utc"].endswith("Z")
     assert manifest["file_count"] == 2
-    assert set(manifest["dirs"]) == {"data/sft_tools_v2", "data/heldout_v2"}
+    assert set(manifest["dirs"]) == {"data/sft_tools_v3", "data/heldout_v2"}
     assert all({"path", "sha256", "size_bytes", "local_path"} <= set(f) for f in manifest["files"])
 
     heldout = next(f for f in manifest["files"] if "/heldout_v2/" in f["path"])

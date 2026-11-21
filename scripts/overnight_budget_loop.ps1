@@ -69,7 +69,7 @@ function Wait-Kernel {
 }
 
 function Commit-Work([string]$message) {
-  git add data/frontier_tools_cohort data/memory docs/BUDGET_BATCH_REPORT.md data/frontier_tools_accepted data/sft_mix_v2 data/grpo_mix_v2 reports/DATAGEN_PROGRESS.md reports/datagen_progress.json
+  git add data/frontier_tools_cohort data/memory reports/budget_batches.md data/frontier_tools_accepted data/sft_mix_v3 data/grpo_mix_v3 reports/DATAGEN_PROGRESS.md reports/datagen_progress.json
   $diff = git diff --cached --stat
   if ($diff) {
     git commit -m $message | Out-Null
@@ -83,13 +83,13 @@ function Update-TrainingData {
   & .venv/Scripts/python.exe scripts/build_accepted_frontier.py
   if ($LASTEXITCODE -ne 0) { Fail "accepted frontier flatten failed" }
   & .venv/Scripts/python.exe scripts/mix_tool_corpora.py `
-    --deterministic-sft data/sft_tools_v2_h --deterministic-grpo data/grpo_tools_v2_h `
-    --frontier data/frontier_tools_accepted --out-sft data/sft_mix_v2 --out-grpo data/grpo_mix_v2 `
-    --manifest data/sft_mix_v2/MANIFEST.json --harness-prompt --a-slice data/a_slice --seed 0 --force
+    --deterministic-sft data/sft_tools_v3_h --deterministic-grpo data/grpo_tools_v3_h `
+    --frontier data/frontier_tools_accepted --out-sft data/sft_mix_v3 --out-grpo data/grpo_mix_v3 `
+    --manifest data/sft_mix_v3/MANIFEST.json --harness-prompt --a-slice data/a_slice --seed 0 --force
   if ($LASTEXITCODE -ne 0) { Fail "mix rebuild failed" }
   & .venv/Scripts/python.exe -m pytest -q tests/test_final_mix_tiers_provenance.py tests/test_check_datagen_complete.py
   if ($LASTEXITCODE -ne 0) { Fail "post-mix tests failed" }
-  & .venv/Scripts/python.exe scripts/sync_corpora_hf.py --dirs data/frontier_tools_cohort data/frontier_tools_accepted data/memory data/sft_mix_v2 data/grpo_mix_v2 `
+  & .venv/Scripts/python.exe scripts/sync_corpora_hf.py --dirs data/frontier_tools_cohort data/frontier_tools_accepted data/memory data/sft_mix_v3 data/grpo_mix_v3 `
     --message "budget frontier traces incorporated into training mix" --tag "budget-mix-$(Get-Date -Format yyyyMMddHHmmss)"
   if ($LASTEXITCODE -ne 0) { Fail "HF sync failed" }
   # Refresh the human progress view every batch so cell coverage is never a guess.
@@ -165,7 +165,11 @@ for ($b = 1; $b -le $MaxBatches; $b++) {
   }
 
   & .venv/Scripts/python.exe scripts/build_accepted_frontier.py | ForEach-Object { Log "  $_" }
-  Add-Content -Path docs/BUDGET_BATCH_REPORT.md -Value "`n## $batchTag (overnight)`n- Ran luna+haiku, gated and ingested accepted traces; memory updated by transfer.ingest.`n"
+  # Real tally (rows per task file), logged once per batch tag; no boilerplate lines (anti-litter, DECISIONS §8).
+  if (-not (Select-String -Path reports/budget_batches.md -Pattern ("^## " + [regex]::Escape($batchTag) + " ") -Quiet)) {
+    $tally = (Get-ChildItem data/frontier_tools_accepted/frontier_*_train.jsonl | ForEach-Object { "{0}={1}" -f $_.BaseName.Replace("frontier_","").Replace("_train",""), @(Get-Content $_.FullName).Count }) -join ", "
+    Add-Content -Path reports/budget_batches.md -Value "`n## $batchTag (overnight)`n- Accepted frontier rows after this batch (all models): $tally.`n"
+  }
   Commit-Work "budget: process $batchTag"
 
   if ($b % $RebuildEvery -eq 0) { Update-TrainingData }
