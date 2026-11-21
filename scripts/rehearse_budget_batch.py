@@ -48,6 +48,9 @@ EXTRA_EXPORT_DIRS = (
     ROOT / "data" / "processed_arch",
     ROOT / "data" / "frontier_prov",
     ROOT / "data" / "a_slice",
+    # Hosted cohort shards are projected from frontier_export; without it the
+    # rehearsal synthesizes answers for those ids and the real gate rejects them.
+    ROOT / "data" / "frontier_export",
 )
 REHEARSAL_ROOT = ROOT / "data" / "_rehearsal"
 TOKENGATE = ROOT / "scripts" / "frontier_cohort_tokengate.py"
@@ -406,6 +409,22 @@ def run_one_model(model: str, *, cfg, rows_limit: int, config_dir: pathlib.Path,
     shard_path = find_shard(shard_name, config_dir)
     shard_rows = read_jsonl(shard_path)
     selected = cfg.select_rows(shard_rows)
+    # Ingest dedupes by base record id. A shard can contain paraphrases of the
+    # same plant (#vN); keep distinct plants so the fake journal has exactly
+    # rows_limit records and the attempt-count assertion stays meaningful.
+    seen: set[str] = set()
+    distinct = []
+    for row in selected:
+        rid = str(row.get("record_id") or row.get("id") or "").split("#v", 1)[0]
+        if rid and rid in seen:
+            continue
+        # Hosted shards include input-only rows whose export record has no
+        # completion; a synthetic answer would be rejected by the real gate.
+        if not final_answer(row, export_rows)[1]:
+            continue
+        seen.add(rid)
+        distinct.append(row)
+    selected = distinct
     if rows_limit > 0:
         selected = selected[:rows_limit]
     if not selected:
