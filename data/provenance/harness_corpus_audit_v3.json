@@ -1,0 +1,366 @@
+{
+  "anomalies": [],
+  "gate": 8192,
+  "generated_by": "scripts/audit_harness_corpus.py",
+  "generated_from": {
+    "data/grpo_tools_v3_h/audit_train.jsonl": {
+      "bytes": 36742104,
+      "rows": 1200,
+      "sha256": "09d87f38b26ffdc1cbc1aec7db99d49c5be42620f9f6081458cc91830fbe90dd"
+    },
+    "data/grpo_tools_v3_h/design_train.jsonl": {
+      "bytes": 34485368,
+      "rows": 1200,
+      "sha256": "9eee42062a31da84034be42df1e7c461c79577afd538141a4c6c5e40395e7af0"
+    },
+    "data/grpo_tools_v3_h/ledger_train.jsonl": {
+      "bytes": 35527629,
+      "rows": 1194,
+      "sha256": "1d49760de95fe70e0004f82d3555fb663cb40352e3fbcc17b5ca0945c258bb74"
+    },
+    "data/grpo_tools_v3_h/repair_train.jsonl": {
+      "bytes": 31515298,
+      "rows": 1200,
+      "sha256": "c55cc9b6cc0c6ca46791065031a241b345030a249fe524cc1107ee16c831f6a0"
+    },
+    "data/sft_tools_v3_h/audit_train.jsonl": {
+      "bytes": 26703939,
+      "rows": 1200,
+      "sha256": "4a4d674e03b2a89f3911599999eaf4bc5ec48a48e84f6cff65245191f016ef86"
+    },
+    "data/sft_tools_v3_h/design_train.jsonl": {
+      "bytes": 22368550,
+      "rows": 1200,
+      "sha256": "f84410058b42398a2a91afa99c76952342daa82aa08dceaafc6b2e3534d12161"
+    },
+    "data/sft_tools_v3_h/ledger_train.jsonl": {
+      "bytes": 28140402,
+      "rows": 1194,
+      "sha256": "cea524e898298a5bbbd32c285ae595aebf50ba6f8c0f1bcee552f1c6e63165cb"
+    },
+    "data/sft_tools_v3_h/repair_train.jsonl": {
+      "bytes": 25207386,
+      "rows": 1200,
+      "sha256": "9893ca2159d3946c4e5dfc0c6ea46ebe57e0bb0f0d846291722e9d9880eb6711"
+    }
+  },
+  "inputs": [
+    "data/grpo_tools_v3_h",
+    "data/sft_tools_v3_h"
+  ],
+  "note": "counts and lengths only; no prompt/completion text. rendered=chat-template(add_generation_prompt=False); pipeline=plain prompt+completion+reserve (the build's 8192 gate).",
+  "over_8192_pipeline": [],
+  "over_8192_rendered": [],
+  "per_dir_task": {
+    "data/grpo_tools_v3_h": {
+      "audit": {
+        "chars": {
+          "max": 12205,
+          "median": 10750,
+          "min": 10156,
+          "n": 1200,
+          "p95": 11829
+        },
+        "n": 1200,
+        "pipeline": {
+          "max": 4246,
+          "median": 3446,
+          "min": 3118,
+          "n": 1200,
+          "p95": 4052
+        },
+        "rendered": {
+          "max": 4170,
+          "median": 3370,
+          "min": 3042,
+          "n": 1200,
+          "p95": 3976
+        }
+      },
+      "design": {
+        "chars": {
+          "max": 9784,
+          "median": 9595,
+          "min": 9381,
+          "n": 1200,
+          "p95": 9741
+        },
+        "n": 1200,
+        "pipeline": {
+          "max": 2717,
+          "median": 2637,
+          "min": 2556,
+          "n": 1200,
+          "p95": 2685
+        },
+        "rendered": {
+          "max": 2640,
+          "median": 2560,
+          "min": 2479,
+          "n": 1200,
+          "p95": 2608
+        }
+      },
+      "ledger": {
+        "chars": {
+          "max": 13165,
+          "median": 11072,
+          "min": 10107,
+          "n": 1194,
+          "p95": 12291
+        },
+        "n": 1194,
+        "pipeline": {
+          "max": 5109,
+          "median": 3792,
+          "min": 3181,
+          "n": 1194,
+          "p95": 4586
+        },
+        "rendered": {
+          "max": 5032,
+          "median": 3715,
+          "min": 3104,
+          "n": 1194,
+          "p95": 4509
+        }
+      },
+      "repair": {
+        "chars": {
+          "max": 10362,
+          "median": 9953,
+          "min": 9567,
+          "n": 1200,
+          "p95": 10153
+        },
+        "n": 1200,
+        "pipeline": {
+          "max": 3244,
+          "median": 3043,
+          "min": 2853,
+          "n": 1200,
+          "p95": 3149
+        },
+        "rendered": {
+          "max": 3168,
+          "median": 2967,
+          "min": 2777,
+          "n": 1200,
+          "p95": 3073
+        }
+      }
+    },
+    "data/sft_tools_v3_h": {
+      "audit": {
+        "chars": {
+          "max": 20694,
+          "median": 17217,
+          "min": 15817,
+          "n": 1200,
+          "p95": 18763
+        },
+        "n": 1200,
+        "pipeline": {
+          "max": 7669,
+          "median": 5940,
+          "min": 5342,
+          "n": 1200,
+          "p95": 6778
+        },
+        "rendered": {
+          "max": 4200,
+          "median": 3398,
+          "min": 3066,
+          "n": 1200,
+          "p95": 3995
+        }
+      },
+      "design": {
+        "chars": {
+          "max": 18250,
+          "median": 16662,
+          "min": 14089,
+          "n": 1200,
+          "p95": 17778
+        },
+        "n": 1200,
+        "pipeline": {
+          "max": 6791,
+          "median": 5945,
+          "min": 4393,
+          "n": 1200,
+          "p95": 6417
+        },
+        "rendered": {
+          "max": 2783,
+          "median": 2634,
+          "min": 2497,
+          "n": 1200,
+          "p95": 2739
+        }
+      },
+      "ledger": {
+        "chars": {
+          "max": 19420,
+          "median": 15662,
+          "min": 13624,
+          "n": 1194,
+          "p95": 17873
+        },
+        "n": 1194,
+        "pipeline": {
+          "max": 7983,
+          "median": 5788,
+          "min": 4690,
+          "n": 1194,
+          "p95": 7166
+        },
+        "rendered": {
+          "max": 5049,
+          "median": 3736,
+          "min": 3126,
+          "n": 1194,
+          "p95": 4531
+        }
+      },
+      "repair": {
+        "chars": {
+          "max": 15460,
+          "median": 13963,
+          "min": 12612,
+          "n": 1200,
+          "p95": 15083
+        },
+        "n": 1200,
+        "pipeline": {
+          "max": 5208,
+          "median": 4484,
+          "min": 3882,
+          "n": 1200,
+          "p95": 5028
+        },
+        "rendered": {
+          "max": 3192,
+          "median": 2990,
+          "min": 2802,
+          "n": 1200,
+          "p95": 3097
+        }
+      }
+    }
+  },
+  "per_task": {
+    "audit": {
+      "chars": {
+        "max": 20694,
+        "median": 14011,
+        "min": 10156,
+        "n": 2400,
+        "p95": 18299
+      },
+      "n": 2400,
+      "pipeline": {
+        "max": 7669,
+        "median": 4794,
+        "min": 3118,
+        "n": 2400,
+        "p95": 6626
+      },
+      "rendered": {
+        "max": 4200,
+        "median": 3385,
+        "min": 3042,
+        "n": 2400,
+        "p95": 3979
+      }
+    },
+    "design": {
+      "chars": {
+        "max": 18250,
+        "median": 11936,
+        "min": 9381,
+        "n": 2400,
+        "p95": 17649
+      },
+      "n": 2400,
+      "pipeline": {
+        "max": 6791,
+        "median": 3555,
+        "min": 2556,
+        "n": 2400,
+        "p95": 6367
+      },
+      "rendered": {
+        "max": 2783,
+        "median": 2580,
+        "min": 2479,
+        "n": 2400,
+        "p95": 2725
+      }
+    },
+    "ledger": {
+      "chars": {
+        "max": 19420,
+        "median": 13394,
+        "min": 10107,
+        "n": 2388,
+        "p95": 17340
+      },
+      "n": 2388,
+      "pipeline": {
+        "max": 7983,
+        "median": 4795,
+        "min": 3181,
+        "n": 2388,
+        "p95": 6844
+      },
+      "rendered": {
+        "max": 5049,
+        "median": 3724,
+        "min": 3104,
+        "n": 2388,
+        "p95": 4527
+      }
+    },
+    "repair": {
+      "chars": {
+        "max": 15460,
+        "median": 11487,
+        "min": 9567,
+        "n": 2400,
+        "p95": 14822
+      },
+      "n": 2400,
+      "pipeline": {
+        "max": 5208,
+        "median": 3563,
+        "min": 2853,
+        "n": 2400,
+        "p95": 4905
+      },
+      "rendered": {
+        "max": 3192,
+        "median": 2974,
+        "min": 2777,
+        "n": 2400,
+        "p95": 3093
+      }
+    }
+  },
+  "schema_version": 1,
+  "token_reserve": 96,
+  "tokenizer": "measured",
+  "tokenizer_info": {
+    "method": "local_auto_chat_template",
+    "name": "Qwen/Qwen3.5-4B",
+    "path": "C:\\Users\\rezax\\.cache\\thermo\\qwen3.5-4b",
+    "reason": null,
+    "status": "measured"
+  },
+  "totals": {
+    "malformed_or_anomalous": 0,
+    "over_8192_pipeline": 0,
+    "over_8192_rendered": 0,
+    "rows": 9588
+  }
+}

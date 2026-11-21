@@ -3,6 +3,17 @@
 Working copy: `C:\Users\rezax\Home\Code\thermo_agent\Repo` on REZA_PC (git, branch `main`). No SSH, no WSL: every
 step below runs in this checkout.
 
+## Next actions — step 3 "rebuild deterministic traces v3" (2026-11-20, DONE)
+
+- Rebuilt with `scripts/build_tool_corpus.py --src data/processed --out data/sft_tools_v3 --grpo-out data/grpo_tools_v3 --tasks repair,design,audit,ledger --split train --plants-per-task 600 --heldout data/heldout_v2`, then the same command with `--prompt-variant harness_tools` (writes `data/sft_tools_v3_h` / `data/grpo_tools_v3_h`).
+- Plain corpora: **4,800 SFT + 4,800 GRPO** rows (600 distinct plants x {direct, recover} x 4 tasks), equal thirds 400/400/400 per task, 0 dropped over 8k, 0 contamination overlap with `heldout_v2`, 0 frontier rows reused (the pre-CoT frontier traces are archived and were not read).
+- Harness corpora: **4,794 SFT + 4,794 GRPO** rows; 6 ledger rows dropped over the 8,192 gate (never truncated), leaving 398/398/398 ledger tiers; other tasks 400/400/400. Contamination guard PASS.
+- `scripts/audit_harness_corpus.py ... --out data/provenance/harness_corpus_audit_v3.json --gate 8192` (real Qwen3.5 chat tokenizer): **9,588 rows, 0 over-8192 (rendered or pipeline), 0 anomalies**. Max pipeline: audit 7,669 / design 6,791 / ledger 7,983 / repair 5,208. `scripts/drop_over_gate.py --dry-run` → 0 drops; no gated copies created.
+- **Per-row subagent review (no regex/bulk scan):** four free subagents each read 30 full rows at evenly spaced lines (1, 41, ..., 1161), one at a time, writing a verdict line per row to `reports/trace_review_2026-11-20_{repair,design,audit,ledger}.md`. Totals: 120 rows, 60 OK / 60 CONCERN.
+  - audit 30/30 OK, ledger 30/30 OK: reasoning grounded in prior tool numbers, real tool payloads, no answer leak (ledger `recomputed_MW`/`residual_W` only, no `truth_MW`/`failed_lines`), correct final XML.
+  - repair 30/30 and design 30/30 were flagged **CONCERN by my over-strict review prompt**, which treated top-level ground-truth metadata (`plant_original`, `fault_type`, `ref_spec`, `ref_fuel_w`) as a leak. Direct verification of those rows shows these keys are **not present in any prompt, tool call, tool result or completion**; first repair call is `inspect_plant(candidate="")`, design recover starts from a stated hypothesis (both allowed by F2). `tests/test_reasoning_v3.py` explicitly permits reasoning anchored in ground truth as well as prior tool results, and `mix_tool_corpora.py` strips all `ref_*`/answer fields at mix write time. Disposition: **no data defect, no rewrite**; the generic `fault_type` label is inherited metadata, not part of the training text. Non-blocking observations are kept in the two review reports.
+- Dataset stats regenerated with the v3 dirs included. No test was skipped due to missing tooling; no AI/Kaggle/network/quota used.
+
 ## Next actions — step 1 "apply and verify" (2026-11-20, DONE)
 
 - Patch `0003-hard-fix-reasoning-archive-defaults.patch` applied as commit `4eeccb6` ("hard fix ..."). Binding reads, in the required order: `docs/DECISIONS.md` newest 2026-11-20 section, `docs/AUDITS.md` 2026-11-20, `docs/IMPLEMENTATION_PLAN.md` "Next actions". Rules held: no archived data in any corpus; docs remain exactly 10 files (this is a dated section of the owning doc, not a new file); luna/haiku only; all tools/skills on by default.
