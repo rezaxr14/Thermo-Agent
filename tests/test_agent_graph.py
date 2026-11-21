@@ -22,9 +22,11 @@ def _note(note_id, record_id):
 
 
 def test_tools_are_real_solver_results():
-    assert tool_names() == ["inspect_plant", "first_law_check", "second_law_check", "validity_check", "solve_plant"]
-    assert tool_names(include_dynamic=True) == tool_names() + list(DYNAMIC_TOOL_NAMES) + list(SKILL_TOOL_NAMES)
-    assert len(tool_names(include_dynamic=True)) == 16
+    # All 16 tools are the default; the legacy 5-plant-tool set is the opt-out.
+    assert tool_names() == tool_names(include_dynamic=True)
+    assert tool_names(include_dynamic=False) == ["inspect_plant", "first_law_check", "second_law_check", "validity_check", "solve_plant"]
+    assert tool_names() == tool_names(include_dynamic=False) + list(DYNAMIC_TOOL_NAMES) + list(SKILL_TOOL_NAMES)
+    assert len(tool_names()) == 16
     row = _row()
     gt = row["completion"][0]["content"]
     t = {x.__name__: x for x in make_tools("repair", row)}
@@ -223,19 +225,23 @@ def test_build_context_dynamic_opt_in_controls_tools_and_prompt():
     row = _row()
     base = {"row": row, "task": "repair", "notes": [], "mode": "agents+skills"}
     default = build_context(base)
+    legacy = build_context({**base, "include_dynamic": False})
     dynamic = build_context({**base, "include_dynamic": True})
 
     assert [t.__name__ for t in default["tools"]] == tool_names()
+    assert [t.__name__ for t in legacy["tools"]] == tool_names(include_dynamic=False)
     assert [t.__name__ for t in dynamic["tools"]] == tool_names(include_dynamic=True)
     assert len(dynamic["tools"]) == 16
     assert "check_answer" not in dynamic["tool_map"]
-    assert default["include_dynamic"] is False and dynamic["include_dynamic"] is True
+    assert legacy["include_dynamic"] is False and default["include_dynamic"] is True and dynamic["include_dynamic"] is True
 
-    # The compact contract names the dynamic tools only when opted in.
-    assert all(n not in default["system_prompt"] for n in DYNAMIC_TOOL_NAMES)
+    # The compact contract names the dynamic tools by default and when opted in;
+    # only the legacy opt-out hides them.
+    assert all(n not in legacy["system_prompt"] for n in DYNAMIC_TOOL_NAMES)
+    assert all(n in default["system_prompt"] for n in DYNAMIC_TOOL_NAMES)
     assert all(n in dynamic["system_prompt"] for n in DYNAMIC_TOOL_NAMES)
     assert "JSON object string" in dynamic["system_prompt"]
-    assert "JSON object string" not in default["system_prompt"]
+    assert "JSON object string" not in legacy["system_prompt"]
     # execute a dynamic tool through the same fn(candidate) parser path the graph uses.
     fn = dynamic["tool_map"]["fluid_state"]
     import json as _json

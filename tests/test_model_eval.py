@@ -53,7 +53,9 @@ def test_harness_text_reaches_the_generator(data):
     seen = []
     def gen(messages): seen.append(messages[0]["content"]); return "x"
     ME.run(gen, data, ["audit"], splits=["test_id"], limit=1, mode="agents+skills")
-    assert seen and "AGENTS.md" in seen[0] and "SKILL exergy-audit" in seen[0]
+    assert seen and "AGENTS.md" in seen[0]
+    # 2026-11-20: the default prompt serves an on-demand catalog, not a full body.
+    assert "SKILL CATALOG" in seen[0] and "Primary skill for audit: exergy-audit:" in seen[0]
 
 def test_think_blocks_are_stripped_and_summary_table_renders(data, tmp_path):
     assert ME._THINK.sub("", "<think>secret</think>answer").strip() == "answer"

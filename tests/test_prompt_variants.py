@@ -89,8 +89,10 @@ def test_harness_row_has_agents_skills_and_contract(tmp_path, corpus_fixture_row
         for row in built:
             system = row["prompt"][0]["content"]
             assert AGENTS_MARKER in system
-            assert any(line.startswith("SKILL ") for line in system.splitlines())
-            assert "SKILL design-catalog" in system
+            # 2026-11-20: the task skill is named in the on-demand catalog;
+            # its full SKILL.md body is loaded only via load_skill at run time.
+            assert "SKILL CATALOG" in system
+            assert f"Primary skill for {TASK}: design-catalog:" in system
             assert CONTRACT_HEADER in system
             assert '<tool_call name="TOOL_NAME">' in system
             # Only the prompt/metadata change: completions and trajectories stay identical.

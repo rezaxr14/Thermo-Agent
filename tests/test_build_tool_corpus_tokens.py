@@ -158,9 +158,26 @@ def test_frontier_grpo_row_carries_real_tool_turns(tmp_path: Path, monkeypatch):
     The cleaned frontier export already contains the real tool turns; an earlier
     build path hardcoded `turns: []` for every frontier row.
     """
+    # The pre-CoT frontier corpora were archived on 2026-11-20 and must never be
+    # read back into a live path. Build a synthetic frontier row from a real
+    # processed repair row instead: a tool call + result followed by the valid
+    # ground-truth answer, with a non-empty trajectory.
     root = Path(__file__).resolve().parents[1]
-    source = root / "data/frontier_tools_clean/frontier_repair_train.jsonl"
-    frontier_row = json.loads(source.read_text(encoding="utf-8").splitlines()[0])
+    source = root / "data/processed/repair_train.jsonl"
+    if not source.is_file():
+        pytest.skip(f"no real processed repair row at {source}")
+    base = json.loads(source.read_text(encoding="utf-8").splitlines()[0])
+    answer = base["completion"][0]["content"]
+    turns = [{"role": "assistant", "content": "Checking the plant as given before proposing edits."},
+             {"role": "tool", "content": "<tool_result>residuals ~0</tool_result>"}]
+    text = ('<tool_call name="inspect_plant">{"candidate": ""}</tool_call>\n'
+            '<tool_result>{"ok": true, "max_mass_residual_kg_s": 0.0}</tool_result>\n'
+            + answer)
+    frontier_row = dict(base)
+    frontier_row["id"] = "synthetic-frontier-toolrow"
+    frontier_row["record_id"] = "synthetic-frontier-toolrow"
+    frontier_row["completion"] = [{"role": "assistant", "content": text}]
+    frontier_row["trajectory"] = {"turns": turns}
     fdir = tmp_path / "frontier"
     fdir.mkdir()
     (fdir / "frontier_repair_train.jsonl").write_text(

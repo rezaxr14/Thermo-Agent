@@ -105,7 +105,9 @@ def test_run_direct_finalizes_four_tuple_without_reexecuting_tools(monkeypatch):
     assert state["turns"] == turns
     assert isinstance(state["notes_used"], list)
     assert state["tools_available"] == tool_names()
-    assert tool_names(include_dynamic=True) == tool_names() + list(DYNAMIC_TOOL_NAMES) + list(SKILL_TOOL_NAMES)
+    # The 16 tools are the default; the legacy 5-tool set is the opt-out.
+    assert tool_names() == tool_names(include_dynamic=True)
+    assert tool_names() == tool_names(include_dynamic=False) + list(DYNAMIC_TOOL_NAMES) + list(SKILL_TOOL_NAMES)
     assert state["accepted"] is True
     assert state["verdict"]["accepted"] is True
 

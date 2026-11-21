@@ -62,10 +62,16 @@ def _all_rows(out: pathlib.Path) -> list[dict]:
     return rows
 
 
+def _expected_counts(builder) -> dict:
+    """The builder projects every export row; derive the target from the source."""
+    return {t: len(_read_jsonl(EXPORT / f"{t}_train.jsonl")) for t in builder.TASK_ORDER}
+
+
 def test_builder_counts_allowlist_and_no_answers(built):
     builder, out, _ = built
     rows = _all_rows(out)
-    assert len(rows) == 1600
+    expected = _expected_counts(builder)
+    assert len(rows) == sum(expected.values())
 
     counts = {t: 0 for t in builder.TASK_ORDER}
     for row in rows:
@@ -77,7 +83,7 @@ def test_builder_counts_allowlist_and_no_answers(built):
         assert isinstance(row["prompt"], list) and row["prompt"]
         assert all(isinstance(m, dict) and "role" in m and "content" in m
                    for m in row["prompt"])
-    assert counts == {t: 400 for t in builder.TASK_ORDER}
+    assert counts == expected
 
     manifest = json.loads((out / "manifest.json").read_text(encoding="utf-8"))
     assert manifest["total_rows"] == len(rows)
@@ -94,11 +100,11 @@ def test_builder_counts_allowlist_and_no_answers(built):
 
 
 def test_shards_balanced_within_one_row(built):
-    _, out, _ = built
-    sizes = [len(_read_jsonl(out / f"prompts_s{i:02d}.jsonl")) for i in range(5)]
-    assert len(sizes) == 5
+    builder, out, _ = built
+    sizes = [len(_read_jsonl(out / f"prompts_s{i:02d}.jsonl")) for i in range(builder.N_SHARDS)]
+    assert len(sizes) == builder.N_SHARDS
     assert max(sizes) - min(sizes) <= 1
-    assert sum(sizes) == 1600
+    assert sum(sizes) == sum(_expected_counts(builder).values())
 
 
 def test_tool_readiness_for_every_task(built):

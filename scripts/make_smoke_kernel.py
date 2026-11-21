@@ -16,7 +16,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--steps", default="20")
     ap.add_argument("--rows", default="64")
-    ap.add_argument("--task", default="ledger")
+    ap.add_argument("--task", default="repair")
     ap.add_argument("--ngpu", default="1")
     ap.add_argument("--batch", default="1")
     ap.add_argument("--accum", default="8")
@@ -40,7 +40,7 @@ def main():
                            "outputs": [], "source": source})
     out = pathlib.Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
-    (out / "train.ipynb").write_text(json.dumps(nb, indent=1) + "\n", encoding="utf-8")
+    (out / "train.ipynb").write_text(json.dumps(nb, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     print("smoke env:", env, "cells:", len(nb["cells"]))
 
 

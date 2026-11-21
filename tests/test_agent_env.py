@@ -51,14 +51,18 @@ def _prompt(row: dict) -> str:
 # tool list
 # ---------------------------------------------------------------------------
 def test_tools_names_equal_toolkit(row: dict):
+    # 2026-11-20 hard fix: all 16 tools (14 physics + 2 on-demand skill) are ON by
+    # default; include_dynamic=False is the unit-test opt-out that restores the
+    # legacy five-plant-tool contract.
     env = ThermoEnv(row, "repair")
     assert [fn.__name__ for fn in env.tools] == toolkit.tool_names()
-    assert toolkit.tool_names() == TOOL_NAMES
-    # Opt-in hosted mode exposes all 16 tools (14 physics + 2 skill) via the parser path.
-    assert toolkit.tool_names(include_dynamic=True) == ALL_TOOL_NAMES
-    dyn = ThermoEnv(row, "repair", include_dynamic=True)
-    assert [fn.__name__ for fn in dyn.tools] == toolkit.tool_names(include_dynamic=True)
-    assert [fn.__name__ for fn in dyn.tools] == ALL_TOOL_NAMES
+    assert toolkit.tool_names() == ALL_TOOL_NAMES
+    assert toolkit.tool_names(include_dynamic=False) == TOOL_NAMES
+    assert [fn.__name__ for fn in env.tools] == ALL_TOOL_NAMES
+    legacy = ThermoEnv(row, "repair", include_dynamic=False)
+    assert [fn.__name__ for fn in legacy.tools] == TOOL_NAMES
+    assert len(TOOL_NAMES) == 5
+    assert len(ALL_TOOL_NAMES) == 16
     assert "check_answer" not in ALL_TOOL_NAMES
 
 
@@ -78,14 +82,16 @@ def test_dynamic_tools_are_callable_through_the_shared_parser(row: dict):
     # Invalid JSON is a uniform ok:false payload, never an exception.
     bad = json.loads(env._call("turbomachine", "not json"))
     assert bad["ok"] is False and bad["error"]
-    # Default env still has only the five plant tools.
-    assert len(ThermoEnv(row, "repair").tools) == 5
+    # The opt-out env keeps the legacy five plant tools (default now exposes all 16).
+    assert len(ThermoEnv(row, "repair", include_dynamic=False).tools) == 5
 
 
 def test_observation_block_names_dynamic_tools_only_when_enabled(row: dict):
+    legacy = ThermoEnv(row, "repair", include_dynamic=False).observation_block()
     default = ThermoEnv(row, "repair").observation_block()
     dynamic = ThermoEnv(row, "repair", include_dynamic=True).observation_block()
-    assert all(n not in default for n in DYNAMIC_TOOL_NAMES)
+    assert all(n not in legacy for n in DYNAMIC_TOOL_NAMES)
+    assert all(n in default for n in DYNAMIC_TOOL_NAMES)
     assert all(n in dynamic for n in DYNAMIC_TOOL_NAMES)
     assert "JSON object string" in dynamic
 

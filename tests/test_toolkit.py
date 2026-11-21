@@ -44,16 +44,19 @@ def _j(text: str) -> dict:
 # P0-8: the oracle is gone from teacher AND student tool lists.
 # --------------------------------------------------------------------------------------
 def test_check_answer_absent_from_tool_lists():
+    # 2026-11-20: all 16 tools are the default; the legacy 5-tool set is the opt-out.
     assert "check_answer" not in tool_names()
-    assert tool_names() == PHYSICS_TOOLS
-    # Opt-in mode: 5 plant + 9 component + 2 on-demand skill tools, still no oracle.
-    assert tool_names(include_dynamic=True) == ALL_TOOLS
+    assert tool_names() == ALL_TOOLS
+    assert tool_names(include_dynamic=False) == PHYSICS_TOOLS
     assert len(ALL_TOOLS) == 16
     assert "check_answer" not in tool_names(include_dynamic=True)
     for task in ("repair", "audit", "ledger", "design"):
         tools = _tools(task)
         assert "check_answer" not in tools, task
-        assert set(tools) == set(PHYSICS_TOOLS), task
+        assert set(tools) == set(ALL_TOOLS), task
+        legacy = {fn.__name__: fn for fn in make_tools(task, _row(task), include_dynamic=False)}
+        assert "check_answer" not in legacy, task
+        assert list(legacy) == PHYSICS_TOOLS, task
         dynamic = {fn.__name__: fn for fn in make_tools(task, _row(task), include_dynamic=True)}
         assert "check_answer" not in dynamic, task
         assert list(dynamic) == ALL_TOOLS, task
@@ -142,7 +145,11 @@ def test_inspect_plant_on_ledger_reports_real_per_line_residuals():
     assert any(x["line"].startswith("E[") for x in lines)
     assert any(x["line"].startswith("ED[") for x in lines)
     assert all("residual_W" in x for x in lines)
-    assert out["failed_lines"]                            # broken ledger has bad lines
+    # F4 (2026-11-20): the tool now states only recomputed values and residuals —
+    # it must NOT reveal the faulty line via failed_lines / ok flags / line names.
+    assert "failed_lines" not in out
+    assert all("ok" not in x for x in lines)
+    assert all("recomputed_MW" in x for x in lines)
     # residuals are real per-line numbers (MW-scale), not closure divided by line count
     assert any(abs(x["residual_W"]) > 1e6 for x in lines), lines
 

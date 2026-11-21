@@ -139,13 +139,17 @@ def test_final_tags_present(task):
 
 @pytest.mark.parametrize("task", TASKS)
 def test_no_non_selected_skills(task):
+    """Default mode serves an on-demand catalog; no full SKILL.md body is inlined."""
     system = _system(task)
-    selected = set(H.TASK_SKILLS.get(task, []))
+    selected = H.TASK_SKILLS.get(task, [])
+    assert "SKILL CATALOG" in system
+    if selected:
+        assert f"Primary skill for {task}: {selected[0]}:" in system, (
+            f"{task}: primary skill {selected[0]} missing from catalog")
     for name in H.skill_names():
-        if name in selected:
-            assert f"SKILL {name}" in system, f"{task}: selected skill {name} missing"
-        else:
-            assert f"SKILL {name}" not in system, f"{task}: non-selected skill {name} leaked"
+        # A full body starts with the "SKILL <name>:" header emitted by H.read_skill.
+        assert f"SKILL {name}:" not in system, (
+            f"{task}: full body of skill {name} leaked into the system prompt")
 
 
 def test_tool_call_and_result_format_unchanged():
@@ -171,8 +175,10 @@ def test_dynamic_tools_named_only_when_included(task):
     # Test the contract itself: the row/skill text may legitimately mention a
     # component (e.g. "combustor"), so the whole harness block is too coarse.
     row = _row(task)
-    default = compact_tool_contract(task, 6, 8)
-    assert all(name not in default for name in DYNAMIC_TOOL_NAMES)
+    # The legacy opt-out is include_dynamic=False; the default now carries all 16.
+    legacy = compact_tool_contract(
+        task, 6, 8, tools=make_tools(task, row, include_dynamic=False))
+    assert all(name not in legacy for name in DYNAMIC_TOOL_NAMES)
     dynamic = compact_tool_contract(
         task, 6, 8, tools=make_tools(task, row, include_dynamic=True))
     assert all(name in dynamic for name in DYNAMIC_TOOL_NAMES)

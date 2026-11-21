@@ -3,6 +3,19 @@
 Working copy: `C:\Users\rezax\Home\Code\thermo_agent\Repo` on REZA_PC (git, branch `main`). No SSH, no WSL: every
 step below runs in this checkout.
 
+## Next actions — step 1 "apply and verify" (2026-11-20, DONE)
+
+- Patch `0003-hard-fix-reasoning-archive-defaults.patch` applied as commit `4eeccb6` ("hard fix ..."). Binding reads, in the required order: `docs/DECISIONS.md` newest 2026-11-20 section, `docs/AUDITS.md` 2026-11-20, `docs/IMPLEMENTATION_PLAN.md` "Next actions". Rules held: no archived data in any corpus; docs remain exactly 10 files (this is a dated section of the owning doc, not a new file); luna/haiku only; all tools/skills on by default.
+- Notebooks regenerated from their canonical sources: `python kaggle/make_notebook.py`, `python scripts/make_smoke_kernel.py`, `python notebooks/build_runner_notebook.py`. Fixed a latent drift in `scripts/make_smoke_kernel.py` (TASK default `ledger` -> `repair` to match `tests/test_smoke_kernel_config.py`, and `ensure_ascii=False` so regeneration is byte-stable). Notebook-sync tests: 18 passed.
+- Fresh full-suite `pytest` (1175 tests) first reported 6 failures, all stale assertions/corpus dependencies left by the patch; each fixed in place:
+  - `test_agent_env.py`, `test_agent_graph.py`, `test_agent_graph_direct.py`, `test_compact_harness.py`, `test_toolkit.py`, `test_prompt_variants.py`, `test_model_eval.py`: updated to the new defaults (16 tools ON by default, `include_dynamic=False` is the unit-test opt-out; skills served as an on-demand catalog with no inlined `SKILL <name>` body; ledger tool reports recomputed values/residuals only, never `failed_lines`).
+  - `test_build_tool_corpus_tokens.py`: builds a synthetic frontier row from a real processed row instead of reading the archived pre-CoT corpus (archived data is never read into a live path).
+  - `test_heldout_v2_overlap.py`: requires the live `*_v3` corpora (skips until built) and redacted the orientation sample's `id`/`site`/`ref_spec` so it cannot leak a frozen test row.
+  - `test_hosted_prompts.py`: derives expected row counts from `data/frontier_export` (design is now 865 rows) instead of hardcoding 1600.
+- **Final full-suite result: 1155 passed, 18 skipped in 21:31 (green).** No test was skipped due to missing tooling; the 18 skips are the fresh-clone `corpus` guard.
+- Dataset stats regenerated from the live corpora only: `reports/dataset_stats.json` / `reports/dataset_stats.md` (a_slice 1600, frontier_export 2065, cohort prompts 4985, heldout_v2 3476, processed 27418, sft_all 133032, grpo_all 28247 rows). Archived dirs are excluded.
+- Tests not runnable: none locally. No AI/Kaggle/network/quota was used.
+
 ## Truth snapshot — 2026-11-20 (LATEST; supersedes every section below)
 
 Authoritative decisions: `docs/DECISIONS.md` (esp. §4–§7, §7.9–§7.11). Plan: `docs/IMPLEMENTATION_PLAN.md`.
