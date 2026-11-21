@@ -3,6 +3,10 @@
 Working copy: `C:\Users\rezax\Home\Code\thermo_agent\Repo` on REZA_PC (git, branch `main`). No SSH, no WSL: every
 step below runs in this checkout.
 
+## Final verification (2026-11-22)
+
+Full suite after all five Next actions and the small follow-up fixes: **1,164 passed, 9 skipped in 18:20 (green)**. The 9 skips are intentional: 8 in `test_final_mix_tiers_provenance.py` ("v2 mix not built yet" — the v2 mix is archived) and 1 in `test_mix_tool_corpora.py` ("needs the local corpora (pre-CoT tool corpora are archived)"). No test could not be run: no missing tooling, no network- or quota-dependent test in the suite.
+
 ## Next actions — step 5 "v3 mix + provenance audit" (2026-11-22, DONE)
 
 - `scripts/build_accepted_frontier.py` flattened the pilot cohort into `data/frontier_tools_accepted`: **11 unique verifier-accepted rows** (repair 7, ledger 4). The 12 cohort rows contained one ground-truth ledger plant attempted by both models; the shared `record_id` is deduped so the mix never trains twice on one plant.
