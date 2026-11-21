@@ -44,10 +44,11 @@ from ..design.spec import parse_design, DesignError
 from ..design.build import evaluate_design
 from .thermo_tools import DYNAMIC_TOOL_NAMES, dynamic_tools
 
-# The eleven extra tools are OFF by default: the 4,800 deterministic corpora and
-# every accepted frontier trace keep their five-tool contract. The hosted cohort
-# harness opts in with ``include_dynamic=True`` (pipeline flag): nine continuous-
-# input component tools plus the two on-demand skill tools below.
+# The eleven extra tools (nine continuous-input component tools plus the two
+# on-demand skill tools below) are ON by default since the 2026-11-20 hard fix:
+# ``make_tools``/``tool_names``/``ThermoEnv`` all default to include_dynamic=True.
+# ``include_dynamic=False`` exists only for unit tests that need the legacy
+# five-plant-tool contract; the old 5-tool traces remain valid and are not migrated.
 
 # The two on-demand skill tools are kept SEPARATE from ``DYNAMIC_TOOL_NAMES``
 # (thermo_tools.py, nine CoolProp tools): that registry and its tests are frozen,

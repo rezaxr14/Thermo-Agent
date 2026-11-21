@@ -151,12 +151,14 @@ def _load_runner():
 
 def test_runner_forwards_dynamic_flag_to_tools_context_and_direct():
     runner = _load_runner()
-    assert runner.DEFAULTS["pipeline"]["dynamic_tools"] is False  # default stays off
-    assert runner.Config.from_dict({}).dynamic_tools is False
+    # 2026-11-20 hard fix: tools + on-demand skills are ON by default everywhere.
+    assert runner.DEFAULTS["pipeline"]["dynamic_tools"] is True
+    assert runner.Config.from_dict({}).dynamic_tools is True
+    # Explicit opt-out exists only for unit tests needing the legacy 5-tool contract.
     assert runner.Config.from_dict(
-        {"pipeline": {"dynamic_tools": True}}).dynamic_tools is True
+        {"pipeline": {"dynamic_tools": False}}).dynamic_tools is False
     assert runner.Config.from_dict(
-        {"pipeline": {"dynamic_tools": "true"}}).dynamic_tools is True
+        {"pipeline": {"dynamic_tools": "false"}}).dynamic_tools is False
 
     code = (ROOT / "notebooks" / "kaggle_model_runner.py").read_text(encoding="utf-8")
     assert "tool_names(include_dynamic=CFG.dynamic_tools)" in code

@@ -3,6 +3,10 @@
 Working copy: `C:\Users\rezax\Home\Code\thermo_agent\Repo` on REZA_PC (git, branch `main`). No SSH, no WSL: every
 step below runs in this checkout.
 
+## 2026-11-22 — "nothing off by default" residual fixed
+
+The hosted runner still had a config-level opt-out: `notebooks/kaggle_model_runner.py` `DEFAULTS["pipeline"]["dynamic_tools"]` was `False` and `Config.dynamic_tools` fell back to `False`, even though the toolkit and the hosted `harness_config.json` were already ON. Flipped both to `True`, updated `Config.dynamic_tools`'s docstring, the two assertions in `tests/test_dynamic_tool_integration.py` (which had enshrined the default-off flag), and the stale "OFF by default" comment in `thermo_agent/teacher/toolkit.py`. `include_dynamic: false` now exists only as an explicit per-test opt-out for the legacy five-plant-tool contract. Verified: `DEFAULTS["pipeline"]["dynamic_tools"] is True`, `Config.from_dict({}).dynamic_tools is True`, explicit `false` still parses as `False`, `tool_names()` returns all 16. Regenerated `notebooks/kaggle_model_runner.ipynb` from source. Focused tests: **50 passed** (`test_dynamic_tool_integration`, `test_kaggle_model_runner`, `test_toolkit`, `test_reasoning_v3`, `test_docs_layout`). Full-suite evidence from before this config-only change: 1,164 passed / 9 skipped; no behavior change for the hosted config (it already set `dynamic_tools: true`).
+
 ## Final verification (2026-11-22)
 
 Full suite after all five Next actions and the small follow-up fixes: **1,164 passed, 9 skipped in 18:20 (green)**. The 9 skips are intentional: 8 in `test_final_mix_tiers_provenance.py` ("v2 mix not built yet" — the v2 mix is archived) and 1 in `test_mix_tool_corpora.py` ("needs the local corpora (pre-CoT tool corpora are archived)"). No test could not be run: no missing tooling, no network- or quota-dependent test in the suite.

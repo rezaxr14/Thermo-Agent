@@ -73,7 +73,9 @@ DEFAULTS = {
         "ingest": True,
         "memory": True,
         "mix_refresh": True,
-        "dynamic_tools": False,
+        # 2026-11-20 hard fix: the 14 physics tools + 2 on-demand skill tools
+        # are the default everywhere (DECISIONS §2026-11-20 item 4).
+        "dynamic_tools": True,
     },
     "config_file": "harness_config.json",
 }
@@ -207,10 +209,12 @@ class Config:
         prompt and full skill text delivered as tool results.
 
         Driven by ``pipeline.dynamic_tools`` in harness_config.json (or the
-        ``HARNESS_PIPELINE`` env override). OFF by default so ordinary runs keep the
-        five-plant-tool contract; the frontier cohort config turns it on.
+        ``HARNESS_PIPELINE`` env override). ON by default since the 2026-11-20
+        hard fix: all 16 tools are offered everywhere; pass
+        ``pipeline.dynamic_tools: false`` explicitly only for unit tests that
+        need the legacy five-plant-tool contract.
         """
-        value = self.pipeline.get("dynamic_tools", False)
+        value = self.pipeline.get("dynamic_tools", True)
         if isinstance(value, str):
             return value.strip().lower() in ("1", "true", "yes", "on")
         return bool(value)
