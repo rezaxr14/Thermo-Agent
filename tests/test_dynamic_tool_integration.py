@@ -134,8 +134,9 @@ def test_hosted_config_enables_dynamic_tools():
     cfg = json.loads((ROOT / "data" / "frontier_tools_cohort_prompts" /
                       "harness_config.json").read_text(encoding="utf-8"))
     assert cfg["pipeline"]["dynamic_tools"] is True
-    # The batch contract is otherwise untouched.
-    assert cfg["limit"] == 100 and cfg["rounds"] == 6 and cfg["k_memory"] == 3
+    # The batch contract is otherwise untouched. The limit is 40 for the
+    # reasoning pilot and 100 for bulk batches; both are valid.
+    assert cfg["limit"] in (40, 100) and cfg["rounds"] == 6 and cfg["k_memory"] == 3
     assert cfg["pipeline"]["gate_tokens"] == 8192
     assert set(cfg["allowed_models"]) == {"gpt-6-luna", "claude-haiku-5-5"}
 
@@ -168,6 +169,7 @@ def test_runner_config_shard_limit_and_models_unchanged():
                       "harness_config.json").read_text(encoding="utf-8"))
     runner = _load_runner()
     parsed = runner.Config.from_dict(cfg)
-    assert parsed.limit == 100 and parsed.rounds == 6 and parsed.k_memory == 3
+    assert parsed.limit == cfg["limit"] and parsed.limit in (40, 100)
+    assert parsed.rounds == 6 and parsed.k_memory == 3
     assert parsed.uses_tools is True and parsed.dynamic_tools is True
     assert set(parsed.allowed_models) == {"gpt-6-luna", "claude-haiku-5-5"}
