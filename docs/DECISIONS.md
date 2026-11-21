@@ -1104,3 +1104,15 @@ Reza's instruction: compatibility with bad data is worth nothing; move it out, r
 6. **Deterministic traces are derived, not recited**: inspect first, reason from the result, then propose; recover variants begin from an explicit hypothesis. v3 is the only deterministic generator.
 7. **No review-by-regex.** Any future check of individual traces is one trace at a time by subagents (read the whole row, write a verdict line); archived data is not edited.
 8. **Kaggle batches continue** under the standing model rules (luna/haiku only). Before bulk, a 40-row pilot per model must show reasoning prose on >=75% of tool turns and acceptance after the gate; the rejection reasons by model x task go into `reports/budget_batches.md`.
+
+### 2026-11-20 — prompt-budget re-measurement (Next actions step 2, DONE)
+
+The default prompt now carries the reasoning rule, the 27-skill description catalog and the 16-tool schema. Measured with the **local cached Qwen3.5 tokenizer** (no download) on 50 real rows per task from `data/processed`, rendered through the production builder `build_harness_tool_messages` (default tools ON). Full numbers: `reports/prompt_budget_2026-11-20.json`.
+
+| Measure (tokens) | repair | design | audit | ledger | Gate |
+|---|---:|---:|---:|---:|---|
+| Harness block p95 / max | 1875 / 1875 | 1811 / 1811 | 1824 / 1824 | 1847 / 1847 | <= 2500 (J2/J3) |
+| Pipeline row p95 / max | 3171 / 3206 | 2694 / 2712 | 4077 / 4233 | 4577 / 4871 | <= 8192 |
+| Rendered chat p95 / max | 3093 / 3128 | 2616 / 2634 | 3999 / 4155 | 4499 / 4793 | <= 8192 |
+
+Overall pipeline max **4,871** (p95 4,135); rendered-chat max **4,793** (p95 4,057). Static parts: compact AGENTS.md 388, skill catalog 742, 16-tool contract 742 tokens. Both gates PASS with >3,300 tokens of headroom, so **no skill description or tool docstring is trimmed** and the reasoning rule is untouched. The repository's Qwen3.5 chat template drops inline `<tool_call>`/`<tool_result>` blocks, so the pipeline measure (plain prompt + completion text + 96 reserve) remains the authoritative 8,192 gate, as recorded in `scripts/audit_harness_corpus.py`. `scripts/audit_harness_corpus.py` / `python -m thermo_agent.train.token_audit` will run on the rebuilt `*_v3_h` corpora in step 3; step 2 measured rendered rows directly because those corpora are not built yet.

@@ -1,0 +1,100 @@
+{
+  "date": "2026-11-20",
+  "method": "cached Qwen3.5 tokenizer; pipeline=prompt+completion text + reserve 96; rendered=apply_chat_template(tokenize=False) then tokenize; note: Qwen template drops inline tool_call/tool_result so pipeline is authoritative",
+  "tokenizer_path": "C:\\Users\\rezax\\.cache\\thermo\\qwen3.5-4b\\tokenizer.json",
+  "reserve": 96,
+  "n_per_task": 50,
+  "tool_count": 16,
+  "harness_gate": 2500,
+  "row_gate": 8192,
+  "tasks": {
+    "repair": {
+      "rows": 50,
+      "harness_block": {
+        "p50": 1875,
+        "p95": 1875,
+        "max": 1875
+      },
+      "pipeline_tokens": {
+        "p50": 3059,
+        "p95": 3171,
+        "max": 3206
+      },
+      "rendered_chat_tokens": {
+        "p50": 2981,
+        "p95": 3093,
+        "max": 3128
+      }
+    },
+    "design": {
+      "rows": 50,
+      "harness_block": {
+        "p50": 1811,
+        "p95": 1811,
+        "max": 1811
+      },
+      "pipeline_tokens": {
+        "p50": 2642,
+        "p95": 2694,
+        "max": 2712
+      },
+      "rendered_chat_tokens": {
+        "p50": 2564,
+        "p95": 2616,
+        "max": 2634
+      }
+    },
+    "audit": {
+      "rows": 50,
+      "harness_block": {
+        "p50": 1824,
+        "p95": 1824,
+        "max": 1824
+      },
+      "pipeline_tokens": {
+        "p50": 3331,
+        "p95": 4077,
+        "max": 4233
+      },
+      "rendered_chat_tokens": {
+        "p50": 3253,
+        "p95": 3999,
+        "max": 4155
+      }
+    },
+    "ledger": {
+      "rows": 50,
+      "harness_block": {
+        "p50": 1847,
+        "p95": 1847,
+        "max": 1847
+      },
+      "pipeline_tokens": {
+        "p50": 3781,
+        "p95": 4577,
+        "max": 4871
+      },
+      "rendered_chat_tokens": {
+        "p50": 3703,
+        "p95": 4499,
+        "max": 4793
+      }
+    }
+  },
+  "static": {
+    "skill_catalog_tokens": 742,
+    "sixteen_tool_contract_tokens": 742,
+    "agents_md_tokens": 388,
+    "skill_metadata_count": 27
+  },
+  "overall": {
+    "pipeline_max": 4871,
+    "pipeline_p95": 4135,
+    "rendered_max": 4793,
+    "rendered_p95": 4057
+  },
+  "gates": {
+    "harness_block_le_2500": true,
+    "pipeline_le_8192": true
+  }
+}
