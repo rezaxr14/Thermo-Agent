@@ -592,18 +592,18 @@
           "max": 0,
           "median": 0,
           "min": 0,
-          "n": 4985,
+          "n": 5065,
           "p95": 0
         },
         "prompt": {
           "max": 11394,
           "median": 3450,
           "min": 1445,
-          "n": 4985,
+          "n": 5065,
           "p95": 10399
         }
       },
-      "files": 36,
+      "files": 38,
       "flags": {
         "with_stored_completion": 0,
         "with_tool_call": 0,
@@ -611,11 +611,11 @@
         "with_trajectory": 0
       },
       "harness_values": {
-        "<missing>": 4985
+        "<missing>": 5065
       },
       "malformed_lines": 0,
       "per_split": {
-        "train": 4985
+        "train": 5065
       },
       "per_task": {
         "audit": {
@@ -624,14 +624,14 @@
               "max": 0,
               "median": 0,
               "min": 0,
-              "n": 2641,
+              "n": 2661,
               "p95": 0
             },
             "prompt": {
               "max": 11286,
               "median": 3459,
               "min": 2838,
-              "n": 2641,
+              "n": 2661,
               "p95": 10930
             }
           },
@@ -642,36 +642,36 @@
             "with_trajectory": 0
           },
           "harness_values": {
-            "<missing>": 2641
+            "<missing>": 2661
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 2641
+            "train": 2661
           },
           "per_tier": {
             "<missing>": 781,
-            "easy": 780,
-            "hard": 340,
-            "medium": 740
+            "easy": 786,
+            "hard": 348,
+            "medium": 746
           },
-          "rows": 2641,
+          "rows": 2661,
           "source_values": {
-            "<missing>": 2641
+            "<missing>": 2661
           },
           "tokens": {
             "completion": {
               "max": 0,
               "median": 0,
               "min": 0,
-              "n": 2641,
+              "n": 2661,
               "p95": 0
             },
             "prompt": {
               "max": 3401,
               "median": 1533,
               "min": 1184,
-              "n": 2641,
-              "p95": 3349
+              "n": 2661,
+              "p95": 3348
             },
             "reason": null,
             "status": "measured",
@@ -684,14 +684,14 @@
               "max": 0,
               "median": 0,
               "min": 0,
-              "n": 781,
+              "n": 801,
               "p95": 0
             },
             "prompt": {
               "max": 8147,
               "median": 1482,
               "min": 1445,
-              "n": 781,
+              "n": 801,
               "p95": 8144
             }
           },
@@ -702,32 +702,35 @@
             "with_trajectory": 0
           },
           "harness_values": {
-            "<missing>": 781
+            "<missing>": 801
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 781
+            "train": 801
           },
           "per_tier": {
-            "<missing>": 781
+            "<missing>": 781,
+            "easy": 6,
+            "hard": 6,
+            "medium": 8
           },
-          "rows": 781,
+          "rows": 801,
           "source_values": {
-            "<missing>": 781
+            "<missing>": 801
           },
           "tokens": {
             "completion": {
               "max": 0,
               "median": 0,
               "min": 0,
-              "n": 781,
+              "n": 801,
               "p95": 0
             },
             "prompt": {
               "max": 2290,
               "median": 515,
               "min": 489,
-              "n": 781,
+              "n": 801,
               "p95": 2286
             },
             "reason": null,
@@ -741,15 +744,15 @@
               "max": 0,
               "median": 0,
               "min": 0,
-              "n": 781,
+              "n": 801,
               "p95": 0
             },
             "prompt": {
               "max": 10648,
               "median": 3904,
               "min": 2797,
-              "n": 781,
-              "p95": 10451
+              "n": 801,
+              "p95": 10450
             }
           },
           "flags": {
@@ -759,33 +762,36 @@
             "with_trajectory": 0
           },
           "harness_values": {
-            "<missing>": 781
+            "<missing>": 801
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 781
+            "train": 801
           },
           "per_tier": {
-            "<missing>": 781
+            "<missing>": 781,
+            "easy": 8,
+            "hard": 6,
+            "medium": 6
           },
-          "rows": 781,
+          "rows": 801,
           "source_values": {
-            "<missing>": 781
+            "<missing>": 801
           },
           "tokens": {
             "completion": {
               "max": 0,
               "median": 0,
               "min": 0,
-              "n": 781,
+              "n": 801,
               "p95": 0
             },
             "prompt": {
               "max": 3829,
               "median": 1912,
               "min": 1257,
-              "n": 781,
-              "p95": 3758
+              "n": 801,
+              "p95": 3757
             },
             "reason": null,
             "status": "measured",
@@ -798,14 +804,14 @@
               "max": 0,
               "median": 0,
               "min": 0,
-              "n": 782,
+              "n": 802,
               "p95": 0
             },
             "prompt": {
               "max": 11394,
-              "median": 2922,
+              "median": 2923,
               "min": 2325,
-              "n": 782,
+              "n": 802,
               "p95": 9108
             }
           },
@@ -816,33 +822,36 @@
             "with_trajectory": 0
           },
           "harness_values": {
-            "<missing>": 782
+            "<missing>": 802
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 782
+            "train": 802
           },
           "per_tier": {
-            "<missing>": 782
+            "<missing>": 782,
+            "easy": 8,
+            "hard": 6,
+            "medium": 6
           },
-          "rows": 782,
+          "rows": 802,
           "source_values": {
-            "<missing>": 782
+            "<missing>": 802
           },
           "tokens": {
             "completion": {
               "max": 0,
               "median": 0,
               "min": 0,
-              "n": 782,
+              "n": 802,
               "p95": 0
             },
             "prompt": {
               "max": 3504,
-              "median": 1208,
+              "median": 1209,
               "min": 946,
-              "n": 782,
-              "p95": 2887
+              "n": 802,
+              "p95": 2888
             },
             "reason": null,
             "status": "measured",
@@ -852,27 +861,27 @@
       },
       "per_tier": {
         "<missing>": 3125,
-        "easy": 780,
-        "hard": 340,
-        "medium": 740
+        "easy": 808,
+        "hard": 366,
+        "medium": 766
       },
-      "rows": 4985,
+      "rows": 5065,
       "source_values": {
-        "<missing>": 4985
+        "<missing>": 5065
       },
       "tokens": {
         "completion": {
           "max": 0,
           "median": 0,
           "min": 0,
-          "n": 4985,
+          "n": 5065,
           "p95": 0
         },
         "prompt": {
           "max": 3829,
           "median": 1531,
           "min": 489,
-          "n": 4985,
+          "n": 5065,
           "p95": 3388
         },
         "reason": null,
@@ -3539,6 +3548,16 @@
       "rows": 130,
       "sha256": "071dda1299cc0cf6142bc98507509c97afe39464e00d9cc4a59b5e6758b63ac3"
     },
+    "data/frontier_tools_cohort_prompts/prompts_pilot40_claude-haiku-5-5.jsonl": {
+      "bytes": 323263,
+      "rows": 40,
+      "sha256": "59588e3eb4ede5656bebf080cfe9be33f1ca4f8643c234d5068cb7b31586f851"
+    },
+    "data/frontier_tools_cohort_prompts/prompts_pilot40_gpt-6-luna.jsonl": {
+      "bytes": 323263,
+      "rows": 40,
+      "sha256": "59588e3eb4ede5656bebf080cfe9be33f1ca4f8643c234d5068cb7b31586f851"
+    },
     "data/frontier_tools_cohort_prompts/prompts_proof.jsonl": {
       "bytes": 35568,
       "rows": 5,
@@ -4023,14 +4042,14 @@
         "max": 9366,
         "median": 202,
         "min": 0,
-        "n": 220011,
-        "p95": 846
+        "n": 220091,
+        "p95": 845
       },
       "prompt": {
         "max": 20844,
         "median": 3041,
         "min": 1442,
-        "n": 220011,
+        "n": 220091,
         "p95": 13795
       }
     },
@@ -4041,7 +4060,7 @@
       "with_trajectory": 9594
     },
     "harness_values": {
-      "<missing>": 40679,
+      "<missing>": 40759,
       "agents+skills": 63732,
       "none": 113394,
       "skills": 2206
@@ -4054,18 +4073,18 @@
       "test_ood_load": 1435,
       "test_ood_scale": 1576,
       "test_ood_topology": 5656,
-      "train": 176931,
+      "train": 177011,
       "val": 5604
     },
     "per_tier": {
       "<missing>": 195487,
-      "easy": 8334,
-      "hard": 7896,
-      "medium": 8294
+      "easy": 8362,
+      "hard": 7922,
+      "medium": 8320
     },
-    "rows": 220011,
+    "rows": 220091,
     "source_values": {
-      "<missing>": 35879,
+      "<missing>": 35959,
       "deterministic_tools": 19188,
       "frontier": 1315,
       "ground_truth": 163629
@@ -4075,14 +4094,14 @@
         "max": 4370,
         "median": 77,
         "min": 0,
-        "n": 220011,
+        "n": 220091,
         "p95": 267
       },
       "prompt": {
         "max": 6235,
         "median": 1252,
         "min": 486,
-        "n": 220011,
+        "n": 220091,
         "p95": 4194
       },
       "reason": null,

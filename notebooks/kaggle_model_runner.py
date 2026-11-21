@@ -361,6 +361,23 @@ def _manifest(status: str, stage: str, **kw) -> None:
 # %%
 if IS_KAGGLE:
 
+    def _bundle_is_current(root: pathlib.Path) -> bool:
+        """A usable bundle must have the 2026-11-20 patched toolkit.
+
+        The HF corpus repo is additive (remote files are never deleted), so an
+        old unzipped ``kaggle_bundle/`` from 2026-11-19 still sits in the Kaggle
+        dataset next to a freshly synced zip. Loading it silently calls
+        ``tool_names()`` without ``include_dynamic`` and fails at run time. Check
+        the signature before accepting ANY candidate bundle.
+        """
+        tk = root / "thermo_agent" / "teacher" / "toolkit.py"
+        if not tk.is_file():
+            return False
+        try:
+            return "include_dynamic" in tk.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            return False
+
     def _bundle_from_input_dir(inp: pathlib.Path):
         if not inp.exists():
             return None
@@ -368,7 +385,8 @@ if IS_KAGGLE:
             if marker.parent.name != "teacher":
                 continue
             root = marker.parents[2]
-            if (root / "thermo_agent" / "teacher" / "agent_graph.py").exists():
+            if ((root / "thermo_agent" / "teacher" / "agent_graph.py").exists()
+                    and _bundle_is_current(root)):
                 return root
         return None
 
@@ -378,15 +396,15 @@ if IS_KAGGLE:
             return None
         work.mkdir(parents=True, exist_ok=True)
         marker = work / "thermo_agent" / "teacher" / "agent_graph.py"
-        if not marker.exists():
-            dest = work.resolve()
-            with zipfile.ZipFile(zips[0]) as zf:
-                for info in zf.infolist():
-                    target = (work / info.filename).resolve()
-                    if target != dest and dest not in target.parents:
-                        continue
-                    zf.extract(info, work)
-        return work if marker.exists() else None
+        # Always re-extract: a stale extraction must not shadow a fresh zip.
+        dest = work.resolve()
+        with zipfile.ZipFile(zips[-1]) as zf:
+            for info in zf.infolist():
+                target = (work / info.filename).resolve()
+                if target != dest and dest not in target.parents:
+                    continue
+                zf.extract(info, work)
+        return work if marker.exists() and _bundle_is_current(work) else None
 
     def _bootstrap() -> pathlib.Path:
         inp = pathlib.Path("/kaggle/input")

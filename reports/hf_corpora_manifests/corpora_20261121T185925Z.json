@@ -1,0 +1,328 @@
+{
+  "repo_id": "Reza-Nadimi/thermo-agent-corpora",
+  "timestamp_utc": "2026-11-21T18:59:25Z",
+  "message": "pilot40 reasoning shards",
+  "tag": "pilot40",
+  "mode": "upload",
+  "additive_only": true,
+  "heldout_prompts_only": true,
+  "dirs": [
+    "data/frontier_tools_cohort_prompts"
+  ],
+  "file_count": 52,
+  "total_bytes": 41370004,
+  "files": [
+    {
+      "path": "data/frontier_tools_cohort_prompts/batch1_quota.json",
+      "sha256": "b85aadd5a9505c9fff1361e8fcd44b17ef71b231bac3f6bb67a9b1be5564a688",
+      "size_bytes": 197,
+      "local_path": "data/frontier_tools_cohort_prompts/batch1_quota.json"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/dataset-metadata.json",
+      "sha256": "ec586b089850c0e89d5fa9c0ed61a4825426acf51d69c5bc8f92c400f6158d9b",
+      "size_bytes": 1672,
+      "local_path": "data/frontier_tools_cohort_prompts/dataset-metadata.json"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/diagram_index.json",
+      "sha256": "9c267df80f0a0216b15a7a47873a7e71b4e4ed50fe446022b206faf2abb9d22f",
+      "size_bytes": 181305,
+      "local_path": "data/frontier_tools_cohort_prompts/diagram_index.json"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/diagram_ledger.json",
+      "sha256": "c8391c2c399912d97980cd62aa9946dfbeeee1323d7cecd3d73716356c81b843",
+      "size_bytes": 425627,
+      "local_path": "data/frontier_tools_cohort_prompts/diagram_ledger.json"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/harness_config.json",
+      "sha256": "f7f3f323e616bc0688a0419fca8d0920b849dec01c2808238b6292bd554cdfc0",
+      "size_bytes": 887,
+      "local_path": "data/frontier_tools_cohort_prompts/harness_config.json"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/manifest.json",
+      "sha256": "9b331928120ba1c5cc427d3022586087a8b3cb363ae79c9bea2c2936243b0c83",
+      "size_bytes": 37274,
+      "local_path": "data/frontier_tools_cohort_prompts/manifest.json"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/plan_bulk_claude-haiku-5-5.json",
+      "sha256": "18236ae3b19fbb79b05683bbde277326ae2311b846b5df3824b3b9c913371c60",
+      "size_bytes": 210171,
+      "local_path": "data/frontier_tools_cohort_prompts/plan_bulk_claude-haiku-5-5.json"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/plan_bulk_gpt-6-luna.json",
+      "sha256": "3ea2dc55f4be5d9e4c6261638156074384748605967a17ff25fd54548d33a845",
+      "size_bytes": 210165,
+      "local_path": "data/frontier_tools_cohort_prompts/plan_bulk_gpt-6-luna.json"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/plan_proof_claude-haiku-5-5.json",
+      "sha256": "71d6b7280c1b58834aa476a0c832ae4eb339385a3ce3558c47e4c6a8029bcf3f",
+      "size_bytes": 292,
+      "local_path": "data/frontier_tools_cohort_prompts/plan_proof_claude-haiku-5-5.json"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/plan_proof_claude-opus-5-5-default.json",
+      "sha256": "36930cc727a408ce5bc964ace90e30987b02bda9205f52f9e66fd82987773c9c",
+      "size_bytes": 759,
+      "local_path": "data/frontier_tools_cohort_prompts/plan_proof_claude-opus-5-5-default.json"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/plan_proof_claude-sonnet-5-5.json",
+      "sha256": "5d69d3adefa5932a660e060d8e0b06c29ef8dcbef28bbb44db5c5ec6a6289d79",
+      "size_bytes": 747,
+      "local_path": "data/frontier_tools_cohort_prompts/plan_proof_claude-sonnet-5-5.json"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/plan_proof_gemini-4-argon.json",
+      "sha256": "b5dfc9a07acb30366543054945f9223a052fa92c0f44cbe807c9ed13fad97eaf",
+      "size_bytes": 746,
+      "local_path": "data/frontier_tools_cohort_prompts/plan_proof_gemini-4-argon.json"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/plan_proof_gpt-6-luna.json",
+      "sha256": "1ab0679cab8c910574f1acc0aa2d507e8ea7b5eb44c318f8d2eb7dbb8faf2615",
+      "size_bytes": 286,
+      "local_path": "data/frontier_tools_cohort_prompts/plan_proof_gpt-6-luna.json"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/plan_proof_gpt-6.2-sol.json",
+      "sha256": "36b82d81d516ef0eb27b169c63a9f70b65c26306a03e2dd0e8caaaaf74e4b034",
+      "size_bytes": 749,
+      "local_path": "data/frontier_tools_cohort_prompts/plan_proof_gpt-6.2-sol.json"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_all.jsonl",
+      "sha256": "24ce255be4560eb4cf4071f052fddddee725ded43f4bc8bc5cefa32473556c4a",
+      "size_bytes": 12435339,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_all.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_audit_easy.jsonl",
+      "sha256": "877e8f763277635ea257be1777a5da49e661607e50b1b2ad4ae1e8d091df777d",
+      "size_bytes": 977725,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_audit_easy.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_audit_hard.jsonl",
+      "sha256": "7362718245b95aa762379f59b956c5c0c68c0ba0036114f0fe21c0b0043f73bc",
+      "size_bytes": 1152973,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_audit_hard.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_audit_medium.jsonl",
+      "sha256": "ba144eb82fb0229d6a8d2160fa6227bf49ac0406db6cbf2eebbae76a2b2f71c5",
+      "size_bytes": 1050693,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_audit_medium.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_batch10_claude-haiku-5-5.jsonl",
+      "sha256": "68a5aad7e5b95f5c80fb2f51115387360aa53408d7c9c6e166c89d460b875ee8",
+      "size_bytes": 526933,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_batch10_claude-haiku-5-5.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_batch10_gpt-6-luna.jsonl",
+      "sha256": "98f2bed4c0c03c137fa8738b2a5536938fa3db9c4988f7e9150d64b7b138f6b9",
+      "size_bytes": 792758,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_batch10_gpt-6-luna.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_batch11_claude-haiku-5-5.jsonl",
+      "sha256": "68a5aad7e5b95f5c80fb2f51115387360aa53408d7c9c6e166c89d460b875ee8",
+      "size_bytes": 526933,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_batch11_claude-haiku-5-5.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_batch11_gpt-6-luna.jsonl",
+      "sha256": "98f2bed4c0c03c137fa8738b2a5536938fa3db9c4988f7e9150d64b7b138f6b9",
+      "size_bytes": 792758,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_batch11_gpt-6-luna.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_batch1_claude-haiku-5-5.jsonl",
+      "sha256": "d05c333e06994de6ec7715c7f4bd367c8f988bd53cbf8600164022033c08d400",
+      "size_bytes": 767628,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_batch1_claude-haiku-5-5.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_batch1_gpt-6-luna.jsonl",
+      "sha256": "8503a07c63ddf4c70d0a8c4d7ca1097d59a11c3236fd8e44461cc05c6d38c134",
+      "size_bytes": 781817,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_batch1_gpt-6-luna.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_batch2_claude-haiku-5-5.jsonl",
+      "sha256": "68a5aad7e5b95f5c80fb2f51115387360aa53408d7c9c6e166c89d460b875ee8",
+      "size_bytes": 526933,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_batch2_claude-haiku-5-5.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_batch2_gpt-6-luna.jsonl",
+      "sha256": "98f2bed4c0c03c137fa8738b2a5536938fa3db9c4988f7e9150d64b7b138f6b9",
+      "size_bytes": 792758,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_batch2_gpt-6-luna.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_batch3_claude-haiku-5-5.jsonl",
+      "sha256": "68a5aad7e5b95f5c80fb2f51115387360aa53408d7c9c6e166c89d460b875ee8",
+      "size_bytes": 526933,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_batch3_claude-haiku-5-5.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_batch3_gpt-6-luna.jsonl",
+      "sha256": "98f2bed4c0c03c137fa8738b2a5536938fa3db9c4988f7e9150d64b7b138f6b9",
+      "size_bytes": 792758,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_batch3_gpt-6-luna.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_batch4_claude-haiku-5-5.jsonl",
+      "sha256": "68a5aad7e5b95f5c80fb2f51115387360aa53408d7c9c6e166c89d460b875ee8",
+      "size_bytes": 526933,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_batch4_claude-haiku-5-5.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_batch4_gpt-6-luna.jsonl",
+      "sha256": "98f2bed4c0c03c137fa8738b2a5536938fa3db9c4988f7e9150d64b7b138f6b9",
+      "size_bytes": 792758,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_batch4_gpt-6-luna.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_batch5_claude-haiku-5-5.jsonl",
+      "sha256": "68a5aad7e5b95f5c80fb2f51115387360aa53408d7c9c6e166c89d460b875ee8",
+      "size_bytes": 526933,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_batch5_claude-haiku-5-5.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_batch5_gpt-6-luna.jsonl",
+      "sha256": "98f2bed4c0c03c137fa8738b2a5536938fa3db9c4988f7e9150d64b7b138f6b9",
+      "size_bytes": 792758,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_batch5_gpt-6-luna.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_batch6_claude-haiku-5-5.jsonl",
+      "sha256": "68a5aad7e5b95f5c80fb2f51115387360aa53408d7c9c6e166c89d460b875ee8",
+      "size_bytes": 526933,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_batch6_claude-haiku-5-5.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_batch6_gpt-6-luna.jsonl",
+      "sha256": "98f2bed4c0c03c137fa8738b2a5536938fa3db9c4988f7e9150d64b7b138f6b9",
+      "size_bytes": 792758,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_batch6_gpt-6-luna.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_batch7_claude-haiku-5-5.jsonl",
+      "sha256": "68a5aad7e5b95f5c80fb2f51115387360aa53408d7c9c6e166c89d460b875ee8",
+      "size_bytes": 526933,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_batch7_claude-haiku-5-5.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_batch7_gpt-6-luna.jsonl",
+      "sha256": "98f2bed4c0c03c137fa8738b2a5536938fa3db9c4988f7e9150d64b7b138f6b9",
+      "size_bytes": 792758,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_batch7_gpt-6-luna.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_batch8_claude-haiku-5-5.jsonl",
+      "sha256": "68a5aad7e5b95f5c80fb2f51115387360aa53408d7c9c6e166c89d460b875ee8",
+      "size_bytes": 526933,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_batch8_claude-haiku-5-5.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_batch8_gpt-6-luna.jsonl",
+      "sha256": "98f2bed4c0c03c137fa8738b2a5536938fa3db9c4988f7e9150d64b7b138f6b9",
+      "size_bytes": 792758,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_batch8_gpt-6-luna.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_batch9_claude-haiku-5-5.jsonl",
+      "sha256": "68a5aad7e5b95f5c80fb2f51115387360aa53408d7c9c6e166c89d460b875ee8",
+      "size_bytes": 526933,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_batch9_claude-haiku-5-5.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_batch9_gpt-6-luna.jsonl",
+      "sha256": "98f2bed4c0c03c137fa8738b2a5536938fa3db9c4988f7e9150d64b7b138f6b9",
+      "size_bytes": 792758,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_batch9_gpt-6-luna.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_design_easy.jsonl",
+      "sha256": "02cac238b8d9653dc221ed20939d471da4df306bce76a0136128e45b1b6dd56c",
+      "size_bytes": 571370,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_design_easy.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_design_hard.jsonl",
+      "sha256": "5c5858716e223742ecf32830b9f5adf81158c9074359597afdc3762298f52cd6",
+      "size_bytes": 585396,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_design_hard.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_design_medium.jsonl",
+      "sha256": "854eaea0636d2b4d0148cb36a01bedad734d70476e988d7776f4a17aeb2d5f78",
+      "size_bytes": 590943,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_design_medium.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_ledger_easy.jsonl",
+      "sha256": "90c7a0be3337d3ceeef4ecdaf2b7c12f19e65c5f294a12e6c01e4e14fe09b95b",
+      "size_bytes": 1437418,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_ledger_easy.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_ledger_hard.jsonl",
+      "sha256": "7b56604617655b9e323ea15140cd4885e37c7eee6182597f72c96bb00385f339",
+      "size_bytes": 1731185,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_ledger_hard.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_ledger_medium.jsonl",
+      "sha256": "071dda1299cc0cf6142bc98507509c97afe39464e00d9cc4a59b5e6758b63ac3",
+      "size_bytes": 1529941,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_ledger_medium.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_pilot40_claude-haiku-5-5.jsonl",
+      "sha256": "59588e3eb4ede5656bebf080cfe9be33f1ca4f8643c234d5068cb7b31586f851",
+      "size_bytes": 323263,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_pilot40_claude-haiku-5-5.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_pilot40_gpt-6-luna.jsonl",
+      "sha256": "59588e3eb4ede5656bebf080cfe9be33f1ca4f8643c234d5068cb7b31586f851",
+      "size_bytes": 323263,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_pilot40_gpt-6-luna.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_proof.jsonl",
+      "sha256": "c6aa7d352ff061dda7e0d16b364eda56a7fa2ede7d0f805a89ab42ab3ee2943d",
+      "size_bytes": 35568,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_proof.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_repair_easy.jsonl",
+      "sha256": "63155b6e0b731cc1b44ea509d665332270c716b4b9af8362f245d96e7f1ac046",
+      "size_bytes": 904613,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_repair_easy.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_repair_hard.jsonl",
+      "sha256": "f1dfa8e64ea10e288e97bfdfa88b3b17affa8561a4bba4ecb4dfac5a45e8968e",
+      "size_bytes": 919950,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_repair_hard.jsonl"
+    },
+    {
+      "path": "data/frontier_tools_cohort_prompts/prompts_repair_medium.jsonl",
+      "sha256": "1b4d407f997aab8ce45b6ac98694032821298da9834300cc80e40d1b53c3d42a",
+      "size_bytes": 983132,
+      "local_path": "data/frontier_tools_cohort_prompts/prompts_repair_medium.jsonl"
+    }
+  ]
+}

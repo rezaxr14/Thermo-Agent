@@ -1,18 +1,18 @@
 {
   "mode": "harness",
   "shard": "prompts_proof.jsonl",
-  "limit": 100,
+  "limit": 40,
   "rounds": 6,
   "k_memory": 3,
   "deadline_seconds": 0,
   "max_cost_usd": 0.0,
-  "journal": "batch11_completions.jsonl",
-  "manifest": "batch11_manifest.json",
+  "journal": "pilot40_completions.jsonl",
+  "manifest": "pilot40_manifest.json",
   "memory_dir": "",
   "export_dir": "",
   "model_shards": {
-    "gpt-6-luna": "prompts_batch11_gpt-6-luna.jsonl",
-    "claude-haiku-5-5": "prompts_batch11_claude-haiku-5-5.jsonl"
+    "gpt-6-luna": "prompts_pilot40_gpt-6-luna.jsonl",
+    "claude-haiku-5-5": "prompts_pilot40_claude-haiku-5-5.jsonl"
   },
   "tiers": [
     "easy",
