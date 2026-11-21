@@ -1210,6 +1210,307 @@
         "tokenizer": "C:\\Users\\rezax\\.cache\\thermo\\qwen3.5-4b\\tokenizer.json"
       }
     },
+    "data/grpo_mix_v3": {
+      "chars": {
+        "completion": {
+          "max": 10526,
+          "median": 322,
+          "min": 140,
+          "n": 4805,
+          "p95": 811
+        },
+        "prompt": {
+          "max": 12886,
+          "median": 9942,
+          "min": 8848,
+          "n": 4805,
+          "p95": 11399
+        }
+      },
+      "files": 4,
+      "flags": {
+        "with_stored_completion": 4805,
+        "with_tool_call": 4805,
+        "with_tool_result": 4805,
+        "with_trajectory": 4805
+      },
+      "harness_values": {
+        "agents+skills": 4805
+      },
+      "malformed_lines": 0,
+      "per_split": {
+        "train": 4805
+      },
+      "per_task": {
+        "audit": {
+          "chars": {
+            "completion": {
+              "max": 345,
+              "median": 327,
+              "min": 318,
+              "n": 1200,
+              "p95": 339
+            },
+            "prompt": {
+              "max": 11874,
+              "median": 10425,
+              "min": 9823,
+              "n": 1200,
+              "p95": 11499
+            }
+          },
+          "flags": {
+            "with_stored_completion": 1200,
+            "with_tool_call": 1200,
+            "with_tool_result": 1200,
+            "with_trajectory": 1200
+          },
+          "harness_values": {
+            "agents+skills": 1200
+          },
+          "malformed_lines": 0,
+          "per_split": {
+            "train": 1200
+          },
+          "per_tier": {
+            "easy": 400,
+            "hard": 400,
+            "medium": 400
+          },
+          "rows": 1200,
+          "source_values": {
+            "deterministic_tools": 1200
+          },
+          "tokens": {
+            "completion": {
+              "max": 135,
+              "median": 124,
+              "min": 116,
+              "n": 1200,
+              "p95": 131
+            },
+            "prompt": {
+              "max": 4025,
+              "median": 3229,
+              "min": 2891,
+              "n": 1200,
+              "p95": 3830
+            },
+            "reason": null,
+            "status": "measured",
+            "tokenizer": "C:\\Users\\rezax\\.cache\\thermo\\qwen3.5-4b\\tokenizer.json"
+          }
+        },
+        "design": {
+          "chars": {
+            "completion": {
+              "max": 898,
+              "median": 728,
+              "min": 530,
+              "n": 1200,
+              "p95": 857
+            },
+            "prompt": {
+              "max": 8888,
+              "median": 8871,
+              "min": 8848,
+              "n": 1200,
+              "p95": 8886
+            }
+          },
+          "flags": {
+            "with_stored_completion": 1200,
+            "with_tool_call": 1200,
+            "with_tool_result": 1200,
+            "with_trajectory": 1200
+          },
+          "harness_values": {
+            "agents+skills": 1200
+          },
+          "malformed_lines": 0,
+          "per_split": {
+            "train": 1200
+          },
+          "per_tier": {
+            "easy": 400,
+            "hard": 400,
+            "medium": 400
+          },
+          "rows": 1200,
+          "source_values": {
+            "deterministic_tools": 1200
+          },
+          "tokens": {
+            "completion": {
+              "max": 296,
+              "median": 228,
+              "min": 153,
+              "n": 1200,
+              "p95": 271
+            },
+            "prompt": {
+              "max": 2330,
+              "median": 2313,
+              "min": 2300,
+              "n": 1200,
+              "p95": 2328
+            },
+            "reason": null,
+            "status": "measured",
+            "tokenizer": "C:\\Users\\rezax\\.cache\\thermo\\qwen3.5-4b\\tokenizer.json"
+          }
+        },
+        "ledger": {
+          "chars": {
+            "completion": {
+              "max": 7624,
+              "median": 228,
+              "min": 157,
+              "n": 1198,
+              "p95": 433
+            },
+            "prompt": {
+              "max": 12886,
+              "median": 10843,
+              "min": 9916,
+              "n": 1198,
+              "p95": 11994
+            }
+          },
+          "flags": {
+            "with_stored_completion": 1198,
+            "with_tool_call": 1198,
+            "with_tool_result": 1198,
+            "with_trajectory": 1198
+          },
+          "harness_values": {
+            "agents+skills": 1198
+          },
+          "malformed_lines": 0,
+          "per_split": {
+            "train": 1198
+          },
+          "per_tier": {
+            "easy": 399,
+            "hard": 400,
+            "medium": 399
+          },
+          "rows": 1198,
+          "source_values": {
+            "deterministic_tools": 1194,
+            "frontier_tools": 4
+          },
+          "tokens": {
+            "completion": {
+              "max": 3213,
+              "median": 87,
+              "min": 56,
+              "n": 1198,
+              "p95": 165
+            },
+            "prompt": {
+              "max": 4917,
+              "median": 3603,
+              "min": 3007,
+              "n": 1198,
+              "p95": 4395
+            },
+            "reason": null,
+            "status": "measured",
+            "tokenizer": "C:\\Users\\rezax\\.cache\\thermo\\qwen3.5-4b\\tokenizer.json"
+          }
+        },
+        "repair": {
+          "chars": {
+            "completion": {
+              "max": 10526,
+              "median": 188,
+              "min": 140,
+              "n": 1207,
+              "p95": 215
+            },
+            "prompt": {
+              "max": 11327,
+              "median": 9755,
+              "min": 9399,
+              "n": 1207,
+              "p95": 9958
+            }
+          },
+          "flags": {
+            "with_stored_completion": 1207,
+            "with_tool_call": 1207,
+            "with_tool_result": 1207,
+            "with_trajectory": 1207
+          },
+          "harness_values": {
+            "agents+skills": 1207
+          },
+          "malformed_lines": 0,
+          "per_split": {
+            "train": 1207
+          },
+          "per_tier": {
+            "easy": 402,
+            "hard": 403,
+            "medium": 402
+          },
+          "rows": 1207,
+          "source_values": {
+            "deterministic_tools": 1200,
+            "frontier_tools": 7
+          },
+          "tokens": {
+            "completion": {
+              "max": 4455,
+              "median": 66,
+              "min": 57,
+              "n": 1207,
+              "p95": 81
+            },
+            "prompt": {
+              "max": 3547,
+              "median": 2879,
+              "min": 2688,
+              "n": 1207,
+              "p95": 2993
+            },
+            "reason": null,
+            "status": "measured",
+            "tokenizer": "C:\\Users\\rezax\\.cache\\thermo\\qwen3.5-4b\\tokenizer.json"
+          }
+        }
+      },
+      "per_tier": {
+        "easy": 1601,
+        "hard": 1603,
+        "medium": 1601
+      },
+      "rows": 4805,
+      "source_values": {
+        "deterministic_tools": 4794,
+        "frontier_tools": 11
+      },
+      "tokens": {
+        "completion": {
+          "max": 4455,
+          "median": 122,
+          "min": 56,
+          "n": 4805,
+          "p95": 249
+        },
+        "prompt": {
+          "max": 4917,
+          "median": 2971,
+          "min": 2300,
+          "n": 4805,
+          "p95": 4061
+        },
+        "reason": null,
+        "status": "measured",
+        "tokenizer": "C:\\Users\\rezax\\.cache\\thermo\\qwen3.5-4b\\tokenizer.json"
+      }
+    },
     "data/grpo_tools_v3": {
       "chars": {
         "completion": {
@@ -2749,6 +3050,317 @@
         "tokenizer": "C:\\Users\\rezax\\.cache\\thermo\\qwen3.5-4b\\tokenizer.json"
       }
     },
+    "data/sft_mix_v3": {
+      "chars": {
+        "completion": {
+          "max": 10526,
+          "median": 4972,
+          "min": 154,
+          "n": 6405,
+          "p95": 8353
+        },
+        "prompt": {
+          "max": 12886,
+          "median": 9599,
+          "min": 1445,
+          "n": 6405,
+          "p95": 11388
+        }
+      },
+      "files": 4,
+      "flags": {
+        "with_stored_completion": 6405,
+        "with_tool_call": 4805,
+        "with_tool_result": 4805,
+        "with_trajectory": 11
+      },
+      "harness_values": {
+        "agents+skills": 4805,
+        "none": 1600
+      },
+      "malformed_lines": 0,
+      "per_split": {
+        "train": 6405
+      },
+      "per_task": {
+        "audit": {
+          "chars": {
+            "completion": {
+              "max": 8831,
+              "median": 6248,
+              "min": 317,
+              "n": 1600,
+              "p95": 7884
+            },
+            "prompt": {
+              "max": 11874,
+              "median": 10194,
+              "min": 2840,
+              "n": 1600,
+              "p95": 11240
+            }
+          },
+          "flags": {
+            "with_stored_completion": 1600,
+            "with_tool_call": 1200,
+            "with_tool_result": 1200,
+            "with_trajectory": 0
+          },
+          "harness_values": {
+            "agents+skills": 1200,
+            "none": 400
+          },
+          "malformed_lines": 0,
+          "per_split": {
+            "train": 1600
+          },
+          "per_tier": {
+            "easy": 533,
+            "hard": 534,
+            "medium": 533
+          },
+          "rows": 1600,
+          "source_values": {
+            "deterministic_tools": 1200,
+            "ground_truth": 400
+          },
+          "tokens": {
+            "completion": {
+              "max": 3565,
+              "median": 2464,
+              "min": 117,
+              "n": 1600,
+              "p95": 3136
+            },
+            "prompt": {
+              "max": 4025,
+              "median": 3100,
+              "min": 1182,
+              "n": 1600,
+              "p95": 3679
+            },
+            "reason": null,
+            "status": "measured",
+            "tokenizer": "C:\\Users\\rezax\\.cache\\thermo\\qwen3.5-4b\\tokenizer.json"
+          }
+        },
+        "design": {
+          "chars": {
+            "completion": {
+              "max": 9366,
+              "median": 7464,
+              "min": 460,
+              "n": 1600,
+              "p95": 8862
+            },
+            "prompt": {
+              "max": 8888,
+              "median": 8853,
+              "min": 1445,
+              "n": 1600,
+              "p95": 8886
+            }
+          },
+          "flags": {
+            "with_stored_completion": 1600,
+            "with_tool_call": 1200,
+            "with_tool_result": 1200,
+            "with_trajectory": 0
+          },
+          "harness_values": {
+            "agents+skills": 1200,
+            "none": 400
+          },
+          "malformed_lines": 0,
+          "per_split": {
+            "train": 1600
+          },
+          "per_tier": {
+            "easy": 533,
+            "hard": 534,
+            "medium": 533
+          },
+          "rows": 1600,
+          "source_values": {
+            "deterministic_tools": 1200,
+            "ground_truth": 400
+          },
+          "tokens": {
+            "completion": {
+              "max": 4370,
+              "median": 3467,
+              "min": 155,
+              "n": 1600,
+              "p95": 3973
+            },
+            "prompt": {
+              "max": 2330,
+              "median": 2305,
+              "min": 489,
+              "n": 1600,
+              "p95": 2328
+            },
+            "reason": null,
+            "status": "measured",
+            "tokenizer": "C:\\Users\\rezax\\.cache\\thermo\\qwen3.5-4b\\tokenizer.json"
+          }
+        },
+        "ledger": {
+          "chars": {
+            "completion": {
+              "max": 7624,
+              "median": 4616,
+              "min": 157,
+              "n": 1598,
+              "p95": 5940
+            },
+            "prompt": {
+              "max": 12886,
+              "median": 10524,
+              "min": 2792,
+              "n": 1598,
+              "p95": 11950
+            }
+          },
+          "flags": {
+            "with_stored_completion": 1598,
+            "with_tool_call": 1198,
+            "with_tool_result": 1198,
+            "with_trajectory": 4
+          },
+          "harness_values": {
+            "agents+skills": 1198,
+            "none": 400
+          },
+          "malformed_lines": 0,
+          "per_split": {
+            "train": 1598
+          },
+          "per_tier": {
+            "easy": 532,
+            "hard": 534,
+            "medium": 532
+          },
+          "rows": 1598,
+          "source_values": {
+            "deterministic_tools": 1194,
+            "frontier_tools": 4,
+            "ground_truth": 400
+          },
+          "tokens": {
+            "completion": {
+              "max": 3218,
+              "median": 2020,
+              "min": 56,
+              "n": 1598,
+              "p95": 2660
+            },
+            "prompt": {
+              "max": 4917,
+              "median": 3378,
+              "min": 1256,
+              "n": 1598,
+              "p95": 4356
+            },
+            "reason": null,
+            "status": "measured",
+            "tokenizer": "C:\\Users\\rezax\\.cache\\thermo\\qwen3.5-4b\\tokenizer.json"
+          }
+        },
+        "repair": {
+          "chars": {
+            "completion": {
+              "max": 10526,
+              "median": 4165,
+              "min": 154,
+              "n": 1607,
+              "p95": 5206
+            },
+            "prompt": {
+              "max": 11327,
+              "median": 9594,
+              "min": 2330,
+              "n": 1607,
+              "p95": 9953
+            }
+          },
+          "flags": {
+            "with_stored_completion": 1607,
+            "with_tool_call": 1207,
+            "with_tool_result": 1207,
+            "with_trajectory": 7
+          },
+          "harness_values": {
+            "agents+skills": 1207,
+            "none": 400
+          },
+          "malformed_lines": 0,
+          "per_split": {
+            "train": 1607
+          },
+          "per_tier": {
+            "easy": 535,
+            "hard": 537,
+            "medium": 535
+          },
+          "rows": 1607,
+          "source_values": {
+            "deterministic_tools": 1200,
+            "frontier_tools": 7,
+            "ground_truth": 400
+          },
+          "tokens": {
+            "completion": {
+              "max": 4455,
+              "median": 1433,
+              "min": 52,
+              "n": 1607,
+              "p95": 1985
+            },
+            "prompt": {
+              "max": 3547,
+              "median": 2790,
+              "min": 950,
+              "n": 1607,
+              "p95": 2966
+            },
+            "reason": null,
+            "status": "measured",
+            "tokenizer": "C:\\Users\\rezax\\.cache\\thermo\\qwen3.5-4b\\tokenizer.json"
+          }
+        }
+      },
+      "per_tier": {
+        "easy": 2133,
+        "hard": 2139,
+        "medium": 2133
+      },
+      "rows": 6405,
+      "source_values": {
+        "deterministic_tools": 4794,
+        "frontier_tools": 11,
+        "ground_truth": 1600
+      },
+      "tokens": {
+        "completion": {
+          "max": 4455,
+          "median": 2035,
+          "min": 52,
+          "n": 6405,
+          "p95": 3838
+        },
+        "prompt": {
+          "max": 4917,
+          "median": 2792,
+          "min": 489,
+          "n": 6405,
+          "p95": 3949
+        },
+        "reason": null,
+        "status": "measured",
+        "tokenizer": "C:\\Users\\rezax\\.cache\\thermo\\qwen3.5-4b\\tokenizer.json"
+      }
+    },
     "data/sft_tools_v3": {
       "chars": {
         "completion": {
@@ -3683,6 +4295,26 @@
       "rows": 669,
       "sha256": "981869a561f189a7512c7fca06046dd2689266eb43538b11fb438e09ae270bc2"
     },
+    "data/grpo_mix_v3/audit_train.jsonl": {
+      "bytes": 36742104,
+      "rows": 1200,
+      "sha256": "a1beaeb2ec8e84e8a97fba5e0a48fd812406e2a9bfda27acabd40c25dc063020"
+    },
+    "data/grpo_mix_v3/design_train.jsonl": {
+      "bytes": 34145768,
+      "rows": 1200,
+      "sha256": "e4c15f0a3f00222483b3b64b9cee6464323bf3d95b8dff9d92f6eeb3f4222928"
+    },
+    "data/grpo_mix_v3/ledger_train.jsonl": {
+      "bytes": 35667554,
+      "rows": 1198,
+      "sha256": "5c8e0b02795723c010d97dd4884dab324374f8eaaba7667484bf04e139f54a69"
+    },
+    "data/grpo_mix_v3/repair_train.jsonl": {
+      "bytes": 31742144,
+      "rows": 1207,
+      "sha256": "76766cd29a94d97351b863ccb204510984168400a739410c97764ec7d8ef1b4e"
+    },
     "data/grpo_tools_v3/audit_train.jsonl": {
       "bytes": 27644904,
       "rows": 1200,
@@ -3988,6 +4620,26 @@
       "rows": 669,
       "sha256": "981869a561f189a7512c7fca06046dd2689266eb43538b11fb438e09ae270bc2"
     },
+    "data/sft_mix_v3/audit_train.jsonl": {
+      "bytes": 29847427,
+      "rows": 1600,
+      "sha256": "9abe31afa875db45847ef8a7b74e6fb0b398dc75d1883e706fe0b2decf7ef8e6"
+    },
+    "data/sft_mix_v3/design_train.jsonl": {
+      "bytes": 23282065,
+      "rows": 1600,
+      "sha256": "9265a478969f42ac85f4b9ea51315a4cbf3945e2bfed6e8797ea816221f1516e"
+    },
+    "data/sft_mix_v3/ledger_train.jsonl": {
+      "bytes": 32684258,
+      "rows": 1598,
+      "sha256": "169c5a50d170935217e37b08e7b778a4816742b6475d9ba31fa5740c4d32800e"
+    },
+    "data/sft_mix_v3/repair_train.jsonl": {
+      "bytes": 29227312,
+      "rows": 1607,
+      "sha256": "21ed85d654116ad7ef64efeedc65cda889731f901da6faeb1f2b3af8f79407e4"
+    },
     "data/sft_tools_v3/audit_train.jsonl": {
       "bytes": 17629539,
       "rows": 1200,
@@ -4039,30 +4691,30 @@
   "totals": {
     "chars": {
       "completion": {
-        "max": 9366,
-        "median": 202,
+        "max": 10526,
+        "median": 203,
         "min": 0,
-        "n": 220091,
-        "p95": 845
+        "n": 231301,
+        "p95": 4407
       },
       "prompt": {
         "max": 20844,
-        "median": 3041,
+        "median": 3067,
         "min": 1442,
-        "n": 220091,
-        "p95": 13795
+        "n": 231301,
+        "p95": 13764
       }
     },
     "flags": {
-      "with_stored_completion": 212961,
-      "with_tool_call": 19188,
-      "with_tool_result": 19188,
-      "with_trajectory": 9594
+      "with_stored_completion": 224171,
+      "with_tool_call": 28798,
+      "with_tool_result": 28798,
+      "with_trajectory": 14410
     },
     "harness_values": {
       "<missing>": 40759,
-      "agents+skills": 63732,
-      "none": 113394,
+      "agents+skills": 73342,
+      "none": 114994,
       "skills": 2206
     },
     "malformed_lines": 0,
@@ -4073,36 +4725,37 @@
       "test_ood_load": 1435,
       "test_ood_scale": 1576,
       "test_ood_topology": 5656,
-      "train": 177011,
+      "train": 188221,
       "val": 5604
     },
     "per_tier": {
       "<missing>": 195487,
-      "easy": 8362,
-      "hard": 7922,
-      "medium": 8320
+      "easy": 12096,
+      "hard": 11664,
+      "medium": 12054
     },
-    "rows": 220091,
+    "rows": 231301,
     "source_values": {
       "<missing>": 35959,
-      "deterministic_tools": 19188,
+      "deterministic_tools": 28776,
       "frontier": 1315,
-      "ground_truth": 163629
+      "frontier_tools": 22,
+      "ground_truth": 165229
     },
     "tokens": {
       "completion": {
-        "max": 4370,
-        "median": 77,
+        "max": 4455,
+        "median": 78,
         "min": 0,
-        "n": 220091,
-        "p95": 267
+        "n": 231301,
+        "p95": 1726
       },
       "prompt": {
         "max": 6235,
-        "median": 1252,
+        "median": 1267,
         "min": 486,
-        "n": 220091,
-        "p95": 4194
+        "n": 231301,
+        "p95": 4193
       },
       "reason": null,
       "status": "measured",

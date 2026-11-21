@@ -2,6 +2,12 @@
 
 Everything about what the data is and where it came from.
 
+## 2026-11-22 — v3 mix provenance audit (Next actions step 5)
+
+`scripts/audit_provenance_chain.py --strict` → **PROVENANCE OK (8/8)**: 12 cohort rows carry explicit model/provider/run/source fields; 22 frontier rows traced (all from the cohort, 0 legacy); 11,210 mix rows with 0 `ref_spec`/answer leaks; 0 prompt-shard or harness-prompt leakage; 460 memory notes (58 accepted / 402 rejected). The 2026-11-20 archive (`data/archive/2026-11-20_pre_cot/`) is never read by any live corpus or by this audit.
+
+Mix built by `scripts/mix_tool_corpora.py` from `data/sft_tools_v3_h` (4,794 rows), `data/frontier_tools_accepted` (11 unique pilot rows, repair 7 / ledger 4 — one shared ledger plant attempted by both models is deduped), and `data/a_slice` (1,600 plain rows): `data/sft_mix_v3` = 6,405 rows, `data/grpo_mix_v3` = 4,805 rows. Per task the SFT mix is 400 plain A-slice + 1,200 deterministic v3_h (+ frontier on repair/ledger only); audit and design have 0 frontier rows because the 40-row pilot rejected every such trace. Training/scoring stay blocked until the pilot gate is met and Reza gives "go".
+
 ## Per-trace provenance
 
 *(merged from `docs/PROVENANCE.md` on 2026-11-20; content kept, headings demoted one level)*

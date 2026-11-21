@@ -3,6 +3,13 @@
 Working copy: `C:\Users\rezax\Home\Code\thermo_agent\Repo` on REZA_PC (git, branch `main`). No SSH, no WSL: every
 step below runs in this checkout.
 
+## Next actions — step 5 "v3 mix + provenance audit" (2026-11-22, DONE)
+
+- `scripts/build_accepted_frontier.py` flattened the pilot cohort into `data/frontier_tools_accepted`: **11 unique verifier-accepted rows** (repair 7, ledger 4). The 12 cohort rows contained one ground-truth ledger plant attempted by both models; the shared `record_id` is deduped so the mix never trains twice on one plant.
+- `scripts/mix_tool_corpora.py --deterministic-sft data/sft_tools_v3_h --deterministic-grpo data/grpo_tools_v3_h --frontier data/frontier_tools_accepted --out-sft data/sft_mix_v3 --out-grpo data/grpo_mix_v3 --manifest data/sft_mix_v3/MANIFEST.json --harness-prompt --a-slice data/a_slice --seed 0 --force`: **sft_mix_v3 6,405 rows** (audit 1600, design 1600, ledger 1598, repair 1607), **grpo_mix_v3 4,805 rows** (1200/1200/1198/1207). Per task: deterministic v3_h + 11 frontier rows on repair/ledger + 400 plain A-slice rows (SFT only); zero frontier rows in audit/design because the pilot gate rejected them all.
+- `scripts/audit_provenance_chain.py --strict`: **PROVENANCE OK, 8/8 checks** (12 cohort rows with explicit fields, 22 frontier rows traced, 11,210 mix rows with 0 `ref_spec`/answer leaks, prompt-shard/harness leakage 0, memory outcomes 460 notes). Focused tests: 28 passed, 8 skipped (fresh-clone corpus guard).
+- Dataset stats regenerated with the v3 mixes. Training/scoring remain blocked until the pilot gate is met and Reza says "datagen complete"/"go"; no SFT, GRPO, k4/8/16 or eval has run.
+
 ## Next actions — step 4 "40-row reasoning pilot" (2026-11-21/22, DONE; gate NOT met)
 
 - Shards regenerated with `scripts/build_next_budget_batch.py --size 40 --name pilot40`: exactly 40 rows/model, 10 per task, tiers rotated 3/3/4 (shard-wide 14/13/13, so the hosted `select_rows` keeps all 40). Fixed that script (stale gate regex, per-task allocation, restored `dynamic_tools: true`) and made `notebooks/kaggle_model_runner.py` reject any code bundle whose `toolkit.py` lacks the patched `tool_names(include_dynamic=...)` signature — the first pilot attempt died with `TypeError: tool_names() got an unexpected keyword argument 'include_dynamic'` because the additive HF repo still carried a 2026-11-19 unzipped bundle. Refreshed that bundle in place (no remote deletion), re-synced, and task version 22 ran luna (7302405) + haiku (7302406) to completion with 0 runner errors.

@@ -1,0 +1,8 @@
+{
+ "by_task": {
+  "ledger": 4,
+  "repair": 7
+ },
+ "generator": "build_accepted_frontier",
+ "rows": 11
+}
