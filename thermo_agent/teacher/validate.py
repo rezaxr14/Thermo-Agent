@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import copy
 import hashlib
+import json
 import re
 
 from ..agent.dsl import EditError, edits_to_patch, parse_edits
@@ -229,6 +230,35 @@ def teacher_row(task: str, completion: str, row: dict, verdict: dict, tag: str =
         if k in row:
             out[k] = row[k]
     return out
+
+
+def last_validated_candidate(task: str, turns: list[dict] | None, text: str) -> str:
+    """Design only: the final answer must be the last validity_check-passed candidate.
+
+    A verifier-valid specification that the model then talks itself out of is not a
+    usable trajectory. Both the harness and ingest call this before accepting a
+    design final answer, so the student never learns to replace a checked answer.
+    """
+    if task != "design":
+        return text
+    for turn in reversed(turns or []):
+        calls = turn.get("tool_calls") or []
+        results = turn.get("tool_results") or []
+        for call, raw in reversed(list(zip(calls, results))):
+            name = call.get("name") if isinstance(call, dict) else getattr(call, "name", "")
+            if name != "validity_check":
+                continue
+            try:
+                ok = json.loads(raw).get("ok") is True
+            except (TypeError, ValueError):
+                continue
+            if not ok:
+                continue
+            args = call.get("arguments") if isinstance(call, dict) else getattr(call, "arguments", {})
+            candidate = args.get("candidate") if isinstance(args, dict) else ""
+            if isinstance(candidate, str) and candidate.strip():
+                return candidate.strip()
+    return text
 
 
 def rejection_note(task: str, row: dict, verdict: dict, source: str = "validator") -> memory.Note:

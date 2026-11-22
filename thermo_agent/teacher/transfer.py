@@ -212,6 +212,8 @@ def ingest(export_dir, completions_path, out_dir, memory_dir=None, tasks=TASKS, 
             stats["skipped_duplicate"] += 1
             continue
         seen_answers.add(digest)
+        text = validate.last_validated_candidate(
+            task, (record.get("trajectory") or {}).get("turns"), text)
         verdict = validate.validate(task, text, row)
         if verdict["accepted"] and verdict["reward"] >= min_reward:
             # Reasoning gate (2026-11-20): a tool trace without chain of thought is not training data.

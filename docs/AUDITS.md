@@ -1,5 +1,13 @@
 # Audits (dated entries)
 
+## Native protocol + 8,192 gate audit - 2026-11-22 (step 3 rebuild)
+
+After the step-3 prompt additions the harness corpora were rebuilt and re-measured:
+**10,404 rows, 0 over 8,192 (rendered), 0 over 8,192 (pipeline), 0 anomalies**.
+Per-task rendered p50/p95/max: audit 5,709/8,073/8,096, design 4,819/8,070/8,096,
+ledger 5,586/8,055/8,096, repair 5,320/7,131/7,451. The extra audit-id line cost
+539 deterministic rows; they were dropped by the gate, never truncated.
+
 ## Native protocol + 8,192 gate audit - 2026-11-22
 
 `python -m scripts.audit_harness_corpus --dirs data/sft_tools_v3_h

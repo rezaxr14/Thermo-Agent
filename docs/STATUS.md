@@ -1,5 +1,16 @@
 # Status and operating notes
 
+## 2026-11-22 - Step 3: audit ids, design final-answer enforcement, ledger table (DONE)
+
+The audit harness now lists the rankable `ed_json` component ids (excluding the
+combustor/gas engine) and forbids any other id; a test confirms a `DC` ranking is
+rejected. Design final answers are forced to the last `validity_check`-passed
+candidate in both the eval harness and ingest. Ledger reasoning now renders a compact
+`(line, value, recomputed, residual)` table with no faulty-line pointer.
+Corpora rebuilt under the exact gate: `sft_tools_v3_h`/`grpo_tools_v3_h` 2,198 rows,
+`sft_mix_v3` 3,802, `grpo_mix_v3` 2,202; 10,404 audited rows, 0 over 8,192,
+0 anomalies. Focused tests: 27 passed.
+
 ## 2026-11-22 - Step 2: teacher-only reason schema (DONE)
 
 Hosted tool wrappers now require a `reason` sentence; `transfer.ingest` and

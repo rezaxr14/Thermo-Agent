@@ -4,9 +4,9 @@
   "generated_by": "scripts/audit_harness_corpus.py",
   "generated_from": {
     "data/grpo_mix_v3/audit_train.jsonl": {
-      "bytes": 15945379,
-      "rows": 479,
-      "sha256": "13e58801d5b1c093947b9419a679b349416a9c14207280d05dc4e6985ea28cec"
+      "bytes": 14067236,
+      "rows": 423,
+      "sha256": "c58a6459adbc5d937681524c892d3084191ce07eebb75e834ab10c2cae1447da"
     },
     "data/grpo_mix_v3/design_train.jsonl": {
       "bytes": 12875052,
@@ -14,9 +14,9 @@
       "sha256": "68119e446fb56eebe6c2414d0ff63b6ab861957255d241a82471c94cef212b3c"
     },
     "data/grpo_mix_v3/ledger_train.jsonl": {
-      "bytes": 20150037,
-      "rows": 661,
-      "sha256": "22ac769da86e647fef84939c914cd97e40dafae9dd9d7f65fdbb297358d6dbc9"
+      "bytes": 5446260,
+      "rows": 178,
+      "sha256": "5e9d4b2b79dc4c3ee5fc957f821a86d2f67d25dce9e44cd9db85d4fd6370d136"
     },
     "data/grpo_mix_v3/repair_train.jsonl": {
       "bytes": 35011681,
@@ -24,9 +24,9 @@
       "sha256": "6a73e1c0dc556ba7dc0967acac875197da0e97d237785d9eb7b17b699c08b1c8"
     },
     "data/grpo_tools_v3_h/audit_train.jsonl": {
-      "bytes": 15945375,
-      "rows": 479,
-      "sha256": "c1b012b8cc250aa87821f7e7bc3202fb0c394ad5fc16c9bdc51c7046067cf87e"
+      "bytes": 14067234,
+      "rows": 423,
+      "sha256": "10703e80b60b7901cc92cc288160c9621504f8fe95026aea3887aea321a7b7b0"
     },
     "data/grpo_tools_v3_h/design_train.jsonl": {
       "bytes": 12974590,
@@ -34,9 +34,9 @@
       "sha256": "980918b2572d84e4e61e160e72460b410abb1953103f59f55bcff1f635974f67"
     },
     "data/grpo_tools_v3_h/ledger_train.jsonl": {
-      "bytes": 20114372,
-      "rows": 660,
-      "sha256": "a85a8827b1adbfee38157caa673e6b7a8d2c24f1d5cb47f999615a2726c006fb"
+      "bytes": 5410575,
+      "rows": 177,
+      "sha256": "d9f385d5454f52572590c844f1ef484947839151545b888a4dbd1f14254f34ce"
     },
     "data/grpo_tools_v3_h/repair_train.jsonl": {
       "bytes": 34833072,
@@ -44,9 +44,9 @@
       "sha256": "5426495686445b5207fa8579cc9746e4b9e0c56fa7d236162ba3dd71a26636be"
     },
     "data/sft_mix_v3/audit_train.jsonl": {
-      "bytes": 15467110,
-      "rows": 879,
-      "sha256": "94bf22503b51f41dd172163a657c42090838c05323df97b534a04c0fc8db2fb3"
+      "bytes": 14029874,
+      "rows": 823,
+      "sha256": "dd308d62afa4f65b09aefdca29736cbae407f816d9c7061845ab8e06ac819700"
     },
     "data/sft_mix_v3/design_train.jsonl": {
       "bytes": 10448823,
@@ -54,9 +54,9 @@
       "sha256": "351b620fd63654b5172753c1592e64b347d7d8ca0ebb9065c9b1951abd1b0a87"
     },
     "data/sft_mix_v3/ledger_train.jsonl": {
-      "bytes": 20754605,
-      "rows": 1061,
-      "sha256": "f5de8a459c9c8988f461c23a7e21172bb905d66ae1510ceb653ba7fead986942"
+      "bytes": 8763451,
+      "rows": 578,
+      "sha256": "37ac66d3c61655819ee19b1c0b75c9442f9c2289bd7c13cd05f5c4ef43162e02"
     },
     "data/sft_mix_v3/repair_train.jsonl": {
       "bytes": 32460851,
@@ -64,9 +64,9 @@
       "sha256": "256a8c7ac058c5cfbfcbd8f139a3bceddb83837142b55422a2f1dfaa3ca7e62e"
     },
     "data/sft_tools_v3_h/audit_train.jsonl": {
-      "bytes": 12323616,
-      "rows": 479,
-      "sha256": "0dc71266050a126ece25418b2dfb4d5560abf35090ad847b846407b9e47b1e81"
+      "bytes": 10886384,
+      "rows": 423,
+      "sha256": "175e4102d574724e0752a0469a0fa126e603f0f3d16c60b3fb8352d0c564da7f"
     },
     "data/sft_tools_v3_h/design_train.jsonl": {
       "bytes": 9295244,
@@ -74,9 +74,9 @@
       "sha256": "a401a7ef5223bdf5e809ca97d9e059233b1a4eb463dbb5f1408d0de6a08ee88b"
     },
     "data/sft_tools_v3_h/ledger_train.jsonl": {
-      "bytes": 16315009,
-      "rows": 660,
-      "sha256": "48567e452b6cdb6e6039d3ffd6123e54556afe4ed192a1c855359c2363929836"
+      "bytes": 4323835,
+      "rows": 177,
+      "sha256": "9c5026c3b69ae779afbb9affeeb3babeb49c95860cbc542e97f2758104f4cbc5"
     },
     "data/sft_tools_v3_h/repair_train.jsonl": {
       "bytes": 28489160,
@@ -97,26 +97,26 @@
     "data/grpo_mix_v3": {
       "audit": {
         "chars": {
-          "max": 8688,
-          "median": 8327,
-          "min": 7861,
-          "n": 479,
-          "p95": 8676
+          "max": 8831,
+          "median": 8369,
+          "min": 7984,
+          "n": 423,
+          "p95": 8824
         },
-        "n": 479,
+        "n": 423,
         "pipeline": {
-          "max": 2965,
-          "median": 2790,
-          "min": 2516,
-          "n": 479,
-          "p95": 2959
+          "max": 3007,
+          "median": 2764,
+          "min": 2549,
+          "n": 423,
+          "p95": 3003
         },
         "rendered": {
-          "max": 5762,
-          "median": 5587,
-          "min": 5313,
-          "n": 479,
-          "p95": 5756
+          "max": 5804,
+          "median": 5561,
+          "min": 5346,
+          "n": 423,
+          "p95": 5800
         }
       },
       "design": {
@@ -146,25 +146,25 @@
       "ledger": {
         "chars": {
           "max": 11397,
-          "median": 8394,
+          "median": 8104,
           "min": 7812,
-          "n": 661,
-          "p95": 8840
+          "n": 178,
+          "p95": 8313
         },
-        "n": 661,
+        "n": 178,
         "pipeline": {
           "max": 4495,
-          "median": 2925,
+          "median": 2797,
           "min": 2578,
-          "n": 661,
-          "p95": 3218
+          "n": 178,
+          "p95": 2903
         },
         "rendered": {
           "max": 7390,
-          "median": 5722,
+          "median": 5594,
           "min": 5375,
-          "n": 661,
-          "p95": 6015
+          "n": 178,
+          "p95": 5700
         }
       },
       "repair": {
@@ -195,26 +195,26 @@
     "data/grpo_tools_v3_h": {
       "audit": {
         "chars": {
-          "max": 8688,
-          "median": 8327,
-          "min": 7861,
-          "n": 479,
-          "p95": 8676
+          "max": 8831,
+          "median": 8369,
+          "min": 7984,
+          "n": 423,
+          "p95": 8824
         },
-        "n": 479,
+        "n": 423,
         "pipeline": {
-          "max": 2965,
-          "median": 2790,
-          "min": 2516,
-          "n": 479,
-          "p95": 2959
+          "max": 3007,
+          "median": 2764,
+          "min": 2549,
+          "n": 423,
+          "p95": 3003
         },
         "rendered": {
-          "max": 5762,
-          "median": 5587,
-          "min": 5313,
-          "n": 479,
-          "p95": 5756
+          "max": 5804,
+          "median": 5561,
+          "min": 5346,
+          "n": 423,
+          "p95": 5800
         }
       },
       "design": {
@@ -243,26 +243,26 @@
       },
       "ledger": {
         "chars": {
-          "max": 9006,
-          "median": 8393,
+          "max": 8439,
+          "median": 8103,
           "min": 7812,
-          "n": 660,
-          "p95": 8834
+          "n": 177,
+          "p95": 8300
         },
-        "n": 660,
+        "n": 177,
         "pipeline": {
-          "max": 3286,
-          "median": 2925,
+          "max": 2948,
+          "median": 2797,
           "min": 2578,
-          "n": 660,
-          "p95": 3217
+          "n": 177,
+          "p95": 2901
         },
         "rendered": {
-          "max": 6083,
-          "median": 5722,
+          "max": 5745,
+          "median": 5594,
           "min": 5375,
-          "n": 660,
-          "p95": 6014
+          "n": 177,
+          "p95": 5698
         }
       },
       "repair": {
@@ -293,26 +293,26 @@
     "data/sft_mix_v3": {
       "audit": {
         "chars": {
-          "max": 13682,
-          "median": 12713,
+          "max": 13771,
+          "median": 12736,
           "min": 3170,
-          "n": 879,
-          "p95": 13526
+          "n": 823,
+          "p95": 13549
         },
-        "n": 879,
+        "n": 823,
         "pipeline": {
-          "max": 4937,
-          "median": 4499,
+          "max": 4940,
+          "median": 4478,
           "min": 1406,
-          "n": 879,
-          "p95": 4898
+          "n": 823,
+          "p95": 4912
         },
         "rendered": {
           "max": 8096,
-          "median": 7660,
+          "median": 7651,
           "min": 1329,
-          "n": 879,
-          "p95": 8064
+          "n": 823,
+          "p95": 8076
         }
       },
       "design": {
@@ -341,26 +341,26 @@
       },
       "ledger": {
         "chars": {
-          "max": 13115,
-          "median": 11806,
+          "max": 12797,
+          "median": 4450,
           "min": 3062,
-          "n": 1061,
-          "p95": 12885
+          "n": 578,
+          "p95": 12670
         },
-        "n": 1061,
+        "n": 578,
         "pipeline": {
-          "max": 5138,
-          "median": 4451,
+          "max": 5139,
+          "median": 2354,
           "min": 1430,
-          "n": 1061,
-          "p95": 5053
+          "n": 578,
+          "p95": 5083
         },
         "rendered": {
           "max": 8096,
-          "median": 7428,
+          "median": 2278,
           "min": 1353,
-          "n": 1061,
-          "p95": 8033
+          "n": 578,
+          "p95": 8053
         }
       },
       "repair": {
@@ -391,26 +391,26 @@
     "data/sft_tools_v3_h": {
       "audit": {
         "chars": {
-          "max": 13682,
-          "median": 13240,
-          "min": 12579,
-          "n": 479,
-          "p95": 13574
+          "max": 13771,
+          "median": 13331,
+          "min": 12702,
+          "n": 423,
+          "p95": 13576
         },
-        "n": 479,
+        "n": 423,
         "pipeline": {
-          "max": 4937,
-          "median": 4773,
-          "min": 4407,
-          "n": 479,
-          "p95": 4912
+          "max": 4940,
+          "median": 4779,
+          "min": 4440,
+          "n": 423,
+          "p95": 4921
         },
         "rendered": {
           "max": 8096,
-          "median": 7942,
-          "min": 7585,
-          "n": 479,
-          "p95": 8079
+          "median": 7952,
+          "min": 7618,
+          "n": 423,
+          "p95": 8084
         }
       },
       "design": {
@@ -439,26 +439,26 @@
       },
       "ledger": {
         "chars": {
-          "max": 13115,
-          "median": 12281,
-          "min": 10961,
-          "n": 660,
-          "p95": 12945
+          "max": 12797,
+          "median": 12395,
+          "min": 11639,
+          "n": 177,
+          "p95": 12733
         },
-        "n": 660,
+        "n": 177,
         "pipeline": {
-          "max": 5138,
-          "median": 4646,
-          "min": 3958,
-          "n": 660,
-          "p95": 5082
+          "max": 5139,
+          "median": 4956,
+          "min": 4498,
+          "n": 177,
+          "p95": 5118
         },
         "rendered": {
           "max": 8096,
-          "median": 7649,
-          "min": 6914,
-          "n": 660,
-          "p95": 8069
+          "median": 7932,
+          "min": 7454,
+          "n": 177,
+          "p95": 8079
         }
       },
       "repair": {
@@ -490,26 +490,26 @@
   "per_task": {
     "audit": {
       "chars": {
-        "max": 13682,
-        "median": 8484,
+        "max": 13771,
+        "median": 8615,
         "min": 3170,
-        "n": 2316,
-        "p95": 13464
+        "n": 2092,
+        "p95": 13541
       },
-      "n": 2316,
+      "n": 2092,
       "pipeline": {
-        "max": 4937,
-        "median": 2874,
+        "max": 4940,
+        "median": 2912,
         "min": 1406,
-        "n": 2316,
-        "p95": 4891
+        "n": 2092,
+        "p95": 4907
       },
       "rendered": {
         "max": 8096,
-        "median": 5671,
+        "median": 5709,
         "min": 1329,
-        "n": 2316,
-        "p95": 8057
+        "n": 2092,
+        "p95": 8073
       }
     },
     "design": {
@@ -538,26 +538,26 @@
     },
     "ledger": {
       "chars": {
-        "max": 13115,
-        "median": 8774,
+        "max": 12797,
+        "median": 8102,
         "min": 3062,
-        "n": 3042,
-        "p95": 12832
+        "n": 1110,
+        "p95": 12676
       },
-      "n": 3042,
+      "n": 1110,
       "pipeline": {
-        "max": 5138,
-        "median": 3188,
+        "max": 5139,
+        "median": 2798,
         "min": 1430,
-        "n": 3042,
-        "p95": 5034
+        "n": 1110,
+        "p95": 5085
       },
       "rendered": {
         "max": 8096,
-        "median": 5982,
+        "median": 5586,
         "min": 1353,
-        "n": 3042,
-        "p95": 8003
+        "n": 1110,
+        "p95": 8055
       }
     },
     "repair": {
@@ -599,6 +599,6 @@
     "malformed_or_anomalous": 0,
     "over_8192_pipeline": 0,
     "over_8192_rendered": 0,
-    "rows": 12560
+    "rows": 10404
   }
 }

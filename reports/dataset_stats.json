@@ -1214,87 +1214,87 @@
       "chars": {
         "completion": {
           "max": 4964,
-          "median": 214,
+          "median": 212,
           "min": 140,
-          "n": 2743,
-          "p95": 720
+          "n": 2204,
+          "p95": 728
         },
         "prompt": {
           "max": 9032,
-          "median": 7584,
+          "median": 7507,
           "min": 6553,
-          "n": 2743,
-          "p95": 8446
+          "n": 2204,
+          "p95": 8290
         }
       },
       "files": 4,
       "flags": {
-        "with_stored_completion": 2743,
-        "with_tool_call": 2738,
+        "with_stored_completion": 2204,
+        "with_tool_call": 2199,
         "with_tool_result": 0,
-        "with_trajectory": 2743
+        "with_trajectory": 2204
       },
       "harness_values": {
-        "agents+skills": 2743
+        "agents+skills": 2204
       },
       "malformed_lines": 0,
       "per_split": {
-        "train": 2743
+        "train": 2204
       },
       "per_task": {
         "audit": {
           "chars": {
             "completion": {
-              "max": 342,
+              "max": 341,
               "median": 327,
               "min": 318,
-              "n": 479,
+              "n": 423,
               "p95": 338
             },
             "prompt": {
-              "max": 8353,
-              "median": 8003,
-              "min": 7528,
-              "n": 479,
-              "p95": 8349
+              "max": 8501,
+              "median": 8033,
+              "min": 7651,
+              "n": 423,
+              "p95": 8497
             }
           },
           "flags": {
-            "with_stored_completion": 479,
-            "with_tool_call": 479,
+            "with_stored_completion": 423,
+            "with_tool_call": 423,
             "with_tool_result": 0,
-            "with_trajectory": 479
+            "with_trajectory": 423
           },
           "harness_values": {
-            "agents+skills": 479
+            "agents+skills": 423
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 479
+            "train": 423
           },
           "per_tier": {
-            "easy": 159,
-            "hard": 161,
-            "medium": 159
+            "easy": 141,
+            "hard": 141,
+            "medium": 141
           },
-          "rows": 479,
+          "rows": 423,
           "source_values": {
-            "deterministic_tools": 479
+            "deterministic_tools": 423
           },
           "tokens": {
             "completion": {
               "max": 135,
               "median": 123,
               "min": 116,
-              "n": 479,
+              "n": 423,
               "p95": 131
             },
             "prompt": {
-              "max": 2743,
-              "median": 2570,
-              "min": 2289,
-              "n": 479,
-              "p95": 2739
+              "max": 2787,
+              "median": 2537,
+              "min": 2322,
+              "n": 423,
+              "p95": 2783
             },
             "reason": null,
             "status": "measured",
@@ -1365,55 +1365,55 @@
             "completion": {
               "max": 2838,
               "median": 225,
-              "min": 169,
-              "n": 661,
-              "p95": 425
+              "min": 170,
+              "n": 178,
+              "p95": 392
             },
             "prompt": {
-              "max": 8783,
-              "median": 8067,
+              "max": 8559,
+              "median": 7887,
               "min": 7621,
-              "n": 661,
-              "p95": 8599
+              "n": 178,
+              "p95": 8061
             }
           },
           "flags": {
-            "with_stored_completion": 661,
-            "with_tool_call": 660,
+            "with_stored_completion": 178,
+            "with_tool_call": 177,
             "with_tool_result": 0,
-            "with_trajectory": 661
+            "with_trajectory": 178
           },
           "harness_values": {
-            "agents+skills": 661
+            "agents+skills": 178
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 661
+            "train": 178
           },
           "per_tier": {
-            "easy": 220,
-            "hard": 221,
-            "medium": 220
+            "easy": 59,
+            "hard": 60,
+            "medium": 59
           },
-          "rows": 661,
+          "rows": 178,
           "source_values": {
-            "deterministic_tools": 660,
+            "deterministic_tools": 177,
             "frontier_tools": 1
           },
           "tokens": {
             "completion": {
               "max": 1391,
               "median": 87,
-              "min": 68,
-              "n": 661,
-              "p95": 160
+              "min": 69,
+              "n": 178,
+              "p95": 147
             },
             "prompt": {
-              "max": 3096,
-              "median": 2718,
+              "max": 3008,
+              "median": 2613,
               "min": 2404,
-              "n": 661,
-              "p95": 3033
+              "n": 178,
+              "p95": 2713
             },
             "reason": null,
             "status": "measured",
@@ -1482,29 +1482,29 @@
         }
       },
       "per_tier": {
-        "easy": 912,
-        "hard": 919,
-        "medium": 912
+        "easy": 733,
+        "hard": 738,
+        "medium": 733
       },
-      "rows": 2743,
+      "rows": 2204,
       "source_values": {
-        "deterministic_tools": 2737,
+        "deterministic_tools": 2198,
         "frontier_tools": 6
       },
       "tokens": {
         "completion": {
           "max": 1631,
-          "median": 82,
+          "median": 79,
           "min": 57,
-          "n": 2743,
-          "p95": 214
+          "n": 2204,
+          "p95": 218
         },
         "prompt": {
-          "max": 3096,
-          "median": 2335,
+          "max": 3008,
+          "median": 2308,
           "min": 1697,
-          "n": 2743,
-          "p95": 2963
+          "n": 2204,
+          "p95": 2693
         },
         "reason": null,
         "status": "measured",
@@ -1515,32 +1515,32 @@
       "chars": {
         "completion": {
           "max": 898,
-          "median": 322,
+          "median": 323,
           "min": 140,
-          "n": 4686,
-          "p95": 810
+          "n": 4509,
+          "p95": 812
         },
         "prompt": {
-          "max": 4534,
-          "median": 2391,
+          "max": 4440,
+          "median": 2365,
           "min": 1445,
-          "n": 4686,
-          "p95": 3914
+          "n": 4509,
+          "p95": 3450
         }
       },
       "files": 4,
       "flags": {
-        "with_stored_completion": 4686,
-        "with_tool_call": 4686,
+        "with_stored_completion": 4509,
+        "with_tool_call": 4509,
         "with_tool_result": 0,
-        "with_trajectory": 4686
+        "with_trajectory": 4509
       },
       "harness_values": {
-        "<missing>": 4686
+        "<missing>": 4509
       },
       "malformed_lines": 0,
       "per_split": {
-        "train": 4686
+        "train": 4509
       },
       "per_task": {
         "audit": {
@@ -1666,54 +1666,54 @@
             "completion": {
               "max": 512,
               "median": 228,
-              "min": 157,
-              "n": 1126,
+              "min": 169,
+              "n": 949,
               "p95": 432
             },
             "prompt": {
-              "max": 4534,
-              "median": 3358,
+              "max": 4016,
+              "median": 3238,
               "min": 2444,
-              "n": 1126,
-              "p95": 3977
+              "n": 949,
+              "p95": 3919
             }
           },
           "flags": {
-            "with_stored_completion": 1126,
-            "with_tool_call": 1126,
+            "with_stored_completion": 949,
+            "with_tool_call": 949,
             "with_tool_result": 0,
-            "with_trajectory": 1126
+            "with_trajectory": 949
           },
           "harness_values": {
-            "<missing>": 1126
+            "<missing>": 949
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 1126
+            "train": 949
           },
           "per_tier": {
-            "easy": 378,
-            "hard": 370,
-            "medium": 378
+            "easy": 328,
+            "hard": 293,
+            "medium": 328
           },
-          "rows": 1126,
+          "rows": 949,
           "source_values": {
-            "deterministic_tools": 1126
+            "deterministic_tools": 949
           },
           "tokens": {
             "completion": {
               "max": 188,
               "median": 87,
-              "min": 56,
-              "n": 1126,
-              "p95": 165
+              "min": 68,
+              "n": 949,
+              "p95": 166
             },
             "prompt": {
-              "max": 2561,
-              "median": 1744,
+              "max": 2237,
+              "median": 1689,
               "min": 1160,
-              "n": 1126,
-              "p95": 2236
+              "n": 949,
+              "p95": 2108
             },
             "reason": null,
             "status": "measured",
@@ -1781,28 +1781,28 @@
         }
       },
       "per_tier": {
-        "easy": 1578,
-        "hard": 1530,
-        "medium": 1578
+        "easy": 1528,
+        "hard": 1453,
+        "medium": 1528
       },
-      "rows": 4686,
+      "rows": 4509,
       "source_values": {
-        "deterministic_tools": 4686
+        "deterministic_tools": 4509
       },
       "tokens": {
         "completion": {
           "max": 296,
           "median": 122,
-          "min": 56,
-          "n": 4686,
-          "p95": 248
+          "min": 57,
+          "n": 4509,
+          "p95": 249
         },
         "prompt": {
-          "max": 2561,
-          "median": 1085,
+          "max": 2237,
+          "median": 1070,
           "min": 489,
-          "n": 4686,
-          "p95": 2103
+          "n": 4509,
+          "p95": 1797
         },
         "reason": null,
         "status": "measured",
@@ -1813,87 +1813,87 @@
       "chars": {
         "completion": {
           "max": 812,
-          "median": 214,
+          "median": 212,
           "min": 140,
-          "n": 2737,
-          "p95": 719
+          "n": 2198,
+          "p95": 728
         },
         "prompt": {
-          "max": 8783,
-          "median": 7584,
+          "max": 8501,
+          "median": 7506,
           "min": 6553,
-          "n": 2737,
-          "p95": 8444
+          "n": 2198,
+          "p95": 8289
         }
       },
       "files": 4,
       "flags": {
-        "with_stored_completion": 2737,
-        "with_tool_call": 2737,
+        "with_stored_completion": 2198,
+        "with_tool_call": 2198,
         "with_tool_result": 0,
-        "with_trajectory": 2737
+        "with_trajectory": 2198
       },
       "harness_values": {
-        "agents+skills": 2737
+        "agents+skills": 2198
       },
       "malformed_lines": 0,
       "per_split": {
-        "train": 2737
+        "train": 2198
       },
       "per_task": {
         "audit": {
           "chars": {
             "completion": {
-              "max": 342,
+              "max": 341,
               "median": 327,
               "min": 318,
-              "n": 479,
+              "n": 423,
               "p95": 338
             },
             "prompt": {
-              "max": 8353,
-              "median": 8003,
-              "min": 7528,
-              "n": 479,
-              "p95": 8349
+              "max": 8501,
+              "median": 8033,
+              "min": 7651,
+              "n": 423,
+              "p95": 8497
             }
           },
           "flags": {
-            "with_stored_completion": 479,
-            "with_tool_call": 479,
+            "with_stored_completion": 423,
+            "with_tool_call": 423,
             "with_tool_result": 0,
-            "with_trajectory": 479
+            "with_trajectory": 423
           },
           "harness_values": {
-            "agents+skills": 479
+            "agents+skills": 423
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 479
+            "train": 423
           },
           "per_tier": {
-            "easy": 164,
-            "hard": 158,
-            "medium": 157
+            "easy": 141,
+            "hard": 142,
+            "medium": 140
           },
-          "rows": 479,
+          "rows": 423,
           "source_values": {
-            "deterministic_tools": 479
+            "deterministic_tools": 423
           },
           "tokens": {
             "completion": {
               "max": 135,
               "median": 123,
               "min": 116,
-              "n": 479,
+              "n": 423,
               "p95": 131
             },
             "prompt": {
-              "max": 2743,
-              "median": 2570,
-              "min": 2289,
-              "n": 479,
-              "p95": 2739
+              "max": 2787,
+              "median": 2537,
+              "min": 2322,
+              "n": 423,
+              "p95": 2783
             },
             "reason": null,
             "status": "measured",
@@ -1962,56 +1962,56 @@
         "ledger": {
           "chars": {
             "completion": {
-              "max": 489,
+              "max": 468,
               "median": 225,
-              "min": 169,
-              "n": 660,
-              "p95": 425
+              "min": 170,
+              "n": 177,
+              "p95": 391
             },
             "prompt": {
-              "max": 8783,
-              "median": 8066,
+              "max": 8240,
+              "median": 7887,
               "min": 7621,
-              "n": 660,
-              "p95": 8599
+              "n": 177,
+              "p95": 8060
             }
           },
           "flags": {
-            "with_stored_completion": 660,
-            "with_tool_call": 660,
+            "with_stored_completion": 177,
+            "with_tool_call": 177,
             "with_tool_result": 0,
-            "with_trajectory": 660
+            "with_trajectory": 177
           },
           "harness_values": {
-            "agents+skills": 660
+            "agents+skills": 177
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 660
+            "train": 177
           },
           "per_tier": {
-            "easy": 250,
-            "hard": 171,
-            "medium": 239
+            "easy": 70,
+            "hard": 39,
+            "medium": 68
           },
-          "rows": 660,
+          "rows": 177,
           "source_values": {
-            "deterministic_tools": 660
+            "deterministic_tools": 177
           },
           "tokens": {
             "completion": {
-              "max": 181,
+              "max": 168,
               "median": 87,
-              "min": 68,
-              "n": 660,
-              "p95": 159
+              "min": 69,
+              "n": 177,
+              "p95": 147
             },
             "prompt": {
-              "max": 3096,
-              "median": 2718,
+              "max": 2766,
+              "median": 2613,
               "min": 2404,
-              "n": 660,
-              "p95": 3033
+              "n": 177,
+              "p95": 2711
             },
             "reason": null,
             "status": "measured",
@@ -2079,28 +2079,28 @@
         }
       },
       "per_tier": {
-        "easy": 1002,
-        "hard": 834,
-        "medium": 901
+        "easy": 799,
+        "hard": 686,
+        "medium": 713
       },
-      "rows": 2737,
+      "rows": 2198,
       "source_values": {
-        "deterministic_tools": 2737
+        "deterministic_tools": 2198
       },
       "tokens": {
         "completion": {
           "max": 240,
-          "median": 81,
+          "median": 79,
           "min": 57,
-          "n": 2737,
-          "p95": 214
+          "n": 2198,
+          "p95": 217
         },
         "prompt": {
-          "max": 3096,
-          "median": 2335,
+          "max": 2787,
+          "median": 2307,
           "min": 1697,
-          "n": 2737,
-          "p95": 2962
+          "n": 2198,
+          "p95": 2693
         },
         "reason": null,
         "status": "measured",
@@ -3053,91 +3053,91 @@
     "data/sft_mix_v3": {
       "chars": {
         "completion": {
-          "max": 6139,
-          "median": 3676,
+          "max": 6120,
+          "median": 3032,
           "min": 154,
-          "n": 4343,
-          "p95": 5706
+          "n": 3804,
+          "p95": 5724
         },
         "prompt": {
           "max": 10588,
-          "median": 7245,
+          "median": 6590,
           "min": 1445,
-          "n": 4343,
-          "p95": 8407
+          "n": 3804,
+          "p95": 8137
         }
       },
       "files": 4,
       "flags": {
-        "with_stored_completion": 4343,
+        "with_stored_completion": 3804,
         "with_tool_call": 1,
         "with_tool_result": 0,
         "with_trajectory": 6
       },
       "harness_values": {
-        "agents+skills": 2743,
+        "agents+skills": 2204,
         "none": 1600
       },
       "malformed_lines": 0,
       "per_split": {
-        "train": 4343
+        "train": 3804
       },
       "per_task": {
         "audit": {
           "chars": {
             "completion": {
-              "max": 6139,
-              "median": 4992,
+              "max": 6120,
+              "median": 4968,
               "min": 317,
-              "n": 879,
-              "p95": 5395
+              "n": 823,
+              "p95": 5288
             },
             "prompt": {
-              "max": 8353,
-              "median": 7643,
+              "max": 8501,
+              "median": 7666,
               "min": 2840,
-              "n": 879,
-              "p95": 8347
+              "n": 823,
+              "p95": 8495
             }
           },
           "flags": {
-            "with_stored_completion": 879,
+            "with_stored_completion": 823,
             "with_tool_call": 0,
             "with_tool_result": 0,
             "with_trajectory": 0
           },
           "harness_values": {
-            "agents+skills": 479,
+            "agents+skills": 423,
             "none": 400
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 879
+            "train": 823
           },
           "per_tier": {
-            "easy": 293,
-            "hard": 293,
-            "medium": 293
+            "easy": 274,
+            "hard": 275,
+            "medium": 274
           },
-          "rows": 879,
+          "rows": 823,
           "source_values": {
-            "deterministic_tools": 479,
+            "deterministic_tools": 423,
             "ground_truth": 400
           },
           "tokens": {
             "completion": {
-              "max": 2480,
-              "median": 2019,
+              "max": 2457,
+              "median": 2007,
               "min": 117,
-              "n": 879,
-              "p95": 2177
+              "n": 823,
+              "p95": 2134
             },
             "prompt": {
-              "max": 2743,
-              "median": 2369,
+              "max": 2787,
+              "median": 2337,
               "min": 1182,
-              "n": 879,
-              "p95": 2737
+              "n": 823,
+              "p95": 2781
             },
             "reason": null,
             "status": "measured",
@@ -3208,59 +3208,59 @@
         "ledger": {
           "chars": {
             "completion": {
-              "max": 4779,
-              "median": 3793,
+              "max": 5000,
+              "median": 270,
               "min": 157,
-              "n": 1061,
-              "p95": 4504
+              "n": 578,
+              "p95": 4771
             },
             "prompt": {
               "max": 10588,
-              "median": 7898,
+              "median": 4241,
               "min": 2792,
-              "n": 1061,
-              "p95": 8580
+              "n": 578,
+              "p95": 8031
             }
           },
           "flags": {
-            "with_stored_completion": 1061,
+            "with_stored_completion": 578,
             "with_tool_call": 0,
             "with_tool_result": 0,
             "with_trajectory": 1
           },
           "harness_values": {
-            "agents+skills": 661,
+            "agents+skills": 178,
             "none": 400
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 1061
+            "train": 578
           },
           "per_tier": {
-            "easy": 353,
-            "hard": 355,
-            "medium": 353
+            "easy": 192,
+            "hard": 194,
+            "medium": 192
           },
-          "rows": 1061,
+          "rows": 578,
           "source_values": {
-            "deterministic_tools": 660,
+            "deterministic_tools": 177,
             "frontier_tools": 1,
             "ground_truth": 400
           },
           "tokens": {
             "completion": {
-              "max": 2096,
-              "median": 1699,
+              "max": 2425,
+              "median": 100,
               "min": 56,
-              "n": 1061,
-              "p95": 1989
+              "n": 578,
+              "p95": 2323
             },
             "prompt": {
               "max": 3807,
-              "median": 2635,
+              "median": 2170,
               "min": 1256,
-              "n": 1061,
-              "p95": 3029
+              "n": 578,
+              "p95": 2736
             },
             "reason": null,
             "status": "measured",
@@ -3331,30 +3331,30 @@
         }
       },
       "per_tier": {
-        "easy": 1447,
-        "hard": 1449,
-        "medium": 1447
+        "easy": 1267,
+        "hard": 1270,
+        "medium": 1267
       },
-      "rows": 4343,
+      "rows": 3804,
       "source_values": {
-        "deterministic_tools": 2737,
+        "deterministic_tools": 2198,
         "frontier_tools": 6,
         "ground_truth": 1600
       },
       "tokens": {
         "completion": {
           "max": 2985,
-          "median": 1331,
+          "median": 1062,
           "min": 52,
-          "n": 4343,
-          "p95": 2855
+          "n": 3804,
+          "p95": 2912
         },
         "prompt": {
           "max": 3807,
-          "median": 2177,
+          "median": 2107,
           "min": 489,
-          "n": 4343,
-          "p95": 2930
+          "n": 3804,
+          "p95": 2679
         },
         "reason": null,
         "status": "measured",
@@ -3365,32 +3365,32 @@
       "chars": {
         "completion": {
           "max": 7273,
-          "median": 5012,
+          "median": 5229,
           "min": 2719,
-          "n": 4686,
-          "p95": 6711
+          "n": 4509,
+          "p95": 6723
         },
         "prompt": {
-          "max": 4534,
-          "median": 2391,
+          "max": 4440,
+          "median": 2365,
           "min": 1445,
-          "n": 4686,
-          "p95": 3914
+          "n": 4509,
+          "p95": 3450
         }
       },
       "files": 4,
       "flags": {
-        "with_stored_completion": 4686,
+        "with_stored_completion": 4509,
         "with_tool_call": 0,
         "with_tool_result": 0,
         "with_trajectory": 0
       },
       "harness_values": {
-        "none": 4686
+        "none": 4509
       },
       "malformed_lines": 0,
       "per_split": {
-        "train": 4686
+        "train": 4509
       },
       "per_task": {
         "audit": {
@@ -3514,56 +3514,56 @@
         "ledger": {
           "chars": {
             "completion": {
-              "max": 5692,
-              "median": 4384,
-              "min": 3325,
-              "n": 1126,
-              "p95": 5205
+              "max": 6080,
+              "median": 5004,
+              "min": 4003,
+              "n": 949,
+              "p95": 5661
             },
             "prompt": {
-              "max": 4534,
-              "median": 3358,
+              "max": 4016,
+              "median": 3238,
               "min": 2444,
-              "n": 1126,
-              "p95": 3977
+              "n": 949,
+              "p95": 3919
             }
           },
           "flags": {
-            "with_stored_completion": 1126,
+            "with_stored_completion": 949,
             "with_tool_call": 0,
             "with_tool_result": 0,
             "with_trajectory": 0
           },
           "harness_values": {
-            "none": 1126
+            "none": 949
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 1126
+            "train": 949
           },
           "per_tier": {
-            "easy": 378,
-            "hard": 370,
-            "medium": 378
+            "easy": 328,
+            "hard": 293,
+            "medium": 328
           },
-          "rows": 1126,
+          "rows": 949,
           "source_values": {
-            "deterministic_tools": 1126
+            "deterministic_tools": 949
           },
           "tokens": {
             "completion": {
-              "max": 2629,
-              "median": 1949,
-              "min": 1449,
-              "n": 1126,
-              "p95": 2416
+              "max": 3139,
+              "median": 2523,
+              "min": 1989,
+              "n": 949,
+              "p95": 2846
             },
             "prompt": {
-              "max": 2561,
-              "median": 1744,
+              "max": 2237,
+              "median": 1689,
               "min": 1160,
-              "n": 1126,
-              "p95": 2236
+              "n": 949,
+              "p95": 2108
             },
             "reason": null,
             "status": "measured",
@@ -3631,28 +3631,28 @@
         }
       },
       "per_tier": {
-        "easy": 1578,
-        "hard": 1530,
-        "medium": 1578
+        "easy": 1528,
+        "hard": 1453,
+        "medium": 1528
       },
-      "rows": 4686,
+      "rows": 4509,
       "source_values": {
-        "deterministic_tools": 4686
+        "deterministic_tools": 4509
       },
       "tokens": {
         "completion": {
           "max": 3703,
-          "median": 2102,
+          "median": 2457,
           "min": 936,
-          "n": 4686,
-          "p95": 3334
+          "n": 4509,
+          "p95": 3338
         },
         "prompt": {
-          "max": 2561,
-          "median": 1085,
+          "max": 2237,
+          "median": 1070,
           "min": 489,
-          "n": 4686,
-          "p95": 2103
+          "n": 4509,
+          "p95": 1797
         },
         "reason": null,
         "status": "measured",
@@ -3662,88 +3662,88 @@
     "data/sft_tools_v3_h": {
       "chars": {
         "completion": {
-          "max": 6139,
-          "median": 4176,
+          "max": 6120,
+          "median": 4460,
           "min": 2719,
-          "n": 2737,
-          "p95": 5771
+          "n": 2198,
+          "p95": 5781
         },
         "prompt": {
-          "max": 8783,
-          "median": 7584,
+          "max": 8501,
+          "median": 7506,
           "min": 6553,
-          "n": 2737,
-          "p95": 8444
+          "n": 2198,
+          "p95": 8289
         }
       },
       "files": 4,
       "flags": {
-        "with_stored_completion": 2737,
+        "with_stored_completion": 2198,
         "with_tool_call": 0,
         "with_tool_result": 0,
         "with_trajectory": 0
       },
       "harness_values": {
-        "agents+skills": 2737
+        "agents+skills": 2198
       },
       "malformed_lines": 0,
       "per_split": {
-        "train": 2737
+        "train": 2198
       },
       "per_task": {
         "audit": {
           "chars": {
             "completion": {
-              "max": 6139,
-              "median": 5165,
+              "max": 6120,
+              "median": 5147,
               "min": 4945,
-              "n": 479,
-              "p95": 5433
+              "n": 423,
+              "p95": 5357
             },
             "prompt": {
-              "max": 8353,
-              "median": 8003,
-              "min": 7528,
-              "n": 479,
-              "p95": 8349
+              "max": 8501,
+              "median": 8033,
+              "min": 7651,
+              "n": 423,
+              "p95": 8497
             }
           },
           "flags": {
-            "with_stored_completion": 479,
+            "with_stored_completion": 423,
             "with_tool_call": 0,
             "with_tool_result": 0,
             "with_trajectory": 0
           },
           "harness_values": {
-            "agents+skills": 479
+            "agents+skills": 423
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 479
+            "train": 423
           },
           "per_tier": {
-            "easy": 164,
-            "hard": 158,
-            "medium": 157
+            "easy": 141,
+            "hard": 142,
+            "medium": 140
           },
-          "rows": 479,
+          "rows": 423,
           "source_values": {
-            "deterministic_tools": 479
+            "deterministic_tools": 423
           },
           "tokens": {
             "completion": {
-              "max": 2480,
-              "median": 2076,
+              "max": 2457,
+              "median": 2066,
               "min": 1994,
-              "n": 479,
-              "p95": 2191
+              "n": 423,
+              "p95": 2164
             },
             "prompt": {
-              "max": 2743,
-              "median": 2570,
-              "min": 2289,
-              "n": 479,
-              "p95": 2739
+              "max": 2787,
+              "median": 2537,
+              "min": 2322,
+              "n": 423,
+              "p95": 2783
             },
             "reason": null,
             "status": "measured",
@@ -3812,56 +3812,56 @@
         "ledger": {
           "chars": {
             "completion": {
-              "max": 4779,
-              "median": 4116,
-              "min": 3325,
-              "n": 660,
-              "p95": 4566
+              "max": 5000,
+              "median": 4521,
+              "min": 4003,
+              "n": 177,
+              "p95": 4863
             },
             "prompt": {
-              "max": 8783,
-              "median": 8066,
+              "max": 8240,
+              "median": 7887,
               "min": 7621,
-              "n": 660,
-              "p95": 8599
+              "n": 177,
+              "p95": 8060
             }
           },
           "flags": {
-            "with_stored_completion": 660,
+            "with_stored_completion": 177,
             "with_tool_call": 0,
             "with_tool_result": 0,
             "with_trajectory": 0
           },
           "harness_values": {
-            "agents+skills": 660
+            "agents+skills": 177
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 660
+            "train": 177
           },
           "per_tier": {
-            "easy": 250,
-            "hard": 171,
-            "medium": 239
+            "easy": 70,
+            "hard": 39,
+            "medium": 68
           },
-          "rows": 660,
+          "rows": 177,
           "source_values": {
-            "deterministic_tools": 660
+            "deterministic_tools": 177
           },
           "tokens": {
             "completion": {
-              "max": 2096,
-              "median": 1826,
-              "min": 1449,
-              "n": 660,
-              "p95": 2004
+              "max": 2425,
+              "median": 2266,
+              "min": 1989,
+              "n": 177,
+              "p95": 2342
             },
             "prompt": {
-              "max": 3096,
-              "median": 2718,
+              "max": 2766,
+              "median": 2613,
               "min": 2404,
-              "n": 660,
-              "p95": 3033
+              "n": 177,
+              "p95": 2711
             },
             "reason": null,
             "status": "measured",
@@ -3929,28 +3929,28 @@
         }
       },
       "per_tier": {
-        "easy": 1002,
-        "hard": 834,
-        "medium": 901
+        "easy": 799,
+        "hard": 686,
+        "medium": 713
       },
-      "rows": 2737,
+      "rows": 2198,
       "source_values": {
-        "deterministic_tools": 2737
+        "deterministic_tools": 2198
       },
       "tokens": {
         "completion": {
           "max": 2985,
-          "median": 1773,
+          "median": 1757,
           "min": 936,
-          "n": 2737,
-          "p95": 2927
+          "n": 2198,
+          "p95": 2932
         },
         "prompt": {
-          "max": 3096,
-          "median": 2335,
+          "max": 2787,
+          "median": 2307,
           "min": 1697,
-          "n": 2737,
-          "p95": 2962
+          "n": 2198,
+          "p95": 2693
         },
         "reason": null,
         "status": "measured",
@@ -4296,9 +4296,9 @@
       "sha256": "981869a561f189a7512c7fca06046dd2689266eb43538b11fb438e09ae270bc2"
     },
     "data/grpo_mix_v3/audit_train.jsonl": {
-      "bytes": 15945379,
-      "rows": 479,
-      "sha256": "13e58801d5b1c093947b9419a679b349416a9c14207280d05dc4e6985ea28cec"
+      "bytes": 14067236,
+      "rows": 423,
+      "sha256": "c58a6459adbc5d937681524c892d3084191ce07eebb75e834ab10c2cae1447da"
     },
     "data/grpo_mix_v3/design_train.jsonl": {
       "bytes": 12875052,
@@ -4306,9 +4306,9 @@
       "sha256": "68119e446fb56eebe6c2414d0ff63b6ab861957255d241a82471c94cef212b3c"
     },
     "data/grpo_mix_v3/ledger_train.jsonl": {
-      "bytes": 20150037,
-      "rows": 661,
-      "sha256": "22ac769da86e647fef84939c914cd97e40dafae9dd9d7f65fdbb297358d6dbc9"
+      "bytes": 5446260,
+      "rows": 178,
+      "sha256": "5e9d4b2b79dc4c3ee5fc957f821a86d2f67d25dce9e44cd9db85d4fd6370d136"
     },
     "data/grpo_mix_v3/repair_train.jsonl": {
       "bytes": 35011681,
@@ -4326,9 +4326,9 @@
       "sha256": "2f2a8bfdf29d881f7d232f855683656bab41139477bc76515a2980891a6d9f2e"
     },
     "data/grpo_tools_v3/ledger_train.jsonl": {
-      "bytes": 30910258,
-      "rows": 1126,
-      "sha256": "647cbc97f38844e066bcd9aaee434823f1553318f69488b0bb7f0e28554b54e4"
+      "bytes": 27335721,
+      "rows": 949,
+      "sha256": "e8f849d9e329507dd61b4ef13cc8bccdff0384749f1a052ff18758fe63b25ff8"
     },
     "data/grpo_tools_v3/repair_train.jsonl": {
       "bytes": 28389072,
@@ -4336,9 +4336,9 @@
       "sha256": "5149638e11bed5021dca58419587a071cc914271d6df0efeff2d499bb2d8d6eb"
     },
     "data/grpo_tools_v3_h/audit_train.jsonl": {
-      "bytes": 15945375,
-      "rows": 479,
-      "sha256": "c1b012b8cc250aa87821f7e7bc3202fb0c394ad5fc16c9bdc51c7046067cf87e"
+      "bytes": 14067234,
+      "rows": 423,
+      "sha256": "10703e80b60b7901cc92cc288160c9621504f8fe95026aea3887aea321a7b7b0"
     },
     "data/grpo_tools_v3_h/design_train.jsonl": {
       "bytes": 12974590,
@@ -4346,9 +4346,9 @@
       "sha256": "980918b2572d84e4e61e160e72460b410abb1953103f59f55bcff1f635974f67"
     },
     "data/grpo_tools_v3_h/ledger_train.jsonl": {
-      "bytes": 20114372,
-      "rows": 660,
-      "sha256": "a85a8827b1adbfee38157caa673e6b7a8d2c24f1d5cb47f999615a2726c006fb"
+      "bytes": 5410575,
+      "rows": 177,
+      "sha256": "d9f385d5454f52572590c844f1ef484947839151545b888a4dbd1f14254f34ce"
     },
     "data/grpo_tools_v3_h/repair_train.jsonl": {
       "bytes": 34833072,
@@ -4621,9 +4621,9 @@
       "sha256": "981869a561f189a7512c7fca06046dd2689266eb43538b11fb438e09ae270bc2"
     },
     "data/sft_mix_v3/audit_train.jsonl": {
-      "bytes": 15467110,
-      "rows": 879,
-      "sha256": "94bf22503b51f41dd172163a657c42090838c05323df97b534a04c0fc8db2fb3"
+      "bytes": 14029874,
+      "rows": 823,
+      "sha256": "dd308d62afa4f65b09aefdca29736cbae407f816d9c7061845ab8e06ac819700"
     },
     "data/sft_mix_v3/design_train.jsonl": {
       "bytes": 10448823,
@@ -4631,9 +4631,9 @@
       "sha256": "351b620fd63654b5172753c1592e64b347d7d8ca0ebb9065c9b1951abd1b0a87"
     },
     "data/sft_mix_v3/ledger_train.jsonl": {
-      "bytes": 20754605,
-      "rows": 1061,
-      "sha256": "f5de8a459c9c8988f461c23a7e21172bb905d66ae1510ceb653ba7fead986942"
+      "bytes": 8763451,
+      "rows": 578,
+      "sha256": "37ac66d3c61655819ee19b1c0b75c9442f9c2289bd7c13cd05f5c4ef43162e02"
     },
     "data/sft_mix_v3/repair_train.jsonl": {
       "bytes": 32460851,
@@ -4651,9 +4651,9 @@
       "sha256": "e282004cb49394fb23b7061a41d623700004895ee9b4d644d0d344793144cc17"
     },
     "data/sft_tools_v3/ledger_train.jsonl": {
-      "bytes": 24012079,
-      "rows": 1126,
-      "sha256": "2c0685451a1ac8e3d5fecd7bcd036ff708a7067fc256b7629d9ca0993326e789"
+      "bytes": 20942669,
+      "rows": 949,
+      "sha256": "645ef9c50eed182951f0134fa24654824a0a79321c905d8a8039ae0d9c3754c9"
     },
     "data/sft_tools_v3/repair_train.jsonl": {
       "bytes": 22067960,
@@ -4661,9 +4661,9 @@
       "sha256": "96eb71dc1e11baecd6fa60769429474bed5377c68e8053deea9290aea50c9c59"
     },
     "data/sft_tools_v3_h/audit_train.jsonl": {
-      "bytes": 12323616,
-      "rows": 479,
-      "sha256": "0dc71266050a126ece25418b2dfb4d5560abf35090ad847b846407b9e47b1e81"
+      "bytes": 10886384,
+      "rows": 423,
+      "sha256": "175e4102d574724e0752a0469a0fa126e603f0f3d16c60b3fb8352d0c564da7f"
     },
     "data/sft_tools_v3_h/design_train.jsonl": {
       "bytes": 9295244,
@@ -4671,9 +4671,9 @@
       "sha256": "a401a7ef5223bdf5e809ca97d9e059233b1a4eb463dbb5f1408d0de6a08ee88b"
     },
     "data/sft_tools_v3_h/ledger_train.jsonl": {
-      "bytes": 16315009,
-      "rows": 660,
-      "sha256": "48567e452b6cdb6e6039d3ffd6123e54556afe4ed192a1c855359c2363929836"
+      "bytes": 4323835,
+      "rows": 177,
+      "sha256": "9c5026c3b69ae779afbb9affeeb3babeb49c95860cbc542e97f2758104f4cbc5"
     },
     "data/sft_tools_v3_h/repair_train.jsonl": {
       "bytes": 28489160,
@@ -4692,29 +4692,29 @@
     "chars": {
       "completion": {
         "max": 7273,
-        "median": 202,
+        "median": 201,
         "min": 0,
-        "n": 222835,
-        "p95": 854
+        "n": 220325,
+        "p95": 825
       },
       "prompt": {
         "max": 20844,
-        "median": 3045,
+        "median": 3038,
         "min": 1442,
-        "n": 222835,
-        "p95": 13791
+        "n": 220325,
+        "p95": 13795
       }
     },
     "flags": {
-      "with_stored_completion": 215705,
-      "with_tool_call": 10162,
+      "with_stored_completion": 213195,
+      "with_tool_call": 8907,
       "with_tool_result": 0,
-      "with_trajectory": 10172
+      "with_trajectory": 8917
     },
     "harness_values": {
-      "<missing>": 40645,
-      "agents+skills": 65104,
-      "none": 114880,
+      "<missing>": 40468,
+      "agents+skills": 62948,
+      "none": 114703,
       "skills": 2206
     },
     "malformed_lines": 0,
@@ -4725,19 +4725,19 @@
       "test_ood_load": 1435,
       "test_ood_scale": 1576,
       "test_ood_topology": 5656,
-      "train": 179755,
+      "train": 177245,
       "val": 5604
     },
     "per_tier": {
       "<missing>": 195487,
-      "easy": 9485,
-      "hard": 8622,
-      "medium": 9241
+      "easy": 8620,
+      "hard": 7812,
+      "medium": 8406
     },
-    "rows": 222835,
+    "rows": 220325,
     "source_values": {
       "<missing>": 35959,
-      "deterministic_tools": 20320,
+      "deterministic_tools": 17810,
       "frontier": 1315,
       "frontier_tools": 12,
       "ground_truth": 165229
@@ -4747,14 +4747,14 @@
         "max": 3703,
         "median": 77,
         "min": 0,
-        "n": 222835,
-        "p95": 271
+        "n": 220325,
+        "p95": 257
       },
       "prompt": {
         "max": 6235,
-        "median": 1253,
+        "median": 1251,
         "min": 486,
-        "n": 222835,
+        "n": 220325,
         "p95": 4193
       },
       "reason": null,

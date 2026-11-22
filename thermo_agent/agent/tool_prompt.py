@@ -258,6 +258,13 @@ def build_compact_harness_messages(messages, task, plant, mode="agents+skills",
     parts = []
     if mode != "none":
         parts.append(compact_agents_md(task))
+        if task == "audit" and plant is not None:
+            rankable = [c.id for c in plant.components
+                        if c.type not in ("combustor", "gas_engine")]
+            if rankable:
+                parts.append("Rankable audit ids (the components in ed_json, excluding the "
+                             "combustor/gas engine): " + ", ".join(rankable)
+                             + ". Never rank any other id.")
         if dynamic:
             parts.append(_compact_skill_catalog(task))
         else:

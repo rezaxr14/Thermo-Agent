@@ -1,9 +1,9 @@
 {
  "char_length": {
   "max": 9464,
-  "n": 4686,
-  "p50": 6034,
-  "p95": 8504
+  "n": 4509,
+  "p50": 6182,
+  "p95": 8538
  },
  "char_length_by_task": {
   "audit": {
@@ -19,10 +19,10 @@
    "p95": 8993
   },
   "ledger": {
-   "max": 6536,
-   "n": 1126,
-   "p50": 4992,
-   "p95": 5902
+   "max": 6885,
+   "n": 949,
+   "p50": 5606,
+   "p95": 6386
   },
   "repair": {
    "max": 5617,
@@ -70,7 +70,7 @@
   "leaks": [],
   "overlap": 0,
   "passed": true,
-  "rows_scanned": 4686,
+  "rows_scanned": 4509,
   "signatures": 675
  },
  "counts": {
@@ -83,7 +83,7 @@
    "frontier_tools": 0
   },
   "ledger": {
-   "deterministic_tools": 1126,
+   "deterministic_tools": 949,
    "frontier_tools": 0
   },
   "repair": {
@@ -93,7 +93,7 @@
  },
  "dropped_invalid_or_no_tools": 0,
  "dropped_large_tool_results": 0,
- "dropped_over_8k": 114,
+ "dropped_over_8k": 291,
  "frontier": {
   "deduplicated": 0,
   "kept": 0,
@@ -102,7 +102,7 @@
   "scanned": 1336,
   "with_tool_turns": 0
  },
- "generated_at": "2026-11-22T12:13:05.378025+00:00",
+ "generated_at": "2026-11-22T14:38:29.065952+00:00",
  "generator": "synth.tool_traces (deterministic) + accepted frontier tool traces",
  "plants_selected_by_task": {
   "audit": 600,
@@ -179,14 +179,14 @@
   },
   {
    "generator": "deterministic_tools",
-   "kept": 1126,
+   "kept": 949,
    "rows_read": 4846,
    "rows_selected": 600,
    "source_dir": "data/processed",
    "task": "ledger",
    "variants": {
-    "direct": 567,
-    "recover": 559
+    "direct": 493,
+    "recover": 456
    }
   },
   {
@@ -253,25 +253,25 @@
   },
   "ledger": {
    "counts": {
-    "easy": 378,
-    "hard": 370,
-    "medium": 378
+    "easy": 328,
+    "hard": 293,
+    "medium": 328
    },
    "ranges": {
     "easy": {
      "max": 6,
      "min": 4,
-     "n": 378
+     "n": 328
     },
     "hard": {
-     "max": 10,
+     "max": 9,
      "min": 7,
-     "n": 370
+     "n": 293
     },
     "medium": {
      "max": 7,
      "min": 6,
-     "n": 378
+     "n": 328
     }
    },
    "rule": "rank by documented per-task component count, sha256(id) tie-break, floor(n/3)/floor(n/3)/remainder; a plant's two variants share the tier"
@@ -303,20 +303,20 @@
   }
  },
  "token_length": {
-  "max": 8191,
-  "n": 4686,
-  "p50": 6889,
-  "p95": 7698
+  "max": 8192,
+  "n": 4509,
+  "p50": 6971,
+  "p95": 7792
  },
  "token_length_plain": {
-  "max": 5276,
-  "n": 4686,
-  "p50": 3979,
-  "p95": 4790
+  "max": 5287,
+  "n": 4509,
+  "p50": 4060,
+  "p95": 4880
  },
  "token_measure_note": "token_length = FINAL rendered prompt messages + completion + TOKEN_RESERVE (the gate); token_length_plain = plain prompt instead. Over-gate rows are dropped, never truncated.",
  "totals": {
-  "grpo": 4686,
-  "sft": 4686
+  "grpo": 4509,
+  "sft": 4509
  }
 }

@@ -570,6 +570,8 @@ class ToolLoop:
             parser = getattr(self.generate, "parse_tool_calls", None)
             parsed = parser(text) if callable(parser) else parse_tool_calls(text)
             if not parsed:
+                from ..teacher.validate import last_validated_candidate
+                text = last_validated_candidate(self.task, turn_log, text)
                 final_text = text
                 turn_log.append({"turn": turn, "text": text, "tool_calls": [], "tool_results": []})
                 if has_final_xml(text, self.task):
@@ -580,7 +582,9 @@ class ToolLoop:
                                {"role": "user", "content": _FINAL_NUDGE}]
                 continue
             executed = []
+            candidates = []
             for name, payload in parsed:
+                candidates.append(str(payload.get("candidate", "") or ""))
                 if n_calls >= self.max_tool_calls:
                     stop = "max_tool_calls"
                     break
@@ -597,6 +601,7 @@ class ToolLoop:
                 tool_calls.append(name); result_chars.append(len(result)); n_calls += 1
             turn_log.append({"turn": turn, "text": text,
                              "tool_calls": [n for n, _ in executed],
+                             "candidates": candidates[:len(executed)],
                              "tool_results": [r for _, r in executed]})
             if executed:
                 final_text = text

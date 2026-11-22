@@ -1,5 +1,13 @@
 # Decisions, directives, parameters and feedback log
 
+## 2026-11-22 - Step 3 constraints (binding)
+
+Audit prompts must state the rankable `ed_json` ids explicitly; ids not in the row
+(e.g. `DC`) are rejected. A design final answer is the last candidate whose
+`validity_check` returned `ok: true`, enforced in the harness and at ingest. Ledger
+reasoning renders a compact `(line, value, recomputed, residual)` table and never
+points at a "faulty line" directly.
+
 ## 2026-11-22 - teacher-only `reason` argument (binding)
 
 The hosted TEACHER tool schema adds a required `reason: str` to each of the 16 tools

@@ -193,8 +193,8 @@ _OPENERS = {
               "First I read the solved plant's totals (exergy destruction, fuel, net work) so the change I propose can be sized against them.",
               "I start from the plant as given and read its overall balances before ranking components."),
     "ledger": ("Before fixing any line I will inspect the ledger as given and compare each line with its recomputed value.",
-               "First I read the ledger lines against their recomputed values; a line with a large residual is the suspect.",
-               "I start by checking the closure and every line residual of the ledger as given."),
+               "First I read the (line, value, recomputed, residual) table as given and look for the entry that does not close.",
+               "I start by reading the full ledger table and its closure residual before choosing any fix."),
 }
 _HYPOTHESIS = {
     "no_edits": "As a baseline I submit no edit at all, to see whether the checks fail without any change.",
@@ -253,12 +253,14 @@ def _tool_facts(task: str, tool: str, d: dict) -> str:
     if flags:
         bits.append("unit/range flags " + ", ".join(map(str, flags[:3])))
     lines = _as_list(d.get("per_line_residuals"))
-    worst = [x for x in lines if isinstance(x, dict) and x.get("residual_W") not in (None, 0.0)]
-    if worst:
-        w = max(worst, key=lambda x: abs(x["residual_W"]))
-        bits.append(f"line {w['line']} is {w['value_MW']} MW but recomputes to {w['recomputed_MW']} MW (residual {w['residual_W']} W)")
-    elif lines:
-        bits.append(f"all {len(lines)} ledger lines match their recomputed values")
+    if lines:
+        rows = []
+        for x in lines:
+            if isinstance(x, dict):
+                rows.append(f"({x.get('line')},{x.get('value_MW')},"
+                            f"{x.get('recomputed_MW')},{x.get('residual_W')})")
+        if rows:
+            bits.append("lines (line,value,recomputed,residual): " + "; ".join(rows[:12]))
     comps = _as_list(d.get("per_component_exergy_destruction_MW"))
     if comps:
         top = sorted((c for c in comps if isinstance(c, dict)), key=lambda c: -c.get("exergy_destruction_MW", 0))[:3]

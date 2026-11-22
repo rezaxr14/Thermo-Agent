@@ -1,16 +1,16 @@
 {
  "char_length": {
   "max": 7878,
-  "n": 2737,
-  "p50": 4782,
-  "p95": 7447
+  "n": 2198,
+  "p50": 5146,
+  "p95": 7458
  },
  "char_length_by_task": {
   "audit": {
-   "max": 7342,
-   "n": 479,
-   "p50": 6224,
-   "p95": 6480
+   "max": 7325,
+   "n": 423,
+   "p50": 6196,
+   "p95": 6431
   },
   "design": {
    "max": 7878,
@@ -19,10 +19,10 @@
    "p95": 7526
   },
   "ledger": {
-   "max": 5660,
-   "n": 660,
-   "p50": 4666,
-   "p95": 5272
+   "max": 5869,
+   "n": 177,
+   "p50": 5028,
+   "p95": 5518
   },
   "repair": {
    "max": 5617,
@@ -70,12 +70,12 @@
   "leaks": [],
   "overlap": 0,
   "passed": true,
-  "rows_scanned": 2737,
+  "rows_scanned": 2198,
   "signatures": 675
  },
  "counts": {
   "audit": {
-   "deterministic_tools": 479,
+   "deterministic_tools": 423,
    "frontier_tools": 0
   },
   "design": {
@@ -83,7 +83,7 @@
    "frontier_tools": 0
   },
   "ledger": {
-   "deterministic_tools": 660,
+   "deterministic_tools": 177,
    "frontier_tools": 0
   },
   "repair": {
@@ -93,7 +93,7 @@
  },
  "dropped_invalid_or_no_tools": 0,
  "dropped_large_tool_results": 0,
- "dropped_over_8k": 2063,
+ "dropped_over_8k": 2602,
  "frontier": {
   "deduplicated": 0,
   "kept": 0,
@@ -102,7 +102,7 @@
   "scanned": 1336,
   "with_tool_turns": 0
  },
- "generated_at": "2026-11-22T11:58:07.680413+00:00",
+ "generated_at": "2026-11-22T14:21:53.805502+00:00",
  "generator": "synth.tool_traces (deterministic) + accepted frontier tool traces",
  "plants_selected_by_task": {
   "audit": 600,
@@ -157,14 +157,14 @@
   },
   {
    "generator": "deterministic_tools",
-   "kept": 479,
+   "kept": 423,
    "rows_read": 2192,
    "rows_selected": 600,
    "source_dir": "data/processed",
    "task": "audit",
    "variants": {
-    "direct": 472,
-    "recover": 7
+    "direct": 422,
+    "recover": 1
    }
   },
   {
@@ -179,14 +179,14 @@
   },
   {
    "generator": "deterministic_tools",
-   "kept": 660,
+   "kept": 177,
    "rows_read": 4846,
    "rows_selected": 600,
    "source_dir": "data/processed",
    "task": "ledger",
    "variants": {
-    "direct": 377,
-    "recover": 283
+    "direct": 112,
+    "recover": 65
    }
   },
   {
@@ -203,25 +203,25 @@
  "tiers": {
   "audit": {
    "counts": {
-    "easy": 164,
-    "hard": 158,
-    "medium": 157
+    "easy": 141,
+    "hard": 142,
+    "medium": 140
    },
    "ranges": {
     "easy": {
      "max": 6,
      "min": 4,
-     "n": 164
+     "n": 141
     },
     "hard": {
      "max": 9,
      "min": 7,
-     "n": 158
+     "n": 142
     },
     "medium": {
-     "max": 7,
+     "max": 6,
      "min": 6,
-     "n": 157
+     "n": 140
     }
    },
    "rule": "rank by documented per-task component count, sha256(id) tie-break, floor(n/3)/floor(n/3)/remainder; a plant's two variants share the tier"
@@ -253,25 +253,25 @@
   },
   "ledger": {
    "counts": {
-    "easy": 250,
-    "hard": 171,
-    "medium": 239
+    "easy": 70,
+    "hard": 39,
+    "medium": 68
    },
    "ranges": {
     "easy": {
      "max": 5,
      "min": 4,
-     "n": 250
+     "n": 70
     },
     "hard": {
-     "max": 7,
-     "min": 6,
-     "n": 171
-    },
-    "medium": {
      "max": 6,
      "min": 5,
-     "n": 239
+     "n": 39
+    },
+    "medium": {
+     "max": 5,
+     "min": 5,
+     "n": 68
     }
    },
    "rule": "rank by documented per-task component count, sha256(id) tie-break, floor(n/3)/floor(n/3)/remainder; a plant's two variants share the tier"
@@ -304,19 +304,19 @@
  },
  "token_length": {
   "max": 8192,
-  "n": 2737,
-  "p50": 7449,
-  "p95": 8162
+  "n": 2198,
+  "p50": 7215,
+  "p95": 8168
  },
  "token_length_plain": {
   "max": 4078,
-  "n": 2737,
-  "p50": 3288,
-  "p95": 4034
+  "n": 2198,
+  "p50": 3059,
+  "p95": 4031
  },
  "token_measure_note": "token_length = FINAL rendered prompt messages + completion + TOKEN_RESERVE (the gate); token_length_plain = plain prompt instead. Over-gate rows are dropped, never truncated.",
  "totals": {
-  "grpo": 2737,
-  "sft": 2737
+  "grpo": 2198,
+  "sft": 2198
  }
 }
