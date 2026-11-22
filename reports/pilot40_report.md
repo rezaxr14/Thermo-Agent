@@ -1,4 +1,16 @@
-# 40-row reasoning pilot — luna + haiku (2026-11-21/22)
+# 40-row reasoning pilot - luna + haiku (2026-11-21/22)
+
+## 2026-11-22 - native-protocol re-pilot: shards ready, hosted run BLOCKED
+
+`scripts/build_next_budget_batch.py --size 40 --name native_pilot` produced two
+40-row shards (10 per task, 14/13/13 tiers). Local preflight selected 40/40 for each
+model; `scripts/rehearse_budget_batch.py --rows 40` gated/ingested 39/39 per model
+with no loss, proving the post-processing path. Shards were synced to the HF corpora
+dataset. Kaggle connectivity was later restored and the bridge kernel was pushed
+(version 16, COMPLETE), but the Kaggle dataset copy is stale: dataset preflight returns
+404 for the new shard files. No hosted luna/haiku calls were made. No re-pilot
+metrics exist; the reasoning-share gate (>=0.85 per model) and the per-task accepted
+row requirement remain unverified. No bulk run was started.
 
 Setup: `scripts/build_next_budget_batch.py --size 40 --name pilot40` produced two shards of exactly 40 rows
 (10 per task, tiers rotated 3/3/4 so the shard-wide counts are 14/13/13 and the hosted `select_rows` keeps all

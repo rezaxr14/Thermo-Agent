@@ -1,5 +1,11 @@
 # User prompts — verbatim
 
+## Current truth (2026-11-22)
+
+This file is a verbatim record of Reza's directives. Wording below is not edited. The
+binding interpretation of the latest directive is summarised in `STATUS.md` and
+`IMPLEMENTATION_PLAN.md`; where they differ, the verbatim prompt below wins.
+
 Exact text of Reza's prompts in this session, in order. Kept for handing to another model for direction. Do not edit wording.
 
 ---

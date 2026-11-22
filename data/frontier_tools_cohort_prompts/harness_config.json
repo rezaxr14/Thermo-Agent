@@ -6,13 +6,13 @@
   "k_memory": 3,
   "deadline_seconds": 0,
   "max_cost_usd": 0.0,
-  "journal": "pilot40_completions.jsonl",
-  "manifest": "pilot40_manifest.json",
+  "journal": "native_pilot_completions.jsonl",
+  "manifest": "native_pilot_manifest.json",
   "memory_dir": "",
   "export_dir": "",
   "model_shards": {
-    "gpt-6-luna": "prompts_pilot40_gpt-6-luna.jsonl",
-    "claude-haiku-5-5": "prompts_pilot40_claude-haiku-5-5.jsonl"
+    "gpt-6-luna": "prompts_native_pilot_gpt-6-luna.jsonl",
+    "claude-haiku-5-5": "prompts_native_pilot_claude-haiku-5-5.jsonl"
   },
   "tiers": [
     "easy",
