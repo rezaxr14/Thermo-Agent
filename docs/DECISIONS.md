@@ -1,5 +1,15 @@
 # Decisions, directives, parameters and feedback log
 
+## 2026-11-22 - teacher-only `reason` argument (binding)
+
+The hosted TEACHER tool schema adds a required `reason: str` to each of the 16 tools
+(`tool_protocol.tool_schemas(..., reason=True)` and `teacher_tool_wrappers`); the
+student/eval schema stays candidate-only. On ingest the reason is moved into the
+turn's `<think>` block and stripped from the stored call arguments, so no student row
+is ever trained on the teacher-only schema. Visible/provider reasoning from the kbench
+adapter takes precedence; the schema reason only fills turns with no reasoning. The
+75% reasoning gate is unchanged (90% is the luna target, not a hard rejection rule).
+
 ## 2026-11-22 - native Qwen3.5 structured tool protocol is the ONLY protocol (binding)
 
 All corpora, traces, training, GRPO and eval use OpenAI-style assistant `tool_calls`

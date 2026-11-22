@@ -81,7 +81,8 @@ def reasoning_for_model(model: str) -> str | None:
 
 
 def make_respond(llm, kbench, actors, *, system_prompt: str, max_tool_rounds: int = 3,
-                 usage_holder: dict | None = None, reasoning: str | None = None):
+                 usage_holder: dict | None = None, reasoning: str | None = None,
+                 teacher_reason: bool = False):
     """Build respond(messages, tools) -> (text, tool_calls, reasoning, turns).
 
     `messages` is the full LangGraph conversation; the system message is installed as the
@@ -96,6 +97,9 @@ def make_respond(llm, kbench, actors, *, system_prompt: str, max_tool_rounds: in
         tool_kwargs["reasoning"] = reasoning
 
     def respond(messages, tools):
+        if teacher_reason:
+            from ..agent.tool_protocol import teacher_tool_wrappers
+            tools = teacher_tool_wrappers(tools)
         sys = "\n\n".join(m["content"] for m in messages if m["role"] == "system") or system_prompt
         with kbench.chats.new("agent", system_instructions=sys or None) as chat:
             # Replay the WHOLE conversation into this one chat, not just the last message:

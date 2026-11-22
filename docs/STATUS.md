@@ -1,5 +1,12 @@
 # Status and operating notes
 
+## 2026-11-22 - Step 2: teacher-only reason schema (DONE)
+
+Hosted tool wrappers now require a `reason` sentence; `transfer.ingest` and
+`validate.teacher_row` move it into `<think>` and strip it from the student call
+arguments. Provider/visible reasoning is preferred. Student schemas are unchanged.
+`tests/test_tool_protocol.py` covers both sides. Focused tests: 28 passed.
+
 ## 2026-11-22 - Step 1: one native structured tool protocol (DONE)
 
 Single wire format: Qwen3.5 native `tool_calls` rendered by `apply_chat_template(tools=...)`.

@@ -107,6 +107,31 @@ def tool_schemas(task: str, row: dict | None = None, *, include_dynamic: bool = 
     return out
 
 
+def teacher_tool_wrappers(fns) -> list:
+    """Wrap hosted tool callables with a required ``reason`` argument.
+
+    Used only on the TEACHER/hosted path. The wrapper records the model's reason and
+    executes the original tool with its ``candidate`` argument; ingest later moves the
+    reason into ``<think>`` and strips it from the student call arguments.
+    """
+    out = []
+    for fn in fns:
+        def tool(reason: str, candidate: str = "", _fn=fn):
+            return _fn(candidate)
+        tool.__name__ = fn.__name__
+        tool.__qualname__ = f"teacher_tool.{fn.__name__}"
+        tool.__doc__ = (
+            f"{_description(fn)}\n\n"
+            "Args:\n"
+            "    reason: One short sentence on what you are checking and why.\n"
+            "    candidate: Empty for inspect_plant; otherwise the candidate XML or a JSON object string.\n\n"
+            "Returns:\n"
+            "    str: JSON with the tool's real numeric result.")
+        tool.__annotations__ = {"reason": str, "candidate": str, "return": str}
+        out.append(tool)
+    return out
+
+
 def tool_names(schemas: list[dict]) -> list[str]:
     return [s["function"]["name"] for s in schemas]
 

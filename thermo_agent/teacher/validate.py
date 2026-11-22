@@ -11,6 +11,7 @@ and checking the plant. Rejections are not thrown away: they become hindsight-me
 """
 from __future__ import annotations
 
+import copy
 import hashlib
 import re
 
@@ -207,6 +208,10 @@ def teacher_row(task: str, completion: str, row: dict, verdict: dict, tag: str =
         sft_text = trajectory["sft_completion"]
         completion_messages = trajectory.get("messages") or [
             {"role": "assistant", "content": sft_text}]
+        if completion_messages:
+            from ..agent.tool_protocol import strip_reason_arguments
+            completion_messages = copy.deepcopy(completion_messages)
+            strip_reason_arguments(completion_messages)
     else:
         sft_text = completion
         completion_messages = [{"role": "assistant", "content": sft_text}]

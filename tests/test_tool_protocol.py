@@ -82,6 +82,33 @@ def test_legacy_call_syntax_is_not_parsed(tok):
     assert tool_protocol.parse_generated(tok, legacy, prompt, _schemas()) == []
 
 
+def test_teacher_schema_requires_reason_and_ingest_moves_it_into_think():
+    teacher = tool_protocol.tool_schemas("repair", reason=True)
+    for schema in teacher:
+        function = schema["function"]
+        assert "reason" in function["parameters"]["properties"]
+        assert "reason" in function["parameters"]["required"]
+    student = _schemas()
+    assert all("reason" not in s["function"]["parameters"]["properties"] for s in student)
+
+    def fake(candidate):
+        return {"candidate": candidate}
+    wrapped = tool_protocol.teacher_tool_wrappers([fake])
+    assert wrapped[0].__name__ == "fake"
+    assert wrapped[0](reason="because", candidate="x") == {"candidate": "x"}
+
+    messages = [tool_protocol.assistant_message(
+        "", [{"name": "inspect_plant", "arguments": {"reason": "Check the as-given solver status.",
+                                                      "candidate": ""}}])]
+    reasons = tool_protocol.strip_reason_arguments(messages)
+    assert reasons == ["Check the as-given solver status."]
+    call = messages[0]["tool_calls"][0]["function"]
+    assert "reason" not in call["arguments"]
+    assert call["arguments"] == {"candidate": ""}
+    assert "<think>" in messages[0]["content"]
+    assert "Check the as-given solver status." in messages[0]["content"]
+
+
 def test_three_step_grpo_style_trace_parses_a_tool_call_every_step(tok):
     """Cheap 3-step smoke: every GRPO-exposed tool renders and parses natively.
 

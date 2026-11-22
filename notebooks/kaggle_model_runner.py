@@ -599,7 +599,8 @@ if IS_KAGGLE:
                             respond = make_respond(llm, kbench, actors,
                                                    system_prompt=ctx["system_prompt"],
                                                    max_tool_rounds=CFG.rounds,
-                                                   usage_holder=holder, reasoning=reasoning)
+                                                   usage_holder=holder, reasoning=reasoning,
+                                                    teacher_reason=True)
                             try:
                                 state = run_direct(row, task, respond, notes=notes,
                                                    max_rounds=CFG.rounds,

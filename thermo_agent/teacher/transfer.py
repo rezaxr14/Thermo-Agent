@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import argparse
 import collections
+import copy
 import hashlib
 import json
 import pathlib
@@ -236,6 +237,18 @@ def ingest(export_dir, completions_path, out_dir, memory_dir=None, tasks=TASKS, 
                     trajectory["messages"] = record["messages"]
                 elif traj_raw.get("messages"):
                     trajectory["messages"] = traj_raw["messages"]
+                if trajectory.get("messages"):
+                    from ..agent.tool_protocol import strip_reason_arguments
+                    messages = copy.deepcopy(trajectory["messages"])
+                    reasons = strip_reason_arguments(messages)
+                    trajectory["messages"] = messages
+                    # The hosted teacher schema requires a `reason` on every call. Keep it as
+                    # chain-of-thought, never as a student-visible call argument.
+                    turns = trajectory.get("turns") or []
+                    reason_iter = iter(reasons)
+                    for turn in turns:
+                        if not turn.get("reasoning") and turn.get("tool_calls"):
+                            turn["reasoning"] = next(reason_iter, "")
             teacher = validate.teacher_row(task, text, row, verdict, tag=base_provenance["model"],
                                            trajectory=trajectory)
             # The validator tags genuine tool traces "frontier_tools"; keep that signal
