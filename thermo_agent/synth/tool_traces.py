@@ -36,6 +36,7 @@ import hashlib
 import json
 import re
 
+from ..agent import tool_protocol
 from ..teacher import validate
 from ..teacher.toolkit import make_tools
 from . import combine
@@ -75,6 +76,24 @@ def _tools(task: str, row: dict) -> dict:
 def _ntok(text: str) -> int | None:
     tok = combine.tokenizer()
     return len(tok.encode(text, add_special_tokens=False).ids) if tok is not None else None
+
+
+_RENDER_TOK = None
+
+
+def render_tokenizer():
+    """Chat-template tokenizer used for the real 8,192-token gate (cached, local only)."""
+    global _RENDER_TOK
+    if _RENDER_TOK is None:
+        import pathlib
+        path = combine.tokenizer_path()
+        config = pathlib.Path(path).parent / "tokenizer_config.json" if path else None
+        if config and config.is_file():
+            from transformers import AutoTokenizer
+            _RENDER_TOK = AutoTokenizer.from_pretrained(str(config.parent), local_files_only=True)
+        else:
+            _RENDER_TOK = False
+    return _RENDER_TOK or None
 
 
 def _facts(payload: str) -> str:
@@ -358,17 +377,8 @@ def build_trace(row: dict, task: str, *, variant: str = "direct",
         final_reasoning = ""
     turns.append(_turn(reasoning=final_reasoning, assistant=final))
 
-    parts: list[str] = []
-    for turn in turns:
-        if turn["reasoning"]:
-            parts.append(turn["reasoning"])
-        if turn["assistant"]:
-            parts.append(turn["assistant"])
-        for call, result in zip(turn["tool_calls"], turn["tool_results"]):
-            args = json.dumps(call["arguments"], ensure_ascii=False)
-            parts.append(f"<tool_call name=\"{call['name']}\">{args}</tool_call>")
-            parts.append(f"<tool_result>{result}</tool_result>")
-    sft = "\n".join(parts)
+    messages = tool_protocol.messages_from_turns(turns)
+    sft = tool_protocol.native_text(messages)
 
     verdict = validate.validate(task, final, row)
     n_calls = sum(len(t["tool_calls"]) for t in turns)
@@ -383,8 +393,26 @@ def build_trace(row: dict, task: str, *, variant: str = "direct",
     if n_prompt_plain is not None and n_completion is not None:
         plain_tokens = n_prompt_plain + n_completion + TOKEN_RESERVE
 
+    # Exact gate: the native template injects all 16 tool schemas into the system
+    # message, so the old plain prompt+completion count under-measures the training
+    # sequence by thousands of tokens. Measure the ACTUAL rendered conversation.
+    rt = render_tokenizer()
+    if rt is not None and isinstance(prompt_messages, list):
+        try:
+            tools = tool_protocol.tool_schemas(task)
+            prefix = tool_protocol.render_messages(
+                rt, prompt_messages, tools, add_generation_prompt=True)
+            full = tool_protocol.render_messages(rt, prompt_messages + messages, tools)
+            if full.startswith(prefix):
+                n_prompt = len(rt.encode(prefix, add_special_tokens=False))
+                n_completion = len(rt.encode(full[len(prefix):], add_special_tokens=False))
+                tokens = len(rt.encode(full, add_special_tokens=False)) + TOKEN_RESERVE
+        except (TypeError, ValueError):
+            pass
+
     out = {
         "sft_completion": sft,
+        "messages": messages,
         "turns": turns,
         "tool_calls": n_calls,
         "accepted": bool(verdict["accepted"]),

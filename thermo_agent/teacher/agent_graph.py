@@ -244,29 +244,18 @@ def finalize(state: AgentState) -> dict:
     if not turns:
         turns = [{"assistant": final, "reasoning": state["last_reasoning"],
                   "tool_calls": [], "tool_results": []}]
-    parts = []
-    for t in turns:
-        reason = str(t.get("reasoning") or "").strip()
-        assistant = str(t.get("assistant") or "").strip()
-        # The visible per-turn prose is the reasoning for chat-completions models.
-        # Emit it once, not as both <think> and assistant text.
-        if reason and reason != assistant:
-            parts.append(f"<think>\n{reason}\n</think>")
-        if assistant:
-            parts.append(assistant)
-        for call, result in zip(t.get("tool_calls", []), t.get("tool_results", [])):
-            args = call.get("arguments", "")
-            args = args if isinstance(args, str) else json.dumps(args, ensure_ascii=False)
-            parts.append(f"<tool_call name=\"{call.get('name','tool')}\">{args}</tool_call>")
-            parts.append(f"<tool_result>{result}</tool_result>")
-    sft = "\n".join(parts)
+    from ..agent import tool_protocol
+    messages = tool_protocol.messages_from_turns(turns)
+    sft = tool_protocol.native_text(messages)
     # Guarantee: a non-empty final answer yields non-empty SFT text that ends with that answer.
     # Don't duplicate it when the last turn already ends with it.
     if final:
         if not sft.strip():
+            messages = [tool_protocol.assistant_message(final)]
             sft = final
         elif not sft.rstrip().endswith(final.rstrip()):
-            sft = sft.rstrip() + "\n" + final
+            messages.append(tool_protocol.assistant_message(final))
+            sft = tool_protocol.native_text(messages)
     row = state["row"]
     missing = missing_scoring_fields(state["task"], row)
     # An input-only hosted row is recognisable by its carried prompt; a bare/partial
@@ -275,7 +264,7 @@ def finalize(state: AgentState) -> dict:
         verdict = deferred_verdict(missing)
     else:
         verdict = validate(state["task"], final, row)
-    return {"final": final, "turns": turns, "verdict": verdict,
+    return {"final": final, "turns": turns, "verdict": verdict, "messages": messages,
             "accepted": verdict["accepted"], "sft_completion": sft, "done": True}
 
 
@@ -369,6 +358,7 @@ def run_direct(row: dict, task: str, respond, *, notes=None, k_memory=3,
         "verdict": out["verdict"],
         "accepted": out["accepted"],
         "sft_completion": out["sft_completion"],
+        "messages": out.get("messages", []),
         "notes_used": ctx["notes_used"],
         "served_skill": ctx.get("served_skill", ""),
         "memory_block": ctx.get("memory_block", ""),

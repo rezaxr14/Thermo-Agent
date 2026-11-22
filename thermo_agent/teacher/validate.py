@@ -205,11 +205,14 @@ def teacher_row(task: str, completion: str, row: dict, verdict: dict, tag: str =
         raise ValueError("refusing to build a training row from a rejected answer")
     if trajectory is not None and trajectory.get("final"):
         sft_text = trajectory["sft_completion"]
+        completion_messages = trajectory.get("messages") or [
+            {"role": "assistant", "content": sft_text}]
     else:
         sft_text = completion
+        completion_messages = [{"role": "assistant", "content": sft_text}]
     suffix = tag or hashlib.md5(sft_text.encode()).hexdigest()[:8]
     out = {"id": f"{row['id']}-t-{suffix}", "record_id": row["id"], "split": row["split"], "task": task, "source": "frontier",
-           "prompt": row["prompt"], "completion": [{"role": "assistant", "content": sft_text}],
+           "prompt": row["prompt"], "completion": completion_messages,
            "validation": {"reward": verdict["reward"], "reasons": verdict["reasons"]}}
     if trajectory is not None:
         out["trajectory"] = {k: v for k, v in trajectory.items() if k != "sft_completion"}

@@ -46,7 +46,7 @@ PROBE_MESSAGES = [{"role": "system", "content": "You are a plant engineer."},
 # The compact and the historical full harness both start with this heading; both
 # tool-contract builders carry these four strings.
 HARNESS_MARKERS = ("# AGENTS.md",)
-TOOL_MARKERS = ("MULTI-TURN TOOL ENVIRONMENT", "<tool_call", "<tool_result", "inspect_plant")
+TOOL_MARKERS = ("MULTI-TURN TOOL ENVIRONMENT", "inspect_plant", "answer-oracle")
 
 _UNSET = object()
 _REQUIRED_FIELDS = ("backend", "harness", "tool_access", "zero_shot")

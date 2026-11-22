@@ -1,5 +1,17 @@
 # Decisions, directives, parameters and feedback log
 
+## 2026-11-22 - native Qwen3.5 structured tool protocol is the ONLY protocol (binding)
+
+All corpora, traces, training, GRPO and eval use OpenAI-style assistant `tool_calls`
+plus `role="tool"` results, rendered through the real tokenizer's
+`apply_chat_template(tools=...)`. The Qwen3.5 chat template owns the wire format
+(`<tool_call><function=...>`); prompt text never repeats the call syntax or the tool
+list. `tokenizer.parse_response` with the shared response template is the single
+parser. The legacy `<tool_call name=...>` form is rejected, never tolerated. The gate
+is measured on the exact tools-rendered conversation (8,192 tokens including the
+96-token chat reserve), not on the old plain prompt+completion sum. All 16 tools are
+exposed by default in GRPO, eval and the hosted runner.
+
 One home for every decision. Newest binding entry wins; superseded sections are marked, not deleted. Anti-litter rule: §8 of the 2026-11-19 parameters section — extend this file, do not add another decision/directive doc.
 
 ## Decisions

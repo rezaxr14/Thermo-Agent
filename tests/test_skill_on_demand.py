@@ -38,7 +38,7 @@ TOKEN_CEILING = 2500
 # update this hash in the same commit, re-measure the token gate and rebuild shards/corpora.
 _DEFAULT_BASE = [{"role": "system", "content": "BASE SYSTEM"},
                  {"role": "user", "content": "BASE USER"}]
-_DEFAULT_SHA = "a5511ef737b01a56531a4f9e0fc32d1b420ee196d03a124787583b6af0e2e6d6"
+_DEFAULT_SHA = "4bce20201f3dab374c00bd44ff695c910c0796deff2c2ab87f1a4ce11999979b"
 
 
 def _body(name: str) -> str:

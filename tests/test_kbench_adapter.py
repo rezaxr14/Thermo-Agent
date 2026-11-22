@@ -150,7 +150,9 @@ def test_full_system_prompt_and_history_replayed(monkeypatch):
     assert si == sys_prompt
     assert "FIRST inventory" in si                  # compact_memory.agent_guidance_block
     assert "REAL physics tools" in si               # tool contract
-    assert all(name in si for name in tool_names())
+    # The tool list and wire format are injected by the native chat template.
+    assert "MULTI-TURN TOOL ENVIRONMENT" in si
+    assert '<tool_call name=' not in si
 
     # (b) every message (system + all user/assistant turns) is replayed to the
     # model, not just the last one.
@@ -264,6 +266,6 @@ def test_message_turns_dispatch_on_role_captures_tool_result_and_final_answer():
              "last_reasoning": reasoning, "turns": turns}
     sft = agent_graph.finalize(state)["sft_completion"]
     assert "<tool_call" in sft
-    assert "<tool_result" in sft
+    assert "<tool_response" in sft
     assert tool_json in sft
     assert sft.rstrip().endswith(final_xml)

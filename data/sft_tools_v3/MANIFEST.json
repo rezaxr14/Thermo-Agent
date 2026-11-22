@@ -1,41 +1,41 @@
 {
  "char_length": {
-  "max": 9366,
-  "n": 4800,
-  "p50": 5949,
-  "p95": 8483
+  "max": 9464,
+  "n": 4686,
+  "p50": 6034,
+  "p95": 8504
  },
  "char_length_by_task": {
   "audit": {
-   "max": 8831,
-   "n": 1200,
-   "p50": 7145,
-   "p95": 7933
+   "max": 8425,
+   "n": 1160,
+   "p50": 7086,
+   "p95": 7937
   },
   "design": {
-   "max": 9366,
+   "max": 9464,
    "n": 1200,
-   "p50": 7800,
-   "p95": 8893
+   "p50": 7897,
+   "p95": 8993
   },
   "ledger": {
-   "max": 7298,
-   "n": 1200,
-   "p50": 4941,
-   "p95": 6048
+   "max": 6536,
+   "n": 1126,
+   "p50": 4992,
+   "p95": 5902
   },
   "repair": {
-   "max": 5497,
+   "max": 5617,
    "n": 1200,
-   "p50": 4316,
-   "p95": 5240
+   "p50": 4439,
+   "p95": 5360
   }
  },
  "config": {
   "grpo_out": "data/grpo_tools_v3",
   "include_frontier": true,
   "limit": 0,
-  "max_tokens": 8000,
+  "max_tokens": 8192,
   "max_tool_result_chars": 4500,
   "out": "data/sft_tools_v3",
   "plant_seed": 0,
@@ -54,28 +54,28 @@
  },
  "contamination_guard": {
   "heldout_files": [
-   "data\\heldout_v2\\audit_test_id.jsonl",
-   "data\\heldout_v2\\audit_test_ood_topology.jsonl",
-   "data\\heldout_v2\\design_test_id.jsonl",
-   "data\\heldout_v2\\design_test_ood_climate.jsonl",
-   "data\\heldout_v2\\design_test_ood_load.jsonl",
-   "data\\heldout_v2\\design_test_ood_scale.jsonl",
-   "data\\heldout_v2\\ledger_test_id.jsonl",
-   "data\\heldout_v2\\ledger_test_ood_fault.jsonl",
-   "data\\heldout_v2\\ledger_test_ood_topology.jsonl",
-   "data\\heldout_v2\\repair_test_id.jsonl",
-   "data\\heldout_v2\\repair_test_ood_fault.jsonl",
-   "data\\heldout_v2\\repair_test_ood_topology.jsonl"
+   "data\\heldout\\audit_test_id.jsonl",
+   "data\\heldout\\audit_test_ood_topology.jsonl",
+   "data\\heldout\\design_test_id.jsonl",
+   "data\\heldout\\design_test_ood_climate.jsonl",
+   "data\\heldout\\design_test_ood_load.jsonl",
+   "data\\heldout\\design_test_ood_scale.jsonl",
+   "data\\heldout\\ledger_test_id.jsonl",
+   "data\\heldout\\ledger_test_ood_fault.jsonl",
+   "data\\heldout\\ledger_test_ood_topology.jsonl",
+   "data\\heldout\\repair_test_id.jsonl",
+   "data\\heldout\\repair_test_ood_fault.jsonl",
+   "data\\heldout\\repair_test_ood_topology.jsonl"
   ],
   "leaks": [],
   "overlap": 0,
   "passed": true,
-  "rows_scanned": 4800,
-  "signatures": 10578
+  "rows_scanned": 4686,
+  "signatures": 675
  },
  "counts": {
   "audit": {
-   "deterministic_tools": 1200,
+   "deterministic_tools": 1160,
    "frontier_tools": 0
   },
   "design": {
@@ -83,7 +83,7 @@
    "frontier_tools": 0
   },
   "ledger": {
-   "deterministic_tools": 1200,
+   "deterministic_tools": 1126,
    "frontier_tools": 0
   },
   "repair": {
@@ -93,7 +93,7 @@
  },
  "dropped_invalid_or_no_tools": 0,
  "dropped_large_tool_results": 0,
- "dropped_over_8k": 0,
+ "dropped_over_8k": 114,
  "frontier": {
   "deduplicated": 0,
   "kept": 0,
@@ -102,7 +102,7 @@
   "scanned": 1336,
   "with_tool_turns": 0
  },
- "generated_at": "2026-11-21T18:14:13.990292+00:00",
+ "generated_at": "2026-11-22T12:13:05.378025+00:00",
  "generator": "synth.tool_traces (deterministic) + accepted frontier tool traces",
  "plants_selected_by_task": {
   "audit": 600,
@@ -157,14 +157,14 @@
   },
   {
    "generator": "deterministic_tools",
-   "kept": 1200,
+   "kept": 1160,
    "rows_read": 2192,
    "rows_selected": 600,
    "source_dir": "data/processed",
    "task": "audit",
    "variants": {
     "direct": 600,
-    "recover": 600
+    "recover": 560
    }
   },
   {
@@ -179,14 +179,14 @@
   },
   {
    "generator": "deterministic_tools",
-   "kept": 1200,
+   "kept": 1126,
    "rows_read": 4846,
    "rows_selected": 600,
    "source_dir": "data/processed",
    "task": "ledger",
    "variants": {
-    "direct": 600,
-    "recover": 600
+    "direct": 567,
+    "recover": 559
    }
   },
   {
@@ -204,7 +204,7 @@
   "audit": {
    "counts": {
     "easy": 400,
-    "hard": 400,
+    "hard": 360,
     "medium": 400
    },
    "ranges": {
@@ -216,7 +216,7 @@
     "hard": {
      "max": 13,
      "min": 7,
-     "n": 400
+     "n": 360
     },
     "medium": {
      "max": 7,
@@ -253,25 +253,25 @@
   },
   "ledger": {
    "counts": {
-    "easy": 400,
-    "hard": 400,
-    "medium": 400
+    "easy": 378,
+    "hard": 370,
+    "medium": 378
    },
    "ranges": {
     "easy": {
      "max": 6,
      "min": 4,
-     "n": 400
+     "n": 378
     },
     "hard": {
-     "max": 13,
+     "max": 10,
      "min": 7,
-     "n": 400
+     "n": 370
     },
     "medium": {
      "max": 7,
      "min": 6,
-     "n": 400
+     "n": 378
     }
    },
    "rule": "rank by documented per-task component count, sha256(id) tie-break, floor(n/3)/floor(n/3)/remainder; a plant's two variants share the tier"
@@ -303,20 +303,20 @@
   }
  },
  "token_length": {
-  "max": 6591,
-  "n": 4800,
-  "p50": 3967,
-  "p95": 4874
+  "max": 8191,
+  "n": 4686,
+  "p50": 6889,
+  "p95": 7698
  },
  "token_length_plain": {
-  "max": 6591,
-  "n": 4800,
-  "p50": 3967,
-  "p95": 4874
+  "max": 5276,
+  "n": 4686,
+  "p50": 3979,
+  "p95": 4790
  },
  "token_measure_note": "token_length = FINAL rendered prompt messages + completion + TOKEN_RESERVE (the gate); token_length_plain = plain prompt instead. Over-gate rows are dropped, never truncated.",
  "totals": {
-  "grpo": 4800,
-  "sft": 4800
+  "grpo": 4686,
+  "sft": 4686
  }
 }

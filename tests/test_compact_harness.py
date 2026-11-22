@@ -124,10 +124,13 @@ def test_single_shared_hash_for_task_and_plant(task):
 # 3. content contract (no tool semantics changed)
 # --------------------------------------------------------------------------- #
 @pytest.mark.parametrize("task", TASKS)
-def test_five_tools_present(task):
+def test_tool_list_not_duplicated_in_prompt(task):
     system = _system(task)
-    for name in TOOLS:
-        assert name in system, f"{task}: missing tool {name}"
+    # The chat template injects the 16 schemas; the contract text must not repeat the list.
+    for name in TOOLS[1:]:
+        assert name not in system, f"{task}: tool {name} duplicated in prompt text"
+    assert "Tools (one-line semantics):" not in system
+    assert "MULTI-TURN TOOL ENVIRONMENT" in system
 
 
 @pytest.mark.parametrize("task", TASKS)
@@ -152,11 +155,12 @@ def test_no_non_selected_skills(task):
             f"{task}: full body of skill {name} leaked into the system prompt")
 
 
-def test_tool_call_and_result_format_unchanged():
+def test_native_tool_format_is_owned_by_the_template():
     system = _system("repair")
-    assert '<tool_call name="TOOL_NAME">' in system
-    assert '{"candidate": "..."}' in system
-    assert "<tool_result>" in system and "</tool_result>" in system
+    assert '<tool_call name="TOOL_NAME">' not in system
+    assert '{"candidate": "..."}' not in system
+    assert "<tool_result>" not in system
+    assert "MULTI-TURN TOOL ENVIRONMENT" in system
     assert "answer-oracle" in system
 
 
@@ -178,11 +182,11 @@ def test_dynamic_tools_named_only_when_included(task):
     # The legacy opt-out is include_dynamic=False; the default now carries all 16.
     legacy = compact_tool_contract(
         task, 6, 8, tools=make_tools(task, row, include_dynamic=False))
-    assert all(name not in legacy for name in DYNAMIC_TOOL_NAMES)
+    assert "Tools (one-line semantics):" not in legacy
     dynamic = compact_tool_contract(
         task, 6, 8, tools=make_tools(task, row, include_dynamic=True))
-    assert all(name in dynamic for name in DYNAMIC_TOOL_NAMES)
-    assert "JSON object string" in dynamic
+    assert "Tools (one-line semantics):" not in dynamic
+    assert '<tool_call name=' not in dynamic
 
 
 @pytest.mark.parametrize("task", TASKS)

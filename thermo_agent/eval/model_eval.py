@@ -50,7 +50,7 @@ _DEFAULT_TEXT_TURNS = 3
 _DEFAULT_TOOL_CALLS = 8      # I6
 _TOOL_MAX_NEW_TOKENS = 4096   # I7, per turn
 _TEXT_MAX_NEW_TOKENS = 4096   # I7: thinking is on, 400 truncates it
-_REVISE_NUDGE = ("Tool results are above inside <tool_result> blocks. Read the numbers, revise, "
+_REVISE_NUDGE = ("Tool results are above in the tool-response messages. Read the numbers, revise, "
                 "and either call another tool or STOP and emit ONLY the final answer XML tags.")
 _FINAL_NUDGE = ("Your last message was not a final answer. Emit ONLY the task's final XML tags "
                "now (no tool calls, no prose).")
@@ -256,10 +256,19 @@ class HFGenerator:
         return kw
 
     def _encode(self, messages):
-        text = self.tok.apply_chat_template(messages, add_generation_prompt=True, tokenize=False,
+        tools = getattr(self, "tools", None)
+        text = self.tok.apply_chat_template(messages, tools=tools or None, add_generation_prompt=True,
+                                            tokenize=False,
                                             enable_thinking=self.enable_thinking)
+        self.last_prompt_text = text
         inputs = self.tok(text, return_tensors="pt", add_special_tokens=False).to(self.model.device)
         return inputs, int(inputs["input_ids"].shape[1])
+
+    def parse_tool_calls(self, text: str) -> list[tuple[str, dict]]:
+        """Parse generated text with the tokenizer's own response template."""
+        from ..agent import tool_protocol
+        return tool_protocol.parse_generated(
+            self.tok, text, getattr(self, "last_prompt_text", ""), getattr(self, "tools", None) or [])
 
     def _decode(self, gen):
         return _THINK.sub("", self.tok.decode(gen, skip_special_tokens=True)).strip()
@@ -523,10 +532,11 @@ class ToolLoop:
     tool_contract = staticmethod(_tool_contract)
 
     def _base_messages(self):
-        # One shared Gate 2 environment per episode: same five tools, same caps as SFT/GRPO.
-        from ..agent.env import ThermoEnv
-        env = ThermoEnv(self.row, self.task, self.max_turns, self.max_tool_calls)
-        tools = env.tools
+        # One shared Gate 2 environment per episode: the full toolset, same caps as SFT/GRPO.
+        from ..agent.tool_protocol import tool_schemas
+        from ..teacher.toolkit import make_tools
+        tools = make_tools(self.task, self.row)
+        self.generate.tools = tool_schemas(self.task)
         plant = None
         for key in ("plant_broken", "plant", "plant_original"):
             if self.row.get(key):
@@ -557,7 +567,8 @@ class ToolLoop:
             c_tokens += int(getattr(self.generate, "last_completion_tokens", 0) or 0)
             if getattr(self.generate, "last_truncated", False):
                 truncated = True
-            parsed = parse_tool_calls(text)
+            parser = getattr(self.generate, "parse_tool_calls", None)
+            parsed = parser(text) if callable(parser) else parse_tool_calls(text)
             if not parsed:
                 final_text = text
                 turn_log.append({"turn": turn, "text": text, "tool_calls": [], "tool_results": []})
@@ -589,9 +600,13 @@ class ToolLoop:
                              "tool_results": [r for _, r in executed]})
             if executed:
                 final_text = text
-                blocks = "".join(f"<tool_result>{r}</tool_result>" for _, r in executed)
-                msgs = msgs + [{"role": "assistant", "content": text},
-                               {"role": "user", "content": blocks + "\n" + _REVISE_NUDGE}]
+                from ..agent import tool_protocol
+                calls = [{"name": name, "arguments": payload} for name, payload in parsed]
+                msgs = msgs + [
+                    tool_protocol.assistant_message(TC.strip_tool_calls(text), calls),
+                    *[tool_protocol.tool_message(name, result) for name, result in executed],
+                    {"role": "user", "content": _REVISE_NUDGE},
+                ]
                 if stop == "max_tool_calls":
                     break
                 continue

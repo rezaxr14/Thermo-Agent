@@ -44,7 +44,7 @@ def test_trl_source_probes_factory_with_no_args_and_reads_public_class_methods()
     assert "completions/clipped_ratio" in src          # TRL already logs truncation rate
 
 
-def test_wrapper_exposes_exactly_five_tools_and_no_env_internals():
+def test_wrapper_exposes_exactly_sixteen_tools_and_no_env_internals():
     factory = grpo.make_env_factory("repair")
     wrapper = factory()                                 # TRL calls this with no arguments
     public = _public_functions(type(wrapper))
@@ -52,7 +52,7 @@ def test_wrapper_exposes_exactly_five_tools_and_no_env_internals():
     assert "step" not in public and "observation_block" not in public
     # We keep the verifier rewards as reward_funcs, so the wrapper must NOT own get_reward.
     assert "get_reward" not in public
-    assert len(grpo.TOOL_NAMES) == 5
+    assert len(grpo.TOOL_NAMES) == 16
 
 
 def test_reset_takes_dataset_columns_and_returns_observation_not_prompt():
@@ -68,9 +68,9 @@ def test_reset_takes_dataset_columns_and_returns_observation_not_prompt():
 # --------------------------------------------------------------------------- #
 # 2. Tool schemas: type hints + Google docstrings sufficient for JSON schema
 # --------------------------------------------------------------------------- #
-def test_five_tools_generate_a_json_schema_with_candidate():
+def test_all_sixteen_tools_generate_a_json_schema_with_candidate():
     schemas = [get_json_schema(tool) for tool in grpo.wrapper_tool_methods()]
-    assert len(schemas) == 5
+    assert len(schemas) == 16
     for schema in schemas:
         fn = schema["function"]
         assert fn["name"] in grpo.TOOL_NAMES

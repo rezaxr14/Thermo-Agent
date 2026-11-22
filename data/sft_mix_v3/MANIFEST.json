@@ -1645,50 +1645,50 @@
  "counts": {
   "grpo": {
    "audit": {
-    "deterministic": 1200,
+    "deterministic": 479,
     "frontier": 0,
-    "total": 1200
+    "total": 479
    },
    "design": {
-    "deterministic": 1200,
+    "deterministic": 398,
     "frontier": 0,
-    "total": 1200
+    "total": 398
    },
    "ledger": {
-    "deterministic": 1194,
-    "frontier": 4,
-    "total": 1198
+    "deterministic": 660,
+    "frontier": 1,
+    "total": 661
    },
    "repair": {
     "deterministic": 1200,
-    "frontier": 7,
-    "total": 1207
+    "frontier": 5,
+    "total": 1205
    }
   },
   "sft": {
    "audit": {
-    "deterministic": 1200,
+    "deterministic": 479,
     "frontier": 0,
     "plain_a": 400,
-    "total": 1600
+    "total": 879
    },
    "design": {
-    "deterministic": 1200,
+    "deterministic": 398,
     "frontier": 0,
     "plain_a": 400,
-    "total": 1600
+    "total": 798
    },
    "ledger": {
-    "deterministic": 1194,
-    "frontier": 4,
+    "deterministic": 660,
+    "frontier": 1,
     "plain_a": 400,
-    "total": 1598
+    "total": 1061
    },
    "repair": {
     "deterministic": 1200,
-    "frontier": 7,
+    "frontier": 5,
     "plain_a": 400,
-    "total": 1607
+    "total": 1605
    }
   }
  },
@@ -1705,25 +1705,21 @@
   "eligible": 11,
   "reprompted": 11,
   "scanned": 11,
-  "selected_count": 11,
+  "selected_count": 6,
   "selected_ids": [
    "arch-10-00000#v10-t-google-gemini-3-1-flash-lite-preview-t-claude-haiku-5-5",
    "arch-10-00022-t-claude-haiku-5-5",
-   "arch-109-00022#v4-t-google-gemini-3-1-flash-lite-preview-t-claude-haiku-5-5",
    "arch-25-00002-t-gpt-6-luna",
-   "arch-34-00022-t-gpt-6-luna",
    "arch-40-00002-t-gpt-6-luna",
    "arch-40-00004#v4-t-google-gemini-3-1-flash-lite-preview-t-claude-haiku-5-5",
-   "led-0-00321-t-claude-haiku-5-5",
-   "led-0-00346-t-gpt-6-luna",
-   "led-0-00454-t-gpt-6-luna",
    "led-0-00488-t-claude-haiku-5-5"
   ],
   "skipped_over_cap": 0,
+  "skipped_over_gate": 5,
   "with_tool_turns": 11
  },
  "frontier_reprompted": 11,
- "generated_at": "2026-11-21T21:24:44.160790+00:00",
+ "generated_at": "2026-11-22T12:25:18.651684+00:00",
  "generator": "mix_tool_corpora.py",
  "input_file_hashes": {
   "data/a_slice/audit_train.jsonl": "7eec6b3580097c9a807da9a659a7f4de1e9f05c6a59761213dd2cda48545a973",
@@ -1732,14 +1728,14 @@
   "data/a_slice/repair_train.jsonl": "66991f8672ce64685fc3074b1bafa73f57499d96d76354bd0ec249b5254589e1",
   "data/frontier_tools_accepted/frontier_ledger_train.jsonl": "d978deac48b57b499c27a219235c6fa988ece83049c920fc922800ca0ab45daf",
   "data/frontier_tools_accepted/frontier_repair_train.jsonl": "c7eeb4dbc964e22ae6da460315e1dab703ced2b9cab1093bc832502274ad82c7",
-  "data/grpo_tools_v3_h/audit_train.jsonl": "09d87f38b26ffdc1cbc1aec7db99d49c5be42620f9f6081458cc91830fbe90dd",
-  "data/grpo_tools_v3_h/design_train.jsonl": "9eee42062a31da84034be42df1e7c461c79577afd538141a4c6c5e40395e7af0",
-  "data/grpo_tools_v3_h/ledger_train.jsonl": "1d49760de95fe70e0004f82d3555fb663cb40352e3fbcc17b5ca0945c258bb74",
-  "data/grpo_tools_v3_h/repair_train.jsonl": "c55cc9b6cc0c6ca46791065031a241b345030a249fe524cc1107ee16c831f6a0",
-  "data/sft_tools_v3_h/audit_train.jsonl": "4a4d674e03b2a89f3911599999eaf4bc5ec48a48e84f6cff65245191f016ef86",
-  "data/sft_tools_v3_h/design_train.jsonl": "f84410058b42398a2a91afa99c76952342daa82aa08dceaafc6b2e3534d12161",
-  "data/sft_tools_v3_h/ledger_train.jsonl": "cea524e898298a5bbbd32c285ae595aebf50ba6f8c0f1bcee552f1c6e63165cb",
-  "data/sft_tools_v3_h/repair_train.jsonl": "9893ca2159d3946c4e5dfc0c6ea46ebe57e0bb0f0d846291722e9d9880eb6711"
+  "data/grpo_tools_v3_h/audit_train.jsonl": "c1b012b8cc250aa87821f7e7bc3202fb0c394ad5fc16c9bdc51c7046067cf87e",
+  "data/grpo_tools_v3_h/design_train.jsonl": "980918b2572d84e4e61e160e72460b410abb1953103f59f55bcff1f635974f67",
+  "data/grpo_tools_v3_h/ledger_train.jsonl": "a85a8827b1adbfee38157caa673e6b7a8d2c24f1d5cb47f999615a2726c006fb",
+  "data/grpo_tools_v3_h/repair_train.jsonl": "5426495686445b5207fa8579cc9746e4b9e0c56fa7d236162ba3dd71a26636be",
+  "data/sft_tools_v3_h/audit_train.jsonl": "0dc71266050a126ece25418b2dfb4d5560abf35090ad847b846407b9e47b1e81",
+  "data/sft_tools_v3_h/design_train.jsonl": "a401a7ef5223bdf5e809ca97d9e059233b1a4eb463dbb5f1408d0de6a08ee88b",
+  "data/sft_tools_v3_h/ledger_train.jsonl": "48567e452b6cdb6e6039d3ffd6123e54556afe4ed192a1c855359c2363929836",
+  "data/sft_tools_v3_h/repair_train.jsonl": "fc9ca538ffa321eb873acf2abf3a51adbd41e9c166f2c1acdb7480a52efa6240"
  },
  "inputs_missing": [],
  "owned_files": [
@@ -1761,103 +1757,103 @@
    "repair": 400
   },
   "deterministic_grpo": {
-   "audit": 1200,
-   "design": 1200,
-   "ledger": 1194,
+   "audit": 479,
+   "design": 398,
+   "ledger": 660,
    "repair": 1200
   },
   "deterministic_sft": {
-   "audit": 1200,
-   "design": 1200,
-   "ledger": 1194,
+   "audit": 479,
+   "design": 398,
+   "ledger": 660,
    "repair": 1200
   },
   "frontier": {
    "audit": 0,
    "design": 0,
-   "ledger": 4,
-   "repair": 7
+   "ledger": 1,
+   "repair": 5
   }
  },
  "provenance": {
   "grpo": {
-   "ai_generated:claude-haiku-5-5": 6,
-   "ai_generated:gpt-6-luna": 5,
-   "deterministic:none": 4794
+   "ai_generated:claude-haiku-5-5": 4,
+   "ai_generated:gpt-6-luna": 2,
+   "deterministic:none": 2737
   },
   "sft": {
-   "ai_generated:claude-haiku-5-5": 6,
-   "ai_generated:gpt-6-luna": 5,
-   "deterministic:none": 6394
+   "ai_generated:claude-haiku-5-5": 4,
+   "ai_generated:gpt-6-luna": 2,
+   "deterministic:none": 4337
   }
  },
  "seed": 0,
  "tiers": {
   "audit": {
    "counts": {
-    "easy": 533,
-    "hard": 534,
-    "medium": 533
+    "easy": 293,
+    "hard": 293,
+    "medium": 293
    },
    "counts_grpo": {
-    "easy": 400,
-    "hard": 400,
-    "medium": 400
+    "easy": 159,
+    "hard": 161,
+    "medium": 159
    },
    "counts_sft": {
-    "easy": 533,
-    "hard": 534,
-    "medium": 533
+    "easy": 293,
+    "hard": 293,
+    "medium": 293
    },
    "ranges": {
     "easy": {
      "max": 6,
      "min": 4,
-     "n": 533
+     "n": 293
     },
     "hard": {
      "max": 13,
      "min": 7,
-     "n": 534
+     "n": 293
     },
     "medium": {
      "max": 7,
      "min": 6,
-     "n": 533
+     "n": 293
     }
    },
    "ranges_grpo": {
     "easy": {
      "max": 6,
      "min": 4,
-     "n": 400
+     "n": 159
     },
     "hard": {
-     "max": 13,
+     "max": 9,
      "min": 7,
-     "n": 400
+     "n": 161
     },
     "medium": {
      "max": 7,
      "min": 6,
-     "n": 400
+     "n": 159
     }
    },
    "ranges_sft": {
     "easy": {
      "max": 6,
      "min": 4,
-     "n": 533
+     "n": 293
     },
     "hard": {
      "max": 13,
      "min": 7,
-     "n": 534
+     "n": 293
     },
     "medium": {
      "max": 7,
      "min": 6,
-     "n": 533
+     "n": 293
     }
    },
    "rule": "exact equal thirds per emitted row by documented per-task component-count measure, sha256(row id) tie-break, remainder to hard; SFT and GRPO tiered as separate streams; deterministic, frontier and plain-A rows tiered together",
@@ -1865,69 +1861,69 @@
   },
   "design": {
    "counts": {
-    "easy": 533,
-    "hard": 534,
-    "medium": 533
+    "easy": 266,
+    "hard": 266,
+    "medium": 266
    },
    "counts_grpo": {
-    "easy": 400,
-    "hard": 400,
-    "medium": 400
+    "easy": 132,
+    "hard": 134,
+    "medium": 132
    },
    "counts_sft": {
-    "easy": 533,
-    "hard": 534,
-    "medium": 533
+    "easy": 266,
+    "hard": 266,
+    "medium": 266
    },
    "ranges": {
     "easy": {
      "max": 10,
      "min": 4,
-     "n": 533
+     "n": 266
     },
     "hard": {
      "max": 13,
-     "min": 11,
-     "n": 534
+     "min": 10,
+     "n": 266
     },
     "medium": {
-     "max": 11,
+     "max": 10,
      "min": 10,
-     "n": 533
+     "n": 266
     }
    },
    "ranges_grpo": {
     "easy": {
-     "max": 10,
+     "max": 6,
      "min": 4,
-     "n": 400
+     "n": 132
     },
     "hard": {
-     "max": 13,
-     "min": 11,
-     "n": 400
+     "max": 10,
+     "min": 10,
+     "n": 134
     },
     "medium": {
-     "max": 11,
-     "min": 10,
-     "n": 400
+     "max": 10,
+     "min": 6,
+     "n": 132
     }
    },
    "ranges_sft": {
     "easy": {
      "max": 10,
      "min": 4,
-     "n": 533
+     "n": 266
     },
     "hard": {
      "max": 13,
-     "min": 11,
-     "n": 534
+     "min": 10,
+     "n": 266
     },
     "medium": {
-     "max": 11,
+     "max": 10,
      "min": 10,
-     "n": 533
+     "n": 266
     }
    },
    "rule": "exact equal thirds per emitted row by documented per-task component-count measure, sha256(row id) tie-break, remainder to hard; SFT and GRPO tiered as separate streams; deterministic, frontier and plain-A rows tiered together",
@@ -1935,69 +1931,69 @@
   },
   "ledger": {
    "counts": {
-    "easy": 532,
-    "hard": 534,
-    "medium": 532
+    "easy": 353,
+    "hard": 355,
+    "medium": 353
    },
    "counts_grpo": {
-    "easy": 399,
-    "hard": 400,
-    "medium": 399
+    "easy": 220,
+    "hard": 221,
+    "medium": 220
    },
    "counts_sft": {
-    "easy": 532,
-    "hard": 534,
-    "medium": 532
+    "easy": 353,
+    "hard": 355,
+    "medium": 353
    },
    "ranges": {
     "easy": {
-     "max": 6,
+     "max": 5,
      "min": 4,
-     "n": 532
+     "n": 353
     },
     "hard": {
      "max": 13,
-     "min": 7,
-     "n": 534
+     "min": 6,
+     "n": 355
     },
     "medium": {
-     "max": 7,
-     "min": 6,
-     "n": 532
+     "max": 6,
+     "min": 5,
+     "n": 353
     }
    },
    "ranges_grpo": {
     "easy": {
-     "max": 6,
+     "max": 5,
      "min": 4,
-     "n": 399
+     "n": 220
     },
     "hard": {
-     "max": 13,
-     "min": 7,
-     "n": 400
-    },
-    "medium": {
      "max": 7,
      "min": 6,
-     "n": 399
+     "n": 221
+    },
+    "medium": {
+     "max": 6,
+     "min": 5,
+     "n": 220
     }
    },
    "ranges_sft": {
     "easy": {
-     "max": 6,
+     "max": 5,
      "min": 4,
-     "n": 532
+     "n": 353
     },
     "hard": {
      "max": 13,
-     "min": 7,
-     "n": 534
+     "min": 6,
+     "n": 355
     },
     "medium": {
-     "max": 7,
-     "min": 6,
-     "n": 532
+     "max": 6,
+     "min": 5,
+     "n": 353
     }
    },
    "rule": "exact equal thirds per emitted row by documented per-task component-count measure, sha256(row id) tie-break, remainder to hard; SFT and GRPO tiered as separate streams; deterministic, frontier and plain-A rows tiered together",
@@ -2006,17 +2002,17 @@
   "repair": {
    "counts": {
     "easy": 535,
-    "hard": 537,
+    "hard": 535,
     "medium": 535
    },
    "counts_grpo": {
-    "easy": 402,
+    "easy": 401,
     "hard": 403,
-    "medium": 402
+    "medium": 401
    },
    "counts_sft": {
     "easy": 535,
-    "hard": 537,
+    "hard": 535,
     "medium": 535
    },
    "ranges": {
@@ -2028,7 +2024,7 @@
     "hard": {
      "max": 19,
      "min": 7,
-     "n": 537
+     "n": 535
     },
     "medium": {
      "max": 7,
@@ -2040,7 +2036,7 @@
     "easy": {
      "max": 6,
      "min": 4,
-     "n": 402
+     "n": 401
     },
     "hard": {
      "max": 10,
@@ -2050,7 +2046,7 @@
     "medium": {
      "max": 7,
      "min": 6,
-     "n": 402
+     "n": 401
     }
    },
    "ranges_sft": {
@@ -2062,7 +2058,7 @@
     "hard": {
      "max": 19,
      "min": 7,
-     "n": 537
+     "n": 535
     },
     "medium": {
      "max": 7,
@@ -2075,7 +2071,7 @@
   }
  },
  "totals": {
-  "grpo": 4805,
-  "sft": 6405
+  "grpo": 2743,
+  "sft": 4343
  }
 }

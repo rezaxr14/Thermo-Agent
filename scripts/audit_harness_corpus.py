@@ -179,9 +179,22 @@ def audit(root: Path, dirs: list[str], tok, gate: int, reserve: int) -> dict[str
                 if tok is not None:
                     msgs = (prompt if isinstance(prompt, list) else []) + \
                            (completion if isinstance(completion, list) else [])
+                    structured = any(isinstance(m, dict) and m.get("tool_calls")
+                                     for m in msgs)
+                    toolish = structured or row.get("prompt_variant") == "harness_tools" or \
+                        bool(row.get("harness") and row.get("harness") != "none") or \
+                        bool(row.get("trajectory"))
+                    tools = None
+                    if toolish and task:
+                        from thermo_agent.agent.tool_protocol import tool_schemas
+                        tools = tool_schemas(str(task))
+                    if "<tool_call name=" in completion_text:
+                        anomalies.append({"file": rel, "id": rid,
+                                          "issue": "legacy_tool_call_syntax"})
                     try:
                         rendered_text = tok.apply_chat_template(
-                            msgs, add_generation_prompt=False, tokenize=False, **CHAT_KW
+                            msgs, tools=tools, add_generation_prompt=False,
+                            tokenize=False, **CHAT_KW
                         )
                         n_rendered = encode_len(tok, rendered_text)
                     except Exception as exc:  # noqa: BLE001

@@ -29,26 +29,62 @@ TOOL_CONTRACT_MARKER = "MULTI-TURN TOOL ENVIRONMENT"
 
 
 def model_messages(row: dict) -> list[dict]:
-    """Only ``role``/``content`` reach the model; a malformed message is a hard error.
+    """Only chat fields reach the model; a malformed message is a hard error.
 
     Rows carry bookkeeping columns (task, tier, id, tokens, provenance ...) that TRL
     forwards to the environment and the reward dispatcher. Dropping anything else
     from each message here is what keeps that metadata out of the model prompt.
+    ``tool_calls``/``name`` are part of the native protocol and are preserved.
     """
     messages = row["prompt"]
     if isinstance(messages, str):  # a few legacy plain-prompt rows predate the chat list
         return [{"role": "user", "content": messages}]
     out = []
     for i, message in enumerate(messages):
-        if not isinstance(message, dict) or "role" not in message or "content" not in message:
-            raise ValueError(f"prompt message {i} is not a role/content dict: {message!r:.200}")
-        role, content = message["role"], message["content"]
+        if not isinstance(message, dict) or "role" not in message:
+            raise ValueError(f"prompt message {i} has no role/content chat fields: {message!r:.200}")
+        role = message["role"]
+        content = message.get("content", "")
         if not isinstance(role, str) or not isinstance(content, str):
             raise ValueError(f"prompt message {i} has non-string role/content")
-        out.append({"role": role, "content": content})
+        clean = {"role": role, "content": content}
+        for key in ("tool_calls", "name", "tool_call_id"):
+            if message.get(key):
+                clean[key] = message[key]
+        out.append(clean)
     if not out:
         raise ValueError("empty model prompt")
     return out
+
+
+def completion_messages(row: dict) -> list[dict]:
+    """The stored completion as chat messages (one assistant message for plain rows)."""
+    completion = row.get("completion")
+    if isinstance(completion, str):
+        return [{"role": "assistant", "content": completion}]
+    if not isinstance(completion, list) or not completion:
+        raise ValueError(f"row {row.get('id', '<no id>')!r} has no completion")
+    return [dict(message, role=message.get("role") or "assistant") for message in completion]
+
+
+def row_tools(row: dict) -> list[dict]:
+    """Tool schemas for a row, or ``[]`` for a plain (no-tool) row.
+
+    A row is a tool row when it stores native ``tool_calls``, carries a trajectory, or
+    was built on the harness. The schemas come from the one shared builder, so training
+    and eval inject exactly the same 16 tool definitions.
+    """
+    structured = any(isinstance(m, dict) and m.get("tool_calls")
+                     for m in (row.get("completion") or [])
+                     if isinstance(m, dict))
+    harness = bool(row.get("harness") and row["harness"] != "none")
+    toolish = structured or harness or bool(row.get("trajectory")) or \
+        row.get("prompt_variant") == "harness_tools"
+    task = row.get("task")
+    if not toolish or not task:
+        return []
+    from ..agent.tool_protocol import tool_schemas
+    return tool_schemas(task)
 
 
 def prompt_text(row: dict) -> str:
@@ -77,18 +113,31 @@ def assert_compact_harness(row: dict) -> None:
         )
 
 
-def generation_prompt(tok, messages: list[dict]) -> str:
-    return tok.apply_chat_template(messages, add_generation_prompt=True, tokenize=False, **CHAT_KW)
+def generation_prompt(tok, messages: list[dict], tools: list[dict] | None = None) -> str:
+    return tok.apply_chat_template(messages, tools=tools or None, add_generation_prompt=True,
+                                   tokenize=False, **CHAT_KW)
 
 
 def render_pair(tok, row: dict) -> dict:
-    return {"prompt": generation_prompt(tok, model_messages(row)),
-            "completion": row["completion"][0]["content"]}
+    """Render prompt and completion through the native template, with tools injected."""
+    messages = model_messages(row)
+    completion = completion_messages(row)
+    tools = row_tools(row)
+    prompt = generation_prompt(tok, messages, tools)
+    full = tok.apply_chat_template(messages + completion, tools=tools or None,
+                                   tokenize=False, **CHAT_KW)
+    if not full.startswith(prompt):
+        raise ValueError(
+            f"row {row.get('id', '<no id>')!r}: the rendered completion is not a suffix of the "
+            "generation prompt; the tool template and the training renderer disagree")
+    return {"prompt": prompt, "completion": full[len(prompt):]}
 
 
 def prefix_report(tok, row: dict) -> dict:
     """Does the whole-conversation render start with the generation prompt? False means conversational SFT would mismatch GRPO."""
     messages = model_messages(row)
-    full = tok.apply_chat_template(messages + row["completion"], tokenize=False, **CHAT_KW)
-    gp = generation_prompt(tok, messages)
+    completion = completion_messages(row)
+    tools = row_tools(row)
+    full = tok.apply_chat_template(messages + completion, tools=tools or None, tokenize=False, **CHAT_KW)
+    gp = generation_prompt(tok, messages, tools)
     return {"prefix_matches": full.startswith(gp), "generation_prompt_tail": gp[-80:], "full_render_at_that_point": full[len(gp) - 80: len(gp) + 40] if len(full) >= len(gp) else full[-120:]}

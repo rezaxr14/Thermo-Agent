@@ -1,41 +1,41 @@
 {
  "char_length": {
-  "max": 9366,
-  "n": 4794,
-  "p50": 5947,
-  "p95": 8483
+  "max": 7878,
+  "n": 2737,
+  "p50": 4782,
+  "p95": 7447
  },
  "char_length_by_task": {
   "audit": {
-   "max": 8831,
-   "n": 1200,
-   "p50": 7145,
-   "p95": 7933
+   "max": 7342,
+   "n": 479,
+   "p50": 6224,
+   "p95": 6480
   },
   "design": {
-   "max": 9366,
-   "n": 1200,
-   "p50": 7800,
-   "p95": 8893
+   "max": 7878,
+   "n": 398,
+   "p50": 7378,
+   "p95": 7526
   },
   "ledger": {
-   "max": 6715,
-   "n": 1194,
-   "p50": 4934,
-   "p95": 6009
+   "max": 5660,
+   "n": 660,
+   "p50": 4666,
+   "p95": 5272
   },
   "repair": {
-   "max": 5497,
+   "max": 5617,
    "n": 1200,
-   "p50": 4316,
-   "p95": 5240
+   "p50": 4439,
+   "p95": 5360
   }
  },
  "config": {
   "grpo_out": "data/grpo_tools_v3",
   "include_frontier": true,
   "limit": 0,
-  "max_tokens": 8000,
+  "max_tokens": 8192,
   "max_tool_result_chars": 4500,
   "out": "data/sft_tools_v3",
   "plant_seed": 0,
@@ -54,36 +54,36 @@
  },
  "contamination_guard": {
   "heldout_files": [
-   "data\\heldout_v2\\audit_test_id.jsonl",
-   "data\\heldout_v2\\audit_test_ood_topology.jsonl",
-   "data\\heldout_v2\\design_test_id.jsonl",
-   "data\\heldout_v2\\design_test_ood_climate.jsonl",
-   "data\\heldout_v2\\design_test_ood_load.jsonl",
-   "data\\heldout_v2\\design_test_ood_scale.jsonl",
-   "data\\heldout_v2\\ledger_test_id.jsonl",
-   "data\\heldout_v2\\ledger_test_ood_fault.jsonl",
-   "data\\heldout_v2\\ledger_test_ood_topology.jsonl",
-   "data\\heldout_v2\\repair_test_id.jsonl",
-   "data\\heldout_v2\\repair_test_ood_fault.jsonl",
-   "data\\heldout_v2\\repair_test_ood_topology.jsonl"
+   "data\\heldout\\audit_test_id.jsonl",
+   "data\\heldout\\audit_test_ood_topology.jsonl",
+   "data\\heldout\\design_test_id.jsonl",
+   "data\\heldout\\design_test_ood_climate.jsonl",
+   "data\\heldout\\design_test_ood_load.jsonl",
+   "data\\heldout\\design_test_ood_scale.jsonl",
+   "data\\heldout\\ledger_test_id.jsonl",
+   "data\\heldout\\ledger_test_ood_fault.jsonl",
+   "data\\heldout\\ledger_test_ood_topology.jsonl",
+   "data\\heldout\\repair_test_id.jsonl",
+   "data\\heldout\\repair_test_ood_fault.jsonl",
+   "data\\heldout\\repair_test_ood_topology.jsonl"
   ],
   "leaks": [],
   "overlap": 0,
   "passed": true,
-  "rows_scanned": 4794,
-  "signatures": 10578
+  "rows_scanned": 2737,
+  "signatures": 675
  },
  "counts": {
   "audit": {
-   "deterministic_tools": 1200,
+   "deterministic_tools": 479,
    "frontier_tools": 0
   },
   "design": {
-   "deterministic_tools": 1200,
+   "deterministic_tools": 398,
    "frontier_tools": 0
   },
   "ledger": {
-   "deterministic_tools": 1194,
+   "deterministic_tools": 660,
    "frontier_tools": 0
   },
   "repair": {
@@ -93,7 +93,7 @@
  },
  "dropped_invalid_or_no_tools": 0,
  "dropped_large_tool_results": 0,
- "dropped_over_8k": 6,
+ "dropped_over_8k": 2063,
  "frontier": {
   "deduplicated": 0,
   "kept": 0,
@@ -102,7 +102,7 @@
   "scanned": 1336,
   "with_tool_turns": 0
  },
- "generated_at": "2026-11-21T18:41:37.720989+00:00",
+ "generated_at": "2026-11-22T11:58:07.680413+00:00",
  "generator": "synth.tool_traces (deterministic) + accepted frontier tool traces",
  "plants_selected_by_task": {
   "audit": 600,
@@ -135,14 +135,14 @@
   },
   {
    "generator": "deterministic_tools",
-   "kept": 1200,
+   "kept": 398,
    "rows_read": 1768,
    "rows_selected": 600,
    "source_dir": "data/processed",
    "task": "design",
    "variants": {
-    "direct": 600,
-    "recover": 600
+    "direct": 294,
+    "recover": 104
    }
   },
   {
@@ -157,14 +157,14 @@
   },
   {
    "generator": "deterministic_tools",
-   "kept": 1200,
+   "kept": 479,
    "rows_read": 2192,
    "rows_selected": 600,
    "source_dir": "data/processed",
    "task": "audit",
    "variants": {
-    "direct": 600,
-    "recover": 600
+    "direct": 472,
+    "recover": 7
    }
   },
   {
@@ -179,14 +179,14 @@
   },
   {
    "generator": "deterministic_tools",
-   "kept": 1194,
+   "kept": 660,
    "rows_read": 4846,
    "rows_selected": 600,
    "source_dir": "data/processed",
    "task": "ledger",
    "variants": {
-    "direct": 598,
-    "recover": 596
+    "direct": 377,
+    "recover": 283
    }
   },
   {
@@ -203,75 +203,75 @@
  "tiers": {
   "audit": {
    "counts": {
-    "easy": 400,
-    "hard": 400,
-    "medium": 400
+    "easy": 164,
+    "hard": 158,
+    "medium": 157
    },
    "ranges": {
     "easy": {
      "max": 6,
      "min": 4,
-     "n": 400
+     "n": 164
     },
     "hard": {
-     "max": 13,
+     "max": 9,
      "min": 7,
-     "n": 400
+     "n": 158
     },
     "medium": {
      "max": 7,
      "min": 6,
-     "n": 400
+     "n": 157
     }
    },
    "rule": "rank by documented per-task component count, sha256(id) tie-break, floor(n/3)/floor(n/3)/remainder; a plant's two variants share the tier"
   },
   "design": {
    "counts": {
-    "easy": 400,
-    "hard": 400,
-    "medium": 400
+    "easy": 188,
+    "hard": 105,
+    "medium": 105
    },
    "ranges": {
     "easy": {
      "max": 10,
      "min": 4,
-     "n": 400
+     "n": 188
     },
     "hard": {
-     "max": 13,
-     "min": 11,
-     "n": 400
+     "max": 10,
+     "min": 10,
+     "n": 105
     },
     "medium": {
-     "max": 11,
+     "max": 10,
      "min": 10,
-     "n": 400
+     "n": 105
     }
    },
    "rule": "rank by documented per-task component count, sha256(id) tie-break, floor(n/3)/floor(n/3)/remainder; a plant's two variants share the tier"
   },
   "ledger": {
    "counts": {
-    "easy": 398,
-    "hard": 398,
-    "medium": 398
+    "easy": 250,
+    "hard": 171,
+    "medium": 239
    },
    "ranges": {
     "easy": {
-     "max": 6,
+     "max": 5,
      "min": 4,
-     "n": 398
+     "n": 250
     },
     "hard": {
-     "max": 13,
-     "min": 7,
-     "n": 398
-    },
-    "medium": {
      "max": 7,
      "min": 6,
-     "n": 398
+     "n": 171
+    },
+    "medium": {
+     "max": 6,
+     "min": 5,
+     "n": 239
     }
    },
    "rule": "rank by documented per-task component count, sha256(id) tie-break, floor(n/3)/floor(n/3)/remainder; a plant's two variants share the tier"
@@ -303,20 +303,20 @@
   }
  },
  "token_length": {
-  "max": 7983,
-  "n": 4794,
-  "p50": 5788,
-  "p95": 6700
+  "max": 8192,
+  "n": 2737,
+  "p50": 7449,
+  "p95": 8162
  },
  "token_length_plain": {
-  "max": 6136,
-  "n": 4794,
-  "p50": 3965,
-  "p95": 4870
+  "max": 4078,
+  "n": 2737,
+  "p50": 3288,
+  "p95": 4034
  },
  "token_measure_note": "token_length = FINAL rendered prompt messages + completion + TOKEN_RESERVE (the gate); token_length_plain = plain prompt instead. Over-gate rows are dropped, never truncated.",
  "totals": {
-  "grpo": 4794,
-  "sft": 4794
+  "grpo": 2737,
+  "sft": 2737
  }
 }

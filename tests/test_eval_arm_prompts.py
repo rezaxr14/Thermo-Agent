@@ -208,6 +208,7 @@ def test_ours_harness_uses_shared_tool_prompt_ours_sft_does_not(tmp_path, monkey
     assert "# AGENTS.md: energy-plant tasks (compact)" in h_sys
     assert "# AGENTS.md: energy-plant tasks (compact)" in s_sys
     assert "MULTI-TURN TOOL ENVIRONMENT" in h_sys
-    assert "<tool_call" in h_sys and "inspect_plant" in h_sys
+    assert "MULTI-TURN TOOL ENVIRONMENT" in h_sys and "inspect_plant" in h_sys
+    assert "<tool_call name=" not in h_sys
     assert "MULTI-TURN TOOL ENVIRONMENT" not in s_sys
-    assert "<tool_call" not in s_sys
+    assert "<tool_call name=" not in s_sys

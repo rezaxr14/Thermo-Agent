@@ -69,7 +69,9 @@ def test_render_pair_uses_only_model_messages(monkeypatch):
     class Tok:
         def apply_chat_template(self, messages, **kwargs):
             seen.append([dict(m) for m in messages])
-            return "RENDERED"
+            if kwargs.get("add_generation_prompt"):
+                return "RENDERED"
+            return "RENDERED<edits/>"
 
     seen = []
     row = _compact_row()

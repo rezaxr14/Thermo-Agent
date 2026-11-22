@@ -38,6 +38,7 @@ def _build(src, tmp_path, variant, **kw):
     manifest = build(
         [str(src)], str(out), str(grpo), tasks=(TASK,), split="train", limit=1,
         include_frontier=False, heldout_dir="tests/fixtures/heldout",
+        max_tokens=20000,
         prompt_variant=variant,
         out_harness=kw.get("out_harness"), grpo_out_harness=kw.get("grpo_out_harness"))
     if variant == "harness_tools":
@@ -94,7 +95,10 @@ def test_harness_row_has_agents_skills_and_contract(tmp_path, corpus_fixture_row
             assert "SKILL CATALOG" in system
             assert f"Primary skill for {TASK}: design-catalog:" in system
             assert CONTRACT_HEADER in system
-            assert '<tool_call name="TOOL_NAME">' in system
+            # The chat template owns the native call syntax and the tool list; the
+            # contract text must not duplicate either.
+            assert '<tool_call name="TOOL_NAME">' not in system
+            assert "<tool_call" not in system
             # Only the prompt/metadata change: completions and trajectories stay identical.
             twin = plain[row["provenance"]["variant"]]
             assert row["completion"] == twin["completion"]

@@ -100,7 +100,7 @@ def test_run_direct_finalizes_four_tuple_without_reexecuting_tools(monkeypatch):
     assert state["done"] is True
     assert counter["n"] == 0, "run_direct executed a tool from the 4-tuple trajectory"
     sft = state["sft_completion"]
-    assert "<tool_call" in sft and "<tool_result" in sft
+    assert "<tool_call" in sft and "<tool_response" in sft
     assert sft.rstrip().endswith(answer.rstrip())
     assert state["turns"] == turns
     assert isinstance(state["notes_used"], list)
@@ -130,7 +130,8 @@ def test_run_direct_reports_dynamic_tools_when_opted_in():
     state = run_direct(row, "repair", respond, include_dynamic=True)
     assert seen["tools"] == tool_names(include_dynamic=True)
     assert len(seen["tools"]) == 16
-    assert all(n in seen["system"] for n in DYNAMIC_TOOL_NAMES)
+    # The tool list is injected by the chat template, not duplicated in prompt text.
+    assert '<tool_call name=' not in seen["system"]
     assert state["tools_available"] == tool_names(include_dynamic=True)
 
 

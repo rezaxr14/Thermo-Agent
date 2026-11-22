@@ -53,7 +53,7 @@ def test_graph_self_corrects_and_records_trajectory():
     assert state["accepted"] is True
     assert state["verdict"]["accepted"] is True
     sft = state["sft_completion"]
-    assert "<tool_call" in sft and "<tool_result" in sft
+    assert "<tool_call" in sft and "<tool_response" in sft
     assert "mass_residual_kg_s" in sft  # a real numeric tool result is in the SFT text
     assert state["final"] == gt
     assert sft.rstrip().endswith(gt)  # the accepted answer is always the last block
@@ -78,7 +78,7 @@ def test_finalize_guarantees_nonempty_sft_ending_in_final_answer():
                                 "reasoning": "",
                                 "tool_calls": [{"name": "first_law_check", "arguments": {}}],
                                 "tool_results": []}]})
-    assert out2["sft_completion"].strip() == gt
+    assert out2["sft_completion"].strip().endswith(gt)
 
     # Already ending with the final answer: do not duplicate it.
     turns = [{"assistant": "earlier candidate", "reasoning": "",
@@ -235,13 +235,11 @@ def test_build_context_dynamic_opt_in_controls_tools_and_prompt():
     assert "check_answer" not in dynamic["tool_map"]
     assert legacy["include_dynamic"] is False and default["include_dynamic"] is True and dynamic["include_dynamic"] is True
 
-    # The compact contract names the dynamic tools by default and when opted in;
-    # only the legacy opt-out hides them.
-    assert all(n not in legacy["system_prompt"] for n in DYNAMIC_TOOL_NAMES)
-    assert all(n in default["system_prompt"] for n in DYNAMIC_TOOL_NAMES)
-    assert all(n in dynamic["system_prompt"] for n in DYNAMIC_TOOL_NAMES)
-    assert "JSON object string" in dynamic["system_prompt"]
-    assert "JSON object string" not in legacy["system_prompt"]
+    # The chat template injects the tool schemas; the prompt text must not duplicate the
+    # call syntax or the one-line tool list.
+    assert '<tool_call name=' not in dynamic["system_prompt"]
+    assert "Tools (one-line semantics):" not in dynamic["system_prompt"]
+    assert "JSON object string" not in dynamic["system_prompt"]
     # execute a dynamic tool through the same fn(candidate) parser path the graph uses.
     fn = dynamic["tool_map"]["fluid_state"]
     import json as _json

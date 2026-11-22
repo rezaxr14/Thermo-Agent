@@ -1,0 +1,604 @@
+{
+  "anomalies": [],
+  "gate": 8192,
+  "generated_by": "scripts/audit_harness_corpus.py",
+  "generated_from": {
+    "data/grpo_mix_v3/audit_train.jsonl": {
+      "bytes": 15945379,
+      "rows": 479,
+      "sha256": "13e58801d5b1c093947b9419a679b349416a9c14207280d05dc4e6985ea28cec"
+    },
+    "data/grpo_mix_v3/design_train.jsonl": {
+      "bytes": 12875052,
+      "rows": 398,
+      "sha256": "68119e446fb56eebe6c2414d0ff63b6ab861957255d241a82471c94cef212b3c"
+    },
+    "data/grpo_mix_v3/ledger_train.jsonl": {
+      "bytes": 20150037,
+      "rows": 661,
+      "sha256": "22ac769da86e647fef84939c914cd97e40dafae9dd9d7f65fdbb297358d6dbc9"
+    },
+    "data/grpo_mix_v3/repair_train.jsonl": {
+      "bytes": 35011681,
+      "rows": 1205,
+      "sha256": "6a73e1c0dc556ba7dc0967acac875197da0e97d237785d9eb7b17b699c08b1c8"
+    },
+    "data/grpo_tools_v3_h/audit_train.jsonl": {
+      "bytes": 15945375,
+      "rows": 479,
+      "sha256": "c1b012b8cc250aa87821f7e7bc3202fb0c394ad5fc16c9bdc51c7046067cf87e"
+    },
+    "data/grpo_tools_v3_h/design_train.jsonl": {
+      "bytes": 12974590,
+      "rows": 398,
+      "sha256": "980918b2572d84e4e61e160e72460b410abb1953103f59f55bcff1f635974f67"
+    },
+    "data/grpo_tools_v3_h/ledger_train.jsonl": {
+      "bytes": 20114372,
+      "rows": 660,
+      "sha256": "a85a8827b1adbfee38157caa673e6b7a8d2c24f1d5cb47f999615a2726c006fb"
+    },
+    "data/grpo_tools_v3_h/repair_train.jsonl": {
+      "bytes": 34833072,
+      "rows": 1200,
+      "sha256": "5426495686445b5207fa8579cc9746e4b9e0c56fa7d236162ba3dd71a26636be"
+    },
+    "data/sft_mix_v3/audit_train.jsonl": {
+      "bytes": 15467110,
+      "rows": 879,
+      "sha256": "94bf22503b51f41dd172163a657c42090838c05323df97b534a04c0fc8db2fb3"
+    },
+    "data/sft_mix_v3/design_train.jsonl": {
+      "bytes": 10448823,
+      "rows": 798,
+      "sha256": "351b620fd63654b5172753c1592e64b347d7d8ca0ebb9065c9b1951abd1b0a87"
+    },
+    "data/sft_mix_v3/ledger_train.jsonl": {
+      "bytes": 20754605,
+      "rows": 1061,
+      "sha256": "f5de8a459c9c8988f461c23a7e21172bb905d66ae1510ceb653ba7fead986942"
+    },
+    "data/sft_mix_v3/repair_train.jsonl": {
+      "bytes": 32460851,
+      "rows": 1605,
+      "sha256": "256a8c7ac058c5cfbfcbd8f139a3bceddb83837142b55422a2f1dfaa3ca7e62e"
+    },
+    "data/sft_tools_v3_h/audit_train.jsonl": {
+      "bytes": 12323616,
+      "rows": 479,
+      "sha256": "0dc71266050a126ece25418b2dfb4d5560abf35090ad847b846407b9e47b1e81"
+    },
+    "data/sft_tools_v3_h/design_train.jsonl": {
+      "bytes": 9295244,
+      "rows": 398,
+      "sha256": "a401a7ef5223bdf5e809ca97d9e059233b1a4eb463dbb5f1408d0de6a08ee88b"
+    },
+    "data/sft_tools_v3_h/ledger_train.jsonl": {
+      "bytes": 16315009,
+      "rows": 660,
+      "sha256": "48567e452b6cdb6e6039d3ffd6123e54556afe4ed192a1c855359c2363929836"
+    },
+    "data/sft_tools_v3_h/repair_train.jsonl": {
+      "bytes": 28489160,
+      "rows": 1200,
+      "sha256": "fc9ca538ffa321eb873acf2abf3a51adbd41e9c166f2c1acdb7480a52efa6240"
+    }
+  },
+  "inputs": [
+    "data/grpo_mix_v3",
+    "data/grpo_tools_v3_h",
+    "data/sft_mix_v3",
+    "data/sft_tools_v3_h"
+  ],
+  "note": "counts and lengths only; no prompt/completion text. rendered=chat-template(add_generation_prompt=False); pipeline=plain prompt+completion+reserve (the build's 8192 gate).",
+  "over_8192_pipeline": [],
+  "over_8192_rendered": [],
+  "per_dir_task": {
+    "data/grpo_mix_v3": {
+      "audit": {
+        "chars": {
+          "max": 8688,
+          "median": 8327,
+          "min": 7861,
+          "n": 479,
+          "p95": 8676
+        },
+        "n": 479,
+        "pipeline": {
+          "max": 2965,
+          "median": 2790,
+          "min": 2516,
+          "n": 479,
+          "p95": 2959
+        },
+        "rendered": {
+          "max": 5762,
+          "median": 5587,
+          "min": 5313,
+          "n": 479,
+          "p95": 5756
+        }
+      },
+      "design": {
+        "chars": {
+          "max": 7401,
+          "median": 7276,
+          "min": 7086,
+          "n": 398,
+          "p95": 7365
+        },
+        "n": 398,
+        "pipeline": {
+          "max": 2049,
+          "median": 2013,
+          "min": 1953,
+          "n": 398,
+          "p95": 2033
+        },
+        "rendered": {
+          "max": 4846,
+          "median": 4810,
+          "min": 4750,
+          "n": 398,
+          "p95": 4830
+        }
+      },
+      "ledger": {
+        "chars": {
+          "max": 11397,
+          "median": 8394,
+          "min": 7812,
+          "n": 661,
+          "p95": 8840
+        },
+        "n": 661,
+        "pipeline": {
+          "max": 4495,
+          "median": 2925,
+          "min": 2578,
+          "n": 661,
+          "p95": 3218
+        },
+        "rendered": {
+          "max": 7390,
+          "median": 5722,
+          "min": 5375,
+          "n": 661,
+          "p95": 6015
+        }
+      },
+      "repair": {
+        "chars": {
+          "max": 12396,
+          "median": 7660,
+          "min": 7272,
+          "n": 1205,
+          "p95": 7861
+        },
+        "n": 1205,
+        "pipeline": {
+          "max": 4039,
+          "median": 2441,
+          "min": 2251,
+          "n": 1205,
+          "p95": 2566
+        },
+        "rendered": {
+          "max": 7313,
+          "median": 5238,
+          "min": 5048,
+          "n": 1205,
+          "p95": 5363
+        }
+      }
+    },
+    "data/grpo_tools_v3_h": {
+      "audit": {
+        "chars": {
+          "max": 8688,
+          "median": 8327,
+          "min": 7861,
+          "n": 479,
+          "p95": 8676
+        },
+        "n": 479,
+        "pipeline": {
+          "max": 2965,
+          "median": 2790,
+          "min": 2516,
+          "n": 479,
+          "p95": 2959
+        },
+        "rendered": {
+          "max": 5762,
+          "median": 5587,
+          "min": 5313,
+          "n": 479,
+          "p95": 5756
+        }
+      },
+      "design": {
+        "chars": {
+          "max": 7401,
+          "median": 7276,
+          "min": 7086,
+          "n": 398,
+          "p95": 7365
+        },
+        "n": 398,
+        "pipeline": {
+          "max": 2049,
+          "median": 2013,
+          "min": 1953,
+          "n": 398,
+          "p95": 2033
+        },
+        "rendered": {
+          "max": 4846,
+          "median": 4810,
+          "min": 4750,
+          "n": 398,
+          "p95": 4830
+        }
+      },
+      "ledger": {
+        "chars": {
+          "max": 9006,
+          "median": 8393,
+          "min": 7812,
+          "n": 660,
+          "p95": 8834
+        },
+        "n": 660,
+        "pipeline": {
+          "max": 3286,
+          "median": 2925,
+          "min": 2578,
+          "n": 660,
+          "p95": 3217
+        },
+        "rendered": {
+          "max": 6083,
+          "median": 5722,
+          "min": 5375,
+          "n": 660,
+          "p95": 6014
+        }
+      },
+      "repair": {
+        "chars": {
+          "max": 8067,
+          "median": 7658,
+          "min": 7272,
+          "n": 1200,
+          "p95": 7858
+        },
+        "n": 1200,
+        "pipeline": {
+          "max": 2642,
+          "median": 2441,
+          "min": 2251,
+          "n": 1200,
+          "p95": 2547
+        },
+        "rendered": {
+          "max": 5439,
+          "median": 5238,
+          "min": 5048,
+          "n": 1200,
+          "p95": 5344
+        }
+      }
+    },
+    "data/sft_mix_v3": {
+      "audit": {
+        "chars": {
+          "max": 13682,
+          "median": 12713,
+          "min": 3170,
+          "n": 879,
+          "p95": 13526
+        },
+        "n": 879,
+        "pipeline": {
+          "max": 4937,
+          "median": 4499,
+          "min": 1406,
+          "n": 879,
+          "p95": 4898
+        },
+        "rendered": {
+          "max": 8096,
+          "median": 7660,
+          "min": 1329,
+          "n": 879,
+          "p95": 8064
+        }
+      },
+      "design": {
+        "chars": {
+          "max": 12627,
+          "median": 9028,
+          "min": 1939,
+          "n": 798,
+          "p95": 12385
+        },
+        "n": 798,
+        "pipeline": {
+          "max": 4784,
+          "median": 2604,
+          "min": 747,
+          "n": 798,
+          "p95": 4748
+        },
+        "rendered": {
+          "max": 8096,
+          "median": 2526,
+          "min": 670,
+          "n": 798,
+          "p95": 8075
+        }
+      },
+      "ledger": {
+        "chars": {
+          "max": 13115,
+          "median": 11806,
+          "min": 3062,
+          "n": 1061,
+          "p95": 12885
+        },
+        "n": 1061,
+        "pipeline": {
+          "max": 5138,
+          "median": 4451,
+          "min": 1430,
+          "n": 1061,
+          "p95": 5053
+        },
+        "rendered": {
+          "max": 8096,
+          "median": 7428,
+          "min": 1353,
+          "n": 1061,
+          "p95": 8033
+        }
+      },
+      "repair": {
+        "chars": {
+          "max": 12557,
+          "median": 10856,
+          "min": 2512,
+          "n": 1605,
+          "p95": 12122
+        },
+        "n": 1605,
+        "pipeline": {
+          "max": 4398,
+          "median": 3541,
+          "min": 1111,
+          "n": 1605,
+          "p95": 4178
+        },
+        "rendered": {
+          "max": 7451,
+          "median": 6572,
+          "min": 1035,
+          "n": 1605,
+          "p95": 7236
+        }
+      }
+    },
+    "data/sft_tools_v3_h": {
+      "audit": {
+        "chars": {
+          "max": 13682,
+          "median": 13240,
+          "min": 12579,
+          "n": 479,
+          "p95": 13574
+        },
+        "n": 479,
+        "pipeline": {
+          "max": 4937,
+          "median": 4773,
+          "min": 4407,
+          "n": 479,
+          "p95": 4912
+        },
+        "rendered": {
+          "max": 8096,
+          "median": 7942,
+          "min": 7585,
+          "n": 479,
+          "p95": 8079
+        }
+      },
+      "design": {
+        "chars": {
+          "max": 12627,
+          "median": 12276,
+          "min": 10397,
+          "n": 398,
+          "p95": 12409
+        },
+        "n": 398,
+        "pipeline": {
+          "max": 4784,
+          "median": 4703,
+          "min": 3436,
+          "n": 398,
+          "p95": 4768
+        },
+        "rendered": {
+          "max": 8096,
+          "median": 7992,
+          "min": 6617,
+          "n": 398,
+          "p95": 8087
+        }
+      },
+      "ledger": {
+        "chars": {
+          "max": 13115,
+          "median": 12281,
+          "min": 10961,
+          "n": 660,
+          "p95": 12945
+        },
+        "n": 660,
+        "pipeline": {
+          "max": 5138,
+          "median": 4646,
+          "min": 3958,
+          "n": 660,
+          "p95": 5082
+        },
+        "rendered": {
+          "max": 8096,
+          "median": 7649,
+          "min": 6914,
+          "n": 660,
+          "p95": 8069
+        }
+      },
+      "repair": {
+        "chars": {
+          "max": 12557,
+          "median": 11137,
+          "min": 9848,
+          "n": 1200,
+          "p95": 12162
+        },
+        "n": 1200,
+        "pipeline": {
+          "max": 4398,
+          "median": 3716,
+          "min": 3132,
+          "n": 1200,
+          "p95": 4200
+        },
+        "rendered": {
+          "max": 7451,
+          "median": 6726,
+          "min": 6124,
+          "n": 1200,
+          "p95": 7271
+        }
+      }
+    }
+  },
+  "per_task": {
+    "audit": {
+      "chars": {
+        "max": 13682,
+        "median": 8484,
+        "min": 3170,
+        "n": 2316,
+        "p95": 13464
+      },
+      "n": 2316,
+      "pipeline": {
+        "max": 4937,
+        "median": 2874,
+        "min": 1406,
+        "n": 2316,
+        "p95": 4891
+      },
+      "rendered": {
+        "max": 8096,
+        "median": 5671,
+        "min": 1329,
+        "n": 2316,
+        "p95": 8057
+      }
+    },
+    "design": {
+      "chars": {
+        "max": 12627,
+        "median": 7315,
+        "min": 1939,
+        "n": 1992,
+        "p95": 12360
+      },
+      "n": 1992,
+      "pipeline": {
+        "max": 4784,
+        "median": 2022,
+        "min": 747,
+        "n": 1992,
+        "p95": 4744
+      },
+      "rendered": {
+        "max": 8096,
+        "median": 4819,
+        "min": 670,
+        "n": 1992,
+        "p95": 8070
+      }
+    },
+    "ledger": {
+      "chars": {
+        "max": 13115,
+        "median": 8774,
+        "min": 3062,
+        "n": 3042,
+        "p95": 12832
+      },
+      "n": 3042,
+      "pipeline": {
+        "max": 5138,
+        "median": 3188,
+        "min": 1430,
+        "n": 3042,
+        "p95": 5034
+      },
+      "rendered": {
+        "max": 8096,
+        "median": 5982,
+        "min": 1353,
+        "n": 3042,
+        "p95": 8003
+      }
+    },
+    "repair": {
+      "chars": {
+        "max": 12557,
+        "median": 7847,
+        "min": 2512,
+        "n": 5210,
+        "p95": 11871
+      },
+      "n": 5210,
+      "pipeline": {
+        "max": 4398,
+        "median": 2523,
+        "min": 1111,
+        "n": 5210,
+        "p95": 4063
+      },
+      "rendered": {
+        "max": 7451,
+        "median": 5320,
+        "min": 1035,
+        "n": 5210,
+        "p95": 7131
+      }
+    }
+  },
+  "schema_version": 1,
+  "token_reserve": 96,
+  "tokenizer": "measured",
+  "tokenizer_info": {
+    "method": "local_auto_chat_template",
+    "name": "Qwen/Qwen3.5-4B",
+    "path": "C:\\Users\\rezax\\.cache\\thermo\\qwen3.5-4b",
+    "reason": null,
+    "status": "measured"
+  },
+  "totals": {
+    "malformed_or_anomalous": 0,
+    "over_8192_pipeline": 0,
+    "over_8192_rendered": 0,
+    "rows": 12560
+  }
+}

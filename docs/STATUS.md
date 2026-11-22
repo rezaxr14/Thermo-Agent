@@ -1,5 +1,28 @@
 # Status and operating notes
 
+## 2026-11-22 - Step 1: one native structured tool protocol (DONE)
+
+Single wire format: Qwen3.5 native `tool_calls` rendered by `apply_chat_template(tools=...)`.
+The legacy `<tool_call name=...>` text is not parsed and is not written to any corpus.
+`thermo_agent/agent/tool_protocol.py` is the single source for the response template,
+16 student schemas, teacher `reason` schema support, structured messages and
+`tokenizer.parse_response` parsing. SFT/SFT masking, GRPO (16 tools), eval/HF, the
+hosted adapter and deterministic traces all use it. The contract text no longer
+duplicates the call syntax or tool list.
+
+Rebuilt with the EXACT template-rendered 8,192-token gate (old plain-text gate
+under-counted by thousands of tokens): `sft_tools_v3_h` 2,737 rows,
+`grpo_tools_v3_h` 2,737, `sft_mix_v3` 4,343, `grpo_mix_v3` 2,743; 2,063
+deterministic rows and 5 frontier rows dropped for the real gate. Final audit
+`reports/harness_corpus_audit_native.json`: **0 over 8,192, 0 anomalies**.
+Legacy frontier traces were migrated once to native structured messages in the mix.
+`reports/dataset_stats.json` / `.md` regenerated.
+
+Tests: full suite (excluding two kbench files that require `LLM_DEFAULT` to be set
+at collection) **1,161 passed, 9 skipped**; with `LLM_DEFAULT=gemini-2.5-flash`
+the two kbench files add **7 passed**. `tests/test_tool_protocol.py` covers the
+real-tokenizer round-trip and explicit rejection of the legacy form.
+
 Working copy: `C:\Users\rezax\Home\Code\thermo_agent\Repo` on REZA_PC (git, branch `main`). No SSH, no WSL: every
 step below runs in this checkout.
 

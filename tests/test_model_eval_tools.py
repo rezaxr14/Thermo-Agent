@@ -76,10 +76,12 @@ def test_scripted_single_tool_call_then_final(repair_row):
     assert rec["stop_reason"] == "final" and rec["limit_reached"] is False
     assert rec["truncated"] is False
 
-    # the verbatim result is in the NEXT prompt, wrapped in <tool_result>
+    # the verbatim result is in the NEXT prompt as a native role="tool" message
     result = rec["turn_log"][0]["tool_results"][0]
-    next_prompt = gen.prompts[1][-1]["content"]
-    assert "<tool_result>" in next_prompt and result in next_prompt
+    next_prompt = gen.prompts[1]
+    assert any(m.get("tool_calls") for m in next_prompt)
+    tool_message = next(m for m in next_prompt if m.get("role") == "tool")
+    assert tool_message["content"] == result
 
     # token counts accumulate across turns (fake reports 10 / 5 per call)
     assert rec["prompt_tokens"] == 20 and rec["completion_tokens"] == 10
@@ -180,14 +182,16 @@ def test_harness_prompt_text_mode_unchanged(repair_row, tmp_path):
 # ---------------------------------------------------------------------------
 # prompt construction + record attachment
 # ---------------------------------------------------------------------------
-def test_tool_contract_lists_all_five_tools_without_oracle(repair_row):
+def test_tool_contract_has_no_duplicate_tool_list_or_oracle(repair_row):
     gen = ScriptedGen([_truth(repair_row)])
     ME.ToolLoop(gen, repair_row, "repair").run()
     system = gen.prompts[0][0]["content"]
-    for name in toolkit.tool_names():
-        assert name in system
-    assert "<tool_call" in system and "<tool_result>" in system
+    assert "MULTI-TURN TOOL ENVIRONMENT" in system
+    assert "<tool_call name=" not in system
+    assert "Tools (one-line semantics):" not in system
     assert "answer-oracle" in system and "check_answer" not in system
+    # The schemas are handed to the renderer, not pasted into the contract text.
+    assert len([s["function"]["name"] for s in gen.tools]) == 16
 
 
 def test_episode_record_attached_to_log_and_examples(repair_row, tmp_path):

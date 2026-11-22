@@ -232,6 +232,10 @@ def ingest(export_dir, completions_path, out_dir, memory_dir=None, tasks=TASKS, 
             if traj_raw and record.get("sft_completion"):
                 trajectory = dict(traj_raw)
                 trajectory["sft_completion"] = record["sft_completion"]
+                if record.get("messages"):
+                    trajectory["messages"] = record["messages"]
+                elif traj_raw.get("messages"):
+                    trajectory["messages"] = traj_raw["messages"]
             teacher = validate.teacher_row(task, text, row, verdict, tag=base_provenance["model"],
                                            trajectory=trajectory)
             # The validator tags genuine tool traces "frontier_tools"; keep that signal

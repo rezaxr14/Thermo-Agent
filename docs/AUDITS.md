@@ -1,5 +1,17 @@
 # Audits (dated entries)
 
+## Native protocol + 8,192 gate audit - 2026-11-22
+
+`python -m scripts.audit_harness_corpus --dirs data/sft_tools_v3_h
+data/grpo_tools_v3_h data/sft_mix_v3 data/grpo_mix_v3 --out
+reports/harness_corpus_audit_native.json` with the cached Qwen3.5 chat tokenizer:
+**12,560 rows, 0 over 8,192 (rendered), 0 over 8,192 (pipeline), 0 anomalies**.
+Per-task rendered p50/p95/max: audit 5,671/8,057/8,096; design 4,819/8,070/8,096;
+ledger 5,982/8,003/8,096; repair 5,320/7,131/7,451. The earlier build (before the
+exact gate) had 3,270 over-gate rows, confirming the old plain-text gate was not a
+valid measurement. The five remaining over-gate frontier rows were removed by an
+exact gate at mix time; legacy frontier traces were migrated to structured messages.
+
 Every audit of traces, training path, memory and directive compliance. Add new audits here as dated sections.
 
 ## Training-trace quality audit — 2026-11-19

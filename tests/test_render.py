@@ -13,7 +13,7 @@ def test_text_format_matches_the_generation_prompt_exactly():
     assert CHAT_KW["enable_thinking"] is True
     p = render_pair(FakeTok(), ROW); assert p["prompt"] == generation_prompt(FakeTok(), ROW["prompt"]) and p["prompt"].endswith("<|assistant|>")
     assert "<think></think>" not in p["prompt"]  # reasoning enabled: no empty closed think block
-    assert p["completion"] == "ANSWER"
+    assert p["completion"] == "ANSWER<|end|>"
 
 def test_prefix_report_confirms_alignment_with_reasoning_enabled():
     assert prefix_report(FakeTok(), ROW)["prefix_matches"] is True

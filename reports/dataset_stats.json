@@ -1213,88 +1213,88 @@
     "data/grpo_mix_v3": {
       "chars": {
         "completion": {
-          "max": 10526,
-          "median": 322,
+          "max": 4964,
+          "median": 214,
           "min": 140,
-          "n": 4805,
-          "p95": 811
+          "n": 2743,
+          "p95": 720
         },
         "prompt": {
-          "max": 12886,
-          "median": 9942,
-          "min": 8848,
-          "n": 4805,
-          "p95": 11399
+          "max": 9032,
+          "median": 7584,
+          "min": 6553,
+          "n": 2743,
+          "p95": 8446
         }
       },
       "files": 4,
       "flags": {
-        "with_stored_completion": 4805,
-        "with_tool_call": 4805,
-        "with_tool_result": 4805,
-        "with_trajectory": 4805
+        "with_stored_completion": 2743,
+        "with_tool_call": 2738,
+        "with_tool_result": 0,
+        "with_trajectory": 2743
       },
       "harness_values": {
-        "agents+skills": 4805
+        "agents+skills": 2743
       },
       "malformed_lines": 0,
       "per_split": {
-        "train": 4805
+        "train": 2743
       },
       "per_task": {
         "audit": {
           "chars": {
             "completion": {
-              "max": 345,
+              "max": 342,
               "median": 327,
               "min": 318,
-              "n": 1200,
-              "p95": 339
+              "n": 479,
+              "p95": 338
             },
             "prompt": {
-              "max": 11874,
-              "median": 10425,
-              "min": 9823,
-              "n": 1200,
-              "p95": 11499
+              "max": 8353,
+              "median": 8003,
+              "min": 7528,
+              "n": 479,
+              "p95": 8349
             }
           },
           "flags": {
-            "with_stored_completion": 1200,
-            "with_tool_call": 1200,
-            "with_tool_result": 1200,
-            "with_trajectory": 1200
+            "with_stored_completion": 479,
+            "with_tool_call": 479,
+            "with_tool_result": 0,
+            "with_trajectory": 479
           },
           "harness_values": {
-            "agents+skills": 1200
+            "agents+skills": 479
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 1200
+            "train": 479
           },
           "per_tier": {
-            "easy": 400,
-            "hard": 400,
-            "medium": 400
+            "easy": 159,
+            "hard": 161,
+            "medium": 159
           },
-          "rows": 1200,
+          "rows": 479,
           "source_values": {
-            "deterministic_tools": 1200
+            "deterministic_tools": 479
           },
           "tokens": {
             "completion": {
               "max": 135,
-              "median": 124,
+              "median": 123,
               "min": 116,
-              "n": 1200,
+              "n": 479,
               "p95": 131
             },
             "prompt": {
-              "max": 4025,
-              "median": 3229,
-              "min": 2891,
-              "n": 1200,
-              "p95": 3830
+              "max": 2743,
+              "median": 2570,
+              "min": 2289,
+              "n": 479,
+              "p95": 2739
             },
             "reason": null,
             "status": "measured",
@@ -1304,56 +1304,56 @@
         "design": {
           "chars": {
             "completion": {
-              "max": 898,
-              "median": 728,
+              "max": 812,
+              "median": 710,
               "min": 530,
-              "n": 1200,
-              "p95": 857
+              "n": 398,
+              "p95": 776
             },
             "prompt": {
-              "max": 8888,
-              "median": 8871,
-              "min": 8848,
-              "n": 1200,
-              "p95": 8886
+              "max": 6593,
+              "median": 6559,
+              "min": 6553,
+              "n": 398,
+              "p95": 6591
             }
           },
           "flags": {
-            "with_stored_completion": 1200,
-            "with_tool_call": 1200,
-            "with_tool_result": 1200,
-            "with_trajectory": 1200
+            "with_stored_completion": 398,
+            "with_tool_call": 398,
+            "with_tool_result": 0,
+            "with_trajectory": 398
           },
           "harness_values": {
-            "agents+skills": 1200
+            "agents+skills": 398
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 1200
+            "train": 398
           },
           "per_tier": {
-            "easy": 400,
-            "hard": 400,
-            "medium": 400
+            "easy": 132,
+            "hard": 134,
+            "medium": 132
           },
-          "rows": 1200,
+          "rows": 398,
           "source_values": {
-            "deterministic_tools": 1200
+            "deterministic_tools": 398
           },
           "tokens": {
             "completion": {
-              "max": 296,
-              "median": 228,
+              "max": 240,
+              "median": 203,
               "min": 153,
-              "n": 1200,
-              "p95": 271
+              "n": 398,
+              "p95": 229
             },
             "prompt": {
-              "max": 2330,
-              "median": 2313,
-              "min": 2300,
-              "n": 1200,
-              "p95": 2328
+              "max": 1727,
+              "median": 1703,
+              "min": 1697,
+              "n": 398,
+              "p95": 1725
             },
             "reason": null,
             "status": "measured",
@@ -1363,57 +1363,57 @@
         "ledger": {
           "chars": {
             "completion": {
-              "max": 7624,
-              "median": 228,
-              "min": 157,
-              "n": 1198,
-              "p95": 433
+              "max": 2838,
+              "median": 225,
+              "min": 169,
+              "n": 661,
+              "p95": 425
             },
             "prompt": {
-              "max": 12886,
-              "median": 10843,
-              "min": 9916,
-              "n": 1198,
-              "p95": 11994
+              "max": 8783,
+              "median": 8067,
+              "min": 7621,
+              "n": 661,
+              "p95": 8599
             }
           },
           "flags": {
-            "with_stored_completion": 1198,
-            "with_tool_call": 1198,
-            "with_tool_result": 1198,
-            "with_trajectory": 1198
+            "with_stored_completion": 661,
+            "with_tool_call": 660,
+            "with_tool_result": 0,
+            "with_trajectory": 661
           },
           "harness_values": {
-            "agents+skills": 1198
+            "agents+skills": 661
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 1198
+            "train": 661
           },
           "per_tier": {
-            "easy": 399,
-            "hard": 400,
-            "medium": 399
+            "easy": 220,
+            "hard": 221,
+            "medium": 220
           },
-          "rows": 1198,
+          "rows": 661,
           "source_values": {
-            "deterministic_tools": 1194,
-            "frontier_tools": 4
+            "deterministic_tools": 660,
+            "frontier_tools": 1
           },
           "tokens": {
             "completion": {
-              "max": 3213,
+              "max": 1391,
               "median": 87,
-              "min": 56,
-              "n": 1198,
-              "p95": 165
+              "min": 68,
+              "n": 661,
+              "p95": 160
             },
             "prompt": {
-              "max": 4917,
-              "median": 3603,
-              "min": 3007,
-              "n": 1198,
-              "p95": 4395
+              "max": 3096,
+              "median": 2718,
+              "min": 2404,
+              "n": 661,
+              "p95": 3033
             },
             "reason": null,
             "status": "measured",
@@ -1423,57 +1423,57 @@
         "repair": {
           "chars": {
             "completion": {
-              "max": 10526,
+              "max": 4964,
               "median": 188,
               "min": 140,
-              "n": 1207,
+              "n": 1205,
               "p95": 215
             },
             "prompt": {
-              "max": 11327,
-              "median": 9755,
-              "min": 9399,
-              "n": 1207,
-              "p95": 9958
+              "max": 9032,
+              "median": 7460,
+              "min": 7109,
+              "n": 1205,
+              "p95": 7663
             }
           },
           "flags": {
-            "with_stored_completion": 1207,
-            "with_tool_call": 1207,
-            "with_tool_result": 1207,
-            "with_trajectory": 1207
+            "with_stored_completion": 1205,
+            "with_tool_call": 1201,
+            "with_tool_result": 0,
+            "with_trajectory": 1205
           },
           "harness_values": {
-            "agents+skills": 1207
+            "agents+skills": 1205
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 1207
+            "train": 1205
           },
           "per_tier": {
-            "easy": 402,
+            "easy": 401,
             "hard": 403,
-            "medium": 402
+            "medium": 401
           },
-          "rows": 1207,
+          "rows": 1205,
           "source_values": {
             "deterministic_tools": 1200,
-            "frontier_tools": 7
+            "frontier_tools": 5
           },
           "tokens": {
             "completion": {
-              "max": 4455,
+              "max": 1631,
               "median": 66,
               "min": 57,
-              "n": 1207,
+              "n": 1205,
               "p95": 81
             },
             "prompt": {
-              "max": 3547,
-              "median": 2879,
-              "min": 2688,
-              "n": 1207,
-              "p95": 2993
+              "max": 2945,
+              "median": 2277,
+              "min": 2088,
+              "n": 1205,
+              "p95": 2390
             },
             "reason": null,
             "status": "measured",
@@ -1482,29 +1482,29 @@
         }
       },
       "per_tier": {
-        "easy": 1601,
-        "hard": 1603,
-        "medium": 1601
+        "easy": 912,
+        "hard": 919,
+        "medium": 912
       },
-      "rows": 4805,
+      "rows": 2743,
       "source_values": {
-        "deterministic_tools": 4794,
-        "frontier_tools": 11
+        "deterministic_tools": 2737,
+        "frontier_tools": 6
       },
       "tokens": {
         "completion": {
-          "max": 4455,
-          "median": 122,
-          "min": 56,
-          "n": 4805,
-          "p95": 249
+          "max": 1631,
+          "median": 82,
+          "min": 57,
+          "n": 2743,
+          "p95": 214
         },
         "prompt": {
-          "max": 4917,
-          "median": 2971,
-          "min": 2300,
-          "n": 4805,
-          "p95": 4061
+          "max": 3096,
+          "median": 2335,
+          "min": 1697,
+          "n": 2743,
+          "p95": 2963
         },
         "reason": null,
         "status": "measured",
@@ -1517,30 +1517,30 @@
           "max": 898,
           "median": 322,
           "min": 140,
-          "n": 4800,
+          "n": 4686,
           "p95": 810
         },
         "prompt": {
-          "max": 5414,
-          "median": 2406,
+          "max": 4534,
+          "median": 2391,
           "min": 1445,
-          "n": 4800,
-          "p95": 3929
+          "n": 4686,
+          "p95": 3914
         }
       },
       "files": 4,
       "flags": {
-        "with_stored_completion": 4800,
-        "with_tool_call": 4800,
-        "with_tool_result": 4800,
-        "with_trajectory": 4800
+        "with_stored_completion": 4686,
+        "with_tool_call": 4686,
+        "with_tool_result": 0,
+        "with_trajectory": 4686
       },
       "harness_values": {
-        "<missing>": 4800
+        "<missing>": 4686
       },
       "malformed_lines": 0,
       "per_split": {
-        "train": 4800
+        "train": 4686
       },
       "per_task": {
         "audit": {
@@ -1549,53 +1549,53 @@
               "max": 345,
               "median": 327,
               "min": 318,
-              "n": 1200,
+              "n": 1160,
               "p95": 339
             },
             "prompt": {
               "max": 4440,
-              "median": 2991,
+              "median": 2987,
               "min": 2389,
-              "n": 1200,
-              "p95": 4065
+              "n": 1160,
+              "p95": 3403
             }
           },
           "flags": {
-            "with_stored_completion": 1200,
-            "with_tool_call": 1200,
-            "with_tool_result": 1200,
-            "with_trajectory": 1200
+            "with_stored_completion": 1160,
+            "with_tool_call": 1160,
+            "with_tool_result": 0,
+            "with_trajectory": 1160
           },
           "harness_values": {
-            "<missing>": 1200
+            "<missing>": 1160
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 1200
+            "train": 1160
           },
           "per_tier": {
             "easy": 400,
-            "hard": 400,
+            "hard": 360,
             "medium": 400
           },
-          "rows": 1200,
+          "rows": 1160,
           "source_values": {
-            "deterministic_tools": 1200
+            "deterministic_tools": 1160
           },
           "tokens": {
             "completion": {
               "max": 135,
-              "median": 124,
+              "median": 123,
               "min": 116,
-              "n": 1200,
+              "n": 1160,
               "p95": 131
             },
             "prompt": {
               "max": 2202,
-              "median": 1406,
+              "median": 1402,
               "min": 1068,
-              "n": 1200,
-              "p95": 2007
+              "n": 1160,
+              "p95": 1640
             },
             "reason": null,
             "status": "measured",
@@ -1622,7 +1622,7 @@
           "flags": {
             "with_stored_completion": 1200,
             "with_tool_call": 1200,
-            "with_tool_result": 1200,
+            "with_tool_result": 0,
             "with_trajectory": 1200
           },
           "harness_values": {
@@ -1667,53 +1667,53 @@
               "max": 512,
               "median": 228,
               "min": 157,
-              "n": 1200,
-              "p95": 431
+              "n": 1126,
+              "p95": 432
             },
             "prompt": {
-              "max": 5414,
-              "median": 3372,
+              "max": 4534,
+              "median": 3358,
               "min": 2444,
-              "n": 1200,
-              "p95": 4530
+              "n": 1126,
+              "p95": 3977
             }
           },
           "flags": {
-            "with_stored_completion": 1200,
-            "with_tool_call": 1200,
-            "with_tool_result": 1200,
-            "with_trajectory": 1200
+            "with_stored_completion": 1126,
+            "with_tool_call": 1126,
+            "with_tool_result": 0,
+            "with_trajectory": 1126
           },
           "harness_values": {
-            "<missing>": 1200
+            "<missing>": 1126
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 1200
+            "train": 1126
           },
           "per_tier": {
-            "easy": 400,
-            "hard": 400,
-            "medium": 400
+            "easy": 378,
+            "hard": 370,
+            "medium": 378
           },
-          "rows": 1200,
+          "rows": 1126,
           "source_values": {
-            "deterministic_tools": 1200
+            "deterministic_tools": 1126
           },
           "tokens": {
             "completion": {
               "max": 188,
               "median": 87,
               "min": 56,
-              "n": 1200,
-              "p95": 164
+              "n": 1126,
+              "p95": 165
             },
             "prompt": {
-              "max": 3070,
-              "median": 1756,
+              "max": 2561,
+              "median": 1744,
               "min": 1160,
-              "n": 1200,
-              "p95": 2559
+              "n": 1126,
+              "p95": 2236
             },
             "reason": null,
             "status": "measured",
@@ -1740,7 +1740,7 @@
           "flags": {
             "with_stored_completion": 1200,
             "with_tool_call": 1200,
-            "with_tool_result": 1200,
+            "with_tool_result": 0,
             "with_trajectory": 1200
           },
           "harness_values": {
@@ -1781,28 +1781,28 @@
         }
       },
       "per_tier": {
-        "easy": 1600,
-        "hard": 1600,
-        "medium": 1600
+        "easy": 1578,
+        "hard": 1530,
+        "medium": 1578
       },
-      "rows": 4800,
+      "rows": 4686,
       "source_values": {
-        "deterministic_tools": 4800
+        "deterministic_tools": 4686
       },
       "tokens": {
         "completion": {
           "max": 296,
           "median": 122,
           "min": 56,
-          "n": 4800,
-          "p95": 247
+          "n": 4686,
+          "p95": 248
         },
         "prompt": {
-          "max": 3070,
-          "median": 1121,
+          "max": 2561,
+          "median": 1085,
           "min": 489,
-          "n": 4800,
-          "p95": 2216
+          "n": 4686,
+          "p95": 2103
         },
         "reason": null,
         "status": "measured",
@@ -1812,88 +1812,88 @@
     "data/grpo_tools_v3_h": {
       "chars": {
         "completion": {
-          "max": 898,
-          "median": 322,
+          "max": 812,
+          "median": 214,
           "min": 140,
-          "n": 4794,
-          "p95": 810
+          "n": 2737,
+          "p95": 719
         },
         "prompt": {
-          "max": 12886,
-          "median": 9942,
-          "min": 8848,
-          "n": 4794,
-          "p95": 11399
+          "max": 8783,
+          "median": 7584,
+          "min": 6553,
+          "n": 2737,
+          "p95": 8444
         }
       },
       "files": 4,
       "flags": {
-        "with_stored_completion": 4794,
-        "with_tool_call": 4794,
-        "with_tool_result": 4794,
-        "with_trajectory": 4794
+        "with_stored_completion": 2737,
+        "with_tool_call": 2737,
+        "with_tool_result": 0,
+        "with_trajectory": 2737
       },
       "harness_values": {
-        "agents+skills": 4794
+        "agents+skills": 2737
       },
       "malformed_lines": 0,
       "per_split": {
-        "train": 4794
+        "train": 2737
       },
       "per_task": {
         "audit": {
           "chars": {
             "completion": {
-              "max": 345,
+              "max": 342,
               "median": 327,
               "min": 318,
-              "n": 1200,
-              "p95": 339
+              "n": 479,
+              "p95": 338
             },
             "prompt": {
-              "max": 11874,
-              "median": 10425,
-              "min": 9823,
-              "n": 1200,
-              "p95": 11499
+              "max": 8353,
+              "median": 8003,
+              "min": 7528,
+              "n": 479,
+              "p95": 8349
             }
           },
           "flags": {
-            "with_stored_completion": 1200,
-            "with_tool_call": 1200,
-            "with_tool_result": 1200,
-            "with_trajectory": 1200
+            "with_stored_completion": 479,
+            "with_tool_call": 479,
+            "with_tool_result": 0,
+            "with_trajectory": 479
           },
           "harness_values": {
-            "agents+skills": 1200
+            "agents+skills": 479
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 1200
+            "train": 479
           },
           "per_tier": {
-            "easy": 400,
-            "hard": 400,
-            "medium": 400
+            "easy": 164,
+            "hard": 158,
+            "medium": 157
           },
-          "rows": 1200,
+          "rows": 479,
           "source_values": {
-            "deterministic_tools": 1200
+            "deterministic_tools": 479
           },
           "tokens": {
             "completion": {
               "max": 135,
-              "median": 124,
+              "median": 123,
               "min": 116,
-              "n": 1200,
+              "n": 479,
               "p95": 131
             },
             "prompt": {
-              "max": 4025,
-              "median": 3229,
-              "min": 2891,
-              "n": 1200,
-              "p95": 3830
+              "max": 2743,
+              "median": 2570,
+              "min": 2289,
+              "n": 479,
+              "p95": 2739
             },
             "reason": null,
             "status": "measured",
@@ -1903,56 +1903,56 @@
         "design": {
           "chars": {
             "completion": {
-              "max": 898,
-              "median": 728,
+              "max": 812,
+              "median": 710,
               "min": 530,
-              "n": 1200,
-              "p95": 857
+              "n": 398,
+              "p95": 776
             },
             "prompt": {
-              "max": 8888,
-              "median": 8871,
-              "min": 8848,
-              "n": 1200,
-              "p95": 8886
+              "max": 6593,
+              "median": 6559,
+              "min": 6553,
+              "n": 398,
+              "p95": 6591
             }
           },
           "flags": {
-            "with_stored_completion": 1200,
-            "with_tool_call": 1200,
-            "with_tool_result": 1200,
-            "with_trajectory": 1200
+            "with_stored_completion": 398,
+            "with_tool_call": 398,
+            "with_tool_result": 0,
+            "with_trajectory": 398
           },
           "harness_values": {
-            "agents+skills": 1200
+            "agents+skills": 398
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 1200
+            "train": 398
           },
           "per_tier": {
-            "easy": 400,
-            "hard": 400,
-            "medium": 400
+            "easy": 188,
+            "hard": 105,
+            "medium": 105
           },
-          "rows": 1200,
+          "rows": 398,
           "source_values": {
-            "deterministic_tools": 1200
+            "deterministic_tools": 398
           },
           "tokens": {
             "completion": {
-              "max": 296,
-              "median": 228,
+              "max": 240,
+              "median": 203,
               "min": 153,
-              "n": 1200,
-              "p95": 271
+              "n": 398,
+              "p95": 229
             },
             "prompt": {
-              "max": 2330,
-              "median": 2313,
-              "min": 2300,
-              "n": 1200,
-              "p95": 2328
+              "max": 1727,
+              "median": 1703,
+              "min": 1697,
+              "n": 398,
+              "p95": 1725
             },
             "reason": null,
             "status": "measured",
@@ -1962,56 +1962,56 @@
         "ledger": {
           "chars": {
             "completion": {
-              "max": 512,
-              "median": 228,
-              "min": 157,
-              "n": 1194,
-              "p95": 431
+              "max": 489,
+              "median": 225,
+              "min": 169,
+              "n": 660,
+              "p95": 425
             },
             "prompt": {
-              "max": 12886,
-              "median": 10843,
-              "min": 9916,
-              "n": 1194,
-              "p95": 11994
+              "max": 8783,
+              "median": 8066,
+              "min": 7621,
+              "n": 660,
+              "p95": 8599
             }
           },
           "flags": {
-            "with_stored_completion": 1194,
-            "with_tool_call": 1194,
-            "with_tool_result": 1194,
-            "with_trajectory": 1194
+            "with_stored_completion": 660,
+            "with_tool_call": 660,
+            "with_tool_result": 0,
+            "with_trajectory": 660
           },
           "harness_values": {
-            "agents+skills": 1194
+            "agents+skills": 660
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 1194
+            "train": 660
           },
           "per_tier": {
-            "easy": 398,
-            "hard": 398,
-            "medium": 398
+            "easy": 250,
+            "hard": 171,
+            "medium": 239
           },
-          "rows": 1194,
+          "rows": 660,
           "source_values": {
-            "deterministic_tools": 1194
+            "deterministic_tools": 660
           },
           "tokens": {
             "completion": {
-              "max": 188,
+              "max": 181,
               "median": 87,
-              "min": 56,
-              "n": 1194,
-              "p95": 164
+              "min": 68,
+              "n": 660,
+              "p95": 159
             },
             "prompt": {
-              "max": 4917,
-              "median": 3603,
-              "min": 3007,
-              "n": 1194,
-              "p95": 4396
+              "max": 3096,
+              "median": 2718,
+              "min": 2404,
+              "n": 660,
+              "p95": 3033
             },
             "reason": null,
             "status": "measured",
@@ -2028,17 +2028,17 @@
               "p95": 215
             },
             "prompt": {
-              "max": 10192,
-              "median": 9755,
-              "min": 9407,
+              "max": 7897,
+              "median": 7460,
+              "min": 7112,
               "n": 1200,
-              "p95": 9957
+              "p95": 7662
             }
           },
           "flags": {
             "with_stored_completion": 1200,
             "with_tool_call": 1200,
-            "with_tool_result": 1200,
+            "with_tool_result": 0,
             "with_trajectory": 1200
           },
           "harness_values": {
@@ -2066,11 +2066,11 @@
               "p95": 81
             },
             "prompt": {
-              "max": 3068,
-              "median": 2879,
-              "min": 2690,
+              "max": 2466,
+              "median": 2277,
+              "min": 2088,
               "n": 1200,
-              "p95": 2981
+              "p95": 2379
             },
             "reason": null,
             "status": "measured",
@@ -2079,28 +2079,28 @@
         }
       },
       "per_tier": {
-        "easy": 1598,
-        "hard": 1598,
-        "medium": 1598
+        "easy": 1002,
+        "hard": 834,
+        "medium": 901
       },
-      "rows": 4794,
+      "rows": 2737,
       "source_values": {
-        "deterministic_tools": 4794
+        "deterministic_tools": 2737
       },
       "tokens": {
         "completion": {
-          "max": 296,
-          "median": 122,
-          "min": 56,
-          "n": 4794,
-          "p95": 247
+          "max": 240,
+          "median": 81,
+          "min": 57,
+          "n": 2737,
+          "p95": 214
         },
         "prompt": {
-          "max": 4917,
-          "median": 2971,
-          "min": 2300,
-          "n": 4794,
-          "p95": 4061
+          "max": 3096,
+          "median": 2335,
+          "min": 1697,
+          "n": 2737,
+          "p95": 2962
         },
         "reason": null,
         "status": "measured",
@@ -3053,91 +3053,91 @@
     "data/sft_mix_v3": {
       "chars": {
         "completion": {
-          "max": 10526,
-          "median": 4972,
+          "max": 6139,
+          "median": 3676,
           "min": 154,
-          "n": 6405,
-          "p95": 8353
+          "n": 4343,
+          "p95": 5706
         },
         "prompt": {
-          "max": 12886,
-          "median": 9599,
+          "max": 10588,
+          "median": 7245,
           "min": 1445,
-          "n": 6405,
-          "p95": 11388
+          "n": 4343,
+          "p95": 8407
         }
       },
       "files": 4,
       "flags": {
-        "with_stored_completion": 6405,
-        "with_tool_call": 4805,
-        "with_tool_result": 4805,
-        "with_trajectory": 11
+        "with_stored_completion": 4343,
+        "with_tool_call": 1,
+        "with_tool_result": 0,
+        "with_trajectory": 6
       },
       "harness_values": {
-        "agents+skills": 4805,
+        "agents+skills": 2743,
         "none": 1600
       },
       "malformed_lines": 0,
       "per_split": {
-        "train": 6405
+        "train": 4343
       },
       "per_task": {
         "audit": {
           "chars": {
             "completion": {
-              "max": 8831,
-              "median": 6248,
+              "max": 6139,
+              "median": 4992,
               "min": 317,
-              "n": 1600,
-              "p95": 7884
+              "n": 879,
+              "p95": 5395
             },
             "prompt": {
-              "max": 11874,
-              "median": 10194,
+              "max": 8353,
+              "median": 7643,
               "min": 2840,
-              "n": 1600,
-              "p95": 11240
+              "n": 879,
+              "p95": 8347
             }
           },
           "flags": {
-            "with_stored_completion": 1600,
-            "with_tool_call": 1200,
-            "with_tool_result": 1200,
+            "with_stored_completion": 879,
+            "with_tool_call": 0,
+            "with_tool_result": 0,
             "with_trajectory": 0
           },
           "harness_values": {
-            "agents+skills": 1200,
+            "agents+skills": 479,
             "none": 400
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 1600
+            "train": 879
           },
           "per_tier": {
-            "easy": 533,
-            "hard": 534,
-            "medium": 533
+            "easy": 293,
+            "hard": 293,
+            "medium": 293
           },
-          "rows": 1600,
+          "rows": 879,
           "source_values": {
-            "deterministic_tools": 1200,
+            "deterministic_tools": 479,
             "ground_truth": 400
           },
           "tokens": {
             "completion": {
-              "max": 3565,
-              "median": 2464,
+              "max": 2480,
+              "median": 2019,
               "min": 117,
-              "n": 1600,
-              "p95": 3136
+              "n": 879,
+              "p95": 2177
             },
             "prompt": {
-              "max": 4025,
-              "median": 3100,
+              "max": 2743,
+              "median": 2369,
               "min": 1182,
-              "n": 1600,
-              "p95": 3679
+              "n": 879,
+              "p95": 2737
             },
             "reason": null,
             "status": "measured",
@@ -3147,58 +3147,58 @@
         "design": {
           "chars": {
             "completion": {
-              "max": 9366,
-              "median": 7464,
+              "max": 6071,
+              "median": 910,
               "min": 460,
-              "n": 1600,
-              "p95": 8862
+              "n": 798,
+              "p95": 5812
             },
             "prompt": {
-              "max": 8888,
-              "median": 8853,
+              "max": 8143,
+              "median": 6554,
               "min": 1445,
-              "n": 1600,
-              "p95": 8886
+              "n": 798,
+              "p95": 6591
             }
           },
           "flags": {
-            "with_stored_completion": 1600,
-            "with_tool_call": 1200,
-            "with_tool_result": 1200,
+            "with_stored_completion": 798,
+            "with_tool_call": 0,
+            "with_tool_result": 0,
             "with_trajectory": 0
           },
           "harness_values": {
-            "agents+skills": 1200,
+            "agents+skills": 398,
             "none": 400
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 1600
+            "train": 798
           },
           "per_tier": {
-            "easy": 533,
-            "hard": 534,
-            "medium": 533
+            "easy": 266,
+            "hard": 266,
+            "medium": 266
           },
-          "rows": 1600,
+          "rows": 798,
           "source_values": {
-            "deterministic_tools": 1200,
+            "deterministic_tools": 398,
             "ground_truth": 400
           },
           "tokens": {
             "completion": {
-              "max": 4370,
-              "median": 3467,
+              "max": 2985,
+              "median": 302,
               "min": 155,
-              "n": 1600,
-              "p95": 3973
+              "n": 798,
+              "p95": 2948
             },
             "prompt": {
-              "max": 2330,
-              "median": 2305,
+              "max": 2285,
+              "median": 1698,
               "min": 489,
-              "n": 1600,
-              "p95": 2328
+              "n": 798,
+              "p95": 1724
             },
             "reason": null,
             "status": "measured",
@@ -3208,59 +3208,59 @@
         "ledger": {
           "chars": {
             "completion": {
-              "max": 7624,
-              "median": 4616,
+              "max": 4779,
+              "median": 3793,
               "min": 157,
-              "n": 1598,
-              "p95": 5940
+              "n": 1061,
+              "p95": 4504
             },
             "prompt": {
-              "max": 12886,
-              "median": 10524,
+              "max": 10588,
+              "median": 7898,
               "min": 2792,
-              "n": 1598,
-              "p95": 11950
+              "n": 1061,
+              "p95": 8580
             }
           },
           "flags": {
-            "with_stored_completion": 1598,
-            "with_tool_call": 1198,
-            "with_tool_result": 1198,
-            "with_trajectory": 4
+            "with_stored_completion": 1061,
+            "with_tool_call": 0,
+            "with_tool_result": 0,
+            "with_trajectory": 1
           },
           "harness_values": {
-            "agents+skills": 1198,
+            "agents+skills": 661,
             "none": 400
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 1598
+            "train": 1061
           },
           "per_tier": {
-            "easy": 532,
-            "hard": 534,
-            "medium": 532
+            "easy": 353,
+            "hard": 355,
+            "medium": 353
           },
-          "rows": 1598,
+          "rows": 1061,
           "source_values": {
-            "deterministic_tools": 1194,
-            "frontier_tools": 4,
+            "deterministic_tools": 660,
+            "frontier_tools": 1,
             "ground_truth": 400
           },
           "tokens": {
             "completion": {
-              "max": 3218,
-              "median": 2020,
+              "max": 2096,
+              "median": 1699,
               "min": 56,
-              "n": 1598,
-              "p95": 2660
+              "n": 1061,
+              "p95": 1989
             },
             "prompt": {
-              "max": 4917,
-              "median": 3378,
+              "max": 3807,
+              "median": 2635,
               "min": 1256,
-              "n": 1598,
-              "p95": 4356
+              "n": 1061,
+              "p95": 3029
             },
             "reason": null,
             "status": "measured",
@@ -3270,59 +3270,59 @@
         "repair": {
           "chars": {
             "completion": {
-              "max": 10526,
-              "median": 4165,
+              "max": 4964,
+              "median": 3516,
               "min": 154,
-              "n": 1607,
-              "p95": 5206
+              "n": 1605,
+              "p95": 4602
             },
             "prompt": {
-              "max": 11327,
-              "median": 9594,
+              "max": 9032,
+              "median": 7299,
               "min": 2330,
-              "n": 1607,
-              "p95": 9953
+              "n": 1605,
+              "p95": 7658
             }
           },
           "flags": {
-            "with_stored_completion": 1607,
-            "with_tool_call": 1207,
-            "with_tool_result": 1207,
-            "with_trajectory": 7
+            "with_stored_completion": 1605,
+            "with_tool_call": 1,
+            "with_tool_result": 0,
+            "with_trajectory": 5
           },
           "harness_values": {
-            "agents+skills": 1207,
+            "agents+skills": 1205,
             "none": 400
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 1607
+            "train": 1605
           },
           "per_tier": {
             "easy": 535,
-            "hard": 537,
+            "hard": 535,
             "medium": 535
           },
-          "rows": 1607,
+          "rows": 1605,
           "source_values": {
             "deterministic_tools": 1200,
-            "frontier_tools": 7,
+            "frontier_tools": 5,
             "ground_truth": 400
           },
           "tokens": {
             "completion": {
-              "max": 4455,
-              "median": 1433,
+              "max": 1870,
+              "median": 1243,
               "min": 52,
-              "n": 1607,
-              "p95": 1985
+              "n": 1605,
+              "p95": 1771
             },
             "prompt": {
-              "max": 3547,
-              "median": 2790,
+              "max": 2945,
+              "median": 2188,
               "min": 950,
-              "n": 1607,
-              "p95": 2966
+              "n": 1605,
+              "p95": 2364
             },
             "reason": null,
             "status": "measured",
@@ -3331,30 +3331,30 @@
         }
       },
       "per_tier": {
-        "easy": 2133,
-        "hard": 2139,
-        "medium": 2133
+        "easy": 1447,
+        "hard": 1449,
+        "medium": 1447
       },
-      "rows": 6405,
+      "rows": 4343,
       "source_values": {
-        "deterministic_tools": 4794,
-        "frontier_tools": 11,
+        "deterministic_tools": 2737,
+        "frontier_tools": 6,
         "ground_truth": 1600
       },
       "tokens": {
         "completion": {
-          "max": 4455,
-          "median": 2035,
+          "max": 2985,
+          "median": 1331,
           "min": 52,
-          "n": 6405,
-          "p95": 3838
+          "n": 4343,
+          "p95": 2855
         },
         "prompt": {
-          "max": 4917,
-          "median": 2792,
+          "max": 3807,
+          "median": 2177,
           "min": 489,
-          "n": 6405,
-          "p95": 3949
+          "n": 4343,
+          "p95": 2930
         },
         "reason": null,
         "status": "measured",
@@ -3364,88 +3364,88 @@
     "data/sft_tools_v3": {
       "chars": {
         "completion": {
-          "max": 9366,
-          "median": 5948,
-          "min": 3188,
-          "n": 4800,
-          "p95": 8483
+          "max": 7273,
+          "median": 5012,
+          "min": 2719,
+          "n": 4686,
+          "p95": 6711
         },
         "prompt": {
-          "max": 5414,
-          "median": 2406,
+          "max": 4534,
+          "median": 2391,
           "min": 1445,
-          "n": 4800,
-          "p95": 3929
+          "n": 4686,
+          "p95": 3914
         }
       },
       "files": 4,
       "flags": {
-        "with_stored_completion": 4800,
-        "with_tool_call": 4800,
-        "with_tool_result": 4800,
+        "with_stored_completion": 4686,
+        "with_tool_call": 0,
+        "with_tool_result": 0,
         "with_trajectory": 0
       },
       "harness_values": {
-        "none": 4800
+        "none": 4686
       },
       "malformed_lines": 0,
       "per_split": {
-        "train": 4800
+        "train": 4686
       },
       "per_task": {
         "audit": {
           "chars": {
             "completion": {
-              "max": 8831,
-              "median": 7144,
-              "min": 5876,
-              "n": 1200,
-              "p95": 7933
+              "max": 7202,
+              "median": 5956,
+              "min": 4945,
+              "n": 1160,
+              "p95": 6737
             },
             "prompt": {
               "max": 4440,
-              "median": 2991,
+              "median": 2987,
               "min": 2389,
-              "n": 1200,
-              "p95": 4065
+              "n": 1160,
+              "p95": 3403
             }
           },
           "flags": {
-            "with_stored_completion": 1200,
-            "with_tool_call": 1200,
-            "with_tool_result": 1200,
+            "with_stored_completion": 1160,
+            "with_tool_call": 0,
+            "with_tool_result": 0,
             "with_trajectory": 0
           },
           "harness_values": {
-            "none": 1200
+            "none": 1160
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 1200
+            "train": 1160
           },
           "per_tier": {
             "easy": 400,
-            "hard": 400,
+            "hard": 360,
             "medium": 400
           },
-          "rows": 1200,
+          "rows": 1160,
           "source_values": {
-            "deterministic_tools": 1200
+            "deterministic_tools": 1160
           },
           "tokens": {
             "completion": {
-              "max": 3565,
-              "median": 2824,
-              "min": 2306,
-              "n": 1200,
-              "p95": 3164
+              "max": 2935,
+              "median": 2430,
+              "min": 1994,
+              "n": 1160,
+              "p95": 2745
             },
             "prompt": {
               "max": 2202,
-              "median": 1406,
+              "median": 1402,
               "min": 1068,
-              "n": 1200,
-              "p95": 2007
+              "n": 1160,
+              "p95": 1640
             },
             "reason": null,
             "status": "measured",
@@ -3455,11 +3455,11 @@
         "design": {
           "chars": {
             "completion": {
-              "max": 9366,
-              "median": 7800,
-              "min": 5219,
+              "max": 7273,
+              "median": 6095,
+              "min": 3822,
               "n": 1200,
-              "p95": 8893
+              "p95": 6910
             },
             "prompt": {
               "max": 1485,
@@ -3471,8 +3471,8 @@
           },
           "flags": {
             "with_stored_completion": 1200,
-            "with_tool_call": 1200,
-            "with_tool_result": 1200,
+            "with_tool_call": 0,
+            "with_tool_result": 0,
             "with_trajectory": 0
           },
           "harness_values": {
@@ -3493,11 +3493,11 @@
           },
           "tokens": {
             "completion": {
-              "max": 4370,
-              "median": 3543,
-              "min": 1985,
+              "max": 3703,
+              "median": 3016,
+              "min": 1631,
               "n": 1200,
-              "p95": 3996
+              "p95": 3422
             },
             "prompt": {
               "max": 519,
@@ -3514,56 +3514,56 @@
         "ledger": {
           "chars": {
             "completion": {
-              "max": 7298,
-              "median": 4940,
-              "min": 3688,
-              "n": 1200,
-              "p95": 6048
+              "max": 5692,
+              "median": 4384,
+              "min": 3325,
+              "n": 1126,
+              "p95": 5205
             },
             "prompt": {
-              "max": 5414,
-              "median": 3372,
+              "max": 4534,
+              "median": 3358,
               "min": 2444,
-              "n": 1200,
-              "p95": 4530
+              "n": 1126,
+              "p95": 3977
             }
           },
           "flags": {
-            "with_stored_completion": 1200,
-            "with_tool_call": 1200,
-            "with_tool_result": 1200,
+            "with_stored_completion": 1126,
+            "with_tool_call": 0,
+            "with_tool_result": 0,
             "with_trajectory": 0
           },
           "harness_values": {
-            "none": 1200
+            "none": 1126
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 1200
+            "train": 1126
           },
           "per_tier": {
-            "easy": 400,
-            "hard": 400,
-            "medium": 400
+            "easy": 378,
+            "hard": 370,
+            "medium": 378
           },
-          "rows": 1200,
+          "rows": 1126,
           "source_values": {
-            "deterministic_tools": 1200
+            "deterministic_tools": 1126
           },
           "tokens": {
             "completion": {
-              "max": 3474,
-              "median": 2142,
-              "min": 1578,
-              "n": 1200,
-              "p95": 2732
+              "max": 2629,
+              "median": 1949,
+              "min": 1449,
+              "n": 1126,
+              "p95": 2416
             },
             "prompt": {
-              "max": 3070,
-              "median": 1756,
+              "max": 2561,
+              "median": 1744,
               "min": 1160,
-              "n": 1200,
-              "p95": 2559
+              "n": 1126,
+              "p95": 2236
             },
             "reason": null,
             "status": "measured",
@@ -3573,11 +3573,11 @@
         "repair": {
           "chars": {
             "completion": {
-              "max": 5497,
-              "median": 4316,
-              "min": 3188,
+              "max": 4889,
+              "median": 3755,
+              "min": 2719,
               "n": 1200,
-              "p95": 5240
+              "p95": 4619
             },
             "prompt": {
               "max": 2625,
@@ -3589,8 +3589,8 @@
           },
           "flags": {
             "with_stored_completion": 1200,
-            "with_tool_call": 1200,
-            "with_tool_result": 1200,
+            "with_tool_call": 0,
+            "with_tool_result": 0,
             "with_trajectory": 0
           },
           "harness_values": {
@@ -3611,11 +3611,11 @@
           },
           "tokens": {
             "completion": {
-              "max": 2087,
-              "median": 1542,
-              "min": 1076,
+              "max": 1870,
+              "median": 1365,
+              "min": 936,
               "n": 1200,
-              "p95": 1998
+              "p95": 1781
             },
             "prompt": {
               "max": 1193,
@@ -3631,28 +3631,28 @@
         }
       },
       "per_tier": {
-        "easy": 1600,
-        "hard": 1600,
-        "medium": 1600
+        "easy": 1578,
+        "hard": 1530,
+        "medium": 1578
       },
-      "rows": 4800,
+      "rows": 4686,
       "source_values": {
-        "deterministic_tools": 4800
+        "deterministic_tools": 4686
       },
       "tokens": {
         "completion": {
-          "max": 4370,
-          "median": 2407,
-          "min": 1076,
-          "n": 4800,
-          "p95": 3889
+          "max": 3703,
+          "median": 2102,
+          "min": 936,
+          "n": 4686,
+          "p95": 3334
         },
         "prompt": {
-          "max": 3070,
-          "median": 1121,
+          "max": 2561,
+          "median": 1085,
           "min": 489,
-          "n": 4800,
-          "p95": 2216
+          "n": 4686,
+          "p95": 2103
         },
         "reason": null,
         "status": "measured",
@@ -3662,88 +3662,88 @@
     "data/sft_tools_v3_h": {
       "chars": {
         "completion": {
-          "max": 9366,
-          "median": 5947,
-          "min": 3188,
-          "n": 4794,
-          "p95": 8483
+          "max": 6139,
+          "median": 4176,
+          "min": 2719,
+          "n": 2737,
+          "p95": 5771
         },
         "prompt": {
-          "max": 12886,
-          "median": 9942,
-          "min": 8848,
-          "n": 4794,
-          "p95": 11399
+          "max": 8783,
+          "median": 7584,
+          "min": 6553,
+          "n": 2737,
+          "p95": 8444
         }
       },
       "files": 4,
       "flags": {
-        "with_stored_completion": 4794,
-        "with_tool_call": 4794,
-        "with_tool_result": 4794,
+        "with_stored_completion": 2737,
+        "with_tool_call": 0,
+        "with_tool_result": 0,
         "with_trajectory": 0
       },
       "harness_values": {
-        "agents+skills": 4794
+        "agents+skills": 2737
       },
       "malformed_lines": 0,
       "per_split": {
-        "train": 4794
+        "train": 2737
       },
       "per_task": {
         "audit": {
           "chars": {
             "completion": {
-              "max": 8831,
-              "median": 7144,
-              "min": 5876,
-              "n": 1200,
-              "p95": 7933
+              "max": 6139,
+              "median": 5165,
+              "min": 4945,
+              "n": 479,
+              "p95": 5433
             },
             "prompt": {
-              "max": 11874,
-              "median": 10425,
-              "min": 9823,
-              "n": 1200,
-              "p95": 11499
+              "max": 8353,
+              "median": 8003,
+              "min": 7528,
+              "n": 479,
+              "p95": 8349
             }
           },
           "flags": {
-            "with_stored_completion": 1200,
-            "with_tool_call": 1200,
-            "with_tool_result": 1200,
+            "with_stored_completion": 479,
+            "with_tool_call": 0,
+            "with_tool_result": 0,
             "with_trajectory": 0
           },
           "harness_values": {
-            "agents+skills": 1200
+            "agents+skills": 479
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 1200
+            "train": 479
           },
           "per_tier": {
-            "easy": 400,
-            "hard": 400,
-            "medium": 400
+            "easy": 164,
+            "hard": 158,
+            "medium": 157
           },
-          "rows": 1200,
+          "rows": 479,
           "source_values": {
-            "deterministic_tools": 1200
+            "deterministic_tools": 479
           },
           "tokens": {
             "completion": {
-              "max": 3565,
-              "median": 2824,
-              "min": 2306,
-              "n": 1200,
-              "p95": 3164
+              "max": 2480,
+              "median": 2076,
+              "min": 1994,
+              "n": 479,
+              "p95": 2191
             },
             "prompt": {
-              "max": 4025,
-              "median": 3229,
-              "min": 2891,
-              "n": 1200,
-              "p95": 3830
+              "max": 2743,
+              "median": 2570,
+              "min": 2289,
+              "n": 479,
+              "p95": 2739
             },
             "reason": null,
             "status": "measured",
@@ -3753,56 +3753,56 @@
         "design": {
           "chars": {
             "completion": {
-              "max": 9366,
-              "median": 7800,
-              "min": 5219,
-              "n": 1200,
-              "p95": 8893
+              "max": 6071,
+              "median": 5718,
+              "min": 3822,
+              "n": 398,
+              "p95": 5830
             },
             "prompt": {
-              "max": 8888,
-              "median": 8871,
-              "min": 8848,
-              "n": 1200,
-              "p95": 8886
+              "max": 6593,
+              "median": 6559,
+              "min": 6553,
+              "n": 398,
+              "p95": 6591
             }
           },
           "flags": {
-            "with_stored_completion": 1200,
-            "with_tool_call": 1200,
-            "with_tool_result": 1200,
+            "with_stored_completion": 398,
+            "with_tool_call": 0,
+            "with_tool_result": 0,
             "with_trajectory": 0
           },
           "harness_values": {
-            "agents+skills": 1200
+            "agents+skills": 398
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 1200
+            "train": 398
           },
           "per_tier": {
-            "easy": 400,
-            "hard": 400,
-            "medium": 400
+            "easy": 188,
+            "hard": 105,
+            "medium": 105
           },
-          "rows": 1200,
+          "rows": 398,
           "source_values": {
-            "deterministic_tools": 1200
+            "deterministic_tools": 398
           },
           "tokens": {
             "completion": {
-              "max": 4370,
-              "median": 3543,
-              "min": 1985,
-              "n": 1200,
-              "p95": 3996
+              "max": 2985,
+              "median": 2908,
+              "min": 1631,
+              "n": 398,
+              "p95": 2958
             },
             "prompt": {
-              "max": 2330,
-              "median": 2313,
-              "min": 2300,
-              "n": 1200,
-              "p95": 2328
+              "max": 1727,
+              "median": 1703,
+              "min": 1697,
+              "n": 398,
+              "p95": 1725
             },
             "reason": null,
             "status": "measured",
@@ -3812,56 +3812,56 @@
         "ledger": {
           "chars": {
             "completion": {
-              "max": 6715,
-              "median": 4934,
-              "min": 3688,
-              "n": 1194,
-              "p95": 6011
+              "max": 4779,
+              "median": 4116,
+              "min": 3325,
+              "n": 660,
+              "p95": 4566
             },
             "prompt": {
-              "max": 12886,
-              "median": 10843,
-              "min": 9916,
-              "n": 1194,
-              "p95": 11994
+              "max": 8783,
+              "median": 8066,
+              "min": 7621,
+              "n": 660,
+              "p95": 8599
             }
           },
           "flags": {
-            "with_stored_completion": 1194,
-            "with_tool_call": 1194,
-            "with_tool_result": 1194,
+            "with_stored_completion": 660,
+            "with_tool_call": 0,
+            "with_tool_result": 0,
             "with_trajectory": 0
           },
           "harness_values": {
-            "agents+skills": 1194
+            "agents+skills": 660
           },
           "malformed_lines": 0,
           "per_split": {
-            "train": 1194
+            "train": 660
           },
           "per_tier": {
-            "easy": 398,
-            "hard": 398,
-            "medium": 398
+            "easy": 250,
+            "hard": 171,
+            "medium": 239
           },
-          "rows": 1194,
+          "rows": 660,
           "source_values": {
-            "deterministic_tools": 1194
+            "deterministic_tools": 660
           },
           "tokens": {
             "completion": {
-              "max": 3218,
-              "median": 2139,
-              "min": 1578,
-              "n": 1194,
-              "p95": 2713
+              "max": 2096,
+              "median": 1826,
+              "min": 1449,
+              "n": 660,
+              "p95": 2004
             },
             "prompt": {
-              "max": 4917,
-              "median": 3603,
-              "min": 3007,
-              "n": 1194,
-              "p95": 4396
+              "max": 3096,
+              "median": 2718,
+              "min": 2404,
+              "n": 660,
+              "p95": 3033
             },
             "reason": null,
             "status": "measured",
@@ -3871,24 +3871,24 @@
         "repair": {
           "chars": {
             "completion": {
-              "max": 5497,
-              "median": 4316,
-              "min": 3188,
+              "max": 4889,
+              "median": 3755,
+              "min": 2719,
               "n": 1200,
-              "p95": 5240
+              "p95": 4619
             },
             "prompt": {
-              "max": 10192,
-              "median": 9755,
-              "min": 9407,
+              "max": 7897,
+              "median": 7460,
+              "min": 7112,
               "n": 1200,
-              "p95": 9957
+              "p95": 7662
             }
           },
           "flags": {
             "with_stored_completion": 1200,
-            "with_tool_call": 1200,
-            "with_tool_result": 1200,
+            "with_tool_call": 0,
+            "with_tool_result": 0,
             "with_trajectory": 0
           },
           "harness_values": {
@@ -3909,18 +3909,18 @@
           },
           "tokens": {
             "completion": {
-              "max": 2087,
-              "median": 1542,
-              "min": 1076,
+              "max": 1870,
+              "median": 1365,
+              "min": 936,
               "n": 1200,
-              "p95": 1998
+              "p95": 1781
             },
             "prompt": {
-              "max": 3068,
-              "median": 2879,
-              "min": 2690,
+              "max": 2466,
+              "median": 2277,
+              "min": 2088,
               "n": 1200,
-              "p95": 2981
+              "p95": 2379
             },
             "reason": null,
             "status": "measured",
@@ -3929,28 +3929,28 @@
         }
       },
       "per_tier": {
-        "easy": 1598,
-        "hard": 1598,
-        "medium": 1598
+        "easy": 1002,
+        "hard": 834,
+        "medium": 901
       },
-      "rows": 4794,
+      "rows": 2737,
       "source_values": {
-        "deterministic_tools": 4794
+        "deterministic_tools": 2737
       },
       "tokens": {
         "completion": {
-          "max": 4370,
-          "median": 2406,
-          "min": 1076,
-          "n": 4794,
-          "p95": 3889
+          "max": 2985,
+          "median": 1773,
+          "min": 936,
+          "n": 2737,
+          "p95": 2927
         },
         "prompt": {
-          "max": 4917,
-          "median": 2971,
-          "min": 2300,
-          "n": 4794,
-          "p95": 4061
+          "max": 3096,
+          "median": 2335,
+          "min": 1697,
+          "n": 2737,
+          "p95": 2962
         },
         "reason": null,
         "status": "measured",
@@ -4296,64 +4296,64 @@
       "sha256": "981869a561f189a7512c7fca06046dd2689266eb43538b11fb438e09ae270bc2"
     },
     "data/grpo_mix_v3/audit_train.jsonl": {
-      "bytes": 36742104,
-      "rows": 1200,
-      "sha256": "a1beaeb2ec8e84e8a97fba5e0a48fd812406e2a9bfda27acabd40c25dc063020"
+      "bytes": 15945379,
+      "rows": 479,
+      "sha256": "13e58801d5b1c093947b9419a679b349416a9c14207280d05dc4e6985ea28cec"
     },
     "data/grpo_mix_v3/design_train.jsonl": {
-      "bytes": 34145768,
-      "rows": 1200,
-      "sha256": "e4c15f0a3f00222483b3b64b9cee6464323bf3d95b8dff9d92f6eeb3f4222928"
+      "bytes": 12875052,
+      "rows": 398,
+      "sha256": "68119e446fb56eebe6c2414d0ff63b6ab861957255d241a82471c94cef212b3c"
     },
     "data/grpo_mix_v3/ledger_train.jsonl": {
-      "bytes": 35667554,
-      "rows": 1198,
-      "sha256": "5c8e0b02795723c010d97dd4884dab324374f8eaaba7667484bf04e139f54a69"
+      "bytes": 20150037,
+      "rows": 661,
+      "sha256": "22ac769da86e647fef84939c914cd97e40dafae9dd9d7f65fdbb297358d6dbc9"
     },
     "data/grpo_mix_v3/repair_train.jsonl": {
-      "bytes": 31742144,
-      "rows": 1207,
-      "sha256": "76766cd29a94d97351b863ccb204510984168400a739410c97764ec7d8ef1b4e"
+      "bytes": 35011681,
+      "rows": 1205,
+      "sha256": "6a73e1c0dc556ba7dc0967acac875197da0e97d237785d9eb7b17b699c08b1c8"
     },
     "data/grpo_tools_v3/audit_train.jsonl": {
-      "bytes": 27644904,
-      "rows": 1200,
-      "sha256": "0002fd609ce4260cc4aedc15b7294b61b5b271f2901860719419a7ba12e91c76"
+      "bytes": 35646096,
+      "rows": 1160,
+      "sha256": "8418e346cb43e19cab2d05128419f3b86eaa7d593d8b5458df81f2266f762f95"
     },
     "data/grpo_tools_v3/design_train.jsonl": {
-      "bytes": 25425368,
+      "bytes": 35916790,
       "rows": 1200,
-      "sha256": "235e54035be2caa23a1b53920f75447a344f7ae4ec0deb44fd28475ddfc89c82"
+      "sha256": "2f2a8bfdf29d881f7d232f855683656bab41139477bc76515a2980891a6d9f2e"
     },
     "data/grpo_tools_v3/ledger_train.jsonl": {
-      "bytes": 26632330,
-      "rows": 1200,
-      "sha256": "a6df693636ffea706c7fac269e0f2d7de6dd532c311d93d718db861ee51facfe"
+      "bytes": 30910258,
+      "rows": 1126,
+      "sha256": "647cbc97f38844e066bcd9aaee434823f1553318f69488b0bb7f0e28554b54e4"
     },
     "data/grpo_tools_v3/repair_train.jsonl": {
-      "bytes": 22258498,
+      "bytes": 28389072,
       "rows": 1200,
-      "sha256": "091114fa5ba3b98016332df8014785578aabface9e5631066b4142fa62fd5e49"
+      "sha256": "5149638e11bed5021dca58419587a071cc914271d6df0efeff2d499bb2d8d6eb"
     },
     "data/grpo_tools_v3_h/audit_train.jsonl": {
-      "bytes": 36742104,
-      "rows": 1200,
-      "sha256": "09d87f38b26ffdc1cbc1aec7db99d49c5be42620f9f6081458cc91830fbe90dd"
+      "bytes": 15945375,
+      "rows": 479,
+      "sha256": "c1b012b8cc250aa87821f7e7bc3202fb0c394ad5fc16c9bdc51c7046067cf87e"
     },
     "data/grpo_tools_v3_h/design_train.jsonl": {
-      "bytes": 34485368,
-      "rows": 1200,
-      "sha256": "9eee42062a31da84034be42df1e7c461c79577afd538141a4c6c5e40395e7af0"
+      "bytes": 12974590,
+      "rows": 398,
+      "sha256": "980918b2572d84e4e61e160e72460b410abb1953103f59f55bcff1f635974f67"
     },
     "data/grpo_tools_v3_h/ledger_train.jsonl": {
-      "bytes": 35527629,
-      "rows": 1194,
-      "sha256": "1d49760de95fe70e0004f82d3555fb663cb40352e3fbcc17b5ca0945c258bb74"
+      "bytes": 20114372,
+      "rows": 660,
+      "sha256": "a85a8827b1adbfee38157caa673e6b7a8d2c24f1d5cb47f999615a2726c006fb"
     },
     "data/grpo_tools_v3_h/repair_train.jsonl": {
-      "bytes": 31515298,
+      "bytes": 34833072,
       "rows": 1200,
-      "sha256": "c55cc9b6cc0c6ca46791065031a241b345030a249fe524cc1107ee16c831f6a0"
+      "sha256": "5426495686445b5207fa8579cc9746e4b9e0c56fa7d236162ba3dd71a26636be"
     },
     "data/heldout_v2/audit_test_id.jsonl": {
       "bytes": 2067407,
@@ -4621,64 +4621,64 @@
       "sha256": "981869a561f189a7512c7fca06046dd2689266eb43538b11fb438e09ae270bc2"
     },
     "data/sft_mix_v3/audit_train.jsonl": {
-      "bytes": 29847427,
-      "rows": 1600,
-      "sha256": "9abe31afa875db45847ef8a7b74e6fb0b398dc75d1883e706fe0b2decf7ef8e6"
+      "bytes": 15467110,
+      "rows": 879,
+      "sha256": "94bf22503b51f41dd172163a657c42090838c05323df97b534a04c0fc8db2fb3"
     },
     "data/sft_mix_v3/design_train.jsonl": {
-      "bytes": 23282065,
-      "rows": 1600,
-      "sha256": "9265a478969f42ac85f4b9ea51315a4cbf3945e2bfed6e8797ea816221f1516e"
+      "bytes": 10448823,
+      "rows": 798,
+      "sha256": "351b620fd63654b5172753c1592e64b347d7d8ca0ebb9065c9b1951abd1b0a87"
     },
     "data/sft_mix_v3/ledger_train.jsonl": {
-      "bytes": 32684258,
-      "rows": 1598,
-      "sha256": "169c5a50d170935217e37b08e7b778a4816742b6475d9ba31fa5740c4d32800e"
+      "bytes": 20754605,
+      "rows": 1061,
+      "sha256": "f5de8a459c9c8988f461c23a7e21172bb905d66ae1510ceb653ba7fead986942"
     },
     "data/sft_mix_v3/repair_train.jsonl": {
-      "bytes": 29227312,
-      "rows": 1607,
-      "sha256": "21ed85d654116ad7ef64efeedc65cda889731f901da6faeb1f2b3af8f79407e4"
+      "bytes": 32460851,
+      "rows": 1605,
+      "sha256": "256a8c7ac058c5cfbfcbd8f139a3bceddb83837142b55422a2f1dfaa3ca7e62e"
     },
     "data/sft_tools_v3/audit_train.jsonl": {
-      "bytes": 17629539,
-      "rows": 1200,
-      "sha256": "95a6ab79c7a1b4c50a972485f8bd08d803cbb8fce4915ed01c30e0de25362df7"
+      "bytes": 26002416,
+      "rows": 1160,
+      "sha256": "6c6a0ea0d603fbd015968b5b22fb49d9ffd071292ead9ccf6e7d4c9bd08539a4"
     },
     "data/sft_tools_v3/design_train.jsonl": {
-      "bytes": 13331350,
+      "bytes": 23786772,
       "rows": 1200,
-      "sha256": "33e49205fec9c260d5d10c665ad4c281f831b6cba26f854b136383e70c48e522"
+      "sha256": "e282004cb49394fb23b7061a41d623700004895ee9b4d644d0d344793144cc17"
     },
     "data/sft_tools_v3/ledger_train.jsonl": {
-      "bytes": 19216202,
-      "rows": 1200,
-      "sha256": "5a3a5623e787873999e951f0ee93d2981930f5054bb1cefed2d113e15551d486"
+      "bytes": 24012079,
+      "rows": 1126,
+      "sha256": "2c0685451a1ac8e3d5fecd7bcd036ff708a7067fc256b7629d9ca0993326e789"
     },
     "data/sft_tools_v3/repair_train.jsonl": {
-      "bytes": 15973386,
+      "bytes": 22067960,
       "rows": 1200,
-      "sha256": "f22c4b582bd930c6233354833e8da5ed54b27bff581bc134d2637dd6ce78d7ab"
+      "sha256": "96eb71dc1e11baecd6fa60769429474bed5377c68e8053deea9290aea50c9c59"
     },
     "data/sft_tools_v3_h/audit_train.jsonl": {
-      "bytes": 26703939,
-      "rows": 1200,
-      "sha256": "4a4d674e03b2a89f3911599999eaf4bc5ec48a48e84f6cff65245191f016ef86"
+      "bytes": 12323616,
+      "rows": 479,
+      "sha256": "0dc71266050a126ece25418b2dfb4d5560abf35090ad847b846407b9e47b1e81"
     },
     "data/sft_tools_v3_h/design_train.jsonl": {
-      "bytes": 22368550,
-      "rows": 1200,
-      "sha256": "f84410058b42398a2a91afa99c76952342daa82aa08dceaafc6b2e3534d12161"
+      "bytes": 9295244,
+      "rows": 398,
+      "sha256": "a401a7ef5223bdf5e809ca97d9e059233b1a4eb463dbb5f1408d0de6a08ee88b"
     },
     "data/sft_tools_v3_h/ledger_train.jsonl": {
-      "bytes": 28140402,
-      "rows": 1194,
-      "sha256": "cea524e898298a5bbbd32c285ae595aebf50ba6f8c0f1bcee552f1c6e63165cb"
+      "bytes": 16315009,
+      "rows": 660,
+      "sha256": "48567e452b6cdb6e6039d3ffd6123e54556afe4ed192a1c855359c2363929836"
     },
     "data/sft_tools_v3_h/repair_train.jsonl": {
-      "bytes": 25207386,
+      "bytes": 28489160,
       "rows": 1200,
-      "sha256": "9893ca2159d3946c4e5dfc0c6ea46ebe57e0bb0f0d846291722e9d9880eb6711"
+      "sha256": "fc9ca538ffa321eb873acf2abf3a51adbd41e9c166f2c1acdb7480a52efa6240"
     }
   },
   "note": "counts and lengths only; no prompt, completion or answer text",
@@ -4691,30 +4691,30 @@
   "totals": {
     "chars": {
       "completion": {
-        "max": 10526,
-        "median": 203,
+        "max": 7273,
+        "median": 202,
         "min": 0,
-        "n": 231301,
-        "p95": 4407
+        "n": 222835,
+        "p95": 854
       },
       "prompt": {
         "max": 20844,
-        "median": 3067,
+        "median": 3045,
         "min": 1442,
-        "n": 231301,
-        "p95": 13764
+        "n": 222835,
+        "p95": 13791
       }
     },
     "flags": {
-      "with_stored_completion": 224171,
-      "with_tool_call": 28798,
-      "with_tool_result": 28798,
-      "with_trajectory": 14410
+      "with_stored_completion": 215705,
+      "with_tool_call": 10162,
+      "with_tool_result": 0,
+      "with_trajectory": 10172
     },
     "harness_values": {
-      "<missing>": 40759,
-      "agents+skills": 73342,
-      "none": 114994,
+      "<missing>": 40645,
+      "agents+skills": 65104,
+      "none": 114880,
       "skills": 2206
     },
     "malformed_lines": 0,
@@ -4725,36 +4725,36 @@
       "test_ood_load": 1435,
       "test_ood_scale": 1576,
       "test_ood_topology": 5656,
-      "train": 188221,
+      "train": 179755,
       "val": 5604
     },
     "per_tier": {
       "<missing>": 195487,
-      "easy": 12096,
-      "hard": 11664,
-      "medium": 12054
+      "easy": 9485,
+      "hard": 8622,
+      "medium": 9241
     },
-    "rows": 231301,
+    "rows": 222835,
     "source_values": {
       "<missing>": 35959,
-      "deterministic_tools": 28776,
+      "deterministic_tools": 20320,
       "frontier": 1315,
-      "frontier_tools": 22,
+      "frontier_tools": 12,
       "ground_truth": 165229
     },
     "tokens": {
       "completion": {
-        "max": 4455,
-        "median": 78,
+        "max": 3703,
+        "median": 77,
         "min": 0,
-        "n": 231301,
-        "p95": 1726
+        "n": 222835,
+        "p95": 271
       },
       "prompt": {
         "max": 6235,
-        "median": 1267,
+        "median": 1253,
         "min": 486,
-        "n": 231301,
+        "n": 222835,
         "p95": 4193
       },
       "reason": null,

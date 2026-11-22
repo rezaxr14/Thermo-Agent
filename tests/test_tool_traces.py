@@ -47,7 +47,9 @@ def test_trace_has_real_tools_and_ends_with_accepted_answer(rows, task, variant)
     assert trace["source"] == "deterministic_tools"
     assert trace["tool_calls"] >= 2
     assert "<tool_call" in trace["sft_completion"]
-    assert "<tool_result" in trace["sft_completion"]
+    assert "<tool_response" in trace["sft_completion"]
+    assert any(m.get("tool_calls") for m in trace["messages"] if m.get("role") == "assistant")
+    assert any(m.get("role") == "tool" for m in trace["messages"])
     assert trace["sft_completion"].rstrip().endswith(final.rstrip())
     assert validate(task, final, row)["accepted"] is True
     assert trace["char_length"] == len(trace["sft_completion"])
@@ -111,7 +113,7 @@ def test_builder_writes_manifest_and_guard_rejects_planted_heldout_row(rows, tmp
     assert manifest["contamination_guard"]["overlap"] == 0
     written = [json.loads(line) for line in (out / "repair_train.jsonl").read_text(encoding="utf-8").splitlines()]
     assert {r["provenance"]["variant"] for r in written} == {"direct", "recover"}
-    assert all("<tool_call" in r["completion"][0]["content"] for r in written)
+    assert all("<tool_call" in r["sft_completion"] for r in written)
 
     # Self-check: a held-out row planted into a training file MUST be rejected.
     index, files = build_heldout_signatures(DATA / "heldout")

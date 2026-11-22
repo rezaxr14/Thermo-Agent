@@ -35,6 +35,7 @@ import argparse, functools, logging, math, os, pathlib, random, warnings
 from collections import defaultdict
 
 from ..agent.env import ThermoEnv, row_has_harness_tools
+from ..teacher import toolkit
 from . import ddp
 from . import data as corpus_data
 from .checkpoint import latest
@@ -59,7 +60,8 @@ DEFAULT_MAX_TOOL_CALLING_ITERATIONS = 6   # D4
 DEFAULT_MAX_COMPLETION_LENGTH = 4096   # C5
 MAX_TOOL_CALLS = 8   # I6: identical to eval
 
-TOOL_NAMES = ("inspect_plant", "first_law_check", "second_law_check", "validity_check", "solve_plant")
+TOOL_NAMES = ("inspect_plant", "first_law_check", "second_law_check", "validity_check", "solve_plant") \
+    + tuple(toolkit.DYNAMIC_TOOL_NAMES) + tuple(toolkit.SKILL_TOOL_NAMES)
 
 _log = logging.getLogger(__name__)
 
@@ -82,10 +84,9 @@ class GrpoThermoEnv:
     """Thin composition wrapper around :class:`ThermoEnv` for TRL's `environment_factory`.
 
     TRL calls `factory()` with no arguments and treats every public class method except `reset`
-    and `get_reward` as a tool. `ThermoEnv.step` and `.observation_block` are therefore only
-    reached *privately* from here; they are never exposed as tools. The five public tool methods
-    have type hints and Google-style docstrings so transformers' `get_json_schema` can render
-    them (`transformers/utils/chat_template_utils.py:289-423`, `:745-757`).
+    and `get_reward` as a tool. The wrapper exposes all 16 physics tools with type hints and
+    docstrings so transformers' `get_json_schema` can render them; `ThermoEnv.step` and
+    `.observation_block` are reached privately and never exposed as tools.
     """
 
     def __init__(self, row: dict | None = None, task: str = "repair",
@@ -201,6 +202,38 @@ class GrpoThermoEnv:
             exergy in kJ/kg) so states can be reasoned about.
         """
         return self._env.solve_plant(candidate)
+
+
+def _register_dynamic_tools() -> None:
+    """Expose the nine component tools and two skill tools on the GRPO wrapper.
+
+    TRL discovers tools with ``inspect.getmembers(type(instance), isfunction)``, so the
+    methods must be real class attributes. Each delegates to the bound ``ThermoEnv``;
+    the shared ``candidate`` string argument is unwrapped by the toolkit.
+    """
+    from ..agent.tool_prompt import _COMPACT_TOOL_LINE
+
+    def make(name: str):
+        def tool(self, candidate: str) -> str:
+            return self._env._call(name, candidate)
+        tool.__name__ = name
+        tool.__qualname__ = f"GrpoThermoEnv.{name}"
+        summary = _COMPACT_TOOL_LINE.get(name, f"{name}: physics tool.")
+        tool.__doc__ = (
+            f"{summary}\n\n"
+            "Args:\n"
+            "    candidate: JSON object string with the component inputs, or the candidate "
+            "answer XML for the plant tools.\n\n"
+            "Returns:\n"
+            "    str: JSON with the tool's real numeric result and any failed checks.")
+        tool.__annotations__ = {"candidate": str, "return": str}
+        return tool
+
+    for name in tuple(toolkit.DYNAMIC_TOOL_NAMES) + tuple(toolkit.SKILL_TOOL_NAMES):
+        setattr(GrpoThermoEnv, name, make(name))
+
+
+_register_dynamic_tools()
 
 
 def make_env_factory(task: str | None, max_turns: int = DEFAULT_MAX_TOOL_CALLING_ITERATIONS,

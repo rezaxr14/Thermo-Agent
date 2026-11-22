@@ -150,7 +150,7 @@ def test_finalize_sft_emits_each_reasoning_once(monkeypatch):
     sft = out["sft_completion"]
     assert sft.count(same) == 1
     assert sft.count(hidden) == 1
-    assert "<tool_call" in sft and "<tool_result>" in sft
+    assert "<tool_call" in sft and "<tool_response>" in sft
     assert TOOL_JSON in sft
     assert sft.rstrip().endswith(FINAL_XML)
     assert out["verdict"]["accepted"] is True

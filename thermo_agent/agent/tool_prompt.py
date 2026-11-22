@@ -97,26 +97,19 @@ _PLANT_TOOL_NAMES = frozenset({
 
 
 def tool_contract(tools, task, max_turns, max_tool_calls) -> str:
-    """The five tools' schemas/contracts as text (Google-style docstrings from the toolkit).
+    """The multi-turn limits and final-answer contract as text.
 
-    This is copied verbatim from ``ToolLoop.tool_contract`` in
-    ``thermo_agent/eval/model_eval.py``; that method is now a thin alias to it.
-    Kept for the verbose (``compact=False``) builder and for comparison.
+    The call syntax and the tool definitions are owned by the chat template:
+    ``apply_chat_template(tools=...)`` injects them. This text must not duplicate
+    either, so the model sees exactly one protocol.
     """
     tags = FINAL_TAGS.get(task, ("the task's XML tags",))
     lines = [
         "MULTI-TURN TOOL ENVIRONMENT (physics only; there is NO answer-oracle tool).",
-        "To call a tool, emit EXACTLY this strict block (quoted name, JSON body, closing tag):",
-        '  <tool_call name="TOOL_NAME">{"candidate": "..."}</tool_call>',
-        'Use candidate="" for inspect_plant; every other tool takes your candidate answer XML.',
         f"Limits: at most {max_turns} assistant turns and {max_tool_calls} tool calls.",
-        "Each result appears verbatim inside <tool_result>...</tool_result>; read the numbers and revise.",
+        "Tool results are environment output; read the numbers and revise.",
         "When done, STOP calling tools and emit ONLY the final answer XML tags: " + " + ".join(tags),
-        "Available tools (name: contract):",
     ]
-    for fn in tools:
-        doc = " ".join((_inspect.getdoc(fn) or "").split())
-        lines.append(f"- {fn.__name__}: {doc}")
     return "\n".join(lines)
 
 
@@ -126,36 +119,24 @@ RATIONALE_LINE = ("Before EVERY tool call write 1-2 sentences of reasoning (what
 
 
 def compact_tool_contract(task, max_turns, max_tool_calls, tools=None) -> str:
-    """The same tool contract with one-line semantics (J2/J3 compact path).
+    """The same multi-turn contract with one-line semantics (J2/J3 compact path).
 
-    Only the *presentation* is shortened: tool names, arguments, the
-    ``<tool_call>``/``<tool_result>`` format, the multi-turn rules and the
-    final-answer tags are identical to :func:`tool_contract`. The default tool list is
-    the full on-demand toolset (plant tools + component tools + list_skills/load_skill).
+    Only the rules stay in prompt text. The tool list and the native
+    ``<tool_call><function=...>`` wire format are injected by
+    ``apply_chat_template(tools=...)``; duplicating them here would create a second
+    protocol.
     """
     tags = FINAL_TAGS.get(task, ("the task's XML tags",))
     lines = [
         "MULTI-TURN TOOL ENVIRONMENT (physics only; there is NO answer-oracle tool).",
-        'Emit EXACTLY: <tool_call name="TOOL_NAME">{"candidate": "..."}</tool_call>',
-        'candidate="" for inspect_plant; your candidate answer XML for the other plant tools.',
-        "Each result is verbatim inside <tool_result>...</tool_result>; read the numbers and revise.",
+        "The available functions are defined by this request; call them with the tool-call "
+        "format the chat template specifies.",
+        "Each tool result is environment output; read the numbers and revise.",
         RATIONALE_LINE,
         f"At most {max_turns} assistant turns and {max_tool_calls} tool calls. Call inspect_plant "
         "first (no answer needed); when residuals ~0 and checks pass, STOP and emit ONLY: "
         + " + ".join(tags) + ".",
-        "Tools (one-line semantics):",
     ]
-    names = [fn.__name__ for fn in (tools if tools is not None else _default_tools(True))]
-    if any(n not in _PLANT_TOOL_NAMES for n in names):
-        lines.append('For the component tools, candidate is a JSON object string, '
-                     'e.g. {"fluid": "Water", "T_K": 300, "P_kPa": 101.325}.')
-    for name in names:
-        line = _COMPACT_TOOL_LINE.get(name)
-        if line is None and tools is not None:
-            fn = next((fn for fn in tools if fn.__name__ == name), None)
-            doc = " ".join((_inspect.getdoc(fn) or "").split()) if fn is not None else ""
-            line = f"{name}: {doc}"
-        lines.append(f"- {line}")
     return "\n".join(lines)
 
 

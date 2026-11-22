@@ -168,9 +168,10 @@ def test_accepted_frontier_row_with_tool_tags_is_selected(tmp_path):
     inputs = _inputs(tmp_path, frontier_rows={"repair": [fr]})
     out_sft, out_grpo, manifest = _run(inputs, tmp_path)
 
-    assert _rows(out_sft / "repair_train.jsonl") == [_sft_row("repair", "repair-sft-1"), fr]
+    assert _rows(out_sft / "repair_train.jsonl") == [
+        _sft_row("repair", "repair-sft-1"), mix.migrate_frontier_row(fr)]
     assert _rows(out_grpo / "repair_train.jsonl") == [
-        _grpo_row("repair", "repair-sft-1"), fr]
+        _grpo_row("repair", "repair-sft-1"), mix.migrate_frontier_row(fr)]
     assert manifest["frontier"]["selected_count"] == 1
     assert manifest["frontier"]["selected_ids"] == ["repair-ft-1"]
     assert manifest["frontier"]["accepted"] == 1
@@ -360,7 +361,7 @@ def test_build_mix_harness_prompt_reprompts_selected_frontier(tmp_path):
     assert len(selected) == 1
     out = selected[0]
     assert mix.is_harness_prompt(out)
-    assert out["completion"] == fr["completion"]
+    assert out["completion"] == mix.migrate_frontier_row(fr)["completion"]
     assert out["prompt"] != fr["prompt"]
     system = [m for m in out["prompt"] if m.get("role") == "system"]
     assert mix.HARNESS_MARKER in system[0]["content"]
@@ -378,7 +379,7 @@ def test_main_wires_harness_prompt_flag(tmp_path):
                 if r.get("id") == "repair-ft-1"]
     assert len(selected) == 1
     assert mix.is_harness_prompt(selected[0])
-    assert selected[0]["completion"] == fr["completion"]
+    assert selected[0]["completion"] == mix.migrate_frontier_row(fr)["completion"]
 
 
 # --------------------------------------------------------------------------- #

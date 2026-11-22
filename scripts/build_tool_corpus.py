@@ -177,8 +177,8 @@ def _aggregate_counts(entries: list[dict]) -> dict:
 
 def _final_from_trace(text: str) -> str:
     """Final assistant answer of a frontier tool trace (tail after the last tool result)."""
-    idx = text.rfind("</tool_result>")
-    body = text[idx + len("</tool_result>"):] if idx >= 0 else text
+    cut = max(text.rfind("</tool_response>"), text.rfind("</tool_result>"))
+    body = text[cut + len("</tool_response>"):] if cut >= 0 else text
     body = re.sub(r"<think>.*?</think>", "", body, flags=re.S)
     return body.strip()
 
@@ -291,11 +291,13 @@ def _emit(task: str, row: dict, trace: dict, variant: str, generator: str,
         "source": generator,
         "source_model": source_model,
         "prompt": prompt,
-        "completion": [{"role": "assistant", "content": trace["sft_completion"]}],
+        "completion": trace["messages"] if trace.get("messages") else [
+            {"role": "assistant", "content": trace["sft_completion"]}],
         "provenance": provenance,
         "harness": "agents+skills" if harness else "none",
         "memory_notes": [],
         "char_length": trace["char_length"],
+        "sft_completion": trace["sft_completion"],
     }
     if harness:
         sft["prompt_variant"] = "harness_tools"
@@ -318,6 +320,7 @@ def _emit(task: str, row: dict, trace: dict, variant: str, generator: str,
     grpo["trajectory"] = {
         "final": trace["final_answer"],
         "sft_completion": trace["sft_completion"],
+        "messages": trace.get("messages") or [],
         "turns": trace["turns"],
         "tool_calls": trace["tool_calls"],
     }
@@ -427,9 +430,15 @@ def build(src: list[str], out: str, grpo_out: str, tasks=TASKS, split: str = "tr
                 for row in _read(pathlib.Path(fd) / f"frontier_{task}_{split}.jsonl"):
                     frontier_stats["scanned"] += 1
                     completion = row.get("completion")
-                    text = (completion[0]["content"] if isinstance(completion, list) and completion
-                            else str(completion or ""))
-                    if "<tool_call" not in text and "<tool_result" not in text:
+                    if isinstance(completion, list) and any(
+                            isinstance(m, dict) and m.get("tool_calls") for m in completion):
+                        messages = completion
+                        text = tool_traces.tool_protocol.native_text(completion)
+                    else:
+                        text = (completion[0]["content"] if isinstance(completion, list) and completion
+                                else str(completion or ""))
+                        messages = [{"role": "assistant", "content": text}]
+                    if "<tool_call" not in text and "<tool_response" not in text and "<tool_result" not in text:
                         continue
                     frontier_stats["with_tool_turns"] += 1
                     local_tool_rows += 1
@@ -449,7 +458,7 @@ def build(src: list[str], out: str, grpo_out: str, tasks=TASKS, split: str = "tr
                     # instead of emitting an empty `turns` list for a tool-using trace.
                     turns = (row.get("trajectory") or {}).get("turns") or []
                     trace = {
-                        "sft_completion": text, "turns": turns, "tool_calls": n_calls,
+                        "sft_completion": text, "messages": messages, "turns": turns, "tool_calls": n_calls,
                         "accepted": True, "final_answer": answer, "verdict": verdict,
                         "char_length": len(text), "tokens": None, "plain_tokens": None,
                         "over_budget": False, "dropped_large_tools": [],

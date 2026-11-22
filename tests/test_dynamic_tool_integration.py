@@ -93,9 +93,10 @@ def test_compact_prompt_names_dynamic_tools_only_when_included(corpus_fixture_ro
                                              tools=make_tools("design", row, include_dynamic=False))[0]["content"]
     with_dyn = build_compact_harness_messages(list(base), "design", None)[0]["content"]      # default
     assert all(n not in without for n in DYNAMIC_TOOL_NAMES)
-    assert all(n in with_dyn for n in DYNAMIC_TOOL_NAMES)
+    assert "Tools (one-line semantics):" not in with_dyn
+    assert '<tool_call name=' not in with_dyn
     assert "JSON object string" not in without
-    assert "JSON object string" in with_dyn
+    assert "JSON object string" not in with_dyn
     assert "check_answer" not in with_dyn
 
 

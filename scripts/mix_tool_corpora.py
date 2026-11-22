@@ -291,9 +291,72 @@ def _text_from_trajectory(row: dict) -> str:
 
 
 def has_tool_turns(row: dict) -> bool:
-    """True only when a completion/trajectory has BOTH a call and a result turn."""
+    """True only when a completion/trajectory has BOTH a call and a result turn.
+
+    The native Qwen3.5 wire format uses ``<tool_response>`` for results, and new rows
+    may store the exchange as structured ``tool_calls`` + ``role="tool"`` messages.
+    """
     blob = _text_from_completion(row) + "\n" + _text_from_trajectory(row)
-    return TOOL_CALL in blob and TOOL_RESULT in blob
+    native = TOOL_CALL in blob and ("<tool_response" in blob or TOOL_RESULT in blob)
+    if native:
+        return True
+    for key in ("completion", "trajectory"):
+        value = row.get(key)
+        messages = value.get("messages") if isinstance(value, dict) else value
+        if isinstance(messages, list):
+            if any(isinstance(m, dict) and m.get("tool_calls") for m in messages) and \
+                    any(isinstance(m, dict) and m.get("role") == "tool" for m in messages):
+                return True
+    return False
+
+
+_GATE_TOK = None
+
+
+def _rendered_tokens(row: dict, task: str) -> int | None:
+    """Exact native-template length for a frontier row, or None when unmeasurable."""
+    global _GATE_TOK
+    from thermo_agent.agent import tool_protocol
+    from thermo_agent.synth.combine import tokenizer_path
+    if _GATE_TOK is None:
+        import pathlib
+        from transformers import AutoTokenizer
+        path = tokenizer_path()
+        cfg = pathlib.Path(path).parent / "tokenizer_config.json" if path else None
+        _GATE_TOK = AutoTokenizer.from_pretrained(str(cfg.parent), local_files_only=True) if cfg and cfg.is_file() else False
+    tok = _GATE_TOK
+    prompt, completion = row.get("prompt"), row.get("completion")
+    if tok is False or not isinstance(prompt, list) or not isinstance(completion, list):
+        return None
+    try:
+        tools = tool_protocol.tool_schemas(task)
+        prefix = tool_protocol.render_messages(tok, prompt, tools, add_generation_prompt=True)
+        full = tool_protocol.render_messages(tok, prompt + completion, tools)
+        if not full.startswith(prefix):
+            return None
+        return len(tok.encode(full, add_special_tokens=False)) + 96
+    except (TypeError, ValueError):
+        return None
+
+
+def migrate_frontier_row(row: dict) -> dict:
+    """One-way migration of a legacy frontier trace to the native structured protocol."""
+    from thermo_agent.agent import tool_protocol
+    completion = row.get("completion")
+    text = (completion[0]["content"] if isinstance(completion, list) and completion and
+            isinstance(completion[0], dict) else None)
+    if not isinstance(text, str) or "<tool_call name=" not in text:
+        return row
+    messages = tool_protocol.messages_from_legacy_text(text)
+    if not messages:
+        return row
+    out = dict(row)
+    out["completion"] = messages
+    out["sft_completion"] = tool_protocol.native_text(messages)
+    trajectory = dict(row.get("trajectory") or {})
+    trajectory["messages"] = messages
+    out["trajectory"] = trajectory
+    return out
 
 
 def _cap(per_task: int, ratio: float, deterministic_count: int) -> tuple[int | None, str]:
@@ -364,6 +427,7 @@ def build_mix(deterministic_sft: pathlib.Path | str,
     frontier_stats = {
         "scanned": 0, "accepted": 0, "with_tool_turns": 0, "eligible": 0,
         "selected_count": 0, "selected_ids": [], "skipped_over_cap": 0,
+        "skipped_over_gate": 0,
         "deduplicated": 0, "cap_mode": "unlimited", "cap_per_task": frontier_per_task,
         "cap_ratio": frontier_ratio, "reprompted": 0,
     }
@@ -442,6 +506,15 @@ def build_mix(deterministic_sft: pathlib.Path | str,
         if harness_prompt and chosen:
             chosen = [to_harness_prompt(row, task) for row in chosen]
             frontier_stats["reprompted"] += len(chosen)
+        chosen = [migrate_frontier_row(row) for row in chosen]
+        gated: list[dict] = []
+        for row in chosen:
+            n_tokens = _rendered_tokens(row, task)
+            if n_tokens is not None and n_tokens > 8192:
+                frontier_stats["skipped_over_gate"] += 1
+                continue
+            gated.append(row)
+        chosen = gated
 
         for row in chosen:
             rid = str(row.get("id") or "")

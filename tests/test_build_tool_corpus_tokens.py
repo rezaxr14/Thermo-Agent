@@ -39,6 +39,7 @@ def word_tokenizer(monkeypatch):
     # patch the function itself so both tool_traces and build_tool_corpus see it,
     # without touching module-level caches.
     monkeypatch.setattr(combine, "tokenizer", lambda: _WordTok())
+    monkeypatch.setattr(tool_traces, "render_tokenizer", lambda: None)
 
 
 @pytest.fixture
@@ -111,7 +112,7 @@ def test_gate_measures_final_harness_prompt_not_plain(tmp_path: Path, word_token
     # Kept rows carry the re-measured value from the ACTUAL final prompt.
     for r in written:
         expected = (sum(_ntok(m.get("content", "")) for m in r["prompt"])
-                    + _ntok(r["completion"][0]["content"]) + RESERVE)
+                    + _ntok(r["sft_completion"]) + RESERVE)
         assert r["tokens"] == expected, (r["id"], r["tokens"], expected)
         assert r["tokens"] <= max_tokens
         assert r["prompt_variant"] == "harness_tools"
