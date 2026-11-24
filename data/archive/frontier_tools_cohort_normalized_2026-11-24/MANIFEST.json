@@ -1,0 +1,43 @@
+{
+ "created_at": "2026-11-24",
+ "reason": "pre-reingest snapshot of hand-normalized pilot cohort",
+ "rows": 18,
+ "files": [
+  {
+   "path": "claude-haiku-5-5/frontier_design_train.jsonl",
+   "sha256": "d4f05056afadd0a19d1bb8b03cba8023b97553a1374b4e96847f9be9ecd796dc",
+   "bytes": 58229,
+   "rows": 3
+  },
+  {
+   "path": "claude-haiku-5-5/frontier_ledger_train.jsonl",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "bytes": 0,
+   "rows": 0
+  },
+  {
+   "path": "claude-haiku-5-5/frontier_repair_train.jsonl",
+   "sha256": "800a5ec82855945de4c5137ceb7e93a18be1ba5966b353ad34b182d607406109",
+   "bytes": 31190,
+   "rows": 1
+  },
+  {
+   "path": "gpt-6-luna/frontier_design_train.jsonl",
+   "sha256": "b64492611542b7a9398631e88cce588bfdcab5884ee204251b73159982bf34f8",
+   "bytes": 89921,
+   "rows": 2
+  },
+  {
+   "path": "gpt-6-luna/frontier_ledger_train.jsonl",
+   "sha256": "55ee3a6279a2781cd5138dd50488e5d3c7ca9a3aee8155b6bb7891df6dad0ffa",
+   "bytes": 231640,
+   "rows": 5
+  },
+  {
+   "path": "gpt-6-luna/frontier_repair_train.jsonl",
+   "sha256": "867fe432b1791b9d2750a4c9358af14bfe28a8e570360750f250f84e2c378f73",
+   "bytes": 457754,
+   "rows": 7
+  }
+ ]
+}
