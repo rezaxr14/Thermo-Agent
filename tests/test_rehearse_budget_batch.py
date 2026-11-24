@@ -59,7 +59,10 @@ def test_build_journal_records_shape_and_unique_ids(rehearsal, runner):
         assert record["model"] == "gpt-6-luna" and record["mode"] == "harness"
         assert record["sft_completion"].rstrip().endswith(answer)
         assert "<tool_call" in record["sft_completion"]
-        assert "<tool_result" in record["sft_completion"]
+        assert "<function=" in record["sft_completion"]
+        assert "<tool_response" in record["sft_completion"]
+        assert "<tool_call name=" not in record["sft_completion"]
+        assert "<tool_result" not in record["sft_completion"]
         assert record["reasoning"].strip()
         traj = record["trajectory"]
         assert len(traj["turns"]) == 3

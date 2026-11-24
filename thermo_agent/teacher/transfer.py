@@ -203,6 +203,11 @@ def ingest(export_dir, completions_path, out_dir, memory_dir=None, tasks=TASKS, 
         if row is None or not text:
             stats["skipped_unknown_or_empty"] += 1
             continue
+        from ..agent import tool_protocol
+        if tool_protocol.is_legacy_row(record):
+            stats["rejected_legacy_protocol"] += 1
+            stats["reason:legacy_protocol"] += 1
+            continue
         task = row.get("task", "repair")
         if rid in existing[task]:
             stats["skipped_already_accepted"] += 1
@@ -219,10 +224,10 @@ def ingest(export_dir, completions_path, out_dir, memory_dir=None, tasks=TASKS, 
             # Reasoning gate (2026-11-20): a tool trace without chain of thought is not training data.
             # The hosted journal stores only `trajectory.turns`; every teacher tool call carries a
             # mandatory `reason`, so move it into the turn's reasoning BEFORE the gate.
+            from ..agent import tool_protocol
             traj_probe = record.get("trajectory")
             if isinstance(traj_probe, dict):
-                from ..agent.tool_protocol import strip_reason_turns
-                strip_reason_turns(traj_probe.get("turns") or [])
+                tool_protocol.normalize_tool_turns(traj_probe.get("turns") or [])
             used_tools = any(t.get("tool_calls") for t in (traj_probe or {}).get("turns", []))
             if used_tools or require_tools:
                 rep = validate.reasoning_report(traj_probe)
@@ -238,29 +243,11 @@ def ingest(export_dir, completions_path, out_dir, memory_dir=None, tasks=TASKS, 
             trajectory = None
             traj_raw = record.get("trajectory")
             if traj_raw and record.get("sft_completion"):
-                trajectory = dict(traj_raw)
-                trajectory["sft_completion"] = record["sft_completion"]
-                if record.get("messages"):
-                    trajectory["messages"] = record["messages"]
-                elif traj_raw.get("messages"):
-                    trajectory["messages"] = traj_raw["messages"]
-                if trajectory.get("messages"):
-                    from ..agent.tool_protocol import strip_reason_arguments
-                    messages = copy.deepcopy(trajectory["messages"])
-                    reasons = strip_reason_arguments(messages)
-                    trajectory["messages"] = messages
-                    # The hosted teacher schema requires a `reason` on every call. Keep it as
-                    # chain-of-thought, never as a student-visible call argument.
-                    turns = trajectory.get("turns") or []
-                    reason_iter = iter(reasons)
-                    for turn in turns:
-                        if not turn.get("reasoning") and turn.get("tool_calls"):
-                            turn["reasoning"] = next(reason_iter, "")
-                else:
-                    # Journals store only trajectory.turns. Move each mandatory teacher
-                    # `reason` into that turn's reasoning so the <think> block survives.
-                    from ..agent.tool_protocol import strip_reason_turns
-                    strip_reason_turns(trajectory.get("turns") or [])
+                # Rebuild the stored text from the cleaned turns: drop the
+                # ToolInvocationResult wrapper and its call_id, move each teacher
+                # `reason` into <think/>, render tool results as <tool_response>,
+                # and keep the final answer outside the think block.
+                trajectory = tool_protocol.normalize_trajectory(traj_raw)
             teacher = validate.teacher_row(task, text, row, verdict, tag=base_provenance["model"],
                                            trajectory=trajectory)
             # The validator tags genuine tool traces "frontier_tools"; keep that signal

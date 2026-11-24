@@ -31,6 +31,7 @@ if str(ROOT) not in sys.path:
 
 from scripts.clean_frontier_traces import _rewrite_inner, rewrite_completion  # noqa: E402
 from scripts.mix_tool_corpora import is_verifier_accepted  # noqa: E402
+from thermo_agent.agent import tool_protocol  # noqa: E402
 from thermo_agent.synth import combine  # noqa: E402
 from thermo_agent.synth import tiers as tier_mod  # noqa: E402
 from thermo_agent.teacher import memory as mem, validate  # noqa: E402
@@ -237,6 +238,17 @@ def gate_journal(model: str, journal: pathlib.Path, out: pathlib.Path,
         text = _text(rec.get("sft_completion") or rec.get("completion"))
         if not _has_tool_trace(text):
             continue
+        # Measure and store the student-visible trace, not the provider's
+        # ToolInvocationResult wrapper. Normalizing before counting means the gate
+        # judges the bytes training will actually see (and never writes call_id or
+        # the teacher-only reason argument to a corpus).
+        traj = rec.get("trajectory")
+        if isinstance(traj, dict) and traj.get("turns"):
+            clean = tool_protocol.normalize_trajectory(traj)
+            rec["trajectory"] = clean
+            rec["sft_completion"] = clean["sft_completion"]
+            rec["messages"] = clean["messages"]
+            text = clean["sft_completion"]
         rid = str(rec.get("id", ""))
         row = exports.get(rid)
         if row is None:

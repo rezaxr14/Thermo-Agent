@@ -1,0 +1,40 @@
+{
+ "accepted": {
+  "frontier_ledger_train.jsonl": {
+   "legacy_rows": 4,
+   "sha256": "d978deac48b57b499c27a219235c6fa988ece83049c920fc922800ca0ab45daf"
+  },
+  "frontier_repair_train.jsonl": {
+   "legacy_rows": 7,
+   "sha256": "c7eeb4dbc964e22ae6da460315e1dab703ced2b9cab1093bc832502274ad82c7"
+  }
+ },
+ "archived_at": "2026-11-24",
+ "cohort": {
+  "claude-haiku-5-5\\frontier_ledger_train.jsonl": {
+   "legacy_rows": 2,
+   "sha256": "d0b2ffd2492c0fb837e60b25964f3830c8cf442267310e176e3a9a21993f001a"
+  },
+  "claude-haiku-5-5\\frontier_repair_train.jsonl": {
+   "legacy_rows": 4,
+   "sha256": "ed4a0146d33832a0ede3df2c36170508315436c5a2dc711aaa6536432ef326bb"
+  },
+  "gpt-6-luna\\frontier_ledger_train.jsonl": {
+   "legacy_rows": 3,
+   "sha256": "f6a3a69bfcf9e22fa5cda482b61a28b72b82272cefd0ef4b62f20ef86e4f7683"
+  },
+  "gpt-6-luna\\frontier_repair_train.jsonl": {
+   "legacy_rows": 3,
+   "sha256": "ce61d84798bbd92fa79f0c87c03cfd74a4826f1b1b54e0764929f5b690da3956"
+  }
+ },
+ "normalized_in_place": {
+  "claude-haiku-5-5\\frontier_design_train.jsonl": 3,
+  "claude-haiku-5-5\\frontier_ledger_train.jsonl": 0,
+  "claude-haiku-5-5\\frontier_repair_train.jsonl": 1,
+  "gpt-6-luna\\frontier_design_train.jsonl": 2,
+  "gpt-6-luna\\frontier_ledger_train.jsonl": 5,
+  "gpt-6-luna\\frontier_repair_train.jsonl": 7
+ },
+ "reason": "retired <tool_call name=...> syntax"
+}

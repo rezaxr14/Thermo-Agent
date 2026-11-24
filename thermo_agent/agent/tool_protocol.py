@@ -20,6 +20,8 @@ deliberately NOT recognised.
 """
 from __future__ import annotations
 
+import ast
+import copy
 import inspect
 import json
 import re
@@ -163,14 +165,6 @@ def messages_from_turns(turns: list[dict], final: str = "") -> list[dict]:
     for turn in turns or []:
         reason = str(turn.get("reasoning") or "").strip()
         prose = str(turn.get("assistant") or "").strip()
-        content = prose
-        if reason:
-            if reason.lstrip().startswith("<think"):
-                content = reason if not prose else f"{reason}\n{prose}"
-            elif reason != prose:
-                content = f"<think>\n{reason}\n</think>\n{prose}".strip()
-            else:
-                content = f"<think>\n{reason}\n</think>"
         calls = []
         for call in turn.get("tool_calls") or []:
             name = str(call.get("name") or "")
@@ -183,12 +177,28 @@ def messages_from_turns(turns: list[dict], final: str = "") -> list[dict]:
                 except (TypeError, ValueError):
                     args = {"candidate": args}
             calls.append({"name": name, "arguments": args if isinstance(args, dict) else {}})
+        content = prose
+        if reason:
+            if reason.lstrip().startswith("<think"):
+                content = reason if not prose else f"{reason}\n{prose}"
+            elif reason != prose:
+                content = f"<think>\n{reason}\n</think>\n{prose}".strip()
+            elif calls:
+                # Same sentence as the visible prose and this turn calls a tool: keep
+                # exactly one copy, as the <think> block that the student learns from.
+                content = f"<think>\n{reason}\n</think>"
+            else:
+                # Final-answer turn. Hiding the answer inside <think> would train the
+                # model never to emit it, so the visible answer stays visible.
+                content = prose
         if content or calls:
             messages.append(assistant_message(content, calls))
         for call, result in zip(calls, turn.get("tool_results") or []):
             messages.append(tool_message(call["name"], str(result)))
     if final:
-        messages.append(assistant_message(final))
+        tail = str(messages[-1].get("content") or "") if messages else ""
+        if final.strip() not in tail:
+            messages.append(assistant_message(final))
     return messages
 
 
@@ -287,12 +297,105 @@ def strip_reason_turns(turns: list[dict]) -> int:
                     args = None
             if isinstance(args, dict):
                 reason = str(args.pop("reason", "") or "").strip()
+                # Write the cleaned dict back even when it arrived as a JSON string:
+                # otherwise the teacher-only key survives every later render.
+                call["arguments"] = args
                 if reason:
                     reasons.append(reason)
         if reasons and not str(turn.get("reasoning") or "").strip():
             turn["reasoning"] = " ".join(reasons)
             moved += 1
     return moved
+
+
+def tool_result_output(value) -> str:
+    """Return a journal tool result's ``output`` JSON, never the provider wrapper.
+
+    Hosted journals store ``tool_results`` as ``repr(ToolInvocationResult(...))``.
+    That repr leaks ``call_id`` and the teacher-only ``reason`` argument into any
+    corpus that copies it verbatim. The student-visible result is only ``output``;
+    a raw JSON string is already in that shape and passes through unchanged.
+    """
+    if isinstance(value, dict):
+        out = value.get("output", value)
+        return out if isinstance(out, str) else json.dumps(out, ensure_ascii=False)
+    text = str(value if value is not None else "")
+    if not text.startswith("ToolInvocationResult("):
+        return text
+    try:
+        node = ast.parse(text, mode="eval").body
+    except (SyntaxError, ValueError) as exc:
+        raise ValueError("unparseable ToolInvocationResult wrapper") from exc
+    if not isinstance(node, ast.Call):
+        raise ValueError("unparseable ToolInvocationResult wrapper")
+    fields: dict = {}
+    for keyword in node.keywords:
+        if keyword.arg is None:
+            continue
+        try:
+            fields[keyword.arg] = ast.literal_eval(keyword.value)
+        except (ValueError, TypeError, SyntaxError) as exc:
+            raise ValueError(
+                f"non-literal ToolInvocationResult field {keyword.arg!r}") from exc
+    out = fields.get("output", fields.get("content", ""))
+    return out if isinstance(out, str) else json.dumps(out, ensure_ascii=False)
+
+
+def normalize_tool_turns(turns: list[dict]) -> int:
+    """Strip teacher ``reason`` arguments and provider wrappers from every turn."""
+    moved = strip_reason_turns(turns)
+    for turn in turns or []:
+        results = turn.get("tool_results")
+        if isinstance(results, list):
+            turn["tool_results"] = [tool_result_output(r) for r in results]
+    return moved
+
+
+def normalize_trajectory(trajectory: dict | None) -> dict:
+    """Rebuild a clean, student-visible trajectory from the harness turns.
+
+    Every tool result is reduced to its JSON ``output``; every teacher ``reason``
+    becomes the turn's ``<think>``; the stored messages and SFT text are rendered
+    from that cleaned structure. The legacy ``<tool_call name=...>`` form is never
+    produced.
+    """
+    out = copy.deepcopy(trajectory) if isinstance(trajectory, dict) else {}
+    turns = out.get("turns") or []
+    normalize_tool_turns(turns)
+    final = str(out.get("final") or "").strip()
+    messages = messages_from_turns(turns, final=final)
+    out["turns"] = turns
+    out["messages"] = messages
+    out["sft_completion"] = native_text(messages)
+    return out
+
+
+def is_legacy_row(row: dict) -> bool:
+    """True when a stored row still uses the retired ``<tool_call name=...>`` syntax."""
+    try:
+        return "<tool_call name=" in json.dumps(row, ensure_ascii=False)
+    except (TypeError, ValueError):
+        return False
+
+
+def normalize_train_row(row: dict) -> dict | None:
+    """Normalize a frontier row for a corpus; ``None`` means the row is legacy and must go.
+
+    There is no compatibility path: a row that still carries the retired text syntax
+    is not rewritten into the native protocol for training. It is rejected here so the
+    caller archives it instead of silently mixing two wire formats.
+    """
+    if not isinstance(row, dict) or is_legacy_row(row):
+        return None
+    trajectory = row.get("trajectory")
+    if not isinstance(trajectory, dict) or not trajectory.get("turns"):
+        return row
+    out = dict(row)
+    clean = normalize_trajectory(trajectory)
+    out["trajectory"] = clean
+    out["completion"] = clean["messages"]
+    out["sft_completion"] = clean["sft_completion"]
+    return out
 
 
 

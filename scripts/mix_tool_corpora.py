@@ -339,24 +339,14 @@ def _rendered_tokens(row: dict, task: str) -> int | None:
         return None
 
 
-def migrate_frontier_row(row: dict) -> dict:
-    """One-way migration of a legacy frontier trace to the native structured protocol."""
+def migrate_frontier_row(row: dict) -> dict | None:
+    """Rebuild a frontier trace with the one native protocol; ``None`` drops legacy text.
+
+    There is no dual-format compatibility path: a retired ``<tool_call name=...>``
+    row is rejected here and archived at the source, never rewritten into a mix.
+    """
     from thermo_agent.agent import tool_protocol
-    completion = row.get("completion")
-    text = (completion[0]["content"] if isinstance(completion, list) and completion and
-            isinstance(completion[0], dict) else None)
-    if not isinstance(text, str) or "<tool_call name=" not in text:
-        return row
-    messages = tool_protocol.messages_from_legacy_text(text)
-    if not messages:
-        return row
-    out = dict(row)
-    out["completion"] = messages
-    out["sft_completion"] = tool_protocol.native_text(messages)
-    trajectory = dict(row.get("trajectory") or {})
-    trajectory["messages"] = messages
-    out["trajectory"] = trajectory
-    return out
+    return tool_protocol.normalize_train_row(row)
 
 
 def _cap(per_task: int, ratio: float, deterministic_count: int) -> tuple[int | None, str]:
@@ -507,6 +497,7 @@ def build_mix(deterministic_sft: pathlib.Path | str,
             chosen = [to_harness_prompt(row, task) for row in chosen]
             frontier_stats["reprompted"] += len(chosen)
         chosen = [migrate_frontier_row(row) for row in chosen]
+        chosen = [row for row in chosen if row is not None]
         gated: list[dict] = []
         for row in chosen:
             n_tokens = _rendered_tokens(row, task)

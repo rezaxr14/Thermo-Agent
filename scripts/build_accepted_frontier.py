@@ -9,8 +9,13 @@ from __future__ import annotations
 import json
 import pathlib
 import shutil
+import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from thermo_agent.agent import tool_protocol  # noqa: E402
 SRC = ROOT / "data/frontier_tools_cohort"
 DST = ROOT / "data/frontier_tools_accepted"
 TASKS = ("repair", "design", "audit", "ledger")
@@ -28,6 +33,12 @@ def main() -> int:
                 if not line.strip():
                     continue
                 row = json.loads(line)
+                # One protocol only: rewrite provider wrappers into the native
+                # structure, and drop any row that still uses the retired
+                # `<tool_call name=...>` text. No compatibility corpus.
+                row = tool_protocol.normalize_train_row(row)
+                if row is None:
+                    continue
                 # transfer.ingest writes `source="frontier:<model>"`. The mix and
                 # provenance audit expect the canonical `frontier_tools` family.
                 original_source = str(row.get("source") or "")
@@ -41,7 +52,10 @@ def main() -> int:
                 row["source"] = "frontier_tools"
                 row["source_model"] = model
                 row["provenance"] = prov
-                rid = str(row.get("record_id") or row.get("id") or "")
+                # Dedupe by the model-tagged row id, not the shared record_id: two
+                # models that solved the same plant are two distinct pilot traces and
+                # both belong in the per-model report.
+                rid = str(row.get("id") or row.get("record_id") or "")
                 if rid in seen:
                     continue
                 seen.add(rid)

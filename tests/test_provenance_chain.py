@@ -11,12 +11,14 @@ import pathlib
 
 import pytest
 
+import scripts.audit_provenance_chain as audit
 from scripts.audit_provenance_chain import (
     CHECK_NAMES,
     check_harness_prompt_leakage,
     check_memory,
     check_mix_leakage,
     check_mix_propagation,
+    check_protocol_markers,
     check_provenance_fields,
     check_prompt_shards,
     check_source_mapping,
@@ -398,6 +400,37 @@ def test_mix_leakage_ref_spec_fails(tmp_path):
     result = check_mix_leakage(sft, grpo)
     assert not result.ok
     assert any("ref_spec" in p for p in result.problems)
+
+
+# --------------------------------------------------------------------------- #
+# 9. one-protocol marker audit
+# --------------------------------------------------------------------------- #
+def test_protocol_markers_flag_wrapper_and_legacy_syntax(tmp_path, monkeypatch):
+    monkeypatch.setattr(audit, "PROTOCOL_DIRS", ())
+    bad = tmp_path / "bad"
+    _write_jsonl(bad / "repair_train.jsonl", [{
+        "id": "x",
+        "completion": [{"role": "assistant",
+                        "content": "ToolInvocationResult(call_id='1') "
+                                   '<tool_call name="inspect_plant">{}</tool_call>'}],
+    }])
+    result = check_protocol_markers([bad])
+    assert not result.ok
+    assert any("call_id" in p and "ToolInvocationResult" in p
+               and "<tool_call name=" in p for p in result.problems)
+
+
+def test_protocol_markers_pass_on_native_text(tmp_path, monkeypatch):
+    monkeypatch.setattr(audit, "PROTOCOL_DIRS", ())
+    good = tmp_path / "good"
+    _write_jsonl(good / "repair_train.jsonl", [{
+        "id": "x",
+        "completion": [{"role": "assistant", "content": (
+            "<tool_call><function=inspect_plant></function></tool_call>"
+            "<tool_response>{\"ok\": true}</tool_response>")}],
+    }])
+    result = check_protocol_markers([good])
+    assert result.ok, result.problems
 
 
 # --------------------------------------------------------------------------- #

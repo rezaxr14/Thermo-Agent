@@ -59,8 +59,11 @@ def _grpo_row(task: str, rid: str) -> dict:
 
 
 def _frontier_row(task: str, rid: str, *, accepted=True, tools=True) -> dict:
-    content = ("I will check the plant.\n<tool_call name=\"calc\">1+1</tool_call>\n"
-               "<tool_result>2</tool_result>\n<edits>SET @x.y = 1</edits>") if tools \
+    content = ("I will check the plant.\n"
+               "<tool_call>\n<function=calc>\n<parameter=candidate>1+1</parameter>\n"
+               "</function>\n</tool_call>\n"
+               "<tool_response>2</tool_response>\n"
+               "<edits>SET @x.y = 1</edits>") if tools \
         else "<edits>SET @x.y = 1</edits>"
     return {
         "id": rid, "record_id": rid.replace("-ft", ""), "split": "train", "task": task,
@@ -190,6 +193,19 @@ def test_frontier_row_without_tool_tags_is_rejected(tmp_path):
     assert manifest["frontier"]["scanned"] == 1
     assert manifest["frontier"]["accepted"] == 1
     assert manifest["frontier"]["with_tool_turns"] == 0
+    assert manifest["frontier"]["selected_count"] == 0
+    assert manifest["frontier"]["selected_ids"] == []
+
+
+def test_legacy_frontier_row_is_rejected_not_migrated(tmp_path):
+    fr = _frontier_row("repair", "repair-ft-legacy")
+    fr["completion"][0]["content"] = (
+        'I will check.\n<tool_call name="calc">1+1</tool_call>\n'
+        "<tool_result>2</tool_result>\n<edits>SET @x.y = 1</edits>")
+    assert mix.migrate_frontier_row(fr) is None
+    inputs = _inputs(tmp_path, frontier_rows={"repair": [fr]})
+    out_sft, _out_grpo, manifest = _run(inputs, tmp_path)
+    assert _rows(out_sft / "repair_train.jsonl") == [_sft_row("repair", "repair-sft-1")]
     assert manifest["frontier"]["selected_count"] == 0
     assert manifest["frontier"]["selected_ids"] == []
 

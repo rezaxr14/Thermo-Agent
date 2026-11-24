@@ -1,6 +1,6 @@
 # PROVENANCE - row labels and chain checks
 
-## Current truth (2026-11-22)
+## Current truth (2026-11-24)
 
 Every training row carries a machine-readable `provenance` dict and a human `source`
 label. `source_family` is `deterministic` or `ai_generated`. AI rows always name the
@@ -16,12 +16,18 @@ exact model; `frontier` alone is never a model name.
   read from credentials.
 - For tool rows: `provenance.tool_calls`, `source_row_id` and `source_dir`.
 
-## Migration of legacy frontier traces
+## Legacy frontier traces are archived, not migrated
 
-Pre-existing frontier traces used `<tool_call name=...>` text. They are converted once,
-at mix time, by `mix_tool_corpora.migrate_frontier_row`: the call/result sequence
-becomes assistant `tool_calls` plus `role="tool"` messages and a native `sft_completion`.
-The legacy syntax is not accepted by the parser and is not written to any corpus.
+Pre-existing frontier traces used `<tool_call name=...>` / `<tool_result>` text. They are
+not a compatibility format. The 11 legacy accepted rows and the 12 legacy source rows
+were moved to `data/archive/frontier_tools_legacy_2026-11-24/` with a SHA-256 manifest;
+`data/archive/` is outside every training corpus. `build_accepted_frontier.py` and
+`mix_tool_corpora.py` now reject any row that still carries the retired syntax.
+
+Hosted journals store tool results as Python `repr(ToolInvocationResult(...))`. The
+converter in `tool_protocol.tool_result_output` extracts only `output=` JSON, and
+`normalize_trajectory` drops `call_id` and the teacher `reason` argument while rebuilding
+`completion` as assistant/tool messages plus a native `sft_completion`.
 
 ## Answer-field hygiene
 
@@ -58,8 +64,11 @@ Columns: `id` `split` `topology` `fault_types` `prompt` `completion` `ledger` `m
 
 ## Chain audit
 
-`python scripts/audit_provenance_chain.py --strict` reports 8 checks: cohort fields,
+`python scripts/audit_provenance_chain.py --strict` reports 9 checks: cohort fields,
 frontier source mapping, recomputed tiers, prompt-shard leakage, harness leakage,
-memory outcomes/serving, mix propagation and mix answer-field leakage. Current result:
-**PROVENANCE OK, 8/8**. The two accepted-model slugs in the campaign are
-`gpt-6-luna` and `claude-haiku-5-5`; no other model may appear in a new AI row.
+memory outcomes/serving, mix propagation, mix answer-field leakage, and protocol
+markers. The marker check fails if `call_id`, `ToolInvocationResult`, or
+`<tool_call name=` appears in accepted, both mixes, or any `sft_tools*` /
+`grpo_tools*` directory. Before the rebuild it failed with 19 leaks; current result:
+**PROVENANCE OK, 9/9**. The two accepted-model slugs are `gpt-6-luna` and
+`claude-haiku-5-5`; no other model may appear in a new AI row.

@@ -142,3 +142,50 @@ def test_messages_from_turns_does_not_double_wrap_think():
     messages = tool_protocol.messages_from_turns(turns)
     assert messages[0]["content"].count("<think>") == 1
     assert messages[1] == {"role": "tool", "name": "inspect_plant", "content": '{"ok": true}'}
+
+
+def test_tool_result_output_drops_wrapper_call_id_and_reason():
+    raw = (
+        "ToolInvocationResult(name='inspect_plant', "
+        "arguments={'candidate': '', 'reason': 'Check the as-given plant.'}, "
+        "call_id='call_secret_123', output='{\"ok\": true, \"solved\": true}', "
+        "error=None)")
+    assert tool_protocol.tool_result_output(raw) == '{"ok": true, "solved": true}'
+    assert tool_protocol.tool_result_output('{"ok": false}') == '{"ok": false}'
+    with pytest.raises(ValueError):
+        tool_protocol.tool_result_output("ToolInvocationResult(name='x', output=not_a_literal)")
+
+
+def test_normalize_trajectory_strips_reasons_and_keeps_final_visible():
+    final = "<diagnosis>Only CH.eps failed.</diagnosis>\n<edits>\nSET CH.eps = 1\n</edits>"
+    trajectory = {
+        "final": final,
+        "turns": [
+            {"assistant": "", "reasoning": "",
+             "tool_calls": [{"name": "inspect_plant",
+                             "arguments": {"candidate": "", "reason": "Inspect first."}}],
+             "tool_results": [
+                 "ToolInvocationResult(name='inspect_plant', "
+                 "arguments={'candidate': '', 'reason': 'Inspect first.'}, "
+                 "call_id='call_secret_123', output='{\"ok\": true}', error=None)"]},
+            {"assistant": final, "reasoning": final, "tool_calls": [], "tool_results": []},
+        ],
+    }
+    clean = tool_protocol.normalize_trajectory(trajectory)
+    text = clean["sft_completion"]
+    assert "<think>\nInspect first.\n</think>" in text
+    assert "<parameter=reason>" not in text
+    assert "call_id" not in text and "ToolInvocationResult" not in text
+    assert "<tool_response>" in text
+    assert text.count(final) == 1
+    assert clean["messages"][-1]["content"] == final
+    assert "reason" not in clean["messages"][0]["tool_calls"][0]["function"]["arguments"]
+
+
+def test_normalize_train_row_rejects_legacy_text():
+    legacy = {"id": "x", "completion": [
+        {"role": "assistant", "content": '<tool_call name="inspect_plant">{}</tool_call>'}]}
+    assert tool_protocol.normalize_train_row(legacy) is None
+    native = {"id": "y", "completion": [
+        {"role": "assistant", "content": "<tool_call><function=inspect_plant></function></tool_call>"}]}
+    assert tool_protocol.normalize_train_row(native) is native

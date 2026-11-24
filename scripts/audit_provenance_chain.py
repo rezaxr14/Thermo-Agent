@@ -70,6 +70,17 @@ CHECK_NAMES = (
     "memory_outcomes_and_serving",
     "mix_propagation",
     "mix_leakage",
+    "protocol_markers",
+)
+
+# One wire protocol only. These strings must never reach a corpus: ``call_id`` and
+# ``ToolInvocationResult`` are provider bookkeeping from the hosted journal, and the
+# ``<tool_call name=...>`` tag is the retired pre-native syntax.
+PROTOCOL_FORBIDDEN = ("call_id", "ToolInvocationResult", "<tool_call name=")
+PROTOCOL_DIRS = (
+    "data/frontier_tools_accepted",
+    "data/sft_mix", "data/grpo_mix",
+    "data/sft_mix_v3", "data/grpo_mix_v3",
 )
 
 # Bookkeeping patterns used by both the harness-prompt and served-memory checks.
@@ -104,6 +115,13 @@ class CheckResult:
 def _resolve(value: pathlib.Path | str) -> pathlib.Path:
     path = pathlib.Path(value)
     return path if path.is_absolute() else (ROOT / path)
+
+
+def _rel(path: pathlib.Path) -> str:
+    try:
+        return path.resolve().relative_to(ROOT.resolve()).as_posix()
+    except ValueError:
+        return str(path)
 
 
 def _jsonl_files(directory: pathlib.Path, recursive: bool = False) -> list[pathlib.Path]:
@@ -625,6 +643,40 @@ def check_mix_leakage(sft_dir: pathlib.Path, grpo_dir: pathlib.Path) -> CheckRes
     return CheckResult(name, not problems, detail, problems)
 
 
+def check_protocol_markers(extra_dirs=()) -> CheckResult:
+    """Fail if any training corpus still carries provider bookkeeping or legacy syntax.
+
+    Covers the accepted frontier, both mixes, and every ``sft_tools*`` / ``grpo_tools*``
+    directory. ``data/archive/`` is deliberately excluded: archived bad rows are kept
+    out of every corpus, not validated as training data.
+    """
+    name = CHECK_NAMES[8]
+    directories: list[pathlib.Path] = []
+    for value in PROTOCOL_DIRS:
+        directories.append(_resolve(value))
+    for pattern in ("data/sft_tools*", "data/grpo_tools*"):
+        directories.extend(sorted(ROOT.glob(pattern)))
+    directories.extend(_resolve(d) for d in extra_dirs)
+    seen: set[pathlib.Path] = set()
+    problems: list[str] = []
+    n_rows = n_dirs = 0
+    for directory in directories:
+        if not directory.is_dir() or directory.resolve() in seen:
+            continue
+        seen.add(directory.resolve())
+        n_dirs += 1
+        for path, lineno, row in _iter_jsonl(_jsonl_files(directory)):
+            n_rows += 1
+            blob = json.dumps(row, ensure_ascii=False)
+            hits = [marker for marker in PROTOCOL_FORBIDDEN if marker in blob]
+            if hits:
+                problems.append(
+                    f"{_rel(directory)}/{path.name}:{lineno} contains {hits}")
+    detail = (f"{n_dirs} corpus dirs, {n_rows} rows; "
+              f"{len(problems)} protocol leak(s)")
+    return CheckResult(name, not problems, detail, problems)
+
+
 # --------------------------------------------------------------------------- #
 # aggregate + CLI
 # --------------------------------------------------------------------------- #
@@ -655,6 +707,7 @@ def run_audit(
         check_memory(memory),
         check_mix_propagation(sft, grpo, cohort, legacy_dirs=legacy_dirs),
         check_mix_leakage(sft, grpo),
+        check_protocol_markers(),
     ]
 
 

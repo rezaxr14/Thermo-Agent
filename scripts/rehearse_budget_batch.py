@@ -39,6 +39,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from thermo_agent.agent import tool_protocol  # noqa: E402
 from thermo_agent.teacher import transfer  # noqa: E402
 
 DEFAULT_CONFIG = ROOT / "data" / "frontier_tools_cohort_prompts" / "harness_config.json"
@@ -265,8 +266,9 @@ def build_record(row: dict, *, model: str, run_id: str, shard: str, cfg,
     prompt_sha = hashlib.sha256((system or shard).encode("utf-8")).hexdigest()
 
     specs = [
-        ("inspect the plant and the harness skills", "plant_inspect", {"id": rid, "task": task}),
-        ("check the candidate against the physics tools", "verify_candidate", {"task": task}),
+        ("inspect the plant and the harness skills", "inspect_plant", {"candidate": ""}),
+        ("check the candidate against the physics tools", "first_law_check",
+         {"candidate": answer}),
         ("consolidate the corrected answer", None, None),
     ]
     turns = []
@@ -282,21 +284,17 @@ def build_record(row: dict, *, model: str, run_id: str, shard: str, cfg,
         tool_calls, tool_results = [], []
         if tool is not None:
             tool_calls = [{"name": tool, "arguments": dict(arguments or {})}]
-            tool_results = [
-                f'<tool_result name="{tool}">deterministic local check for {rid}</tool_result>'
-            ]
+            tool_results = [json.dumps({
+                "tool": tool, "ok": True, "detail": f"deterministic local check for {rid}",
+            }, sort_keys=True)]
         turns.append({"assistant": assistant, "reasoning": reasoning,
                       "tool_calls": tool_calls, "tool_results": tool_results})
 
-    blocks = []
-    for turn in turns:
-        blocks.append(turn["assistant"])
-        for call in turn["tool_calls"]:
-            blocks.append('<tool_call name="%s">%s</tool_call>'
-                          % (call["name"], json.dumps(call["arguments"], sort_keys=True)))
-        blocks.extend(turn["tool_results"])
-    blocks.append(answer)
-    sft_completion = "\n".join(blocks)
+    # The journal must look exactly like a hosted one: native Qwen3.5 wire format
+    # only. Build it from the structured turns so a regression to the retired
+    # <tool_call name=...> syntax cannot silently pass the rehearsal.
+    messages = tool_protocol.messages_from_turns(turns, final=answer)
+    sft_completion = tool_protocol.native_text(messages)
 
     trajectory = {
         "turns": turns,

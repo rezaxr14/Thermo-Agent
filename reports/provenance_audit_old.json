@@ -1,0 +1,79 @@
+{
+ "passed": false,
+ "checks": [
+  {
+   "name": "cohort_provenance_fields",
+   "ok": true,
+   "detail": "30 cohort rows; 0 field problem(s)",
+   "problems": []
+  },
+  {
+   "name": "frontier_source_mapping",
+   "ok": true,
+   "detail": "30 AI rows, 0 deterministic rows; 0 mapping problem(s)",
+   "problems": []
+  },
+  {
+   "name": "tiers_recomputed",
+   "ok": true,
+   "detail": "30 rows with derivable spec; 27 without stored tier (not a failure); 3 shared-id rows skip comparison; 0 without derivable spec (ignored); 0 disagreement(s)",
+   "problems": []
+  },
+  {
+   "name": "prompt_shard_leakage",
+   "ok": true,
+   "detail": "40 shards, 5145 rows; 0 leak(s)",
+   "problems": []
+  },
+  {
+   "name": "harness_prompt_leakage",
+   "ok": true,
+   "detail": "inspected 1/30 rows (rebuild=on); 0 leak(s)",
+   "problems": []
+  },
+  {
+   "name": "memory_outcomes_and_serving",
+   "ok": true,
+   "detail": "468 notes (66 accepted / 402 rejected); 0 problem(s)",
+   "problems": []
+  },
+  {
+   "name": "mix_propagation",
+   "ok": true,
+   "detail": "12 frontier rows traced (12 cohort, 0 legacy); 5996 deterministic rows; 0 problem(s)",
+   "problems": []
+  },
+  {
+   "name": "mix_leakage",
+   "ok": true,
+   "detail": "6008 mix rows inspected; 0 ref_spec leak(s)",
+   "problems": []
+  },
+  {
+   "name": "protocol_markers",
+   "ok": false,
+   "detail": "7 corpus dirs, 19433 rows; 19 protocol leak(s)",
+   "problems": [
+    "data/frontier_tools_accepted/frontier_ledger_train.jsonl:1 contains ['<tool_call name=']",
+    "data/frontier_tools_accepted/frontier_ledger_train.jsonl:2 contains ['<tool_call name=']",
+    "data/frontier_tools_accepted/frontier_ledger_train.jsonl:3 contains ['call_id', 'ToolInvocationResult', '<tool_call name=']",
+    "data/frontier_tools_accepted/frontier_ledger_train.jsonl:4 contains ['call_id', 'ToolInvocationResult', '<tool_call name=']",
+    "data/frontier_tools_accepted/frontier_repair_train.jsonl:1 contains ['call_id', 'ToolInvocationResult', '<tool_call name=']",
+    "data/frontier_tools_accepted/frontier_repair_train.jsonl:2 contains ['call_id', 'ToolInvocationResult', '<tool_call name=']",
+    "data/frontier_tools_accepted/frontier_repair_train.jsonl:3 contains ['<tool_call name=']",
+    "data/frontier_tools_accepted/frontier_repair_train.jsonl:4 contains ['<tool_call name=']",
+    "data/frontier_tools_accepted/frontier_repair_train.jsonl:5 contains ['call_id', 'ToolInvocationResult', '<tool_call name=']",
+    "data/frontier_tools_accepted/frontier_repair_train.jsonl:6 contains ['call_id', 'ToolInvocationResult', '<tool_call name=']",
+    "data/frontier_tools_accepted/frontier_repair_train.jsonl:7 contains ['call_id', 'ToolInvocationResult', '<tool_call name=']",
+    "data/sft_mix_v3/repair_train.jsonl:1201 contains ['call_id', 'ToolInvocationResult', '<tool_call name=']",
+    "data/sft_mix_v3/repair_train.jsonl:1203 contains ['<tool_call name=']",
+    "data/sft_mix_v3/repair_train.jsonl:1204 contains ['call_id', 'ToolInvocationResult']",
+    "data/sft_mix_v3/repair_train.jsonl:1205 contains ['call_id', 'ToolInvocationResult']",
+    "data/grpo_mix_v3/repair_train.jsonl:1201 contains ['call_id', 'ToolInvocationResult', '<tool_call name=']",
+    "data/grpo_mix_v3/repair_train.jsonl:1203 contains ['<tool_call name=']",
+    "data/grpo_mix_v3/repair_train.jsonl:1204 contains ['call_id', 'ToolInvocationResult']",
+    "data/grpo_mix_v3/repair_train.jsonl:1205 contains ['call_id', 'ToolInvocationResult']"
+   ]
+  }
+ ]
+}
