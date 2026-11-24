@@ -125,7 +125,8 @@ def _export_rows() -> dict[str, dict]:
 
 
 def _has_tool_trace(text: str) -> bool:
-    return "<tool_call" in text and "<tool_result" in text
+    """Native Qwen3.5 protocol only: <tool_call><function=...> ... <tool_response>."""
+    return "<tool_call>" in text and "<function=" in text and "<tool_response>" in text
 
 
 def _one(messages: list[dict], completion_text: str, tok, trajectory=None):

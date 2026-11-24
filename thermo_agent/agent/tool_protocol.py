@@ -267,6 +267,35 @@ def strip_reason_arguments(messages: list[dict]) -> list[str]:
     return reasons
 
 
+def strip_reason_turns(turns: list[dict]) -> int:
+    """Move teacher ``reason`` arguments into each harness turn's ``reasoning`` field.
+
+    The hosted journal stores ``trajectory.turns`` (no ``messages``). Every teacher
+    tool call carries a mandatory ``reason``; that sentence is the per-turn
+    chain-of-thought. Return the number of turns that gained reasoning.
+    """
+    moved = 0
+    for turn in turns or []:
+        calls = turn.get("tool_calls") or []
+        reasons: list[str] = []
+        for call in calls:
+            args = call.get("arguments")
+            if isinstance(args, str):
+                try:
+                    args = json.loads(args)
+                except (ValueError, TypeError):
+                    args = None
+            if isinstance(args, dict):
+                reason = str(args.pop("reason", "") or "").strip()
+                if reason:
+                    reasons.append(reason)
+        if reasons and not str(turn.get("reasoning") or "").strip():
+            turn["reasoning"] = " ".join(reasons)
+            moved += 1
+    return moved
+
+
+
 def native_text(messages: list[dict]) -> str:
     """Render structured messages in the Qwen3.5 native textual wire format.
 

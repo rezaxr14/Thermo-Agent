@@ -112,15 +112,24 @@ def check_config(cfg) -> list[str]:
 
 
 def download_dataset_files(base: pathlib.Path, files: list[str]) -> None:
-    """Fetch only the config + shard files (no model call, no training data)."""
+    """Fetch only the config + shard files (no model call, no training data).
+
+    The refreshed Kaggle dataset is flat (shards at the root), while older
+    versions nested them under ``data/frontier_tools_cohort_prompts``. Try the
+    flat name first, then the legacy path, so either layout works.
+    """
     for name in files:
-        rel = f"data/frontier_tools_cohort_prompts/{name}"
-        proc = subprocess.run(
-            ["powershell", "-NoProfile", "-File", str(KAGGLE), "datasets", "download",
-             "rezanadimi/thermo-agent-data", "--file", rel, "--path", str(base), "--unzip"],
-            cwd=ROOT, capture_output=True, text=True)
-        if proc.returncode != 0:
-            raise SystemExit(f"dataset download failed for {rel}:\n{proc.stdout}\n{proc.stderr}")
+        candidates = (name, f"data/frontier_tools_cohort_prompts/{name}")
+        proc = None
+        for rel in candidates:
+            proc = subprocess.run(
+                ["powershell", "-NoProfile", "-File", str(KAGGLE), "datasets", "download",
+                 "rezanadimi/thermo-agent-data", "--file", rel, "--path", str(base), "--unzip"],
+                cwd=ROOT, capture_output=True, text=True)
+            if proc.returncode == 0:
+                break
+        else:
+            raise SystemExit(f"dataset download failed for {name}:\n{proc.stdout}\n{proc.stderr}")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -145,7 +154,8 @@ def main(argv: list[str] | None = None) -> int:
         files = [config_path.name] + [cfg.shard_for(m) for m in models]
         tmp = pathlib.Path(tempfile.mkdtemp(prefix="preflight_"))
         download_dataset_files(tmp, files)
-        base = tmp / "data" / "frontier_tools_cohort_prompts"
+        nested = tmp / "data" / "frontier_tools_cohort_prompts"
+        base = nested if nested.is_dir() else tmp
 
     results = [check_model(runner, cfg, m, base) for m in models]
     print(f"preflight: config={config_path if not args.dataset else 'dataset copy'} "

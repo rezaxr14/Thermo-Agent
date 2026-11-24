@@ -217,7 +217,12 @@ def ingest(export_dir, completions_path, out_dir, memory_dir=None, tasks=TASKS, 
         verdict = validate.validate(task, text, row)
         if verdict["accepted"] and verdict["reward"] >= min_reward:
             # Reasoning gate (2026-11-20): a tool trace without chain of thought is not training data.
+            # The hosted journal stores only `trajectory.turns`; every teacher tool call carries a
+            # mandatory `reason`, so move it into the turn's reasoning BEFORE the gate.
             traj_probe = record.get("trajectory")
+            if isinstance(traj_probe, dict):
+                from ..agent.tool_protocol import strip_reason_turns
+                strip_reason_turns(traj_probe.get("turns") or [])
             used_tools = any(t.get("tool_calls") for t in (traj_probe or {}).get("turns", []))
             if used_tools or require_tools:
                 rep = validate.reasoning_report(traj_probe)
@@ -251,6 +256,11 @@ def ingest(export_dir, completions_path, out_dir, memory_dir=None, tasks=TASKS, 
                     for turn in turns:
                         if not turn.get("reasoning") and turn.get("tool_calls"):
                             turn["reasoning"] = next(reason_iter, "")
+                else:
+                    # Journals store only trajectory.turns. Move each mandatory teacher
+                    # `reason` into that turn's reasoning so the <think> block survives.
+                    from ..agent.tool_protocol import strip_reason_turns
+                    strip_reason_turns(trajectory.get("turns") or [])
             teacher = validate.teacher_row(task, text, row, verdict, tag=base_provenance["model"],
                                            trajectory=trajectory)
             # The validator tags genuine tool traces "frontier_tools"; keep that signal

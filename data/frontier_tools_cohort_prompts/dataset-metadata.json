@@ -9,60 +9,216 @@
  ],
  "files": [
   {
-   "name": "prompts_repair_easy.jsonl",
-   "description": "repair/easy inputs only"
+   "name": "batch1_quota.json",
+   "description": "Native pilot / cohort prompt shard: batch1_quota.json"
   },
   {
-   "name": "prompts_repair_medium.jsonl",
-   "description": "repair/medium inputs only"
+   "name": "diagram_index.json",
+   "description": "Native pilot / cohort prompt shard: diagram_index.json"
   },
   {
-   "name": "prompts_repair_hard.jsonl",
-   "description": "repair/hard inputs only"
+   "name": "diagram_ledger.json",
+   "description": "Native pilot / cohort prompt shard: diagram_ledger.json"
   },
   {
-   "name": "prompts_design_easy.jsonl",
-   "description": "design/easy inputs only"
+   "name": "harness_config.json",
+   "description": "Native pilot / cohort prompt shard: harness_config.json"
   },
   {
-   "name": "prompts_design_medium.jsonl",
-   "description": "design/medium inputs only"
+   "name": "manifest.json",
+   "description": "Native pilot / cohort prompt shard: manifest.json"
   },
   {
-   "name": "prompts_design_hard.jsonl",
-   "description": "design/hard inputs only"
+   "name": "plan_bulk_claude-haiku-5-5.json",
+   "description": "Native pilot / cohort prompt shard: plan_bulk_claude-haiku-5-5.json"
   },
   {
-   "name": "prompts_audit_easy.jsonl",
-   "description": "audit/easy inputs only"
+   "name": "plan_bulk_gpt-6-luna.json",
+   "description": "Native pilot / cohort prompt shard: plan_bulk_gpt-6-luna.json"
   },
   {
-   "name": "prompts_audit_medium.jsonl",
-   "description": "audit/medium inputs only"
+   "name": "plan_proof_claude-haiku-5-5.json",
+   "description": "Native pilot / cohort prompt shard: plan_proof_claude-haiku-5-5.json"
   },
   {
-   "name": "prompts_audit_hard.jsonl",
-   "description": "audit/hard inputs only"
+   "name": "plan_proof_claude-opus-5-5-default.json",
+   "description": "Native pilot / cohort prompt shard: plan_proof_claude-opus-5-5-default.json"
   },
   {
-   "name": "prompts_ledger_easy.jsonl",
-   "description": "ledger/easy inputs only"
+   "name": "plan_proof_claude-sonnet-5-5.json",
+   "description": "Native pilot / cohort prompt shard: plan_proof_claude-sonnet-5-5.json"
   },
   {
-   "name": "prompts_ledger_medium.jsonl",
-   "description": "ledger/medium inputs only"
+   "name": "plan_proof_gemini-4-argon.json",
+   "description": "Native pilot / cohort prompt shard: plan_proof_gemini-4-argon.json"
   },
   {
-   "name": "prompts_ledger_hard.jsonl",
-   "description": "ledger/hard inputs only"
+   "name": "plan_proof_gpt-6-luna.json",
+   "description": "Native pilot / cohort prompt shard: plan_proof_gpt-6-luna.json"
+  },
+  {
+   "name": "plan_proof_gpt-6.2-sol.json",
+   "description": "Native pilot / cohort prompt shard: plan_proof_gpt-6.2-sol.json"
   },
   {
    "name": "prompts_all.jsonl",
-   "description": "all tier-targeted rows"
+   "description": "Native pilot / cohort prompt shard: prompts_all.jsonl"
+  },
+  {
+   "name": "prompts_audit_easy.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_audit_easy.jsonl"
+  },
+  {
+   "name": "prompts_audit_hard.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_audit_hard.jsonl"
+  },
+  {
+   "name": "prompts_audit_medium.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_audit_medium.jsonl"
+  },
+  {
+   "name": "prompts_batch10_claude-haiku-5-5.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_batch10_claude-haiku-5-5.jsonl"
+  },
+  {
+   "name": "prompts_batch10_gpt-6-luna.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_batch10_gpt-6-luna.jsonl"
+  },
+  {
+   "name": "prompts_batch11_claude-haiku-5-5.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_batch11_claude-haiku-5-5.jsonl"
+  },
+  {
+   "name": "prompts_batch11_gpt-6-luna.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_batch11_gpt-6-luna.jsonl"
+  },
+  {
+   "name": "prompts_batch1_claude-haiku-5-5.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_batch1_claude-haiku-5-5.jsonl"
+  },
+  {
+   "name": "prompts_batch1_gpt-6-luna.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_batch1_gpt-6-luna.jsonl"
+  },
+  {
+   "name": "prompts_batch2_claude-haiku-5-5.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_batch2_claude-haiku-5-5.jsonl"
+  },
+  {
+   "name": "prompts_batch2_gpt-6-luna.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_batch2_gpt-6-luna.jsonl"
+  },
+  {
+   "name": "prompts_batch3_claude-haiku-5-5.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_batch3_claude-haiku-5-5.jsonl"
+  },
+  {
+   "name": "prompts_batch3_gpt-6-luna.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_batch3_gpt-6-luna.jsonl"
+  },
+  {
+   "name": "prompts_batch4_claude-haiku-5-5.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_batch4_claude-haiku-5-5.jsonl"
+  },
+  {
+   "name": "prompts_batch4_gpt-6-luna.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_batch4_gpt-6-luna.jsonl"
+  },
+  {
+   "name": "prompts_batch5_claude-haiku-5-5.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_batch5_claude-haiku-5-5.jsonl"
+  },
+  {
+   "name": "prompts_batch5_gpt-6-luna.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_batch5_gpt-6-luna.jsonl"
+  },
+  {
+   "name": "prompts_batch6_claude-haiku-5-5.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_batch6_claude-haiku-5-5.jsonl"
+  },
+  {
+   "name": "prompts_batch6_gpt-6-luna.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_batch6_gpt-6-luna.jsonl"
+  },
+  {
+   "name": "prompts_batch7_claude-haiku-5-5.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_batch7_claude-haiku-5-5.jsonl"
+  },
+  {
+   "name": "prompts_batch7_gpt-6-luna.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_batch7_gpt-6-luna.jsonl"
+  },
+  {
+   "name": "prompts_batch8_claude-haiku-5-5.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_batch8_claude-haiku-5-5.jsonl"
+  },
+  {
+   "name": "prompts_batch8_gpt-6-luna.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_batch8_gpt-6-luna.jsonl"
+  },
+  {
+   "name": "prompts_batch9_claude-haiku-5-5.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_batch9_claude-haiku-5-5.jsonl"
+  },
+  {
+   "name": "prompts_batch9_gpt-6-luna.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_batch9_gpt-6-luna.jsonl"
+  },
+  {
+   "name": "prompts_design_easy.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_design_easy.jsonl"
+  },
+  {
+   "name": "prompts_design_hard.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_design_hard.jsonl"
+  },
+  {
+   "name": "prompts_design_medium.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_design_medium.jsonl"
+  },
+  {
+   "name": "prompts_ledger_easy.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_ledger_easy.jsonl"
+  },
+  {
+   "name": "prompts_ledger_hard.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_ledger_hard.jsonl"
+  },
+  {
+   "name": "prompts_ledger_medium.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_ledger_medium.jsonl"
+  },
+  {
+   "name": "prompts_native_pilot_claude-haiku-5-5.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_native_pilot_claude-haiku-5-5.jsonl"
+  },
+  {
+   "name": "prompts_native_pilot_gpt-6-luna.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_native_pilot_gpt-6-luna.jsonl"
+  },
+  {
+   "name": "prompts_pilot40_claude-haiku-5-5.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_pilot40_claude-haiku-5-5.jsonl"
+  },
+  {
+   "name": "prompts_pilot40_gpt-6-luna.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_pilot40_gpt-6-luna.jsonl"
   },
   {
    "name": "prompts_proof.jsonl",
-   "description": "5-row payload-proof shard"
+   "description": "Native pilot / cohort prompt shard: prompts_proof.jsonl"
+  },
+  {
+   "name": "prompts_repair_easy.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_repair_easy.jsonl"
+  },
+  {
+   "name": "prompts_repair_hard.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_repair_hard.jsonl"
+  },
+  {
+   "name": "prompts_repair_medium.jsonl",
+   "description": "Native pilot / cohort prompt shard: prompts_repair_medium.jsonl"
   }
  ]
 }
