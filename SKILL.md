@@ -126,7 +126,8 @@ This is the most expensive mistake in the whole surface.
    on the allow-list, write a small "skipped" manifest and return. Then the auto-run
    costs nothing.
 
-Minimal guard:
+Minimal guard. The important part is the **early return before the first model
+call**, plus a manifest so the run is visibly skipped rather than an empty success:
 
 ```python
 ALLOWED = ("<budget-model-a>", "<budget-model-b>")
@@ -138,11 +139,34 @@ def allowed(model: str) -> bool:
 
 @kbench.task(name="my-task")
 def shard(llm) -> None:
-    if not allowed(getattr(llm, "model", "")):
-        write_manifest(status="skipped", reason="model not allowed")
+    model = getattr(llm, "model", "") or getattr(llm, "name", "") or "unknown"
+    if not allowed(model):
+        OUT.mkdir(parents=True, exist_ok=True)
+        (OUT / "manifest.json").write_text(json.dumps({
+            "status": "skipped",
+            "stage": "model_not_allowed",
+            "model": model,
+            "allowed_models": list(ALLOWED),
+            "blocked_models": list(BLOCKED),
+            "model_calls": 0,
+            "quota_spent_usd": 0.0,
+            "note": "returned before any model call",
+        }, indent=1), encoding="utf-8")
         return
     ...
 ```
+
+Exact skip recipe:
+
+1. Read the scheduled slug from `llm.model` (or `llm.name`).
+2. Check the blocked list first, then the allow-list.
+3. Create the output directory and write the skipped manifest.
+4. `return` before any prompt, tool, or client construction that could bill.
+5. Do **not** cancel and re-push to "fix" it; that just creates another default run.
+6. Do **not** try to select the model with `LLM_DEFAULT`; it does not control the
+   push auto-run.
+7. If a blocked journal appears anyway, keep it as evidence, record its `usage` and
+   actual model slug, mark every row rejected, and never ingest it.
 
 Project rules that fall out of this:
 

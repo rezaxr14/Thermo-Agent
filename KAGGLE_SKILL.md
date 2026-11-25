@@ -213,6 +213,17 @@ session does not rediscover them by spending quota.
   from it). It hard-blocks `gemini-3.8-flash` and `gemini-3.5-flash-lite`, and it
   returns before any model call when the scheduled slug is not allowed. That is why a
   `tasks push` auto-run on the account default costs nothing.
+- The skip branch is at the very start of the task, before `llm.prompt` or any client
+  construction. It now writes `/kaggle/working/manifest.json` with
+  `status="skipped"`, `stage="model_not_allowed"`, the actual model slug,
+  `allowed_models`, `blocked_models`, `model_calls=0`, `quota_spent_usd=0.0`, and
+  `note="returned before any model call"`, then returns. This is the exact "3.8 runs
+  empty and spends nothing" behaviour; do not replace it with cancel-after-start.
+- Never try to select the push auto-run model with `LLM_DEFAULT`. Only explicit
+  `tasks run -m <slug>` selects a model.
+- If a blocked run ever executes because the guard was bypassed, keep its journal as
+  evidence, record the actual model and `usage.cost`, mark its rows rejected, and never
+  ingest it into a corpus.
 - `allowed_models` is in `harness_config.json` and can be overridden with
   `HARNESS_ALLOWED_MODELS`; keep both at the two budget slugs.
 - One `tasks run -m <slug>` per model. The repo scripts loop over models; the CLI does
@@ -276,7 +287,7 @@ proxy scoped around it.
 
 | Symptom | Real cause | Action |
 |---|---|---|
-| push seems to start an unwanted run | account-default auto-run | guard already returns `skipped`; do not cancel by pushing again |
+| push seems to start an unwanted run | account-default auto-run | guard returns `skipped` with `model_calls=0` and writes a skip manifest; do not cancel by pushing again |
 | `tasks run -m a -m b` -> 400 | batch models in one call | loop locally |
 | new shard preflight 404 | stale Kaggle dataset version | refresh HF -> Kaggle bridge, verify status |
 | auth/quota error mid-run | key expiry or cap | pause, write no result for the in-flight item, resume |
