@@ -30,6 +30,15 @@ def test_gemini_models_are_hard_blocked_even_if_configured():
     assert m.is_allowed("anthropic/claude-haiku-5-5")
 
 
+def test_blocked_default_run_records_a_skipped_manifest():
+    """The push auto-run must return before a model call and leave evidence."""
+    source = (ROOT / "notebooks/kaggle_model_runner.py").read_text(encoding="utf-8")
+    skip = source[source.index("if not is_allowed(MODEL_SLUG"):]
+    assert '_manifest("skipped", "model_not_allowed"' in skip
+    assert "quota_spent_usd=0.0" in skip
+    assert "returned before any model call" in skip
+
+
 def test_mode_mapping():
     m = _load()
     for mode in m.TOOL_MODES:

@@ -522,7 +522,16 @@ if IS_KAGGLE:
         llm = llm or kbench.llm
         MODEL_SLUG = getattr(llm, "name", None) or getattr(llm, "model", None) or "unknown"
         if not is_allowed(MODEL_SLUG, CFG.allowed_models):
+            # The push auto-run lands here on the account default (gemini-3.8-flash).
+            # Return before any model call and leave a manifest, so the run is
+            # visibly "skipped" instead of looking like an empty success.
             print(f"[skip] model {MODEL_SLUG!r} is not allowed by this task; no model call made", flush=True)
+            OUT.mkdir(parents=True, exist_ok=True)
+            _manifest("skipped", "model_not_allowed",
+                      allowed_models=list(CFG.allowed_models),
+                      blocked_models=list(BLOCKED),
+                      model_calls=0, quota_spent_usd=0.0,
+                      note="returned before any model call")
             return
         ACTIVE_SHARD = CFG.shard_for(MODEL_SLUG)
         COUNTS.update(attempted=0, answered=0, error=0, skipped=0)
