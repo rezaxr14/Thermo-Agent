@@ -96,6 +96,15 @@ def test_load_exports_resolves_ids_from_extra_dirs_and_record_id(tmp_path):
     assert exports["rep-129-00072#v3"]["id"].endswith("-t-google-gemini")
 
 
+def test_budget_batch_ingest_reads_frontier_export():
+    """Regression: arch-107-00019#v16 exists only in frontier_export, so ingest must see it."""
+    import pathlib
+
+    root = pathlib.Path(__file__).resolve().parents[1]
+    script = (root / "scripts" / "process_budget_batch.ps1").read_text(encoding="utf-8")
+    assert "--extra-export-dir data/frontier_export" in script
+
+
 def test_load_exports_primary_dir_wins_over_extra_dirs(tmp_path):
     primary, other = tmp_path / "processed", tmp_path / "other"
     row = make_row("wrong_fluid")

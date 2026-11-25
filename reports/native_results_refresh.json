@@ -1,0 +1,50 @@
+[
+ {
+  "file": "data\\frontier_tools_cohort\\gpt-6-luna\\frontier_design_train.jsonl",
+  "rows": 2,
+  "changed": 2,
+  "rejected_legacy": 0
+ },
+ {
+  "file": "data\\frontier_tools_cohort\\gpt-6-luna\\frontier_ledger_train.jsonl",
+  "rows": 7,
+  "changed": 7,
+  "rejected_legacy": 0
+ },
+ {
+  "file": "data\\frontier_tools_cohort\\gpt-6-luna\\frontier_repair_train.jsonl",
+  "rows": 8,
+  "changed": 8,
+  "rejected_legacy": 0
+ },
+ {
+  "file": "data\\frontier_tools_cohort\\claude-haiku-5-5\\frontier_design_train.jsonl",
+  "rows": 4,
+  "changed": 4,
+  "rejected_legacy": 0
+ },
+ {
+  "file": "data\\frontier_tools_cohort\\claude-haiku-5-5\\frontier_repair_train.jsonl",
+  "rows": 9,
+  "changed": 9,
+  "rejected_legacy": 0
+ },
+ {
+  "file": "data\\frontier_tools_accepted\\frontier_design_train.jsonl",
+  "rows": 6,
+  "changed": 6,
+  "rejected_legacy": 0
+ },
+ {
+  "file": "data\\frontier_tools_accepted\\frontier_ledger_train.jsonl",
+  "rows": 7,
+  "changed": 7,
+  "rejected_legacy": 0
+ },
+ {
+  "file": "data\\frontier_tools_accepted\\frontier_repair_train.jsonl",
+  "rows": 17,
+  "changed": 17,
+  "rejected_legacy": 0
+ }
+]

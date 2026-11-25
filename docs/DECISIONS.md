@@ -15,8 +15,14 @@ file holds rules.
 2. Prompt contract text contains limits and the final-answer format only. The chat
    template owns the call syntax and the 16 tool schemas; no prompt duplicates them.
 3. Tool results are masked in SFT loss; tool calls stay trainable.
-4. The 8,192-token gate is measured on the exact tools-rendered conversation plus a
-   96-token chat reserve. Over-gate rows are dropped, never truncated or re-shortened.
+4. The 8,192-token gate measures exactly the text training tokenizes:
+   `prompt + completion`, where `prompt` is rendered through
+   `apply_chat_template(tools=<the 16 shared schemas>, add_generation_prompt=True)` and
+   `completion` is the template suffix (see `train.render.render_pair`), plus a
+   96-token chat reserve. That is one full render of `prompt + completion` with the same
+   schemas; tokenizing prompt and completion separately, or omitting the schemas, is a
+   different and shorter sequence and must not be used. Over-gate rows are dropped,
+   never truncated or re-shortened.
 5. All 16 tools are on by default in GRPO, eval and the hosted runner. `include_dynamic`
    exists only as an explicit test opt-out.
 6. Every corpus rebuild starts from `data/processed` (and explicitly accepted frontier

@@ -224,6 +224,21 @@ def _as_list(x):
     return x if isinstance(x, list) else []
 
 
+def _residual_rows(d: dict) -> list[dict]:
+    """Ledger residuals as dicts, from either the old list or the compact table."""
+    old = _as_list(d.get("per_line_residuals"))
+    if old:
+        return [row for row in old if isinstance(row, dict)]
+    table = d.get("line_table")
+    if not isinstance(table, dict):
+        return []
+    columns = [str(c) for c in table.get("columns") or []]
+    rows = table.get("rows") or []
+    if not columns or not isinstance(rows, list):
+        return []
+    return [dict(zip(columns, row)) for row in rows if isinstance(row, list)]
+
+
 def _inner(final: str, tags=("diagnosis", "analysis", "rationale")) -> str:
     for t in tags:
         m = re.search(rf"<{t}>(.*?)</{t}>", final, re.S)
@@ -252,15 +267,22 @@ def _tool_facts(task: str, tool: str, d: dict) -> str:
     flags = d.get("unit_range_flags")
     if flags:
         bits.append("unit/range flags " + ", ".join(map(str, flags[:3])))
-    lines = _as_list(d.get("per_line_residuals"))
+    lines = _residual_rows(d)
     if lines:
-        rows = []
-        for x in lines:
-            if isinstance(x, dict):
-                rows.append(f"({x.get('line')},{x.get('value_MW')},"
-                            f"{x.get('recomputed_MW')},{x.get('residual_W')})")
-        if rows:
-            bits.append("lines (line,value,recomputed,residual): " + "; ".join(rows[:12]))
+        # Reasoning is not a second copy of the tool table: cite the lines that
+        # actually disagree, worst first, and say how many others were checked.
+        def magnitude(row):
+            try:
+                return abs(float(row.get("residual_W") or 0.0))
+            except (TypeError, ValueError):
+                return 0.0
+        ordered = sorted(lines, key=magnitude, reverse=True)
+        rows = [f"({x.get('line')},{x.get('value_MW')},"
+                f"{x.get('recomputed_MW')},{x.get('residual_W')})"
+                for x in ordered[:5]]
+        extra = len(ordered) - len(rows)
+        bits.append("worst lines (line,value,recomputed,residual): " + "; ".join(rows)
+                    + (f"; {extra} more within tolerance" if extra > 0 else ""))
     comps = _as_list(d.get("per_component_exergy_destruction_MW"))
     if comps:
         top = sorted((c for c in comps if isinstance(c, dict)), key=lambda c: -c.get("exergy_destruction_MW", 0))[:3]
@@ -397,7 +419,9 @@ def build_trace(row: dict, task: str, *, variant: str = "direct",
 
     # Exact gate: the native template injects all 16 tool schemas into the system
     # message, so the old plain prompt+completion count under-measures the training
-    # sequence by thousands of tokens. Measure the ACTUAL rendered conversation.
+    # sequence by thousands of tokens. Measure the ACTUAL rendered conversation: the
+    # training text is ``prompt + completion`` where ``completion`` is the template
+    # suffix, i.e. byte-identical to this one full render (see train.render.render_pair).
     rt = render_tokenizer()
     if rt is not None and isinstance(prompt_messages, list):
         try:

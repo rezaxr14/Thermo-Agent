@@ -123,6 +123,37 @@ def test_gate_measures_final_harness_prompt_not_plain(tmp_path: Path, word_token
 
 
 @pytest.mark.corpus
+def test_gate_counts_tool_schemas_and_matches_training_render(monkeypatch):
+    """The gate must equal the training text length, including tool schemas.
+
+    ``train.render.render_pair`` produces ``text = prompt + completion`` where
+    ``completion`` is the template suffix, so the gate is one full render with the
+    same schemas. Measuring prompt and completion separately (or without schemas)
+    is a different, shorter sequence.
+    """
+    from thermo_agent.agent import tool_protocol
+
+    class _Tok:
+        def encode(self, text, add_special_tokens=False):
+            return text.split()
+
+        def apply_chat_template(self, messages, tools=None, add_generation_prompt=False,
+                               tokenize=False, enable_thinking=True):
+            head = "T1 T2 T3 T4" if tools else "N"
+            return head + " " + " ".join(str(m.get("content", "")) for m in messages)
+
+    monkeypatch.setattr(tool_traces, "render_tokenizer", lambda: _Tok())
+    row = _row("SMALL", seed=0)
+    trace = tool_traces.build_trace(row, "repair", variant="direct", strict=False)
+    assert trace["tool_calls"] > 0
+    tools = tool_protocol.tool_schemas("repair")
+    full = _Tok().apply_chat_template(row["prompt"] + trace["messages"], tools=tools)
+    assert trace["tokens"] == _ntok(full) + RESERVE
+    without = _Tok().apply_chat_template(row["prompt"] + trace["messages"], tools=None)
+    assert trace["tokens"] > _ntok(without) + RESERVE
+
+
+@pytest.mark.corpus
 def test_rows_with_frontier_style_id_suffix_still_get_a_tier(tmp_path: Path):
     """A `#vN-t-<model>` suffix in the source id must not cost the row its tier.
 

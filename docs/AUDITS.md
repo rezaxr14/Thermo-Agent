@@ -1,54 +1,71 @@
 # AUDITS - verification evidence
 
-## Current truth (2026-11-22)
+## Current truth (2026-11-25)
 
 All audits below were run locally. No model call, training run or paid API call was part
 of an audit. Commands are reproducible with `.venv/Scripts/python.exe`.
 
-## Native protocol and 8,192 gate (2026-11-22, final)
+## Native protocol and 8,192 gate (2026-11-25, step 3)
 
 Command:
-`python -m scripts.audit_harness_corpus --dirs data/sft_tools_v3_h data/grpo_tools_v3_h data/sft_mix_v3 data/grpo_mix_v3 --out reports/harness_corpus_audit_native.json`
 
-Result: **10,404 rows, 0 over 8,192 (rendered), 0 over 8,192 (pipeline), 0 anomalies**
+`python scripts/audit_harness_corpus.py --dirs data/sft_tools_v3_h data/grpo_tools_v3_h data/sft_mix_v3 data/grpo_mix_v3 --out reports/harness_corpus_audit_step3_after.json`
+
+Result: **20,780 rows, 0 over 8,192 (rendered), 0 over 8,192 (pipeline), 0 anomalies**
 (legacy call syntax, malformed JSON, missing prompt variant, render failure).
 
 | Task | Rows | rendered p50/p95/max | pipeline p50/p95/max |
 | --- | ---: | --- | --- |
-| audit | 2,092 | 5,709 / 8,073 / 8,096 | 2,912 / 4,907 / 4,940 |
-| design | 1,992 | 4,819 / 8,070 / 8,096 | 2,022 / 4,744 / 4,784 |
-| ledger | 1,110 | 5,586 / 8,055 / 8,096 | 2,798 / 5,085 / 5,139 |
-| repair | 5,210 | 5,320 / 7,131 / 7,451 | 2,523 / 4,063 / 4,398 |
+| audit | 5,156 | 4,201 / 7,038 / 8,049 | 3,031 / 5,468 / 6,457 |
+| design | 5,212 | 3,172 / 5,958 / 6,281 | 2,003 / 4,198 / 4,401 |
+| ledger | 5,178 | 4,841 / 7,129 / 8,089 | 3,673 / 5,739 / 6,726 |
+| repair | 5,234 | 3,623 / 5,429 / 5,751 | 2,451 / 3,988 / 4,325 |
 
-The 96-point difference between rendered and pipeline maxima is the chat reserve. The
-earlier plain-text gate produced 3,270 over-gate rows at the same nominal 8,192 limit,
-so it was not a valid measurement and was replaced.
+The rendered measure is the training text (`prompt + completion`, one template render
+with the 16 serving schemas); pipeline adds the 96-token chat reserve. The builder's own
+gate reports max 8,185 with the reserve.
 
-## Provenance (2026-11-22)
+## Row retention (2026-11-25, step 3)
+
+`python scripts/gate_retention_report.py --corpus data/sft_tools_v3 --out reports/gate_retention_step3.json`
+
+- Deterministic: **4,780 / 4,800 kept (99.58%)**.
+- Per task: repair 100%, design 100%, audit 99.08%, ledger 99.25%.
+- Worst tier: audit/hard 97.25%, ledger/hard 97.75%; every tier >=97.25%.
+- All 20 drops are hard-tier, 8.2k-8.8k training tokens.
+- Accepted frontier: **30 / 30 under the gate**, max 7,369 tokens.
+
+Full table and dropped ids: `reports/step3_row_retention.md`.
+
+## Provenance (2026-11-25, step 3)
 
 `python scripts/audit_provenance_chain.py --strict`:
-**PROVENANCE OK, 8/8 checks** - cohort provenance fields, frontier source mapping,
+**PROVENANCE OK, 9/9 checks** - cohort provenance fields, frontier source mapping,
 recomputed tiers, prompt-shard leakage, harness leakage, memory outcomes/serving, mix
-propagation and mix answer-field leakage all pass. 0 `ref_spec` leaks in 7,086 mix rows.
+propagation, mix answer-field leakage, protocol markers. The marker check scans 7 corpus
+directories and 30,410 rows for `call_id`, `ToolInvocationResult` and
+`<tool_call name=`; 0 leaks. Mix leakage: 11,220 rows, 0 `ref_spec` leaks.
 
-## Prompt separation (2026-11-22)
+## Prompt separation (2026-11-25)
 
 `python scripts/audit_prompt_separation.py`: all arms pass. The H arm is detected by
 the `MULTI-TURN TOOL ENVIRONMENT` header and the absence of answer oracles; the retired
 `<tool_call ...>` marker is deliberately not used as a contract detector.
 
-## Trace reviews (2026-11-22)
+## Trace reviews (2026-11-25)
 
-`reports/trace_review.jsonl` contains 27 one-row-at-a-time repair/design reviews (21
-verifier-accepted). Reviews use the verifier only for the final answer; scoring columns
-are never quoted as review evidence. The four superseded `trace_review_2026-11-20_*.md`
-files were deleted.
+`reports/trace_review.jsonl` still contains the earlier one-row-at-a-time reviews.
+Step 6 replaces it with real whole-row reviews (3 rows/task for deterministic and
+frontier) and explains the `reasoning_ok=false` / `accepted=false` rows.
 
-## Tests (2026-11-22)
+## Tests (2026-11-25, step 3)
 
-- Full suite with `LLM_DEFAULT=gemini-2.5-flash` (needed only for kbench test
-  collection): **1,172 passed, 9 skipped**.
-- 9 skips are intentional: 8 "v2 mix not built yet" corpus guards, 1 legacy pre-CoT
-  corpus guard.
-- Two kbench files cannot be collected without `LLM_DEFAULT`; this is an environment
-  requirement, not a test failure. No other test was not runnable.
+- Full suite: **1,183 passed, 9 skipped** in 1,178.7 s
+  (`$env:LLM_DEFAULT="gpt-6-luna"; .venv/Scripts/python.exe -m pytest -q`).
+- The 9 skips are data-gated, with explicit reasons:
+  - 8 x `tests/test_final_mix_tiers_provenance.py`: "v2 mix not built yet" (the v2 mix is
+    not part of the v3 pipeline).
+  - 1 x `tests/test_mix_tool_corpora.py`: "needs the local corpora (pre-CoT tool corpora
+    are archived under `data/archive/`)".
+- No test failed to run. kbench collection needs `LLM_DEFAULT=gpt-6-luna`; that is an
+  import sentinel, not a model call.

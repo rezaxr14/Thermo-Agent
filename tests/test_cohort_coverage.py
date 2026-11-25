@@ -290,4 +290,5 @@ def test_all_five_tools_accept_ground_truth_across_cohorts(source: str, task: st
         assert solved["n_streams"] == 0
     else:
         assert solved["n_streams"] > 0
-        assert isinstance(solved["streams"][0]["T_K"], (int, float))
+        s0 = dict(zip(solved["columns"], solved["rows"][0]))
+        assert isinstance(s0["T_K"], (int, float))

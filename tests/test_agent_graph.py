@@ -37,7 +37,9 @@ def test_tools_are_real_solver_results():
     second = json.loads(t["second_law_check"](gt))
     assert second["ok"] is True and "total_exergy_destruction_MW" in second
     solve = json.loads(t["solve_plant"](gt))
-    assert solve["ok"] and solve["n_streams"] > 0 and "T_K" in solve["streams"][0]
+    assert solve["ok"] and solve["n_streams"] > 0
+    assert "T_K" in solve["columns"]
+    assert len(solve["rows"]) == solve["n_streams"]
 
 
 def test_graph_self_corrects_and_records_trajectory():

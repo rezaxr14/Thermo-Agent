@@ -22,6 +22,7 @@ from thermo_agent.synth.combine import tokenizer
 from thermo_agent.teacher import agent_graph
 from thermo_agent.teacher.toolkit import (
     SKILL_TOOL_NAMES,
+    compact_skill_body,
     list_skills,
     load_skill,
     make_tools,
@@ -33,16 +34,21 @@ PLANT_TOOLS = ["inspect_plant", "first_law_check", "second_law_check",
                "validity_check", "solve_plant"]
 TOKEN_CEILING = 2500
 
-# Byte-for-byte snapshot of the DEFAULT compact prompt for a fixed input (2026-11-20: reasoning line +
-# on-demand skills/component tools are the default). Changing the default prompt is a deliberate act:
-# update this hash in the same commit, re-measure the token gate and rebuild shards/corpora.
+# Byte-for-byte snapshot of the DEFAULT compact prompt for a fixed input (2026-11-25: the
+# step-3 docstring/prompt compaction and budgeted skill bodies are in effect). Changing the
+# default prompt is a deliberate act: update this hash in the same commit, re-measure the
+# token gate and rebuild shards/corpora.
 _DEFAULT_BASE = [{"role": "system", "content": "BASE SYSTEM"},
                  {"role": "user", "content": "BASE USER"}]
-_DEFAULT_SHA = "4bce20201f3dab374c00bd44ff695c910c0796deff2c2ab87f1a4ce11999979b"
+_DEFAULT_SHA = "04701511cda62b603a19d467d138ee87c34997fc6e126631c1654a2522e8144e"
 
 
 def _body(name: str) -> str:
     return H.read_skill(name).split("\n", 1)[1]
+
+
+def _compact(name: str) -> str:
+    return compact_skill_body(_body(name))
 
 
 # --------------------------------------------------------------------------- #
@@ -84,12 +90,15 @@ def test_list_skills_filters_by_task_components_and_query():
 
 
 # --------------------------------------------------------------------------- #
-# 2. load_skill: full body, strict validation, no path traversal
+# 2. load_skill: budgeted body, strict validation, no path traversal
 # --------------------------------------------------------------------------- #
-def test_load_skill_returns_full_body_for_a_known_skill():
+def test_load_skill_returns_budgeted_body_for_a_known_skill():
     out = json.loads(load_skill(json.dumps({"name": "compressor"})))
     assert out["ok"] is True and out["name"] == "compressor"
-    assert out["text"] == _body("compressor")
+    # A served skill is a tool result, so it is the budgeted essentials view,
+    # not the whole file: the gate must hold without truncating the trace.
+    assert out["text"] == _compact("compressor")
+    assert len(out["text"]) <= 1000 < len(_body("compressor"))
     assert "# Compressor" in out["text"]
     assert "## Physics and equations" in out["text"]
     # Frontmatter (and the "SKILL name: description" header) is stripped.
@@ -199,7 +208,7 @@ def test_multiturn_trajectory_loads_skill_without_touching_system_prompt(corpus_
     r1 = agent_graph.reflect({**st1, **t1})
     assert r1["messages"][0]["content"] == sys0
 
-    # Turn 2: the model loads the full skill — it arrives as a TOOL RESULT.
+    # Turn 2: the model loads the skill — it arrives as a budgeted TOOL RESULT.
     st2 = {"last_text": "", "last_reasoning": "read the skill",
            "last_calls": [{"name": "load_skill",
                            "arguments": {"candidate": json.dumps({"name": "compressor"})}}],
@@ -208,7 +217,7 @@ def test_multiturn_trajectory_loads_skill_without_touching_system_prompt(corpus_
     t2 = agent_graph.call_tools(st2)
     full_text_result = t2["turns"][-1]["tool_results"][0]
     loaded = json.loads(full_text_result)
-    assert loaded["ok"] is True and loaded["text"] == _body("compressor")
+    assert loaded["ok"] is True and loaded["text"] == _compact("compressor")
     assert "## Physics and equations" in full_text_result
     # The loaded text lives in the tool result only: the system prompt is intact.
     assert loaded["text"] not in sys0

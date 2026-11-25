@@ -29,13 +29,14 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from scripts.audit_harness_corpus import load_chat_tokenizer  # noqa: E402
 from scripts.clean_frontier_traces import _rewrite_inner, rewrite_completion  # noqa: E402
 from scripts.mix_tool_corpora import is_verifier_accepted  # noqa: E402
 from thermo_agent.agent import tool_protocol  # noqa: E402
 from thermo_agent.synth import combine  # noqa: E402
 from thermo_agent.synth import tiers as tier_mod  # noqa: E402
 from thermo_agent.teacher import memory as mem, validate  # noqa: E402
-from thermo_agent.teacher.agent_graph import build_context  # noqa: E402
+
 
 EXPORT = ROOT / "data" / "frontier_export"
 A_SLICE = ROOT / "data" / "a_slice"
@@ -65,27 +66,60 @@ def _text(value) -> str:
     return str(value or "")
 
 
-def _rendered_prompt(row: dict, notes: list) -> list[dict]:
-    """Compact harness messages exactly as the hosted harness/training render them."""
+def _rendered_prompt(row: dict, notes: list | None = None) -> list[dict]:
+    """The exact prompt a harness mix trains on: ``mix_tool_corpora.to_harness_prompt``.
+
+    The teacher generated its completion against the plain export prompt; training
+    re-prompts every frontier row with the shared compact harness. Gating the teacher
+    prompt would measure a different, shorter sequence, so both the gate and the mix
+    use this one builder.
+    """
+    from scripts.mix_tool_corpora import to_harness_prompt
+
     row = dict(row)
     if not isinstance(row.get("prompt"), list):
         row["prompt"] = [
             {"role": "system", "content": row.get("system") or ""},
             {"role": "user", "content": row.get("user") or ""},
         ]
-    task = row.get("task") or "repair"
-    ctx = build_context({"row": row, "task": task, "notes": notes,
-                         "k_memory": 3, "mode": "agents+skills", "max_rounds": 6})
-    return ctx["messages"]
+    return to_harness_prompt(row, row.get("task") or "repair")["prompt"]
 
 
-def measure(messages: list[dict], completion_text: str, tok) -> dict:
-    n = 0
-    for m in messages:
-        n += len(tok.encode(str(m.get("content", "")), add_special_tokens=False).ids)
-    n += len(tok.encode(completion_text, add_special_tokens=False).ids)
+def _chat_tokenizer():
+    """The local Qwen3.5 tokenizer *with* its chat template.
+
+    ``combine.tokenizer()`` is a bare ``tokenizers.Tokenizer``: it can count
+    tokens but cannot render the tools-aware chat template the gate must
+    measure. Gating on raw content would under-measure the sequence by more
+    than a thousand tokens, so refuse to run without the template.
+    """
+    tok, info = load_chat_tokenizer(None, False)
+    if tok is None:
+        raise SystemExit(f"no local chat-template tokenizer: {info.get('reason')}")
+    return tok
+
+
+def measure(messages: list[dict], completion_text: str, tok, tools: list[dict] | None = None) -> dict:
+    """Exact training length: the tools-rendered prompt, the completion, the reserve.
+
+    ``tools`` is required for a real gate: the chat template injects all tool
+    schemas into the system turn, so counting message ``content`` alone
+    under-measures the sequence by more than a thousand tokens.
+    """
+    if tools:
+        prefix = tool_protocol.render_messages(tok, messages, tools, add_generation_prompt=True)
+        n = _tok_len(tok, prefix + completion_text)
+    else:
+        n = sum(_tok_len(tok, str(m.get("content", ""))) for m in messages)
+        n += _tok_len(tok, completion_text)
     n += combine.TOKEN_RESERVE
     return {"tokens": n, "under_gate": n <= MAX_TOKENS}
+
+
+def _tok_len(tok, text: str) -> int:
+    """Token count for either a ``list[int]`` or an object with ``.ids``."""
+    enc = tok.encode(text, add_special_tokens=False)
+    return len(enc.ids) if hasattr(enc, "ids") else len(enc)
 
 
 def sanitize(text: str, trajectory: dict | None = None) -> tuple[str, dict | None, int]:
@@ -130,23 +164,23 @@ def _has_tool_trace(text: str) -> bool:
     return "<tool_call>" in text and "<function=" in text and "<tool_response>" in text
 
 
-def _one(messages: list[dict], completion_text: str, tok, trajectory=None):
+def _one(messages: list[dict], completion_text: str, tok, trajectory=None, tools=None):
     """Return (accept, measurement, sanitized_text, sanitized_traj, drop_reason)."""
-    m0 = measure(messages, completion_text, tok)
+    m0 = measure(messages, completion_text, tok, tools)
     if m0["under_gate"]:
         return True, m0, completion_text, trajectory, None
     # Over gate: retry with bookkeeping-only sanitizer.
     new_text, new_traj, changed = sanitize(completion_text, trajectory)
     if changed == 0:
         return False, m0, None, None, "over_gate_no_bookkeeping_wrapper"
-    m1 = measure(messages, new_text, tok)
+    m1 = measure(messages, new_text, tok, tools)
     if not m1["under_gate"]:
         return False, {"before": m0, "after": m1}, None, None, "over_gate_after_sanitize"
     return True, {"before": m0, "after": m1}, new_text, new_traj, None
 
 
 def gate_pilot() -> None:
-    tok = combine.tokenizer()
+    tok = _chat_tokenizer()
     notes = _notes()
     summary = {"generated_at": datetime.now(timezone.utc).isoformat(),
                "tokenizer": "Qwen3.5 real tokenizer via thermo_agent.synth.combine",
@@ -179,8 +213,9 @@ def gate_pilot() -> None:
                     continue  # zero-shot row: never counted as a tool trace
                 m["accepted_tool_rows_seen"] += 1
                 messages = _rendered_prompt(row, notes)
+                tools = tool_protocol.tool_schemas(task)
                 ok, measurement, new_text, new_traj, reason = _one(
-                    messages, text, tok, row.get("trajectory"))
+                    messages, text, tok, row.get("trajectory"), tools)
                 raw_n = measurement.get("before", measurement)["tokens"]
                 m["token_max_raw"] = max(m["token_max_raw"], raw_n)
                 if not ok:
@@ -214,7 +249,7 @@ def gate_pilot() -> None:
 
 def gate_journal(model: str, journal: pathlib.Path, out: pathlib.Path,
                  manifest_path: pathlib.Path) -> None:
-    tok = combine.tokenizer()
+    tok = _chat_tokenizer()
     notes = _notes()
     exports = _export_rows()
     summary = {"generated_at": datetime.now(timezone.utc).isoformat(),
@@ -263,8 +298,9 @@ def gate_journal(model: str, journal: pathlib.Path, out: pathlib.Path,
             continue
         summary["accepted_tool_rows"] += 1
         messages = _rendered_prompt(row, notes)
+        tools = tool_protocol.tool_schemas(row.get("task", "repair"))
         ok, measurement, new_text, new_traj, reason = _one(
-            messages, text, tok, rec.get("trajectory"))
+            messages, text, tok, rec.get("trajectory"), tools)
         raw_n = measurement.get("before", measurement)["tokens"]
         summary["token_max_raw"] = max(summary["token_max_raw"], raw_n)
         if not ok:

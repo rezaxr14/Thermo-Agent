@@ -72,7 +72,7 @@ if ($doIngest) {
   if ($doMemory) { $memoryArgs = @('--memory-dir', 'data/memory') }
   & .venv/Scripts/python.exe -m thermo_agent.teacher.transfer ingest data/processed $gated $OutDir `
     --model $Model --run-id $RunId --require-tools @memoryArgs `
-    --extra-export-dir data/processed_arch --extra-export-dir data/frontier_prov --extra-export-dir data/a_slice
+    --extra-export-dir data/processed_arch --extra-export-dir data/frontier_prov --extra-export-dir data/a_slice --extra-export-dir data/frontier_export
   if ($LASTEXITCODE -ne 0) { throw "ingest failed for $Model" }
 } else {
   Write-Host "pipeline.ingest=false: skipped ingest for $Model"

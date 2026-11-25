@@ -101,7 +101,8 @@ def test_second_law_and_validity_and_solve_have_real_units():
 
     solved = _j(repair["solve_plant"](gt))
     assert solved["ok"] is True and solved["n_streams"] > 0
-    s0 = solved["streams"][0]
+    columns = solved["columns"]
+    s0 = dict(zip(columns, solved["rows"][0]))
     for key in ("T_K", "P_kPa", "h_kJ_kg", "s_kJ_kgK", "m_dot_kg_s", "e_ph_kJ_kg"):
         assert isinstance(s0[key], NUM), (key, s0.get(key))
 
@@ -140,7 +141,8 @@ def test_inspect_plant_on_ledger_reports_real_per_line_residuals():
     out = _j(_tools("ledger")["inspect_plant"](""))
     assert out["ok"] is True and out["task"] == "ledger"
     assert isinstance(out["ledger_closure_residual_W"], NUM)
-    lines = out["per_line_residuals"]
+    table = out["line_table"]
+    lines = [dict(zip(table["columns"], row)) for row in table["rows"]]
     assert lines
     assert any(x["line"].startswith("E[") for x in lines)
     assert any(x["line"].startswith("ED[") for x in lines)
@@ -161,11 +163,35 @@ def test_ledger_first_law_uses_per_line_residuals():
     out = _j(_tools("ledger")["first_law_check"](_truth("ledger")))
     assert out["ok"] is True
     assert isinstance(out["max_energy_residual_W"], NUM)
-    lines = out["per_line_residuals"]
+    table = out["line_table"]
+    lines = [dict(zip(table["columns"], row)) for row in table["rows"]]
     assert lines and all("residual_W" in x for x in lines)
     assert any(x["line"].startswith("E[") for x in lines)
     assert any(x["line"].startswith("ED[") for x in lines)
     assert isinstance(out["ledger_closure_residual_W"], NUM)
+
+
+def test_compact_result_preserves_values_and_removes_repeated_keys():
+    from thermo_agent.teacher.toolkit import compact_result
+
+    old = json.dumps({"ok": True, "n_streams": 1, "streams": [
+        {"stream": "s1", "T_K": 300.0, "P_kPa": 100.0, "h_kJ_kg": 1.0,
+         "s_kJ_kgK": 2.0, "m_dot_kg_s": 3.0, "e_ph_kJ_kg": 4.0, "e_ch_kJ_kg": 0.0}]})
+    new = json.loads(compact_result("solve_plant", old))
+    assert "streams" not in new and new["n_streams"] == 1
+    assert dict(zip(new["columns"], new["rows"][0]))["T_K"] == 300.0
+
+    ledger = json.dumps({"ok": True, "per_line_residuals": [
+        {"line": "E[s1]", "value_MW": 1.0, "recomputed_MW": 1.0, "residual_W": 0.0},
+        {"line": "E[s2]", "value_MW": 2.0, "recomputed_MW": 3.0, "residual_W": -1e6}]})
+    table = json.loads(compact_result("inspect_plant", ledger))["line_table"]
+    rows = [dict(zip(table["columns"], r)) for r in table["rows"]]
+    assert rows[1]["residual_W"] == -1e6
+
+    hint = json.dumps({"ok": True, "solver_message":
+                       "1 ledger line(s) fail the checks; read per_line_residuals"})
+    assert "line_table" in compact_result("inspect_plant", hint)
+    assert "per_line_residuals" not in compact_result("inspect_plant", hint)
 
 
 def test_malformed_ledger_candidate_returns_error():

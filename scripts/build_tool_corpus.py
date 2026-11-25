@@ -35,6 +35,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from thermo_agent.agent import tool_protocol  # noqa: E402
 from thermo_agent.agent.tool_prompt import build_harness_tool_messages  # noqa: E402
 from thermo_agent.core.schema import Plant  # noqa: E402
 from thermo_agent.synth import tiers as tier_mod  # noqa: E402
@@ -463,17 +464,17 @@ def build(src: list[str], out: str, grpo_out: str, tasks=TASKS, split: str = "tr
                         "char_length": len(text), "tokens": None, "plain_tokens": None,
                         "over_budget": False, "dropped_large_tools": [],
                     }
-                    # Gate on the FINAL rendered prompt, exactly like the deterministic path.
+                    # Gate on the exact training text: the template render of prompt +
+                    # completion with the same tool schemas train.render.row_tools uses.
                     prompt, harness = final_prompt(row.get("prompt", []), task, row, prompt_variant)
-                    tok = tool_traces.combine.tokenizer()
+                    tok = tool_traces.render_tokenizer()
                     if tok is not None:
-                        n_tok = len(tok.encode(text, add_special_tokens=False).ids)
-                        n_final = sum(len(tok.encode(m.get("content", ""), add_special_tokens=False).ids)
-                                      for m in prompt)
-                        n_plain = sum(len(tok.encode(m.get("content", ""), add_special_tokens=False).ids)
-                                      for m in row.get("prompt", []))
-                        trace["tokens"] = n_final + n_tok + tool_traces.TOKEN_RESERVE
-                        trace["plain_tokens"] = n_plain + n_tok + tool_traces.TOKEN_RESERVE
+                        tools = tool_protocol.tool_schemas(task)
+                        full = tool_protocol.render_messages(tok, prompt + messages, tools)
+                        plain_full = tool_protocol.render_messages(
+                            tok, row.get("prompt", []) + messages, tools)
+                        trace["tokens"] = len(tok.encode(full, add_special_tokens=False)) + tool_traces.TOKEN_RESERVE
+                        trace["plain_tokens"] = len(tok.encode(plain_full, add_special_tokens=False)) + tool_traces.TOKEN_RESERVE
                         trace["over_budget"] = trace["tokens"] > max_tokens
                         if trace["over_budget"]:
                             frontier_stats["over_budget"] += 1

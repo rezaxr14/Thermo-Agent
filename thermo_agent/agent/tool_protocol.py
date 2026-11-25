@@ -55,8 +55,18 @@ RESPONSE_TEMPLATE = {
 
 
 def _description(fn) -> str:
+    """One short sentence for the chat-template tool schema.
+
+    Developer docstrings carry an ``Args:``/``Returns:`` block that the model
+    does not need twice (the JSON schema already lists the parameters). Keeping
+    only the leading sentence cuts the fixed tool-schema prompt by roughly half.
+    """
     text = " ".join((inspect.getdoc(fn) or "").split())
-    return text[:700]
+    head = text.split(" Args:", 1)[0].split(" Returns:", 1)[0].strip()
+    sentence = head.split(". ", 1)[0].strip()
+    if sentence and not sentence.endswith("."):
+        sentence += "."
+    return sentence[:220]
 
 
 def tool_schemas(task: str, row: dict | None = None, *, include_dynamic: bool = True,
@@ -92,10 +102,7 @@ def tool_schemas(task: str, row: dict | None = None, *, include_dynamic: bool = 
                 "description": "One short sentence: what you are checking and why, before this call.",
             }
             required.append("reason")
-        properties["candidate"] = {
-            "type": "string",
-            "description": "Empty for inspect_plant; otherwise the candidate answer XML or a JSON object string.",
-        }
+        properties["candidate"] = {"type": "string"}
         if name != "inspect_plant":
             required.append("candidate")
         out.append({
@@ -341,13 +348,73 @@ def tool_result_output(value) -> str:
     return out if isinstance(out, str) else json.dumps(out, ensure_ascii=False)
 
 
+def refresh_skill_results(turns: list[dict]) -> int:
+    """Re-serve ``list_skills``/``load_skill`` results from the current library.
+
+    Skill text is environment output, not model reasoning: when a skill body is
+    shortened, every stored trace must carry the shortened result or training
+    would teach a response the tool no longer produces. Returns the number of
+    results replaced. Unknown/malformed skill calls are left untouched.
+    """
+    from ..teacher import toolkit
+
+    replaced = 0
+    for turn in turns or []:
+        calls = turn.get("tool_calls") or []
+        results = turn.get("tool_results")
+        if not isinstance(results, list):
+            continue
+        for index, call in enumerate(calls):
+            if index >= len(results):
+                break
+            name = str(call.get("name") or "")
+            if name not in toolkit.SKILL_TOOL_NAMES:
+                continue
+            args = call.get("arguments")
+            if not isinstance(args, dict):
+                continue
+            # Student calls carry one ``candidate`` string (a JSON object); the
+            # hosted teacher schema may instead have the object keys inline.
+            candidate = args.get("candidate")
+            if not isinstance(candidate, str):
+                candidate = json.dumps(args, ensure_ascii=False)
+            if name == "load_skill":
+                try:
+                    parsed = json.loads(candidate) if candidate.strip() else {}
+                except (TypeError, ValueError):
+                    continue
+                if not isinstance(parsed, dict) or not str(parsed.get("name") or "").strip():
+                    continue
+            fresh = toolkit.load_skill(candidate) if name == "load_skill" \
+                else toolkit.list_skills(candidate)
+            try:
+                payload = json.loads(fresh)
+            except (TypeError, ValueError):
+                continue
+            if payload.get("ok") is not True:
+                continue
+            results[index] = fresh
+            replaced += 1
+    return replaced
+
+
 def normalize_tool_turns(turns: list[dict]) -> int:
     """Strip teacher ``reason`` arguments and provider wrappers from every turn."""
+    from ..teacher import toolkit
+
     moved = strip_reason_turns(turns)
     for turn in turns or []:
         results = turn.get("tool_results")
-        if isinstance(results, list):
-            turn["tool_results"] = [tool_result_output(r) for r in results]
+        if not isinstance(results, list):
+            continue
+        calls = turn.get("tool_calls") or []
+        cleaned = []
+        for index, result in enumerate(results):
+            text = tool_result_output(result)
+            name = str(calls[index].get("name") or "") if index < len(calls) else ""
+            cleaned.append(toolkit.compact_result(name, text))
+        turn["tool_results"] = cleaned
+    refresh_skill_results(turns)
     return moved
 
 

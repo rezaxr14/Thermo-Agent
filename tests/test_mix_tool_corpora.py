@@ -434,3 +434,28 @@ def test_final_mix_tiers_are_exact_thirds_per_row_not_per_plant(tmp_path):
         assert plan["tiers"]["repair"][f"counts_{key}"] == expected
     assert plan["tiers"]["repair"]["counts"] == {"easy": 3, "medium": 3, "hard": 3}
     assert plan["tiers"]["repair"]["unscored"] == 0
+
+
+def test_gate_counts_tool_schemas_and_matches_training_render(monkeypatch):
+    """The mix gate must equal the training text length, including tool schemas."""
+    from thermo_agent.agent import tool_protocol
+
+    class _Tok:
+        def encode(self, text, add_special_tokens=False):
+            return text.split()
+
+        def apply_chat_template(self, messages, tools=None, add_generation_prompt=False,
+                                tokenize=False, enable_thinking=True):
+            head = "T1 T2 T3 T4" if tools else "N"
+            return head + " " + " ".join(str(m.get("content", "")) for m in messages)
+
+    monkeypatch.setattr(mix, "_GATE_TOK", _Tok())
+    prompt = [{"role": "system", "content": "sys"}, {"role": "user", "content": "q"}]
+    completion = [{"role": "assistant", "content": "one two three"}]
+    row = {"prompt": prompt, "completion": completion}
+    got = mix._rendered_tokens(row, "repair")
+    tools = tool_protocol.tool_schemas("repair")
+    full = _Tok().apply_chat_template(prompt + completion, tools=tools)
+    assert got == len(full.split()) + 96
+    without = _Tok().apply_chat_template(prompt + completion, tools=None)
+    assert got > len(without.split()) + 96

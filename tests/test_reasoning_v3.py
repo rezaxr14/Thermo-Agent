@@ -115,5 +115,8 @@ def test_ledger_tool_states_recomputed_values_without_naming_the_faulty_line():
     row = _row("ledger")
     out = json.loads({f.__name__: f for f in toolkit.make_tools("ledger", row)}["inspect_plant"](""))
     blob = json.dumps(out)
-    assert "truth_MW" not in blob and "failed_lines" not in out and '"ok": false' not in json.dumps(out["per_line_residuals"]).lower()
-    assert any(x.get("recomputed_MW") is not None for x in out["per_line_residuals"])
+    table = out["line_table"]
+    rows = [dict(zip(table["columns"], row)) for row in table["rows"]]
+    assert "truth_MW" not in blob and "failed_lines" not in out
+    assert '"ok": false' not in json.dumps(rows).lower()
+    assert any(x.get("recomputed_MW") is not None for x in rows)

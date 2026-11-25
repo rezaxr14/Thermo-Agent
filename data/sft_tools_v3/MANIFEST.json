@@ -1,28 +1,28 @@
 {
  "char_length": {
-  "max": 9464,
-  "n": 4509,
-  "p50": 6182,
-  "p95": 8538
+  "max": 8993,
+  "n": 4800,
+  "p50": 5479,
+  "p95": 7683
  },
  "char_length_by_task": {
   "audit": {
-   "max": 8425,
-   "n": 1160,
-   "p50": 7086,
-   "p95": 7937
+   "max": 8993,
+   "n": 1200,
+   "p50": 7305,
+   "p95": 8095
   },
   "design": {
-   "max": 9464,
+   "max": 7563,
    "n": 1200,
-   "p50": 7897,
-   "p95": 8993
+   "p50": 6415,
+   "p95": 7273
   },
   "ledger": {
-   "max": 6885,
-   "n": 949,
-   "p50": 5606,
-   "p95": 6386
+   "max": 6119,
+   "n": 1200,
+   "p50": 4472,
+   "p95": 5288
   },
   "repair": {
    "max": 5617,
@@ -32,12 +32,12 @@
   }
  },
  "config": {
-  "grpo_out": "data/grpo_tools_v3",
+  "grpo_out": "data/rebuild_step3c_plain/grpo_tools_v3",
   "include_frontier": true,
   "limit": 0,
   "max_tokens": 8192,
   "max_tool_result_chars": 4500,
-  "out": "data/sft_tools_v3",
+  "out": "data/rebuild_step3c_plain/sft_tools_v3",
   "plant_seed": 0,
   "plants_per_task": 600,
   "prompt_variant": "plain",
@@ -70,12 +70,12 @@
   "leaks": [],
   "overlap": 0,
   "passed": true,
-  "rows_scanned": 4509,
+  "rows_scanned": 4800,
   "signatures": 675
  },
  "counts": {
   "audit": {
-   "deterministic_tools": 1160,
+   "deterministic_tools": 1200,
    "frontier_tools": 0
   },
   "design": {
@@ -83,7 +83,7 @@
    "frontier_tools": 0
   },
   "ledger": {
-   "deterministic_tools": 949,
+   "deterministic_tools": 1200,
    "frontier_tools": 0
   },
   "repair": {
@@ -93,7 +93,7 @@
  },
  "dropped_invalid_or_no_tools": 0,
  "dropped_large_tool_results": 0,
- "dropped_over_8k": 291,
+ "dropped_over_8k": 0,
  "frontier": {
   "deduplicated": 0,
   "kept": 0,
@@ -102,7 +102,7 @@
   "scanned": 1336,
   "with_tool_turns": 0
  },
- "generated_at": "2026-11-22T14:38:29.065952+00:00",
+ "generated_at": "2026-11-25T16:00:26.996125+00:00",
  "generator": "synth.tool_traces (deterministic) + accepted frontier tool traces",
  "plants_selected_by_task": {
   "audit": 600,
@@ -157,14 +157,14 @@
   },
   {
    "generator": "deterministic_tools",
-   "kept": 1160,
+   "kept": 1200,
    "rows_read": 2192,
    "rows_selected": 600,
    "source_dir": "data/processed",
    "task": "audit",
    "variants": {
     "direct": 600,
-    "recover": 560
+    "recover": 600
    }
   },
   {
@@ -179,14 +179,14 @@
   },
   {
    "generator": "deterministic_tools",
-   "kept": 949,
+   "kept": 1200,
    "rows_read": 4846,
    "rows_selected": 600,
    "source_dir": "data/processed",
    "task": "ledger",
    "variants": {
-    "direct": 493,
-    "recover": 456
+    "direct": 600,
+    "recover": 600
    }
   },
   {
@@ -204,7 +204,7 @@
   "audit": {
    "counts": {
     "easy": 400,
-    "hard": 360,
+    "hard": 400,
     "medium": 400
    },
    "ranges": {
@@ -216,7 +216,7 @@
     "hard": {
      "max": 13,
      "min": 7,
-     "n": 360
+     "n": 400
     },
     "medium": {
      "max": 7,
@@ -253,25 +253,25 @@
   },
   "ledger": {
    "counts": {
-    "easy": 328,
-    "hard": 293,
-    "medium": 328
+    "easy": 400,
+    "hard": 400,
+    "medium": 400
    },
    "ranges": {
     "easy": {
      "max": 6,
      "min": 4,
-     "n": 328
+     "n": 400
     },
     "hard": {
-     "max": 9,
+     "max": 13,
      "min": 7,
-     "n": 293
+     "n": 400
     },
     "medium": {
      "max": 7,
      "min": 6,
-     "n": 328
+     "n": 400
     }
    },
    "rule": "rank by documented per-task component count, sha256(id) tie-break, floor(n/3)/floor(n/3)/remainder; a plant's two variants share the tier"
@@ -303,20 +303,20 @@
   }
  },
  "token_length": {
-  "max": 8192,
-  "n": 4509,
-  "p50": 6971,
-  "p95": 7792
+  "max": 7593,
+  "n": 4800,
+  "p50": 4829,
+  "p95": 6113
  },
  "token_length_plain": {
-  "max": 5287,
-  "n": 4509,
-  "p50": 4060,
-  "p95": 4880
+  "max": 6307,
+  "n": 4800,
+  "p50": 3545,
+  "p95": 4831
  },
  "token_measure_note": "token_length = FINAL rendered prompt messages + completion + TOKEN_RESERVE (the gate); token_length_plain = plain prompt instead. Over-gate rows are dropped, never truncated.",
  "totals": {
-  "grpo": 4509,
-  "sft": 4509
+  "grpo": 4800,
+  "sft": 4800
  }
 }

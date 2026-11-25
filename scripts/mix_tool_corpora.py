@@ -330,10 +330,9 @@ def _rendered_tokens(row: dict, task: str) -> int | None:
         return None
     try:
         tools = tool_protocol.tool_schemas(task)
-        prefix = tool_protocol.render_messages(tok, prompt, tools, add_generation_prompt=True)
+        # The training text is prompt + completion, where completion is the template
+        # suffix; byte-identical to this one full render (train.render.render_pair).
         full = tool_protocol.render_messages(tok, prompt + completion, tools)
-        if not full.startswith(prefix):
-            return None
         return len(tok.encode(full, add_special_tokens=False)) + 96
     except (TypeError, ValueError):
         return None

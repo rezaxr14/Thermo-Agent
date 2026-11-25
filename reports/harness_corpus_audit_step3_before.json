@@ -1,0 +1,604 @@
+{
+  "anomalies": [],
+  "gate": 8192,
+  "generated_by": "scripts/audit_harness_corpus.py",
+  "generated_from": {
+    "data/grpo_mix_v3/audit_train.jsonl": {
+      "bytes": 14067236,
+      "rows": 423,
+      "sha256": "c58a6459adbc5d937681524c892d3084191ce07eebb75e834ab10c2cae1447da"
+    },
+    "data/grpo_mix_v3/design_train.jsonl": {
+      "bytes": 13102458,
+      "rows": 404,
+      "sha256": "48d9d888fe5c26c35cb2b5951267b525875be953a840d1280eaed9c387418082"
+    },
+    "data/grpo_mix_v3/ledger_train.jsonl": {
+      "bytes": 5473441,
+      "rows": 179,
+      "sha256": "5c86474f6ea12ea16f21cdf59679d383472b8677123d6ce50e5e581e94584a66"
+    },
+    "data/grpo_mix_v3/repair_train.jsonl": {
+      "bytes": 35252928,
+      "rows": 1209,
+      "sha256": "44c15ea665290e4293fa23c182449962b64a58b1e0e0ca9a471c1bca178ea6a3"
+    },
+    "data/grpo_tools_v3_h/audit_train.jsonl": {
+      "bytes": 14067234,
+      "rows": 423,
+      "sha256": "10703e80b60b7901cc92cc288160c9621504f8fe95026aea3887aea321a7b7b0"
+    },
+    "data/grpo_tools_v3_h/design_train.jsonl": {
+      "bytes": 12974590,
+      "rows": 398,
+      "sha256": "980918b2572d84e4e61e160e72460b410abb1953103f59f55bcff1f635974f67"
+    },
+    "data/grpo_tools_v3_h/ledger_train.jsonl": {
+      "bytes": 5410575,
+      "rows": 177,
+      "sha256": "d9f385d5454f52572590c844f1ef484947839151545b888a4dbd1f14254f34ce"
+    },
+    "data/grpo_tools_v3_h/repair_train.jsonl": {
+      "bytes": 34833072,
+      "rows": 1200,
+      "sha256": "5426495686445b5207fa8579cc9746e4b9e0c56fa7d236162ba3dd71a26636be"
+    },
+    "data/sft_mix_v3/audit_train.jsonl": {
+      "bytes": 14029874,
+      "rows": 823,
+      "sha256": "dd308d62afa4f65b09aefdca29736cbae407f816d9c7061845ab8e06ac819700"
+    },
+    "data/sft_mix_v3/design_train.jsonl": {
+      "bytes": 10676229,
+      "rows": 804,
+      "sha256": "8c5c0d3e5c8134d9f0f3e8d947c7984543a11f0fae97b8fdb09d8a0105b4861e"
+    },
+    "data/sft_mix_v3/ledger_train.jsonl": {
+      "bytes": 8790634,
+      "rows": 579,
+      "sha256": "dd13e7840019a98cf67cbb8944da02a7b3dffbacc604122cf4dfb0a976afd698"
+    },
+    "data/sft_mix_v3/repair_train.jsonl": {
+      "bytes": 32702096,
+      "rows": 1609,
+      "sha256": "2eb17f109cb6a7a9018e2c46c67abfe34a31ff46d8ed92f68ff5f9088c2d4bbb"
+    },
+    "data/sft_tools_v3_h/audit_train.jsonl": {
+      "bytes": 10886384,
+      "rows": 423,
+      "sha256": "175e4102d574724e0752a0469a0fa126e603f0f3d16c60b3fb8352d0c564da7f"
+    },
+    "data/sft_tools_v3_h/design_train.jsonl": {
+      "bytes": 9295244,
+      "rows": 398,
+      "sha256": "a401a7ef5223bdf5e809ca97d9e059233b1a4eb463dbb5f1408d0de6a08ee88b"
+    },
+    "data/sft_tools_v3_h/ledger_train.jsonl": {
+      "bytes": 4323835,
+      "rows": 177,
+      "sha256": "9c5026c3b69ae779afbb9affeeb3babeb49c95860cbc542e97f2758104f4cbc5"
+    },
+    "data/sft_tools_v3_h/repair_train.jsonl": {
+      "bytes": 28489160,
+      "rows": 1200,
+      "sha256": "fc9ca538ffa321eb873acf2abf3a51adbd41e9c166f2c1acdb7480a52efa6240"
+    }
+  },
+  "inputs": [
+    "data/grpo_mix_v3",
+    "data/grpo_tools_v3_h",
+    "data/sft_mix_v3",
+    "data/sft_tools_v3_h"
+  ],
+  "note": "counts and lengths only; no prompt/completion text. rendered=chat-template(add_generation_prompt=False); pipeline=plain prompt+completion+reserve (the build's 8192 gate).",
+  "over_8192_pipeline": [],
+  "over_8192_rendered": [],
+  "per_dir_task": {
+    "data/grpo_mix_v3": {
+      "audit": {
+        "chars": {
+          "max": 8831,
+          "median": 8369,
+          "min": 7984,
+          "n": 423,
+          "p95": 8824
+        },
+        "n": 423,
+        "pipeline": {
+          "max": 3007,
+          "median": 2764,
+          "min": 2549,
+          "n": 423,
+          "p95": 3003
+        },
+        "rendered": {
+          "max": 4177,
+          "median": 3934,
+          "min": 3719,
+          "n": 423,
+          "p95": 4173
+        }
+      },
+      "design": {
+        "chars": {
+          "max": 14111,
+          "median": 7276,
+          "min": 7086,
+          "n": 404,
+          "p95": 7367
+        },
+        "n": 404,
+        "pipeline": {
+          "max": 3690,
+          "median": 2014,
+          "min": 1953,
+          "n": 404,
+          "p95": 2034
+        },
+        "rendered": {
+          "max": 5313,
+          "median": 3184,
+          "min": 3123,
+          "n": 404,
+          "p95": 3204
+        }
+      },
+      "ledger": {
+        "chars": {
+          "max": 10802,
+          "median": 8106,
+          "min": 7812,
+          "n": 179,
+          "p95": 8315
+        },
+        "n": 179,
+        "pipeline": {
+          "max": 4101,
+          "median": 2797,
+          "min": 2578,
+          "n": 179,
+          "p95": 2905
+        },
+        "rendered": {
+          "max": 5312,
+          "median": 3967,
+          "min": 3748,
+          "n": 179,
+          "p95": 4075
+        }
+      },
+      "repair": {
+        "chars": {
+          "max": 14717,
+          "median": 7660,
+          "min": 7272,
+          "n": 1209,
+          "p95": 7863
+        },
+        "n": 1209,
+        "pipeline": {
+          "max": 4531,
+          "median": 2443,
+          "min": 2251,
+          "n": 1209,
+          "p95": 2567
+        },
+        "rendered": {
+          "max": 6078,
+          "median": 3613,
+          "min": 3421,
+          "n": 1209,
+          "p95": 3737
+        }
+      }
+    },
+    "data/grpo_tools_v3_h": {
+      "audit": {
+        "chars": {
+          "max": 8831,
+          "median": 8369,
+          "min": 7984,
+          "n": 423,
+          "p95": 8824
+        },
+        "n": 423,
+        "pipeline": {
+          "max": 3007,
+          "median": 2764,
+          "min": 2549,
+          "n": 423,
+          "p95": 3003
+        },
+        "rendered": {
+          "max": 4177,
+          "median": 3934,
+          "min": 3719,
+          "n": 423,
+          "p95": 4173
+        }
+      },
+      "design": {
+        "chars": {
+          "max": 7401,
+          "median": 7276,
+          "min": 7086,
+          "n": 398,
+          "p95": 7365
+        },
+        "n": 398,
+        "pipeline": {
+          "max": 2049,
+          "median": 2013,
+          "min": 1953,
+          "n": 398,
+          "p95": 2033
+        },
+        "rendered": {
+          "max": 3219,
+          "median": 3183,
+          "min": 3123,
+          "n": 398,
+          "p95": 3203
+        }
+      },
+      "ledger": {
+        "chars": {
+          "max": 8439,
+          "median": 8103,
+          "min": 7812,
+          "n": 177,
+          "p95": 8300
+        },
+        "n": 177,
+        "pipeline": {
+          "max": 2948,
+          "median": 2797,
+          "min": 2578,
+          "n": 177,
+          "p95": 2901
+        },
+        "rendered": {
+          "max": 4118,
+          "median": 3967,
+          "min": 3748,
+          "n": 177,
+          "p95": 4071
+        }
+      },
+      "repair": {
+        "chars": {
+          "max": 8067,
+          "median": 7658,
+          "min": 7272,
+          "n": 1200,
+          "p95": 7858
+        },
+        "n": 1200,
+        "pipeline": {
+          "max": 2642,
+          "median": 2441,
+          "min": 2251,
+          "n": 1200,
+          "p95": 2547
+        },
+        "rendered": {
+          "max": 3812,
+          "median": 3611,
+          "min": 3421,
+          "n": 1200,
+          "p95": 3717
+        }
+      }
+    },
+    "data/sft_mix_v3": {
+      "audit": {
+        "chars": {
+          "max": 13771,
+          "median": 12736,
+          "min": 3170,
+          "n": 823,
+          "p95": 13549
+        },
+        "n": 823,
+        "pipeline": {
+          "max": 4940,
+          "median": 4478,
+          "min": 1406,
+          "n": 823,
+          "p95": 4912
+        },
+        "rendered": {
+          "max": 6469,
+          "median": 6024,
+          "min": 1329,
+          "n": 823,
+          "p95": 6449
+        }
+      },
+      "design": {
+        "chars": {
+          "max": 14111,
+          "median": 9723,
+          "min": 1939,
+          "n": 804,
+          "p95": 12390
+        },
+        "n": 804,
+        "pipeline": {
+          "max": 4784,
+          "median": 2700,
+          "min": 747,
+          "n": 804,
+          "p95": 4748
+        },
+        "rendered": {
+          "max": 6469,
+          "median": 3722,
+          "min": 670,
+          "n": 804,
+          "p95": 6448
+        }
+      },
+      "ledger": {
+        "chars": {
+          "max": 12797,
+          "median": 4453,
+          "min": 3062,
+          "n": 579,
+          "p95": 12670
+        },
+        "n": 579,
+        "pipeline": {
+          "max": 5139,
+          "median": 2356,
+          "min": 1430,
+          "n": 579,
+          "p95": 5083
+        },
+        "rendered": {
+          "max": 6469,
+          "median": 2279,
+          "min": 1353,
+          "n": 579,
+          "p95": 6426
+        }
+      },
+      "repair": {
+        "chars": {
+          "max": 14717,
+          "median": 10856,
+          "min": 2512,
+          "n": 1609,
+          "p95": 12126
+        },
+        "n": 1609,
+        "pipeline": {
+          "max": 4531,
+          "median": 3541,
+          "min": 1111,
+          "n": 1609,
+          "p95": 4182
+        },
+        "rendered": {
+          "max": 6078,
+          "median": 4953,
+          "min": 1035,
+          "n": 1609,
+          "p95": 5610
+        }
+      }
+    },
+    "data/sft_tools_v3_h": {
+      "audit": {
+        "chars": {
+          "max": 13771,
+          "median": 13331,
+          "min": 12702,
+          "n": 423,
+          "p95": 13576
+        },
+        "n": 423,
+        "pipeline": {
+          "max": 4940,
+          "median": 4779,
+          "min": 4440,
+          "n": 423,
+          "p95": 4921
+        },
+        "rendered": {
+          "max": 6469,
+          "median": 6325,
+          "min": 5991,
+          "n": 423,
+          "p95": 6457
+        }
+      },
+      "design": {
+        "chars": {
+          "max": 12627,
+          "median": 12276,
+          "min": 10397,
+          "n": 398,
+          "p95": 12409
+        },
+        "n": 398,
+        "pipeline": {
+          "max": 4784,
+          "median": 4703,
+          "min": 3436,
+          "n": 398,
+          "p95": 4768
+        },
+        "rendered": {
+          "max": 6469,
+          "median": 6366,
+          "min": 4990,
+          "n": 398,
+          "p95": 6460
+        }
+      },
+      "ledger": {
+        "chars": {
+          "max": 12797,
+          "median": 12395,
+          "min": 11639,
+          "n": 177,
+          "p95": 12733
+        },
+        "n": 177,
+        "pipeline": {
+          "max": 5139,
+          "median": 4956,
+          "min": 4498,
+          "n": 177,
+          "p95": 5118
+        },
+        "rendered": {
+          "max": 6469,
+          "median": 6305,
+          "min": 5827,
+          "n": 177,
+          "p95": 6452
+        }
+      },
+      "repair": {
+        "chars": {
+          "max": 12557,
+          "median": 11137,
+          "min": 9848,
+          "n": 1200,
+          "p95": 12162
+        },
+        "n": 1200,
+        "pipeline": {
+          "max": 4398,
+          "median": 3716,
+          "min": 3132,
+          "n": 1200,
+          "p95": 4200
+        },
+        "rendered": {
+          "max": 5824,
+          "median": 5099,
+          "min": 4497,
+          "n": 1200,
+          "p95": 5644
+        }
+      }
+    }
+  },
+  "per_task": {
+    "audit": {
+      "chars": {
+        "max": 13771,
+        "median": 8615,
+        "min": 3170,
+        "n": 2092,
+        "p95": 13541
+      },
+      "n": 2092,
+      "pipeline": {
+        "max": 4940,
+        "median": 2912,
+        "min": 1406,
+        "n": 2092,
+        "p95": 4907
+      },
+      "rendered": {
+        "max": 6469,
+        "median": 4082,
+        "min": 1329,
+        "n": 2092,
+        "p95": 6446
+      }
+    },
+    "design": {
+      "chars": {
+        "max": 14111,
+        "median": 7316,
+        "min": 1939,
+        "n": 2004,
+        "p95": 12365
+      },
+      "n": 2004,
+      "pipeline": {
+        "max": 4784,
+        "median": 2022,
+        "min": 747,
+        "n": 2004,
+        "p95": 4744
+      },
+      "rendered": {
+        "max": 6469,
+        "median": 3192,
+        "min": 670,
+        "n": 2004,
+        "p95": 6443
+      }
+    },
+    "ledger": {
+      "chars": {
+        "max": 12797,
+        "median": 8102,
+        "min": 3062,
+        "n": 1112,
+        "p95": 12676
+      },
+      "n": 1112,
+      "pipeline": {
+        "max": 5139,
+        "median": 2800,
+        "min": 1430,
+        "n": 1112,
+        "p95": 5085
+      },
+      "rendered": {
+        "max": 6469,
+        "median": 3960,
+        "min": 1353,
+        "n": 1112,
+        "p95": 6427
+      }
+    },
+    "repair": {
+      "chars": {
+        "max": 14717,
+        "median": 7847,
+        "min": 2512,
+        "n": 5218,
+        "p95": 11925
+      },
+      "n": 5218,
+      "pipeline": {
+        "max": 4531,
+        "median": 2524,
+        "min": 1111,
+        "n": 5218,
+        "p95": 4079
+      },
+      "rendered": {
+        "max": 6078,
+        "median": 3694,
+        "min": 1035,
+        "n": 5218,
+        "p95": 5506
+      }
+    }
+  },
+  "schema_version": 1,
+  "token_reserve": 96,
+  "tokenizer": "measured",
+  "tokenizer_info": {
+    "method": "local_auto_chat_template",
+    "name": "Qwen/Qwen3.5-4B",
+    "path": "C:\\Users\\rezax\\.cache\\thermo\\qwen3.5-4b",
+    "reason": null,
+    "status": "measured"
+  },
+  "totals": {
+    "malformed_or_anomalous": 0,
+    "over_8192_pipeline": 0,
+    "over_8192_rendered": 0,
+    "rows": 10426
+  }
+}

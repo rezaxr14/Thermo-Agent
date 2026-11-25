@@ -1,4 +1,4 @@
-# STATUS - current state (2026-11-22)
+# STATUS - current state (2026-11-25)
 
 One-page truth. This file describes the working tree now, not its history. Binding rules
 are in `DECISIONS.md`; evidence is in `AUDITS.md`.
@@ -10,54 +10,60 @@ are in `DECISIONS.md`; evidence is in `AUDITS.md`.
 - Credentials only from repo-root `.env`; tokens are never printed.
 - Proxy for hosted calls: `socks5h://127.0.0.1:10808`.
 - kbench test collection needs `LLM_DEFAULT=gpt-6-luna` (import sentinel only, no call).
-- Docs: exactly 10 files, 31 KB total. `data/archive/` is never mixed into a corpus.
+- Docs: exactly 10 files, under 150 KB. `data/archive/` is never mixed into a corpus.
 
 ## Protocol
 
 One native Qwen3.5 structured tool protocol everywhere: assistant `tool_calls` and
 `role="tool"` results, rendered with `apply_chat_template(tools=...)` and parsed with
 `tokenizer.parse_response` via `thermo_agent/agent/tool_protocol.py`. The legacy
-`<tool_call name=...>` form is rejected. Contract text contains no call syntax or tool
-list. All 16 tools are on by default. The student schema is candidate-only; the teacher
-schema requires `reason`, which ingest moves into `<think>` and strips from arguments.
+`<tool_call name=...>` form is rejected, and archived rows are never migrated. All 16
+tools are on by default; the serving schema is the short contract (1,247 tokens). The
+teacher add-on is a required `reason`, which ingest moves into `<think>` and strips from
+arguments.
 
 ## Corpora
 
-The 8,192-token gate is measured on the exact tools-rendered conversation plus a
-96-token chat reserve. Over-gate rows are dropped, never truncated.
+The 8,192 gate measures the exact training text: harness prompt + completion, one
+template render with the 16 serving schemas, plus the 96-token reserve. Over-gate rows
+are dropped, never truncated.
 
 | Corpus | Rows |
 | --- | ---: |
-| `data/sft_tools_v3_h` | 2,198 |
-| `data/grpo_tools_v3_h` | 2,198 |
-| `data/sft_mix_v3` | 3,804 |
-| `data/grpo_mix_v3` | 2,204 |
+| `data/sft_tools_v3_h` | 4,780 |
+| `data/grpo_tools_v3_h` | 4,780 |
+| `data/sft_mix_v3` | 6,410 |
+| `data/grpo_mix_v3` | 4,810 |
+| `data/frontier_tools_accepted` | 30 |
 
-`reports/harness_corpus_audit_native.json`: 10,404 audited rows, **0 over 8,192**,
-**0 anomalies**. `reports/dataset_stats.json` / `.md` are regenerated.
-`data/processed` is unchanged.
+Deterministic retention: 4,780 / 4,800 = 99.58% (repair 100%, design 100%, audit
+99.08%, ledger 99.25%; worst tier audit/hard 97.25%). Accepted frontier rows: 30 / 30
+under the gate, max 7,369 tokens. Evidence: `reports/step3_row_retention.md`,
+`reports/gate_retention_step3.json`, `reports/harness_corpus_audit_step3_after.json`.
+
+Tool results are compact: `solve_plant` returns `columns` + `rows`; ledger tools return
+`line_table` + `line_errors`; skill bodies are budgeted; stored frontier results are
+re-served through the same compaction.
 
 ## Verification
 
-- Full suite: **1,172 passed, 9 skipped** (last run used a benign import sentinel;
-  the same 7 kbench tests were separately verified with `LLM_DEFAULT=gpt-6-luna`).
-- `scripts/audit_provenance_chain.py --strict`: **PROVENANCE OK, 8/8 checks**.
-- 3-step GRPO-style parse smoke in `tests/test_tool_protocol.py` (no model run).
+- Full suite green after step 3: **1,183 passed, 9 skipped** (1,178.7 s). The 9 skips are
+  data-gated, not failures: 8 in `tests/test_final_mix_tiers_provenance.py` ("v2 mix not
+  built yet") and 1 in `tests/test_mix_tool_corpora.py` ("pre-CoT tool corpora are archived
+  under `data/archive/`"). No test failed to run.
+- `scripts/audit_provenance_chain.py --strict`: **PROVENANCE OK (9/9)** after the final
+  step-3 rebuild - 30,410 rows scanned for protocol markers, 11,220 mix rows inspected,
+  0 leaks.
 
 ## Work state
 
-- Steps 1-3 complete and committed: `2906d2b`, `9307a46`, `046bcfe`.
-- Step 4: `native_pilot` 40-row shards built (10/task, 14/13/13 tiers), local preflight
-  40/40 per model, rehearsal 39/39 per model, HF sync done. Kaggle is reachable again;
-  bridge kernel pushed (version 16, COMPLETE), but the Kaggle dataset copy is stale and
-  dataset preflight returns 404 for the new shards. No hosted rows, no reasoning-share
-  measurement, and no bulk run.
-- Step 5: 27 one-row repair/design reviews in `reports/trace_review.jsonl`; the four old
-  markdown reviews deleted.
-- Step 6: docs curated to this 10-file/<=150 KB set with current-truth headers.
+- Hard-fix steps 1-3 committed: `d81ca1f` (native protocol), `bda80ab` (native pilot),
+  plus the step-3 retention commit.
+- Skill docs: `SKILL.md` is the repo-agnostic Kaggle/HF guide; `KAGGLE_SKILL.md` and
+  `HF_KAGGLE_SKILL.md` hold the project-specific commands and repo ids.
+- Step 4 is next: audit final-answer format, haiku ledger zero tool calls.
 
 ## Still not done
 
-- Refresh the Kaggle dataset copy, run only luna/haiku on the existing 40-row shards,
-  apply the >=0.85 reasoning-share gate and per-task accepted-row rule, then ingest.
+- Step 4 audit/ledger fixes; steps 5-8 of the plan.
 - No training, SFT, GRPO or full eval has been launched.

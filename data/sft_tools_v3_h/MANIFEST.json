@@ -1,28 +1,28 @@
 {
  "char_length": {
-  "max": 7878,
-  "n": 2198,
-  "p50": 5146,
-  "p95": 7458
+  "max": 8819,
+  "n": 4780,
+  "p50": 5472,
+  "p95": 7671
  },
  "char_length_by_task": {
   "audit": {
-   "max": 7325,
-   "n": 423,
-   "p50": 6196,
-   "p95": 6431
+   "max": 8819,
+   "n": 1189,
+   "p50": 7174,
+   "p95": 8068
   },
   "design": {
-   "max": 7878,
-   "n": 398,
-   "p50": 7378,
-   "p95": 7526
+   "max": 7563,
+   "n": 1200,
+   "p50": 6415,
+   "p95": 7273
   },
   "ledger": {
-   "max": 5869,
-   "n": 177,
-   "p50": 5028,
-   "p95": 5518
+   "max": 5752,
+   "n": 1191,
+   "p50": 4467,
+   "p95": 5261
   },
   "repair": {
    "max": 5617,
@@ -32,12 +32,12 @@
   }
  },
  "config": {
-  "grpo_out": "data/grpo_tools_v3",
+  "grpo_out": "data/rebuild_step3c/grpo_tools_v3",
   "include_frontier": true,
   "limit": 0,
   "max_tokens": 8192,
   "max_tool_result_chars": 4500,
-  "out": "data/sft_tools_v3",
+  "out": "data/rebuild_step3c/sft_tools_v3",
   "plant_seed": 0,
   "plants_per_task": 600,
   "prompt_variant": "harness_tools",
@@ -70,20 +70,20 @@
   "leaks": [],
   "overlap": 0,
   "passed": true,
-  "rows_scanned": 2198,
+  "rows_scanned": 4780,
   "signatures": 675
  },
  "counts": {
   "audit": {
-   "deterministic_tools": 423,
+   "deterministic_tools": 1189,
    "frontier_tools": 0
   },
   "design": {
-   "deterministic_tools": 398,
+   "deterministic_tools": 1200,
    "frontier_tools": 0
   },
   "ledger": {
-   "deterministic_tools": 177,
+   "deterministic_tools": 1191,
    "frontier_tools": 0
   },
   "repair": {
@@ -93,7 +93,7 @@
  },
  "dropped_invalid_or_no_tools": 0,
  "dropped_large_tool_results": 0,
- "dropped_over_8k": 2602,
+ "dropped_over_8k": 20,
  "frontier": {
   "deduplicated": 0,
   "kept": 0,
@@ -102,7 +102,7 @@
   "scanned": 1336,
   "with_tool_turns": 0
  },
- "generated_at": "2026-11-22T14:21:53.805502+00:00",
+ "generated_at": "2026-11-25T16:16:30.125886+00:00",
  "generator": "synth.tool_traces (deterministic) + accepted frontier tool traces",
  "plants_selected_by_task": {
   "audit": 600,
@@ -135,14 +135,14 @@
   },
   {
    "generator": "deterministic_tools",
-   "kept": 398,
+   "kept": 1200,
    "rows_read": 1768,
    "rows_selected": 600,
    "source_dir": "data/processed",
    "task": "design",
    "variants": {
-    "direct": 294,
-    "recover": 104
+    "direct": 600,
+    "recover": 600
    }
   },
   {
@@ -157,14 +157,14 @@
   },
   {
    "generator": "deterministic_tools",
-   "kept": 423,
+   "kept": 1189,
    "rows_read": 2192,
    "rows_selected": 600,
    "source_dir": "data/processed",
    "task": "audit",
    "variants": {
-    "direct": 422,
-    "recover": 1
+    "direct": 600,
+    "recover": 589
    }
   },
   {
@@ -179,14 +179,14 @@
   },
   {
    "generator": "deterministic_tools",
-   "kept": 177,
+   "kept": 1191,
    "rows_read": 4846,
    "rows_selected": 600,
    "source_dir": "data/processed",
    "task": "ledger",
    "variants": {
-    "direct": 112,
-    "recover": 65
+    "direct": 597,
+    "recover": 594
    }
   },
   {
@@ -203,75 +203,75 @@
  "tiers": {
   "audit": {
    "counts": {
-    "easy": 141,
-    "hard": 142,
-    "medium": 140
+    "easy": 400,
+    "hard": 389,
+    "medium": 400
    },
    "ranges": {
     "easy": {
      "max": 6,
      "min": 4,
-     "n": 141
+     "n": 400
     },
     "hard": {
-     "max": 9,
+     "max": 13,
      "min": 7,
-     "n": 142
+     "n": 389
     },
     "medium": {
-     "max": 6,
+     "max": 7,
      "min": 6,
-     "n": 140
+     "n": 400
     }
    },
    "rule": "rank by documented per-task component count, sha256(id) tie-break, floor(n/3)/floor(n/3)/remainder; a plant's two variants share the tier"
   },
   "design": {
    "counts": {
-    "easy": 188,
-    "hard": 105,
-    "medium": 105
+    "easy": 400,
+    "hard": 400,
+    "medium": 400
    },
    "ranges": {
     "easy": {
      "max": 10,
      "min": 4,
-     "n": 188
+     "n": 400
     },
     "hard": {
-     "max": 10,
-     "min": 10,
-     "n": 105
+     "max": 13,
+     "min": 11,
+     "n": 400
     },
     "medium": {
-     "max": 10,
+     "max": 11,
      "min": 10,
-     "n": 105
+     "n": 400
     }
    },
    "rule": "rank by documented per-task component count, sha256(id) tie-break, floor(n/3)/floor(n/3)/remainder; a plant's two variants share the tier"
   },
   "ledger": {
    "counts": {
-    "easy": 70,
-    "hard": 39,
-    "medium": 68
+    "easy": 398,
+    "hard": 395,
+    "medium": 398
    },
    "ranges": {
     "easy": {
-     "max": 5,
+     "max": 6,
      "min": 4,
-     "n": 70
+     "n": 398
     },
     "hard": {
-     "max": 6,
-     "min": 5,
-     "n": 39
+     "max": 13,
+     "min": 7,
+     "n": 395
     },
     "medium": {
-     "max": 5,
-     "min": 5,
-     "n": 68
+     "max": 7,
+     "min": 6,
+     "n": 398
     }
    },
    "rule": "rank by documented per-task component count, sha256(id) tie-break, floor(n/3)/floor(n/3)/remainder; a plant's two variants share the tier"
@@ -303,20 +303,20 @@
   }
  },
  "token_length": {
-  "max": 8192,
-  "n": 2198,
-  "p50": 7215,
-  "p95": 8168
+  "max": 8185,
+  "n": 4780,
+  "p50": 5971,
+  "p95": 7239
  },
  "token_length_plain": {
-  "max": 4078,
-  "n": 2198,
-  "p50": 3059,
-  "p95": 4031
+  "max": 5733,
+  "n": 4780,
+  "p50": 3543,
+  "p95": 4782
  },
  "token_measure_note": "token_length = FINAL rendered prompt messages + completion + TOKEN_RESERVE (the gate); token_length_plain = plain prompt instead. Over-gate rows are dropped, never truncated.",
  "totals": {
-  "grpo": 2198,
-  "sft": 2198
+  "grpo": 4780,
+  "sft": 4780
  }
 }

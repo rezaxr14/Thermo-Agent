@@ -218,10 +218,6 @@ def compact_agents_md(task: str) -> str:
         "stream produced by a component is a tear closing a loop: change both sides together. "
         "Flows a component solves itself must not be specified (engine air/fuel, chiller "
         "gen/rejection, IT coolant, heat-pump sink).",
-        "Failure checklist (before any candidate): unit mismatch (MW vs W, kJ vs J), fraction "
-        "vs percent, K vs C; sign flip; swapped ports; wrong fluid class; efficiency > 1; "
-        "out-of-range parameter; unconverged tear. Locate the failing check/stream first, fix "
-        "it with the fewest edits, and never invent numbers.",
         f"Answer format ({task}): {answer}",
     ])
 

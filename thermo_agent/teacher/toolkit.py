@@ -105,6 +105,38 @@ def skill_body(name: str) -> str | None:
     return re.sub(r"^---\n.*?\n---\n", "", text, flags=re.S)
 
 
+# A served skill is a *tool result*, so it shares the 8,192-token training
+# budget with the prompt and the rest of the trace. Keep the formulas, limits
+# and failure modes; drop the duplicated `## Environment:` block (the compact
+# contract already states it) and any section that does not fit the budget.
+_SKILL_BUDGET_CHARS = 1000
+_SKILL_PRIORITY = ("physics", "equation", "correct", "parameter", "constraint",
+                   "failure", "fix", "finding", "rule")
+
+
+def compact_skill_body(text: str, budget: int = _SKILL_BUDGET_CHARS) -> str:
+    """A budgeted essentials view of one SKILL.md body.
+
+    Priority sections (formulas, parameters, failure modes, fixes) are kept
+    first, then the remaining sections while they fit. The full file stays on
+    disk; this only bounds what one tool result costs in a training trace.
+    """
+    text = text.split("\n## Environment:", 1)[0].rstrip()
+    parts = re.split(r"(?m)^## ", text)
+    head, sections = parts[0].rstrip(), []
+    for part in parts[1:]:
+        title = part.splitlines()[0].strip().lower() if part.strip() else ""
+        rank = 0 if any(key in title for key in _SKILL_PRIORITY) else 1
+        sections.append((rank, part.rstrip()))
+    sections.sort(key=lambda pair: pair[0])       # stable: library order inside a rank
+    out = head
+    for _rank, part in sections:
+        candidate = f"{out}\n## {part}"
+        if len(candidate) <= budget:
+            out = candidate
+    return out.strip()
+
+
 def _skill_object(candidate: str) -> dict:
     """Decode the single ``candidate`` slot into a JSON object (or raise)."""
     if not isinstance(candidate, str):
@@ -158,7 +190,7 @@ def list_skills(candidate: str = "") -> str:
 
 
 def load_skill(candidate: str = "") -> str:
-    """Return the FULL SKILL.md body of one named skill as this tool's result.
+    """Return a budgeted essentials view of one named skill's SKILL.md body.
 
     Args:
         candidate (str): JSON object with a single ``name`` key, e.g.
@@ -166,8 +198,9 @@ def load_skill(candidate: str = "") -> str:
             skill library exactly, so paths/traversal are rejected.
 
     Returns:
-        str: JSON with ``ok``, ``name`` and the frontmatter-stripped ``text``,
-        or ``{"ok": false, "error": "unknown skill", "available": [...]}``.
+        str: JSON with ``ok``, ``name`` and the frontmatter-stripped, budgeted
+        ``text`` (formulas, limits and failure modes first), or
+        ``{"ok": false, "error": "unknown skill", "available": [...]}``.
         The text is a tool result only — the harness never writes it back into
         the system prompt. The tool never raises.
     """
@@ -179,7 +212,8 @@ def load_skill(candidate: str = "") -> str:
         text = skill_body(name.strip())
         if text is None:
             raise KeyError("unknown skill")
-        return json.dumps({"ok": True, "name": name.strip(), "text": text},
+        return json.dumps({"ok": True, "name": name.strip(),
+                           "text": compact_skill_body(text)},
                           ensure_ascii=False)
     except Exception:
         return json.dumps({"ok": False, "error": "unknown skill",
@@ -231,6 +265,60 @@ _SET_M = re.compile(
 
 def _fmt(v, nd=6):
     return None if v is None else round(float(v), nd)
+
+
+# Tool results are training tokens too. A list of dicts repeats every column name
+# on every row; the same numbers as one header + rows is several hundred tokens
+# smaller and still ordinary JSON that the model can read.
+STREAM_COLUMNS = ("stream", "T_K", "P_kPa", "h_kJ_kg", "s_kJ_kgK",
+                  "m_dot_kg_s", "e_ph_kJ_kg", "e_ch_kJ_kg")
+LINE_COLUMNS = ("line", "value_MW", "recomputed_MW", "residual_W")
+
+
+def _table(rows: list[dict], columns: tuple[str, ...]) -> dict:
+    """Compact column/row view of homogeneous records."""
+    return {"columns": list(columns),
+            "rows": [[row.get(col) for col in columns] for row in rows]}
+
+
+def compact_result(name: str, text: str) -> str:
+    """Rewrite an older stored result into today's compact table shape.
+
+    Values are preserved byte-for-byte; only the repeated JSON keys are removed.
+    Used when a corpus that predates the compact tool output is re-served, so a
+    stored trace and a fresh tool call describe the same result.
+    """
+    try:
+        payload = json.loads(text)
+    except (TypeError, ValueError):
+        return text
+    if not isinstance(payload, dict):
+        return text
+    changed = False
+    streams = payload.get("streams")
+    if isinstance(streams, list) and streams and isinstance(streams[0], dict):
+        payload["columns"] = list(STREAM_COLUMNS)
+        payload["rows"] = [[row.get(col) for col in STREAM_COLUMNS] for row in streams]
+        del payload["streams"]
+        changed = True
+    lines = payload.get("per_line_residuals")
+    if isinstance(lines, list):
+        errors = {str(row.get("line")): row.get("error") for row in lines
+                  if isinstance(row, dict) and row.get("error")}
+        payload["line_table"] = _table([row for row in lines if isinstance(row, dict)],
+                                       LINE_COLUMNS)
+        if errors:
+            payload["line_errors"] = errors
+        del payload["per_line_residuals"]
+        changed = True
+    # The solver's one-line hint is part of the served result too. Older stored
+    # rows point at a key that no longer exists.
+    for key in ("solver_message", "message"):
+        text = payload.get(key)
+        if isinstance(text, str) and "per_line_residuals" in text:
+            payload[key] = text.replace("per_line_residuals", "line_table")
+            changed = True
+    return json.dumps(payload, ensure_ascii=False) if changed else text
 
 
 def _rep_failed(rep) -> list:
@@ -351,7 +439,7 @@ def _ledger_eval(candidate: str, row: dict, as_given: bool = False) -> _Eval:
             "E_fuel_w": ef * 1e6,
             "T0_K": float((data.get("consts_true") or {}).get("T0", 0.0))}
     res = _LedgerResult(balances=balances, kpis=kpis,
-                        message=(f"{len(failed_lines)} ledger line(s) fail the checks; read per_line_residuals") if failed_lines else "")
+                        message=(f"{len(failed_lines)} ledger line(s) fail the checks; read line_table") if failed_lines else "")
 
     n_lines = max(len(line_residuals), 1)
     n_ok = sum(1 for x in line_residuals
@@ -534,7 +622,13 @@ def make_tools(task: str, row: dict, candidate_of=lambda c: c, include_dynamic: 
         }
         if ev.meta.get("ledger"):
             payload["ledger_closure_residual_W"] = _fmt(ev.meta.get("closure_residual_w"), 3)
-            payload["per_line_residuals"] = ev.meta.get("line_residuals", [])
+            lines = ev.meta.get("line_residuals", [])
+            payload["line_table"] = _table([x for x in lines if isinstance(x, dict)],
+                                           LINE_COLUMNS)
+            errors = {str(x.get("line")): x.get("error") for x in lines
+                      if isinstance(x, dict) and x.get("error")}
+            if errors:
+                payload["line_errors"] = errors
             payload["n_lines"] = ev.meta.get("n_lines", 0)
         return json.dumps(_with_meta(payload, ev.meta), ensure_ascii=False)
 
@@ -569,7 +663,13 @@ def make_tools(task: str, row: dict, candidate_of=lambda c: c, include_dynamic: 
             "energy_balance_ok": all(abs(b.energy_residual) <= 1e-6 * (abs(k.get("W_net_w", 0)) + abs(k.get("Q_fuel_w", 0)) + 1e6) for b in res.balances),
         }
         if ev.meta.get("ledger"):
-            payload["per_line_residuals"] = ev.meta.get("line_residuals", [])
+            lines = ev.meta.get("line_residuals", [])
+            payload["line_table"] = _table([x for x in lines if isinstance(x, dict)],
+                                           LINE_COLUMNS)
+            errors = {str(x.get("line")): x.get("error") for x in lines
+                      if isinstance(x, dict) and x.get("error")}
+            if errors:
+                payload["line_errors"] = errors
             payload["ledger_closure_residual_W"] = _fmt(ev.meta.get("closure_residual_w"), 3)
         return json.dumps(_with_meta(payload, ev.meta), ensure_ascii=False)
 
@@ -643,7 +743,8 @@ def make_tools(task: str, row: dict, candidate_of=lambda c: c, include_dynamic: 
                     "h_kJ_kg": _fmt(s.h / 1000, 3), "s_kJ_kgK": _fmt(s.s / 1000, 5),
                     "m_dot_kg_s": _fmt(s.m_dot, 5), "e_ph_kJ_kg": _fmt(s.e_ph / 1000, 3),
                     "e_ch_kJ_kg": _fmt(s.e_ch / 1000, 3)} for s in res.states]
-        return json.dumps(_with_meta({"ok": True, "n_streams": len(streams), "streams": streams}, ev.meta),
+        table = _table(streams, STREAM_COLUMNS)
+        return json.dumps(_with_meta({"ok": True, "n_streams": len(streams), **table}, ev.meta),
                           ensure_ascii=False)
 
     tools = [inspect_plant, first_law_check, second_law_check, validity_check, solve_plant]

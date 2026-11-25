@@ -1,0 +1,604 @@
+{
+  "anomalies": [],
+  "gate": 8192,
+  "generated_by": "scripts/audit_harness_corpus.py",
+  "generated_from": {
+    "data/grpo_mix_v3/audit_train.jsonl": {
+      "bytes": 42807793,
+      "rows": 1189,
+      "sha256": "0da6492008b5ac16bf75f2494ac1ae04918a974734323693b1d11ebabb9fed8b"
+    },
+    "data/grpo_mix_v3/design_train.jsonl": {
+      "bytes": 35421351,
+      "rows": 1206,
+      "sha256": "f51c1b441cccc7eafb1b55b9b380b91ae80e600797cca5f6e8ddeaa7c96a8817"
+    },
+    "data/grpo_mix_v3/ledger_train.jsonl": {
+      "bytes": 36871068,
+      "rows": 1198,
+      "sha256": "9ea1e024af78fdc4ac43d3d965ef6f7014cb63f3b60f8887fef86b57b1b2ca3c"
+    },
+    "data/grpo_mix_v3/repair_train.jsonl": {
+      "bytes": 35095715,
+      "rows": 1217,
+      "sha256": "4aa281de9d8f253258190365410c88e4e5b97e5f13e56a57b5e15ae0a2177bfc"
+    },
+    "data/grpo_tools_v3_h/audit_train.jsonl": {
+      "bytes": 42807801,
+      "rows": 1189,
+      "sha256": "dc7ea23f9aa6da4dc879396683608356e712d244784b246aaa956ea141111ac3"
+    },
+    "data/grpo_tools_v3_h/design_train.jsonl": {
+      "bytes": 35584174,
+      "rows": 1200,
+      "sha256": "47de32def96811773444d3777b738f84094c2ce6740bd52b7724dfca678a5c3f"
+    },
+    "data/grpo_tools_v3_h/ledger_train.jsonl": {
+      "bytes": 36659527,
+      "rows": 1191,
+      "sha256": "322af7f1646a7e5bc39eda4df6ad02aa41d5e659559ccd3ef293e68d52eea328"
+    },
+    "data/grpo_tools_v3_h/repair_train.jsonl": {
+      "bytes": 34468272,
+      "rows": 1200,
+      "sha256": "2b2718b064c79e1efdce496ac883daec682c3e0be28a1f8c6db60157084e1d3d"
+    },
+    "data/sft_mix_v3/audit_train.jsonl": {
+      "bytes": 35992334,
+      "rows": 1589,
+      "sha256": "82ec487e85f2a6e5f3c58f26426fed30be398e6e2c3c4426e9884756567ddd81"
+    },
+    "data/sft_mix_v3/design_train.jsonl": {
+      "bytes": 26593320,
+      "rows": 1606,
+      "sha256": "37605abb5e8431463155163645df10199df3e05b0731e797beaf8391747e88a8"
+    },
+    "data/sft_mix_v3/ledger_train.jsonl": {
+      "bytes": 34727989,
+      "rows": 1598,
+      "sha256": "a9ab5be29857b22f9e793f09180da9d8a429dc0c60913282a21bd3634e6b99ef"
+    },
+    "data/sft_mix_v3/repair_train.jsonl": {
+      "bytes": 32544885,
+      "rows": 1617,
+      "sha256": "0eee1c29f324ee60c7d88184d5c9aa8d8f9dec7aaefe9a9ba77f9296340da3ad"
+    },
+    "data/sft_tools_v3_h/audit_train.jsonl": {
+      "bytes": 32848854,
+      "rows": 1189,
+      "sha256": "b41b1f49df44311093f0c3bc578bf661ba008831743ff48c947a17eca15ac0dd"
+    },
+    "data/sft_tools_v3_h/design_train.jsonl": {
+      "bytes": 25503028,
+      "rows": 1200,
+      "sha256": "295af050444704a0d46bd4100bcf680a0430e2c7b7c1bc9086566a98b8b812d6"
+    },
+    "data/sft_tools_v3_h/ledger_train.jsonl": {
+      "bytes": 30112517,
+      "rows": 1191,
+      "sha256": "4b735222ae956a1f86a798f8c4ae00dc8abcfe73d7377ef55a7079ae0eed597f"
+    },
+    "data/sft_tools_v3_h/repair_train.jsonl": {
+      "bytes": 28124360,
+      "rows": 1200,
+      "sha256": "47f04719ae83e452cbba1b5340f6981bd3cde27034cfa805f3d89b603b9a537d"
+    }
+  },
+  "inputs": [
+    "data/grpo_mix_v3",
+    "data/grpo_tools_v3_h",
+    "data/sft_mix_v3",
+    "data/sft_tools_v3_h"
+  ],
+  "note": "counts and lengths only; no prompt/completion text. rendered=chat-template(add_generation_prompt=False); pipeline=plain prompt+completion+reserve (the build's 8192 gate).",
+  "over_8192_pipeline": [],
+  "over_8192_rendered": [],
+  "per_dir_task": {
+    "data/grpo_mix_v3": {
+      "audit": {
+        "chars": {
+          "max": 9773,
+          "median": 8285,
+          "min": 7681,
+          "n": 1189,
+          "p95": 9158
+        },
+        "n": 1189,
+        "pipeline": {
+          "max": 3627,
+          "median": 2809,
+          "min": 2476,
+          "n": 1189,
+          "p95": 3286
+        },
+        "rendered": {
+          "max": 4797,
+          "median": 3979,
+          "min": 3646,
+          "n": 1189,
+          "p95": 4456
+        }
+      },
+      "design": {
+        "chars": {
+          "max": 10743,
+          "median": 6998,
+          "min": 6783,
+          "n": 1206,
+          "p95": 7144
+        },
+        "n": 1206,
+        "pipeline": {
+          "max": 2777,
+          "median": 1961,
+          "min": 1880,
+          "n": 1206,
+          "p95": 2010
+        },
+        "rendered": {
+          "max": 4399,
+          "median": 3131,
+          "min": 3050,
+          "n": 1206,
+          "p95": 3180
+        }
+      },
+      "ledger": {
+        "chars": {
+          "max": 11571,
+          "median": 8474,
+          "min": 7509,
+          "n": 1198,
+          "p95": 9724
+        },
+        "n": 1198,
+        "pipeline": {
+          "max": 4434,
+          "median": 3116,
+          "min": 2505,
+          "n": 1198,
+          "p95": 3908
+        },
+        "rendered": {
+          "max": 5858,
+          "median": 4286,
+          "min": 3675,
+          "n": 1198,
+          "p95": 5079
+        }
+      },
+      "repair": {
+        "chars": {
+          "max": 11517,
+          "median": 7359,
+          "min": 6969,
+          "n": 1217,
+          "p95": 7562
+        },
+        "n": 1217,
+        "pipeline": {
+          "max": 3661,
+          "median": 2371,
+          "min": 2178,
+          "n": 1217,
+          "p95": 2496
+        },
+        "rendered": {
+          "max": 5465,
+          "median": 3541,
+          "min": 3348,
+          "n": 1217,
+          "p95": 3668
+        }
+      }
+    },
+    "data/grpo_tools_v3_h": {
+      "audit": {
+        "chars": {
+          "max": 9773,
+          "median": 8285,
+          "min": 7681,
+          "n": 1189,
+          "p95": 9158
+        },
+        "n": 1189,
+        "pipeline": {
+          "max": 3627,
+          "median": 2809,
+          "min": 2476,
+          "n": 1189,
+          "p95": 3286
+        },
+        "rendered": {
+          "max": 4797,
+          "median": 3979,
+          "min": 3646,
+          "n": 1189,
+          "p95": 4456
+        }
+      },
+      "design": {
+        "chars": {
+          "max": 7186,
+          "median": 6997,
+          "min": 6783,
+          "n": 1200,
+          "p95": 7143
+        },
+        "n": 1200,
+        "pipeline": {
+          "max": 2041,
+          "median": 1961,
+          "min": 1880,
+          "n": 1200,
+          "p95": 2009
+        },
+        "rendered": {
+          "max": 3211,
+          "median": 3131,
+          "min": 3050,
+          "n": 1200,
+          "p95": 3179
+        }
+      },
+      "ledger": {
+        "chars": {
+          "max": 10567,
+          "median": 8474,
+          "min": 7509,
+          "n": 1191,
+          "p95": 9645
+        },
+        "n": 1191,
+        "pipeline": {
+          "max": 4433,
+          "median": 3115,
+          "min": 2505,
+          "n": 1191,
+          "p95": 3907
+        },
+        "rendered": {
+          "max": 5603,
+          "median": 4285,
+          "min": 3675,
+          "n": 1191,
+          "p95": 5077
+        }
+      },
+      "repair": {
+        "chars": {
+          "max": 7764,
+          "median": 7355,
+          "min": 6969,
+          "n": 1200,
+          "p95": 7555
+        },
+        "n": 1200,
+        "pipeline": {
+          "max": 2569,
+          "median": 2368,
+          "min": 2178,
+          "n": 1200,
+          "p95": 2474
+        },
+        "rendered": {
+          "max": 3739,
+          "median": 3538,
+          "min": 3348,
+          "n": 1200,
+          "p95": 3644
+        }
+      }
+    },
+    "data/sft_mix_v3": {
+      "audit": {
+        "chars": {
+          "max": 16719,
+          "median": 13264,
+          "min": 3170,
+          "n": 1589,
+          "p95": 15200
+        },
+        "n": 1589,
+        "pipeline": {
+          "max": 6457,
+          "median": 4842,
+          "min": 1406,
+          "n": 1589,
+          "p95": 5706
+        },
+        "rendered": {
+          "max": 8049,
+          "median": 6381,
+          "min": 1329,
+          "n": 1589,
+          "p95": 7282
+        }
+      },
+      "design": {
+        "chars": {
+          "max": 11658,
+          "median": 10674,
+          "min": 1939,
+          "n": 1606,
+          "p95": 11440
+        },
+        "n": 1606,
+        "pipeline": {
+          "max": 4401,
+          "median": 3893,
+          "min": 747,
+          "n": 1606,
+          "p95": 4211
+        },
+        "rendered": {
+          "max": 6281,
+          "median": 5598,
+          "min": 670,
+          "n": 1606,
+          "p95": 5989
+        }
+      },
+      "ledger": {
+        "chars": {
+          "max": 14898,
+          "median": 11712,
+          "min": 3062,
+          "n": 1598,
+          "p95": 13549
+        },
+        "n": 1598,
+        "pipeline": {
+          "max": 6726,
+          "median": 4684,
+          "min": 1430,
+          "n": 1598,
+          "p95": 5914
+        },
+        "rendered": {
+          "max": 8089,
+          "median": 6050,
+          "min": 1353,
+          "n": 1598,
+          "p95": 7303
+        }
+      },
+      "repair": {
+        "chars": {
+          "max": 12254,
+          "median": 10545,
+          "min": 2512,
+          "n": 1617,
+          "p95": 11816
+        },
+        "n": 1617,
+        "pipeline": {
+          "max": 4325,
+          "median": 3456,
+          "min": 1111,
+          "n": 1617,
+          "p95": 4105
+        },
+        "rendered": {
+          "max": 5751,
+          "median": 4872,
+          "min": 1035,
+          "n": 1617,
+          "p95": 5534
+        }
+      }
+    },
+    "data/sft_tools_v3_h": {
+      "audit": {
+        "chars": {
+          "max": 16719,
+          "median": 13708,
+          "min": 12399,
+          "n": 1189,
+          "p95": 15238
+        },
+        "n": 1189,
+        "pipeline": {
+          "max": 6457,
+          "median": 4957,
+          "min": 4367,
+          "n": 1189,
+          "p95": 5735
+        },
+        "rendered": {
+          "max": 8049,
+          "median": 6526,
+          "min": 5918,
+          "n": 1189,
+          "p95": 7314
+        }
+      },
+      "design": {
+        "chars": {
+          "max": 11658,
+          "median": 10870,
+          "min": 9558,
+          "n": 1200,
+          "p95": 11475
+        },
+        "n": 1200,
+        "pipeline": {
+          "max": 4401,
+          "median": 3946,
+          "min": 3066,
+          "n": 1200,
+          "p95": 4221
+        },
+        "rendered": {
+          "max": 6281,
+          "median": 5685,
+          "min": 4620,
+          "n": 1200,
+          "p95": 6007
+        }
+      },
+      "ledger": {
+        "chars": {
+          "max": 14898,
+          "median": 12043,
+          "min": 10493,
+          "n": 1191,
+          "p95": 13678
+        },
+        "n": 1191,
+        "pipeline": {
+          "max": 6726,
+          "median": 4883,
+          "min": 3928,
+          "n": 1191,
+          "p95": 6026
+        },
+        "rendered": {
+          "max": 8089,
+          "median": 6250,
+          "min": 5257,
+          "n": 1191,
+          "p95": 7407
+        }
+      },
+      "repair": {
+        "chars": {
+          "max": 12254,
+          "median": 10834,
+          "min": 9545,
+          "n": 1200,
+          "p95": 11859
+        },
+        "n": 1200,
+        "pipeline": {
+          "max": 4325,
+          "median": 3643,
+          "min": 3059,
+          "n": 1200,
+          "p95": 4127
+        },
+        "rendered": {
+          "max": 5751,
+          "median": 5026,
+          "min": 4424,
+          "n": 1200,
+          "p95": 5571
+        }
+      }
+    }
+  },
+  "per_task": {
+    "audit": {
+      "chars": {
+        "max": 16719,
+        "median": 8675,
+        "min": 3170,
+        "n": 5156,
+        "p95": 14724
+      },
+      "n": 5156,
+      "pipeline": {
+        "max": 6457,
+        "median": 3031,
+        "min": 1406,
+        "n": 5156,
+        "p95": 5468
+      },
+      "rendered": {
+        "max": 8049,
+        "median": 4201,
+        "min": 1329,
+        "n": 5156,
+        "p95": 7038
+      }
+    },
+    "design": {
+      "chars": {
+        "max": 11658,
+        "median": 7137,
+        "min": 1939,
+        "n": 5212,
+        "p95": 11383
+      },
+      "n": 5212,
+      "pipeline": {
+        "max": 4401,
+        "median": 2003,
+        "min": 747,
+        "n": 5212,
+        "p95": 4198
+      },
+      "rendered": {
+        "max": 6281,
+        "median": 3172,
+        "min": 670,
+        "n": 5212,
+        "p95": 5958
+      }
+    },
+    "ledger": {
+      "chars": {
+        "max": 14898,
+        "median": 9442,
+        "min": 3062,
+        "n": 5178,
+        "p95": 13174
+      },
+      "n": 5178,
+      "pipeline": {
+        "max": 6726,
+        "median": 3673,
+        "min": 1430,
+        "n": 5178,
+        "p95": 5739
+      },
+      "rendered": {
+        "max": 8089,
+        "median": 4841,
+        "min": 1353,
+        "n": 5178,
+        "p95": 7129
+      }
+    },
+    "repair": {
+      "chars": {
+        "max": 12254,
+        "median": 7547,
+        "min": 2512,
+        "n": 5234,
+        "p95": 11558
+      },
+      "n": 5234,
+      "pipeline": {
+        "max": 4325,
+        "median": 2451,
+        "min": 1111,
+        "n": 5234,
+        "p95": 3988
+      },
+      "rendered": {
+        "max": 5751,
+        "median": 3623,
+        "min": 1035,
+        "n": 5234,
+        "p95": 5429
+      }
+    }
+  },
+  "schema_version": 1,
+  "token_reserve": 96,
+  "tokenizer": "measured",
+  "tokenizer_info": {
+    "method": "local_auto_chat_template",
+    "name": "Qwen/Qwen3.5-4B",
+    "path": "C:\\Users\\rezax\\.cache\\thermo\\qwen3.5-4b",
+    "reason": null,
+    "status": "measured"
+  },
+  "totals": {
+    "malformed_or_anomalous": 0,
+    "over_8192_pipeline": 0,
+    "over_8192_rendered": 0,
+    "rows": 20780
+  }
+}
