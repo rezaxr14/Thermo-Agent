@@ -27,6 +27,13 @@ tasks status NAME                              -> queued / running / completed /
 tasks download NAME -o OUT -m <slug> -s -f     -> OUT/NAME/<version>/<model>/<run_id>/<files>
 ```
 
+**The account-default trap.** `tasks push` immediately starts one run on the account's
+default model, which on this account is `gemini-3.8-flash`. That run is not selected by
+`LLM_DEFAULT`; the only reliable defence is a guard inside the task that returns before
+the first model call when `llm.model` is not on an allow-list. The generic runner in
+`notebooks/kaggle_model_runner.py` does exactly this, so its push auto-run spends nothing.
+Never batch `-m a -m b` (HTTP 400); loop over models locally.
+
 ## 2. Setup and credentials
 
 * `pip install "kaggle>=2.2.5" "kaggle-benchmarks>=0.5.0"`; pin the versions you tested.
@@ -192,3 +199,87 @@ kaggle benchmarks tasks models
 | v7 | full roster (37 listed vs served), image-token fidelity, reasoning knobs |
 | v8 | hosted runs over the full catalogue; batch `-m` of 37 models fails with 400 |
 | v9 | one model at a time works; worker environment; dataset mount; Secrets do not work; >=150 min runs; 34 vision models |
+
+## 14. Thermo-agent-specific lessons (2026-11-25)
+
+These are the project rules layered on top of the generic guide. They live here so a new
+session does not rediscover them by spending quota.
+
+### 14.1 Models
+
+- Only `gpt-6-luna` and `claude-haiku-5-5` may be called. No premium, mid-tier, or
+  "just one probe" model without explicit user permission. No bulk campaign.
+- The reusable runner is `notebooks/kaggle_model_runner.py` (the `.ipynb` is generated
+  from it). It hard-blocks `gemini-3.8-flash` and `gemini-3.5-flash-lite`, and it
+  returns before any model call when the scheduled slug is not allowed. That is why a
+  `tasks push` auto-run on the account default costs nothing.
+- `allowed_models` is in `harness_config.json` and can be overridden with
+  `HARNESS_ALLOWED_MODELS`; keep both at the two budget slugs.
+- One `tasks run -m <slug>` per model. The repo scripts loop over models; the CLI does
+  not accept a batch.
+- The provider-prefixed slug inside a run is read from `llm.model`; the CLI slug is the
+  bare one (`claude-haiku-5-5`).
+
+### 14.2 Launch and download (repo commands)
+
+```powershell
+# push once; the default-model auto-run is skipped by the in-task guard
+powershell -NoProfile -File scripts/kaggle_project.ps1 benchmarks tasks push `
+  thermo-teacher-cotproof-s00 --file notebooks/kaggle_model_runner.py `
+  --kaggle-dataset rezanadimi/thermo-agent-data
+
+# one explicit budget model per call
+powershell -NoProfile -File scripts/kaggle_project.ps1 benchmarks tasks run `
+  thermo-teacher-cotproof-s00 --model gpt-6-luna --wait 1800 -v
+powershell -NoProfile -File scripts/kaggle_project.ps1 benchmarks tasks run `
+  thermo-teacher-cotproof-s00 --model claude-haiku-5-5 --wait 1800 -v
+
+# download; then gate and ingest locally
+powershell -NoProfile -File scripts/kaggle_project.ps1 benchmarks tasks download `
+  thermo-teacher-cotproof-s00 --model gpt-6-luna `
+  --output data/teacher_runs/kaggle_hosted/budget_batches
+```
+
+`scripts/kaggle_project.ps1` reads the single token from `.env`, scopes the SOCKS proxy
+to that one command, and never prints the value. A raw `kaggle` command needs the same
+proxy scoped around it.
+
+### 14.3 Data and credentials
+
+- Local data goes to the private HF dataset, never directly to Kaggle; the private
+  bridge kernel downloads HF and publishes the Kaggle dataset version.
+- The Kaggle dataset copy can lag the HF copy. A preflight 404 for a new shard means the
+  dataset version is stale, not that the model or task is broken. Refresh the bridge,
+  verify `datasets status <id>`, then run.
+- Keep dataset upload directories flat. Uploaded zips auto-extract; a nested or renamed
+  path breaks the runner's shard lookup.
+- One Kaggle account only. Exactly one `KAGGLE_API_TOKEN` in the repo-root `.env`; no
+  second token, no account switch to work around a proxy abort. Retry the read-only
+  command instead.
+- `HF_TOKEN`, `KAGGLE_API_TOKEN`, `MODEL_PROXY_*`, and `LLM*` come only from the
+  repo-root `.env` (locally) or an attached private `env` dataset (hosted). Never print,
+  journal, or commit them.
+- Never create another dataset, hosted task, or kernel; never delete or modify anything
+  else on Kaggle without explicit permission.
+
+### 14.4 Hosted-run shape that worked
+
+- 40-row pilot shards, 10 per task, equal easy/medium/hard tiers.
+- `tasks push` then explicit per-model `tasks run`; download the journal, gate at 8,192
+  tokens locally, then ingest with the model tag and run id.
+- The task source embeds a `SPEC` JSON; prompts and configs are attached datasets, not
+  secrets. The worker writes a manifest so a failure is diagnosable without logs.
+- Actual pilot spend: luna `$0.07797`, haiku `$0.14529`. Treat any order-of-magnitude
+  jump as a configuration bug, not normal variance.
+
+### 14.5 Known failure signatures
+
+| Symptom | Real cause | Action |
+|---|---|---|
+| push seems to start an unwanted run | account-default auto-run | guard already returns `skipped`; do not cancel by pushing again |
+| `tasks run -m a -m b` -> 400 | batch models in one call | loop locally |
+| new shard preflight 404 | stale Kaggle dataset version | refresh HF -> Kaggle bridge, verify status |
+| auth/quota error mid-run | key expiry or cap | pause, write no result for the in-flight item, resume |
+| journal missing after download | wrong output dir / model path | scan download root for the bare or provider-prefixed slug |
+| runner exits before any call | scheduled model not in allow-list | expected; schedule `gpt-6-luna` or `claude-haiku-5-5` |
+

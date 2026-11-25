@@ -8,6 +8,10 @@ description: Keep this project's Hugging Face corpora dataset and its Kaggle dat
 Short actionable companion to `KAGGLE_SKILL.md` (benchmarks) and `docs/RUNBOOK.md` (raw commands).
 Read those for model calls and quota. This file is only about **data movement**.
 
+The repo-agnostic, copy-paste version of both guides is `SKILL.md` at the repo root. This
+file keeps the project-specific repo ids, allow-lists, and commands that the generic
+guide deliberately leaves as placeholders.
+
 ## 1. Two HF repos, never mixed
 
 | Repo | Type | What lives there | Writer |
