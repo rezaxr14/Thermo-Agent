@@ -1,0 +1,346 @@
+{
+ "corpus": "data/rebuild_step4_plain/sft_tools_v3",
+ "gate": 8192,
+ "reserve": 96,
+ "rows": 4800,
+ "kept": 4778,
+ "dropped": 22,
+ "schema_tokens": {
+  "min": 1246,
+  "median": 1246,
+  "max": 1246
+ },
+ "per_task": {
+  "repair": {
+   "attempted": 1200,
+   "kept": 1200,
+   "dropped": [],
+   "retention": 1.0
+  },
+  "design": {
+   "attempted": 1200,
+   "kept": 1200,
+   "dropped": [],
+   "retention": 1.0
+  },
+  "audit": {
+   "attempted": 1200,
+   "kept": 1189,
+   "dropped": [
+    {
+     "id": "aud-0-00283-dt-recover-c3c2",
+     "tokens": 8363,
+     "tier": "hard"
+    },
+    {
+     "id": "aud-0-00335-dt-recover-c3c2",
+     "tokens": 8338,
+     "tier": "hard"
+    },
+    {
+     "id": "aud-0-00567-dt-recover-c3c2",
+     "tokens": 8335,
+     "tier": "hard"
+    },
+    {
+     "id": "aud-0-00589-dt-recover-c3c2",
+     "tokens": 8326,
+     "tier": "hard"
+    },
+    {
+     "id": "aud-0-01138-dt-recover-c3c2",
+     "tokens": 8365,
+     "tier": "hard"
+    },
+    {
+     "id": "aud-0-01845-dt-recover-c3c2",
+     "tokens": 8340,
+     "tier": "hard"
+    },
+    {
+     "id": "aud-0-01966-dt-recover-c3c2",
+     "tokens": 8341,
+     "tier": "hard"
+    },
+    {
+     "id": "aud-0-02369-dt-recover-c3c2",
+     "tokens": 8371,
+     "tier": "hard"
+    },
+    {
+     "id": "aud-0-02448-dt-recover-c3c2",
+     "tokens": 8332,
+     "tier": "hard"
+    },
+    {
+     "id": "aud-0-02538-dt-recover-c3c2",
+     "tokens": 8341,
+     "tier": "hard"
+    },
+    {
+     "id": "aud-0-02774-dt-recover-c3c2",
+     "tokens": 8379,
+     "tier": "hard"
+    }
+   ],
+   "retention": 0.9908
+  },
+  "ledger": {
+   "attempted": 1200,
+   "kept": 1189,
+   "dropped": [
+    {
+     "id": "led-0-01930-dt-direct-c3c2",
+     "tokens": 8357,
+     "tier": "hard"
+    },
+    {
+     "id": "led-0-03649-dt-direct-c3c2",
+     "tokens": 8219,
+     "tier": "hard"
+    },
+    {
+     "id": "led-0-04932-dt-direct-c3c2",
+     "tokens": 8207,
+     "tier": "hard"
+    },
+    {
+     "id": "led-0-06790-dt-direct-c3c2",
+     "tokens": 8653,
+     "tier": "hard"
+    },
+    {
+     "id": "led-0-01930-dt-recover-c3c2",
+     "tokens": 8493,
+     "tier": "hard"
+    },
+    {
+     "id": "led-0-03649-dt-recover-c3c2",
+     "tokens": 8355,
+     "tier": "hard"
+    },
+    {
+     "id": "led-0-04718-dt-recover-c3c2",
+     "tokens": 8256,
+     "tier": "hard"
+    },
+    {
+     "id": "led-0-04932-dt-recover-c3c2",
+     "tokens": 8343,
+     "tier": "hard"
+    },
+    {
+     "id": "led-0-05661-dt-recover-c3c2",
+     "tokens": 8255,
+     "tier": "hard"
+    },
+    {
+     "id": "led-0-06547-dt-recover-c3c2",
+     "tokens": 8210,
+     "tier": "hard"
+    },
+    {
+     "id": "led-0-06790-dt-recover-c3c2",
+     "tokens": 8789,
+     "tier": "hard"
+    }
+   ],
+   "retention": 0.9908
+  }
+ },
+ "per_tier": {
+  "audit/easy": {
+   "attempted": 400,
+   "kept": 400,
+   "dropped": [],
+   "retention": 1.0
+  },
+  "audit/hard": {
+   "attempted": 400,
+   "kept": 389,
+   "dropped": [
+    {
+     "id": "aud-0-00283-dt-recover-c3c2",
+     "tokens": 8363,
+     "tier": "hard"
+    },
+    {
+     "id": "aud-0-00335-dt-recover-c3c2",
+     "tokens": 8338,
+     "tier": "hard"
+    },
+    {
+     "id": "aud-0-00567-dt-recover-c3c2",
+     "tokens": 8335,
+     "tier": "hard"
+    },
+    {
+     "id": "aud-0-00589-dt-recover-c3c2",
+     "tokens": 8326,
+     "tier": "hard"
+    },
+    {
+     "id": "aud-0-01138-dt-recover-c3c2",
+     "tokens": 8365,
+     "tier": "hard"
+    },
+    {
+     "id": "aud-0-01845-dt-recover-c3c2",
+     "tokens": 8340,
+     "tier": "hard"
+    },
+    {
+     "id": "aud-0-01966-dt-recover-c3c2",
+     "tokens": 8341,
+     "tier": "hard"
+    },
+    {
+     "id": "aud-0-02369-dt-recover-c3c2",
+     "tokens": 8371,
+     "tier": "hard"
+    },
+    {
+     "id": "aud-0-02448-dt-recover-c3c2",
+     "tokens": 8332,
+     "tier": "hard"
+    },
+    {
+     "id": "aud-0-02538-dt-recover-c3c2",
+     "tokens": 8341,
+     "tier": "hard"
+    },
+    {
+     "id": "aud-0-02774-dt-recover-c3c2",
+     "tokens": 8379,
+     "tier": "hard"
+    }
+   ],
+   "retention": 0.9725
+  },
+  "audit/medium": {
+   "attempted": 400,
+   "kept": 400,
+   "dropped": [],
+   "retention": 1.0
+  },
+  "design/easy": {
+   "attempted": 400,
+   "kept": 400,
+   "dropped": [],
+   "retention": 1.0
+  },
+  "design/hard": {
+   "attempted": 400,
+   "kept": 400,
+   "dropped": [],
+   "retention": 1.0
+  },
+  "design/medium": {
+   "attempted": 400,
+   "kept": 400,
+   "dropped": [],
+   "retention": 1.0
+  },
+  "ledger/easy": {
+   "attempted": 400,
+   "kept": 400,
+   "dropped": [],
+   "retention": 1.0
+  },
+  "ledger/hard": {
+   "attempted": 400,
+   "kept": 389,
+   "dropped": [
+    {
+     "id": "led-0-01930-dt-direct-c3c2",
+     "tokens": 8357,
+     "tier": "hard"
+    },
+    {
+     "id": "led-0-03649-dt-direct-c3c2",
+     "tokens": 8219,
+     "tier": "hard"
+    },
+    {
+     "id": "led-0-04932-dt-direct-c3c2",
+     "tokens": 8207,
+     "tier": "hard"
+    },
+    {
+     "id": "led-0-06790-dt-direct-c3c2",
+     "tokens": 8653,
+     "tier": "hard"
+    },
+    {
+     "id": "led-0-01930-dt-recover-c3c2",
+     "tokens": 8493,
+     "tier": "hard"
+    },
+    {
+     "id": "led-0-03649-dt-recover-c3c2",
+     "tokens": 8355,
+     "tier": "hard"
+    },
+    {
+     "id": "led-0-04718-dt-recover-c3c2",
+     "tokens": 8256,
+     "tier": "hard"
+    },
+    {
+     "id": "led-0-04932-dt-recover-c3c2",
+     "tokens": 8343,
+     "tier": "hard"
+    },
+    {
+     "id": "led-0-05661-dt-recover-c3c2",
+     "tokens": 8255,
+     "tier": "hard"
+    },
+    {
+     "id": "led-0-06547-dt-recover-c3c2",
+     "tokens": 8210,
+     "tier": "hard"
+    },
+    {
+     "id": "led-0-06790-dt-recover-c3c2",
+     "tokens": 8789,
+     "tier": "hard"
+    }
+   ],
+   "retention": 0.9725
+  },
+  "ledger/medium": {
+   "attempted": 400,
+   "kept": 400,
+   "dropped": [],
+   "retention": 1.0
+  },
+  "repair/easy": {
+   "attempted": 400,
+   "kept": 400,
+   "dropped": [],
+   "retention": 1.0
+  },
+  "repair/hard": {
+   "attempted": 400,
+   "kept": 400,
+   "dropped": [],
+   "retention": 1.0
+  },
+  "repair/medium": {
+   "attempted": 400,
+   "kept": 400,
+   "dropped": [],
+   "retention": 1.0
+  }
+ },
+ "rendered_max_by_task": {
+  "audit": 8379,
+  "design": 6376,
+  "ledger": 8789,
+  "repair": 5846
+ },
+ "dropped_tiers": {
+  "hard": 22
+ }
+}

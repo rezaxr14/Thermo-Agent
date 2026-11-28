@@ -1,5 +1,8 @@
 """The teacher export must not leak answers, and ingest must keep only what the tool suite accepts."""
 import json
+import pathlib
+
+import pytest
 
 from thermo_agent.teacher import memory, transfer
 
@@ -112,3 +115,41 @@ def test_load_exports_primary_dir_wins_over_extra_dirs(tmp_path):
     write(other / "repair_train.jsonl", [dict(row, id="same", task="repair", topology="other")])
     exports = transfer.load_exports(primary, tasks=("repair",), extra_dirs=(other,))
     assert exports["same"]["topology"] == "primary"
+
+
+@pytest.mark.corpus
+def test_ingest_rejects_ledger_without_tool_calls(tmp_path):
+    """A verifier-correct ledger answer that never inspected the ledger is not training data.
+
+    Haiku's native pilot answered ten ledger rows directly from the prompt (zero
+    tool calls) and every one passed the ledger verifier. The reasoning gate caught
+    them only because a zero-tool trajectory has no CoT; this rule makes the
+    rejection explicit even when `--require-tools` is not passed.
+    """
+    root = pathlib.Path(__file__).resolve().parents[1]
+    source = root / "data/frontier_tools_accepted/frontier_ledger_train.jsonl"
+    if not source.is_file():
+        pytest.skip("no accepted ledger row in this clone")
+    accepted = json.loads(source.read_text(encoding="utf-8").splitlines()[0])
+    keep = ("id", "record_id", "prompt", "task", "ledger", "fault_types",
+            "min_edits", "topology", "split")
+    export_row = {k: accepted[k] for k in keep if k in accepted}
+    export_row["id"] = accepted["record_id"]
+    export = tmp_path / "export"
+    write(export / "ledger_train.jsonl", [export_row])
+
+    text = accepted["sft_completion"]
+    completions = tmp_path / "completions.jsonl"
+    write(completions, [{
+        "id": accepted["record_id"],
+        "completion": text,
+        "trajectory": {"turns": [{"assistant": text,
+                                  "reasoning": "I read the ledger from the prompt.",
+                                  "tool_calls": [], "tool_results": []}]},
+    }])
+    report = transfer.ingest(export, completions, tmp_path / "frontier", None,
+                             tasks=("ledger",), require_tools=False)
+    assert report["accepted"] == 0
+    assert report["stats"]["rejected_no_tool_use:ledger"] == 1
+    out = tmp_path / "frontier" / "frontier_ledger_train.jsonl"
+    assert not out.exists() or not read(out)

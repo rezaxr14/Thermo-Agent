@@ -1,12 +1,13 @@
 # IMPLEMENTATION_PLAN - remaining work
 
-## Current truth (2026-11-25)
+## Current truth (2026-11-27)
 
-Hard-fix steps 1-3 are complete: one native protocol (legacy traces archived, never
-migrated), the native pilot re-ingested as 30 accepted rows, and the exact 8,192 gate now
-measures the training render with retention 4,780/4,800 deterministic rows (99.58%).
-Step 4 (audit format + haiku ledger tool flow) is next. No premium model, bulk run,
-training, SFT, GRPO or eval launch is authorised.
+Hard-fix steps 1-4 are complete: one native protocol (legacy traces archived, never
+migrated), the native pilot re-ingested as 30 accepted rows, the exact 8,192 gate
+(4,778/4,800 deterministic rows kept, 99.54%), and the audit/ledger contract fixed
+(audit ids match `ed_json`; a ledger row needs a tool call). Step 5 (reasoning quality
+gate) is next. No premium model, bulk run, training, SFT, GRPO or eval launch is
+authorised.
 
 ## Done
 
@@ -29,13 +30,26 @@ training, SFT, GRPO or eval launch is authorised.
 
 ## Step 4 - audit format and the haiku ledger tool flow
 
-1. Print three raw audit final answers per model next to the expected
-   `<analysis>/<ranking>/<change>/<prediction>` contract.
-2. Fix the contract/validator/parser mismatch with a failing-then-passing test.
-3. Explain and fix haiku ledger traces with zero tool calls; a ledger row without at
-   least one tool call must not be accepted.
-4. Re-run only the audit + ledger pilot rows for luna and haiku if a code change is
-   needed to confirm the fix; no other model.
+1. Printed three raw audit final answers per model next to the expected
+   `<analysis>/<ranking>/<change>/<prediction>` contract
+   (`reports/step4_audit_format.md`).
+2. Fixed the contract/validator mismatch: the harness advertised `DC` as rankable while
+   `ed_json` excludes `dc_load`, so 18/20 pilot audit answers failed with
+   `unknown component ids ['DC']`. The advertised set is now exactly the `ed_json` keys.
+   Failing-then-passing test: `tests/test_audit_ranking_prompt.py`.
+3. Explained the haiku ledger zero tool calls (it answered from the prompt text; the
+   verifier accepted it) and made `transfer.ingest` reject any ledger row without a tool
+   call, with or without `--require-tools`. Test:
+   `tests/test_transfer.py::test_ingest_rejects_ledger_without_tool_calls`.
+4. Rebuilt the four deterministic corpora and the mixes with the fixed prompt:
+   4,778/4,800 rows kept (99.54%), all 22 drops hard-tier; 20,776 audited rows with 0
+   over-gate and 0 anomalies; provenance 9/9. Evidence:
+   `reports/gate_retention_step4.json`, `reports/harness_corpus_audit_step4.json`.
+5. Fixed a tool-flow data loss found during the re-ingest: `compact_result` returned
+   `None` for unchanged payloads, so 114/158 stored tool results in the accepted
+   frontier rows were `None` (mixes rendered them empty). Fixed with two
+   failing-then-passing tests; both journals re-ingested to 32 clean rows (max 7,306
+   tokens), and the cohort/accepted/mixes rebuilt.
 
 ## Step 5 - reasoning quality gate
 

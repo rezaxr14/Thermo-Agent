@@ -156,6 +156,24 @@ def test_tool_result_output_drops_wrapper_call_id_and_reason():
         tool_protocol.tool_result_output("ToolInvocationResult(name='x', output=not_a_literal)")
 
 
+def test_normalize_tool_turns_keeps_the_served_output():
+    """Regression: compact_result returned None for unchanged payloads, so cleaning
+    a journal turn replaced every real tool result with None (or an empty string)."""
+    raw = (
+        "ToolInvocationResult(name='inspect_plant', "
+        "arguments={'reason': 'Check the as-given plant.'}, "
+        "call_id='call_secret_123', output='{\"ok\": true, \"solved\": true}', "
+        "error=None)")
+    turns = [{
+        "assistant": "I inspect the plant first because the solver status is unknown.",
+        "reasoning": "",
+        "tool_calls": [{"name": "inspect_plant", "arguments": {"reason": "Check it."}}],
+        "tool_results": [raw],
+    }]
+    tool_protocol.normalize_tool_turns(turns)
+    assert turns[0]["tool_results"] == ['{"ok": true, "solved": true}']
+
+
 def test_normalize_trajectory_strips_reasons_and_keeps_final_visible():
     final = "<diagnosis>Only CH.eps failed.</diagnosis>\n<edits>\nSET CH.eps = 1\n</edits>"
     trajectory = {

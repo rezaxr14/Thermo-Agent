@@ -229,6 +229,15 @@ def ingest(export_dir, completions_path, out_dir, memory_dir=None, tasks=TASKS, 
             if isinstance(traj_probe, dict):
                 tool_protocol.normalize_tool_turns(traj_probe.get("turns") or [])
             used_tools = any(t.get("tool_calls") for t in (traj_probe or {}).get("turns", []))
+            # A ledger repair is a diagnostic task: the whole point is to inspect the
+            # served ledger and its residuals. A zero-tool answer is a prompt-reading
+            # shortcut (haiku produced ten of them in the native pilot) and is never
+            # training data, even when the verifier happens to accept the text.
+            if task == "ledger" and not used_tools:
+                stats[f"rejected_no_tool_use:{task}"] += 1
+                stats[f"rejected:{task}"] += 1
+                stats["reason:no_tool_use"] += 1
+                continue
             if used_tools or require_tools:
                 rep = validate.reasoning_report(traj_probe)
                 if not rep["ok"]:

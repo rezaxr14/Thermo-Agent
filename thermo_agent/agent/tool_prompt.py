@@ -87,9 +87,9 @@ _COMPACT_TOOL_LINE.update({
                     '(name, description, components/variants/task) with a hint to call '
                     'load_skill; candidate is a JSON object {"task", "components", "query"} '
                     '(all optional); never returns full skill bodies.'),
-    "load_skill": ('load_skill(candidate): candidate is {"name": "..."}; returns the FULL '
-                   'SKILL.md text as this tool result only — call list_skills first to find '
-                   'names; the system prompt is never changed.'),
+    "load_skill": ('load_skill(candidate): candidate is {"name": "..."}; returns a budgeted '
+                   'SKILL.md essentials view as this tool result only — call list_skills first '
+                   'to find names; the system prompt is never changed.'),
 })
 
 _PLANT_TOOL_NAMES = frozenset({
@@ -110,6 +110,9 @@ def tool_contract(tools, task, max_turns, max_tool_calls) -> str:
         "Tool results are environment output; read the numbers and revise.",
         "When done, STOP calling tools and emit ONLY the final answer XML tags: " + " + ".join(tags),
     ]
+    if task == "ledger":
+        lines.append("A ledger answer needs at least one inspect_plant call; a zero-tool "
+                     "answer is rejected even when the text looks right.")
     return "\n".join(lines)
 
 
@@ -137,6 +140,9 @@ def compact_tool_contract(task, max_turns, max_tool_calls, tools=None) -> str:
         "first (no answer needed); when residuals ~0 and checks pass, STOP and emit ONLY: "
         + " + ".join(tags) + ".",
     ]
+    if task == "ledger":
+        lines.append("A ledger answer needs at least one inspect_plant call; a zero-tool "
+                     "answer is rejected even when the text looks right.")
     return "\n".join(lines)
 
 
@@ -255,11 +261,15 @@ def build_compact_harness_messages(messages, task, plant, mode="agents+skills",
     if mode != "none":
         parts.append(compact_agents_md(task))
         if task == "audit" and plant is not None:
+            # Exactly the ids the audit validator accepts: ed_json keys minus the
+            # combustor/gas engine. `audit.truth.ranking` excludes dc_load (the IT
+            # load is not part of the plant), so advertising DC here taught the
+            # model to emit a ranking the validator then rejected.
             rankable = [c.id for c in plant.components
-                        if c.type not in ("combustor", "gas_engine")]
+                        if c.type not in ("combustor", "gas_engine", "dc_load")]
             if rankable:
                 parts.append("Rankable audit ids (the components in ed_json, excluding the "
-                             "combustor/gas engine): " + ", ".join(rankable)
+                             "combustor/gas engine and the IT load): " + ", ".join(rankable)
                              + ". Never rank any other id.")
         if dynamic:
             parts.append(_compact_skill_catalog(task))

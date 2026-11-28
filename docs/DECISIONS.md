@@ -27,7 +27,9 @@ file holds rules.
    exists only as an explicit test opt-out.
 6. Every corpus rebuild starts from `data/processed` (and explicitly accepted frontier
    rows). `data/archive/` is never mixed in. Ground-truth answers are never pasted into
-   tool results.
+   tool results. A stored tool result is the served `output` JSON; cleaning returns an
+   unchanged payload verbatim, never `None` or an empty string, and a trace with an
+   empty result is a bug, not training data.
 
 ## Teacher and reasoning
 
@@ -40,12 +42,15 @@ file holds rules.
 
 ## Task-specific correctness
 
-10. Audit prompts state the rankable `ed_json` ids explicitly (excluding combustor/gas
-    engine). Ids outside that set, e.g. `DC`, are rejected by the verifier.
+10. Audit prompts state the rankable ids explicitly: exactly the `ed_json` keys, i.e.
+    the plant components minus the combustor, the gas engine and the IT load
+    (`dc_load`). Ids outside that set, e.g. `DC`, are rejected by the verifier.
 11. A design final answer is the last candidate whose `validity_check` returned
     `ok: true`, enforced in the eval harness and at ingest.
 12. Ledger reasoning renders a compact `(line, value, recomputed, residual)` table and
-    never points at a "faulty line" directly.
+    never points at a "faulty line" directly. A ledger answer must contain at least one
+    tool call: a zero-tool ledger row is rejected at ingest even when its text passes the
+    ledger verifier, with or without `--require-tools`.
 
 ## Operating rules
 

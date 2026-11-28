@@ -194,6 +194,18 @@ def test_compact_result_preserves_values_and_removes_repeated_keys():
     assert "per_line_residuals" not in compact_result("inspect_plant", hint)
 
 
+def test_compact_result_returns_an_unchanged_payload_verbatim():
+    """Regression: the hint loop used to rebind `text`, so every unchanged payload
+    came back as None (or as the bare `message` string) and the whole served tool
+    result vanished from the cleaned trace."""
+    from thermo_agent.teacher.toolkit import compact_result
+
+    plain = '{"ok": true, "solved": true}'
+    assert compact_result("inspect_plant", plain) == plain
+    hinted = '{"ok": true, "message": "solved at 0.0 MW residual"}'
+    assert compact_result("inspect_plant", hinted) == hinted
+
+
 def test_malformed_ledger_candidate_returns_error():
     tools = _tools("ledger")
     candidate_tools = [n for n in PHYSICS_TOOLS if n != "inspect_plant"]

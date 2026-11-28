@@ -312,11 +312,12 @@ def compact_result(name: str, text: str) -> str:
         del payload["per_line_residuals"]
         changed = True
     # The solver's one-line hint is part of the served result too. Older stored
-    # rows point at a key that no longer exists.
+    # rows point at a key that no longer exists. Do not reuse `text` as the loop
+    # variable: the unchanged path below returns the caller's original string.
     for key in ("solver_message", "message"):
-        text = payload.get(key)
-        if isinstance(text, str) and "per_line_residuals" in text:
-            payload[key] = text.replace("per_line_residuals", "line_table")
+        hint = payload.get(key)
+        if isinstance(hint, str) and "per_line_residuals" in hint:
+            payload[key] = hint.replace("per_line_residuals", "line_table")
             changed = True
     return json.dumps(payload, ensure_ascii=False) if changed else text
 
