@@ -75,6 +75,38 @@ def test_reasoning_gate_rejects_silent_tool_calls_and_accepts_visible_prose():
     assert not validate.reasoning_report(first_silent)["ok"]
 
 
+def test_reasoning_gate_rejects_filler_reasons_that_never_cite_the_result():
+    """Distinct, long-enough sentences are still filler if none of them uses a tool number."""
+    filler = [
+        "I will look at the tool output now and then decide the next step carefully.",
+        "That looks reasonable enough, so I will keep going and check one more thing.",
+        "Everything appears consistent with what I expected, so I will continue.",
+    ]
+    turns = [
+        {"assistant": "", "reasoning": filler[0], "tool_calls": [{"name": "inspect_plant"}],
+         "tool_results": ['{"max_energy_residual_W": 14117080.669, "failed_checks": ["V6"]}']},
+        {"assistant": "", "reasoning": filler[1], "tool_calls": [{"name": "first_law_check"}],
+         "tool_results": ['{"mass_residual_kg_s": 0.0}']},
+        {"assistant": "", "reasoning": filler[2], "tool_calls": [{"name": "validity_check"}],
+         "tool_results": ['{"ok": true}']},
+    ]
+    rep = validate.reasoning_report({"turns": turns})
+    assert not rep["ok"] and not rep["cite_ok"]
+    assert rep["non_first_turns"] == 2 and rep["cited_turns"] == 0
+
+
+def test_reasoning_gate_accepts_a_later_turn_that_cites_the_earlier_result():
+    turns = [
+        {"assistant": "", "reasoning": "The solver reports a 14117080.669 W energy residual, so I inspect the plant.",
+         "tool_calls": [{"name": "inspect_plant"}],
+         "tool_results": ['{"max_energy_residual_W": 14117080.669}']},
+        {"assistant": "", "reasoning": "The 14117080.669 W residual points at the combustor energy balance, so I check it.",
+         "tool_calls": [{"name": "first_law_check"}], "tool_results": ['{"ok": false}']},
+    ]
+    rep = validate.reasoning_report({"turns": turns})
+    assert rep["ok"] and rep["cited_turns"] == 1
+
+
 def _ingest(tmp_path, trajectory):
     row = _row("repair")
     gt = TT.ground_truth(row)

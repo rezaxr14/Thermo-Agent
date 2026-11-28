@@ -158,7 +158,29 @@ def validate(task: str, completion: str, row: dict) -> dict:
     return VALIDATORS[task](completion, row)
 
 
-MIN_COT_CHARS = 30        # a tool turn needs at least this much reasoning text to count
+MIN_COT_CHARS = 40        # every tool turn needs at least this much reasoning text
+
+_NUMBER = re.compile(r"-?\d+(?:\.\d+)?")
+_TOKEN = re.compile(r"[A-Za-z_][A-Za-z0-9_.\[\]]*")
+
+
+def _citation_anchors(text: str) -> set[str]:
+    """Identifiers and non-trivial numbers a reasoning sentence can cite from a tool result.
+
+    Single digits are ignored (they match almost any prose); identifiers are snake_case,
+    dotted, bracketed (``E[s8]``, ``ED[CH]``) or letter+digit codes (``V6``).
+    """
+    anchors: set[str] = set()
+    for match in _NUMBER.findall(text or ""):
+        literal = match.lstrip("-")
+        if len(literal) >= 2:
+            anchors.add(literal)
+    for token in _TOKEN.findall(text or ""):
+        identifier = ("_" in token or "." in token or "[" in token
+                      or bool(re.fullmatch(r"[A-Za-z][A-Z0-9]*\d[A-Z0-9]*", token)))
+        if identifier and len(token) >= 2:
+            anchors.add(token)
+    return anchors
 
 
 def _turn_cot(turn: dict) -> str:
@@ -173,10 +195,12 @@ def _turn_cot(turn: dict) -> str:
 
 
 def reasoning_report(trajectory: dict | None) -> dict:
-    """Is this tool-using trajectory a usable chain of thought? (gate used at ingest, 2026-11-20)
+    """Is this tool-using trajectory a usable chain of thought? (gate used at ingest)
 
-    Usable means: the first tool turn carries reasoning, at least 75% of tool turns carry >= MIN_COT_CHARS of
-    reasoning, and the reasoning is not one repeated sentence (distinct >= 60% of the reasoned turns).
+    Usable means: every tool turn carries >= MIN_COT_CHARS of reasoning, every reason is
+    distinct within the trace, and at least half of the non-first tool turns cite an
+    identifier or number that appeared in an earlier tool result. A turn with no earlier
+    result cannot cite one, so the citation rule only applies once results exist.
     """
     turns = (trajectory or {}).get("turns") or []
     tool_turns = [t for t in turns if t.get("tool_calls")]
@@ -184,9 +208,37 @@ def reasoning_report(trajectory: dict | None) -> dict:
     reasoned = [x for x in texts if len(x) >= MIN_COT_CHARS]
     distinct = len(set(reasoned))
     first_ok = bool(texts) and len(texts[0]) >= MIN_COT_CHARS
-    ok = bool(tool_turns) and first_ok and len(reasoned) >= 0.75 * len(texts) and distinct >= 0.6 * max(len(reasoned), 1)
+    all_reasoned = bool(texts) and len(reasoned) == len(texts)
+    all_distinct = distinct == len(reasoned)
+    earlier: list[str] = []
+    non_first = 0
+    cited = 0
+    for turn, text in zip(tool_turns, texts):
+        if earlier and len(text) >= MIN_COT_CHARS:
+            non_first += 1
+            if _citation_anchors(text) & _citation_anchors("\n".join(earlier)):
+                cited += 1
+        for result in turn.get("tool_results") or []:
+            earlier.append(result if isinstance(result, str)
+                           else json.dumps(result, sort_keys=True, default=str))
+    cite_ok = non_first == 0 or cited >= 0.5 * non_first
+    failures = []
+    if not tool_turns:
+        failures.append("no_tool_turns")
+    if not first_ok:
+        failures.append("first_turn_silent")
+    if not all_reasoned:
+        failures.append("short_reason")
+    if not all_distinct:
+        failures.append("repeated_reason")
+    if not cite_ok:
+        failures.append("ungrounded_reason")
+    ok = not failures
     return {"tool_turns": len(tool_turns), "reasoned_turns": len(reasoned), "distinct": distinct,
-            "cot_chars": sum(len(x) for x in reasoned), "first_turn_reasoned": first_ok, "ok": ok}
+            "cot_chars": sum(len(x) for x in reasoned), "first_turn_reasoned": first_ok,
+            "all_reasoned": all_reasoned, "all_distinct": all_distinct,
+            "non_first_turns": non_first, "cited_turns": cited, "cite_ok": cite_ok,
+            "failures": failures, "ok": ok}
 
 
 def _has_tool_turns(text: str) -> bool:

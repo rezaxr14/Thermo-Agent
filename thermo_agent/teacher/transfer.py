@@ -245,6 +245,8 @@ def ingest(export_dir, completions_path, out_dir, memory_dir=None, tasks=TASKS, 
                     stats[f"rejected_{why}:{task}"] += 1
                     stats[f"rejected:{task}"] += 1
                     stats[f"reason:{why}"] += 1
+                    for failure in rep.get("failures") or []:
+                        stats[f"gate:{failure}"] += 1
                     continue        # verifier-correct but unusable as CoT: no physics memory note, stays in the journal
             # A tool-using trace carries its full trajectory (reasoning + tool calls + numeric
             # results + revisions). Persist it as the SFT completion so the student learns to

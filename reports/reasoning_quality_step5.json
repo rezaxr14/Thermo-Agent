@@ -1,0 +1,185 @@
+{
+ "deterministic_corpus": [
+  {
+   "cited_turns": 3000,
+   "distinct": 4200,
+   "failures": {},
+   "gate_fail": 0,
+   "gate_ok": 1200,
+   "model": "deterministic",
+   "non_first_turns": 3000,
+   "reasoned_turns": 4200,
+   "rows": 1200,
+   "task": "audit",
+   "tool_turns": 4200
+  },
+  {
+   "cited_turns": 1200,
+   "distinct": 3000,
+   "failures": {},
+   "gate_fail": 0,
+   "gate_ok": 1200,
+   "model": "deterministic",
+   "non_first_turns": 1800,
+   "reasoned_turns": 3000,
+   "rows": 1200,
+   "task": "design",
+   "tool_turns": 3000
+  },
+  {
+   "cited_turns": 1724,
+   "distinct": 3000,
+   "failures": {},
+   "gate_fail": 0,
+   "gate_ok": 1200,
+   "model": "deterministic",
+   "non_first_turns": 1800,
+   "reasoned_turns": 3000,
+   "rows": 1200,
+   "task": "ledger",
+   "tool_turns": 3000
+  },
+  {
+   "cited_turns": 2234,
+   "distinct": 3600,
+   "failures": {},
+   "gate_fail": 0,
+   "gate_ok": 1200,
+   "model": "deterministic",
+   "non_first_turns": 2400,
+   "reasoned_turns": 3600,
+   "rows": 1200,
+   "task": "repair",
+   "tool_turns": 3600
+  }
+ ],
+ "frontier_journals": [
+  {
+   "cited_turns": 12,
+   "distinct": 36,
+   "failures": {
+    "ungrounded_reason": 4
+   },
+   "gate_fail": 4,
+   "gate_ok": 6,
+   "model": "claude-haiku-5-5",
+   "non_first_turns": 26,
+   "reasoned_turns": 36,
+   "rows": 10,
+   "task": "audit",
+   "tool_turns": 36
+  },
+  {
+   "cited_turns": 5,
+   "distinct": 41,
+   "failures": {
+    "ungrounded_reason": 6
+   },
+   "gate_fail": 6,
+   "gate_ok": 4,
+   "model": "claude-haiku-5-5",
+   "non_first_turns": 31,
+   "reasoned_turns": 41,
+   "rows": 10,
+   "task": "design",
+   "tool_turns": 41
+  },
+  {
+   "cited_turns": 0,
+   "distinct": 0,
+   "failures": {
+    "first_turn_silent": 10,
+    "no_tool_turns": 10,
+    "short_reason": 10
+   },
+   "gate_fail": 10,
+   "gate_ok": 0,
+   "model": "claude-haiku-5-5",
+   "non_first_turns": 0,
+   "reasoned_turns": 0,
+   "rows": 10,
+   "task": "ledger",
+   "tool_turns": 0
+  },
+  {
+   "cited_turns": 4,
+   "distinct": 33,
+   "failures": {
+    "ungrounded_reason": 7
+   },
+   "gate_fail": 7,
+   "gate_ok": 3,
+   "model": "claude-haiku-5-5",
+   "non_first_turns": 23,
+   "reasoned_turns": 33,
+   "rows": 10,
+   "task": "repair",
+   "tool_turns": 33
+  },
+  {
+   "cited_turns": 10,
+   "distinct": 49,
+   "failures": {
+    "ungrounded_reason": 7
+   },
+   "gate_fail": 7,
+   "gate_ok": 3,
+   "model": "gpt-6-luna",
+   "non_first_turns": 39,
+   "reasoned_turns": 49,
+   "rows": 10,
+   "task": "audit",
+   "tool_turns": 49
+  },
+  {
+   "cited_turns": 6,
+   "distinct": 59,
+   "failures": {
+    "ungrounded_reason": 10
+   },
+   "gate_fail": 10,
+   "gate_ok": 0,
+   "model": "gpt-6-luna",
+   "non_first_turns": 49,
+   "reasoned_turns": 59,
+   "rows": 10,
+   "task": "design",
+   "tool_turns": 59
+  },
+  {
+   "cited_turns": 3,
+   "distinct": 41,
+   "failures": {
+    "ungrounded_reason": 6
+   },
+   "gate_fail": 6,
+   "gate_ok": 4,
+   "model": "gpt-6-luna",
+   "non_first_turns": 31,
+   "reasoned_turns": 41,
+   "rows": 10,
+   "task": "ledger",
+   "tool_turns": 41
+  },
+  {
+   "cited_turns": 13,
+   "distinct": 48,
+   "failures": {
+    "ungrounded_reason": 7
+   },
+   "gate_fail": 7,
+   "gate_ok": 3,
+   "model": "gpt-6-luna",
+   "non_first_turns": 38,
+   "reasoned_turns": 48,
+   "rows": 10,
+   "task": "repair",
+   "tool_turns": 48
+  }
+ ],
+ "gate": {
+  "all_reasons_distinct": true,
+  "citation": "at least half of non-first tool turns cite an earlier identifier/number",
+  "min_chars": 40
+ }
+}

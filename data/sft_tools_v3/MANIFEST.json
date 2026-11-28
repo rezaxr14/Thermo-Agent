@@ -32,12 +32,12 @@
   }
  },
  "config": {
-  "grpo_out": "data/rebuild_step4_plain/grpo_tools_v3",
+  "grpo_out": "data/grpo_tools_v3",
   "include_frontier": true,
   "limit": 0,
   "max_tokens": 8192,
   "max_tool_result_chars": 4500,
-  "out": "data/rebuild_step4_plain/sft_tools_v3",
+  "out": "data/sft_tools_v3",
   "plant_seed": 0,
   "plants_per_task": 600,
   "prompt_variant": "plain",
@@ -102,7 +102,7 @@
   "scanned": 1336,
   "with_tool_turns": 0
  },
- "generated_at": "2026-11-25T21:00:46.185133+00:00",
+ "generated_at": "2026-11-28T17:44:55.353495+00:00",
  "generator": "synth.tool_traces (deterministic) + accepted frontier tool traces",
  "plants_selected_by_task": {
   "audit": 600,
